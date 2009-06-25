@@ -16,6 +16,7 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -27,8 +28,11 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
+ * This is meant to be used as a direct control for the {@link IssueTable} located inside the {@link ShowLinkedIssueSection}.
+ * See comments in the constructor below on strategy.
  *
+ * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
+ * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class ShowLinkedIssuePageController
 extends EntityEditorPageController
@@ -67,7 +71,40 @@ extends EntityEditorPageController
 		super(editor);
 		this.articleContainerID = ((ArticleContainerEditorInput) editor.getEditorInput()).getArticleContainerID();
 		linkedIssues = new HashSet<Issue>();
+
+		// [Observation and strategy, 23.06.2009]: Kai.
+		//   ~ Let <issues> be all the Issues listed in the IssueTable.
+		//   ~ Let <linkedObject> be the common Entity of which all of the <issues> in the IssueTable is 'related' to (via valid IssueLinks).
+		//
+		// Since all IssueLinks are uni-directional, then it follows that the <linkedObject> of all <issues> does not have the knowledge
+		// that it is 'related' to them all. However, the reverse is true.
+		//
+		// Thus, in order to ensure that the IssueTable correctly displays all <issues> related to the <linkedObject>, without having
+		// to create an additional field in the <linkedObject>, we need:
+		//
+		//   1. A listener on the data store, listening to the events that (i) a new IssueLink has been added, and (ii) an existing
+		//      IssueLink has been deleted. In both events, we should check to see if the linked object in the IssueLink is exactly
+		//      the same <linkedObject> (and that, additionally (?), the IssueLinkType == Related). If so, then we update the IssueTable.
+		//      --> Furthermore, we know that an IssueLinks are never modified, so the above should be sufficient.
+		//
+		//  2. A further set of listeners, for every single <issue> that is already in the IssueTable, listening to modification events.
+		//     That is, we should update modifications in the IssueTable whenever there is a subject change, or description change, etc.
+		//     --> Other kinds of listeners, such as add and delete, for the <issues> are not necessary, since add and delete events for
+		//         an Issue, will automatically trigger its related IssueLink to be added or removed, and this is already handled
+		//         in 1.
+		//
+		// All these should be implemented somewhere where there is a chance to related the creation and disposal of the listeners
+		// directly to the IssueTable (as is clearly defined by the ground rules in the Wiki: https://www.jfire.org/modules/phpwiki/index.php/ClientSide%20JDO%20Lifecycle%20Listeners).
+		//
+		// Logically, we should place the listeners in the IssueTable class itself, as is dictated above. However, the IssueTable appears in several situations,
+		// and not all of them require the active functionality described thus far. Hence, the closest we can get to the IssueTable, whose
+		// behaviour we want to be portrayed like so, is to place the JDOLifecycleListener in ShowLinkedIssueSection; and then making sure
+		// that the disposeListener is attached to the IssueTable's instance.
 	}
+
+
+
+
 
 	/**
 	 * @param editor
@@ -91,9 +128,12 @@ extends EntityEditorPageController
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 
-		for (IssueLink issueLink : issueLinks) {
+
+		// In the case that existing IssueLinks are removed, we need to make sure that the current Collection of IssueLinks are
+		// also updated. And hence, we clear the current colletion before adding new things.
+		linkedIssues.clear();
+		for (IssueLink issueLink : issueLinks)
 			linkedIssues.add(issueLink.getIssue());
-		}
 
 		fireModifyEvent(null, null);
 	}

@@ -14,7 +14,6 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObject
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
-import org.nightlabs.progress.NullProgressMonitor;
 
 
 public class IssueAttachAction extends ArticleContainerAction {
@@ -46,8 +45,6 @@ public class IssueAttachAction extends ArticleContainerAction {
 		dialog.open();
 
 		// Update the table in the Section inside ShowLinkedIssuePage.
-		// TODO Use proper listeners for refreshing the table.
-		//      And then maybe find out the latest entry and highlight it. Kai
 		if (dialog.getReturnCode() == Window.OK) { // != Window.CANCEL) {
 			IEditorPart activeEditor = RCPUtil.getActiveWorkbenchPage().getActiveEditor();
 			if (activeEditor instanceof ArticleContainerEditor) {
@@ -55,8 +52,8 @@ public class IssueAttachAction extends ArticleContainerAction {
 
 				if (getArticleContainer().equals(articleContainerEditor.getArticleContainerEdit().getArticleContainer())) {
 					IFormPage page = articleContainerEditor.setActivePage(ShowLinkedIssuePage.PAGE_ID);
-					((ShowLinkedIssuePage)page).highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
-					((ShowLinkedIssuePage)page).getPageController().doLoad(new NullProgressMonitor());
+					((ShowLinkedIssuePage)page).setHighlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() ); // <-- Attempt to highlight the latest entry in the table.
+//					((ShowLinkedIssuePage)page).getPageController().doLoad(new NullProgressMonitor());// <-- This shall be delegated to the issueLinksLifeCycleListener.
 				}
 			}
 		}

@@ -23,7 +23,6 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -93,13 +92,15 @@ extends EntityEditorPageWithProgress
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (showLinkedIssueSection != null && !showLinkedIssueSection.getSection().isDisposed()) {
-					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues());
-
-					if (selectedIssue != null) {
-						showLinkedIssueSection.getIssueTable().refresh(true);
-						showLinkedIssueSection.highlightIssueEntry(selectedIssue);
+					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues(), selectedIssue);
+					if (selectedIssue != null)
 						selectedIssue = null;
-					}
+
+//					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues());
+//					if (selectedIssue != null) {
+//						showLinkedIssueSection.highlightIssueEntry(selectedIssue);
+//						selectedIssue = null;
+//					}
 				}
 			}
 		});
@@ -115,7 +116,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	private Issue selectedIssue = null;
-	public void highlightIssueEntry(Issue issue) { selectedIssue = issue; }
+	public void setHighlightIssueEntry(Issue issue) { selectedIssue = issue; }
 
 
 	private class LinkToIssueAction extends Action {
@@ -148,12 +149,12 @@ extends EntityEditorPageWithProgress
 
 
 			// Update the table in the Section.
-			// TODO Use proper listeners for refreshing the table.
-			//      And then maybe find out the latest entry and highlight it. Kai
-			// --> See also: ShowLinkedIssueSection.AddIssueLinkAction, and IssueAttachAction. --> These should all somehow be unified, since ALL of their behaviours are the same. Kai.
+			// --> See also: ShowLinkedIssueSection.AddIssueLinkAction, and IssueAttachAction.
+			// --> These should all somehow be unified, since ALL of their behaviours are the same. Kai.
+			//     --> On second thoughts, maybe not. Since they are, erm, different, even though they are the same. Kai. <--  Hääää??? WTF does this mean?? Kai.
 			if (dialog.getReturnCode() == Window.OK) { // != Window.CANCEL) {
-				highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
-				getPageController().doLoad(new NullProgressMonitor());
+				setHighlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() ); // <-- Attempt to highlight the latest entry in the table.
+//				getPageController().doLoad(new NullProgressMonitor()); // <-- This shall be delegated to the issueLinksLifeCycleListener.
 			}
 		}
 	}
