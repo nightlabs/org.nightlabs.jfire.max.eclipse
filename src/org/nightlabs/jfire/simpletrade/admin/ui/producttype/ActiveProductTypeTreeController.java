@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
@@ -16,6 +14,7 @@ import org.nightlabs.jfire.simpletrade.notification.SimpleProductTypeParentResol
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.progress.ProgressMonitor;
 
 public abstract class ActiveProductTypeTreeController
 extends ActiveJDOObjectTreeController<ProductTypeID, SimpleProductType, ProductTypeTreeNode>
@@ -43,15 +42,15 @@ extends ActiveJDOObjectTreeController<ProductTypeID, SimpleProductType, ProductT
 	}
 
 	@Override
-	protected Collection<SimpleProductType> retrieveChildren(ProductTypeID parentID, SimpleProductType parent, IProgressMonitor monitor)
+	protected Collection<SimpleProductType> retrieveChildren(ProductTypeID parentID, SimpleProductType parent, ProgressMonitor monitor)
 	{
-		return SimpleProductTypeDAO.sharedInstance().getChildSimpleProductTypes(parentID, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+		return SimpleProductTypeDAO.sharedInstance().getChildSimpleProductTypes(parentID, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
 	@Override
-	protected Collection<SimpleProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
+	protected Collection<SimpleProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, ProgressMonitor monitor)
 	{
-		return SimpleProductTypeDAO.sharedInstance().getSimpleProductTypes(objectIDs, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+		return SimpleProductTypeDAO.sharedInstance().getSimpleProductTypes(objectIDs, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
 	@Override
