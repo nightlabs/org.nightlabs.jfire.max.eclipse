@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
@@ -16,6 +14,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.notification.VoucherTypeParentResolver;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.progress.ProgressMonitor;
 
 public abstract class ActiveVoucherTypeTreeController
 extends ActiveJDOObjectTreeController<ProductTypeID, VoucherType, VoucherTypeTreeNode>
@@ -32,18 +31,18 @@ extends ActiveJDOObjectTreeController<ProductTypeID, VoucherType, VoucherTypeTre
 	}
 
 	@Override
-	protected Collection<VoucherType> retrieveChildren(ProductTypeID parentID, VoucherType parent, IProgressMonitor monitor)
+	protected Collection<VoucherType> retrieveChildren(ProductTypeID parentID, VoucherType parent, ProgressMonitor monitor)
 	{
 		Collection<VoucherType> res = VoucherTypeDAO.sharedInstance().getChildVoucherTypes(
-				parentID, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+				parentID, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		return res;
 	}
 
 	@Override
-	protected Collection<VoucherType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
+	protected Collection<VoucherType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, ProgressMonitor monitor)
 	{
 		Collection<VoucherType> res = VoucherTypeDAO.sharedInstance().getVoucherTypes(
-				objectIDs, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+				objectIDs, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		return res;
 	}
 
