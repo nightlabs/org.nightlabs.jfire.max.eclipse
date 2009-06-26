@@ -32,7 +32,7 @@
             id="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView" targetID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView">
             <action
                 class="org.nightlabs.jfire.department.admin.ui.CreateDepartmentAction"
-                icon="icons/editor/DepartmentEditor.16x16.png"
+                icon="icons/CreateDepartmentAction.16x16.png"
                 id="org.nightlabs.jfire.department.admin.ui.CreateDepartmentAction"
                 label="Create Department"
                 style="push" toolbarPath="additions" tooltip="Create new Department"/>
