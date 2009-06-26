@@ -1,18 +1,18 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Point;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
 
 
-
+/**
+ * @author Fitas Amine - fitas at nightlabs dot de
+ *
+ */
 public class CreateNewIssueViewAction extends Action{
 	
 	/**
@@ -33,11 +33,16 @@ public class CreateNewIssueViewAction extends Action{
 	@Override
 	public void run() {
 		if(view.getPartner() != null)
-		{		
-			CreateIssueWizard createIssueWizard = new CreateIssueWizard();
-			createIssueWizard.addLinkedObject((ObjectID)JDOHelper.getObjectId(view.getPartner().getPerson()),
-					IssueLinkType.ISSUE_LINK_TYPE_ID_RELATED);
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(createIssueWizard);
+		{			
+			AttachIssueToObjectWizard attachIssueToObjectWizard = new AttachIssueToObjectWizard(view.getPartner().getPerson());
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(attachIssueToObjectWizard)
+			{
+				@Override
+				protected Point getInitialSize()
+				{
+					return new Point(convertHorizontalDLUsToPixels(600), convertVerticalDLUsToPixels(450));
+				}
+			};
 			dialog.open();
 		}
 	}
