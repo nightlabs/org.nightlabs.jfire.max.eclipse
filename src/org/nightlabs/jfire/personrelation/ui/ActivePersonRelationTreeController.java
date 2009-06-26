@@ -19,8 +19,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 	@Override
 	protected TreeNodeParentResolver createTreeNodeParentResolver() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("This method should not be called because we're using a TreeNode*Multi*ParentResolver!");
 	}
 
 	@Override
@@ -29,21 +28,22 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 	}
 
 	@Override
-	protected Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor)
 	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs,
+			ProgressMonitor monitor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID,
+			ProgressMonitor monitor) {
 		// TODO Auto-generated method stub
 		return null;
 	}
