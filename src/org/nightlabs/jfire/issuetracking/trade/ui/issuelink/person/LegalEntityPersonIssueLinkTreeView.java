@@ -42,7 +42,8 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	 */
 	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
-	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();  	
+	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();  
+	private AddNewCommentViewAction AddNewCommentViewAction = new AddNewCommentViewAction();
 	private LegalEntity partner = null;
 	
 
@@ -86,6 +87,8 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		createNewIssueViewAction.init(this);
 		toolBarManager.add(createNewIssueViewAction);
+		AddNewCommentViewAction.init(this);
+		toolBarManager.add(AddNewCommentViewAction);
 		createNewIssueViewAction.setEnabled(false);
 		
 	}
