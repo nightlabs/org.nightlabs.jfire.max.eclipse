@@ -59,5 +59,7 @@ public class LegalEntityEditorWizardOtherPage extends
 						LegalEntityEditorWizardOtherPage.class, null, SharedImages.ImageDimension._75x70));
 	}
 	
+	
+//	create
 
 }
