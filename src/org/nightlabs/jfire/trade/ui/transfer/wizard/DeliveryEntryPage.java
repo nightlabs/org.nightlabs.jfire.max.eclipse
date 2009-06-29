@@ -643,7 +643,11 @@ implements IDeliveryEntryPage
 		loadJob.schedule();
 	}
 
-	public int getDeliveryNotesToPrintCount() {
-		return automaticPrintingGroup.getActualPrintCount();
+	public int getDeliveryNotesToPrintCount()
+	{
+		if (automaticPrintingGroup != null)
+			return automaticPrintingGroup.getActualPrintCount();
+		else
+			return 0;
 	}
 }

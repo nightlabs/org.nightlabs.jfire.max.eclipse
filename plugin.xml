@@ -57,6 +57,13 @@
             category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView"
             id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView" name="%org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView.name"/>
+        <view
+              category="org.nightlabs.jfire.trade.ui.TradeCategory"
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateView"
+              icon="icons/articlecontainer/deliverydate/DeliveryDateView.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateView"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateView.name">
+        </view>
     </extension>
     <extension point="org.eclipse.ui.viewActions">
         <viewContribution
