@@ -116,7 +116,7 @@ extends WizardHopPage
 
 		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
-			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
+			protected void addResultTableListeners(AbstractTableComposite<Issue> tableComposite) {
 				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {

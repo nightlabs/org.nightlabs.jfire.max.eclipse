@@ -410,22 +410,50 @@ extends AbstractTableComposite<Issue>
 	}
 
 
-	public boolean removeElementByID(IssueID issueIDToBeDeleted) {
+
+	// ---[ Proposed additional helper methods ]----------------------------------------------------------------------|
+	// --->> Which perhaps can be upgraded into the super class?
+	/**
+	 * @return the ObjectIDs of all the elements in this table. Note that it is possible that the Collection is empty.
+	 */
+	public Collection<IssueID> getElementsObjectIDs() {
+		return NLJDOHelper.getObjectIDList( getElements() );
+	}
+
+	/**
+	 * Performs an O(n) search in the currecnt Collection based on the given ObjectID.
+	 * @return the element from this table that matches the given ObjectID. Returns null if no matching element is found.
+	 */
+	public Issue getElementByID(IssueID objectID) {
 		Collection<Issue> issues = getElements();
-		if (issues.isEmpty())	return false;
+		if (issues == null || issues.isEmpty())	return null;
 
 		Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issues);
 		Iterator<Issue> issueIter = issues.iterator();
 		for (IssueID issueID : issueIDs) {
-			Issue issueToBeDeleted = issueIter.next();
-			if (issueID.equals(issueIDToBeDeleted)) {
-				issues.remove( issueToBeDeleted );
-				this.setInput(issues);
-				return true;
-			}
+			Issue issue = issueIter.next();
+			if (objectID.equals(issueID))
+				return issue;
 		}
 
-		return false;
+		return null;
 	}
+
+	/**
+	 * Removes an element from this table given its matching ObjectID. Performs a linear search here.
+	 * @return the element that was removed from the table. Returns null if no matching element is found.
+	 */
+	public Issue removeElementByID(IssueID objectID) {
+		Issue issue = getElementByID(objectID);
+		if (issue != null) {
+			Collection<Issue> issues = getElements();
+			issues.remove(issue);
+			this.setInput(issues);
+		}
+
+		return issue;
+	}
+
+
 
 }
