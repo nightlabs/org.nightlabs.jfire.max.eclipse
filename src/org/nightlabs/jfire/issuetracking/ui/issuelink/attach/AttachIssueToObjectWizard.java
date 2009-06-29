@@ -100,13 +100,19 @@ extends DynamicPathWizard
 
 					if (JDOHelper.getObjectId(issue) == null) {
 						try {
-							User reporter = Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+//							User reporter = Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+							User reporter = Login.getLogin().getUser(
+									new String[] {User.FETCH_GROUP_NAME},
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+									new org.eclipse.core.runtime.SubProgressMonitor(_monitor, 50)
+							);
 							issue.setReporter(reporter);
+
 						} catch (LoginException e) {
 							throw new RuntimeException(e);
 						}
 
-						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // new RCPProgressMonitor(monitor)?
 					}
 					else {
 						//Issue Link

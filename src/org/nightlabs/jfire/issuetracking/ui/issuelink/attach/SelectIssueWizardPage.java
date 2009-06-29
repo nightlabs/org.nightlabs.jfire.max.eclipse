@@ -120,7 +120,8 @@ extends WizardHopPage
 				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
-						//do nothing!!!
+						// Do nothing!!!
+						// --> Or maybe we can already react for 'Finish' on the double-click? Kai.
 					}
 				});
 

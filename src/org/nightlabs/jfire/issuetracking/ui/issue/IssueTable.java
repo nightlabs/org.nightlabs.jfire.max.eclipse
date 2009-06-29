@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -282,11 +283,6 @@ extends AbstractTableComposite<Issue>
 
 		addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
-				StructuredSelection s = (StructuredSelection)e.getSelection();
-				if (s.isEmpty())
-					return;
-
-
 				// --> [Observation] 18.06.2009
 				// This table is used in several scenarios, and for all of them it makes perfect sense to open up an editor
 				// to display the selected Issue on a double-click event.
@@ -295,6 +291,11 @@ extends AbstractTableComposite<Issue>
 				// application when the Wizard has got focus.
 				if (isTableInWizard)
 					return;
+
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				if (s.isEmpty())
+					return;
+
 
 				Issue issue = (Issue)s.getFirstElement();
 				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
@@ -407,4 +408,24 @@ extends AbstractTableComposite<Issue>
 
 		super.setInput(input);
 	}
+
+
+	public boolean removeElementByID(IssueID issueIDToBeDeleted) {
+		Collection<Issue> issues = getElements();
+		if (issues.isEmpty())	return false;
+
+		Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issues);
+		Iterator<Issue> issueIter = issues.iterator();
+		for (IssueID issueID : issueIDs) {
+			Issue issueToBeDeleted = issueIter.next();
+			if (issueID.equals(issueIDToBeDeleted)) {
+				issues.remove( issueToBeDeleted );
+				this.setInput(issues);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }
