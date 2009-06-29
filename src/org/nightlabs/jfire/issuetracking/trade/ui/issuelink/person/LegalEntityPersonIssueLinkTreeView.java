@@ -5,6 +5,9 @@ import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -43,7 +46,18 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();  
-	private AddNewCommentViewAction AddNewCommentViewAction = new AddNewCommentViewAction();
+	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
+	private IssueLink selectedIssueLink;
+	
+	
+	protected void setSelectedIssueLink(IssueLink selectedIssueLink) {
+		this.selectedIssueLink = selectedIssueLink;
+	}
+
+	public IssueLink getSelectedIssueLink() {
+		return selectedIssueLink;
+	}
+
 	private LegalEntity partner = null;
 	
 
@@ -84,13 +98,37 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			}
 		});
 			
+
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		createNewIssueViewAction.init(this);
 		toolBarManager.add(createNewIssueViewAction);
-		AddNewCommentViewAction.init(this);
-		toolBarManager.add(AddNewCommentViewAction);
+		addNewCommentViewAction.init(this);
+		addNewCommentViewAction.setEnabled(false);
+		toolBarManager.add(addNewCommentViewAction);
 		createNewIssueViewAction.setEnabled(false);
 		
+	
+		showLegalEntityLinkedTreeComposite.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+			   public void selectionChanged(SelectionChangedEvent event) {
+			       // if the selection is empty clear the label
+			       if(event.getSelection().isEmpty()) {
+			    	   addNewCommentViewAction.setEnabled(false);   
+			           return;
+			       }
+					StructuredSelection s = (StructuredSelection)event.getSelection();
+
+					Object o = s.getFirstElement();
+					if (o instanceof IssueLink)
+					{	
+						setSelectedIssueLink((IssueLink)o);
+						addNewCommentViewAction.setEnabled(true);
+					}	
+					else
+						addNewCommentViewAction.setEnabled(false);
+			       
+			   }
+			});	
+	
 	}
 
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
