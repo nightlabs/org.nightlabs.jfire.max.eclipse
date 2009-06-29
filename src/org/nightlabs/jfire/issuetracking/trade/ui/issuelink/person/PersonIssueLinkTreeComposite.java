@@ -61,7 +61,7 @@ extends AbstractTreeComposite
 	{
 		super(parent, style);
 		init();
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);				
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
@@ -81,7 +81,7 @@ extends AbstractTreeComposite
 
 				Object o = s.getFirstElement();
 				if (o instanceof IssueLink)
-				{	
+				{
 					Issue issue = ((IssueLink)o).getIssue();
 					IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
 					try {
@@ -89,7 +89,7 @@ extends AbstractTreeComposite
 					} catch (Exception e1) {
 						throw new RuntimeException(e1);
 					}
-				}				
+				}
 			}
 
 		}
@@ -116,7 +116,7 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof IssueLinkTreeNode)			
+			if (parentElement instanceof IssueLinkTreeNode)
 				return ((IssueLinkTreeNode)parentElement).getChildNodes();
 			if (parentElement instanceof IssueLink)
 			{
@@ -130,8 +130,8 @@ extends AbstractTreeComposite
 
 				// for empty string description no need to add the desc node
 				if(((IssueLink)parentElement).getIssue().getDescription().getText().isEmpty())
-					return	commentsList.toArray();	
-				// concatnate the Comments nodes with the Desc 
+					return	commentsList.toArray();
+				// concatnate the Comments nodes with the Desc
 				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};
 				return concat(arrayDesc,commentsList.toArray());
 			}
@@ -150,10 +150,10 @@ extends AbstractTreeComposite
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
 		@Override
-		public boolean hasChildren(Object element) {	
+		public boolean hasChildren(Object element) {
 
 			if (element instanceof IssueLinkTreeNode)
-				return ((IssueLinkTreeNode)element).getHasChildNodes();
+				return ((IssueLinkTreeNode)element).hasChildren();
 			if (element instanceof IssueLink)
 				return ((IssueLink)element).getIssue().getComments().size() > 0||
 				!((IssueLink)element).getIssue().getDescription().getText().isEmpty();
@@ -177,7 +177,7 @@ extends AbstractTreeComposite
 	private class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 
-			if(columnIndex==0)		
+			if(columnIndex==0)
 				return getText(element);
 			else
 				return "";
@@ -246,7 +246,7 @@ extends AbstractTreeComposite
 	public void setRootNode(IssueLinkTreeNode rootNode)
 	{
 		if (rootNode == null)
-			return;		
+			return;
 		this.rootlegalEntityIssuesLinkNode = rootNode;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
