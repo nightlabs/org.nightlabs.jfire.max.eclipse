@@ -29,6 +29,7 @@ import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.id.IssueLinkID;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
@@ -39,7 +40,8 @@ import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -106,22 +108,29 @@ extends ToolBarSectionPart
 
 		@Override
 		public void notify(JDOLifecycleEvent event) {
-			// Perform the sifting here.
-			for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs()) {
-				IssueLink issueLink = IssueLinkDAO.sharedInstance().getIssueLink(
-						(IssueLinkID)dirtyObjectID.getObjectID(),
-						new String[] {FetchPlan.DEFAULT, IssueLink.FETCH_GROUP_LINKED_OBJECT}, // <-- Seems enough without having to load IssueType.
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new NullProgressMonitor()
-				);
+			ProgressMonitor monitor = getProgressMonitor();
+			monitor.beginTask("Updating issue links...", 100);
+			try {
+				// Perform the sifting here.
+				for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs()) {
+					IssueLink issueLink = IssueLinkDAO.sharedInstance().getIssueLink(
+							(IssueLinkID)dirtyObjectID.getObjectID(),
+							new String[] {FetchPlan.DEFAULT, IssueLink.FETCH_GROUP_LINKED_OBJECT}, // <-- Seems enough without having to load IssueType.
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new SubProgressMonitor(monitor, 10)
+					);
 
-				// If any single one of the DirtyObjects within the carrier points to the <linkedObject> known by
-				// the controller, then we stop the loop, and perform a single doLoad().
-				JDOLifecycleState lState = dirtyObjectID.getLifecycleState();	// <-- Bad... how does one deal with deleted objects? I need to access the linkedObject from the deleted IssueLink. Check with jdoPreDelete()?
-				if ( lState.equals(JDOLifecycleState.DELETED) || issueLink.getLinkedObjectID().equals( controller.getArticleContainerID() ) ) {
-					controller.doLoad(new NullProgressMonitor());
-					break;
+					// If any single one of the DirtyObjects within the carrier points to the <linkedObject> known by
+					// the controller, then we stop the loop, and perform a single doLoad().
+					JDOLifecycleState lState = dirtyObjectID.getLifecycleState();	// <-- Bad... how does one deal with deleted objects? I need to access the linkedObject from the deleted IssueLink. Check with jdoPreDelete()?
+					if ( lState.equals(JDOLifecycleState.DELETED) || issueLink.getLinkedObjectID().equals( controller.getArticleContainerID() ) ) {
+						controller.doLoad(new SubProgressMonitor(monitor, 70));
+						break;
+					}
 				}
+
+			} finally {
+				monitor.done();
 			}
 		}
 	};
@@ -130,19 +139,31 @@ extends ToolBarSectionPart
 	private NotificationListener issueChangeNotificationListener = new NotificationAdapterJob() {
 		@Override
 		public void notify(NotificationEvent event) {
-			// Check to see if any of the dirty Issues notified belong in our table.
-			// If so, refresh the entry.
+			ProgressMonitor monitor = getProgressMonitor();
+			monitor.beginTask("Updating issues...", 100);
 
-			// TODO Finish this properly. Pleazzzzz....
-			controller.doLoad(new NullProgressMonitor());
+			try {
+				// Check to see if any of the dirty Issues notified belong in our table.
+				// If so, refresh the entry.
+				Collection<Issue> issues = issueTable.getElements();
+				if (issues.isEmpty())	return;
 
-//			for (Object dirtyObjectID : event.getSubjects()) {
-//
-//			}
-//
-//
-//			event.getSource();
-//			System.out.println();
+				Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issues);
+				for (Object obj : event.getSubjects()) {
+					if (obj == null)
+						continue;
+
+					DirtyObjectID dirtyObjectID = (DirtyObjectID) obj;
+					if (dirtyObjectID.getLifecycleState().equals( JDOLifecycleState.DIRTY ) && issueIDs.contains(dirtyObjectID.getObjectID())) {
+						controller.doLoad(new SubProgressMonitor(monitor, 90));
+						break;
+					}
+				}
+
+			} finally {
+				monitor.done();
+			}
+
 		}
 	};
 	// ------ KaiExperiments ----- >8 -------------------------------
