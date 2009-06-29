@@ -93,14 +93,7 @@ extends EntityEditorPageWithProgress
 			public void run() {
 				if (showLinkedIssueSection != null && !showLinkedIssueSection.getSection().isDisposed()) {
 					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues(), selectedIssue);
-					if (selectedIssue != null)
-						selectedIssue = null;
-
-//					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues());
-//					if (selectedIssue != null) {
-//						showLinkedIssueSection.highlightIssueEntry(selectedIssue);
-//						selectedIssue = null;
-//					}
+					selectedIssue = null;
 				}
 			}
 		});
