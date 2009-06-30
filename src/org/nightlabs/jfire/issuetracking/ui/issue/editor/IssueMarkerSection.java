@@ -20,6 +20,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerTable;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * A section for the {@link IssueEditorGeneralPage} to handle the interface mechanisms for the
@@ -38,7 +39,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	 */
 	public IssueMarkerSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getSection().setText("Issue Markers");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueMarkerSection.section.text")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
@@ -119,8 +120,8 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		public AddIssueMarkerAction() {
 			setId(AddIssueMarkerAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Mark issue");
-			setText("Mark issue");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueMarkerSection.addIssueMarkerAction.tooltip")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueMarkerSection.addIssueMarkerAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -152,8 +153,8 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		public RemoveIssueMarkerAction() {
 			setId(RemoveIssueMarkerAction.class.getName());
 			setImageDescriptor(SharedImages.DELETE_16x16);
-			setToolTipText("Delete currently selected issue marker");
-			setText("Delete issue marker");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueMarkerSection.deleteIssueMarkerAction.tooltip")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueMarkerSection.deleteIssueMarkerAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

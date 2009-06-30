@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 public class ProjectEditorData{
@@ -19,7 +20,7 @@ public class ProjectEditorData{
 	public void setUsers(Collection<User> users) {
 		Collection<User> oldUsers = this.users;
         this.users = users;
-		pcs.firePropertyChange("users", oldUsers, users);
+		pcs.firePropertyChange("users", oldUsers, users); //$NON-NLS-1$
 	}
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {

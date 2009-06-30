@@ -42,7 +42,7 @@ extends AbstractIssueLinkAdder
 	
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
-		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, "");
+		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, ""); //$NON-NLS-1$
 		personSearchComposite.getResultTable().addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent evt) {

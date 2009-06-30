@@ -27,6 +27,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueManagerRemote;
 import org.nightlabs.jfire.issue.id.IssueMarkerID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -43,7 +44,7 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 	 */
 	public AddIssueMarkerWizard(Issue issue) {
 		this.issue = issue;
-		setWindowTitle("Add new issue marker");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard.window.title")); //$NON-NLS-1$
 		setForcePreviousAndNextButtons(false);
 	}
 
@@ -89,8 +90,8 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 		 * Creates a new instance of an AddIssueMarkerWizardPage.
 		 */
 		public AddIssueMarkerWizardPage() {
-			super(AddIssueMarkerWizardPage.class.getName(), "Add issue marker");
-			setDescription("Select an issue marker name to mark this issue.");
+			super(AddIssueMarkerWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard.page.name")); //$NON-NLS-1$
+			setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard.page.description")); //$NON-NLS-1$
 		}
 
 
@@ -103,7 +104,7 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 			page.setLayoutData(new GridData(GridData.FILL_BOTH));
 			page.getGridLayout().numColumns = 1;
 
-			new Label(page, SWT.NONE).setText("Marker name :");
+			new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard.label.markerName")); //$NON-NLS-1$
 			issueMarkerWizardTable = new IssueMarkerWizardTable(page, issue.getIssueMarkers());
 			issueMarkerWizardTable.addDoubleClickListener( new IDoubleClickListener() {
 				@Override
@@ -112,7 +113,7 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 
 
 			// Load the IssueMarkers references.
-			Job job = new Job("Loading...") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard.job.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
 					IssueManagerRemote imr = null;

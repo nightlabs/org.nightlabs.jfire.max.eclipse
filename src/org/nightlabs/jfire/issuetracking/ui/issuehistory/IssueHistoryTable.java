@@ -159,7 +159,7 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 					case(2): return issueHistoryItem.getDescription(); //.getChange();
 				}
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		@Override

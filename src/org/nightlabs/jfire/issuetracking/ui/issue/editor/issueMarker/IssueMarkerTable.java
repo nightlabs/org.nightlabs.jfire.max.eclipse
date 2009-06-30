@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * An {@link AbstractTableComposite} to deal with displaying {@link IssueMarker}s.
@@ -52,11 +53,11 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("Marker name");
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerTable.column.markerName")); //$NON-NLS-1$
 
 		tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("Description");
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerTable.column.description")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{20, 70});
 		table.setLayout(layout);
@@ -128,7 +129,7 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 				if (columnIndex == 1) return issueMarker.getDescription().getText();
 			}
 
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 

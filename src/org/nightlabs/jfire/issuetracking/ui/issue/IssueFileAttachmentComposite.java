@@ -61,7 +61,7 @@ extends XComposite
 			public String getText(Object element) {
 				if (element instanceof IssueFileAttachment) {
 					IssueFileAttachment issueFileAttachment = (IssueFileAttachment)element;
-					return String.format("%s (%s)", issueFileAttachment.getFileName(), issueFileAttachment.getFileSize() + " bytes");
+					return String.format("%s (%s)", issueFileAttachment.getFileName(), issueFileAttachment.getFileSize() + " bytes"); //$NON-NLS-1$ //$NON-NLS-2$
 					// return ((IssueFileAttachment)element).getFileName();
 				}
 

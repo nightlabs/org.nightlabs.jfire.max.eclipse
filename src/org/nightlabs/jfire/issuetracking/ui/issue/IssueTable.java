@@ -155,7 +155,7 @@ extends AbstractTableComposite<Issue>
 		StringBuilder sb = new StringBuilder();
 		for (IssueMarker issueMarker : issueMarkers) {
 			if (sb.length() > 0)
-				sb.append("::");
+				sb.append("::"); //$NON-NLS-1$
 
 			sb.append(issueMarker.getOrganisationID());
 			sb.append('/');
@@ -170,7 +170,7 @@ extends AbstractTableComposite<Issue>
 	protected Image getCombiIssueMarkerImage(Issue issue)
 	{
 		if (maxIssueMarkerCountPerIssue < 0)
-			throw new IllegalStateException("maxIssueMarkerCountPerIssue < 0");
+			throw new IllegalStateException("maxIssueMarkerCountPerIssue < 0"); //$NON-NLS-1$
 
 		String imageKey = generateCombiIssueMarkerImageKey(issue);
 		Image combiImage = imageKey2Image.get(imageKey);
@@ -255,7 +255,7 @@ extends AbstractTableComposite<Issue>
 		// ---->> Added to display IssueMarker icons, whenever they are avaible in an Issue ------------------------------------|
 		tc = new TableColumn(table, SWT.LEFT); // @column 5
 		tc.setMoveable(true);
-		tc.setText("Markers");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.column.markers.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
 		// <<-------------------------------------------------------------------------------------------------------------------|
 

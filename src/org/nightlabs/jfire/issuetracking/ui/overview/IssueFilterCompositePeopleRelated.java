@@ -205,7 +205,7 @@ public class IssueFilterCompositePeopleRelated
 				allAssigneeButton.setSelection(!active);
 				sectionActive = active;
 				if (!active) {
-					assigneeText.setText("");
+					assigneeText.setText(""); //$NON-NLS-1$
 					getQuery().setAssigneeID(null);
 				}
 			}
@@ -233,7 +233,7 @@ public class IssueFilterCompositePeopleRelated
 				allReporterButton.setSelection(!active);
 				sectionActive = active;
 				if (!active) {
-					reporterText.setText("");
+					reporterText.setText(""); //$NON-NLS-1$
 					getQuery().setReporterID(null);
 				}
 			}

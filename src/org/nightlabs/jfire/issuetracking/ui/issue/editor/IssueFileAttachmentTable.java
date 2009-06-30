@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * An {@link AbstractTableComposite} to deal with displaying {@link IssueFileAttachment}s.
@@ -40,11 +41,11 @@ public class IssueFileAttachmentTable extends AbstractTableComposite<IssueFileAt
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("File name");
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentTable.column.filename.text")); //$NON-NLS-1$
 
 		tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("Size");
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentTable.column.size.text")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{70, 30});
 		table.setLayout(layout);
@@ -73,10 +74,10 @@ public class IssueFileAttachmentTable extends AbstractTableComposite<IssueFileAt
 				IssueFileAttachment iFA = (IssueFileAttachment)element;
 
 				if (columnIndex == 0) return iFA.getFileName();
-				if (columnIndex == 1) return iFA.getFileSize() + " bytes";
+				if (columnIndex == 1) return iFA.getFileSize() + " bytes"; //$NON-NLS-1$
 			}
 
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 }

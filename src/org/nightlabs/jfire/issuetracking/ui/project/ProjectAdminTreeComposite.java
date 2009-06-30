@@ -33,6 +33,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateSubProjectAction;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -156,7 +157,7 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 			if (jdoObject != null)
 				return jdoObject.getName().getText();
 
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		@Override
