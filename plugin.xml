@@ -14,23 +14,23 @@
             id="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer" name="Offer"/>
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer" name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder" name="Order"/>
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder" name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder.name"/>
         <issueLinkHandlerCategory
             id="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice" name="Invoice"/>
+            class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice" name="%org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice.name"/>
         <issueLinkHandlerCategory
             id="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote" name="DeliveryNote"/>
+            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote" name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote" name="ReceptionNote"/>
+            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote" name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote.name"/>
     </extension>
     <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
