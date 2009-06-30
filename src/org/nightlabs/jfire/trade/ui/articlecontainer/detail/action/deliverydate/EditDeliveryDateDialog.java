@@ -16,9 +16,9 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ArticleDeliveryDateCarrier;
-import org.nightlabs.jfire.trade.DeliveryDateMode;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
+import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
+import org.nightlabs.jfire.trade.deliverydate.DeliveryDateMode;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**

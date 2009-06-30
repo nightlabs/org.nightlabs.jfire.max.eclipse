@@ -11,7 +11,7 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.celleditor.DateTimeCellEditor;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ArticleDeliveryDateCarrier;
+import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.DateFormatter;
 
