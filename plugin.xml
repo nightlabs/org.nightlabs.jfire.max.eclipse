@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
 <plugin>
-    
-    <extension
-         point="org.eclipse.ui.editors">
-      <editor
-        	class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
-            default="false"
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="false"
             icon="icons/overview/issueproperty/IssueType-icon.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
-            name="Issue Type">
-      </editor>
-   </extension>
-   
+            id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor" name="%org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor.name"/>
+    </extension>
     <extension point="org.nightlabs.base.ui.entityEditor">
-		<pageFactory 
-			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
-			indexHint="10" />
-  	</extension>  
-  
-  <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+        <pageFactory
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPage$Factory"
+            editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor" indexHint="10"/>
+    </extension>
+    <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
             targetEditorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor">
          <editorActionBarContribution
@@ -36,11 +28,8 @@
          </groupMarker>         
       </editorActionBarContributionRegistry>
    </extension-->
-   
-   
-   <extension
-         point="org.nightlabs.jfire.base.ui.overview">
-      	<categoryFactory
+    <extension point="org.nightlabs.jfire.base.ui.overview">
+        <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
             class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeCategoryFactory"
             index="10" name="Issue Types" scope="IssueShelf"/>
