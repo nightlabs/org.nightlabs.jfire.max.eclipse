@@ -98,16 +98,6 @@
             productTypeDetailViewFactory="org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewFactory">
       </productTypeDetailView>
    </extension>
-<!--   
-    <extension
-          point="org.nightlabs.tableprovider.ui">
-       <tableprovider
-             elementClass="org.nightlabs.jfire.trade.ArticleDeliveryDateCarrier"
-             scopeClass="org.nightlabs.jfire.trade.ProductType"
-             factoryClass="org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleDeliveryDateCarrierTableProviderFactory">
-       </tableprovider>
-    </extension>
--->
     <extension
           point="org.nightlabs.tableprovider.ui">
        <tableprovider
