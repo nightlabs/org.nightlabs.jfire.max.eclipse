@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension point="org.eclipse.ui.views">
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView"
+            icon="icons/editor/SysAdminEntityTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView" name="Relations &amp;&amp; Issues"/>
+    </extension>
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">   
+			<view id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView"
+			relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"
+			relationship="stack"/>
+		</perspectiveExtension>
+	</extension>
+	<extension point="org.eclipse.ui.viewActions">
+         <viewContribution
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeViewContribution" targetID="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView">
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreatePersonRelationAction"
+                icon="icons/CreatePersonRelationAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreatePersonRelationAction"
+                label=""
+                style="push" toolbarPath="additions" tooltip="Create a new person relation"/>
+        </viewContribution>
+   </extension>
+</plugin>
