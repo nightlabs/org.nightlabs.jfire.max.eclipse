@@ -118,12 +118,12 @@
             id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue" name="Issue"/>
+            class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue" name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue.name"/>
         <issueLinkHandlerCategory
-            id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person" name="Person"/>
+            id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person" name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person.name"/>
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
-            class="org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson" name="Person"/>
+            class="org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson" name="%org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.editor2perspective">
         <registry
@@ -171,17 +171,17 @@
         <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory"
-            index="0" name="Issue" scope="IssueShelf"/>
+            index="0" name="%org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory.name" scope="IssueShelf"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             icon="icons/IssuePerspective.16x16.png"
-            index="0" name="Issue List"/>
+            index="0" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview.project"
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory"
-            index="20" name="Project" scope="IssueShelf"/>
+            index="20" name="%org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory.name" scope="IssueShelf"/>
     </extension>
     <extension
           point="org.eclipse.ui.newWizards">
