@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -115,7 +116,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
 			ProgressMonitor monitor = getProgressMonitor();
-			monitor.beginTask("do sth.", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView.job.doSomething"), 100); //$NON-NLS-1$
 			// some work
 			monitor.worked(30);
 			if (event.getSubjects().isEmpty())
@@ -128,7 +129,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 
 	private void legalEntityChanged(AnchorID partnerID, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Loading legal entity", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView.task.loadingLegalEntity"), 100); //$NON-NLS-1$
 		try {
 			LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
 					partnerID,

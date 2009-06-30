@@ -98,7 +98,7 @@ extends ToolBarSectionPart
 
 	// --- 8< --- KaiExperiments: since 23.06.2009 ------------------
 	// We require the explicit listener here, to monitor any additions or removal of IssueLinks.
-	private JDOLifecycleListener issueLinksLifeCycleListener = new JDOLifecycleAdapterJob("Checking IssueLinks...") {
+	private JDOLifecycleListener issueLinksLifeCycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.job.name.checkingIssueLinks")) { //$NON-NLS-1$
 		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
 				IssueLink.class, false, JDOLifecycleState.NEW, JDOLifecycleState.DELETED
 		);
@@ -109,7 +109,7 @@ extends ToolBarSectionPart
 		@Override
 		public void notify(JDOLifecycleEvent event) {
 			ProgressMonitor monitor = getProgressMonitor();
-			monitor.beginTask("Updating issue links...", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.task.updatingIssueLinks"), 100); //$NON-NLS-1$
 			try {
 				// Perform the sifting here.
 				for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs()) {
@@ -140,7 +140,7 @@ extends ToolBarSectionPart
 		@Override
 		public void notify(NotificationEvent event) {
 			ProgressMonitor monitor = getProgressMonitor();
-			monitor.beginTask("Updating issues...", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.task.updatingIssue"), 100); //$NON-NLS-1$
 
 			try {
 				// Check to see if any of the dirty Issues notified belong in our table.
@@ -213,8 +213,8 @@ extends ToolBarSectionPart
 		public AddIssueLinkAction() {
 			setId(AddIssueLinkAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Add a link to an Issue");
-			setText("Add a link to an Issue");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.addIssueLinkAction.tooltip")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.addIssueLinkAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

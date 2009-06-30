@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.dao.IssueCommentDAO;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -57,16 +58,16 @@ public class AddNewCommentViewAction  extends Action{
 			return;
 
 		final InputDialog dlg = new InputDialog(RCPUtil.getActiveShell(),
-				"Add new Comment", "Enter a New Comment", "", null);
+				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.title"), Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.description"), "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (dlg.open() == Window.OK) {	
 
 			final String text = dlg.getValue(); 
 
-			Job job = new Job("Saving the newly Added Comment") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.job.savingComment")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor)
 				{
-					monitor.beginTask("Saving the newly Added Comment", 100);
+					monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.task.savingComment"), 100); //$NON-NLS-1$
 					Issue issue = view.getSelectedIssueLink().getIssue();
 					IssueComment comment = new IssueComment(issue.getOrganisationID(),
 							IDGenerator.nextID(IssueComment.class),
@@ -101,11 +102,11 @@ public class AddNewCommentViewAction  extends Action{
 
 	@Override
 	public String getText() {
-		return "Add a Comment";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.action.text"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTipText() {
-		return "Add a Comment";	
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.action.tooltip");	 //$NON-NLS-1$
 	}
 }

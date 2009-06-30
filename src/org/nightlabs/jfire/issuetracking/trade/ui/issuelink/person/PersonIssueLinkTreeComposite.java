@@ -45,6 +45,7 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -147,7 +148,7 @@ extends AbstractTreeComposite
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			ProgressMonitor monitor = getProgressMonitor();
-			monitor.beginTask("refresh nodes", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.task.refreshNodes"), 100); //$NON-NLS-1$
 			setRootNode(partner, new SubProgressMonitor(monitor, 100));}		
 	};
 
@@ -226,7 +227,7 @@ extends AbstractTreeComposite
 			if(columnIndex==0)
 				return getText(element);
 			else
-				return "";
+				return ""; //$NON-NLS-1$
 		}
 
 		@Override
@@ -277,7 +278,7 @@ extends AbstractTreeComposite
 			if (element instanceof IssueLinkTreeNode)
 				return ((IssueLinkTreeNode)element).getName();
 			if (element instanceof IssueLink)
-				return String.format("%s/%s",((IssueLink)element).getIssue().getIssueIDAsString(),
+				return String.format(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.2"),((IssueLink)element).getIssue().getIssueIDAsString(), //$NON-NLS-1$
 						((IssueLink)element).getIssue().getSubject().getText());
 			if (element instanceof IssueComment)
 				return ((IssueComment)element).getText();
@@ -301,7 +302,7 @@ extends AbstractTreeComposite
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 80)
 		);
 
-		this.rootlegalEntityIssuesLinkNode = new IssueLinkTreeNode("Issue List", null)
+		this.rootlegalEntityIssuesLinkNode = new IssueLinkTreeNode(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.node.name"), null) //$NON-NLS-1$
 		{
 			@Override
 			public Object[] getChildNodes() {

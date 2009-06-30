@@ -73,7 +73,7 @@ extends EntityEditorPageWithProgress
 
 	private MenuManager menuMgr;
 	private void createContextMenu() {
-		menuMgr = new MenuManager("#PopupMenu");
+		menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager m) {
@@ -123,8 +123,8 @@ extends EntityEditorPageWithProgress
 					ShowLinkedIssueSection.class,
 			"Link")); //$NON-NLS-1$
 
-			setToolTipText("Link to another issue");
-			setText("Link to Issue");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage.linkAction.tooltip")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage.linkAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

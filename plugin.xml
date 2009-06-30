@@ -1,60 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-   <extension
-         point="org.nightlabs.jfire.trade.ui.articleContainerAction">
-      <articleContainerAction
+    <extension point="org.nightlabs.jfire.trade.ui.articleContainerAction">
+        <articleContainerAction
             class="org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction"
             contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/action/issue/AttachIssueAction.16x16.png"
             id="org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction"
             menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
-            name="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.name"
-            tooltip="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.tooltip">
-      </articleContainerAction>
-   </extension>
-   <extension
-         point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
-      <issueLinkHandlerCategory
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
-            name="Trade">
-      </issueLinkHandlerCategory>
-      <issueLinkHandlerFactory
+            name="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.name" tooltip="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.tooltip"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
+        <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer"
-            name="Offer">
-      </issueLinkHandlerFactory>
-      <issueLinkHandlerFactory
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer" name="Offer"/>
+        <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder"
-            name="Order">
-      </issueLinkHandlerFactory>
-      <issueLinkHandlerCategory
-            id="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
-            name="Accounting">
-      </issueLinkHandlerCategory>
-      <issueLinkHandlerFactory
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder" name="Order"/>
+        <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice"
-            name="Invoice">
-      </issueLinkHandlerFactory>
-      <issueLinkHandlerCategory
-            id="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
-            name="Store">
-      </issueLinkHandlerCategory>
-      <issueLinkHandlerFactory
+            class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice" name="Invoice"/>
+        <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote"
-            name="DeliveryNote">
-       </issueLinkHandlerFactory>
-       <issueLinkHandlerFactory
+            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote" name="DeliveryNote"/>
+        <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote"
-            name="ReceptionNote">
-      </issueLinkHandlerFactory>
-   </extension>
-   
-  
-  <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote" name="ReceptionNote"/>
+    </extension>
+    <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
             targetEditorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor">
          <editorActionBarContribution
@@ -71,35 +49,27 @@
          </groupMarker>         
       </editorActionBarContributionRegistry>
    </extension-->
-     <extension point="org.eclipse.ui.views">
+    <extension point="org.eclipse.ui.views">
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
             icon="icons/editor/SysAdminEntityTreeView.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView" name="Linked issues"/>
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView" name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView.name"/>
     </extension>
-	<extension point="org.eclipse.ui.perspectiveExtensions">
-		<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">   
-			<view id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
-			relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"
-			relationship="stack"/>
-		</perspectiveExtension>
-	</extension>	
-	 
-   <extension
-         point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
-      <articleContainerEditorPageFactory
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+            <view
+                id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
+                relationship="stack" relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"/>
+        </perspectiveExtension>
+    </extension>
+    <extension point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
+        <articleContainerEditorPageFactory
             articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
             class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage$Factory"
             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage"
-            indexHint="600">
-      </articleContainerEditorPageFactory>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-         <objectContribution
-      		objectClass="java.lang.Object"
-      		id="com.qualityeclipse.favorites.popupMenu">
-  		</objectContribution>
-   </extension>
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage" indexHint="600"/>
+    </extension>
+    <extension point="org.eclipse.ui.popupMenus">
+        <objectContribution id="com.qualityeclipse.favorites.popupMenu" objectClass="java.lang.Object"/>
+    </extension>
 </plugin>

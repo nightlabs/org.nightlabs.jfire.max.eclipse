@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.Point;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
 
 
@@ -55,12 +56,12 @@ public class CreateNewIssueViewAction extends Action{
 
 	@Override
 	public String getText() {
-		return "Create New Linked Issue";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.CreateNewIssueViewAction.text"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTipText() {
-		return "Create New Linked Issue";	
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.CreateNewIssueViewAction.tooltip");	 //$NON-NLS-1$
 	}
 
 
