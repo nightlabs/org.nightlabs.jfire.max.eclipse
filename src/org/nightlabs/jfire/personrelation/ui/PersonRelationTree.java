@@ -1,41 +1,192 @@
 package org.nightlabs.jfire.personrelation.ui;
 
+import java.util.Collection;
 
-//public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTreeNode>
-//{
-//	protected static class PersonRelationTreeContentProvider
-//	extends JDOObjectLazyTreeContentProvider<ObjectID, Object, PersonRelationTreeNode>
-//	{
-//	}
-//
-//	public PersonRelationTree(Composite parent) {
-//		super(parent);
-//	}
-//
-//	@Override
-//	public void createTreeColumns(Tree tree) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	@Override
-//	public void setTreeProvider(TreeViewer treeViewer) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	public void setPersonIDs(Collection<PropertySetID> personIDs)
-//	{
-//
-//	}
-//
-//	/**
-//	 * @deprecated Do not call this method! It's only inherited and used
-//	 * internally - use {@link #setPersonIDs(Collection)} instead.
-//	 */
-//	@Deprecated
-//	@Override
-//	public void setInput(Object input) {
-//		super.setInput(input);
-//	}
-//}
+import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.nightlabs.base.ui.tree.AbstractTreeComposite;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
+import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEventHandler;
+import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeContentProvider;
+import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeLabelProvider;
+import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.id.PersonRelationID;
+import org.nightlabs.jfire.prop.id.PropertySetID;
+import org.nightlabs.util.NLLocale;
+
+
+public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTreeNode>
+{
+	private Collection<PropertySetID> personIDs;
+
+	protected static class PersonRelationTreeContentProvider
+	extends JDOObjectLazyTreeContentProvider<ObjectID, Object, PersonRelationTreeNode>
+	{
+	}
+
+	protected static class PersonRelationTreeLabelProvider extends JDOObjectLazyTreeLabelProvider<ObjectID, Object, PersonRelationTreeNode>
+	{
+		private String languageID = NLLocale.getDefault().getLanguage();
+
+		@Override
+		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int columnIndex) {
+			if (jdoObject == null) {
+				if (jdoObjectID instanceof PropertySetID) {
+					PropertySetID personID = (PropertySetID) jdoObjectID;
+
+					switch (columnIndex) {
+						case 0:
+							return personID.organisationID + '/' + personID.propertySetID;
+						default:
+							break;
+					}
+				}
+				else if (jdoObjectID instanceof PersonRelationID) {
+					PersonRelationID personRelationID = (PersonRelationID) jdoObjectID;
+
+					switch (columnIndex) {
+						case 0:
+							return personRelationID.organisationID + '/' + personRelationID.personRelationID;
+						default:
+							break;
+					}
+				}
+			}
+			else {
+				if (jdoObject instanceof Person) {
+					Person person = (Person) jdoObject;
+
+					switch (columnIndex) {
+						case 0:
+							return null;
+						case 1:
+							return person.getDisplayName();
+						default:
+							break;
+					}
+				}
+				else if (jdoObject instanceof PersonRelation) {
+					PersonRelation personRelation = (PersonRelation) jdoObject;
+
+					switch (columnIndex) {
+						case 0:
+							return personRelation.getPersonRelationType().getName().getText(languageID);
+						case 1:
+							return personRelation.getTo().getDisplayName();
+						default:
+							break;
+					}
+				}
+				else {
+					// TODO delegate
+				}
+			}
+
+			return null;
+		}
+
+	}
+
+	private void assertSWTThread()
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!");
+	}
+
+	private void assertNotDisposed() {
+		if (isDisposed())
+			throw new IllegalStateException("This PersonRelationTree is already disposed! " + this);
+	}
+
+	private ActivePersonRelationTreeController activePersonRelationTreeController;
+
+	public PersonRelationTree(Composite parent) {
+		super(parent, SWT.VIRTUAL);
+
+		activePersonRelationTreeController = new ActivePersonRelationTreeController() {
+			@Override
+			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent)
+			{
+				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
+			}
+		};
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent event) {
+				activePersonRelationTreeController.close();
+				activePersonRelationTreeController = null;
+			}
+		});
+
+		super.setInput(activePersonRelationTreeController);
+	}
+
+	@Override
+	public void createTreeColumns(Tree tree) {
+		TableLayout tableLayout = new TableLayout();
+
+		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
+		column.setText("Relation");
+		tableLayout.addColumnData(new ColumnPixelData(120));
+
+		column = new TreeColumn(tree, SWT.LEFT);
+		column.setText("Person");
+		tableLayout.addColumnData(new ColumnWeightData(70));
+
+		tree.setLayout(tableLayout);
+
+		tree.setHeaderVisible(true);
+	}
+
+	@Override
+	public void setTreeProvider(TreeViewer treeViewer) {
+		treeViewer.setContentProvider(new PersonRelationTreeContentProvider());
+		treeViewer.setLabelProvider(new PersonRelationTreeLabelProvider());
+	}
+
+	public void setInputPersonIDs(Collection<PropertySetID> personIDs)
+	{
+		assertSWTThread();
+		assertNotDisposed();
+
+		super.setInput(null);
+		this.personIDs = personIDs;
+		activePersonRelationTreeController.setRootPersonIDs(personIDs);
+		super.setInput(activePersonRelationTreeController);
+//		refresh(true);
+	}
+
+	public Collection<PropertySetID> getInputPersonIDs() {
+		return personIDs;
+	}
+
+	public PropertySetID getSelectedInputPersonID() {
+		Collection<PropertySetID> inputPersonIDs = getInputPersonIDs();
+		if (inputPersonIDs == null || inputPersonIDs.isEmpty())
+			return null;
+
+		PropertySetID personID = inputPersonIDs.iterator().next();
+		return personID;
+	}
+
+	/**
+	 * @deprecated Do not call this method! It's only inherited and used
+	 * internally - use {@link #setInputPersonIDs(Collection)} instead.
+	 */
+	@Deprecated
+	@Override
+	public void setInput(Object input) {
+		super.setInput(input);
+	}
+}
