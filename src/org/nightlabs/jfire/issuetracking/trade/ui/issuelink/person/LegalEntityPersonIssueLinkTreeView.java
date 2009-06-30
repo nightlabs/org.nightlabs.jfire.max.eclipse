@@ -1,9 +1,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
-import java.util.Collection;
-
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IToolBarManager;
@@ -19,14 +16,8 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
-import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
-import org.nightlabs.jfire.issue.id.IssueLinkID;
-import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -52,7 +43,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();
 	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
 	private IssueLink selectedIssueLink;
-	
+
 	protected void setSelectedIssueLink(IssueLink selectedIssueLink) {
 		this.selectedIssueLink = selectedIssueLink;
 	}
@@ -90,8 +81,6 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			}
 		});
 
-
-
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		createNewIssueViewAction.init(this);
 		toolBarManager.add(createNewIssueViewAction);
@@ -101,25 +90,25 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		createNewIssueViewAction.setEnabled(false);
 
 		showLegalEntityLinkedTreeComposite.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-			   public void selectionChanged(SelectionChangedEvent event) {
-			       // if the selection is empty clear the label
-			       if(event.getSelection().isEmpty()) {
-			    	   addNewCommentViewAction.setEnabled(false);
-			           return;
-			       }
-					StructuredSelection s = (StructuredSelection)event.getSelection();
+			public void selectionChanged(SelectionChangedEvent event) {
+				// if the selection is empty clear the label
+				if(event.getSelection().isEmpty()) {
+					addNewCommentViewAction.setEnabled(false);
+					return;
+				}
+				StructuredSelection s = (StructuredSelection)event.getSelection();
 
-					Object o = s.getFirstElement();
-					if (o instanceof IssueLink)
-					{
-						setSelectedIssueLink((IssueLink)o);
-						addNewCommentViewAction.setEnabled(true);
-					}
-					else
-						addNewCommentViewAction.setEnabled(false);
+				Object o = s.getFirstElement();
+				if (o instanceof IssueLink)
+				{
+					setSelectedIssueLink((IssueLink)o);
+					addNewCommentViewAction.setEnabled(true);
+				}
+				else
+					addNewCommentViewAction.setEnabled(false);
 
-			   }
-			});
+			}
+		});
 
 	}
 
@@ -152,8 +141,8 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 					new SubProgressMonitor(monitor, 30)
 			);
 			this.partner = partner;
-			
-			showLegalEntityLinkedTreeComposite.loadRootNode(partner, new SubProgressMonitor(monitor, 70));
+
+			showLegalEntityLinkedTreeComposite.setRootNode(partner, new SubProgressMonitor(monitor, 70));
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					createNewIssueViewAction.setEnabled(true);
@@ -163,8 +152,8 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			monitor.done();
 		}
 	}
-	
-	
+
+
 	public LegalEntity getPartner() {
 		return partner;
 	}

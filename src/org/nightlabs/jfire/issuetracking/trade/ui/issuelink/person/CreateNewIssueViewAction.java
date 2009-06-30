@@ -14,7 +14,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObject
  *
  */
 public class CreateNewIssueViewAction extends Action{
-	
+
 	/**
 	 *
 	 */
@@ -61,8 +61,8 @@ public class CreateNewIssueViewAction extends Action{
 	@Override
 	public String getToolTipText() {
 		return "Create New Linked Issue";	
-		}
+	}
 
-	
+
 
 }

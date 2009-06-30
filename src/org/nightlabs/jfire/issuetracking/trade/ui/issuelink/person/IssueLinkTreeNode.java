@@ -9,17 +9,6 @@ import org.eclipse.swt.graphics.Image;
  */
 public abstract class IssueLinkTreeNode{
 
-	// Some comments to this code (I already refactored it):
-	//
-	// 1) Why is "hasChildNodes" a Boolean instead of a boolean?! That might lead to NPEs!
-	// 2) Why was this class not abstract when its methods are overridden anyway?
-	// 3) Why was only one of the method overridden (getChildNodes) assuming that it is called before "getHasChildNodes".
-	//    It is nowhere documented that these methods are called in that order and might be called in a different order
-	//    leading to wrong results!
-	// 4) See notes in LegalEntityPersonIssueLinkTreeView!
-	//
-	// Marco.
-
 	protected String name;
 	protected Image icon;
 
@@ -48,9 +37,8 @@ public abstract class IssueLinkTreeNode{
 		this.icon = icon;
 	}
 
-	
+
 	public abstract Object[] getChildNodes();
-	
 	public abstract boolean hasChildren();
 
 }

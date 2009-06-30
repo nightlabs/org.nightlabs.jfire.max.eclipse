@@ -148,7 +148,7 @@ extends AbstractTreeComposite
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask("refresh nodes", 100);
-			loadRootNode(partner, new SubProgressMonitor(monitor, 100));}		
+			setRootNode(partner, new SubProgressMonitor(monitor, 100));}		
 	};
 
 	private class ContentProvider extends TreeContentProvider {
@@ -289,7 +289,7 @@ extends AbstractTreeComposite
 	}
 
 
-	public void loadRootNode(LegalEntity partner, ProgressMonitor monitor)
+	public void setRootNode(LegalEntity partner, ProgressMonitor monitor)
 	{
 		this.partner = partner;
 
@@ -298,7 +298,7 @@ extends AbstractTreeComposite
 		final Collection<IssueLink> links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(),
 				personID,
 				FETCH_GROUPS_ISSUESLINK,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,monitor
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 80)
 		);
 
 		this.rootlegalEntityIssuesLinkNode = new IssueLinkTreeNode("Issue List", null)
@@ -314,16 +314,6 @@ extends AbstractTreeComposite
 
 		};
 		
-		setRootNode(rootlegalEntityIssuesLinkNode);
-	}
-
-
-
-	public void setRootNode(IssueLinkTreeNode rootNode)
-	{
-		if (rootNode == null)
-			return;
-		this.rootlegalEntityIssuesLinkNode = rootNode;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
@@ -332,7 +322,8 @@ extends AbstractTreeComposite
 				else
 					getTreeViewer().expandToLevel(1);
 			}
-		});
+		});	
+		monitor.worked(20);
 	}
 
 	/**

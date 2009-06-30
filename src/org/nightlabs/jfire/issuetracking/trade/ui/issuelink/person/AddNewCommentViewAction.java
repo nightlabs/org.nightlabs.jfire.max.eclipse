@@ -53,7 +53,7 @@ public class AddNewCommentViewAction  extends Action{
 
 	@Override
 	public void run() {
-		if(view.getSelectedIssueLink().getIssue() == null)
+		if(view.getSelectedIssueLink() == null)
 			return;
 
 		final InputDialog dlg = new InputDialog(RCPUtil.getActiveShell(),
@@ -84,14 +84,14 @@ public class AddNewCommentViewAction  extends Action{
 					return Status.OK_STATUS;
 				}
 			};
-			
+
 			job.setPriority(Job.SHORT);
 			job.schedule();
-			
+
 		}
 
 	}
-	
+
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
