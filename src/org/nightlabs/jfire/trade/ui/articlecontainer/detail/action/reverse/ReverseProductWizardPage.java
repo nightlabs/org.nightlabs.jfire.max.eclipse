@@ -34,8 +34,8 @@ public class ReverseProductWizardPage extends DynamicPathWizardPage
 	 */
 	public ReverseProductWizardPage()
 	{
-		super(PAGE_NAME, "Reverse Product");
-		setDescription("Enter an product id / number to find the reversing offer for");
+		super(PAGE_NAME, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductWizardPage.page.name")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductWizardPage.page.description")); //$NON-NLS-1$
 		setPageComplete(false);
 	}
 

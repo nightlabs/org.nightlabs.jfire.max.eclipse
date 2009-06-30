@@ -200,6 +200,6 @@ extends DynamicPathWizard
 	@Override
 	public void setContainer(IWizardContainer wizardContainer) {
 		super.setContainer(wizardContainer);
-		setWindowTitle("Reverse Product");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductWizard.window.title")); //$NON-NLS-1$
 	}
 }

@@ -34,6 +34,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.deliverydate.ArticleContainerDeliveryDateDTO;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -55,7 +56,7 @@ public class DeliveryDateTable extends AbstractTableComposite<ArticleContainer>
 				ArticleContainer ac = dto.getArticleContainer();
 				switch(columnIndex) {
 					case 0:
-						return "";
+						return ""; //$NON-NLS-1$
 					case 1:
 						return ArticleContainerUtil.getArticleContainerID(ac);
 					case 2:
@@ -74,7 +75,7 @@ public class DeliveryDateTable extends AbstractTableComposite<ArticleContainer>
 						int counter = 0;
 						for (String endCustomer : endCustomers) {
 							if (counter != 0)
-								sb.append("/");
+								sb.append("/"); //$NON-NLS-1$
 
 							sb.append(endCustomer);
 							++counter;
@@ -102,7 +103,7 @@ public class DeliveryDateTable extends AbstractTableComposite<ArticleContainer>
 						counter = 0;
 						for (Date deliveryDate : dates) {
 							if (counter != 0)
-								sb.append("/");
+								sb.append("/"); //$NON-NLS-1$
 
 							sb.append(DateFormatter.formatDateShort(deliveryDate, true));
 							++counter;
@@ -128,13 +129,13 @@ public class DeliveryDateTable extends AbstractTableComposite<ArticleContainer>
 							suffix = "Offer";
 						}
 						else if (ac instanceof Order) {
-							suffix = "Order";
+							suffix = "Order"; //$NON-NLS-1$
 						}
 						else if (ac instanceof DeliveryNote) {
-							suffix = "DeliveryNote";
+							suffix = "DeliveryNote"; //$NON-NLS-1$
 						}
 						else if (ac instanceof Invoice) {
-							suffix = "Invoice";
+							suffix = "Invoice"; //$NON-NLS-1$
 						}
 
 						return SharedImages.getSharedImage(TradePlugin.getDefault(), DeliveryDateTable.class, suffix);
@@ -162,13 +163,13 @@ public class DeliveryDateTable extends AbstractTableComposite<ArticleContainer>
 		TableColumn iconColumn = new TableColumn(table, SWT.NONE);
 //		iconColumn.setText("Icon");
 		TableColumn idColumn = new TableColumn(table, SWT.NONE);
-		idColumn.setText("ID");
+		idColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateTable.column.id.name")); //$NON-NLS-1$
 		TableColumn customerColumn = new TableColumn(table, SWT.NONE);
-		customerColumn.setText("Customer");
+		customerColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateTable.column.customer.name")); //$NON-NLS-1$
 		TableColumn endCustomerColumn = new TableColumn(table, SWT.NONE);
-		endCustomerColumn.setText("End Customer");
+		endCustomerColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateTable.column.endcustomer.name")); //$NON-NLS-1$
 		TableColumn deliveryDateColumn = new TableColumn(table, SWT.NONE);
-		deliveryDateColumn.setText("Delivery Date");
+		deliveryDateColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateTable.column.deliverydate.name")); //$NON-NLS-1$
 
 		TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnPixelData(20));

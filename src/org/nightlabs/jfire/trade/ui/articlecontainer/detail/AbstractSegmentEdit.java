@@ -292,7 +292,7 @@ implements SegmentEdit
 
 				if (factory == null) {
 					if (logger.isInfoEnabled())
-						logger.info("There is no ArticleAdderFactory registered for articleContainerClass=" + articleContainerClass.getName() + " segmentTypeClass=" + segmentTypeClass.getName() + " selectedProductTypeClass=" + selectedProductTypeClass.getName());
+						logger.info("There is no ArticleAdderFactory registered for articleContainerClass=" + articleContainerClass.getName() + " segmentTypeClass=" + segmentTypeClass.getName() + " selectedProductTypeClass=" + selectedProductTypeClass.getName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 
 					final ArticleAdder articleAdderToDispose = articleAdderForSelectedProductType;

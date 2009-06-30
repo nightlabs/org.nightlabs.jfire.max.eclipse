@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * Extension-Point Registry for registering {@link IArticleContainerPrinterFactory}s.
@@ -17,8 +18,8 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 public class ArticleContainerPrinterRegistry
 extends AbstractEPProcessor
 {
-	public static final String FACTOY_ELEMENT_NAME = "articleContainerPrinterFactory";
-	public static final String EXTENSION_POINT_ID = TradePlugin.getDefault().getBundle().getSymbolicName() + "." + FACTOY_ELEMENT_NAME;
+	public static final String FACTOY_ELEMENT_NAME = "articleContainerPrinterFactory"; //$NON-NLS-1$
+	public static final String EXTENSION_POINT_ID = TradePlugin.getDefault().getBundle().getSymbolicName() + "." + FACTOY_ELEMENT_NAME; //$NON-NLS-1$
 
 	private static ArticleContainerPrinterRegistry sharedInstance;
 

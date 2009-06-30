@@ -45,6 +45,7 @@ import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.notification.NotificationEvent;
@@ -66,9 +67,9 @@ public class DeliveryDateComposite extends XComposite
 	private AnchorID selectedLegalEntityID;
 //	private ExpandableComposite advancedFilterComp;
 
-	private static final String TYPE_OFFER = "Offer";
-	private static final String TYPE_DELIVERY_NOTE = "DeliveryNote";
-	private static final String TYPE_BOTH = "Both";
+	private static final String TYPE_OFFER = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.type.offer"); //$NON-NLS-1$
+	private static final String TYPE_DELIVERY_NOTE = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.type.deliverynote"); //$NON-NLS-1$
+	private static final String TYPE_BOTH = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.type.both"); //$NON-NLS-1$
 
 	/**
 	 * @param parent
@@ -96,14 +97,22 @@ public class DeliveryDateComposite extends XComposite
 		final Composite filterCriteriaWrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER,
 				LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
 		Label label = new Label(filterCriteriaWrapper, SWT.NONE);
-		label.setText("Delivery Date");
-		label.setToolTipText("Search offers or deliverynotes which contain articles where the delivery date is higher than the specified one");
+		label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.label.deliverydate.text")); //$NON-NLS-1$
+		label.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.label.deliverydate.tooltip")); //$NON-NLS-1$
 		dateTimeControl = new DateTimeControl(filterCriteriaWrapper, true, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT);
 		dateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		dateTimeControl.addSelectionListener(new SelectionAdapter(){
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				search();
+			}
+		});
 		Button searchButton = new Button(filterCriteriaWrapper, SWT.PUSH);
 		searchButton.setImage(SharedImages.SEARCH_16x16.createImage());
-		searchButton.setToolTipText("To search click here or press Enter.");
+		searchButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.search.tooltip")); //$NON-NLS-1$
 		searchButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -126,10 +135,8 @@ public class DeliveryDateComposite extends XComposite
 //		Composite wrapper = new XComposite(advancedFilterComp, SWT.NONE);
 		onlyCurrentBuisnessPartnerButton = new Button(filterCriteriaWrapper, SWT.CHECK);
 		onlyCurrentBuisnessPartnerButton.setSelection(onlyCurrentBusinessPartner);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		onlyCurrentBuisnessPartnerButton.setLayoutData(gd);
-		onlyCurrentBuisnessPartnerButton.setText("Only current business partner");
-		onlyCurrentBuisnessPartnerButton.setToolTipText("show only offers or delivery notes of the current selected business partner");
+		onlyCurrentBuisnessPartnerButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.onlyCurrentBusinessPartner.text")); //$NON-NLS-1$
+		onlyCurrentBuisnessPartnerButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.onlyCurrentBusinessPartner.tooltip")); //$NON-NLS-1$
 		onlyCurrentBuisnessPartnerButton.addSelectionListener(new SelectionAdapter(){
 			/* (non-Javadoc)
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -212,12 +219,12 @@ public class DeliveryDateComposite extends XComposite
 	{
 		final Display display = Display.getCurrent();
 		if (display == null)
-			throw new IllegalStateException("Thread mismatch! This method must be called on the UI thread!");
+			throw new IllegalStateException("Thread mismatch! This method must be called on the UI thread!"); //$NON-NLS-1$
 
-		deliveryDateTable.setLoadingMessage("Loading");
+		deliveryDateTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.loading.message")); //$NON-NLS-1$
 
 		final Date deliveryDate = dateTimeControl.getDate();
-		Job job = new Job("Search") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.job.search.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{

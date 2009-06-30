@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -18,7 +19,7 @@ public class RecurringSaleRootTreeNode extends HeaderTreeNode.RootNode{
 
 	public 	RecurringSaleRootTreeNode(HeaderTreeNode parent)
 	{
-		super(parent, "Sale", parent.getHeaderTreeComposite().getImageCustomerRootTreeNode());
+		super(parent, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringSaleRootTreeNode.node.name"), parent.getHeaderTreeComposite().getImageCustomerRootTreeNode()); //$NON-NLS-1$
 
 		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, false, false);
 

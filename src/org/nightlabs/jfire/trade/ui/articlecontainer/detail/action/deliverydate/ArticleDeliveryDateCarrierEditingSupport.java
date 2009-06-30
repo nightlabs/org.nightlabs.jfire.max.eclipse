@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.celleditor.DateTimeCellEditor;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -102,7 +103,7 @@ public class ArticleDeliveryDateCarrierEditingSupport extends EditingSupport
 				deliveryDate = null;
 			}
 			else {
-				throw new IllegalArgumentException("Param value is neither a Date nor null!");
+				throw new IllegalArgumentException("Param value is neither a Date nor null!"); //$NON-NLS-1$
 			}
 			if (carrier != null)
 				carrier.setDeliveryDate(deliveryDate);

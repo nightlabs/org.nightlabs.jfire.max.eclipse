@@ -18,6 +18,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
 import org.nightlabs.jfire.trade.deliverydate.DeliveryDateMode;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.tableprovider.ui.TableProviderTable;
 
@@ -66,7 +67,7 @@ extends TableProviderTable<Article>
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		super.createTableColumns(tableViewer, table);
 		TableColumn deliveryDateColumn = new TableColumn(table, SWT.NONE);
-		deliveryDateColumn.setText("Delivery Date");
+		deliveryDateColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.ArticleDeliveryDateTable.column.deliverydate.name")); //$NON-NLS-1$
 
 		articleDeliveryDateCarrierEditingSupport = new ArticleDeliveryDateCarrierEditingSupport(tableViewer);
 		TableViewerColumn tvc = new TableViewerColumn(tableViewer, deliveryDateColumn);
@@ -88,7 +89,7 @@ extends TableProviderTable<Article>
 						return DateFormatter.formatDateShort(deliverDate, false);
 					}
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		});
 	}

@@ -30,6 +30,7 @@ import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -60,7 +61,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 		this.getGridData().grabExcessHorizontalSpace = true;
 		this.getGridData().grabExcessVerticalSpace = false;
 
-		vendorLink = createLegalEntityHyperlink("Vendor");
+		vendorLink = createLegalEntityHyperlink(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite.hyperlink.vendor")); //$NON-NLS-1$
 		vendorLink.addHyperlinkListener(new HyperlinkAdapter() {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
@@ -68,7 +69,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 			}
 		});
 
-		customerLink = createLegalEntityHyperlink("Customer");
+		customerLink = createLegalEntityHyperlink(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite.hyperlink.customer")); //$NON-NLS-1$
 		customerLink.addHyperlinkListener(new HyperlinkAdapter() {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
@@ -93,7 +94,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 		fillLayout.marginWidth = 8;
 		legalEntityGroup.setLayout(fillLayout);
 		Hyperlink hyperlink = new Hyperlink(legalEntityGroup, SWT.NONE);
-		hyperlink.setText("");
+		hyperlink.setText(""); //$NON-NLS-1$
 		return hyperlink;
 	}
 
@@ -101,12 +102,12 @@ public class HeaderVendorCustomerComposite extends XComposite
 	{
 		String text;
 		if (loading)
-			text = "Loading...";
+			text = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite.loading.message"); //$NON-NLS-1$
 		else {
 			if (legalEntity != null && legalEntity.getPerson() != null)
 				text = legalEntity.getPerson().getDisplayName();
 			else
-				text = "";
+				text = ""; //$NON-NLS-1$
 		}
 
 		hyperlink.setText(text);
@@ -124,7 +125,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 	public void setArticleContainer(ArticleContainer articleContainer)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Thread mismatch! This method must be called on the SWT UI Thread!");
+			throw new IllegalStateException("Thread mismatch! This method must be called on the SWT UI Thread!"); //$NON-NLS-1$
 
 		this.activeJob = null;
 
@@ -154,7 +155,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 		}
 
 		final Display display = getDisplay();
-		Job job = new Job("Loading business partners") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite.job.loadBusinessPartner.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{

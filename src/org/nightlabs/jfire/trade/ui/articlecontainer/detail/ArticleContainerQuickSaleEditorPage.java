@@ -212,9 +212,9 @@ extends ArticleContainerEditorPage
 			int returnCode = dlg.open();
 			boolean transferSuccessful = wiz.isTransfersSuccessful();
 			if (logger.isDebugEnabled()) {
-				logger.debug("ReservationWizardDialog OrderID = "+orderID);
-				logger.debug("ReservationWizardDialog returnCode = "+returnCode);
-				logger.debug("ReservationWizardDialog.isTransfersSuccessful() = "+transferSuccessful);
+				logger.debug("ReservationWizardDialog OrderID = "+orderID); //$NON-NLS-1$
+				logger.debug("ReservationWizardDialog returnCode = "+returnCode); //$NON-NLS-1$
+				logger.debug("ReservationWizardDialog.isTransfersSuccessful() = "+transferSuccessful); //$NON-NLS-1$
 			}
 			if (returnCode == Dialog.OK && transferSuccessful) {
 				createNewOrder();

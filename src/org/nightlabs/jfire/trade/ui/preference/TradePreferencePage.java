@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.trade.ui.preference;
 
 import org.nightlabs.base.ui.preference.CategoryPreferencePage;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author daniel[at]nightlabs[dot]de
@@ -22,6 +23,6 @@ extends CategoryPreferencePage
 
 	@Override
 	protected String getText() {
-		return "Trade Settings";
+		return Messages.getString("org.nightlabs.jfire.trade.ui.preference.TradePreferencePage.page.text"); //$NON-NLS-1$
 	}
 }

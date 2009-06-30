@@ -19,6 +19,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
 import org.nightlabs.jfire.trade.deliverydate.DeliveryDateMode;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -41,9 +42,9 @@ extends ResizableTitleAreaDialog
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
-		getShell().setText("Edit Delivery Date");
-		setTitle("Edit Delivery Date");
-		setMessage("Edit the delivery date of the articles. Either set the date for all articles,\nor click into the column to edit the delivery date for each article individually");
+		getShell().setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateDialog.window.title")); //$NON-NLS-1$
+		setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateDialog.dialog.title")); //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateDialog.dialog.message")); //$NON-NLS-1$
 
 		deliveryDateComposite = new EditDeliveryDateComposite(parent, SWT.NONE, mode);
 		deliveryDateComposite.setArticles(articles, mode);
@@ -53,14 +54,14 @@ extends ResizableTitleAreaDialog
 	@Override
 	protected void okPressed()
 	{
-		Job job = new Job("Assign Delivery Dates") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateDialog.job.assignDeliveryDates.name")) { //$NON-NLS-1$
 			/* (non-Javadoc)
 			 * @see org.nightlabs.base.ui.job.Job#run(org.nightlabs.progress.ProgressMonitor)
 			 */
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				monitor.beginTask("Assign Delivery Dates", 200);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateDialog.task.assignDeliveryDates.name"), 200); //$NON-NLS-1$
 				TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class,
 						Login.getLogin().getInitialContextProperties());
 				Collection<ArticleDeliveryDateCarrier> articleDeliveryDateCarriers =

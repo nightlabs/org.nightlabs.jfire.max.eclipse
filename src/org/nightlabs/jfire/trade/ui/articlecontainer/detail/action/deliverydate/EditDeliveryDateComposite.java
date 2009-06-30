@@ -18,6 +18,7 @@ import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
 import org.nightlabs.jfire.trade.deliverydate.DeliveryDateMode;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleTableProviderConstants;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -42,7 +43,7 @@ extends XComposite
 		Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		dateTimeControl = new DateTimeControl(wrapper, true, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT);
 		dateTimeControl.clearDate();
-		dateTimeControl.setButtonText("Set the delivery date for all articles");
+		dateTimeControl.setButtonText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateComposite.button.setDeliveryDate.text")); //$NON-NLS-1$
 		dateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		dateTimeControl.addSelectionListener(new SelectionAdapter(){
 			/* (non-Javadoc)

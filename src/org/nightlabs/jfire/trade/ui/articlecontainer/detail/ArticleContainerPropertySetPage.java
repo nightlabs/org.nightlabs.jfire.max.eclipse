@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditorSection;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  *
@@ -41,7 +42,7 @@ extends EntityEditorPageWithProgress
 	 * @param editor
 	 */
 	public ArticleContainerPropertySetPage(FormEditor editor) {
-		super(editor, PAGE_ID, "PropertySet");
+		super(editor, PAGE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerPropertySetPage.page.name")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -49,7 +50,7 @@ extends EntityEditorPageWithProgress
 	 */
 	@Override
 	protected void addSections(Composite parent) {
-		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, "PropertySet");
+		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerPropertySetPage.section.name")); //$NON-NLS-1$
 		getManagedForm().addPart(blockBasedEditorSection);
 	}
 
@@ -58,7 +59,7 @@ extends EntityEditorPageWithProgress
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "PropertySet";
+		return Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerPropertySetPage.page.title"); //$NON-NLS-1$
 	}
 
 	@Override
