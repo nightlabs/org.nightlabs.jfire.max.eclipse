@@ -32,11 +32,11 @@
         <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
             class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeCategoryFactory"
-            index="10" name="Issue Types" scope="IssueShelf"/>
+            index="10" name="%org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeCategoryFactory.name" scope="IssueShelf"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntry"
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
             class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntryFactory"
-            index="0" name="Issue Types"/>
+            index="0" name="%org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntry.name"/>
     </extension>
 </plugin>

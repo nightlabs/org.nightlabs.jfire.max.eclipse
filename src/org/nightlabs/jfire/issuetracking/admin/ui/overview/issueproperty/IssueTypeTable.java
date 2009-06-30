@@ -22,8 +22,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * This composite lists all {@link IssueType}s of an issue type in a table.
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueTypeTable 
-extends AbstractTableComposite<IssueType> 
+public class IssueTypeTable
+extends AbstractTableComposite<IssueType>
 {
 	/**
 	 * The fetch groups of issue data.
@@ -31,13 +31,13 @@ extends AbstractTableComposite<IssueType>
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		IssueType.FETCH_GROUP_NAME};
-	
+
 	public IssueTypeTable(Composite parent, int style)
 	{
 		super(parent, style);
 		setInput(IssueTypeDAO.sharedInstance().getAllIssueTypes(IssueTypeTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 	}
-	
+
 //	@Override
 //	protected ActiveJDOObjectController<IssueTypeID, IssueType> createActiveJDOObjectController() {
 //		return new ActiveJDOObjectController<IssueTypeID, IssueType>() {
@@ -50,7 +50,7 @@ extends AbstractTableComposite<IssueType>
 //			@Override
 //			protected Collection<IssueType> retrieveJDOObjects(
 //					Set<IssueTypeID> objectIDs, ProgressMonitor monitor) {
-//				 
+//
 //				return IssueTypeDAO.sharedInstance().getIssueTypes(objectIDs, IssueTypeTable.FETCH_GROUPS,
 //						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //						new NullProgressMonitor());
@@ -69,7 +69,7 @@ extends AbstractTableComposite<IssueType>
 //			}
 //		};
 //	}
-	
+
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tc;
@@ -78,24 +78,26 @@ extends AbstractTableComposite<IssueType>
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeTable.tableColumn.name.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(30));
-		
+
 		table.setLayout(layout);
 		table.setHeaderVisible(false);
+
+		table.setLinesVisible(false);
 	}
 
 //	@Override
 //	protected ITableLabelProvider createLabelProvider() {
 //		return new IssueTypeLabelProvider();
 //	}
-	
+
 	class IssueTypeLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof IssueType) {
 				IssueType issueType = (IssueType) element;
-				switch (columnIndex) 
+				switch (columnIndex)
 				{
 				case(0):
 					return issueType.getName().getText();
@@ -104,7 +106,7 @@ extends AbstractTableComposite<IssueType>
 				}
 			}
 			return null;
-		}		
+		}
 	}
 
 	@Override
