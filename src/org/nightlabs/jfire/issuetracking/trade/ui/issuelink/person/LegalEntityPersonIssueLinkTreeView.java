@@ -25,6 +25,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
+import org.nightlabs.jfire.issue.id.IssueLinkID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -51,8 +52,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();
 	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
 	private IssueLink selectedIssueLink;
-
-
+	
 	protected void setSelectedIssueLink(IssueLink selectedIssueLink) {
 		this.selectedIssueLink = selectedIssueLink;
 	}
@@ -66,18 +66,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 
 	public static final String ID_VIEW = LegalEntityPersonIssueLinkTreeView.class.getName();
 
-	private static final String[] FETCH_GROUPS_ISSUESLINK = new String[] {
-		FetchPlan.DEFAULT,
-		IssueLink.FETCH_GROUP_ISSUE,
-		Issue.FETCH_GROUP_ISSUE_TYPE,
-		Issue.FETCH_GROUP_SUBJECT,
-		Issue.FETCH_GROUP_DESCRIPTION,
-		Issue.FETCH_GROUP_ISSUE_COMMENTS,
-		Issue.FETCH_GROUP_ISSUE_MARKERS,
-		Issue.FETCH_GROUP_DESCRIPTION,
-		IssueMarker.FETCH_GROUP_NAME,
-		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
-		IssueComment.FETCH_GROUP_TEXT};
+
 
 	@Override
 	public void createPartContents(Composite parent) {
@@ -111,8 +100,6 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		toolBarManager.add(addNewCommentViewAction);
 		createNewIssueViewAction.setEnabled(false);
 
-
-
 		showLegalEntityLinkedTreeComposite.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			   public void selectionChanged(SelectionChangedEvent event) {
 			       // if the selection is empty clear the label
@@ -141,10 +128,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask("do sth.", 100);
 			// some work
-
-
 			monitor.worked(30);
-
 			if (event.getSubjects().isEmpty())
 				return;
 			else
@@ -152,29 +136,6 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		}
 	};
 
-	// Some comments to this code (I already refactored it partially):
-	//
-	// 1) A method name *MUST* start with a small letter (never with a capital)! Read the sun code conventions!
-	// 2) The method getChildNodes() of the TreeNode is called on the UI thread and therefore MUST NOT do
-	//    expensive (= time consuming) code. Communicating to the server is considered to *always* be expensive!
-	// 3) The method legalEntityChanged(...) must get the ProgressMonitor as parameter in order to indicate
-	//    a) it's not executed on the UI thread (= it's OK to be expensive)
-	//    b) to provide progress feed back.
-	// 4) see notes in class IssueLinkTreeNode!
-	// 5) This code creating IssueLinkTreeNodes shouldn't be here at all!!! This view is supposed to be a thin wrapper
-	//    around the PersonIssueLinkTreeComposite. Hence all logic that is not essentially necessary here but could
-	//    be implemented in PersonIssueLinkTreeComposite must be implemented there.
-	// 6) And even more: Why the hell is the selection management done here now? It should be in PersonIssueLinkTreeComposite
-	//    instead. If there are methods like getSelectedIssueLink() necessary here, they should simply delegate to PersonIssueLinkTreeComposite.
-	//
-	//
-	// READ THESE DOCUMENTS:
-	//  * https://www.jfire.org/modules/phpwiki/index.php/General%20Development%20Guidelines
-	//  * https://www.jfire.org/modules/phpwiki/index.php/RCP%20Client%20Development%20Guidelines
-	//
-	// FIX THIS CODE!!! Move all into PersonIssueLinkTreeComposite that has nothing to do with the LegalEntity!
-	//
-	// Marco.
 
 	private void legalEntityChanged(AnchorID partnerID, ProgressMonitor monitor)
 	{
@@ -191,36 +152,10 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 					new SubProgressMonitor(monitor, 30)
 			);
 			this.partner = partner;
-
-			final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
-
-			final Collection<IssueLink> links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(),
-					personID,
-					FETCH_GROUPS_ISSUESLINK,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new SubProgressMonitor(monitor, 70)
-			);
-
-			final IssueLinkTreeNode rootlegalEntityIssuesLinkNode = new IssueLinkTreeNode("Issue List", null)
-			{
-				@Override
-				public Object[] getChildNodes() {
-					return links.toArray();
-				}
-				@Override
-				public boolean hasChildren() {
-					return !links.isEmpty();
-				}
-			};
-
+			
+			showLegalEntityLinkedTreeComposite.loadRootNode(partner, new SubProgressMonitor(monitor, 70));
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
-					if(showLegalEntityLinkedTreeComposite.isDisposed())
-						return;
-
-					showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);
-					showLegalEntityLinkedTreeComposite.getTreeViewer().expandToLevel(0);
-					showLegalEntityLinkedTreeComposite.refresh();
 					createNewIssueViewAction.setEnabled(true);
 				}
 			});
@@ -228,7 +163,8 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			monitor.done();
 		}
 	}
-
+	
+	
 	public LegalEntity getPartner() {
 		return partner;
 	}

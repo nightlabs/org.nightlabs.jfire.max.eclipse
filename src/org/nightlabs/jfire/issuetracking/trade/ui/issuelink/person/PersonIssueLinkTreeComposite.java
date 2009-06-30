@@ -8,10 +8,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -25,21 +30,28 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Fitas Amine - fitas at nightlabs dot de
@@ -53,15 +65,33 @@ extends AbstractTreeComposite
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
-	private IssueLinkTreeNode rootlegalEntityIssuesLinkNode;
+	private IssueLinkTreeNode rootlegalEntityIssuesLinkNode = null;
 	private static final Object[] EMPTY_DATA = new Object[]{};
+	private LegalEntity partner = null;
+	private Object selectedElement;
 	private Collection<Image> iconImages = new ArrayList<Image>();
+
+
+	private static final String[] FETCH_GROUPS_ISSUESLINK = new String[] {
+		FetchPlan.DEFAULT,
+		IssueLink.FETCH_GROUP_ISSUE,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_COMMENTS,
+		Issue.FETCH_GROUP_ISSUE_MARKERS,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		IssueMarker.FETCH_GROUP_NAME,
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
+		IssueComment.FETCH_GROUP_TEXT};
+
 
 	public PersonIssueLinkTreeComposite(Composite parent, int style)
 	{
 		super(parent, style);
 		init();
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);
+
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
@@ -71,6 +101,22 @@ extends AbstractTreeComposite
 		});
 
 
+		
+		
+		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+			   public void selectionChanged(SelectionChangedEvent event) {
+			       // if the selection is empty clear the label
+			       if(event.getSelection().isEmpty()) 
+			           return;
+					StructuredSelection s = (StructuredSelection)event.getSelection();
+					selectedElement = s.getFirstElement();
+			   }
+			});
+		
+		
+
+		
+		
 		// open up the Issue in the Issue Editor.
 		getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
@@ -94,15 +140,15 @@ extends AbstractTreeComposite
 
 		}
 		);
-
 	}
 
 
-	private NotificationListener issueChangeListener = new NotificationAdapterSWTThreadSync() {
+	private NotificationListener issueChangeListener = new NotificationAdapterJob() {
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
-			refresh(true);
-		}
+			ProgressMonitor monitor = getProgressMonitor();
+			monitor.beginTask("refresh nodes", 100);
+			loadRootNode(partner, new SubProgressMonitor(monitor, 100));}		
 	};
 
 	private class ContentProvider extends TreeContentProvider {
@@ -243,6 +289,36 @@ extends AbstractTreeComposite
 	}
 
 
+	public void loadRootNode(LegalEntity partner, ProgressMonitor monitor)
+	{
+		this.partner = partner;
+
+		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
+
+		final Collection<IssueLink> links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(),
+				personID,
+				FETCH_GROUPS_ISSUESLINK,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,monitor
+		);
+
+		this.rootlegalEntityIssuesLinkNode = new IssueLinkTreeNode("Issue List", null)
+		{
+			@Override
+			public Object[] getChildNodes() {
+				return links.toArray();
+			}
+			@Override
+			public boolean hasChildren() {
+				return !links.isEmpty();
+			}
+
+		};
+		
+		setRootNode(rootlegalEntityIssuesLinkNode);
+	}
+
+
+
 	public void setRootNode(IssueLinkTreeNode rootNode)
 	{
 		if (rootNode == null)
@@ -251,6 +327,10 @@ extends AbstractTreeComposite
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
+				if(selectedElement!=null)
+					getTreeViewer().expandToLevel(selectedElement,1);
+				else
+					getTreeViewer().expandToLevel(1);
 			}
 		});
 	}

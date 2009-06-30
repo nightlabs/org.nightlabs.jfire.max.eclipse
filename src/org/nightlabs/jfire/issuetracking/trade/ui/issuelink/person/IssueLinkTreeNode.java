@@ -22,7 +22,6 @@ public abstract class IssueLinkTreeNode{
 
 	protected String name;
 	protected Image icon;
-//	protected Boolean hasChildNodes; // Why the hell is this a *B*oolean instead of *b*oolean?!?!???! And why is it necessary at all?????
 
 	public IssueLinkTreeNode(String name, Image icon)
 	{
@@ -31,13 +30,6 @@ public abstract class IssueLinkTreeNode{
 		this.icon = icon;
 	}
 
-//	public Boolean getHasChildNodes() {
-//		return hasChildNodes;
-//	}
-//
-//	public void setHasChildNodes(Boolean hasChildren) {
-//		this.hasChildNodes = hasChildren;
-//	}
 
 	public String getName() {
 		return name;
@@ -56,11 +48,9 @@ public abstract class IssueLinkTreeNode{
 		this.icon = icon;
 	}
 
+	
 	public abstract Object[] getChildNodes();
-//	{ // WTF does this non-used implementation here?
-//		return new ArrayList<IssueLinkTreeNode>().toArray();
-//	}
-
+	
 	public abstract boolean hasChildren();
 
 }
