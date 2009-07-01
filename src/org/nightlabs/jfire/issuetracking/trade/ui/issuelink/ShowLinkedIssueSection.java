@@ -138,28 +138,34 @@ extends ToolBarSectionPart
 	// And now, we require the implicit listener for that handles the Issue items in the IssueTable.
 	private NotificationListener issueChangeNotificationListener = new NotificationAdapterJob() {
 		@Override
-		public void notify(NotificationEvent event) {
-			ProgressMonitor monitor = getProgressMonitor();
+		public void notify(final NotificationEvent event)
+		{
+			final ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.task.updatingIssue"), 100); //$NON-NLS-1$
-
 			try {
-				// Check to see if any of the dirty Issues notified belong in our table.
-				// If so, refresh the entry.
-				Collection<Issue> issues = issueTable.getElements();
-				if (issues.isEmpty())	return;
+				if (!getSection().isDisposed()) {
+					getSection().getDisplay().asyncExec(new Runnable(){
+						@Override
+						public void run() {
+							// Check to see if any of the dirty Issues notified belong in our table.
+							// If so, refresh the entry.
+							Collection<Issue> issues = issueTable.getElements();
+							if (issues.isEmpty())	return;
 
-				Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issues);
-				for (Object obj : event.getSubjects()) {
-					if (obj == null)
-						continue;
+							Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issues);
+							for (Object obj : event.getSubjects()) {
+								if (obj == null)
+									continue;
 
-					DirtyObjectID dirtyObjectID = (DirtyObjectID) obj;
-					if (dirtyObjectID.getLifecycleState().equals( JDOLifecycleState.DIRTY ) && issueIDs.contains(dirtyObjectID.getObjectID())) {
-						controller.doLoad(new SubProgressMonitor(monitor, 90));
-						break;
-					}
+								DirtyObjectID dirtyObjectID = (DirtyObjectID) obj;
+								if (dirtyObjectID.getLifecycleState().equals( JDOLifecycleState.DIRTY ) && issueIDs.contains(dirtyObjectID.getObjectID())) {
+									controller.doLoad(new SubProgressMonitor(monitor, 90));
+									break;
+								}
+							}
+						}
+					});
 				}
-
 			} finally {
 				monitor.done();
 			}
