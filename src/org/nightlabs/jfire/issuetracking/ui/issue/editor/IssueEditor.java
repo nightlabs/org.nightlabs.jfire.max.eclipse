@@ -7,6 +7,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
@@ -68,7 +69,16 @@ implements ICloseOnLogoutEditorPart
 	// :: --- [ ~~ ActiveEntiyEditor ] -------------------------------------------------------------------------->>---|
 	@Override
 	protected String getEditorTitleFromEntity(Object entity) {
-		return entity instanceof Issue ? ((Issue)entity).getSubject().getText() : null;	// <-- Use the 'subject' of the Issue as the Editor's title?
+//		return entity instanceof Issue ? ((Issue)entity).getSubject().getText() : null;
+		if (entity instanceof Issue) {
+			Issue issue = (Issue)entity;
+
+			// Note: It seems that having the (rigid and stable) ID of the Issue being displayed on the
+			//       title tab is quite useful. Kai
+			return "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ") " + issue.getSubject().getText();
+		}
+
+		return null;
 	}
 
 	@Override

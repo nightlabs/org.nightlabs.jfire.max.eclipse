@@ -188,15 +188,12 @@ extends EntityEditorPageWithProgress
 			issueDetailSection.setIssue(issue);
 			issueTypeAndStateSection.setIssue(issue);
 			issueSubjectAndDescriptionSection.setIssue(issue);
+			issueMarkerSection.setIssue(issue);
 			issuePropertySection.setIssue(issue);
 			issueFileAttachmentSection.setIssue(issue);
 			issueCommentListSection.setIssue(issue);
 			issueCommentCreateSection.setIssue(issue);
 			issueWorkTimeSection.setIssue(issue);
-
-			// --[ In preparation for an IssueMarker ]--
-			issueMarkerSection.setIssue(issue);
-			// --[ In preparation for an IssueMarker ]--
 		}
 	}
 

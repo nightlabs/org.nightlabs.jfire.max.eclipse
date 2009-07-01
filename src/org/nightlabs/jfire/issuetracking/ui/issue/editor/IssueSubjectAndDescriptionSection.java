@@ -70,7 +70,7 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 		if (!isIDSet) {
 			getSection().setText(
 				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueSubjectAndDescriptionSection.section.text") //$NON-NLS-1$
-				+ " (ID: " + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ")"
+				+ " (ID:" + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ")"
 			);
 
 			isIDSet = true;

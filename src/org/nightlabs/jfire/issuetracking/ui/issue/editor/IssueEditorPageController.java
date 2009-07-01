@@ -184,6 +184,13 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	@Override
 	protected Issue retrieveEntity(ProgressMonitor monitor) {
 		Issue issue = IssueDAO.sharedInstance().getIssue(getIssueID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), new SubProgressMonitor(monitor, 70));
+
+		// TODO React here(?) when the retrieved Issue is null. Kai.
+		//      That is, in the case where the issue has just been deleted.
+		//      --> We need to close this editor?
+		//      --> Should the UI inform that the editor is about to close?
+		//      --> What happens if someone else is still working on this same issue??
+
 		struct = StructLocalDAO.sharedInstance().getStructLocal(issue.getPropertySet().getStructLocalObjectID(), new SubProgressMonitor(monitor, 30));
 		return issue;
 	}
@@ -217,8 +224,8 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 //			if (jbpmTransitionName == null)
 //				monitor.worked(50);
 //			else {
-			if (jbpmTransitionName != null && 
-					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_ASSIGN) && 
+			if (jbpmTransitionName != null &&
+					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_ASSIGN) &&
 					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_UNASSIGN)) {
 				issue = IssueDAO.sharedInstance().signalIssue(
 						issueID, jbpmTransitionName, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
