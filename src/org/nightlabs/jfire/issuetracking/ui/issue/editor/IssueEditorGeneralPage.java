@@ -70,7 +70,9 @@ extends EntityEditorPageWithProgress
 	//Sections (in order)
 	private IssueDetailSection issueDetailSection;
 	private IssueTypeAndStateSection issueTypeAndStateSection;
+
 	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
+	private IssueMarkerSection issueMarkerSection;
 	private IssuePropertySection issuePropertySection;
 	private IssueCommentListSection issueCommentListSection;
 	private IssueCommentCreateSection issueCommentCreateSection;
@@ -78,9 +80,6 @@ extends EntityEditorPageWithProgress
 	private IssueFileAttachmentSection issueFileAttachmentSection;
 	private IssueWorkTimeSection issueWorkTimeSection;
 
-	// --[ In preparation for an IssueMarker ]--
-	private IssueMarkerSection issueMarkerSection;
-	// --[ In preparation for an IssueMarker ]--
 
 	/**
 	 * <p>

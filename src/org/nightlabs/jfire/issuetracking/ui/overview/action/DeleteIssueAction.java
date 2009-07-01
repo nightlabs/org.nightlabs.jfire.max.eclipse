@@ -78,7 +78,7 @@ extends AbstractIssueAction
 					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"),
 					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text")
 					+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + ") "
-					+ "Subject:\"" + issueToBeDeleted.getSubject().getText() + "\""
+					+ "\"" + issueToBeDeleted.getSubject().getText() + "\""
 					+ "?"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			if (result) {
