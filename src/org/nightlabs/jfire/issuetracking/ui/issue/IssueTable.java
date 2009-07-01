@@ -230,7 +230,7 @@ extends AbstractTableComposite<Issue>
 		tc = new TableColumn(table, SWT.LEFT); // @column 0
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.id.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(5)); // Previously: 15
+		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 1
 		tc.setMoveable(true);
