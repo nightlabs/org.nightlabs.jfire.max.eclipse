@@ -43,6 +43,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();
 	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
+	private DeleteLinkViewAction deleteLinkViewAction = new DeleteLinkViewAction();
 	private Object selectedNode;
 
 	protected void setSelectedNode(Object selectedIssueLink) {
@@ -85,10 +86,14 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		createNewIssueViewAction.init(this);
 		toolBarManager.add(createNewIssueViewAction);
+		deleteLinkViewAction.init(this);
+		deleteLinkViewAction.setEnabled(false);
+		toolBarManager.add(deleteLinkViewAction);	
 		addNewCommentViewAction.init(this);
 		addNewCommentViewAction.setEnabled(false);
 		toolBarManager.add(addNewCommentViewAction);
 		createNewIssueViewAction.setEnabled(false);
+
 
 		showLegalEntityLinkedTreeComposite.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -101,10 +106,14 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				Object o = s.getFirstElement();
 				setSelectedNode(o);
 				if (o instanceof IssueLink)
-					addNewCommentViewAction.setEnabled(true);
+				{	addNewCommentViewAction.setEnabled(true);
+					deleteLinkViewAction.setEnabled(true);
+				}
 				else
+				{
 					addNewCommentViewAction.setEnabled(false);
-
+					deleteLinkViewAction.setEnabled(false);
+				}
 			}
 		});
 
