@@ -55,10 +55,9 @@ public class AddNewCommentViewAction  extends Action{
 
 	@Override
 	public void run() {
-		if(view.getSelectedNode() == null)
+		
+		if(view.getSelectedNode() == null ||!(view.getSelectedNode() instanceof IssueLink))
 			return;
-		if(!(view.getSelectedNode() instanceof IssueLink))
-		return;
 		
 		final InputDialog dlg = new InputDialog(RCPUtil.getActiveShell(),
 				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.title"), Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.description"), "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

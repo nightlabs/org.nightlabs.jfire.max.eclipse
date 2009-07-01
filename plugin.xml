@@ -52,7 +52,7 @@
     <extension point="org.eclipse.ui.views">
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
-            icon="icons/issuelink/person/LegalEntityPersonIssueLinkTreeView.16x16.png"
+            icon="icons/editor/SysAdminEntityTreeView.16x16.png"
             id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView" name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView.name"/>
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
