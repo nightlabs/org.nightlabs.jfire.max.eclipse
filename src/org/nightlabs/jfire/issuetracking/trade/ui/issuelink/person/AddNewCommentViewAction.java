@@ -16,6 +16,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueCommentDAO;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
@@ -54,9 +55,11 @@ public class AddNewCommentViewAction  extends Action{
 
 	@Override
 	public void run() {
-		if(view.getSelectedIssueLink() == null)
+		if(view.getSelectedNode() == null)
 			return;
-
+		if(!(view.getSelectedNode() instanceof IssueLink))
+		return;
+		
 		final InputDialog dlg = new InputDialog(RCPUtil.getActiveShell(),
 				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.title"), Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.description"), "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (dlg.open() == Window.OK) {	
@@ -68,7 +71,7 @@ public class AddNewCommentViewAction  extends Action{
 				protected IStatus run(ProgressMonitor monitor)
 				{
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.task.savingComment"), 100); //$NON-NLS-1$
-					Issue issue = view.getSelectedIssueLink().getIssue();
+					Issue issue = ((IssueLink)view.getSelectedNode()).getIssue();
 					IssueComment comment = new IssueComment(issue.getOrganisationID(),
 							IDGenerator.nextID(IssueComment.class),
 							issue,

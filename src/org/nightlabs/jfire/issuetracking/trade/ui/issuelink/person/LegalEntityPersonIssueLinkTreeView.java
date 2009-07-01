@@ -43,14 +43,14 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();
 	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
-	private IssueLink selectedIssueLink;
+	private Object selectedNode;
 
-	protected void setSelectedIssueLink(IssueLink selectedIssueLink) {
-		this.selectedIssueLink = selectedIssueLink;
+	protected void setSelectedNode(Object selectedIssueLink) {
+		this.selectedNode = selectedIssueLink;
 	}
 
-	public IssueLink getSelectedIssueLink() {
-		return selectedIssueLink;
+	public Object getSelectedNode() {
+		return selectedNode;
 	}
 
 	private LegalEntity partner = null;
@@ -98,13 +98,10 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 					return;
 				}
 				StructuredSelection s = (StructuredSelection)event.getSelection();
-
 				Object o = s.getFirstElement();
+				setSelectedNode(o);
 				if (o instanceof IssueLink)
-				{
-					setSelectedIssueLink((IssueLink)o);
 					addNewCommentViewAction.setEnabled(true);
-				}
 				else
 					addNewCommentViewAction.setEnabled(false);
 
