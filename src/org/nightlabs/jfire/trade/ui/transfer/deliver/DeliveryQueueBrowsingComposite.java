@@ -55,12 +55,12 @@ extends FadeableComposite
 	private DeliveryTable deliveryTable;
 //	private DeliveryQueueConfigModule deliveryQueueConfigModule;
 	private boolean refreshing = false;
-	
+
 	private NotificationListener deliveryQueueLifecycleListener = new NotificationAdapterJob() {
     public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
       for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
         DirtyObjectID dirtyObjectID = it.next();
-        
+
         Set<DeliveryQueueID> objectIds = NLJDOHelper.getObjectIDSet(printQueueCombo.getElements());
 				if (!objectIds.contains(dirtyObjectID.getObjectID())) {
         	return;
@@ -93,7 +93,7 @@ extends FadeableComposite
 			}
 		});
 		deliveryTable = new DeliveryTable(this, SWT.NONE);
-		
+
 		MenuManager popupMenu = new MenuManager();
     IAction checkAllAction = new Action() {
     	@Override
@@ -102,7 +102,7 @@ extends FadeableComposite
     	}
     };
     checkAllAction.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.button.checkAllDeliveries")); //$NON-NLS-1$
-    
+
     IAction uncheckAllAction = new Action() {
     	@Override
     	public void run() {
@@ -110,12 +110,12 @@ extends FadeableComposite
     	}
     };
     uncheckAllAction.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.button.uncheckAllDeliveries")); //$NON-NLS-1$
-    
+
     popupMenu.add(checkAllAction);
     popupMenu.add(uncheckAllAction);
     Menu menu = popupMenu.createContextMenu(deliveryTable.getTableViewer().getTable());
     deliveryTable.getTableViewer().getTable().setMenu(menu);
-		
+
 		JDOLifecycleManager.sharedInstance().addNotificationListener(DeliveryQueue.class, deliveryQueueLifecycleListener);
 
     addDisposeListener(new DisposeListener() {
@@ -142,7 +142,7 @@ extends FadeableComposite
 		final List<Delivery> checkedDeliveries = deliveryTable.getCheckedElements();
 		if (checkedDeliveries.isEmpty())
 			return;
-		
+
 		AnchorID customerID = null;
 		for (Delivery delivery : checkedDeliveries) {
 			if (customerID != null && !delivery.getPartnerID().equals(customerID)) {
@@ -172,34 +172,35 @@ extends FadeableComposite
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						setFaded(true);
-						
-						// store selection
-						DeliveryQueue selectedDeliveryQueue = printQueueCombo.getSelectedElement();
+						if (!isDisposed()) {
+							setFaded(true);
+							// store selection
+							DeliveryQueue selectedDeliveryQueue = printQueueCombo.getSelectedElement();
 
-						// reload delivery queues
-						List<DeliveryQueue> visibleDeliveryQueues = pqCfMod.getVisibleDeliveryQueues();
-						Collections.sort(visibleDeliveryQueues, new Comparator<DeliveryQueue>() {
-							public int compare(DeliveryQueue o1, DeliveryQueue o2) {
-								return o1.getName().getText().compareTo(o2.getName().getText());
+							// reload delivery queues
+							List<DeliveryQueue> visibleDeliveryQueues = pqCfMod.getVisibleDeliveryQueues();
+							Collections.sort(visibleDeliveryQueues, new Comparator<DeliveryQueue>() {
+								public int compare(DeliveryQueue o1, DeliveryQueue o2) {
+									return o1.getName().getText().compareTo(o2.getName().getText());
+								}
+							});
+
+							printQueueCombo.setInput(visibleDeliveryQueues);
+
+							// restore selection
+							if (selectedDeliveryQueue != null) {
+								printQueueCombo.setSelection(selectedDeliveryQueue);
+								if (printQueueCombo.getSelectedElement() != null)
+									deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
+							} else if (!printQueueCombo.getElements().isEmpty()){
+								printQueueCombo.setSelection(0);
+								if (printQueueCombo.getSelectedElement() != null)
+									deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
 							}
-						});
 
-						printQueueCombo.setInput(visibleDeliveryQueues);
-
-						// restore selection
-						if (selectedDeliveryQueue != null) {
-							printQueueCombo.setSelection(selectedDeliveryQueue);
-							if (printQueueCombo.getSelectedElement() != null)
-								deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
-						} else if (!printQueueCombo.getElements().isEmpty()){
-							printQueueCombo.setSelection(0);
-							if (printQueueCombo.getSelectedElement() != null)
-								deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
+							setFaded(false);
+							refreshing = false;
 						}
-
-						setFaded(false);
-						refreshing = false;
 					}
 				});
 				return Status.OK_STATUS;
@@ -209,11 +210,11 @@ extends FadeableComposite
 		refreshJob.setPriority(Job.SHORT);
 		refreshJob.schedule();
 	}
-	
+
 	void checkAllDeliveries() {
 		deliveryTable.checkAll();
 	}
-	
+
 	void uncheckAllDeliveries() {
 		deliveryTable.uncheckAll();
 	}

@@ -17,18 +17,21 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.Form;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.toolkit.IToolkit;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
@@ -94,12 +97,21 @@ public class DeliveryDateComposite extends XComposite
 
 	protected void createComposite(Composite parent)
 	{
-		final Composite filterCriteriaWrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER,
-				LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
-		Label label = new Label(filterCriteriaWrapper, SWT.NONE);
+//		final Composite filterCriteriaWrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER,
+//				LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
+		IToolkit toolkit = getToolkit(true);
+		Form form = toolkit.createForm(parent);
+		form.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite filterCriteriaWrapper = form.getBody();
+		filterCriteriaWrapper.setLayout(new GridLayout(3, false));
+		filterCriteriaWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+//		Label label = new Label(filterCriteriaWrapper, SWT.NONE);
+		Label label = toolkit.createLabel(filterCriteriaWrapper, "", SWT.NONE); //$NON-NLS-1$
 		label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.label.deliverydate.text")); //$NON-NLS-1$
 		label.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.label.deliverydate.tooltip")); //$NON-NLS-1$
 		dateTimeControl = new DateTimeControl(filterCriteriaWrapper, true, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT);
+		toolkit.adapt(dateTimeControl);
 		dateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		dateTimeControl.addSelectionListener(new SelectionAdapter(){
 			/* (non-Javadoc)
@@ -110,7 +122,8 @@ public class DeliveryDateComposite extends XComposite
 				search();
 			}
 		});
-		Button searchButton = new Button(filterCriteriaWrapper, SWT.PUSH);
+//		Button searchButton = new Button(filterCriteriaWrapper, SWT.FLAT);
+		Button searchButton = toolkit.createButton(filterCriteriaWrapper, "", SWT.FLAT); //$NON-NLS-1$
 		searchButton.setImage(SharedImages.SEARCH_16x16.createImage());
 		searchButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.search.tooltip")); //$NON-NLS-1$
 		searchButton.addSelectionListener(new SelectionAdapter() {
@@ -133,7 +146,8 @@ public class DeliveryDateComposite extends XComposite
 //			}
 //		});
 //		Composite wrapper = new XComposite(advancedFilterComp, SWT.NONE);
-		onlyCurrentBuisnessPartnerButton = new Button(filterCriteriaWrapper, SWT.CHECK);
+//		onlyCurrentBuisnessPartnerButton = new Button(filterCriteriaWrapper, SWT.CHECK);
+		onlyCurrentBuisnessPartnerButton = toolkit.createButton(filterCriteriaWrapper, "", SWT.CHECK); //$NON-NLS-1$
 		onlyCurrentBuisnessPartnerButton.setSelection(onlyCurrentBusinessPartner);
 		onlyCurrentBuisnessPartnerButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.onlyCurrentBusinessPartner.text")); //$NON-NLS-1$
 		onlyCurrentBuisnessPartnerButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.onlyCurrentBusinessPartner.tooltip")); //$NON-NLS-1$
@@ -148,6 +162,7 @@ public class DeliveryDateComposite extends XComposite
 		});
 
 		typeCombo = new Combo(filterCriteriaWrapper, SWT.READ_ONLY);
+		toolkit.adapt(typeCombo);
 		GridData comboData = new GridData(GridData.FILL_HORIZONTAL);
 		comboData.horizontalSpan = 2;
 		typeCombo.setLayoutData(comboData);
@@ -202,6 +217,8 @@ public class DeliveryDateComposite extends XComposite
 				SelectionManager.sharedInstance().removeNotificationListener(LegalEntity.class, selectionListener);
 			}
 		});
+
+		adaptToToolkit();
 	}
 
 	private NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
@@ -228,36 +245,39 @@ public class DeliveryDateComposite extends XComposite
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				QueryCollection<AbstractArticleContainerQuery> articleContainerQueries =
-					new QueryCollection<AbstractArticleContainerQuery>(ArticleContainer.class);
-				for (Class<? extends ArticleContainer> acClass : articleContainerClasses) {
-					AbstractArticleContainerQuery query = getQuery(acClass);
-					query.setAllFieldsDisabled();
-					query.setFieldEnabled(AbstractArticleContainerQuery.FieldName.articleDeliveryDate, true);
-					query.setArticleDeliveryDate(deliveryDate);
-					if (onlyCurrentBusinessPartner) {
-						if (selectedLegalEntityID != null) {
-							query.setFieldEnabled(AbstractArticleContainerQuery.FieldName.customerID, true);
-							query.setCustomerID(selectedLegalEntityID);
+				if (!isDisposed()){
+					QueryCollection<AbstractArticleContainerQuery> articleContainerQueries =
+						new QueryCollection<AbstractArticleContainerQuery>(ArticleContainer.class);
+					for (Class<? extends ArticleContainer> acClass : articleContainerClasses) {
+						AbstractArticleContainerQuery query = getQuery(acClass);
+						query.setAllFieldsDisabled();
+						query.setFieldEnabled(AbstractArticleContainerQuery.FieldName.articleDeliveryDate, true);
+						query.setArticleDeliveryDate(deliveryDate);
+						if (onlyCurrentBusinessPartner) {
+							if (selectedLegalEntityID != null) {
+								query.setFieldEnabled(AbstractArticleContainerQuery.FieldName.customerID, true);
+								query.setCustomerID(selectedLegalEntityID);
+							}
 						}
+						articleContainerQueries.add(query);
 					}
-					articleContainerQueries.add(query);
+
+//					final Collection<?> articleContainers = ArticleContainerDAO.sharedInstance().
+//						getArticleContainersForQueries(articleContainerQueries, getFetchGroups(),
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					final Collection<ArticleContainerDeliveryDateDTO> dtos = ArticleContainerDAO.sharedInstance().getArticleContainerDeliveryDateDTOs(
+							articleContainerQueries, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					if (!display.isDisposed()) {
+						display.asyncExec(new Runnable() {
+							public void run() {
+								if (deliveryDateTable.isDisposed())
+									return;
+
+								deliveryDateTable.setInput(dtos);
+							}
+						});
+					}
 				}
-
-//				final Collection<?> articleContainers = ArticleContainerDAO.sharedInstance().
-//					getArticleContainersForQueries(articleContainerQueries, getFetchGroups(),
-//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				final Collection<ArticleContainerDeliveryDateDTO> dtos = ArticleContainerDAO.sharedInstance().getArticleContainerDeliveryDateDTOs(
-						articleContainerQueries, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				display.asyncExec(new Runnable() {
-					public void run() {
-						if (deliveryDateTable.isDisposed())
-							return;
-
-//						deliveryDateTable.setInput(articleContainers);
-						deliveryDateTable.setInput(dtos);
-					}
-				});
 				return Status.OK_STATUS;
 			}
 		};
