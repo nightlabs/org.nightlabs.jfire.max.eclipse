@@ -422,11 +422,13 @@ implements ISelectionProvider
 	 */
 	public OrganisationLegalEntity getMyOrganisationLegalEntity()
 	{
-		if (myOrganisationLegalEntity == null)
+		if (myOrganisationLegalEntity == null) {
 			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!"); //$NON-NLS-1$
+		}
 
 		return myOrganisationLegalEntity;
 	}
+
 	public AnchorID getMyOrganisationLegalEntityID()
 	{
 		if (myOrganisationLegalEntity == null)

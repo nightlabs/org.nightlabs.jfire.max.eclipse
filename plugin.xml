@@ -1218,6 +1218,9 @@
     <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
         <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForQuickSalePerspective"/>
         <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForProductTypeSelection"/>
+        <loginStateListener
+              class="org.nightlabs.jfire.trade.ui.LoginStateListenerForCurrentBusinessPartner">
+        </loginStateListener>
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.queryFilterComposite">
         <QueryFilter orderHint="10"
