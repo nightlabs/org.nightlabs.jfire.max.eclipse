@@ -9,10 +9,10 @@ import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */
-public class DeleteLinkViewAction extends Action{
+public class RemoveLinkPersonIssueViewAction extends Action{
 	
 
-	public DeleteLinkViewAction() {
+	public RemoveLinkPersonIssueViewAction() {
 		super();
 	}
 
