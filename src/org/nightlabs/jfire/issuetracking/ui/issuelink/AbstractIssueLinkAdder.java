@@ -56,7 +56,9 @@ implements IssueLinkAdder
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
 		composite = doCreateComposite(parent);
-		doSearch();
+		// by default no search should be performed after having clicked just on a entry of the available
+		// IssueLinkHandlers. Search can be a very expensive operation especially when no criteria is specified. (Daniel)
+//		doSearch();
 
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
