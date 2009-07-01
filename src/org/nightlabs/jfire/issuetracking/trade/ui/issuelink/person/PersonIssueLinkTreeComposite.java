@@ -107,17 +107,17 @@ extends AbstractTreeComposite
 		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			   public void selectionChanged(SelectionChangedEvent event) {
 			       // if the selection is empty clear the label
-			       if(event.getSelection().isEmpty()) 
+			       if(event.getSelection().isEmpty())
 			           return;
 					StructuredSelection s = (StructuredSelection)event.getSelection();
 					selectedElement = s.getFirstElement();
 			   }
 			});
-		
-		
 
-		
-		
+
+
+
+
 		// open up the Issue in the Issue Editor.
 		getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
@@ -294,7 +294,7 @@ extends AbstractTreeComposite
 	{
 		this.partner = partner;
 
-		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
+		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson()); // <-- FIXME Problem here triggered from the IssueTracking perspective...
 
 		final Collection<IssueLink> links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(),
 				personID,
@@ -314,7 +314,7 @@ extends AbstractTreeComposite
 			}
 
 		};
-		
+
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
@@ -323,7 +323,7 @@ extends AbstractTreeComposite
 				else
 					getTreeViewer().expandToLevel(1);
 			}
-		});	
+		});
 		monitor.worked(20);
 	}
 
