@@ -43,7 +43,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();
 	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
-	private RemoveLinkPersonIssueViewAction removePersonIssueLinkViewAction = new RemoveLinkPersonIssueViewAction();
+	private RemovePersonIssueLinkViewAction removePersonIssueLinkViewAction = new RemovePersonIssueLinkViewAction();
 	private Object selectedNode;
 
 	protected void setSelectedNode(Object selectedIssueLink) {

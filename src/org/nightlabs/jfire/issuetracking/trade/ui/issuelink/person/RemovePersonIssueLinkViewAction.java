@@ -9,10 +9,10 @@ import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */
-public class RemoveLinkPersonIssueViewAction extends Action{
+public class RemovePersonIssueLinkViewAction extends Action{
 	
 
-	public RemoveLinkPersonIssueViewAction() {
+	public RemovePersonIssueLinkViewAction() {
 		super();
 	}
 
@@ -36,12 +36,12 @@ public class RemoveLinkPersonIssueViewAction extends Action{
 
 	@Override
 	public String getText() {
-		return "";
+		return "Removes the Link Person/Issue";
 	}
 
 	@Override
 	public String getToolTipText() {
-		return "";
+		return "Removes the Link between Person/Issue";
 	}
 
 
