@@ -8,7 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScripting"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucher"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucherEditor2D"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsEditor2D"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseBean"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jdo"/>
 	<classpathentry kind="con" path="org.nightlabs.eclipse.sdk.jdo.JDO_CONTAINER"/>
