@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.scripting.ui;visibility:=reexport,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
- org.nightlabs.editor2d.viewer.ui;visibility:=reexport
+ org.nightlabs.editor2d.viewer.ui;visibility:=reexport,
+ org.nightlabs.editor2d
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.scripting.print.ui,
  org.nightlabs.jfire.scripting.print.ui.transfer.delivery
