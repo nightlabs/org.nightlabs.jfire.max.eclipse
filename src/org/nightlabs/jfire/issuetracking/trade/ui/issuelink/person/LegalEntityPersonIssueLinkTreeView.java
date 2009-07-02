@@ -1,10 +1,17 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
+import java.util.Iterator;
+
 import javax.jdo.FetchPlan;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -13,6 +20,9 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -23,6 +33,11 @@ import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.OrderTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringRootTreeNode;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -44,14 +59,14 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();
 	private AddNewCommentViewAction addNewCommentViewAction = new AddNewCommentViewAction();
 	private RemovePersonIssueLinkViewAction removePersonIssueLinkViewAction = new RemovePersonIssueLinkViewAction();
-	private Object selectedNode;
+	
 
-	protected void setSelectedNode(Object selectedIssueLink) {
-		this.selectedNode = selectedIssueLink;
-	}
 
 	public Object getSelectedNode() {
-		return selectedNode;
+		if(showLegalEntityLinkedTreeComposite.isDisposed())
+			return null;
+		else
+			return showLegalEntityLinkedTreeComposite.getSelectedNode();
 	}
 
 	private LegalEntity partner = null;
@@ -63,7 +78,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 
 	@Override
 	public void createPartContents(Composite parent) {
-		showLegalEntityLinkedTreeComposite = new PersonIssueLinkTreeComposite(parent, SWT.NONE);
+		showLegalEntityLinkedTreeComposite = new PersonIssueLinkTreeComposite(parent, SWT.NONE, getSite());
 		showLegalEntityLinkedTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE,
@@ -104,7 +119,6 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				}
 				StructuredSelection s = (StructuredSelection)event.getSelection();
 				Object o = s.getFirstElement();
-				setSelectedNode(o);
 				if (o instanceof IssueLink)
 				{	addNewCommentViewAction.setEnabled(true);
 					removePersonIssueLinkViewAction.setEnabled(true);
@@ -116,9 +130,10 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				}
 			}
 		});
-
+		
 	}
 
+	
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
 			ProgressMonitor monitor = getProgressMonitor();

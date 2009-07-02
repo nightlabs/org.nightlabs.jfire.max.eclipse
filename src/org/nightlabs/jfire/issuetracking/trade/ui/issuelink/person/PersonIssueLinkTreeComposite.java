@@ -12,6 +12,10 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -27,8 +31,12 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
@@ -69,7 +77,9 @@ extends AbstractTreeComposite
 	private IssueLinkTreeNode rootlegalEntityIssuesLinkNode = null;
 	private static final Object[] EMPTY_DATA = new Object[]{};
 	private LegalEntity partner = null;
-	private Object selectedElement;
+	private Object selectedNode = null;
+	private DrillDownAdapter drillDownAdapter;
+	private IWorkbenchPartSite site;
 	private Collection<Image> iconImages = new ArrayList<Image>();
 
 
@@ -88,9 +98,10 @@ extends AbstractTreeComposite
 		IssueComment.FETCH_GROUP_TEXT};
 
 
-	public PersonIssueLinkTreeComposite(Composite parent, int style)
+	public PersonIssueLinkTreeComposite(Composite parent, int style, IWorkbenchPartSite site)
 	{
 		super(parent, style);
+		this.site = site;
 		init();
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);
 
@@ -102,8 +113,6 @@ extends AbstractTreeComposite
 			}
 		});
 
-
-		
 		
 		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			   public void selectionChanged(SelectionChangedEvent event) {
@@ -111,13 +120,9 @@ extends AbstractTreeComposite
 			       if(event.getSelection().isEmpty())
 			           return;
 					StructuredSelection s = (StructuredSelection)event.getSelection();
-					selectedElement = s.getFirstElement();
+					selectedNode = s.getFirstElement();
 			   }
 			});
-
-
-
-
 
 		// open up the Issue in the Issue Editor.
 		getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
@@ -142,7 +147,42 @@ extends AbstractTreeComposite
 
 		}
 		);
+		
+		
+		
+		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
+		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+
+		}});
+		
+		
 	}
+	
+	public Object getSelectedNode() {
+		return selectedNode;
+	}
+	
+	private void fillContextMenu(IMenuManager manager) {
+		drillDownAdapter.addNavigationActions(manager);
+		// Other plug-ins can contribute their actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
+
+	private void createContextMenu() {
+		MenuManager menuMgr = new MenuManager("Markers");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				fillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
+		getTreeViewer().getControl().setMenu(menu);
+		site.registerContextMenu(menuMgr, getTreeViewer());
+	}
+	
 
 
 	private NotificationListener issueChangeListener = new NotificationAdapterJob() {
@@ -319,8 +359,8 @@ extends AbstractTreeComposite
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
-				if(selectedElement!=null)
-					getTreeViewer().expandToLevel(selectedElement,1);
+				if(selectedNode!=null)
+					getTreeViewer().expandToLevel(selectedNode,1);
 				else
 					getTreeViewer().expandToLevel(1);
 			}
