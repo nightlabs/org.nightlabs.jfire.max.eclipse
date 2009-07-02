@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -114,6 +115,7 @@ extends WizardHopPage
 			}
 		});
 
+
 		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite<Issue> tableComposite) {
@@ -121,7 +123,8 @@ extends WizardHopPage
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
 						// Do nothing!!!
-						// --> Or maybe we can already react for 'Finish' on the double-click? Kai.
+						// --> Or maybe we can already react for 'Finish' on the double-click (which will standardise with the rest)? Kai.
+						issueDoubleClick();
 					}
 				});
 
@@ -177,6 +180,18 @@ extends WizardHopPage
 		else
 			return false;
 	}
+
+	/**
+	 * React on the double-click event on the selected Issue from the table,
+	 */
+	protected void issueDoubleClick() {
+		if (getContainer() instanceof WizardDialog) {
+			if (isPageComplete() && getWizard().performFinish()) {
+				((WizardDialog) getContainer()).close();
+			}
+		}
+	}
+
 
 //	@Override
 //	public void onFinish() {

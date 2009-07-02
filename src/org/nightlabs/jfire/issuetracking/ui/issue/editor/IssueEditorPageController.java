@@ -190,8 +190,9 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		//      --> We need to close this editor?
 		//      --> Should the UI inform that the editor is about to close?
 		//      --> What happens if someone else is still working on this same issue??
+		if (issue != null)
+			struct = StructLocalDAO.sharedInstance().getStructLocal(issue.getPropertySet().getStructLocalObjectID(), new SubProgressMonitor(monitor, 30));
 
-		struct = StructLocalDAO.sharedInstance().getStructLocal(issue.getPropertySet().getStructLocalObjectID(), new SubProgressMonitor(monitor, 30));
 		return issue;
 	}
 

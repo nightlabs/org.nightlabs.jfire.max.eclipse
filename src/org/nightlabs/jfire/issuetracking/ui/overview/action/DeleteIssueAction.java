@@ -66,7 +66,7 @@ extends AbstractIssueAction
 		// It's possible that multiple Issues have been selected to be deleted.
 		for (IssueID issueID : getSelectedIssueIDs()) {
 			// Perform the delete only upon the confirmation from the UI.
-			// Erh... how do I get access to the freaking table???
+			// Erh... how the heck do I get access to the freaking table???
 			IWorkbenchPart part = getActivePart();
 			final IssueTable issueTable = ((IssueEntryListViewer) ((IssueEntryListEditor)part).getEntryViewer()).getIssueTable(); // <-- Uughhh :(
 

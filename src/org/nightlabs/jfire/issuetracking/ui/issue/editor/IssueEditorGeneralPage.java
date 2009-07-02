@@ -38,6 +38,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
@@ -203,6 +204,16 @@ extends EntityEditorPageWithProgress
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				Issue issue = getController().getIssue();
+
+				// Note: Now that we have allowed an Issue to be deleted, it might be the case that
+				//       we get notified in this opened editor, where the Issue no longer exists. Kai.
+				if (issue == null) {
+					// Close this editor.
+					// --> But before that, we should simply pop up a dialog letting people know that the editor is about to be closed?
+					RCPUtil.closeEditor(getEditorInput(), false);
+					return;
+				}
+
 
 				if (issueLinkListSection != null && !issueLinkListSection.getSection().isDisposed()) {
 					issueLinkListSection.setIssue(issue);
