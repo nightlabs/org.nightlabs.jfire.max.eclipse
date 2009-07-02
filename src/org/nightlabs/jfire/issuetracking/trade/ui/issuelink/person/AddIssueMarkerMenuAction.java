@@ -34,23 +34,23 @@ public class AddIssueMarkerMenuAction extends Action{
 		super();
 	}
 
-	private LegalEntityPersonIssueLinkTreeView view;
+	private PersonIssueLinkTreeComposite treecomposite;
 	private IssueMarker issueMarker;
 	
 	/**
 	 * @see org.eclipse.ui.IViewActionDelegate#init(org.eclipse.ui.IViewPart)
 	 */
-	public void init(LegalEntityPersonIssueLinkTreeView view, IssueMarker issueMarker) {
-		this.view = view;
+	public void init(PersonIssueLinkTreeComposite treecomposite, IssueMarker issueMarker) {
+		this.treecomposite = treecomposite;
 		this.issueMarker = issueMarker;
 	}
 
 
 	@Override
 	public void run() {
-		if(view.getSelectedNode() == null ||!(view.getSelectedNode() instanceof IssueLink))
+		if(treecomposite.getSelectedNode() == null ||!(treecomposite.getSelectedNode() instanceof IssueLink))
 			return;
-		final IssueLink issueLink = (IssueLink)view.getSelectedNode();
+		final IssueLink issueLink = (IssueLink)treecomposite.getSelectedNode();
 		final Issue issue = issueLink.getIssue();
 		
 		Job job = new Job(Messages.getString("Add an Issue Marker")) { 

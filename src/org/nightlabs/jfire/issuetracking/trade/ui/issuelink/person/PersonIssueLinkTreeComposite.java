@@ -7,11 +7,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -38,6 +41,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -45,13 +49,17 @@ import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueManagerRemote;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.id.IssueMarkerID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
@@ -80,6 +88,7 @@ extends AbstractTreeComposite
 	private Object selectedNode = null;
 	private DrillDownAdapter drillDownAdapter;
 	private IWorkbenchPartSite site;
+	private Collection<IssueMarker> issueMarkers;
 	private Collection<Image> iconImages = new ArrayList<Image>();
 
 
@@ -148,8 +157,6 @@ extends AbstractTreeComposite
 		}
 		);
 		
-		
-		
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
@@ -157,7 +164,34 @@ extends AbstractTreeComposite
 
 		}});
 		
-		
+		// Load the IssueMarkers references.
+		Job job = new Job(Messages.getString("Load the Issue Markers")) {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				IssueManagerRemote imr = null;
+				try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
+				catch (Exception e) { throw new RuntimeException(e); }
+
+				Set<IssueMarkerID> issueMarkerIDs = imr.getIssueMarkerIDs();
+				issueMarkers = imr.getIssueMarkers(
+						issueMarkerIDs,
+						new String[] {FetchPlan.DEFAULT, IssueMarker.FETCH_GROUP_NAME, IssueMarker.FETCH_GROUP_DESCRIPTION, IssueMarker.FETCH_GROUP_ICON_16X16_DATA},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+				);
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						createContextMenu();
+					}
+				});
+				
+				return Status.OK_STATUS;	
+			}
+			};
+			
+			job.setPriority(Job.SHORT);
+			job.schedule();
 	}
 	
 	public Object getSelectedNode() {
@@ -167,7 +201,13 @@ extends AbstractTreeComposite
 	private void fillContextMenu(IMenuManager manager) {
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute their actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		for(IssueMarker issueMarker:issueMarkers)
+		{
+			AddIssueMarkerMenuAction addIssueMarkerMenuAction = new AddIssueMarkerMenuAction(); 
+			addIssueMarkerMenuAction.init(this, issueMarker);
+			manager.add(addIssueMarkerMenuAction);
+		}
+		//manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void createContextMenu() {
