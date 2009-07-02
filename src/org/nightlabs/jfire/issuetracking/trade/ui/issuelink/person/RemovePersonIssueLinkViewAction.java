@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -14,6 +15,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
@@ -24,13 +26,13 @@ import org.nightlabs.progress.SubProgressMonitor;
  *
  */
 public class RemovePersonIssueLinkViewAction extends Action{
-	
+
 	private static String[] FETCH_GROUP_ISSUE = new String[]{
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_ISSUE_LINKS
 	};
 
-	
+
 	public RemovePersonIssueLinkViewAction() {
 		super();
 	}
@@ -50,6 +52,7 @@ public class RemovePersonIssueLinkViewAction extends Action{
 			return;
 		final IssueLink issueLink = (IssueLink)view.getSelectedNode();
 		final Issue issue = issueLink.getIssue();
+
 		boolean result = MessageDialog.openConfirm(
 				view.getSite().getShell(),
 				"Remove Person/Issue Link",
@@ -57,21 +60,26 @@ public class RemovePersonIssueLinkViewAction extends Action{
 				+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ") "
 				+ "Subject:\"" + issue.getSubject().getText() + "\""
 				+ "?");
-		
+
 		if(!result)
 			return;
-		
-		Job job = new Job(Messages.getString("Deleting the Issue Link")) { 
+
+		Job job = new Job(Messages.getString("Deleting the Issue Link")) {
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				monitor.beginTask("Deleting the Issue Link", 100);
-				issue.removeIssueLink(issueLink);
+
+				Issue _issue = IssueDAO.sharedInstance().getIssue(
+						(IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP_ISSUE,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 30));
+
+				_issue.removeIssueLink(issueLink);
 				monitor.worked(30);
-				Issue storedIssue = IssueDAO.sharedInstance().storeIssue(issue,false,FETCH_GROUP_ISSUE,
+				Issue storedIssue = IssueDAO.sharedInstance().storeIssue(_issue,false,FETCH_GROUP_ISSUE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 70));
-				monitor.done();	
-				return Status.OK_STATUS;	
+				monitor.done();
+				return Status.OK_STATUS;
 			}
 		};
 
