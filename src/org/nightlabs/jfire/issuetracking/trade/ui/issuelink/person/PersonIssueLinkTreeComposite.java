@@ -191,7 +191,7 @@ extends AbstractTreeComposite
 			};
 			
 			job.setPriority(Job.SHORT);
-			job.schedule();
+			job.schedule();			
 	}
 	
 	public Object getSelectedNode() {
