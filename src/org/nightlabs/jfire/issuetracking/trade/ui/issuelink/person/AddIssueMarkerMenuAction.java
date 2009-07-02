@@ -20,6 +20,10 @@ import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
+/**
+ * @author Fitas Amine - fitas at nightlabs dot de
+ *
+ */
 public class AddIssueMarkerMenuAction extends Action{
 
 	private static String[] FETCH_GROUP_ISSUE = new String[]{
@@ -53,12 +57,11 @@ public class AddIssueMarkerMenuAction extends Action{
 		final IssueLink issueLink = (IssueLink)treecomposite.getSelectedNode();
 		final Issue issue = issueLink.getIssue();
 
-		Job job = new Job(Messages.getString("Add an Issue Marker")) { 
+		Job job = new Job(Messages.getString("Add/Remove an Issue Marker")) { 
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
-				monitor.beginTask("Add an Issue Marker", 100);
-				
+				monitor.beginTask("Add/Remove an Issue Marker", 100);		
 				// reverse state of the GUI CheckBox
 				if(isChecked())
 					issue.addIssueMarker(issueMarker);
@@ -76,7 +79,6 @@ public class AddIssueMarkerMenuAction extends Action{
 		job.setPriority(Job.SHORT);
 		job.schedule();	
 	}
-
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
@@ -98,7 +100,4 @@ public class AddIssueMarkerMenuAction extends Action{
 	public String getToolTipText() {
 		return issueMarker.getDescription().getText();	
 	}
-	
-	
-	
 }
