@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -37,13 +36,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
@@ -201,13 +198,24 @@ extends AbstractTreeComposite
 	private void fillContextMenu(IMenuManager manager) {
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute their actions here
+		Set<IssueMarker>selectedIssueMarkers = null;
+		// get the already selected Issue Markers
+		if(selectedNode!= null && selectedNode instanceof IssueLink)
+		{
+			Issue issue = ((IssueLink)selectedNode).getIssue();
+			selectedIssueMarkers =  issue.getIssueMarkers();	
+		}
+
 		for(IssueMarker issueMarker:issueMarkers)
 		{
+
 			AddIssueMarkerMenuAction addIssueMarkerMenuAction = new AddIssueMarkerMenuAction(); 
 			addIssueMarkerMenuAction.init(this, issueMarker);
 			manager.add(addIssueMarkerMenuAction);
+			if(selectedIssueMarkers!= null)
+				addIssueMarkerMenuAction.setChecked(selectedIssueMarkers.contains(issueMarker));	
+
 		}
-		//manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void createContextMenu() {
@@ -219,11 +227,12 @@ extends AbstractTreeComposite
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
+		
+	    
 		getTreeViewer().getControl().setMenu(menu);
 		site.registerContextMenu(menuMgr, getTreeViewer());
 	}
 	
-
 
 	private NotificationListener issueChangeListener = new NotificationAdapterJob() {
 		public void notify(NotificationEvent evt) {

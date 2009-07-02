@@ -52,15 +52,21 @@ public class AddIssueMarkerMenuAction extends Action{
 			return;
 		final IssueLink issueLink = (IssueLink)treecomposite.getSelectedNode();
 		final Issue issue = issueLink.getIssue();
-		
+
 		Job job = new Job(Messages.getString("Add an Issue Marker")) { 
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				monitor.beginTask("Add an Issue Marker", 100);
-				issue.addIssueMarker(issueMarker);
+				
+				// reverse state of the GUI CheckBox
+				if(isChecked())
+					issue.addIssueMarker(issueMarker);
+				else
+					issue.removeIssueMarker(issueMarker);
+				
 				monitor.worked(30);
-				Issue storedIssue = IssueDAO.sharedInstance().storeIssue(issue,false,FETCH_GROUP_ISSUE,
+				IssueDAO.sharedInstance().storeIssue(issue,false,FETCH_GROUP_ISSUE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 70));
 				monitor.done();	
 				return Status.OK_STATUS;	
