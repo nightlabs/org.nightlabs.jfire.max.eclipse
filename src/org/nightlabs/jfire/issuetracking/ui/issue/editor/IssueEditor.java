@@ -80,6 +80,11 @@ implements ICloseOnLogoutEditorPart
 
 		return null;
 	}
+	
+	@Override
+	protected String getEditorTooltipFromEntity(Object entity) {
+		return getEditorTitleFromEntity(entity);
+	}
 
 	@Override
 	protected Object retrieveEntityForEditorTitle(ProgressMonitor monitor) {

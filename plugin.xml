@@ -69,17 +69,21 @@
                 name="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.name"
                 toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
-                icon="icons/overview/action/IssueQuerySaveAction.16x16.png"
-                id="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
-                name="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.name"
-                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.tooltip"/>
+                  actionDefinitionId="org.eclipse.ui.file.save"
+                  class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
+                  icon="icons/overview/action/IssueQuerySaveAction.16x16.png"
+                  id="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
+                  name="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
-                icon="icons/overview/action/DeleteIssueAction.16x16.png"
-                id="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
-                name="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.name"
-                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.tooltip"/>
+                  actionDefinitionId="org.eclipse.ui.edit.delete"
+                  class="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
+                  icon="icons/overview/action/DeleteIssueAction.16x16.png"
+                  id="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
+                  name="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.tooltip"/>
             <editorActionBarContribution
                 class="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
                 icon="icons/overview/action/AddIssueAction.16x16.png"
