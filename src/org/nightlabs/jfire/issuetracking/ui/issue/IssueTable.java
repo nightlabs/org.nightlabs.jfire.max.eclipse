@@ -95,22 +95,8 @@ extends AbstractTableComposite<Issue>
 	 * @param parent - the parent composite for holding this table
 	 * @param style - SWT style constant
 	 */
-	public IssueTable(Composite parent, int style)
-	{
+	public IssueTable(Composite parent, int style) {
 		super(parent, style);
-//		loadIssues();
-
-//		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
-//		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, changedIssueListener);
-
-//		addDisposeListener(new DisposeListener() {
-//		public void widgetDisposed(DisposeEvent event)
-//		{
-//		JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
-//		JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, changedIssueListener);
-//		}
-//		});
-
 		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
@@ -121,12 +107,14 @@ extends AbstractTableComposite<Issue>
 				});
 			}
 		});
+
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
 				disposeAllImages();
 			}
 		});
+
 	}
 
 	private void disposeAllImages()

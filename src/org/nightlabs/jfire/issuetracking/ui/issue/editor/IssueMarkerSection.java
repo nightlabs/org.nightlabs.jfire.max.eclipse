@@ -159,6 +159,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 		@Override
 		public void run() {
+			// Should I do this on Async??
 			Collection<IssueMarker> items = issueMarkerTable.getSelectedElements();
 			if (items.isEmpty()) return;
 
