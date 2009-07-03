@@ -221,4 +221,12 @@
                perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
          </registry>
       </extension>
+      <extension
+            point="org.nightlabs.base.ui.simpleExceptionHandler">
+         <simpleExceptionHandler
+               message="There exists already an issue link with the same issue and issue link type"
+               targetType="org.nightlabs.jfire.issue.DuplicateIssueLinkException"
+               title="Same issue link already existing">
+         </simpleExceptionHandler>
+      </extension>
 </plugin>

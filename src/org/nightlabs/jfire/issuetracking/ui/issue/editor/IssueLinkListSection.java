@@ -32,7 +32,7 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 	private IssueLinkAdderComposite issueLinkAdderComposite;
-	private Issue issue;	// <-- FIXME There is already an Issue in the super class. Do we need this duplicate? Kai
+//	private Issue issue;	// <-- FIXME There is already an Issue in the super class. Do we need this duplicate? Kai
 
 	private OpenLinkedObjectAction openLinkedObjectAction;
 	private AddLinkAction addLinkAction;
@@ -65,7 +65,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 				openLinkedObjectAction.run();
 			}
 		});
-		
+
 		issueLinkAdderComposite.getIssueLinkTable().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -93,14 +93,13 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 	@Override
 	protected void doSetIssue(Issue issue) {
-		this.issue = issue;
 		issueLinkAdderComposite.getIssueLinkTable().setIssue(issue);
 	}
 
-	@Override
-	public Issue getIssue() {
-		return issue;
-	}
+//	@Override
+//	public Issue getIssue() {
+//		return issue;
+//	}
 
 	public class OpenLinkedObjectAction extends Action {
 		public OpenLinkedObjectAction() {
@@ -144,7 +143,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		@Override
 		public void run() {
 			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateIssueLinkWizard(table, issue));
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateIssueLinkWizard(table, getIssue()));
 			dialog.open();
 		}
 	}

@@ -28,12 +28,8 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.PaletteData;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -163,19 +159,20 @@ extends AbstractTableComposite<Issue>
 		String imageKey = generateCombiIssueMarkerImageKey(issue);
 		Image combiImage = imageKey2Image.get(imageKey);
 		if (combiImage == null && maxIssueMarkerCountPerIssue > 0) { // It is possible that none of the Issues has a single IssueMarker; in which case, we dont need to display any icons.
-//			combiImage = new Image(
-//					getDisplay(),
-//					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
-//					ISSUE_MARKER_IMAGE_DIMENSION.height
-//			);
+			combiImage = new Image(
+					getDisplay(),
+					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+					ISSUE_MARKER_IMAGE_DIMENSION.height
+			);
 			//Create a transparent image, Chairat.
-		    Color white = getDisplay().getSystemColor(SWT.COLOR_WHITE);
-		    Color black = getDisplay().getSystemColor(SWT.COLOR_BLACK);
-		    PaletteData palette = new PaletteData(new RGB[] { white.getRGB(), black.getRGB() });
-			ImageData imageData = new ImageData(ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
-					ISSUE_MARKER_IMAGE_DIMENSION.height, 1, palette);
-			imageData.transparentPixel = 0;
-			combiImage = new Image(getDisplay(), imageData);
+			// Commented because does not worked under windows.
+//		    Color white = getDisplay().getSystemColor(SWT.COLOR_WHITE);
+//		    Color black = getDisplay().getSystemColor(SWT.COLOR_BLACK);
+//		    PaletteData palette = new PaletteData(new RGB[] { white.getRGB(), black.getRGB() });
+//			ImageData imageData = new ImageData(ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+//					ISSUE_MARKER_IMAGE_DIMENSION.height, 1, palette);
+//			imageData.transparentPixel = 0;
+//			combiImage = new Image(getDisplay(), imageData);
 
 			GC gc = new GC(combiImage);
 			try {
@@ -218,6 +215,7 @@ extends AbstractTableComposite<Issue>
 		tc = new TableColumn(table, SWT.LEFT); // @column 0
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.id.text")); //$NON-NLS-1$
+		// Must be so big, because otherwise under windows id is not visible, first column behaves strange
 		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 1
@@ -228,7 +226,7 @@ extends AbstractTableComposite<Issue>
 		tc = new TableColumn(table, SWT.LEFT); // @column 2
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.type.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10)); // Previously: 20
+		layout.addColumnData(new ColumnWeightData(12)); // Previously: 20
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 3
 		tc.setMoveable(true);
@@ -240,7 +238,7 @@ extends AbstractTableComposite<Issue>
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.description.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(30)); // Previously: 20
 
-		// ---->> Added to display IssueMarker icons, whenever they are avaible in an Issue ------------------------------------|
+		// ---->> Added to display IssueMarker icons, whenever they are available in an Issue ------------------------------------|
 		tc = new TableColumn(table, SWT.LEFT); // @column 5
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.column.markers.text")); //$NON-NLS-1$
@@ -250,22 +248,23 @@ extends AbstractTableComposite<Issue>
 		tc = new TableColumn(table, SWT.LEFT); // @column 6
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
+		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 7
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
+		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 8
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
+		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
-		tc = new TableColumn(table, SWT.LEFT); // @column 9
-		tc.setMoveable(true);
-		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.status.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
+		// commented because IMHO not necessary
+//		tc = new TableColumn(table, SWT.LEFT); // @column 9
+//		tc.setMoveable(true);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.status.text")); //$NON-NLS-1$
+//		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		table.setLayout(layout);
 
@@ -284,11 +283,9 @@ extends AbstractTableComposite<Issue>
 				if (s.isEmpty())
 					return;
 
-
 				Issue issue = (Issue)s.getFirstElement();
 				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
 				try {
-//					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
 					Editor2PerspectiveRegistry.sharedInstance().openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
 				} catch (Exception e1) {
 					throw new RuntimeException(e1);
@@ -335,7 +332,7 @@ extends AbstractTableComposite<Issue>
 				case 6: return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
 				case 7: return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
 				case 8: return getStateName(issue);
-				case 9: return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
+//				case 9: return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
 				default: return ""; //$NON-NLS-1$
 				}
 			}

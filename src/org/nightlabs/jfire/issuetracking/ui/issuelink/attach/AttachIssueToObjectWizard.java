@@ -6,12 +6,16 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.MessageBox;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.issue.DuplicateIssueLinkException;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
@@ -27,7 +31,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -87,9 +91,12 @@ extends DynamicPathWizard
 
 	@Override
 	public boolean performFinish() {
+		final boolean[] result = new boolean[] { true };
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
-				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
+				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException
+				{
+					_monitor.beginTask("Create Issue Link", 100);
 					//Issue Link Type
 					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 
@@ -100,7 +107,6 @@ extends DynamicPathWizard
 
 					if (JDOHelper.getObjectId(issue) == null) {
 						try {
-//							User reporter = Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
 							User reporter = Login.getLogin().getUser(
 									new String[] {User.FETCH_GROUP_NAME},
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -112,11 +118,13 @@ extends DynamicPathWizard
 							throw new RuntimeException(e);
 						}
 
-						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // new RCPProgressMonitor(monitor)?
+						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								new SubProgressMonitor(new ProgressMonitorWrapper(_monitor), 50));
 					}
 					else {
 						//Issue Link
-						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP,
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(new ProgressMonitorWrapper(_monitor), 50));
 						IssueLink issueLink = issue.createIssueLink(selectedIssueLinkType, attachedObject);
 						if (issueLink == null) {
 							MessageBox msg = new MessageBox(getShell());
@@ -127,10 +135,26 @@ extends DynamicPathWizard
 						}
 
 						//Store Issue
-						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						try {
+							createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP,
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(new ProgressMonitorWrapper(_monitor), 50));
+						}
+						catch (Exception e) {
+							if (ExceptionUtils.indexOfThrowable(e, DuplicateIssueLinkException.class) >= 0) {
+//								getContainer().getCurrentPage().getControl().setEnabled(true);
+								// display message and close dialog
+								MessageDialog.openError(
+										getShell(),
+										"Same issue link already existing",
+										"There exists already an issue link with the same issue and issue link type");
+								result[0] = true;
+								return;
+							}
+							else {
+								throw new RuntimeException(e);
+							}
+						}
 					}
-
-
 
 					// Open the editor <-- Do we immediately do this after establishing a link to an Issue?
 					//                     Now that we've restricted ourselves to only open an Issue page in the Issue perspective, as apposed to previously
@@ -152,7 +176,7 @@ extends DynamicPathWizard
 					//     be highlighted/given focus/etc.
 					//
 					setSelectedIssue(createdIssue);
-
+					_monitor.done();
 				}
 			});
 		} catch (Exception ex) {
@@ -160,7 +184,7 @@ extends DynamicPathWizard
 		}
 
 
-		return true;
+		return result[0];
 	}
 
 	public void setSelectedIssue(Issue issue) {
