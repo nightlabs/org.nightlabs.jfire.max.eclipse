@@ -35,6 +35,8 @@ extends ResizableTitleAreaDialog
 
 	public EditDeliveryDateDialog(Shell shell, Collection<Article> articles, DeliveryDateMode mode) {
 		super(shell, null);
+		if (articles == null)
+			throw new IllegalArgumentException("Param articles must notbe null");
 		this.articles = articles;
 		this.mode = mode;
 	}

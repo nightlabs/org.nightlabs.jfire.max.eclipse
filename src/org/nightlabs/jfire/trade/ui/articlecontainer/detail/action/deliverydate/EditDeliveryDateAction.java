@@ -53,7 +53,8 @@ extends GenericArticleEditAction
 					return false;
 			}
 
-			return true;
+			if (getArticles() != null)
+				return true;
 		}
 		// check if ArticleContainer is DeliveryNote
 		else if (ac instanceof DeliveryNote) {
@@ -72,7 +73,8 @@ extends GenericArticleEditAction
 					return false;
 			}
 
-			return true;
+			if (getArticles() != null)
+				return true;
 		}
 
 		return false;
