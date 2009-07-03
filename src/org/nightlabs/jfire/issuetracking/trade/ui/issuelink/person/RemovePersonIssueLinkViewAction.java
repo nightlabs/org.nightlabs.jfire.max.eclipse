@@ -56,7 +56,7 @@ public class RemovePersonIssueLinkViewAction extends Action{
 		boolean result = MessageDialog.openConfirm(
 				view.getSite().getShell(),
 				"Remove Person/Issue Link",
-				"Are you sure you wants to remove the Link Person/Issue"
+				"Are you sure you want to remove the Link Person/Issue"
 				+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ") "
 				+ "Subject:\"" + issue.getSubject().getText() + "\""
 				+ "?");
@@ -76,7 +76,7 @@ public class RemovePersonIssueLinkViewAction extends Action{
 
 				_issue.removeIssueLink(issueLink);
 				monitor.worked(30);
-				Issue storedIssue = IssueDAO.sharedInstance().storeIssue(_issue,false,FETCH_GROUP_ISSUE,
+				_issue = IssueDAO.sharedInstance().storeIssue(_issue,false,FETCH_GROUP_ISSUE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 70));
 				monitor.done();
 				return Status.OK_STATUS;

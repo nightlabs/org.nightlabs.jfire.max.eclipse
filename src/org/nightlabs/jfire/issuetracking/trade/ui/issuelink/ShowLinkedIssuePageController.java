@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -71,6 +72,7 @@ extends EntityEditorPageController
 		super(editor);
 		this.articleContainerID = ((ArticleContainerEditorInput) editor.getEditorInput()).getArticleContainerID();
 		linkedIssues = new HashSet<Issue>();
+		issueLinks = new ArrayList<IssueLink>();
 
 		// [Observation and strategy, 23.06.2009]: Kai.
 		//   ~ Let <issues> be all the Issues listed in the IssueTable.
@@ -121,7 +123,7 @@ extends EntityEditorPageController
 		this.articleContainer =
 			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
-		Collection<IssueLink> issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
+		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
 				null, // This must be the local organisationID! The backend now chooses this automatically, when passing null. Marco.
 				articleContainerID,
 				FETCH_GROUPS,
@@ -155,4 +157,37 @@ extends EntityEditorPageController
 	public ArticleContainer getArticleContainer() {
 		return articleContainer;
 	}
+
+
+	// ---[ Helper methods to manage the IssueLinks ]-------------------------------------------------------------------------------------|
+	private Collection<IssueLink> issueLinks;
+//	public Collection<IssueLink> getIssueLinks() {
+//		return issueLinks;
+//	}
+
+	/**
+	 * @return the IssueLink from the issueLinks collection matching the srcIssue. Null if no matching Issue is found.
+	 */
+	public IssueLink getRelatedIssueLink(Issue srcIssue) {
+		for (IssueLink issueLink : issueLinks)
+			if (issueLink.getIssue().equals(srcIssue)) {
+				return issueLink;
+			}
+
+		return null;
+	}
+
+	/**
+	 * Removes an IssueLink based on the given reference source Issue.
+	 */
+	public IssueLink removeRelatedIssueLink(Issue srcIssue) {
+		IssueLink issueLink = getRelatedIssueLink(srcIssue);
+		if (issueLink != null)
+			issueLinks.remove(issueLink);
+
+		return issueLink;
+	}
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+
+
 }
