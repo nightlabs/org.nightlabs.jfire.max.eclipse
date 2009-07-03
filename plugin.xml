@@ -96,12 +96,14 @@
                 id="org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction"
                 name="%org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction.name"
                 toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction.tooltip"/>
+<!--  Commented because Reminder functionality is not finished. Daniel
             <editorActionBarContribution
                 class="org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction"
                 icon="icons/overview/action/RemindIssueAction.16x16.png"
                 id="org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction"
                 name="%org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction.name"
                 toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction.tooltip"/>
+-->                
             <groupMarker name="org.nightlabs.jfire.issuetracking.ui.overview"/>
         </editorActionBarContributionRegistry>
     </extension>
