@@ -79,7 +79,7 @@ public class IssueFilterCompositePeopleRelated
 	@Override
 	protected void createComposite()
 	{
-		GridLayout gridLayout = new GridLayout(4, false);
+		GridLayout gridLayout = new GridLayout(8, false);
 		setLayout(gridLayout);
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -238,7 +238,7 @@ public class IssueFilterCompositePeopleRelated
 				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
-		
+
 		setSearchSectionActive(sectionActive);
 	}
 

@@ -118,10 +118,10 @@ public class IssueFilterCompositePropertyRelated
 
 		XComposite issueTypeComposite = new XComposite(this, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
-		issueTypeComposite.getGridLayout().numColumns = 2;
+		issueTypeComposite.getGridLayout().numColumns = 4;
 
 		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.issueType.text")); //$NON-NLS-1$
-		issueTypeCombo = new XComboComposite<IssueType>(issueTypeComposite, getBorderStyle());
+		issueTypeCombo = new XComboComposite<IssueType>(issueTypeComposite, getBorderStyle() | SWT.READ_ONLY);
 		issueTypeCombo.setLabelProvider(labelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
@@ -130,7 +130,7 @@ public class IssueFilterCompositePropertyRelated
 				final IssueType selectedIssueType = issueTypeCombo.getSelectedElement();
 
 				boolean selectAll = selectedIssueType.equals(ISSUE_TYPE_ALL);
-				
+
 				if (selectAll)
 					getQuery().setIssueTypeID(null);
 				else
@@ -141,7 +141,7 @@ public class IssueFilterCompositePropertyRelated
 		});
 
 		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.severity.text")); //$NON-NLS-1$
-		issueSeverityCombo = new XComboComposite<IssueSeverityType>(issueTypeComposite, getBorderStyle());
+		issueSeverityCombo = new XComboComposite<IssueSeverityType>(issueTypeComposite, getBorderStyle() | SWT.READ_ONLY);
 		issueSeverityCombo.setLabelProvider(labelProvider);
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
@@ -155,13 +155,13 @@ public class IssueFilterCompositePropertyRelated
 				else
 					getQuery().setIssueSeverityTypeID(
 							(IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-				
+
 				getQuery().setFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID, ! selectAll);
 			}
 		});
 
 		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.priority.text")); //$NON-NLS-1$
-		issuePriorityCombo = new XComboComposite<IssuePriority>(issueTypeComposite, getBorderStyle());
+		issuePriorityCombo = new XComboComposite<IssuePriority>(issueTypeComposite, getBorderStyle() | SWT.READ_ONLY);
 		issuePriorityCombo.setLabelProvider(labelProvider);
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
@@ -175,26 +175,26 @@ public class IssueFilterCompositePropertyRelated
 				else
 					getQuery().setIssuePriorityID(
 							(IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
-				
+
 				getQuery().setFieldEnabled(IssueQuery.FieldName.issuePriorityID, ! selectAll);
 			}
 		});
 
 		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.resolution.text")); //$NON-NLS-1$
-		issueResolutionCombo = new XComboComposite<IssueResolution>(issueTypeComposite, getBorderStyle());
+		issueResolutionCombo = new XComboComposite<IssueResolution>(issueTypeComposite, getBorderStyle() | SWT.READ_ONLY);
 		issueResolutionCombo.setLabelProvider(labelProvider);
 		issueResolutionCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				final IssueResolution selectedIssueResolution = issueResolutionCombo.getSelectedElement();
-				
+
 				boolean selectAll = ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution);
 				if (selectAll)
 					getQuery().setIssueResolutionID(null);
 				else
 					getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
-				
+
 				getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, ! selectAll);
 			}
 		});
@@ -223,7 +223,7 @@ public class IssueFilterCompositePropertyRelated
 					issuePriorityCombo.setSelection(newIssuePriority);
 					if (! newIssuePriority.equals(issuePriorityCombo.getSelectedElement()))
 						selectedIssuePriority = newIssuePriority;
-					
+
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issuePriorityID).equals(
@@ -254,7 +254,7 @@ public class IssueFilterCompositePropertyRelated
 					issueResolutionCombo.setSelection(newIssueResolution);
 					if (! newIssueResolution.equals(issueResolutionCombo.getSelectedElement()))
 						selectedIssueResolution = newIssueResolution;
-					
+
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueResolutionID).equals(

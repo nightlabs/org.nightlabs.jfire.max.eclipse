@@ -111,7 +111,7 @@ public class IssueFilterCompositeIssueLinkRelated
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		new Label(this, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeIssueLinkRelated.label.linkType.text")); //$NON-NLS-1$
-		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(this, getBorderStyle());
+		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(this, getBorderStyle() | SWT.READ_ONLY);
 		issueLinkTypeCombo.setLabelProvider(labelProvider);
 		issueLinkTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
@@ -179,7 +179,7 @@ public class IssueFilterCompositeIssueLinkRelated
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID));
-				
+
 				if (!active) {
 					issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
 					getQuery().setIssueLinkTypeID(null);
