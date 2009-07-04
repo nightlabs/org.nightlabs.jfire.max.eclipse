@@ -18,6 +18,12 @@
          <viewContribution
             id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeViewContribution" targetID="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView">
             <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.DeletePersonRelationAction"
+                icon="icons/DeletePersonRelationAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.DeletePersonRelationAction"
+                label=""
+                style="push" toolbarPath="additions" tooltip="Delete a person relation"/>
+            <action
                 class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreatePersonRelationAction"
                 icon="icons/CreatePersonRelationAction.16x16.png"
                 id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreatePersonRelationAction"

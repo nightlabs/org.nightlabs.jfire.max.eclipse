@@ -11,6 +11,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.selection.SelectionProviderProxy;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
@@ -25,6 +26,13 @@ public class PersonRelationIssueTreeView
 extends LSDViewPart
 {
 	private PersonRelationTree personRelationTree;
+	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
+
+	@Override
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		getSite().setSelectionProvider(selectionProviderProxy);
+	}
 
 	@Override
 	public void createPartContents(Composite parent) {
@@ -44,6 +52,8 @@ extends LSDViewPart
 				);
 			}
 		});
+
+		selectionProviderProxy.addRealSelectionProvider(personRelationTree);
 	}
 
 	private NotificationListener notificationListenerLegalEntitySelected = new NotificationAdapterJob("Selecting legal entity")

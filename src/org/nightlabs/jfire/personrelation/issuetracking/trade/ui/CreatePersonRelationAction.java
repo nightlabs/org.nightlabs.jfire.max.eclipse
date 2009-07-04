@@ -2,24 +2,23 @@ package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.personrelation.ui.createrelation.CreatePersonRelationWizard;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 
 public class CreatePersonRelationAction implements IViewActionDelegate
 {
-	private PersonRelationIssueTreeView view;
-
 	@Override
-	public void init(IViewPart view) {
-		this.view = (PersonRelationIssueTreeView) view;
-	}
+	public void init(IViewPart view) { }
 
 	@Override
 	public void run(IAction action) {
-		PropertySetID personID = view.getPersonRelationTree().getSelectedInputPersonID();
+		PropertySetID personID = this.selectedPersonID;
 		if (personID == null)
 			return;
 
@@ -27,7 +26,36 @@ public class CreatePersonRelationAction implements IViewActionDelegate
 		new DynamicPathWizardDialog(wizard).open();
 	}
 
+	private PropertySetID selectedPersonID = null;
+
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
+		selectedPersonID = null;
+
+		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+			action.setEnabled(false);
+			return;
+		}
+
+		IStructuredSelection sel = (IStructuredSelection) selection;
+		if (sel.size() != 1 || sel.getFirstElement() == null) {
+			action.setEnabled(false);
+			return;
+		}
+
+		Object object = sel.getFirstElement();
+		if (!(object instanceof PersonRelationTreeNode)) {
+			action.setEnabled(false);
+			return;
+		}
+
+		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
+		if (node.getJdoObjectID() instanceof PropertySetID)
+			selectedPersonID = (PropertySetID) node.getJdoObjectID();
+		else if (node.getJdoObject() instanceof PersonRelation) {
+			PersonRelation pr = (PersonRelation) node.getJdoObject();
+			selectedPersonID = pr.getToID();
+		}
+		action.setEnabled(selectedPersonID != null);
 	}
 }
