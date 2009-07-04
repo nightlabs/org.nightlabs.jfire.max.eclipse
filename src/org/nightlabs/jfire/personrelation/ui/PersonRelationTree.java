@@ -3,6 +3,7 @@ package org.nightlabs.jfire.personrelation.ui;
 import java.util.Collection;
 
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -13,12 +14,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEventHandler;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeContentProvider;
-import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeLabelProvider;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
@@ -35,17 +36,20 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	{
 	}
 
-	protected static class PersonRelationTreeLabelProvider extends JDOObjectLazyTreeLabelProvider<ObjectID, Object, PersonRelationTreeNode>
+	protected static class PersonRelationTreeLabelProvider extends ColumnSpanLabelProvider
 	{
+		public PersonRelationTreeLabelProvider(ColumnViewer columnViewer) {
+			super(columnViewer);
+		}
+
 		private String languageID = NLLocale.getDefault().getLanguage();
 
-		@Override
-		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int columnIndex) {
+		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
 			if (jdoObject == null) {
 				if (jdoObjectID instanceof PropertySetID) {
 					PropertySetID personID = (PropertySetID) jdoObjectID;
 
-					switch (columnIndex) {
+					switch (spanColIndex) {
 						case 0:
 							return personID.organisationID + '/' + personID.propertySetID;
 						default:
@@ -55,7 +59,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				else if (jdoObjectID instanceof PersonRelationID) {
 					PersonRelationID personRelationID = (PersonRelationID) jdoObjectID;
 
-					switch (columnIndex) {
+					switch (spanColIndex) {
 						case 0:
 							return personRelationID.organisationID + '/' + personRelationID.personRelationID;
 						default:
@@ -67,10 +71,8 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				if (jdoObject instanceof Person) {
 					Person person = (Person) jdoObject;
 
-					switch (columnIndex) {
+					switch (spanColIndex) {
 						case 0:
-							return null;
-						case 1:
 							return person.getDisplayName();
 						default:
 							break;
@@ -79,7 +81,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				else if (jdoObject instanceof PersonRelation) {
 					PersonRelation personRelation = (PersonRelation) jdoObject;
 
-					switch (columnIndex) {
+					switch (spanColIndex) {
 						case 0:
 							return personRelation.getPersonRelationType().getName().getText(languageID);
 						case 1:
@@ -96,7 +98,104 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			return null;
 		}
 
+		@Override
+		protected int[][] getColumnSpan(Object element) {
+			if (!(element instanceof PersonRelationTreeNode))
+				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+
+			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
+//			ObjectID jdoObjectID = node.getJdoObjectID();
+			Object jdoObject = node.getJdoObject();
+			if (jdoObject == null)
+				return new int[][] { {0, 1} };
+
+			if (jdoObject instanceof Person)
+				return new int[][] { {0, 1} };
+
+			if (jdoObject instanceof PersonRelationTreeNode)
+				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+
+			return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+		}
+
+		@Override
+		protected String getColumnText(Object element, int spanColIndex) {
+			if (element == null)
+				return null;
+
+			if (!(element instanceof PersonRelationTreeNode))
+				return String.valueOf(element);
+
+			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
+			ObjectID jdoObjectID = node.getJdoObjectID();
+			Object jdoObject = node.getJdoObject();
+			return getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+		}
+
 	}
+
+//	protected static class PersonRelationTreeLabelProvider extends JDOObjectLazyTreeLabelProvider<ObjectID, Object, PersonRelationTreeNode>
+//	{
+//		private String languageID = NLLocale.getDefault().getLanguage();
+//
+//		@Override
+//		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int columnIndex) {
+//			if (jdoObject == null) {
+//				if (jdoObjectID instanceof PropertySetID) {
+//					PropertySetID personID = (PropertySetID) jdoObjectID;
+//
+//					switch (columnIndex) {
+//						case 0:
+//							return personID.organisationID + '/' + personID.propertySetID;
+//						default:
+//							break;
+//					}
+//				}
+//				else if (jdoObjectID instanceof PersonRelationID) {
+//					PersonRelationID personRelationID = (PersonRelationID) jdoObjectID;
+//
+//					switch (columnIndex) {
+//						case 0:
+//							return personRelationID.organisationID + '/' + personRelationID.personRelationID;
+//						default:
+//							break;
+//					}
+//				}
+//			}
+//			else {
+//				if (jdoObject instanceof Person) {
+//					Person person = (Person) jdoObject;
+//
+//					switch (columnIndex) {
+//						case 0:
+//							return null;
+//						case 1:
+//							return person.getDisplayName();
+//						default:
+//							break;
+//					}
+//				}
+//				else if (jdoObject instanceof PersonRelation) {
+//					PersonRelation personRelation = (PersonRelation) jdoObject;
+//
+//					switch (columnIndex) {
+//						case 0:
+//							return personRelation.getPersonRelationType().getName().getText(languageID);
+//						case 1:
+//							return personRelation.getTo().getDisplayName();
+//						default:
+//							break;
+//					}
+//				}
+//				else {
+//					// TODO delegate
+//				}
+//			}
+//
+//			return null;
+//		}
+//
+//	}
 
 	private void assertSWTThread()
 	{
@@ -152,7 +251,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new PersonRelationTreeContentProvider());
-		treeViewer.setLabelProvider(new PersonRelationTreeLabelProvider());
+		treeViewer.setLabelProvider(new PersonRelationTreeLabelProvider(treeViewer));
 	}
 
 	public void setInputPersonIDs(Collection<PropertySetID> personIDs)
