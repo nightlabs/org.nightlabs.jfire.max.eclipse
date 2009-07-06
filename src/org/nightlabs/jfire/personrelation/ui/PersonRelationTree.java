@@ -208,12 +208,12 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			throw new IllegalStateException("This PersonRelationTree is already disposed! " + this);
 	}
 
-	private ActivePersonRelationTreeController activePersonRelationTreeController;
+	private PersonRelationTreeController personRelationTreeController;
 
 	public PersonRelationTree(Composite parent) {
 		super(parent, SWT.VIRTUAL);
 
-		activePersonRelationTreeController = new ActivePersonRelationTreeController() {
+		personRelationTreeController = new PersonRelationTreeController() {
 			@Override
 			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent)
 			{
@@ -223,12 +223,12 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
-				activePersonRelationTreeController.close();
-				activePersonRelationTreeController = null;
+				personRelationTreeController.close();
+				personRelationTreeController = null;
 			}
 		});
 
-		super.setInput(activePersonRelationTreeController);
+		super.setInput(personRelationTreeController);
 	}
 
 	@Override
@@ -261,8 +261,8 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		super.setInput(null);
 		this.personIDs = personIDs;
-		activePersonRelationTreeController.setRootPersonIDs(personIDs);
-		super.setInput(activePersonRelationTreeController);
+		personRelationTreeController.setRootPersonIDs(personIDs);
+		super.setInput(personRelationTreeController);
 //		refresh(true);
 	}
 

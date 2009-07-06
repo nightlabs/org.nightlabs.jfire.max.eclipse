@@ -29,7 +29,7 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
-public class ActivePersonRelationTreeController
+public class PersonRelationTreeController
 extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNode>
 {
 	public static final String[] FETCH_GROUPS_PERSON = {
@@ -73,7 +73,6 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 	@Override
 	protected Class<?> getJDOObjectClass() {
 		return PersonRelation.class;
-//		throw new UnsupportedOperationException("Due to other methods being overwritten, this method should never be called!");
 	}
 
 	@Override
