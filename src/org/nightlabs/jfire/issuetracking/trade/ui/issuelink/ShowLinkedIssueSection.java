@@ -3,12 +3,8 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 import java.util.Collection;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
@@ -24,19 +20,16 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.id.IssueLinkID;
@@ -47,14 +40,18 @@ import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
- * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
+ * This is the related Section called from the {@link ShowLinkedIssuePage}, containing the {@link IssueTable} that displays
+ * the {@link Issue}s linked to the controllerObject, which in this case refers to the {@link ArticleContainer}.
  *
+ * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
+ * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class ShowLinkedIssueSection
 extends ToolBarSectionPart
@@ -64,12 +61,10 @@ extends ToolBarSectionPart
 	private IssueTable issueTable;
 
 	private AddIssueLinkAction addIssueLinkAction;
-	private RemoveIssueLinkAction removeIssueLinkAction;
+	private IssueLinkActionRemove issueLinkActionRemove;
 
 	/**
-	 * @param page
-	 * @param parent
-	 * @param controller
+	 * Creates a new instance of the ShowLinkedIssueSection.
 	 */
 	public ShowLinkedIssueSection(IFormPage page, Composite parent, final ShowLinkedIssuePageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.title")); //$NON-NLS-1$
@@ -82,15 +77,6 @@ extends ToolBarSectionPart
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;
 
-
-		addIssueLinkAction = new AddIssueLinkAction();
-		getToolBarManager().add(addIssueLinkAction);
-
-		removeIssueLinkAction = new RemoveIssueLinkAction();
-		getToolBarManager().add(removeIssueLinkAction);
-
-		getSection().setClient(client);
-		updateToolBarManager();
 
 		issueTable = new IssueTable(client, SWT.NONE);
 		issueTable.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -112,9 +98,32 @@ extends ToolBarSectionPart
 			}
 		});
 
+
+		// The Action buttons to perform the interface for adding and removing IssueLinks.
+		addIssueLinkAction = new AddIssueLinkAction();
+		getToolBarManager().add( addIssueLinkAction );
+
+		issueLinkActionRemove = new IssueLinkActionRemove(issueTable, controller, page);
+		getToolBarManager().add( issueLinkActionRemove );
+
+		updateToolBarManager();
+		getSection().setClient(client);
 	}
 
+	/**
+	 * Makes the Action button enabled if and only if there is at least one selected item from the {@link IssueTable}.
+	 */
+	protected void handleRemoveActionButton() {
+		assert issueLinkActionRemove != null;
+		issueLinkActionRemove.setEnabled( issueTable.getSelectionIndex() >= 0 );
+	}
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// ---[ Lifecycle and Notification listeners: IssueLinks and Issues ] ----------------------------------------------------------------|
+	// -----------------------------------------------------------------------------------------------------------------------------------|
 	// We require the explicit listener here, to monitor any additions or removal of IssueLinks.
+	// See notes in [Observation and strategy, 23.06.2009] in ShowLinkedIssuePageController.
 	private JDOLifecycleListener issueLinksLifeCycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.job.name.checkingIssueLinks")) { //$NON-NLS-1$
 		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
 				IssueLink.class, false, JDOLifecycleState.NEW, JDOLifecycleState.DELETED
@@ -190,24 +199,32 @@ extends ToolBarSectionPart
 		}
 	};
 
-	protected void handleRemoveActionButton() {
-		assert removeIssueLinkAction != null;
-		removeIssueLinkAction.setEnabled( issueTable.getSelectionIndex() >= 0 );
-	}
 
 
-
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// ---[ Routines to handle the IssueTable contents ] ---------------------------------------------------------------------------------|
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	/**
+	 * Sets the {@link Issue}s linked to the {@link ArticleContainer}, and updates the remove-Action-button.
+	 */
 	public void setLinkedIssues(Collection<Issue> issues) {
 		issueTable.setInput(issues);
 		handleRemoveActionButton();
 	}
 
+	/**
+	 * Sets the {@link Issue}s linked to the {@link ArticleContainer}, and updates the remove-Action-button, and
+	 * highlights the {@link Issue} identified by selectedIssue.
+	 */
 	public void setLinkedIssues(Collection<Issue> issues, Issue selectedIssue) {
 		setLinkedIssues(issues);
 		if (selectedIssue != null)
 			highlightIssueEntry(selectedIssue);
 	}
 
+	/**
+	 * @return the {@link IssueTable} from this Section.
+	 */
 	public IssueTable getIssueTable() {
 		return issueTable;
 	}
@@ -215,12 +232,13 @@ extends ToolBarSectionPart
 	/**
 	 * Highlights the entry in the {@link IssueTable} matching the given {@link Issue}.
 	 * Table will contain no highlight if no match is found.
+	 * FIXME Something is still wrong here... Wont highlight the latest entry.
 	 */
-	public void highlightIssueEntry(Issue issue) {
+	protected void highlightIssueEntry(Issue issue) {
 		int index = -1;
 		issueTable.getTableViewer().getTable().setSelection(index);
 
-		Collection<Issue> issues = issueTable.getElements(); // Sometimes, something is not right here. Cache elements dont seem updated?? Kai.
+		Collection<Issue> issues = issueTable.getElements();
 		for(Issue issueElem : issues) {
 			index++;
 			if ( issueElem.equals(issue) ) {
@@ -228,7 +246,6 @@ extends ToolBarSectionPart
 				break;
 			}
 		}
-
 	}
 
 
@@ -269,67 +286,67 @@ extends ToolBarSectionPart
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
-	/**
-	 * Handles the action to delete a new {@link IssueLink} to an {@link Issue}.
-	 */
-	private class RemoveIssueLinkAction extends Action {
-		public RemoveIssueLinkAction() {
-			setId(RemoveIssueLinkAction.class.getName());
-			setImageDescriptor(SharedImages.DELETE_16x16);
-			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.action.removeIssueLink.tooltip")); //$NON-NLS-1$
-			setText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.action.removeIssueLink.text")); //$NON-NLS-1$
-		}
-
-		@Override
-		public void run() {
-			// Pick out those Issues selected from the IssueTable.
-			Collection<Issue> selectedIssues = issueTable.getSelectedElements();
-			if (selectedIssues == null || selectedIssues.isEmpty()) return;
-
-			// Scroll through every single selected Issue, and ask for delete-confirmation.
-			for (Issue selectedIssue : selectedIssues) {
-				boolean result = MessageDialog.openConfirm(
-						getContainer().getShell(),
-						Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.dialog.removeIssueLink.title"), //$NON-NLS-1$
-						Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.dialog.removeIssueLink.message") //$NON-NLS-1$
-						+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(selectedIssue.getIssueID()) + ") " //$NON-NLS-1$ //$NON-NLS-2$
-						+ "\"" + selectedIssue.getSubject().getText() + "\"?"); //$NON-NLS-1$ //$NON-NLS-2$
-
-				if (result) {
-					// Setup the pre-delete sequence.
-					// Look for that related IssueLink to be deleted.
-					final Issue issue = selectedIssue;
-					final IssueLink issueLink = controller.removeRelatedIssueLink(selectedIssue);
-
-					Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.job.removeIssueLink")) { //$NON-NLS-1$
-						@Override
-						protected IStatus run(ProgressMonitor monitor) {
-							try {
-								Issue _issue = IssueDAO.sharedInstance().getIssue(
-										(IssueID)JDOHelper.getObjectId(issue), new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_LINKS},
-										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
-
-								_issue.removeIssueLink(issueLink);
-								IssueDAO.sharedInstance().storeIssue(
-										_issue, false, new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_LINKS},
-										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
-
-								return Status.OK_STATUS;
-							} finally {
-								monitor.done();
-							}
-						}
-					};
-
-					job.setPriority(Job.SHORT);
-					job.schedule();
-				}
-
-				// Note: There are listeners and these entries from the table will be removed.
-				//       Or, do we simply update the table here ourselves? <-- Double work? Let's leave it here. Kai.
-			}
-
-
-		}
-	}
+//	/**
+//	 * Handles the action to delete a new {@link IssueLink} to an {@link Issue}.
+//	 */
+//	private class RemoveIssueLinkAction extends Action {
+//		public RemoveIssueLinkAction() {
+//			setId(RemoveIssueLinkAction.class.getName());
+//			setImageDescriptor(SharedImages.DELETE_16x16);
+//			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.action.removeIssueLink.tooltip")); //$NON-NLS-1$
+//			setText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.action.removeIssueLink.text")); //$NON-NLS-1$
+//		}
+//
+//		@Override
+//		public void run() {
+//			// Pick out those Issues selected from the IssueTable.
+//			Collection<Issue> selectedIssues = issueTable.getSelectedElements();
+//			if (selectedIssues == null || selectedIssues.isEmpty()) return;
+//
+//			// Scroll through every single selected Issue, and ask for delete-confirmation.
+//			for (Issue selectedIssue : selectedIssues) {
+//				boolean result = MessageDialog.openConfirm(
+//						getContainer().getShell(),
+//						Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.dialog.removeIssueLink.title"), //$NON-NLS-1$
+//						Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.dialog.removeIssueLink.message") //$NON-NLS-1$
+//						+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(selectedIssue.getIssueID()) + ") " //$NON-NLS-1$ //$NON-NLS-2$
+//						+ "\"" + selectedIssue.getSubject().getText() + "\"?"); //$NON-NLS-1$ //$NON-NLS-2$
+//
+//				if (result) {
+//					// Setup the pre-delete sequence.
+//					// Look for that related IssueLink to be deleted.
+//					final Issue issue = selectedIssue;
+//					final IssueLink issueLink = controller.removeRelatedIssueLink(selectedIssue);
+//
+//					Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.job.removeIssueLink")) { //$NON-NLS-1$
+//						@Override
+//						protected IStatus run(ProgressMonitor monitor) {
+//							try {
+//								Issue _issue = IssueDAO.sharedInstance().getIssue(
+//										(IssueID)JDOHelper.getObjectId(issue), new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_LINKS},
+//										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
+//
+//								_issue.removeIssueLink(issueLink);
+//								IssueDAO.sharedInstance().storeIssue(
+//										_issue, false, new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_LINKS},
+//										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
+//
+//								return Status.OK_STATUS;
+//							} finally {
+//								monitor.done();
+//							}
+//						}
+//					};
+//
+//					job.setPriority(Job.SHORT);
+//					job.schedule();
+//				}
+//
+//				// Note: There are listeners and these entries from the table will be removed.
+//				//       Or, do we simply update the table here ourselves? <-- Double work? Let's leave it here. Kai.
+//			}
+//
+//
+//		}
+//	}
 }

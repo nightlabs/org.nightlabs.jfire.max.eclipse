@@ -1,9 +1,13 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
+import java.util.Collection;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -22,6 +26,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
 
 /**
@@ -72,29 +77,70 @@ extends EntityEditorPageWithProgress
 	}
 
 	private MenuManager menuMgr;
+	private IssueLinkActionRemove issueLinkActionRemove;
 	private void createContextMenu() {
+		issueLinkActionRemove = new IssueLinkActionRemove(showLinkedIssueSection.getIssueTable(), (ShowLinkedIssuePageController)getPageController(), this);
+
 		menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager m) {
 				menuMgr.add(new LinkToIssueAction(getController().getArticleContainer()));
+				menuMgr.add(issueLinkActionRemove);
 			}
 		});
+
 		Menu menu = menuMgr.createContextMenu(showLinkedIssueSection.getIssueTable());
 		showLinkedIssueSection.getIssueTable().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, showLinkedIssueSection.getIssueTable());
+
+
+		showLinkedIssueSection.getIssueTable().addSelectionChangedListener(new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				handleRemoveAction();
+			}
+		});
 	}
 
+	protected void handleRemoveAction() {
+		assert issueLinkActionRemove != null;
+		issueLinkActionRemove.setEnabled( showLinkedIssueSection.getIssueTable().getSelectionIndex() >= 0 );
+	}
 
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent();
 		Display.getDefault().asyncExec(new Runnable() {
+			@Override
 			public void run() {
 				if (showLinkedIssueSection != null && !showLinkedIssueSection.getSection().isDisposed()) {
-					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues(), selectedIssue);
-					selectedIssue = null;
+					// Update the IssueTable.
+					Collection<Issue> issues = getController().getLinkedIssues();
+					showLinkedIssueSection.setLinkedIssues( issues );
+
+					// Now highlight the entry if a selectedIssue exists.
+					if (selectedIssue != null) {
+						IssueTable issueTable = showLinkedIssueSection.getIssueTable();
+
+						int index = -1;
+						issueTable.refresh(true);
+						issueTable.getTableViewer().getTable().setSelection(index);
+
+						issues = issueTable.getElements(); // <-- Doesnt seem to return the correct values here; retrieved them from cache... So how??
+						for(Issue issueElem : issues) {
+							index++;
+							if ( issueElem.equals(selectedIssue) ) {
+								issueTable.getTableViewer().getTable().setSelection(index);
+								break;
+							}
+						}
+
+						selectedIssue = null;
+					}
 				}
+
+				handleRemoveAction();
 			}
 		});
 	}
@@ -107,6 +153,7 @@ extends EntityEditorPageWithProgress
 	protected ShowLinkedIssuePageController getController() {
 		return (ShowLinkedIssuePageController)getPageController();
 	}
+
 
 	private Issue selectedIssue = null;
 	public void setHighlightIssueEntry(Issue issue) { selectedIssue = issue; }
@@ -151,4 +198,73 @@ extends EntityEditorPageWithProgress
 			}
 		}
 	}
+
+
+
+
+//	// -----------------------------------------------------------------------------------------------------------------------------------| TESTING |
+//	/**
+//	 * Handles the action to delete a new {@link IssueLink} to an {@link Issue}.
+//	 */
+//	private class RemoveIssueLinkAction extends Action {
+//		public RemoveIssueLinkAction() {
+//			setId(RemoveIssueLinkAction.class.getName());
+//			setImageDescriptor(SharedImages.DELETE_16x16);
+//			setToolTipText("Remove link to selected issue");
+//			setText("Remove selected issue link(s)");
+//		}
+//
+//		@Override
+//		public void run() {
+//			// Pick out those Issues selected from the IssueTable.
+//			Collection<Issue> selectedIssues = showLinkedIssueSection.getIssueTable().getSelectedElements();
+//			if (selectedIssues == null || selectedIssues.isEmpty()) return;
+//
+//			// Scroll through every single selected Issue, and ask for delete-confirmation.
+//			for (Issue selectedIssue : selectedIssues) {
+//				boolean result = MessageDialog.openConfirm(
+//						getSite().getShell(),
+//						"Remove IssueLink",
+//						"Remove the link to Issue "
+//						+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(selectedIssue.getIssueID()) + ") "
+//						+ "\"" + selectedIssue.getSubject().getText() + "\"?");
+//
+//				if (result) {
+//					// Setup the pre-delete sequence.
+//					// Look for that related IssueLink to be deleted.
+//					final Issue issue = selectedIssue;
+//					final IssueLink issueLink = getController().removeRelatedIssueLink(selectedIssue);
+//
+//					Job job = new Job("Removing Issue link...") {
+//						@Override
+//						protected IStatus run(ProgressMonitor monitor) {
+//							try {
+//								Issue _issue = IssueDAO.sharedInstance().getIssue(
+//										(IssueID)JDOHelper.getObjectId(issue), new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_LINKS},
+//										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
+//
+//								_issue.removeIssueLink(issueLink);
+//								IssueDAO.sharedInstance().storeIssue(
+//										_issue, false, new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_LINKS},
+//										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
+//
+//								return Status.OK_STATUS;
+//							} finally {
+//								monitor.done();
+//							}
+//						}
+//					};
+//
+//					job.setPriority(Job.SHORT);
+//					job.schedule();
+//				}
+//
+//				// Note: There are listeners and these entries from the table will be removed.
+//				//       Or, do we simply update the table here ourselves? <-- Double work? Let's leave it here. Kai.
+//			}
+//
+//
+//		}
+//	}
+
 }
