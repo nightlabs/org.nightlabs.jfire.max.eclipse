@@ -181,7 +181,7 @@ public class ArticleAdder extends AbstractArticleAdder
 	protected Composite createRequirementsNotFulfilledComposite(Composite parent)
 	{
 		if (tariffPricePairs == null || tariffPricePairs.isEmpty()) {
-			String message = String.format("The price configuration of product type \"%s\" does not contain prices for the current situation (no tariff, no customer-group or no currency existing/available to you).", getProductType().getName().getText(NLLocale.getDefault()));
+			String message = String.format(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdder.message"), getProductType().getName().getText(NLLocale.getDefault())); //$NON-NLS-1$
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
 

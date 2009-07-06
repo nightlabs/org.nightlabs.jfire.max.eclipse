@@ -94,7 +94,7 @@ extends AbstractProductTypeQuickListFilter
 	@Override
 	protected void search(org.nightlabs.progress.ProgressMonitor monitor)
 	{
-		monitor.beginTask("Searching Simple ProductTypes", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.task.searchSimpleProductTypes"), 100); //$NON-NLS-1$
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
@@ -106,7 +106,7 @@ extends AbstractProductTypeQuickListFilter
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						resultTable.setLoadingMessage("Searching Simple ProductTypes");
+						resultTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.loadingMessage")); //$NON-NLS-1$
 					}
 				});
 				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().queryProductTypes(

@@ -57,9 +57,9 @@ import org.nightlabs.progress.ProgressMonitor;
 public class SimpleProductTypeDetailViewComposite
 extends XComposite
 {
-	private static final String ATTR_NAME_WEIGHT_2 = "weight_2";
-	private static final String ATTR_NAME_WEIGHT_1 = "weight_1";
-	private static final String ATTR_NAME_SASH_ORIENTATION = "sashOrientation";
+	private static final String ATTR_NAME_WEIGHT_2 = "weight_2"; //$NON-NLS-1$
+	private static final String ATTR_NAME_WEIGHT_1 = "weight_1"; //$NON-NLS-1$
+	private static final String ATTR_NAME_SASH_ORIENTATION = "sashOrientation"; //$NON-NLS-1$
 
 	private static final int defaultImageHeight = 200;
 	private static final int defaultImageWidth = 200;
@@ -124,7 +124,7 @@ extends XComposite
 							if (props != null)
 								smallImg = (ImageDataField) props.getDataField(SimpleProductTypeStruct.IMAGES_SMALL_IMAGE);
 						} catch (Exception e) {
-							logger.warn("Loading image from propertySet failed!", e);
+							logger.warn("Loading image from propertySet failed!", e); //$NON-NLS-1$
 						}
 						if (smallImg != null && smallImg.getContent() != null) {
 //							ImageData id = null;
@@ -136,7 +136,7 @@ extends XComposite
 									try {
 										in.close();
 									} catch (IOException e) {
-										logger.error("", e);
+										logger.error("", e); //$NON-NLS-1$
 									}
 							}
 						}
@@ -148,9 +148,9 @@ extends XComposite
 							if (props != null)
 								description = props.getDataField(SimpleProductTypeStruct.DESCRIPTION_LONG, II18nTextDataField.class);
 						} catch (Exception e) {
-							logger.warn("Loading image from propertySet failed!", e);
+							logger.warn("Loading image from propertySet failed!", e); //$NON-NLS-1$
 						}
-						productTypeDescription.setText(description == null ? "" : description.getI18nText().getText());
+						productTypeDescription.setText(description == null ? "" : description.getI18nText().getText()); //$NON-NLS-1$
 					}
 				});
 				return Status.OK_STATUS;
@@ -258,11 +258,11 @@ extends XComposite
 
 			if (leftWeight > 0 && rightWeight > 0) {
 				int[] weights = new int[] {leftWeight, rightWeight};
-				logger.info("Setting weights to " + weights[0] + ", " + weights[1]);
+				logger.info("Setting weights to " + weights[0] + ", " + weights[1]); //$NON-NLS-1$ //$NON-NLS-2$
 				sashForm.setWeights(weights);
 			}
 			else {
-				logger.warn("Weights are out of range! leftWeight=" + leftWeight + " rightWeight=" + rightWeight);
+				logger.warn("Weights are out of range! leftWeight=" + leftWeight + " rightWeight=" + rightWeight); //$NON-NLS-1$ //$NON-NLS-2$
 
 				if (sash_setWeights_counter < 10)
 					Display.getDefault().asyncExec(sash_setWeights_runnable);
@@ -318,7 +318,7 @@ extends XComposite
 			return;
 		IMemento element = memento.createChild(this.getClass().getSimpleName());
 		element.putInteger(ATTR_NAME_SASH_ORIENTATION, sashForm.getOrientation());
-		logger.info("Storing weights to " + weights[0] + ", " + weights[1]);
+		logger.info("Storing weights to " + weights[0] + ", " + weights[1]); //$NON-NLS-1$ //$NON-NLS-2$
 		element.putInteger(ATTR_NAME_WEIGHT_1, weights[0]);
 		element.putInteger(ATTR_NAME_WEIGHT_2, weights[1]);
 	}

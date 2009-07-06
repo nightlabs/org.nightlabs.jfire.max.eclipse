@@ -12,6 +12,7 @@ import javax.jdo.JDOHelper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
+import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
@@ -27,8 +28,8 @@ import org.nightlabs.tableprovider.ui.TableProvider;
 public class ArticleTableProvider
 implements TableProvider<ArticleID, Article>
 {
-	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName";
-	public static final String TYPE_TARIFF = "Tariff";
+	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName"; //$NON-NLS-1$
+	public static final String TYPE_TARIFF = "Tariff"; //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.tableprovider.ui.TableProvider#getObjects(java.util.Collection, org.nightlabs.progress.ProgressMonitor)
@@ -78,7 +79,7 @@ implements TableProvider<ArticleID, Article>
 				return tariff.getName().getText();
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -88,10 +89,10 @@ implements TableProvider<ArticleID, Article>
 	public String getTypeName(String type)
 	{
 		if (type.equals(TYPE_PRODUCT_TYPE_NAME)) {
-			return "ProductType Name";
+			return Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTableProvider.column.productTypeName"); //$NON-NLS-1$
 		}
 		else if (type.equals(TYPE_TARIFF)) {
-			return "Tariff";
+			return Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTableProvider.column.tariff"); //$NON-NLS-1$
 		}
 		return type;
 	}
