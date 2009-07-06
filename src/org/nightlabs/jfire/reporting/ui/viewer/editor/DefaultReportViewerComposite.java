@@ -209,12 +209,14 @@ public class DefaultReportViewerComposite extends XComposite {
 	}
 
 	public void switchToStatus() {
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				stackLayout.topControl = fetchingLayoutComposite;
-				stack.layout(true, true);
-			}
-		});
+		if (!isDisposed()) {
+			getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					stackLayout.topControl = fetchingLayoutComposite;
+					stack.layout(true, true);
+				}
+			});
+		}
 	}
 
 	/**
@@ -231,11 +233,13 @@ public class DefaultReportViewerComposite extends XComposite {
 				final PreparedRenderedReportLayout preparedLayout = RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(
 						renderRequest, monitor
 					);
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						updateViewer(renderRequest.getOutputFormat(), preparedLayout);
-					}
-				});
+				if (!isDisposed()) {
+					getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							updateViewer(renderRequest.getOutputFormat(), preparedLayout);
+						}
+					});
+				}
 
 				return Status.OK_STATUS;
 			}
@@ -250,11 +254,13 @@ public class DefaultReportViewerComposite extends XComposite {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				final PreparedRenderedReportLayout preparedLayout = getPreparedRenderedReportLayout(reportLayout, monitor);
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						updateViewer(reportLayout.getHeader().getOutputFormat(), preparedLayout);
-					}
-				});
+				if (!isDisposed()) {
+					getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							updateViewer(reportLayout.getHeader().getOutputFormat(), preparedLayout);
+						}
+					});
+				}
 				return Status.OK_STATUS;
 			}
 		};
@@ -283,70 +289,72 @@ public class DefaultReportViewerComposite extends XComposite {
 	protected void updateViewer(Birt.OutputFormat format, final PreparedRenderedReportLayout preparedLayout) {
 		this.preparedLayout = preparedLayout;
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
-		final Display display = getDisplay();
-		if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
-//			threadDeathWorkaround.registerComposite(this);
-			org.eclipse.core.runtime.jobs.Job loadJob = new org.eclipse.core.runtime.jobs.Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadJob.name")) { //$NON-NLS-1$
-				@Override
-				protected IStatus run(final IProgressMonitor monitor) {
-					monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
-					try {
-						final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new SubProgressMonitor(monitor, 20));
-						final PdfDocument pdfDocument = new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80));
+		if (!isDisposed()) {
+			final Display display = getDisplay();
+			if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
+//				threadDeathWorkaround.registerComposite(this);
+				org.eclipse.core.runtime.jobs.Job loadJob = new org.eclipse.core.runtime.jobs.Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadJob.name")) { //$NON-NLS-1$
+					@Override
+					protected IStatus run(final IProgressMonitor monitor) {
+						monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
+						try {
+							final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new SubProgressMonitor(monitor, 20));
+							final PdfDocument pdfDocument = new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80));
 
-						display.asyncExec(new Runnable() {
-							public void run() {
-								if (isDisposed())
-									return;
+							display.asyncExec(new Runnable() {
+								public void run() {
+									if (isDisposed())
+										return;
 
-								pdfViewerComposite.getPdfViewer().setPdfDocument(pdfDocument);
-								stackLayout.topControl = pdfViewerComposite;
-								DefaultReportViewerComposite.this.layout(true, true);
-							}
-						});
+									pdfViewerComposite.getPdfViewer().setPdfDocument(pdfDocument);
+									stackLayout.topControl = pdfViewerComposite;
+									DefaultReportViewerComposite.this.layout(true, true);
+								}
+							});
+						}
+						catch (final Exception x) {
+							throw new RuntimeException(x);
+						}
+						finally {
+							monitor.done();
+						}
+						return Status.OK_STATUS;
 					}
-					catch (final Exception x) {
-						throw new RuntimeException(x);
+				};
+				loadJob.setPriority(Job.SHORT);
+				loadJob.schedule();
+			}
+			else {
+				// Use the browser widget as default for all other
+				stackLayout.topControl = browser;
+				browser.setUrl(preparedLayout.getEntryFileAsURL().toString());
+			}
+			if (errorLink != null && !errorLink.isDisposed()) {
+				errorLink.dispose();
+			}
+			if (preparedLayout.getRenderedReportLayout().getHeader().hasRenderingErrors()) {
+				errorLink = new ImageHyperlink(this, SWT.NONE);
+				errorLink.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				errorLink.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.errorLink.text")); //$NON-NLS-1$
+				errorLink.addHyperlinkListener(new HyperlinkAdapter() {
+					@Override
+					public void linkActivated(final HyperlinkEvent e) {
+						Collection<Throwable> ts = preparedLayout.getRenderedReportLayout().getHeader().getRenderingErrors();
+						for (Throwable t : ts) {
+							ExceptionHandlerRegistry.asyncHandleException(t);
+						}
 					}
-					finally {
-						monitor.done();
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			loadJob.setPriority(Job.SHORT);
-			loadJob.schedule();
+				});
+				errorLink.setImage(
+					FieldDecorationRegistry.getDefault().getFieldDecoration(
+						FieldDecorationRegistry.DEC_ERROR
+					).getImage()
+				);
+			}
+//			// WORKAROUND: The marginHeiht = 1 is a workaround for the acrobat viewer, that won't layout well initially otherwise
+//			stackLayout.marginHeight = 1;
+			this.layout(true, true);
 		}
-		else {
-			// Use the browser widget as default for all other
-			stackLayout.topControl = browser;
-			browser.setUrl(preparedLayout.getEntryFileAsURL().toString());
-		}
-		if (errorLink != null && !errorLink.isDisposed()) {
-			errorLink.dispose();
-		}
-		if (preparedLayout.getRenderedReportLayout().getHeader().hasRenderingErrors()) {
-			errorLink = new ImageHyperlink(this, SWT.NONE);
-			errorLink.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			errorLink.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.errorLink.text")); //$NON-NLS-1$
-			errorLink.addHyperlinkListener(new HyperlinkAdapter() {
-				@Override
-				public void linkActivated(final HyperlinkEvent e) {
-					Collection<Throwable> ts = preparedLayout.getRenderedReportLayout().getHeader().getRenderingErrors();
-					for (Throwable t : ts) {
-						ExceptionHandlerRegistry.asyncHandleException(t);
-					}
-				}
-			});
-			errorLink.setImage(
-				FieldDecorationRegistry.getDefault().getFieldDecoration(
-					FieldDecorationRegistry.DEC_ERROR
-				).getImage()
-			);
-		}
-//		// WORKAROUND: The marginHeiht = 1 is a workaround for the acrobat viewer, that won't layout well initially otherwise
-//		stackLayout.marginHeight = 1;
-		this.layout(true, true);
 	}
 
 	public PreparedRenderedReportLayout getPreparedLayout() {
