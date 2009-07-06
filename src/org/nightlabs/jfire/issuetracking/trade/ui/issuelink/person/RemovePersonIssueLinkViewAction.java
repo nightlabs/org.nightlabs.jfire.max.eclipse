@@ -55,20 +55,20 @@ public class RemovePersonIssueLinkViewAction extends Action{
 
 		boolean result = MessageDialog.openConfirm(
 				view.getSite().getShell(),
-				"Remove Person/Issue Link",
-				"Are you sure you want to remove the Link Person/Issue"
-				+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ") "
-				+ "Subject:\"" + issue.getSubject().getText() + "\""
-				+ "?");
+				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.dialog.removePersonIssueLink.title"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.dialog.removePersonIssueLink.message1") //$NON-NLS-1$
+				+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issue.getIssueID()) + ") " //$NON-NLS-1$ //$NON-NLS-2$
+				+ Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.dialog.removePersonIssueLink.message2") + issue.getSubject().getText() + "\"" //$NON-NLS-1$ //$NON-NLS-2$
+				+ "?"); //$NON-NLS-1$
 
 		if(!result)
 			return;
 
-		Job job = new Job(Messages.getString("Deleting the Issue Link")) {
+		Job job = new Job(Messages.getString(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.job.deleteIssueLink"))) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
-				monitor.beginTask("Deleting the Issue Link", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.job.deleteIssueLink"), 100); //$NON-NLS-1$
 
 				Issue _issue = IssueDAO.sharedInstance().getIssue(
 						(IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP_ISSUE,
@@ -95,12 +95,12 @@ public class RemovePersonIssueLinkViewAction extends Action{
 
 	@Override
 	public String getText() {
-		return "Removes the Link Person/Issue";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.action.text"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTipText() {
-		return "Removes the Link between Person/Issue";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.RemovePersonIssueLinkViewAction.action.tooltip"); //$NON-NLS-1$
 	}
 
 

@@ -57,11 +57,11 @@ public class AddIssueMarkerMenuAction extends Action{
 		final IssueLink issueLink = (IssueLink)treecomposite.getSelectedNode();
 		final Issue issue = issueLink.getIssue();
 
-		Job job = new Job(Messages.getString("Add/Remove an Issue Marker")) { 
+		Job job = new Job(Messages.getString(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddIssueMarkerMenuAction.job.addRemoveIssueMarker"))) {  //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
-				monitor.beginTask("Add/Remove an Issue Marker", 100);		
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddIssueMarkerMenuAction.job.addRemoveIssueMarker"), 100);		 //$NON-NLS-1$
 				// reverse state of the GUI CheckBox
 				if(isChecked())
 					issue.addIssueMarker(issueMarker);

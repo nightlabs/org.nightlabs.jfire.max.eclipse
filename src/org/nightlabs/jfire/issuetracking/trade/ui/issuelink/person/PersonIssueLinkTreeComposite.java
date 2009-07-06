@@ -162,7 +162,7 @@ extends AbstractTreeComposite
 		}});
 		
 		// Load the IssueMarkers references.
-		Job job = new Job(Messages.getString("Load the Issue Markers")) {
+		Job job = new Job(Messages.getString(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.job.loadIssueMarkers"))) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				IssueManagerRemote imr = null;
@@ -219,7 +219,7 @@ extends AbstractTreeComposite
 	}
 
 	private void createContextMenu() {
-		MenuManager menuMgr = new MenuManager("Markers");
+		MenuManager menuMgr = new MenuManager(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.menu.markers")); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {

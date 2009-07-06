@@ -276,8 +276,8 @@ extends ToolBarSectionPart
 		public RemoveIssueLinkAction() {
 			setId(RemoveIssueLinkAction.class.getName());
 			setImageDescriptor(SharedImages.DELETE_16x16);
-			setToolTipText("Remove link to selected issue");
-			setText("Remove issue link");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.action.removeIssueLink.tooltip")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.action.removeIssueLink.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -290,10 +290,10 @@ extends ToolBarSectionPart
 			for (Issue selectedIssue : selectedIssues) {
 				boolean result = MessageDialog.openConfirm(
 						getContainer().getShell(),
-						"Remove IssueLink",
-						"Remove the link to Issue "
-						+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(selectedIssue.getIssueID()) + ") "
-						+ "\"" + selectedIssue.getSubject().getText() + "\"?");
+						Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.dialog.removeIssueLink.title"), //$NON-NLS-1$
+						Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.dialog.removeIssueLink.message") //$NON-NLS-1$
+						+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(selectedIssue.getIssueID()) + ") " //$NON-NLS-1$ //$NON-NLS-2$
+						+ "\"" + selectedIssue.getSubject().getText() + "\"?"); //$NON-NLS-1$ //$NON-NLS-2$
 
 				if (result) {
 					// Setup the pre-delete sequence.
@@ -301,7 +301,7 @@ extends ToolBarSectionPart
 					final Issue issue = selectedIssue;
 					final IssueLink issueLink = controller.removeRelatedIssueLink(selectedIssue);
 
-					Job job = new Job("Removing Issue link...") {
+					Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.job.removeIssueLink")) { //$NON-NLS-1$
 						@Override
 						protected IStatus run(ProgressMonitor monitor) {
 							try {
