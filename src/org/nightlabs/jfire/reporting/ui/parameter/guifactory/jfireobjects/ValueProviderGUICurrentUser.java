@@ -20,6 +20,7 @@ import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.security.id.UserID;
 
@@ -62,7 +63,7 @@ public class ValueProviderGUICurrentUser extends AbstractValueProviderGUI<UserID
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(comp, SWT.WRAP);
 		label.setText(
-				String.format("The current user '%s' is preselected, but you can select another one.",
+				String.format(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUICurrentUser.label.preselectedUser.text"), //$NON-NLS-1$
 				currentUserID.userID));
 		searchComposite = new UserSearchComposite(comp, SWT.NONE, UserSearchComposite.FLAG_TYPE_USER | UserSearchComposite.FLAG_SEARCH_BUTTON);
 		return searchComposite;

@@ -27,6 +27,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -158,9 +159,9 @@ public class ReportTextPartConfigurationEditComposite extends XComposite {
 	private void switchReportTextPart(ReportTextPart part) {
 		ReportTextPartEditComposite editComposite = editComposites.get(part);
 		if (editComposite == null)
-			throw new IllegalStateException("EditComposite for ReportTextPart "+part.getReportTextPartID()+" is unknown");
+			throw new IllegalStateException("EditComposite for ReportTextPart "+part.getReportTextPartID()+" is unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (editComposite.isDisposed())
-			throw new IllegalStateException("EditComposite for ReportTextPart "+part.getReportTextPartID()+" is already disposed");
+			throw new IllegalStateException("EditComposite for ReportTextPart "+part.getReportTextPartID()+" is already disposed"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		editorWrapperLayout.topControl = editComposite;
 		editorWrapper.layout();

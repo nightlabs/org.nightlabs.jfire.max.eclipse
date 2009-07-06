@@ -199,7 +199,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 	public void printWithParams(ReportRegistryItemID registryItemID, Map<String, Object> params, ProgressMonitor monitor)
 	throws PrinterException
 	{
-		monitor.beginTask("Printing report layout", 6);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction.task.printingReportLayout"), 6); //$NON-NLS-1$
 		String useCaseID = getReportUseCaseID(registryItemID, params);
 		if (useCaseID == null) {
 			// Try to lookup the UseCase by the reportLayoutType

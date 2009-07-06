@@ -20,6 +20,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.security.id.UserID;
 
@@ -61,7 +62,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(comp, SWT.WRAP);
 		label.setText(
-				String.format("The current user '%s' is preselected, but you can select others.",
+				String.format(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUICurrentUserMultiple.label.preselectedUser.text"), //$NON-NLS-1$
 				currentUserID.iterator().next().userID));
 		super.createGUI(comp);
 		return comp;

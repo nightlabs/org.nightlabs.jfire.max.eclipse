@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -49,7 +50,7 @@ public class ValueProviderGUIRegistry extends AbstractEPProcessor {
 			try {
 				factory = (IValueProviderGUIFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
 			} catch (CoreException e) {
-				logger.error("Failed loading ValueProviderGUIFactory: " + element.getAttribute("class") + ", but will continue", e);
+				logger.error("Failed loading ValueProviderGUIFactory: " + element.getAttribute("class") + ", but will continue", e); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				return;
 			}
 			if (factories.get(factory.getValueProviderID()) != null)

@@ -41,6 +41,7 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -97,7 +98,7 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	}
 	
 	private void updateEditorTitle() {
-		Job nameJob = new Job("Fetch report name") {
+		Job nameJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerEditor.job.loadReportName")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final ReportRegistryItemID reportID = getViewerInput().getRenderReportRequest().getReportRegistryItemID(); 

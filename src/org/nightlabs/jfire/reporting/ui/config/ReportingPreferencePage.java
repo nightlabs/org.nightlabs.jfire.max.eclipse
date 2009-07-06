@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.reporting.ui.config;
 
 import org.nightlabs.base.ui.preference.CategoryPreferencePage;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -44,6 +45,6 @@ extends CategoryPreferencePage
 
 	@Override
 	protected String getText() {
-		return "Reporting Settings";
+		return Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportingPreferencePage.page.text"); //$NON-NLS-1$
 	}
 }

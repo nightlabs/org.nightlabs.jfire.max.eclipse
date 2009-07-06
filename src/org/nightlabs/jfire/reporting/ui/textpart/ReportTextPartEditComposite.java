@@ -33,6 +33,7 @@ import org.nightlabs.base.ui.language.LanguageChooserCombo;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.language.LanguageCf;
 
 /**
@@ -115,7 +116,7 @@ public class ReportTextPartEditComposite extends XComposite {
 		header.setLayout(layout);
 		
 		if (showTextPartID) {
-			reportTextPartID = new LabeledText(header, "identifier:", SWT.READ_ONLY);
+			reportTextPartID = new LabeledText(header, Messages.getString("org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartEditComposite.label.identifier"), SWT.READ_ONLY); //$NON-NLS-1$
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalSpan = 2;
 			reportTextPartID.setLayoutData(gd);
@@ -136,7 +137,7 @@ public class ReportTextPartEditComposite extends XComposite {
 			}
 		});
 
-		nameEditor = new I18nTextEditor(nameParent, languageChooser, "Name");
+		nameEditor = new I18nTextEditor(nameParent, languageChooser, Messages.getString("org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartEditComposite.label.name")); //$NON-NLS-1$
 		nameEditor.setI18nText(reportTextPart.getName(), EditMode.BUFFERED);
 		nameEditor.addModifyListener(modifyListener);
 		editorWrapper = new Composite(this, SWT.NONE);
@@ -148,7 +149,7 @@ public class ReportTextPartEditComposite extends XComposite {
 		
 		typeCombo = new XComboComposite<ReportTextPart.Type>(
 				header, getBorderStyle() | SWT.READ_ONLY,
-				"Text part type");
+				Messages.getString("org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartEditComposite.combo.textPartType")); //$NON-NLS-1$
 		typeCombo.setLabelProvider(new TableLabelProvider() {
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
@@ -189,7 +190,7 @@ public class ReportTextPartEditComposite extends XComposite {
 				if (reportTextPart.getContent().containsLanguageID(language.getLanguageID()))
 					content = reportTextPart.getContent().getText(language.getLanguageID());
 				else
-					content = "";
+					content = ""; //$NON-NLS-1$
 			}
 			contentEditor.setContent(content);
 			contentEditor.addModifyListener(modifyListener);
@@ -202,7 +203,7 @@ public class ReportTextPartEditComposite extends XComposite {
 	private void switchLanguage(String languageId) {
 		IReportTextPartContentEditor contentEditor = contentEditors.get(languageId);
 		if(contentEditor == null)
-			throw new IllegalStateException("Editor for language "+languageId+" is unknown");
+			throw new IllegalStateException("Editor for language "+languageId+" is unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 		editorWrapperLayout.topControl = contentEditor.getControl();
 		editorWrapper.layout();
 	}

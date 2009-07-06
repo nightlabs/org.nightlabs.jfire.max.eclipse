@@ -31,6 +31,7 @@ import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.workstation.Workstation;
 import org.nightlabs.jfire.workstation.id.WorkstationID;
 
@@ -93,7 +94,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 		buttonComp.getGridData().grabExcessHorizontalSpace = false;
 		
 		Button add = new Button(buttonComp, SWT.PUSH);
-		add.setText(">>");
+		add.setText(">>"); //$NON-NLS-1$
 		add.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -106,7 +107,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 		});
 		
 		Button remove = new Button(buttonComp, SWT.PUSH);
-		remove.setText("<<");
+		remove.setText("<<"); //$NON-NLS-1$
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -117,7 +118,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 		
 		XComposite selectionWrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(selectionWrapper, SWT.WRAP);
-		label.setText("Selected workstations");
+		label.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIWorkstations.label.selectedWorkstations")); //$NON-NLS-1$
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		selectedWorkstationsTable = new SelectedWorkstationsTable(selectionWrapper, SWT.NONE);

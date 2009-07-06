@@ -25,6 +25,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.id.UserID;
 
@@ -71,7 +72,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 		buttonComp.getGridData().grabExcessHorizontalSpace = false;
 		
 		Button add = new Button(buttonComp, SWT.PUSH);
-		add.setText(">>");
+		add.setText(">>"); //$NON-NLS-1$
 		add.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -84,7 +85,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 		});
 		
 		Button remove = new Button(buttonComp, SWT.PUSH);
-		remove.setText("<<");
+		remove.setText("<<"); //$NON-NLS-1$
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -95,7 +96,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 		
 		XComposite selectionWrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(selectionWrapper, SWT.WRAP);
-		label.setText("Selected objects");
+		label.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.AbstractValueProviderGUIUsers.label.selectedObjects")); //$NON-NLS-1$
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		selectedUsersTable = new SelectedUsersTable(selectionWrapper, SWT.NONE);

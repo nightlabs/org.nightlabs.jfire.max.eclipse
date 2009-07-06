@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.workstation.Workstation;
 
 /**
@@ -26,11 +27,11 @@ public class SelectedWorkstationsTable extends AbstractTableComposite<Workstatio
 			if (element instanceof Workstation) {
 				Workstation workstation = (Workstation) element;
 				return String.format(
-					"%s (%s)",
+					"%s (%s)", //$NON-NLS-1$
 					workstation.getWorkstationID(), workstation.getDescription()
 				);
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 	

@@ -157,7 +157,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ProgressMonitor pMonitor = new ProgressMonitorWrapper(monitor);
-				pMonitor.beginTask("Searching configuration to print preview of trade document", 6);
+				pMonitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction.task.searchPrintPreviewConfiguration"), 6); //$NON-NLS-1$
 				Map<String, Object> params = null;
 				boolean paramsSet = false;
 				if (nextRunParams != null) {

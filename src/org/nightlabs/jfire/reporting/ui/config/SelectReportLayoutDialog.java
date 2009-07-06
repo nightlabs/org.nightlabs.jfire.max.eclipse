@@ -103,8 +103,8 @@ public class SelectReportLayoutDialog extends ResizableTitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.title")); //$NON-NLS-!$
-		setMessage(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.message")); //$NON-NLS-!$
+		setTitle(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.title")); //$NON-NLS-!$ //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.message")); //$NON-NLS-!$ //$NON-NLS-1$
 		wrapper = new XComposite(parent, SWT.NONE);
 		sashForm = new SashForm(wrapper, SWT.NONE | SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));

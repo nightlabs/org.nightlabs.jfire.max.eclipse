@@ -99,7 +99,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 			}
 		}
 		if (parentID instanceof ValueProviderCategoryID) {
-			monitor.beginTask("Loading value providers", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ValueProviderController.task.loadValueProviders"), 100); //$NON-NLS-1$
 			try {
 				ReportParameterManagerRemote rpm = ReportingPlugin.getReportParameterManager();
 				Set<ValueProviderCategoryID> categoryIDs;

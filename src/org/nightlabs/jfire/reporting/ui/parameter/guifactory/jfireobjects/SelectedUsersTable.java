@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -26,11 +27,11 @@ public class SelectedUsersTable extends AbstractTableComposite<User> {
 			if (element instanceof User) {
 				User user = (User) element;
 				return String.format(
-					"%s (%s)",
+					"%s (%s)", //$NON-NLS-1$
 					user.getUserID(), user.getName(), user.getDescription()
 				);
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 	
