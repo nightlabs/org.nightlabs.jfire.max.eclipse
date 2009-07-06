@@ -20,7 +20,6 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueCommentDAO;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
-import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -31,11 +30,11 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class AddNewCommentViewAction  extends Action{
 
 
-	private static String[] FETCH_GROUP_ISSUE_COMMENT = new String[]{
-		FetchPlan.DEFAULT,
-		IssueComment.FETCH_GROUP_TEXT,
-		IssueComment.FETCH_GROUP_USER
-	};
+//	private static String[] FETCH_GROUP_ISSUE_COMMENT = new String[]{
+//		FetchPlan.DEFAULT,
+//		IssueComment.FETCH_GROUP_TEXT,
+//		IssueComment.FETCH_GROUP_USER
+//	};
 
 	/**
 	 *
@@ -55,15 +54,15 @@ public class AddNewCommentViewAction  extends Action{
 
 	@Override
 	public void run() {
-		
+
 		if(view.getSelectedNode() == null ||!(view.getSelectedNode() instanceof IssueLink))
 			return;
-		
+
 		final InputDialog dlg = new InputDialog(RCPUtil.getActiveShell(),
 				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.title"), Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.inputDialog.description"), "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		if (dlg.open() == Window.OK) {	
+		if (dlg.open() == Window.OK) {
 
-			final String text = dlg.getValue(); 
+			final String text = dlg.getValue();
 
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.AddNewCommentViewAction.job.savingComment")) { //$NON-NLS-1$
 				@Override
@@ -75,15 +74,18 @@ public class AddNewCommentViewAction  extends Action{
 							IDGenerator.nextID(IssueComment.class),
 							issue,
 							text,
-							Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME},
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-									new org.eclipse.core.runtime.NullProgressMonitor() ));
+							Login.sharedInstance().getUser(
+									new String[]{ FetchPlan.DEFAULT },
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+									new org.eclipse.core.runtime.NullProgressMonitor())
+							);
 
 					monitor.worked(30);
-					IssueCommentDAO.sharedInstance().storeIssueComment(comment, FETCH_GROUP_ISSUE_COMMENT, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 60));
+					IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, // FETCH_GROUP_ISSUE_COMMENT,
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 60)
+					);
 
-					monitor.done();	
+					monitor.done();
 					return Status.OK_STATUS;
 				}
 			};
