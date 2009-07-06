@@ -29,6 +29,7 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -55,8 +56,8 @@ public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEn
 			jScript = new Text(wrapper, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 			jScript.setLayoutData(new GridData(GridData.FILL_BOTH));
 			if (entry != null) {
-				name.setText(entry.getName() != null ? entry.getName() : "");
-				jScript.setText(entry.getJScript() != null ? entry.getJScript() : "");
+				name.setText(entry.getName() != null ? entry.getName() : ""); //$NON-NLS-1$
+				jScript.setText(entry.getJScript() != null ? entry.getJScript() : ""); //$NON-NLS-1$
 			}
 			return super.createDialogArea(parent);
 		}
@@ -84,7 +85,7 @@ public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEn
 				return ((JDOQLParameterEntry) element).getName();
 			if (columnIndex == 1)
 				return ((JDOQLParameterEntry) element).getJScript();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 	
@@ -102,32 +103,32 @@ public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEn
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		new TableColumn(table, SWT.LEFT).setText("Name");
-		new TableColumn(table, SWT.LEFT).setText("JScript");
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLParameterTable.column.name")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLParameterTable.column.javaScript")); //$NON-NLS-1$
 		TableLayout l = new TableLayout();
 		l.addColumnData(new ColumnWeightData(1));
 		l.addColumnData(new ColumnWeightData(1));
 		table.setLayout(l);
 		MenuManager mgr = new MenuManager();
-		mgr.add(new Action("Add") {
+		mgr.add(new Action(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLParameterTable.action.add.name")) { //$NON-NLS-1$
 			@Override
 			public void run() {
 				addJDOQLParameterEntry();
 			}
 		});
-		mgr.add(new Action("Edit") {
+		mgr.add(new Action(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLParameterTable.action.edit.name")) { //$NON-NLS-1$
 			@Override
 			public void run() {
 				editCurrentJDOQLParameterEntry();
 			}
 		});
-		mgr.add(new Action("Remove") {
+		mgr.add(new Action(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLParameterTable.action.remove.name")) { //$NON-NLS-1$
 			@Override
 			public void run() {
 				removeCurrentJDOQLParameterEntry();
 			}
 		});
-		mgr.add(new Action("Clear") {
+		mgr.add(new Action(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLParameterTable.action.clear.name")) { //$NON-NLS-1$
 			@Override
 			public void run() {
 				removeAllJDOQLParameterEntries();

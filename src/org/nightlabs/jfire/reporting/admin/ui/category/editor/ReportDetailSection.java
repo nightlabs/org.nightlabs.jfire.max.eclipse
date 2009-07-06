@@ -17,6 +17,7 @@ import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 
 /**
@@ -37,7 +38,7 @@ public class ReportDetailSection extends ToolBarSectionPart {
 	 * @param title
 	 */
 	public ReportDetailSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED, "General");
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportDetailSection.section.name")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
@@ -46,14 +47,14 @@ public class ReportDetailSection extends ToolBarSectionPart {
 
 		getSection().setClient(client);
 
-		name = new I18nTextEditor(client, "Name");
+		name = new I18nTextEditor(client, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportDetailSection.label.name")); //$NON-NLS-1$
 		name.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent arg0) {
 				markDirty();
 			}
 		});
-		description = new I18nTextEditorMultiLine(client, name.getLanguageChooser(), "Description");
+		description = new I18nTextEditorMultiLine(client, name.getLanguageChooser(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportDetailSection.label.description")); //$NON-NLS-1$
 		description.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent arg0) {

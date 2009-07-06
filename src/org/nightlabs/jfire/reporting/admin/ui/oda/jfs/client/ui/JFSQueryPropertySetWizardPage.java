@@ -160,7 +160,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 				.getJFSQueryPropertySetFactory(queryPropertySet.getScriptRegistryItemID());
 
 			if (newFactory == null) {
-				throw new IllegalStateException(JFSQueryPropertySetEditorRegistry.class.getName() + " returned null on getJFSQueryPropertySetFactory()");
+				throw new IllegalStateException(JFSQueryPropertySetEditorRegistry.class.getName() + " returned null on getJFSQueryPropertySetFactory()"); //$NON-NLS-1$
 			}
 
 			if (newFactory != null && newFactory != propertySetEditorFactory) {
@@ -174,7 +174,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 				propertySetEditorFactory = newFactory;
 				propertySetEditor = propertySetEditorFactory.createJFSQueryPropertySetEditor();
 				if (propertySetEditor == null) {
-					throw new IllegalStateException(propertySetEditorFactory.getClass().getName() + " returned no editor on createJFSQueryPropertySetEditor()", new NullPointerException("propertySetEditor"));
+					throw new IllegalStateException(propertySetEditorFactory.getClass().getName() + " returned no editor on createJFSQueryPropertySetEditor()", new NullPointerException("propertySetEditor")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				propertySetEditor.createControl(propertyGroup);
 			}

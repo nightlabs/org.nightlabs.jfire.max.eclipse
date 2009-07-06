@@ -31,6 +31,7 @@ import org.nightlabs.jfire.prop.Struct;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructLocalID;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.scripting.javaclass.prop.PropertySet;
 import org.nightlabs.jfire.security.SecurityReflector;
@@ -56,8 +57,8 @@ public class StructLocalTableComposite extends AbstractTableComposite<StructLoca
 	 */
 	public StructLocalTableComposite(Composite parent, int style) {
 		super(parent, style);
-		setLoadingMessage("Loading StructLocals");
-		Job loadJob = new Job("Loading StructLocals") {
+		setLoadingMessage(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.prop.StructLocalTableComposite.loadingMessage")); //$NON-NLS-1$
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.prop.StructLocalTableComposite.job.loadStructLocal")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				Collection<StructLocalID> structLocalIDs = StructEditorUtil.getAvailableStructLocalIDs();
@@ -87,13 +88,13 @@ public class StructLocalTableComposite extends AbstractTableComposite<StructLoca
 	private void setSelection() {
 		if (queryPropertySet != null) {
 			String linkClass = queryPropertySet.getProperties().get(PropertySet.PROPERTY_NAME_LINK_CLASS);
-			if (linkClass == null || "".equals(linkClass))
+			if (linkClass == null || "".equals(linkClass)) //$NON-NLS-1$
 				return;
 			String structScope = queryPropertySet.getProperties().get(PropertySet.PROPERTY_NAME_STRUCT_SCOPE);
-			if (structScope == null || "".equals(structScope))
+			if (structScope == null || "".equals(structScope)) //$NON-NLS-1$
 				structScope = Struct.DEFAULT_SCOPE;
 			String structLocalScope = queryPropertySet.getProperties().get(PropertySet.PROPERTY_NAME_STRUCT_LOCAL_SCOPE);
-			if (structLocalScope == null || "".equals(structLocalScope))
+			if (structLocalScope == null || "".equals(structLocalScope)) //$NON-NLS-1$
 				structLocalScope = StructLocal.DEFAULT_SCOPE;
 			StructLocalID structLocalID = StructLocalID.create(
 					SecurityReflector.getUserDescriptor().getOrganisationID(),
@@ -139,7 +140,7 @@ public class StructLocalTableComposite extends AbstractTableComposite<StructLoca
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn col = new TableColumn(table, SWT.LEFT);
-		col.setText("StructLocal");
+		col.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.prop.StructLocalTableComposite.column.structLocal")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[]{1}));
 	}
 
@@ -156,7 +157,7 @@ public class StructLocalTableComposite extends AbstractTableComposite<StructLoca
 					if (columnIndex == 0)
 						return ((StructLocal) element).getName().getText();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		});
 	}

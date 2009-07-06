@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
@@ -27,7 +28,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  */
 public class JFSQueryPropertySetEditorRegistry extends AbstractEPProcessor {
 
-	public static final String EXTENSION_POINT_ID = ReportingAdminPlugin.class.getPackage().getName()  + ".queryPropertySetEditor";
+	public static final String EXTENSION_POINT_ID = ReportingAdminPlugin.class.getPackage().getName()  + ".queryPropertySetEditor"; //$NON-NLS-1$
 	
 	/**
 	 * Create a {@link JFSQueryPropertySetEditorRegistry}.
@@ -51,8 +52,8 @@ public class JFSQueryPropertySetEditorRegistry extends AbstractEPProcessor {
 	 */
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element) throws Exception {
-		if (element.getName().equals("queryPropertySetEditor")) {
-			IJFSQueryPropertySetEditorFactory factory = (IJFSQueryPropertySetEditorFactory) element.createExecutableExtension("class");
+		if (element.getName().equals("queryPropertySetEditor")) { //$NON-NLS-1$
+			IJFSQueryPropertySetEditorFactory factory = (IJFSQueryPropertySetEditorFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
 			factories.add(factory);
 		}
 	}

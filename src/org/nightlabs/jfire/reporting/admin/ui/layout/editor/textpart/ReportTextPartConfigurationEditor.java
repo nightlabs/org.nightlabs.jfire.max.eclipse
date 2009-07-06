@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
@@ -119,10 +120,10 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 		JFireRemoteReportEditorInput reportEditorInput = (JFireRemoteReportEditorInput) input;
 		final ReportRegistryItemID reportRegistryItemID = reportEditorInput.getReportRegistryItemID();
 		
-		Job loadJob = new Job("Loading ReportTextPartConfiguration") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.job.loadReportTextPartConfiguration")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Loading ReportTextPartConfiguration", 10);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.job.loadReportTextPartConfiguration"), 10); //$NON-NLS-1$
 				ReportTextPartConfiguration config = ReportTextPartConfigurationDAO.sharedInstance().getReportTextPartConfiguration(
 						reportRegistryItemID, true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 7));
 				synchronized (this) {
@@ -187,13 +188,13 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			ToolBarSectionPart section = new ToolBarSectionPart(
 					toolkit, form.getBody(), 
 					ExpandableComposite.TITLE_BAR,
-					"Text part configuration"
+					Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.section.textPartConfig.name") //$NON-NLS-1$
 				);
 			XComposite comp = new XComposite(section.getSection(), SWT.NONE);
 			comp.setToolkit(toolkit);
 			section.getSection().setClient(comp);
 			
-			form.setText("Text part configuration");
+			form.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.form.textPartConfig.name")); //$NON-NLS-1$
 			
 			addReportTextPartAction = new AddReportTextPartAction(this);
 			section.registerAction(addReportTextPartAction);

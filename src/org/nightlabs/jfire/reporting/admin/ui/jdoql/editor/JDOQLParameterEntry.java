@@ -8,6 +8,7 @@ import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Undefined;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -37,7 +38,7 @@ public class JDOQLParameterEntry {
 		try {
 			Scriptable scope = new ImporterTopLevel(context);
 			
-			String sourceName = "Script";
+			String sourceName = "Script"; //$NON-NLS-1$
 			
 			Object result = context.evaluateString(
 					scope, jScript, sourceName, 1, null);
@@ -53,7 +54,7 @@ public class JDOQLParameterEntry {
 			else if (result instanceof String)
 				; // fine - no conversion necessary
 			else
-				throw new IllegalStateException("context.evaluateString(...) returned an object of an unknown type: " + (result == null ? null : result.getClass().getName()));
+				throw new IllegalStateException("context.evaluateString(...) returned an object of an unknown type: " + (result == null ? null : result.getClass().getName())); //$NON-NLS-1$
 
 			return result;
 		} finally {

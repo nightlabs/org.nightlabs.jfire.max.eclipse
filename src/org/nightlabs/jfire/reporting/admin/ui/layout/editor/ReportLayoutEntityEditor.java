@@ -59,6 +59,7 @@ import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.progress.RCPProgressMonitor;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -167,7 +168,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart implements IRe
 		Job saveJob = null;
 		IFormPage page = getPage();
 		if (page instanceof Fadeable) {
-				saveJob = new FadeableCompositeJob("Saving entity", ((Fadeable)page), this) {
+				saveJob = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.ReportLayoutEntityEditor.job.saveEntity"), ((Fadeable)page), this) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor, Object source) throws Exception {
 						try {
@@ -180,7 +181,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart implements IRe
 			};
 		}
 		if (saveJob == null) {
-			saveJob = new Job("Saving entity") {
+			saveJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.ReportLayoutEntityEditor.job.saveEntity")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) {
 					try {

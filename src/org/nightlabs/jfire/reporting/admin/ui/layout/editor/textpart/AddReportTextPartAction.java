@@ -20,6 +20,7 @@ import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
 
@@ -41,9 +42,9 @@ class AddReportTextPartAction extends Action {
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			XComposite comp = new XComposite(parent, SWT.NONE);
-			setTitle("New report text part");
-			setMessage("Create a new report text part");
-			I18nTextEditor editor = new I18nTextEditor(comp, "Report text part name");
+			setTitle(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.AddReportTextPartAction.title")); //$NON-NLS-1$
+			setMessage(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.AddReportTextPartAction.message")); //$NON-NLS-1$
+			I18nTextEditor editor = new I18nTextEditor(comp, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.AddReportTextPartAction.label.reportTextPartName")); //$NON-NLS-1$
 			editor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			editor.setI18nText(buffer, EditMode.DIRECT);
 			return super.createDialogArea(parent);
@@ -61,7 +62,7 @@ class AddReportTextPartAction extends Action {
 	 * 
 	 */
 	public AddReportTextPartAction(ReportTextPartConfigurationEditor editor) {
-		super("Add");
+		super(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.AddReportTextPartAction.action.add.name")); //$NON-NLS-1$
 		this.editor = editor;		
 	}
 	

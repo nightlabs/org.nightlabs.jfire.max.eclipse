@@ -28,6 +28,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.jfs.IJFSQueryPropertySetMetaData;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.IJFSQueryPropertySetMetaData.IEntry;
@@ -73,7 +74,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableViewerColumn nameColumn = new TableViewerColumn(tableViewer, SWT.LEFT);
-		nameColumn.getColumn().setText("Name");
+		nameColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.column.name.text")); //$NON-NLS-1$
 		nameColumn.setLabelProvider(new CellLabelProvider() {
 			@Override
 			public void update(ViewerCell cell) {
@@ -83,15 +84,15 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 		});
 
 		TableViewerColumn valueColumn = new TableViewerColumn(tableViewer, SWT.LEFT);
-		valueColumn.getColumn().setText("Value");
+		valueColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.column.value.text")); //$NON-NLS-1$
 		valueColumn.setLabelProvider(new CellLabelProvider() {
 			@Override
 			public void update(ViewerCell cell) {
 				JFSQueryPropertySetTableEntry entry = (JFSQueryPropertySetTableEntry) cell.getElement();
-				if (entry.getValue() != null && !"".equals(entry.getValue()))
+				if (entry.getValue() != null && !"".equals(entry.getValue())) //$NON-NLS-1$
 					cell.setText(entry.getValue());
 				else
-					cell.setText("");
+					cell.setText(""); //$NON-NLS-1$
 			}
 		});
 		valueColumn.setEditingSupport(createValueEditingSupport());
@@ -127,7 +128,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 			protected Object getValue(Object element) {
 				String value = ((JFSQueryPropertySetTableEntry) element).getValue();
 				if (value == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				return value;
 			}
 
@@ -171,19 +172,19 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 			protected Object getValue(Object element) {
 				String name = ((JFSQueryPropertySetTableEntry) element).getName();
 				if (name == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				return name;
 			}
 
 			@Override
 			protected void setValue(Object element, Object value) {
 				String name = (String) value;
-				if (name == null || "".equals(name)) {
+				if (name == null || "".equals(name)) { //$NON-NLS-1$
 					MessageDialog.openInformation(
 							getShell(),
-							"Empty property name.",
-							"An empty property name is not allowed, " +
-							"the value will not be changed!");
+							Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.dialog.emptyProperty.title"), //$NON-NLS-1$
+							Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.dialog.emptyProperty.message1") + //$NON-NLS-1$
+							Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.dialog.emptyProperty.message2")); //$NON-NLS-1$
 					return;
 				}
 				JFSQueryPropertySetTableEntry entry = (JFSQueryPropertySetTableEntry) element;
@@ -191,9 +192,9 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 					if (entry != checkEntry && name.equals(checkEntry.getName())) {
 						MessageDialog.openInformation(
 								getShell(),
-								"Duplicate property name.",
-								"A duplicate property name is not allowed, " +
-								"the value will not be changed!");
+								Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.dialog.duplicateProperty.title"), //$NON-NLS-1$
+								Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.dialog.duplicateProperty.message1") + //$NON-NLS-1$
+								Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetTable.dialog.duplicateProperty.message2")); //$NON-NLS-1$
 						return;
 					}
 				}
@@ -288,7 +289,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 			entries = (List<JFSQueryPropertySetTableEntry>) input;
 			super.setInput(input);
 		} else {
-			logger.error(this.getClass().getName() + " received an unexpected input type " + input.getClass().getName());
+			logger.error(this.getClass().getName() + " received an unexpected input type " + input.getClass().getName()); //$NON-NLS-1$
 		}
 	}
 
@@ -327,7 +328,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 	 * @return The newly created {@link JFSQueryPropertySetTableEntry}.
 	 */
 	public JFSQueryPropertySetTableEntry createNewEntry() {
-		String namePrefix = "NewProperty";
+		String namePrefix = "NewProperty"; //$NON-NLS-1$
 		int i = 1;
 		while (!checkNewPropertyName(namePrefix + i)) i++;
 		JFSQueryPropertySetTableEntry entry = new JFSQueryPropertySetTableEntry(

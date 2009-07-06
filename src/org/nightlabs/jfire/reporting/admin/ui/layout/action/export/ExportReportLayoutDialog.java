@@ -20,6 +20,7 @@ import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.ReportingInitialiser;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil.PreparedLayoutL10nData;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.layout.ReportLayoutLocalisationData;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.util.IOUtil;
@@ -48,19 +49,19 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Export layout");
+		newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.window.title")); //$NON-NLS-1$
 		newShell.setSize(400, 400);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
-		layoutFileName = new LabeledText(wrapper, "Select export file name");
+		layoutFileName = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.label.selectExportFileName")); //$NON-NLS-1$
 		folderComposite = new FileSelectionComposite(
 				wrapper, 
 				SWT.NONE, FileSelectionComposite.OPEN_DIR, 
-				"Select export folder",
-		"Select folder");
+				Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.label.selectExportFolder"), //$NON-NLS-1$
+		Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.label.selectFolder")); //$NON-NLS-1$
 		return wrapper;
 	}
 
@@ -79,7 +80,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 			}
 
 			PreparedLayoutL10nData l10nData = ReportLayoutL10nUtil.prepareReportLayoutL10nData(editorInput);
-			File resourceFolder = new File(fileName, "resource");
+			File resourceFolder = new File(fileName, "resource"); //$NON-NLS-1$
 			resourceFolder.mkdirs();
 			for (ReportLayoutLocalisationData data : l10nData.getLocalisationBundle().values()) {				
 				String l10nFileName = reportID;

@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 
 /**
@@ -40,7 +41,7 @@ public class DefaultJFSQueryPropertySetEditorComposite extends XComposite {
 		buttonWrapper.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		add = new Button(buttonWrapper, SWT.PUSH);
 		add.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		add.setText("Add");
+		add.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.DefaultJFSQueryPropertySetEditorComposite.button.add.text")); //$NON-NLS-1$
 		add.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -49,7 +50,7 @@ public class DefaultJFSQueryPropertySetEditorComposite extends XComposite {
 		});
 		remove = new Button(buttonWrapper, SWT.PUSH);
 		remove.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		remove.setText("Remove");
+		remove.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.DefaultJFSQueryPropertySetEditorComposite.button.remove.text")); //$NON-NLS-1$
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

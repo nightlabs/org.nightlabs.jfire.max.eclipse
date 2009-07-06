@@ -13,6 +13,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -69,10 +70,10 @@ public class JFireReportingExpressionProviderRegistry extends
 		}
 	}
 	
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.reporting.admin.ui.expressionProviderEntry";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.reporting.admin.ui.expressionProviderEntry"; //$NON-NLS-1$
 	
-	private static final String ELEMENT_NAME_CATEGORY = "expressionProviderCategory";
-	private static final String ELEMENT_NAME_ENTRY = "expressionProviderEntry";
+	private static final String ELEMENT_NAME_CATEGORY = "expressionProviderCategory"; //$NON-NLS-1$
+	private static final String ELEMENT_NAME_ENTRY = "expressionProviderEntry"; //$NON-NLS-1$
 
 	private Map<String, ItemCarrier> id2Carrier = new HashMap<String, ItemCarrier>();
 	private Map<String, List<ItemCarrier>> parentId2Carrier = new HashMap<String, List<ItemCarrier>>();
@@ -99,17 +100,17 @@ public class JFireReportingExpressionProviderRegistry extends
 	public void processElement(IExtension extension,
 			IConfigurationElement element) throws Exception {
 		if (element.getName().equals(ELEMENT_NAME_CATEGORY)) {
-			ItemCarrier categoryCarrier = new ItemCarrier(element.getAttribute("id"));
-			categoryCarrier.setDisplayText(element.getAttribute("name"));
-			categoryCarrier.setParentId(element.getAttribute("parentCategoryId"));
-			categoryCarrier.setTooltipText(element.getAttribute("tooltip"));
+			ItemCarrier categoryCarrier = new ItemCarrier(element.getAttribute("id")); //$NON-NLS-1$
+			categoryCarrier.setDisplayText(element.getAttribute("name")); //$NON-NLS-1$
+			categoryCarrier.setParentId(element.getAttribute("parentCategoryId")); //$NON-NLS-1$
+			categoryCarrier.setTooltipText(element.getAttribute("tooltip")); //$NON-NLS-1$
 			id2Carrier.put(categoryCarrier.getItemId(), categoryCarrier);
 		} else if (element.getName().equals(ELEMENT_NAME_ENTRY)) {
-			ItemCarrier entryCarrier = new ItemCarrier(element.getAttribute("id"));
-			entryCarrier.setDisplayText(element.getAttribute("name"));
-			entryCarrier.setInsertText(element.getAttribute("insertText"));
-			entryCarrier.setParentId(element.getAttribute("categoryId"));
-			entryCarrier.setTooltipText(element.getAttribute("tooltip"));
+			ItemCarrier entryCarrier = new ItemCarrier(element.getAttribute("id")); //$NON-NLS-1$
+			entryCarrier.setDisplayText(element.getAttribute("name")); //$NON-NLS-1$
+			entryCarrier.setInsertText(element.getAttribute("insertText")); //$NON-NLS-1$
+			entryCarrier.setParentId(element.getAttribute("categoryId")); //$NON-NLS-1$
+			entryCarrier.setTooltipText(element.getAttribute("tooltip")); //$NON-NLS-1$
 			id2Carrier.put(entryCarrier.getItemId(), entryCarrier);
 		}
 	}
