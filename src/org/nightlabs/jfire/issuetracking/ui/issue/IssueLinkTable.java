@@ -216,6 +216,9 @@ extends AbstractTableComposite<IssueLinkTableItem>
 				// display data
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
+						if (isDisposed())
+							return;
+
 						issue = _issue;
 						issueLink2LinkedObjectMap = _issueLink2LinkedObjectMap;
 						issueLinkTableItems.clear();
