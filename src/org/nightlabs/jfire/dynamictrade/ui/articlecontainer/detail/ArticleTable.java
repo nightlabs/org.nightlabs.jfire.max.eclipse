@@ -210,7 +210,7 @@ extends AbstractTableComposite<Article>
 					return ""; // Long.toString(article.getInvoiceID().invoiceID); //$NON-NLS-1$
 
 				if (++ci == columnIndex)
-					return ""; // invoice's paid status
+					return ""; // invoice's paid status //$NON-NLS-1$
 			}
 
 			if (!isInDeliveryNote()) {
@@ -219,7 +219,7 @@ extends AbstractTableComposite<Article>
 			}
 
 			if (++ci == columnIndex)
-				return ""; // Article's delivered status
+				return ""; // Article's delivered status //$NON-NLS-1$
 
 			if (++ci == columnIndex) {
 				ArticlePrice price = article.getPrice();
@@ -306,8 +306,8 @@ extends AbstractTableComposite<Article>
 			col.setToolTipText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
 
 			col = new TableColumn(table, SWT.LEFT);
-			col.setText("Paid");
-			col.setToolTipText("The invoice of this article has been paid completely.");
+			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.column.paid.text")); //$NON-NLS-1$
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.column.paid.tooltip")); //$NON-NLS-1$
 		}
 
 		if (!isInDeliveryNote()) {
@@ -317,8 +317,8 @@ extends AbstractTableComposite<Article>
 		}
 
 		col = new TableColumn(table, SWT.LEFT);
-		col.setText("Delivered");
-		col.setToolTipText("The article has been delivered.");
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.column.delivered.text")); //$NON-NLS-1$
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.column.delivered.tooltip")); //$NON-NLS-1$
 		//////////// END Order, Offer, Invoice, DeliveryNote //////////
 
 		col = new TableColumn(table, SWT.RIGHT);
@@ -346,7 +346,7 @@ extends AbstractTableComposite<Article>
 							new int[]{80, 40, 20, 20, -1, -1, -1, -1, -1, -1, 30},
 							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, 22, 22, -1}));
 		else
-			throw new UnsupportedOperationException("Unknown ArticleContainer!");
+			throw new UnsupportedOperationException("Unknown ArticleContainer!"); //$NON-NLS-1$
 	}
 
 	/**

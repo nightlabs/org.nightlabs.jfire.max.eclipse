@@ -212,7 +212,7 @@ extends FadeableComposite
 		XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);		
 		compName.setLayout(new GridLayout(1,false));
 		
-		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFO);
+		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFO); //$NON-NLS-1$
 		nameMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
 	    GridData data = (GridData)nameMessageLabel.getLayoutData();
 	    data.exclude = true;
@@ -314,7 +314,7 @@ extends FadeableComposite
 		loadDynamicProductType();
 		if(isScriptable())
 		{
-			showTextNameMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);
+			showTextNameMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.textNameMessage"),MessageType.INFO); //$NON-NLS-1$
 			this.nameMessageText = nameMessageLabel.getMessage();
 			this.productNameText.addFocusListener(  new FocusListener(){
 				/** remove the error message shown once the user clicks 
@@ -630,7 +630,7 @@ extends FadeableComposite
 		
 		MessageComposite mc = new MessageComposite(
 				this, SWT.NONE,
-				String.format("The price configuration of the product type \"%s\" contains no prices for the current situation (no tariff, no customer-group, no category or no currency existing/available to you).", dynamicProductType.getName().getText()),
+				String.format(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.message"), dynamicProductType.getName().getText()), //$NON-NLS-1$
 				MessageType.WARNING
 		);
 		mc.adaptToToolkit();
@@ -844,7 +844,7 @@ extends FadeableComposite
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception
 				{
-					monitor.beginTask("Load article", 100);
+					monitor.beginTask(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.task.loadArticle"), 100); //$NON-NLS-1$
 					try {
 						ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
 						final Article articleWithPriceFragments = ArticleDAO.sharedInstance().getArticle(

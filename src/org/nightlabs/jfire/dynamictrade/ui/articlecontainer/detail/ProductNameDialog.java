@@ -49,9 +49,9 @@ extends ResizableTrayDialog
 		area.setLayout(new GridLayout(1,false));
 		if(isScriptable)
 		{
-			this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFO);
+			this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFO); //$NON-NLS-1$
 			this.statusMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-			this.statusMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);		
+			this.statusMessageLabel.setMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.message"),MessageType.INFO);		 //$NON-NLS-1$
 		}
 		this.productNameEditor = new I18nTextEditorMultiLine(area);
 		this.productNameEditor.setEditable(editable);
@@ -82,7 +82,7 @@ extends ResizableTrayDialog
 			productNameEditor.addFocusListener(  new FocusListener(){
 				@Override
 				public void focusGained(FocusEvent arg0) {
-					statusMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);		
+					statusMessageLabel.setMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.message"),MessageType.INFO);		 //$NON-NLS-1$
 					productNameEditor.removeFocusListener(this);
 				}				
 				@Override

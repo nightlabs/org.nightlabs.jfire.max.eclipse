@@ -12,6 +12,7 @@ import javax.jdo.JDOHelper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.Product;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.Unit;
@@ -29,10 +30,10 @@ import org.nightlabs.tableprovider.ui.TableProvider;
 public class ArticleTableProvider
 implements TableProvider<ArticleID, Article>
 {
-	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName";
-	public static final String TYPE_DYNAMIC_PRODUCT_TYPE_NAME = "ProductName";
-	public static final String TYPE_QUANTITY = "Quantity";
-	public static final String TYPE_UNIT = "Unit";
+	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName"; //$NON-NLS-1$
+	public static final String TYPE_DYNAMIC_PRODUCT_TYPE_NAME = "ProductName"; //$NON-NLS-1$
+	public static final String TYPE_QUANTITY = "Quantity"; //$NON-NLS-1$
+	public static final String TYPE_UNIT = "Unit"; //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.tableprovider.ui.TableProvider#getObjects(java.util.Collection, org.nightlabs.progress.ProgressMonitor)
@@ -101,7 +102,7 @@ implements TableProvider<ArticleID, Article>
 				}
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -111,16 +112,16 @@ implements TableProvider<ArticleID, Article>
 	public String getTypeName(String type)
 	{
 		if (type.equals(TYPE_PRODUCT_TYPE_NAME)) {
-			return "ProductType Name";
+			return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTableProvider.column.productTypeName"); //$NON-NLS-1$
 		}
 		else if (type.equals(TYPE_PRODUCT_TYPE_NAME)) {
-			return "Product Name";
+			return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTableProvider.column.productName"); //$NON-NLS-1$
 		}
 		else if (type.equals(TYPE_QUANTITY)) {
-			return "Quantity";
+			return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTableProvider.column.quantity"); //$NON-NLS-1$
 		}
 		else if (type.equals(TYPE_UNIT)) {
-			return "Unit";
+			return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTableProvider.column.unit"); //$NON-NLS-1$
 		}
 
 		return type;
