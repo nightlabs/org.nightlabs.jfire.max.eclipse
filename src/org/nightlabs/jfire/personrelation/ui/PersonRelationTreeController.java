@@ -27,7 +27,6 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
-import org.nightlabs.util.CollectionUtil;
 
 public class PersonRelationTreeController
 extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNode>
@@ -46,6 +45,59 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 	};
 
 	private volatile Collection<PropertySetID> rootPersonIDs;
+
+	private List<PersonRelationTreeControllerDelegate> personRelationTreeControllerDelegates = new ArrayList<PersonRelationTreeControllerDelegate>();
+	private List<PersonRelationTreeControllerDelegate> _personRelationTreeControllerDelegates = null;
+
+	public List<PersonRelationTreeControllerDelegate> getPersonRelationTreeControllerDelegates() {
+		List<PersonRelationTreeControllerDelegate> delegates = _personRelationTreeControllerDelegates;
+		if (delegates == null) {
+			synchronized (personRelationTreeControllerDelegates) {
+				delegates = _personRelationTreeControllerDelegates;
+				if (delegates == null) {
+					delegates = new ArrayList<PersonRelationTreeControllerDelegate>(personRelationTreeControllerDelegates);
+					delegates = Collections.unmodifiableList(delegates);
+					_personRelationTreeControllerDelegates = delegates;
+				}
+			}
+		}
+		return delegates;
+	}
+
+	public void addPersonRelationTreeControllerDelegate(PersonRelationTreeControllerDelegate delegate)
+	{
+		synchronized (personRelationTreeControllerDelegates) {
+			unregisterChangeListener();
+			personRelationTreeControllerDelegates.add(delegate);
+
+			PersonRelationParentResolver personRelationParentResolver = (PersonRelationParentResolver) getTreeNodeMultiParentResolver();
+			TreeNodeMultiParentResolver parentResolverDelegate = delegate.getPersonRelationParentResolverDelegate();
+			if (parentResolverDelegate != null)
+				personRelationParentResolver.addDelegate(parentResolverDelegate);
+
+			_personRelationTreeControllerDelegates = null;
+			jdoObjectClasses = null;
+			registerChangeListener();
+			registerJDOLifecycleListener();
+		}
+		clear();
+	}
+
+//	public void removePersonRelationTreeControllerDelegate(PersonRelationTreeControllerDelegate delegate)
+//	{
+//		synchronized (personRelationTreeControllerDelegates) {
+//			unregisterChangeListener();
+//			personRelationTreeControllerDelegates.remove(delegate);
+//			_personRelationTreeControllerDelegates = null;
+//			jdoObjectClasses = null;
+//			registerChangeListener();
+//			registerJDOLifecycleListener();
+//
+// Here, we would have to remove the TreeNodeMultiParentResolver-delegates. But that's too much work and this method is probably not necessary at all.
+//
+//		}
+//		clear();
+//	}
 
 	public Collection<PropertySetID> getRootPersonIDs() {
 		return rootPersonIDs;
@@ -70,9 +122,46 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		return new PersonRelationParentResolver();
 	}
 
+//	@Override
+//	protected JDOLifecycleListener createJDOLifecycleListener(Set<? extends ObjectID> parentObjectIDs) {
+//		return super.createJDOLifecycleListener(parentObjectIDs);
+//	}
+//
+//	@Override
+//	protected IJDOLifecycleListenerFilter createJDOLifecycleListenerFilter(Set<? extends ObjectID> parentObjectIDs) {
+//		return new TreeLifecycleListenerFilter(
+//				new Class[] { PersonRelation.class }, true,
+//				parentObjectIDs, getTreeNodeMultiParentResolver(),
+//				new JDOLifecycleState[] { JDOLifecycleState.NEW }
+//		);
+//	}
+
 	@Override
 	protected Class<?> getJDOObjectClass() {
-		return PersonRelation.class;
+		throw new UnsupportedOperationException("This method should not be called because we have overridden 'getJDOObjectClasses()' below.");
+//		return PersonRelation.class;
+	}
+
+	private Set<Class<? extends Object>> jdoObjectClasses = null;
+
+	@Override
+	protected Set<Class<? extends Object>> getJDOObjectClasses() {
+		Set<Class<? extends Object>> classes = jdoObjectClasses;
+		if (classes == null) {
+			synchronized (personRelationTreeControllerDelegates) {
+				classes = jdoObjectClasses;
+				if (classes == null) {
+					List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+					classes = new HashSet<Class<? extends Object>>();
+					classes.add(PersonRelation.class);
+					for (PersonRelationTreeControllerDelegate delegate : delegates) {
+						classes.addAll(delegate.getJDOObjectClasses());
+					}
+					jdoObjectClasses = classes;
+				}
+			}
+		}
+		return classes;
 	}
 
 	@Override
@@ -83,18 +172,22 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			Set<PropertySetID> personIDs = null;
 			Set<PersonRelationID> personRelationIDs = null;
 
+			Set<ObjectID> objectIDsLeft = new HashSet<ObjectID>(objectIDs);
+
 			for (ObjectID objectID : objectIDs) {
 				if (objectID instanceof PropertySetID) {
 					if (personIDs == null)
 						personIDs = new HashSet<PropertySetID>();
 
 					personIDs.add((PropertySetID) objectID);
+					objectIDsLeft.remove(objectID);
 				}
 				else if (objectID instanceof PersonRelationID) {
 					if (personRelationIDs == null)
 						personRelationIDs = new HashSet<PersonRelationID>();
 
 					personRelationIDs.add((PersonRelationID) objectID);
+					objectIDsLeft.remove(objectID);
 				}
 			}
 
@@ -131,6 +224,26 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			}
 			else
 				monitor.worked(tixRelation);
+
+
+			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+				if (objectIDsLeft.isEmpty())
+					break;
+
+				Collection<? extends Object> objects = delegate.retrieveJDOObjects(Collections.unmodifiableSet(objectIDsLeft), monitor);
+				if (objects != null) {
+					for (Object object : objects) {
+						Object objectID = JDOHelper.getObjectId(object);
+						if (objectID == null)
+							throw new IllegalStateException("JDOHelper.getObjectId(object) returned null! delegate=" + delegate + " object=" + object);
+
+						objectIDsLeft.remove(objectID);
+						result.add(object);
+					}
+				}
+			}
+
 
 			return result;
 		} finally {
@@ -218,11 +331,33 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			else
 				monitor.worked(1);
 
+			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+				Map<ObjectID, Long> delegateChildCountMap = delegate.retrieveChildCount(parentIDs, new NullProgressMonitor()); // TODO monitor!
+				for (Map.Entry<ObjectID, Long> me : delegateChildCountMap.entrySet()) {
+					ObjectID parentID = me.getKey();
+					Long childCount = me.getValue();
+					if (childCount == null)
+						childCount = 0L;
+
+					Long resultChildCount = result.get(parentID);
+
+					if (resultChildCount == null)
+						resultChildCount = childCount;
+					else
+						resultChildCount += childCount;
+
+					result.put(parentID, resultChildCount);
+				}
+			}
+
 			return result;
 		} finally {
 			monitor.done();
 		}
 	}
+
+//	private Map<ObjectID, Map<PersonRelationTreeControllerDelegate, IndexRange>> parentID2delegate2startChildIndex = new HashMap<ObjectID, Map<PersonRelationTreeControllerDelegate,Long>>();
 
 	@Override
 	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) {
@@ -230,10 +365,12 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		if (rootPersonIDs == null)
 			return Collections.emptyList();
 
+		Collection<ObjectID> result = new ArrayList<ObjectID>();
+
 		monitor.beginTask("Retrieving child IDs", 100);
 		try {
 			if (parentID == null) {
-				return CollectionUtil.castCollection(rootPersonIDs);
+				result.addAll(rootPersonIDs);
 			}
 			else if (parentID instanceof PropertySetID) {
 				Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
@@ -241,7 +378,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 						new SubProgressMonitor(monitor, 80)
 				);
 
-				return CollectionUtil.castCollection(childPersonRelationIDs);
+				result.addAll(childPersonRelationIDs);
 			}
 			else if (parentID instanceof PersonRelationID) {
 				Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
@@ -256,20 +393,26 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 						new SubProgressMonitor(monitor, 20)
 				);
 
-				if (personRelations.isEmpty())
-					return Collections.emptyList();
+				if (!personRelations.isEmpty()) {
+					PersonRelation personRelation = personRelations.iterator().next();
 
-				PersonRelation personRelation = personRelations.iterator().next();
+					Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+							null, personRelation.getToID(), null,
+							new SubProgressMonitor(monitor, 80)
+					);
 
-				Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
-						null, personRelation.getToID(), null,
-						new SubProgressMonitor(monitor, 80)
-				);
-
-				return CollectionUtil.castCollection(childPersonRelationIDs);
+					result.addAll(childPersonRelationIDs);
+				}
 			}
-			else
-				return Collections.emptyList(); // TODO delegate!
+
+			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new NullProgressMonitor()); // TODO monitor!
+				if (childObjectIDs != null)
+					result.addAll(childObjectIDs);
+			}
+
+			return result;
 		} finally {
 			monitor.done();
 		}

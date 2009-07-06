@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.personrelation.ui;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnViewer;
@@ -10,6 +12,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
@@ -36,7 +39,18 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	{
 	}
 
-	protected static class PersonRelationTreeLabelProvider extends ColumnSpanLabelProvider
+	private Map<Class<?>, PersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, PersonRelationTreeLabelProviderDelegate>();
+	private Map<Class<?>, PersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, PersonRelationTreeLabelProviderDelegate>();
+
+	public void addPersonRelationTreeLabelProviderDelegate(PersonRelationTreeLabelProviderDelegate delegate)
+	{
+		Class<? extends ObjectID> objectIDClass = delegate.getJDOObjectIDClass();
+		Class<?> objectClass = delegate.getJDOObjectClass();
+		jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.put(objectIDClass, delegate);
+		jdoObjectClass2PersonRelationTreeLabelProviderDelegate.put(objectClass, delegate);
+	}
+
+	protected class PersonRelationTreeLabelProvider extends ColumnSpanLabelProvider
 	{
 		public PersonRelationTreeLabelProvider(ColumnViewer columnViewer) {
 			super(columnViewer);
@@ -66,6 +80,18 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 							break;
 					}
 				}
+				else {
+					PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+					if (delegate != null)
+						return delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+
+					switch (spanColIndex) {
+						case 0:
+							return String.valueOf(jdoObjectID);
+						default:
+							break;
+					}
+				}
 			}
 			else {
 				if (jdoObject instanceof Person) {
@@ -91,7 +117,16 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 					}
 				}
 				else {
-					// TODO delegate
+					PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+					if (delegate != null)
+						return delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+
+					switch (spanColIndex) {
+						case 0:
+							return String.valueOf(jdoObject);
+						default:
+							break;
+					}
 				}
 			}
 
@@ -104,18 +139,36 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
 
 			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
-//			ObjectID jdoObjectID = node.getJdoObjectID();
+			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
-			if (jdoObject == null)
+			if (jdoObject == null) {
+				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+				if (delegate != null) {
+					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
+					if (result != null)
+						return result;
+				}
+
 				return new int[][] { {0, 1} };
+			}
+			else {
+				if (jdoObject instanceof Person)
+					return new int[][] { {0, 1} };
 
-			if (jdoObject instanceof Person)
+				if (jdoObject instanceof PersonRelation)
+					return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+
+				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+				if (delegate != null) {
+					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
+					if (result != null)
+						return result;
+					else
+						return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+				}
+
 				return new int[][] { {0, 1} };
-
-			if (jdoObject instanceof PersonRelationTreeNode)
-				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
-
-			return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+			}
 		}
 
 		@Override
@@ -130,6 +183,35 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
 			return getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+		}
+
+		@Override
+		protected Image getColumnImage(Object element, int spanColIndex) {
+			if (element == null)
+				return null;
+
+			if (!(element instanceof PersonRelationTreeNode))
+				return null;
+
+			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
+			ObjectID jdoObjectID = node.getJdoObjectID();
+			Object jdoObject = node.getJdoObject();
+			return getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+		}
+
+		protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
+			if (jdoObject == null) {
+				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+				if (delegate != null)
+					return delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+			}
+			else {
+				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+				if (delegate != null)
+					return delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+			}
+
+			return null;
 		}
 
 	}
@@ -231,6 +313,10 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		super.setInput(personRelationTreeController);
 	}
 
+	public PersonRelationTreeController getPersonRelationTreeController() {
+		return personRelationTreeController;
+	}
+
 	@Override
 	public void createTreeColumns(Tree tree) {
 		TableLayout tableLayout = new TableLayout();
@@ -270,14 +356,14 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		return personIDs;
 	}
 
-	public PropertySetID getSelectedInputPersonID() {
-		Collection<PropertySetID> inputPersonIDs = getInputPersonIDs();
-		if (inputPersonIDs == null || inputPersonIDs.isEmpty())
-			return null;
-
-		PropertySetID personID = inputPersonIDs.iterator().next();
-		return personID;
-	}
+//	public PropertySetID getSelectedInputPersonID() {
+//		Collection<PropertySetID> inputPersonIDs = getInputPersonIDs();
+//		if (inputPersonIDs == null || inputPersonIDs.isEmpty())
+//			return null;
+//
+//		PropertySetID personID = inputPersonIDs.iterator().next();
+//		return personID;
+//	}
 
 	/**
 	 * @deprecated Do not call this method! It's only inherited and used
