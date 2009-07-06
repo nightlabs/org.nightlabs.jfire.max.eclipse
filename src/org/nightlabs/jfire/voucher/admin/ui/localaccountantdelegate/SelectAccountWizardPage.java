@@ -167,8 +167,8 @@ extends WizardHopPage
 	{
 		if (createAccountWizardPage == null)
 			createAccountWizardPage = new CreateProductAccountWizardPage(currency,
-					Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.CreateAccountWizardPage.title"),
-					Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.CreateAccountWizardPage.accountNameEditor.caption"));
+					Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.CreateAccountWizardPage.title"), //$NON-NLS-1$
+					Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.CreateAccountWizardPage.accountNameEditor.caption")); //$NON-NLS-1$
 		if (!getWizardHop().getHopPages().contains(createAccountWizardPage))
 			getWizardHop().addHopPage(createAccountWizardPage);
 	}

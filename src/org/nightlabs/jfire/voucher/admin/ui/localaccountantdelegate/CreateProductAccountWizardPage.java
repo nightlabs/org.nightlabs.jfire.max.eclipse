@@ -18,6 +18,7 @@ import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.transfer.Anchor;
+import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.math.Base36Coder;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -31,7 +32,7 @@ public  class CreateProductAccountWizardPage extends WizardHopPage{
 
 	public CreateProductAccountWizardPage(Currency currency, String title)
 	{
-		this(currency,title,"");
+		this(currency,title,""); //$NON-NLS-1$
 	}
 
 	public CreateProductAccountWizardPage(Currency currency, String title, String editorTitle)

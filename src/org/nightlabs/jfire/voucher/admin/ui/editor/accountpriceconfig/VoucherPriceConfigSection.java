@@ -224,7 +224,7 @@ extends ToolBarSectionPart
 		// "Price Configuration / "
 		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherPriceConfig.getPrices());
 		currencyAmountTableWrapper.setMap(map);
-		String str = String.format("%s - %s","Price Configuration",voucherPriceConfig.getName().getText());				
+		String str = String.format("%s - %s",Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherPriceConfigSection.priceConfiguration"),voucherPriceConfig.getName().getText());				 //$NON-NLS-1$ //$NON-NLS-2$
 		getSection().setText(str);
 	}
 

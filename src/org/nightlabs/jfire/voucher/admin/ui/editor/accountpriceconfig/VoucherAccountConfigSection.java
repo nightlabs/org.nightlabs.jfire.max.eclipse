@@ -32,6 +32,7 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
+import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.admin.ui.voucherlayout.editor.VoucherTypeTableDialog;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -65,7 +66,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
 
 	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {
-		super(page, parent, style, "Account Configuration");
+		super(page, parent, style, Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.section.name")); //$NON-NLS-1$
 
 		
 		AssignAccountConfigAction assignAccountConfigAction = new AssignAccountConfigAction();
@@ -116,9 +117,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 				
 		if (!vouchers.isEmpty()) 
 		{
-			String title = "Affected voucher types";
-			String message1 = "Storing the account configurations to the server will change the account configuration of the following voucher types.";
-			String message2 = "Do you really want to proceed?";
+			String title = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.title"); //$NON-NLS-1$
+			String message1 = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.message1"); //$NON-NLS-1$
+			String message2 = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.message2"); //$NON-NLS-1$
 			VoucherTypeTableDialog dlg = new VoucherTypeTableDialog(RCPUtil.getActiveShell(), vouchers, title, message1, message2) {
 				@Override
 				protected void createButtonsForButtonBar(Composite parent) {
@@ -184,7 +185,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		localAccountinheritance = inheritanceAction.isChecked();
 		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
 		// puts the accounts inside the widget
-		String str = String.format("%s - %s","Account Configuration",voucherLocalAccountantDelegate.getName().getText());				
+		String str = String.format("%s - %s",Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.accountConfiguration"),voucherLocalAccountantDelegate.getName().getText());				 //$NON-NLS-1$ //$NON-NLS-2$
 		getSection().setText(str);
 		copyMap.putAll(accountsDelegateMap);
 		accountantDelegateComposite.setMap(copyMap);
@@ -235,8 +236,8 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 					VoucherAdminPlugin.getDefault(),
 					VoucherPriceConfigSection.class,
 			"AssignAccountConfig")); //$NON-NLS-1$
-			setToolTipText("assigns a new account configuration"); 
-			setText("assigns a new account configuration");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.action.assignAccountConfig.tooltip"));  //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.action.assignAccountConfig.text")); //$NON-NLS-1$
 		}
 
 		@Override
