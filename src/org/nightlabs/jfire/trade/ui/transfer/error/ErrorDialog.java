@@ -189,13 +189,13 @@ extends ResizableTitleAreaDialog
 	{
 		String message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title"); //$NON-NLS-1$
 		if (paymentDatas != null && deliveryDatas != null) {
-			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_paymentAndDeliveryFailed");
+			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_paymentAndDeliveryFailed"); //$NON-NLS-1$
 		}
 		else if (paymentDatas != null) {
-			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_paymentFailed");
+			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_paymentFailed"); //$NON-NLS-1$
 		}
 		else {
-			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_deliveryFailed");
+			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_deliveryFailed"); //$NON-NLS-1$
 		}
 		return message; 
 	}
@@ -403,7 +403,7 @@ extends ResizableTitleAreaDialog
 		}
 
 		if (errorReport == null) {
-			Exception xxx = new IllegalStateException("transferTreeComposite.getInput() did not return any data from which we could create an error report!");
+			Exception xxx = new IllegalStateException("transferTreeComposite.getInput() did not return any data from which we could create an error report!"); //$NON-NLS-1$
 			errorReport = new ErrorReport(xxx, xxx);
 		}
 

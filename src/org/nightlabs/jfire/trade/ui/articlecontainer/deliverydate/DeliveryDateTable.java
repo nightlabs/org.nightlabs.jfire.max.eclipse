@@ -126,7 +126,7 @@ public class DeliveryDateTable extends AbstractTableComposite<ArticleContainer>
 					case 0:
 						String suffix = null;
 						if (ac instanceof Offer) {
-							suffix = "Offer";
+							suffix = "Offer"; //$NON-NLS-1$
 						}
 						else if (ac instanceof Order) {
 							suffix = "Order"; //$NON-NLS-1$

@@ -133,11 +133,11 @@ extends AbstractTableComposite<O>
 //		TableColumnLayout tableLayout = new TableColumnLayout();
 		TableColumn c;
 
-		c = new TableColumn(table, SWT.LEFT);
-		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
-		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(c, new ColumnWeightData(10, 50));
-		addWeightedColumn(15);
+//		c = new TableColumn(table, SWT.LEFT);
+//		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
+//		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(c, new ColumnWeightData(10, 50));
+//		addWeightedColumn(15);
 
 //		createArticleContainerIDPrefixTableColumn(tableViewer, table);
 //		createArticleContainerIDTableColumn(tableViewer, table);
@@ -257,9 +257,9 @@ extends AbstractTableComposite<O>
 
 	protected Image getColumnImage(Object element, int columnIndex)
 	{
-		int firstAdditionalColumnIndex = 7;
+		int firstAdditionalColumnIndex = 6;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-			firstAdditionalColumnIndex = 8;
+			firstAdditionalColumnIndex = 7;
 
 		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
 		if (additionalColumnIndex < 0)
@@ -272,32 +272,68 @@ extends AbstractTableComposite<O>
 		return DateFormatter.formatDateShortTimeHM(date, true);
 	}
 
+//	protected String getColumnText(Object element, int columnIndex)
+//	{
+//		if (element instanceof ArticleContainer) {
+//			ArticleContainer articleContainer = (ArticleContainer) element;
+//			switch (columnIndex) {
+//				case 0:
+//					return articleContainer.getOrganisationID();
+//				case 1:
+//					return ArticleContainerUtil.getArticleContainerID(articleContainer);
+//				case 2:
+//					return articleContainer.getCustomer().getPerson().getDisplayName();
+//				case 3:
+//					return articleContainer.getVendor().getPerson().getDisplayName();
+//				case 4:
+//					return formatDate(articleContainer.getCreateDT());
+//				case 5:
+//					return getCreateUserName(articleContainer);
+//				case 6:
+//					return String.valueOf(articleContainer.getArticleCount());
+//			}
+//		}
+//		int firstAdditionalColumnIndex = 7;
+//		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
+//			firstAdditionalColumnIndex = 8;
+//
+//		if (element instanceof Statable && columnIndex == 7) {
+//			Statable statable = (Statable) element;
+//			return getStateName(statable);
+//		}
+//		if (columnIndex == 0)
+//			return String.valueOf(element);
+//
+//		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
+//		if (additionalColumnIndex < 0)
+//			return ""; //$NON-NLS-1$
+//
+//		return getAdditionalColumnText(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
+//	}
 	protected String getColumnText(Object element, int columnIndex)
 	{
 		if (element instanceof ArticleContainer) {
 			ArticleContainer articleContainer = (ArticleContainer) element;
 			switch (columnIndex) {
 				case 0:
-					return articleContainer.getOrganisationID();
-				case 1:
 					return ArticleContainerUtil.getArticleContainerID(articleContainer);
-				case 2:
+				case 1:
 					return articleContainer.getCustomer().getPerson().getDisplayName();
-				case 3:
+				case 2:
 					return articleContainer.getVendor().getPerson().getDisplayName();
-				case 4:
+				case 3:
 					return formatDate(articleContainer.getCreateDT());
-				case 5:
+				case 4:
 					return getCreateUserName(articleContainer);
-				case 6:
+				case 5:
 					return String.valueOf(articleContainer.getArticleCount());
 			}
 		}
-		int firstAdditionalColumnIndex = 7;
+		int firstAdditionalColumnIndex = 6;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-			firstAdditionalColumnIndex = 8;
+			firstAdditionalColumnIndex = 7;
 
-		if (element instanceof Statable && columnIndex == 7) {
+		if (element instanceof Statable && columnIndex == 6) {
 			Statable statable = (Statable) element;
 			return getStateName(statable);
 		}
