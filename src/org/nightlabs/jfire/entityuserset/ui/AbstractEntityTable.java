@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -114,8 +115,8 @@ extends AbstractTableComposite<Map.Entry<Entity, Boolean>>
 	protected void createTableColumns(TableViewer tableViewer, Table table) 
 	{
 		TableColumn checkBoxColumn = new TableColumn(table, SWT.NONE);
-		checkBoxColumn.setText("");
-		checkBoxColumn.setToolTipText("Check if the selected object should be included or not");
+		checkBoxColumn.setText(""); //$NON-NLS-1$
+		checkBoxColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntityTable.checkboxColumn.tooltip")); //$NON-NLS-1$
 		addCheckStateChangedListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -125,7 +126,7 @@ extends AbstractTableComposite<Map.Entry<Entity, Boolean>>
 				entry.setValue(checked);
 				dirtyStateManager.markDirty();
 				if (logger.isDebugEnabled()) {
-					logger.debug("setValue "+checked+" for entity "+entry.getKey());
+					logger.debug("setValue "+checked+" for entity "+entry.getKey()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		});		

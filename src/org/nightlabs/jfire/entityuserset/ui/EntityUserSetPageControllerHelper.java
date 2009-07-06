@@ -19,6 +19,7 @@ import org.nightlabs.jfire.entityuserset.EntityRef;
 import org.nightlabs.jfire.entityuserset.EntityUserSet;
 import org.nightlabs.jfire.entityuserset.dao.EntityUserSetDAO;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 import org.nightlabs.jfire.security.AuthorizedObject;
 import org.nightlabs.jfire.security.UserLocal;
 import org.nightlabs.jfire.security.UserSecurityGroup;
@@ -154,7 +155,7 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 
 	protected void checkLoaded() {
 		if (!loaded) {
-			throw new IllegalStateException("The method load(EntityUserSetID, EntityUserSet<Entity>, ProgressMonitor) has not been called yet, first call this method before calling other methods.");
+			throw new IllegalStateException("The method load(EntityUserSetID, EntityUserSet<Entity>, ProgressMonitor) has not been called yet, first call this method before calling other methods."); //$NON-NLS-1$
 		}
 	}
 
@@ -224,7 +225,7 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 	 */
 	public void load(EntityUserSetID entityUserSetID, EntityUserSet<Entity> newEntityUserSet, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Loading EntityUserSet", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetPageControllerHelper.task.loadEntityUserSet"), 100); //$NON-NLS-1$
 		try {
 			authorizedObjects = new HashMap<AuthorizedObject, Boolean>();
 			authorizedObjectIDToEntities = new HashMap<AuthorizedObjectID, Map<Entity,Boolean>>();
@@ -326,7 +327,7 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 //			throw new IllegalStateException("entityUserSet is null, this should never happen!");
 //		}
 
-		monitor.beginTask("Saving EntityUserSet", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetPageControllerHelper.task.saveEntityUserSet"), 100); //$NON-NLS-1$
 		try {
 			if (entityUserSet != null) {
 				Collection<AuthorizedObjectID> oldEntityUserSetAuthorizedObjectIDs = new HashSet<AuthorizedObjectID>(

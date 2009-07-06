@@ -30,6 +30,7 @@ import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorizedObjectTableViewer;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 import org.nightlabs.jfire.security.AuthorizedObject;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.UserLocal;
@@ -47,8 +48,8 @@ implements ISelectionProvider
 	{
 		public SelectAllAction() {
 			super();
-			setText("Select All");
-			setToolTipText("Check all elements");
+			setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AuthorizedObjectSection.action.selectAll.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AuthorizedObjectSection.action.selectAll.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), SelectAllAction.class));
 		}
 		
@@ -66,8 +67,8 @@ implements ISelectionProvider
 	{
 		public DeselectAllAction() {
 			super();
-			setText("Deselect All");
-			setToolTipText("Uncheck all elements");
+			setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AuthorizedObjectSection.action.deselectAll.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AuthorizedObjectSection.action.deselectAll.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeselectAllAction.class));
 		}
 		
@@ -95,7 +96,7 @@ implements ISelectionProvider
 	public AuthorizedObjectSection(IFormPage page, Composite parent) 
 	{
 		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED, 
-				"Authorized Objects");
+				Messages.getString("org.nightlabs.jfire.entityuserset.ui.AuthorizedObjectSection.title")); //$NON-NLS-1$
 		
 		authorizedObjectTable = new AuthorizedObjectTableViewer(getContainer(), this,
 				AbstractTableComposite.DEFAULT_STYLE_SINGLE | XComposite.getBorderStyle(getContainer()));

@@ -3,6 +3,7 @@ package org.nightlabs.jfire.entityuserset.ui;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.entityuserset.EntityUserSet;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -25,7 +26,7 @@ extends DynamicPathWizard
 		super();
 		this.entityUserSetID = entityUserSetID;
 		this.entityUserSetPageControllerHelper = entityUserSetPageControllerHelper;
-		setWindowTitle(String.format("Assign %s", entityUserSetPageControllerHelper.getEntityUserSetName()));
+		setWindowTitle(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AssignEntityUserSetWizard.window.title"), entityUserSetPageControllerHelper.getEntityUserSetName())); //$NON-NLS-1$
 	}
 
 	@Override

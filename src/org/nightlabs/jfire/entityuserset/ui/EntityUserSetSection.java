@@ -26,6 +26,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
@@ -43,20 +44,20 @@ extends ToolBarSectionPart
 
 	public EntityUserSetSection(IFormPage page, Composite parent) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, 
-				"EntityUserSet Details");
+				Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.title")); //$NON-NLS-1$
 		((GridData)getSection().getLayoutData()).grabExcessVerticalSpace = false;
 
 		Composite wrapper = new XComposite(getContainer(), SWT.NONE);
 		wrapper.setLayout(new GridLayout(2, false));
 
 		nameLabel = new Label(wrapper, SWT.NONE);
-		nameLabel.setText("Name");
+		nameLabel.setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.label.name")); //$NON-NLS-1$
 		name = new I18nTextEditor(wrapper);
 		name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		name.addModifyListener(markDirtyModifyListener);
 
 		descriptionLabel = new Label(wrapper, SWT.NONE);
-		descriptionLabel.setText("Description");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.label.description")); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		descriptionLabel.setLayoutData(gd);
@@ -89,10 +90,10 @@ extends ToolBarSectionPart
 	
 	private Action assignEntityUserSetAction = new Action() {
 		{
-			setText("Assign");
-			setToolTipText("Assign");
+			setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.action.assign.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.action.assign.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), 
-					EntityUserSetSection.class, "Assign", ImageFormat.gif));
+					EntityUserSetSection.class, "Assign", ImageFormat.gif)); //$NON-NLS-1$
 		}
 
 		@Override
@@ -106,7 +107,7 @@ extends ToolBarSectionPart
 			);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), assignEntityUserSetWizard);
 			if (dialog.open() == Dialog.OK) {
-				Job job = new Job(String.format("Loading %s", entityUserSetPageControllerHelper.getEntityUserSetName())) {
+				Job job = new Job(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.job.loading"), entityUserSetPageControllerHelper.getEntityUserSetName())) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
 						entityUserSetPageControllerHelper.load(
@@ -136,7 +137,7 @@ extends ToolBarSectionPart
 		public void run() {
 			final boolean oldEnabled = inheritAction.isEnabled();
 			inheritAction.setEnabled(false);
-			Job job = new Job(String.format("Loading %s", entityUserSetPageControllerHelper.getEntityUserSetName())) {
+			Job job = new Job(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.job.loading"), entityUserSetPageControllerHelper.getEntityUserSetName())) { //$NON-NLS-1$
 				@Override
 				protected org.eclipse.core.runtime.IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
 					try {
@@ -204,8 +205,8 @@ extends ToolBarSectionPart
 					inheritAction.setChecked(entityUserSetPageControllerHelper.isEntityUserSetInitiallyInherited());
 					
 					String name = entityUserSetPageControllerHelper.getEntityUserSetName();
-					assignEntityUserSetAction.setText(String.format("Assign %s", name));
-					assignEntityUserSetAction.setToolTipText(String.format("Assign %s", name));					
+					assignEntityUserSetAction.setText(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.action.assignEntityUserSet.text"), name)); //$NON-NLS-1$
+					assignEntityUserSetAction.setToolTipText(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.action.assignEntityUserSet.tooltip"), name));					 //$NON-NLS-1$
 				}
 			}
 		});
@@ -219,11 +220,11 @@ extends ToolBarSectionPart
 			name.setI18nText(null, EditMode.DIRECT);
 			description.setI18nText(null, EditMode.DIRECT);
 			if (entityUserSetPageControllerHelper == null) {
-				setMessage("Nothing selected");	
+				setMessage(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.message.nothingSelected"));	 //$NON-NLS-1$
 			}
 			else {
 				String name = entityUserSetPageControllerHelper.getEntityUserSetName();
-				setMessage(String.format("No %s assigned", name));	
+				setMessage(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.EntityUserSetSection.message.nothingAssigned"), name));	 //$NON-NLS-1$
 			}
 			setEnabled(false);
 		}

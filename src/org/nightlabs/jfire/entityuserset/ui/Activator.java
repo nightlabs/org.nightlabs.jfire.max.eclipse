@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.entityuserset.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -9,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.entityuserset.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.entityuserset.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

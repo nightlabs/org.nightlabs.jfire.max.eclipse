@@ -9,6 +9,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 import org.nightlabs.jfire.security.AuthorizedObject;
 
 /**
@@ -22,8 +23,8 @@ extends ToolBarSectionPart
 	{
 		public SelectAllAction() {
 			super();
-			setText("Select All");
-			setToolTipText("Check all elements");
+			setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntitySection.action.selectAll.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntitySection.action.selectAll.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), SelectAllAction.class));
 		}
 		
@@ -41,8 +42,8 @@ extends ToolBarSectionPart
 	{
 		public DeselectAllAction() {
 			super();
-			setText("Deselect All");
-			setToolTipText("Uncheck all elements");
+			setText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntitySection.action.deselectAll.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntitySection.action.deselectAll.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeselectAllAction.class));
 		}
 		

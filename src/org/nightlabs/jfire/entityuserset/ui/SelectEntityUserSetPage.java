@@ -38,6 +38,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.entityuserset.EntityUserSet;
 import org.nightlabs.jfire.entityuserset.dao.EntityUserSetDAO;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
+import org.nightlabs.jfire.entityuserset.ui.resource.Messages;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -82,7 +83,7 @@ extends WizardHopPage
 			EntityUserSetID entityUserSetID,
 			EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper)
 	{
-		super(SelectEntityUserSetPage.class.getName(), "Select "+entityUserSetPageControllerHelper.getEntityUserSetName());
+		super(SelectEntityUserSetPage.class.getName(), Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.title")+entityUserSetPageControllerHelper.getEntityUserSetName()); //$NON-NLS-1$
 		this.entityUserSetName = entityUserSetPageControllerHelper.getEntityUserSetName();
 		this.entityUserSetID = entityUserSetID;
 		this.entityUserSetPageControllerHelper = entityUserSetPageControllerHelper;
@@ -91,7 +92,7 @@ extends WizardHopPage
 
 	private void setInheritedEntityUserSetName(String entityUserSetName)
 	{
-		radioButtonInherit.setText(String.format(("Inherit %s (%s)"), this.entityUserSetName, entityUserSetName));
+		radioButtonInherit.setText(String.format((Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.button.inherit.text")), this.entityUserSetName, entityUserSetName)); //$NON-NLS-1$
 	}
 
 	@Override
@@ -108,12 +109,12 @@ extends WizardHopPage
 					setAction(Action.inherit);
 				}
 			});
-			setInheritedEntityUserSetName("Loading");
+			setInheritedEntityUserSetName(Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.loading")); //$NON-NLS-1$
 		}
 
 		radioButtonNone = new Button(page, SWT.RADIO);
 		radioButtonNone.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		radioButtonNone.setText(String.format("Do not assign %s", entityUserSetName));
+		radioButtonNone.setText(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.button.none.text"), entityUserSetName)); //$NON-NLS-1$
 		radioButtonNone.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -124,7 +125,7 @@ extends WizardHopPage
 		radioButtonCreate = new Button(page, SWT.RADIO);
 		radioButtonCreate.setEnabled(false); // enabling this when the AuthorityType has been loaded.
 		radioButtonCreate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		radioButtonCreate.setText(String.format("Create new %s", entityUserSetName));
+		radioButtonCreate.setText(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.button.create.text"), entityUserSetName)); //$NON-NLS-1$
 		radioButtonCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -161,7 +162,7 @@ extends WizardHopPage
 
 		radioButtonSelect = new Button(page, SWT.RADIO);
 		radioButtonSelect.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		radioButtonSelect.setText(String.format("Select %s", entityUserSetName));
+		radioButtonSelect.setText(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.button.select.text"), entityUserSetName)); //$NON-NLS-1$
 		radioButtonSelect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -185,14 +186,14 @@ extends WizardHopPage
 		});
 
 		EntityUserSet<Entity> dummy = entityUserSetPageControllerHelper.createEntityUserSet();
-		dummy.getName().setText(NLLocale.getDefault().getLanguage(), "Loading");
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.dummy.loading.name")); //$NON-NLS-1$
 		entityUserSetList.addElement(dummy);
 
-		Job loadJob = new Job(String.format("Loading %s", entityUserSetName)) {
+		Job loadJob = new Job(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.job.loadEntityUserSet"), entityUserSetName)) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				monitor.beginTask(String.format("Loading %s", entityUserSetName), 100);
+				monitor.beginTask(String.format(Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.tas.loadEntityUserSet"), entityUserSetName), 100); //$NON-NLS-1$
 
 				if (inheritedEntityUserSetResolver == null) {
 					inheritedEntityUserSet = null;
@@ -241,7 +242,7 @@ extends WizardHopPage
 							return;
 
 						if (inheritedEntityUserSetResolver != null)
-							setInheritedEntityUserSetName(inheritedEntityUserSet == null ? "None Assigned" : inheritedEntityUserSet.getName().getText());
+							setInheritedEntityUserSetName(inheritedEntityUserSet == null ? Messages.getString("org.nightlabs.jfire.entityuserset.ui.SelectEntityUserSetPage.label.noneAssigned") : inheritedEntityUserSet.getName().getText()); //$NON-NLS-1$
 
 						radioButtonCreate.setEnabled(true); // now we have the authorityType and thus can enable this.
 
