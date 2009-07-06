@@ -19,6 +19,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleTableProvider
 import org.nightlabs.jfire.voucher.store.Voucher;
 import org.nightlabs.jfire.voucher.store.VoucherKey;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.jfire.voucher.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.tableprovider.ui.TableProvider;
 
@@ -29,9 +30,9 @@ import org.nightlabs.tableprovider.ui.TableProvider;
 public class ArticleTableProvider
 implements TableProvider<ArticleID, Article>
 {
-	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName";
-	public static final String TYPE_VOUCHER_KEY = "Key";
-	public static final String TYPE_VOUCHER_VALIDTITY = "Validity";
+	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName"; //$NON-NLS-1$
+	public static final String TYPE_VOUCHER_KEY = "Key"; //$NON-NLS-1$
+	public static final String TYPE_VOUCHER_VALIDTITY = "Validity"; //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.tableprovider.ui.TableProvider#getObjects(java.util.Collection, org.nightlabs.progress.ProgressMonitor)
@@ -99,7 +100,7 @@ implements TableProvider<ArticleID, Article>
 				}
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -109,13 +110,13 @@ implements TableProvider<ArticleID, Article>
 	public String getTypeName(String type)
 	{
 		if (type.equals(TYPE_PRODUCT_TYPE_NAME)) {
-			return "ProductType Name";
+			return Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTableProvider.column.productTypeName"); //$NON-NLS-1$
 		}
 		else if (type.equals(TYPE_VOUCHER_KEY)) {
-			return "Key";
+			return Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTableProvider.column.key"); //$NON-NLS-1$
 		}
 		else if (type.equals(TYPE_VOUCHER_VALIDTITY)) {
-			return "Validity";
+			return Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTableProvider.column.validity"); //$NON-NLS-1$
 		}
 
 		return type;

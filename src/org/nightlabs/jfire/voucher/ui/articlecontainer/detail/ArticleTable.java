@@ -329,7 +329,7 @@ implements ISelectionProvider
 							new int[]{80, 40, 40, -1, -1, -1, -1, -1, -1, 30},
 							new int[]{-1, -1, -1, 22, 22, 22, 22, 22, 22, -1}));
 		else
-			throw new UnsupportedOperationException("Unknown ArticleContainer!");
+			throw new UnsupportedOperationException("Unknown ArticleContainer!"); //$NON-NLS-1$
 	}
 
 	@Override
