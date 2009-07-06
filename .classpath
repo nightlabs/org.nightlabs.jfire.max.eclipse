@@ -9,5 +9,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFirePersonRelation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireIssueTracking"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFirePersonRelationIssueTracking"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
