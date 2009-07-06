@@ -75,15 +75,15 @@ extends AbstractIssueAction
 			Issue issueToBeDeleted = issueTable.getElementByID(issueID);
 			boolean result = MessageDialog.openConfirm(
 					getActivePart().getSite().getShell(),
-					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"),
-					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text")
-					+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + ") "
-					+ "\"" + issueToBeDeleted.getSubject().getText() + "\""
+					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"), //$NON-NLS-1$
+					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text") //$NON-NLS-1$
+					+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + ") " //$NON-NLS-1$ //$NON-NLS-2$
+					+ "\"" + issueToBeDeleted.getSubject().getText() + "\"" //$NON-NLS-1$ //$NON-NLS-2$
 					+ "?"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			if (result) {
 				final IssueID issueIDToDelete = issueID;
-				Job deleteIssueJob = new Job("Deleting issue with ID: " + issueIDToDelete) {
+				Job deleteIssueJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.job.deleteIssue") + issueIDToDelete) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
 						IssueDAO.sharedInstance().deleteIssue(issueIDToDelete, monitor); // new SubProgressMonitor(monitor, 50));

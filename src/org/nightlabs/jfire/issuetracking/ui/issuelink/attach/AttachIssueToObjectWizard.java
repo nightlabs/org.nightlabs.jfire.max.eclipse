@@ -96,7 +96,7 @@ extends DynamicPathWizard
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException
 				{
-					_monitor.beginTask("Create Issue Link", 100);
+					_monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard.task.createIssueLink"), 100); //$NON-NLS-1$
 					//Issue Link Type
 					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 
@@ -145,8 +145,8 @@ extends DynamicPathWizard
 								// display message and close dialog
 								MessageDialog.openError(
 										getShell(),
-										"Same issue link already existing",
-										"There exists already an issue link with the same issue and issue link type");
+										Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard.dialog.duplicateLink.title"), //$NON-NLS-1$
+										Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard.dialog.duplicateLink.message")); //$NON-NLS-1$
 								result[0] = true;
 								return;
 							}

@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -69,7 +70,7 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 		@Override
 		public void notify(final NotificationEvent event) {
 			final ProgressMonitor monitor = getProgressMonitor();
-			monitor.beginTask("Updating issues...", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer.task.updatingIssues"), 100); //$NON-NLS-1$
 			try {
 				if (previousSavedQuery != null && !getComposite().isDisposed()) {
 					getComposite().getDisplay().asyncExec(new Runnable() {
