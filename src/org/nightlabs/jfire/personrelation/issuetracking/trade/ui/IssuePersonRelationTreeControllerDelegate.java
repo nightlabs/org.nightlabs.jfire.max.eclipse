@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -232,6 +233,7 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 			}
 		}
 
+		Collection<Object> result = null;
 		Set<IssueID> issueDescriptionIssueIDs = null;
 		Set<IssueCommentID> issueCommentIDs = null;
 		Set<IssueLinkID> issueLinkIDs = null;
@@ -263,22 +265,35 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 			}
 		}
 
-		if (issueLinkIDs != null)
-			return IssueLinkDAO.sharedInstance().getIssueLinks(issueLinkIDs, FETCH_GROUPS_ISSUE_LINK, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		if (issueLinkIDs != null) {
+			if (result == null)
+				result = new LinkedList<Object>();
 
-		if (issueCommentIDs != null)
-			return IssueCommentDAO.sharedInstance().getIssueComments(issueCommentIDs, FETCH_GROUPS_ISSUE_COMMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-
-		if (issueDescriptionIssueIDs != null) {
-			List<Issue> issues = IssueDAO.sharedInstance().getIssues(issueDescriptionIssueIDs, FETCH_GROUPS_ISSUE_DESCRIPTION_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			List<IssueDescription> issueDescriptions = new ArrayList<IssueDescription>(issues.size());
-			for (Issue issue : issues) {
-				issueDescriptions.add(issue.getDescription());
-			}
-			return issueDescriptions;
+			result.addAll(
+					IssueLinkDAO.sharedInstance().getIssueLinks(issueLinkIDs, FETCH_GROUPS_ISSUE_LINK, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor)
+			);
 		}
 
-		return null;
+		if (issueCommentIDs != null) {
+			if (result == null)
+				result = new LinkedList<Object>();
+
+			result.addAll(
+					IssueCommentDAO.sharedInstance().getIssueComments(issueCommentIDs, FETCH_GROUPS_ISSUE_COMMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor)
+			);
+		}
+
+		if (issueDescriptionIssueIDs != null) {
+			if (result == null)
+				result = new LinkedList<Object>();
+
+			List<Issue> issues = IssueDAO.sharedInstance().getIssues(issueDescriptionIssueIDs, FETCH_GROUPS_ISSUE_DESCRIPTION_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			for (Issue issue : issues) {
+				result.add(issue.getDescription());
+			}
+		}
+
+		return result;
 	}
 
 	@Override

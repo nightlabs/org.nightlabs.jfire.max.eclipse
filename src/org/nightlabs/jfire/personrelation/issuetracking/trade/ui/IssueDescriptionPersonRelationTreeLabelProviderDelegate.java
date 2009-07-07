@@ -30,8 +30,13 @@ public class IssueDescriptionPersonRelationTreeLabelProviderDelegate extends Per
 
 	@Override
 	public String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
-		if (jdoObject == null)
-			return null;
+		if (jdoObject == null) {
+			if (spanColIndex != 0)
+				return null;
+
+			IssueDescriptionID issueDescriptionID = (IssueDescriptionID) jdoObjectID;
+			return issueDescriptionID.organisationID + '/' + issueDescriptionID.issueID;
+		}
 
 		IssueDescription issueDescription = (IssueDescription) jdoObject;
 		switch (spanColIndex) {

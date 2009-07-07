@@ -27,8 +27,13 @@ public class IssueCommentPersonRelationTreeLabelProviderDelegate extends PersonR
 
 	@Override
 	public String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
-		if (jdoObject == null)
-			return null;
+		if (jdoObject == null) {
+			if (spanColIndex != 0)
+				return null;
+
+			IssueCommentID issueCommentID = (IssueCommentID) jdoObjectID;
+			return issueCommentID.organisationID + '/' + issueCommentID.commentID;
+		}
 
 		IssueComment issueComment = (IssueComment) jdoObject;
 		switch (spanColIndex) {
