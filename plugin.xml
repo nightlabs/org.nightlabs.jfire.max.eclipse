@@ -29,6 +29,24 @@
                 id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreatePersonRelationAction"
                 label=""
                 style="push" toolbarPath="additions" tooltip="Create a new person relation"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentAction"
+                icon="icons/CreateIssueCommentAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentAction"
+                label=""
+                style="push" toolbarPath="additions" tooltip="Create a new issue comment"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction"
+                icon="icons/CreateIssueAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction"
+                label=""
+                style="push" toolbarPath="additions" tooltip="Create a new issue"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction"
+                icon="icons/CreateOrLinkIssueAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction"
+                label=""
+                style="push" toolbarPath="additions" tooltip="Link an existing issue or create a new one."/>
         </viewContribution>
    </extension>
 </plugin>

@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
+import org.eclipse.swt.graphics.Image;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.id.IssueDescriptionID;
@@ -43,6 +45,15 @@ public class IssueDescriptionPersonRelationTreeLabelProviderDelegate extends Per
 			case 0:
 				return issueDescription.getText(languageID);
 		}
+		return null;
+	}
+
+	@Override
+	public Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
+		if (spanColIndex == 0) {
+			return SharedImages.getSharedImage(Activator.getDefault(), IssueDescriptionPersonRelationTreeLabelProviderDelegate.class);
+		}
+
 		return null;
 	}
 

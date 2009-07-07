@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
+import org.eclipse.swt.graphics.Image;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
@@ -62,4 +64,23 @@ public class IssueLinkPersonRelationTreeLabelProviderDelegate extends PersonRela
 		return null;
 	}
 
+	@Override
+	public Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
+		if (spanColIndex == 0) {
+			return SharedImages.getSharedImage(Activator.getDefault(), IssueLinkPersonRelationTreeLabelProviderDelegate.class);
+		}
+
+		return null;
+	}
+
+	@Override
+	public void clear() {
+		super.clear();
+	}
+
+	@Override
+	public void onDispose() {
+		clear();
+		super.onDispose();
+	}
 }
