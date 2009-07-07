@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
@@ -31,6 +32,8 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class PersonRelationTreeController
 extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNode>
 {
+	private static final Logger logger = Logger.getLogger(PersonRelationTreeController.class);
+
 	public static final String[] FETCH_GROUPS_PERSON = {
 		FetchPlan.DEFAULT, // we only need the display-name, hence this should be sufficient
 	};
@@ -244,6 +247,14 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				}
 			}
 
+			if (logger.isDebugEnabled()) {
+				logger.debug("retrieveJDOObjects: objectIDs.size=" + objectIDs.size() + " result.size=" + result.size());
+				if (logger.isTraceEnabled()) {
+					for (Object object : result) {
+						logger.trace("retrieveJDOObjects:   * " + object);
+					}
+				}
+			}
 
 			return result;
 		} finally {

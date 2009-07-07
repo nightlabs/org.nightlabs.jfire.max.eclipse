@@ -2,8 +2,11 @@ package org.nightlabs.jfire.personrelation.ui;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -18,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
@@ -32,6 +36,8 @@ import org.nightlabs.util.NLLocale;
 
 public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTreeNode>
 {
+	private static final Logger logger = Logger.getLogger(PersonRelationTree.class);
+
 	private Collection<PropertySetID> personIDs;
 
 	protected static class PersonRelationTreeContentProvider
@@ -48,10 +54,23 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		Class<?> objectClass = delegate.getJDOObjectClass();
 		jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.put(objectIDClass, delegate);
 		jdoObjectClass2PersonRelationTreeLabelProviderDelegate.put(objectClass, delegate);
+
+		if (logger.isTraceEnabled())
+			logger.trace("addPersonRelationTreeLabelProviderDelegate: added " + delegate + " for objectClass " + (objectClass == null ? null : objectClass.getName()) + " and objectIDClass " + (objectIDClass == null ? null : objectIDClass.getName()));
+	}
+
+	protected Set<PersonRelationTreeLabelProviderDelegate> getAllPersonRelationTreeLabelProviderDelegates()
+	{
+		Set<PersonRelationTreeLabelProviderDelegate> result = new HashSet<PersonRelationTreeLabelProviderDelegate>();
+		result.addAll(jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.values());
+		result.addAll(jdoObjectClass2PersonRelationTreeLabelProviderDelegate.values());
+		return result;
 	}
 
 	protected class PersonRelationTreeLabelProvider extends ColumnSpanLabelProvider
 	{
+		private final Logger logger = Logger.getLogger(PersonRelationTreeLabelProvider.class);
+
 		public PersonRelationTreeLabelProvider(ColumnViewer columnViewer) {
 			super(columnViewer);
 		}
@@ -173,16 +192,29 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		@Override
 		protected String getColumnText(Object element, int spanColIndex) {
-			if (element == null)
-				return null;
+			if (element == null) {
+				if (logger.isDebugEnabled())
+					logger.debug("getColumnText: element is null => returning null.");
 
-			if (!(element instanceof PersonRelationTreeNode))
+				return null;
+			}
+
+			if (!(element instanceof PersonRelationTreeNode)) {
+				if (logger.isDebugEnabled())
+					logger.debug("getColumnText: element is not a PersonRelationTreeNode (but a " + element.getClass().getName() + ") => returning element.toString().");
+
 				return String.valueOf(element);
+			}
 
 			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
 			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
-			return getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+
+			String result = getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+			if (logger.isDebugEnabled())
+				logger.debug("getColumnText: oid=" + jdoObjectID + " o=" +jdoObject+ " => returning: " + result);
+
+			return result;
 		}
 
 		@Override
@@ -200,6 +232,13 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		}
 
 		protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
+			if ((jdoObject instanceof PersonRelation) || (jdoObject instanceof Person)) {
+				if (spanColIndex == 0)
+					return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, jdoObject.getClass().getSimpleName());
+				else
+					return null;
+			}
+
 			if (jdoObject == null) {
 				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
 				if (delegate != null)
@@ -305,6 +344,9 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
+				for (PersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
+					delegate.onDispose();
+
 				personRelationTreeController.close();
 				personRelationTreeController = null;
 			}
@@ -347,6 +389,9 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		super.setInput(null);
 		this.personIDs = personIDs;
+		for (PersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
+			delegate.clear();
+
 		personRelationTreeController.setRootPersonIDs(personIDs);
 		super.setInput(personRelationTreeController);
 //		refresh(true);

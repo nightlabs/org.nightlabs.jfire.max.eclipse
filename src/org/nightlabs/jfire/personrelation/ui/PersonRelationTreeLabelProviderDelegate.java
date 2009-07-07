@@ -15,4 +15,7 @@ public abstract class PersonRelationTreeLabelProviderDelegate
 	public abstract String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex);
 
 	public abstract int[][] getJDOObjectColumnSpan(ObjectID jdoObjectID, Object jdoObject);
+
+	public void onDispose() { }
+	public void clear() { }
 }
