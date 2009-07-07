@@ -19,7 +19,6 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueCommentDAO;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
@@ -46,8 +45,8 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
 		IssueLink.FETCH_GROUP_ISSUE,
-		IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE,
-		IssueLinkType.FETCH_GROUP_NAME,
+//		IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE,
+//		IssueLinkType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_SUBJECT,
 	};
 

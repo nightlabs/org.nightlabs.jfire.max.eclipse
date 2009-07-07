@@ -84,11 +84,21 @@ public class CreateIssueAction implements IViewActionDelegate
 		}
 
 		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
-		if (node.getJdoObjectID() instanceof PropertySetID)
-			selectedPersonID = (PropertySetID) node.getJdoObjectID();
-		else if (node.getJdoObject() instanceof PersonRelation) {
-			PersonRelation pr = (PersonRelation) node.getJdoObject();
-			selectedPersonID = pr.getToID();
+		while (selectedPersonID == null && node != null) {
+			if (node.getJdoObjectID() instanceof PropertySetID) {
+				selectedPersonID = (PropertySetID) node.getJdoObjectID();
+				break;
+			}
+			else if (node.getJdoObject() instanceof PersonRelation) {
+				PersonRelation pr = (PersonRelation) node.getJdoObject();
+				selectedPersonID = pr.getToID();
+				break;
+			}
+//			else if (node.getJdoObjectID() instanceof IssueLinkID) {
+//				node = (PersonRelationTreeNode) node.getParent();
+//			}
+			else
+				break;
 		}
 		action.setEnabled(selectedPersonID != null);
 	}

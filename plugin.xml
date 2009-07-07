@@ -4,8 +4,8 @@
    <extension point="org.eclipse.ui.views">
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView"
-            icon="icons/editor/SysAdminEntityTreeView.16x16.png"
-            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView" name="Relations &amp;&amp; Issues"/>
+            icon="icons/PersonRelationIssueTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView" name="Relations &amp; Issues"/>
     </extension>
 	<extension point="org.eclipse.ui.perspectiveExtensions">
 		<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">   

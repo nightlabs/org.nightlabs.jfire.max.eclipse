@@ -30,7 +30,7 @@ public class IssueLinkPersonRelationTreeLabelProviderDelegate extends PersonRela
 		if (jdoObject == null)
 			return null;
 
-		return new int[][] { {0}, {1} };
+		return new int[][] { {0, 1} };
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class IssueLinkPersonRelationTreeLabelProviderDelegate extends PersonRela
 		IssueLink issueLink = (IssueLink) jdoObject;
 		switch (spanColIndex) {
 			case 0:
-				return issueLink.getIssueLinkType().getName().getText(languageID);
-			case 1:
+//				return issueLink.getIssueLinkType().getName().getText(languageID);
+//			case 1:
 			{
 				Issue issue = issueLink.getIssue();
 				StringBuilder sb = new StringBuilder();
