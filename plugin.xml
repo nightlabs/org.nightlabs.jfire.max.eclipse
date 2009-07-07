@@ -49,4 +49,13 @@
                 style="push" toolbarPath="additions" tooltip="Link an existing issue or create a new one."/>
         </viewContribution>
    </extension>
+ <extension
+       point="org.nightlabs.base.ui.removeExtension">
+    <removeExtension
+          attributeName="id"
+          attributePattern="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
+          elementPath="perspectiveExtension/view"
+          extensionPointID="org.eclipse.ui.perspectiveExtensions">
+    </removeExtension>
+ </extension>
 </plugin>

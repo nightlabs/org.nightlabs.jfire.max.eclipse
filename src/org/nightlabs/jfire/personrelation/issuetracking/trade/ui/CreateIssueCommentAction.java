@@ -14,13 +14,21 @@ import org.nightlabs.jfire.issue.id.IssueDescriptionID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 
-public class CreateIssueCommentAction implements IViewActionDelegate {
+public class CreateIssueCommentAction implements IViewActionDelegate
+{
+	private IViewPart view;
 
 	@Override
-	public void init(IViewPart view) { }
+	public void init(IViewPart view) {
+		this.view = view;
+	}
 
 	@Override
 	public void run(IAction action) {
+		if (selectedIssueID == null)
+			return;
+
+		new CreateIssueCommentDialog(view.getSite().getShell(), selectedIssueID).open();
 	}
 
 	private IssueID selectedIssueID;

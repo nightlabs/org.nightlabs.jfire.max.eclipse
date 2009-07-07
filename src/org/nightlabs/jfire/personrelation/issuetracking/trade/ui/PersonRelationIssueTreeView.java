@@ -25,6 +25,7 @@ import org.nightlabs.jfire.issue.id.IssueDescriptionID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -109,7 +110,7 @@ extends LSDViewPart
 		selectionProviderProxy.addRealSelectionProvider(personRelationTree);
 	}
 
-	private NotificationListener notificationListenerLegalEntitySelected = new NotificationAdapterJob("Selecting legal entity")
+	private NotificationListener notificationListenerLegalEntitySelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 	{
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
 			AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
