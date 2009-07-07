@@ -31,7 +31,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class CreateIssueWizard 
+public class CreateIssueWizard
 extends DynamicPathWizard
 implements INewWizard
 {
@@ -44,7 +44,7 @@ implements INewWizard
 	{
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard.title"));	 //$NON-NLS-1$
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
+		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 	}
 
 	/**
@@ -69,13 +69,13 @@ implements INewWizard
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 	};
-	
+
 	@Override
 	public boolean performFinish() {
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
-					
+
 					Issue issue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
 					try {
@@ -91,7 +91,7 @@ implements INewWizard
 		return true;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
@@ -99,5 +99,5 @@ implements INewWizard
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// do nothing
 	}
-	
+
 }
