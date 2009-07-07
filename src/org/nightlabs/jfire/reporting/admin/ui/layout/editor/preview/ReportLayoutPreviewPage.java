@@ -59,6 +59,7 @@ import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.reporting.Birt;
+import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.IJFireRemoteReportEditorInput;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
@@ -83,10 +84,10 @@ import org.nightlabs.util.NLLocale;
 /**
  * A page for the Report Designer that lets the user preview
  * his reports within the JFire server environment.
- * 
+ *
  * It uses an adapted {@link ReportViewer} to
  * view ReportLayouts.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -99,33 +100,33 @@ implements IReportEditorPage
 	 * Logger used by this class.
 	 */
 	private static final Logger logger = Logger.getLogger(ReportLayoutPreviewPage.class);
-	
+
 	public static final String ID_PAGE = ReportLayoutPreviewPage.class.getName();
-	
-	
+
+
 	private Object model;
-	
+
 	private IReportProvider provider;
-	
+
 	private XComposite wrapper;
 	private XComposite topWrapper;
 	private Button parameterButton;
-	
+
 	private BirtOutputCombo outputCombo;
 	private ComboComposite<Locale> localeCombo;
-	
+
 	private ReportViewer reportViewer;
-	
+
 	private boolean parameterAquisitionDone = false;
 	private Map<String, Object> reportParameters;
-	
-	
+
+
 	private int staleType;
 	private Control control;
 	private FormEditor editor;
-	
+
 	private int index;
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewEditor#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -139,7 +140,7 @@ implements IReportEditorPage
 		topWrapper.getGridLayout().makeColumnsEqualWidth = false;
 		topWrapper.getGridData().grabExcessVerticalSpace = false;
 		topWrapper.getGridData().verticalAlignment = SWT.TOP;
-		
+
 		parameterButton = new Button(topWrapper, SWT.PUSH);
 		parameterButton.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage.parameterButton.text")); //$NON-NLS-1$
 		parameterButton.addSelectionListener(new SelectionListener() {
@@ -160,7 +161,14 @@ implements IReportEditorPage
 		ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCase(ReportingAdminPlugin.REPORT_USECASE_PREVIEW);
 		ReportViewPrintConfigModule cfMod = ReportViewPrintConfigModule.sharedInstance();
 		UseCaseConfig useCaseConfig = cfMod.getReportUseCaseConfigs().get(useCase.getId());
-		outputCombo.setSelection(Birt.parseOutputFormat(useCaseConfig.getViewerFormat()));
+		// Added null check because no UseCaseConfig was registered for preview use case, and then pdf is selected (Daniel)
+		if (useCaseConfig != null) {
+			outputCombo.setSelection(Birt.parseOutputFormat(useCaseConfig.getViewerFormat()));
+		}
+		else {
+			outputCombo.setSelection(OutputFormat.pdf);
+		}
+
 		outputCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
@@ -177,8 +185,7 @@ implements IReportEditorPage
 				showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 			}
 		});
-		
-		
+
 		Label label2 = new Label(topWrapper, SWT.NONE);
 		label2.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage.localeLabel.text")); //$NON-NLS-1$
 		localeCombo = new ComboComposite<Locale>(topWrapper, SWT.READ_ONLY);
@@ -196,14 +203,14 @@ implements IReportEditorPage
 			}
 		});
 		localeCombo.getGridData().grabExcessVerticalSpace = false;
-		
+
 		Control[] children = parent.getChildren( );
 		if (children.length < 1)
 			throw new IllegalStateException("Can not create "+this.getClass().getSimpleName()+", super iplementation did not create the part control!"); //$NON-NLS-1$ //$NON-NLS-2$
 		control = children[children.length - 1];
 //		viewerWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getPartControl()
@@ -222,7 +229,7 @@ implements IReportEditorPage
 		this.editor = editor;
 	}
 
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.birt.report.designer.ui.editors.IReportEditorPage#onBroughtToTop(org.eclipse.birt.report.designer.ui.editors.IReportEditorPage)
@@ -236,7 +243,7 @@ implements IReportEditorPage
 				editor.editorDirtyStateChanged();
 			}
 		}
-		
+
 		if (getEditor() instanceof JFireReportEditor) {
 			IReportLayoutL10nManager l10nManager = ((JFireReportEditor)getEditor()).getReportLayoutL10nManager();
 			if (l10nManager != null) {
@@ -250,14 +257,14 @@ implements IReportEditorPage
 				}
 				if (!locales.contains(NLLocale.getDefault()))
 					locales.add(NLLocale.getDefault());
-				
+
 				localeCombo.addElements(locales);
 				if (selLocale == null)
 					selLocale = NLLocale.getDefault();
 				localeCombo.setSelection(selLocale);
 			}
 		}
-		
+
 		IEditorInput input = getEditorInput();
 		if (input instanceof IJFireRemoteReportEditorInput) {
 			IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) input;
@@ -276,8 +283,8 @@ implements IReportEditorPage
 		}
 		else
 			throw new RuntimeException("The editor is not associated with a JFire report layout!"); //$NON-NLS-1$
-		
-		
+
+
 	}
 
 	/*
@@ -333,7 +340,7 @@ implements IReportEditorPage
 		logger.debug("getIndex returning "+index); //$NON-NLS-1$
 		return index;
 	}
-	
+
 
 	/*
 	 * (non-Javadoc)
@@ -387,7 +394,7 @@ implements IReportEditorPage
 		logger.debug("setIndex "+index); //$NON-NLS-1$
 		this.index = index;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#setInput(org.eclipse.ui.IEditorInput)
@@ -403,7 +410,7 @@ implements IReportEditorPage
 	 * <p>
 	 * Returns the provider from the editor set in {@link #initialize(FormEditor)}
 	 * in order to share the provider with the other editor pages.
-	 * 
+	 *
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewEditor#getProvider()
 	 */
 	protected IReportProvider getProvider() {
@@ -419,9 +426,9 @@ implements IReportEditorPage
 
 		return provider;
 	}
-	
+
 	private ActionRegistry registry;
-	
+
 	@Override
 	public Object getAdapter( Class required )
 	{
@@ -433,20 +440,20 @@ implements IReportEditorPage
 		}
 		return super.getAdapter( required );
 	}
-	
+
 	public Object getModel() {
 		if (model == null)
 			model = getProvider().getReportModuleHandle(getEditorInput());
 		return model;
 	}
-	
+
 	protected boolean isDirtyModel() {
 		if (getModel() != null && getModel() instanceof ModuleHandle) {
 			return ((ModuleHandle) getModel()).needsSave();
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		IEditorInput input = getEditorInput();
@@ -478,11 +485,11 @@ implements IReportEditorPage
 		}
 		return provider;
 	}
-	
+
 	protected void setProvider(IReportProvider provider) {
 		this.provider = provider;
 	}
-	
+
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.setSite(site);
@@ -498,7 +505,7 @@ implements IReportEditorPage
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
-	
+
 	@Override
 	public void setFocus() {
 	}
@@ -511,7 +518,7 @@ implements IReportEditorPage
 			viewer.showReport(createRenderRequest(registryItemID, new HashMap<String, Object>()));
 		wrapper.layout(true, true);
 	}
-	
+
 	protected RenderReportRequest createRenderRequest(
 			ReportRegistryItemID registryItemID,
 			Map<String, Object> parameters
@@ -525,7 +532,7 @@ implements IReportEditorPage
 		renderRequest.setLocale(localeCombo.getSelectedElement());
 		return renderRequest;
 	}
-	
+
 	protected ReportViewer createReportViewer() {
 		if (reportViewer == null) {
 			ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCase(ReportingAdminPlugin.REPORT_USECASE_PREVIEW);
@@ -538,7 +545,7 @@ implements IReportEditorPage
 			if (!factory.isAdaptable(Composite.class))
 				throw new IllegalStateException("ReportViewerFactory associated with ReportPreviewUseCase is not adaptable to Composite!"); //$NON-NLS-1$
 			reportViewer = factory.createReportViewer();
-			
+
 			reportViewer.getAdapter(wrapper);
 		}
 		return reportViewer;
@@ -550,11 +557,11 @@ implements IReportEditorPage
 	protected boolean isParameterAquisitionDone() {
 		return parameterAquisitionDone;
 	}
-	
+
 	protected void setParameterAquisitionDone(boolean parameterAquisitionDone) {
 		this.parameterAquisitionDone = parameterAquisitionDone;
 	}
-	
+
 	/**
 	 * @return the reportParameters
 	 */
@@ -568,5 +575,5 @@ implements IReportEditorPage
 	protected void setReportParameters(Map<String, Object> reportParameters) {
 		this.reportParameters = reportParameters;
 	}
-	
+
 }
