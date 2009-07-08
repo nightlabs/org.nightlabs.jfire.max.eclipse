@@ -70,6 +70,7 @@ extends TableProviderTable<Article>
 		deliveryDateColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.ArticleDeliveryDateTable.column.deliverydate.name")); //$NON-NLS-1$
 
 		articleDeliveryDateCarrierEditingSupport = new ArticleDeliveryDateCarrierEditingSupport(tableViewer);
+		articleDeliveryDateCarrierEditingSupport.setArticleDeliveryDateCarriers(articleDeliveryDateCarriers);
 		TableViewerColumn tvc = new TableViewerColumn(tableViewer, deliveryDateColumn);
 		tvc.setEditingSupport(articleDeliveryDateCarrierEditingSupport);
 		tvc.setLabelProvider(new ColumnLabelProvider() {
