@@ -164,7 +164,7 @@
           point="org.nightlabs.tableprovider.ui">
        <tableprovider
              elementClass="org.nightlabs.jfire.trade.Article"
-             scopeClass="org.nightlabs.jfire.trade.ProductType"
+             scopeClass="org.nightlabs.jfire.store.ProductType"
              factoryClass="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTableProviderFactory">
        </tableprovider>
     </extension>   
