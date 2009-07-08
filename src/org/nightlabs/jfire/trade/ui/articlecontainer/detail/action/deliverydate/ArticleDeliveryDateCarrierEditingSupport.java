@@ -13,7 +13,6 @@ import org.nightlabs.base.ui.celleditor.DateTimeCellEditor;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.deliverydate.ArticleDeliveryDateCarrier;
 import org.nightlabs.jfire.trade.id.ArticleID;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -37,9 +36,11 @@ public class ArticleDeliveryDateCarrierEditingSupport extends EditingSupport
 
 	protected ArticleDeliveryDateCarrier getArticleDeliveryDateCarrier(Article article) {
 		ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
-		for (ArticleDeliveryDateCarrier articleDeliveryDateCarrier : articleDeliveryDateCarriers) {
-			if (articleDeliveryDateCarrier.getArticleID().equals(articleID)) {
-				return articleDeliveryDateCarrier;
+		if (articleDeliveryDateCarriers != null) {
+			for (ArticleDeliveryDateCarrier articleDeliveryDateCarrier : articleDeliveryDateCarriers) {
+				if (articleDeliveryDateCarrier.getArticleID().equals(articleID)) {
+					return articleDeliveryDateCarrier;
+				}
 			}
 		}
 		return null;
