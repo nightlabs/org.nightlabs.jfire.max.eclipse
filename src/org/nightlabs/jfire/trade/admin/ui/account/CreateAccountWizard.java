@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -36,6 +37,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
@@ -53,6 +55,9 @@ import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController;
+import org.nightlabs.jfire.trade.ui.account.editor.AccountEditor;
+import org.nightlabs.jfire.trade.ui.account.editor.AccountEditorInput;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
@@ -131,11 +136,14 @@ implements INewWizard
 									getCreateAccountEntryWizardPage().getCurrency());
 						}
 						((I18nTextBuffer)getCreateAccountEntryWizardPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
-						AccountDAO.sharedInstance().storeAccount(newAccount, false,
+						newAccount = AccountDAO.sharedInstance().storeAccount(newAccount, true,
 								AbstractAccountPageController.FETCH_GROUPS,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 150));
 						monitor.done();
+
+						Editor2PerspectiveRegistry.sharedInstance().openEditor(
+								new AccountEditorInput((AnchorID) JDOHelper.getObjectId(newAccount)), AccountEditor.EDITOR_ID);
 					} catch (Exception e) {
 						ExceptionHandlerRegistry.asyncHandleException(e);
 					}
