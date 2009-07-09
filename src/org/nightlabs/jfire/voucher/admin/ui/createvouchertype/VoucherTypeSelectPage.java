@@ -20,7 +20,7 @@ extends DynamicPathWizardPage
 {
 	private VoucherTypeTree voucherTypeTree;
 	private VoucherType selectedVoucherType;
-	
+
 	/**
 	 * @param pageName
 	 */
@@ -29,7 +29,7 @@ extends DynamicPathWizardPage
 		super(VoucherTypeSelectPage.class.getName(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.VoucherTypeSelectPage.title")); //$NON-NLS-1$
 		this.setDescription(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.VoucherTypeSelectPage.description")); //$NON-NLS-1$
 	}
- 
+
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -37,10 +37,10 @@ extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent)
 	{
 		final FadeableComposite page = new FadeableComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		XComposite comp = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite comp = new XComposite(page, page.getBorderStyle(), LayoutMode.TIGHT_WRAPPER);
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		comp.getGridLayout().numColumns = 2;
-		
+
 		voucherTypeTree = new VoucherTypeTree(comp);
 		voucherTypeTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -56,26 +56,26 @@ extends DynamicPathWizardPage
 	@Override
 	public boolean canFlipToNextPage() {
 		selectedVoucherType = voucherTypeTree.getFirstSelectedElement();
-		
+
 		if (selectedVoucherType != null && selectedVoucherType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_BRANCH ) {
 			CreateVoucherTypeNewWizard newWizard = (CreateVoucherTypeNewWizard)getWizard();
 			newWizard.setParentVoucherTypeID(selectedVoucherType.getObjectId());
-			
+
 			if (!isPageAdded) {
 				newWizard.addRemainingPages();
 				isPageAdded = true;
 			}
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean isPageComplete() {
 		return selectedVoucherType != null;
 	}
-	
+
 	@Override
 	public boolean canBeLastPage() {
 		return false;
