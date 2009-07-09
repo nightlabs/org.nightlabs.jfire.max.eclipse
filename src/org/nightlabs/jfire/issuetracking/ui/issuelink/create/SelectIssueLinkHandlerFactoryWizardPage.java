@@ -69,7 +69,7 @@ implements ISelectionProvider
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
-		treeViewer = new TreeViewer(mainComposite, SWT.NONE);
+		treeViewer = new TreeViewer(mainComposite, mainComposite.getBorderStyle());
 		treeViewer.setContentProvider(new IssueLinkCategoryContentProvider());
 		treeViewer.setLabelProvider(new IssueLinkCategoryLabelProvider());
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
