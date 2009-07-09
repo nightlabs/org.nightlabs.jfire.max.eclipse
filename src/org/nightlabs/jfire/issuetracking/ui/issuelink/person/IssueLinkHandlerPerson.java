@@ -32,12 +32,15 @@ extends AbstractIssueLinkHandler<PropertySetID, Person>
 {
 	@Override
 	public String getLinkedObjectName(IssueLink issueLink, Person linkedObject) {
-		DataField dataField = linkedObject.getPersistentDataFieldByIndex(PersonStruct.PERSONALDATA_NAME, 0);
-		return String.format(
-				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerPerson.linkedObjectName"), //$NON-NLS-1$
-				linkedObject.getOrganisationID()
-				+ '/' + linkedObject.getPropertySetID()
-				+ '/' + ((II18nTextDataField) dataField).getI18nText().getText()); // TODO there must be the subject and maybe some other data be shown
+		return linkedObject.getDisplayName();
+		
+		
+//		DataField dataField = linkedObject.getPersistentDataFieldByIndex(PersonStruct.PERSONALDATA_NAME, 0);
+//		return String.format(
+//				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerPerson.linkedObjectName"), //$NON-NLS-1$
+//				linkedObject.getOrganisationID()
+//				+ '/' + linkedObject.getPropertySetID()
+//				+ '/' + ((II18nTextDataField) dataField).getI18nText().getText()); // TODO there must be the subject and maybe some other data be shown
 	}
 
 	@Override
