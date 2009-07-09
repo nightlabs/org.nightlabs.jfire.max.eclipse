@@ -141,12 +141,12 @@ extends DynamicPathWizardPage
 		anchorIDText.setText(""); //$NON-NLS-1$
 		anchorIDText.setEnabled(false);
 		GridData anchorIDTextLData = new GridData(GridData.FILL_HORIZONTAL);
-		anchorIDTextLData.horizontalSpan = 3;
+		anchorIDTextLData.horizontalSpan = 2;
 		anchorIDText.setLayoutData(anchorIDTextLData);
 
-		accountNameEditor = new I18nTextEditor(wrapper);
+		accountNameEditor = new I18nTextEditor(wrapper, "Language");
 		GridData accountNameEditorGD = new GridData(GridData.FILL_HORIZONTAL);
-		accountNameEditorGD.horizontalSpan = 2;
+		accountNameEditorGD.horizontalSpan = 1;
 		accountNameEditor.setLayoutData(accountNameEditorGD);
 		accountNameEditor.setI18nText(new I18nTextBuffer());
 		accountNameEditor.addModifyListener(new ModifyListener() {
@@ -156,11 +156,11 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		comboOwner = new XComboComposite<String>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
-			Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.ownerCombo.caption")); //$NON-NLS-1$
-
-		comboOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboOwner.setEnabled(false);
+//		comboOwner = new XComboComposite<String>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
+//			Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.ownerCombo.caption")); //$NON-NLS-1$
+//
+//		comboOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		comboOwner.setEnabled(false);
 
 		comboCurrency = new XComboComposite<Currency>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.currencyCombo.caption"), new CurrencyLabelProvider()); //$NON-NLS-1$
@@ -181,7 +181,7 @@ extends DynamicPathWizardPage
 		accountTypeGroup = new Group(wrapper, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
-		gd.verticalAlignment = GridData.CENTER;
+//		gd.verticalAlignment = GridData.CENTER;
 		accountTypeGroup.setLayoutData(gd);
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 1;

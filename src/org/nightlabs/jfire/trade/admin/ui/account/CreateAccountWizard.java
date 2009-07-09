@@ -26,13 +26,18 @@
 
 package org.nightlabs.jfire.trade.admin.ui.account;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.base.ui.wizard.IDynamicPathWizardPage;
@@ -43,13 +48,12 @@ import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
-import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
-import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -92,42 +96,53 @@ implements INewWizard
 	@Override
 	public boolean performFinish()
 	{
-		Account newAccount = null;
-		// TODO async => Job!
 		try {
-			TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			OrganisationLegalEntity owner = tm.getOrganisationLegalEntity(Login.getLogin().getOrganisationID(), true, new String[] { FetchPlan.DEFAULT }, 1); // TODO make this nicer - e.g. by using a DAO and maybe restructuring this whole wizard
+			getContainer().run(false, false, new IRunnableWithProgress(){
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					try {
+						monitor.beginTask("Save Account", 200);
+						Account newAccount = null;
+						OrganisationLegalEntity owner = LegalEntityDAO.sharedInstance().getOrganisationLegalEntity(
+								Login.getLogin().getOrganisationID(), true, new String[] { FetchPlan.DEFAULT }, 1,
+								new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 50));
 
-			if (getCreateAccountEntryWizardPage().isCreateSummaryAccount()) {
-				AccountType accountType = AccountTypeDAO.sharedInstance().getAccountType(
-						AccountType.ACCOUNT_TYPE_ID_SUMMARY,
-						new String[] { FetchPlan.DEFAULT },
-						1, new NullProgressMonitor()
-				);
+						if (getCreateAccountEntryWizardPage().isCreateSummaryAccount()) {
+							AccountType accountType = AccountTypeDAO.sharedInstance().getAccountType(
+									AccountType.ACCOUNT_TYPE_ID_SUMMARY,
+									new String[] { FetchPlan.DEFAULT },
+									1,
+									new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 50)
+							);
 
-				newAccount = new SummaryAccount(
-						Login.getLogin().getOrganisationID(),
-						getCreateAccountEntryWizardPage().getAnchorID(),
-						accountType,
-						owner,
-						getCreateAccountEntryWizardPage().getCurrency());
-			}
-			else
-				newAccount = new Account(
-						Login.getLogin().getOrganisationID(),
-						getCreateAccountEntryWizardPage().getAnchorID(),
-						getCreateAccountEntryWizardPage().getAccountType(),
-						owner,
-						getCreateAccountEntryWizardPage().getCurrency());
-
-			((I18nTextBuffer)getCreateAccountEntryWizardPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
-			AccountDAO.sharedInstance().storeAccount(newAccount, false,
-					AbstractAccountPageController.FETCH_GROUPS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new NullProgressMonitor());
+							newAccount = new SummaryAccount(
+									Login.getLogin().getOrganisationID(),
+									getCreateAccountEntryWizardPage().getAnchorID(),
+									accountType,
+									owner,
+									getCreateAccountEntryWizardPage().getCurrency());
+						}
+						else {
+							newAccount = new Account(
+									Login.getLogin().getOrganisationID(),
+									getCreateAccountEntryWizardPage().getAnchorID(),
+									getCreateAccountEntryWizardPage().getAccountType(),
+									owner,
+									getCreateAccountEntryWizardPage().getCurrency());
+						}
+						((I18nTextBuffer)getCreateAccountEntryWizardPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
+						AccountDAO.sharedInstance().storeAccount(newAccount, false,
+								AbstractAccountPageController.FETCH_GROUPS,
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 150));
+						monitor.done();
+					} catch (Exception e) {
+						ExceptionHandlerRegistry.asyncHandleException(e);
+					}
+				}
+			});
 		} catch (Exception e) {
-			ExceptionHandlerRegistry.asyncHandleException(e);
-			return false;
+			throw new RuntimeException(e);
 		}
 		return true;
 	}
