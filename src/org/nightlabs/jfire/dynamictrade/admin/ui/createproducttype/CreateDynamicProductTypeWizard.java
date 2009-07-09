@@ -6,8 +6,8 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
@@ -107,7 +107,7 @@ extends DynamicPathWizard
 					public void run()
 					{
 						try {
-							RCPUtil.openEditor(
+							Editor2PerspectiveRegistry.sharedInstance().openEditor(
 									new DynamicProductTypeEditorInput(dynamicProductTypeID),
 									DynamicProductTypeEditor.EDITOR_ID);
 						} catch (Exception e) {
