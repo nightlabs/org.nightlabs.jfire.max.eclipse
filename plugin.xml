@@ -1115,6 +1115,10 @@
               editorID="org.nightlabs.jfire.trade.ui.reserve.ReservationEditor"
               perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
         </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
     </extension>
     <extension point="org.nightlabs.base.ui.workbenchListener">
         <workbenchListener class="org.nightlabs.jfire.trade.ui.QuickSaleWorkbenchListener"/>
