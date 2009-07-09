@@ -20,7 +20,7 @@ extends DynamicPathWizardPage
 {
 	private DynamicProductTypeTree dynamicProductTypeTree;
 	private DynamicProductType selectedProductType;
-	
+
 	/**
 	 * @param pageName
 	 */
@@ -29,7 +29,7 @@ extends DynamicPathWizardPage
 		super(DynamicProductTypeSelectPage.class.getName(), Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeSelectPage.title")); //$NON-NLS-1$
 		this.setDescription(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeSelectPage.description")); //$NON-NLS-1$
 	}
- 
+
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -37,10 +37,10 @@ extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent)
 	{
 		final FadeableComposite page = new FadeableComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		XComposite comp = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite comp = new XComposite(page, page.getBorderStyle(), LayoutMode.TIGHT_WRAPPER);
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		comp.getGridLayout().numColumns = 2;
-		
+
 		dynamicProductTypeTree = new DynamicProductTypeTree(comp);
 		dynamicProductTypeTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -56,26 +56,26 @@ extends DynamicPathWizardPage
 	@Override
 	public boolean canFlipToNextPage() {
 		selectedProductType = dynamicProductTypeTree.getFirstSelectedElement();
-		
+
 		if (selectedProductType != null && selectedProductType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_BRANCH) {
 			CreateDynamicProductTypeNewWizard newWizard = (CreateDynamicProductTypeNewWizard)getWizard();
 			newWizard.setParentProductTypeID(selectedProductType.getObjectId());
-			
+
 			if (!isPageAdded) {
 				newWizard.addRemainingPages();
 				isPageAdded = true;
 			}
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean isPageComplete() {
 		return selectedProductType != null;
 	}
-	
+
 	@Override
 	public boolean canBeLastPage() {
 		return false;
