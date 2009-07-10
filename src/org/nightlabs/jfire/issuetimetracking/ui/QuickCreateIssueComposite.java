@@ -37,6 +37,7 @@ import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetimetracking.IssueTimeTrackingStruct;
+import org.nightlabs.jfire.issuetimetracking.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.prop.IStruct;
@@ -73,7 +74,7 @@ extends XComposite
 		this.createIssueQuickDialog = createIssueQuickDialog;
 		
 		issueStructID = StructID.create(Organisation.DEV_ORGANISATION_ID, Issue.class, Struct.DEFAULT_SCOPE);
-		Job job = new Job("Loading issue struct................"){
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.loadingIssueStruct")){ //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				issueStruct = StructDAO.sharedInstance().getStruct(issueStructID,
@@ -113,7 +114,7 @@ extends XComposite
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComposite.setLayoutData(gridData);
 
-		new Label(projectComposite, SWT.NONE).setText("Project");
+		new Label(projectComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.projectLabel")); //$NON-NLS-1$
 
 		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
 		
@@ -132,7 +133,7 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		departmentComposite.setLayoutData(gridData);
 		
-		new Label(departmentComposite, SWT.NONE).setText("Department");
+		new Label(departmentComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.departmentLabel")); //$NON-NLS-1$
 		
 		departmentComboComposite = new DepartmentComboComposite(departmentComposite){
 			@Override
@@ -170,7 +171,7 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		dateComposite.setLayoutData(gridData);
 
-		new Label(dateComposite, SWT.NONE).setText("Start Date");
+		new Label(dateComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.startDateLabel")); //$NON-NLS-1$
 		startDateControl = new DateTimeControl(dateComposite, SWT.DATE, DateFormatter.FLAGS_DATE_SHORT);
 		startDateControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startDateControl);
@@ -180,7 +181,7 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		timeComposite.setLayoutData(gridData);
 
-		new Label(timeComposite, SWT.NONE).setText("Time");
+		new Label(timeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.timeLabel")); //$NON-NLS-1$
 		startTimeControl = new DateTimeControl(timeComposite, SWT.TIME, DateFormatter.FLAGS_TIME_HM, null);
 		startTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startTimeControl);
@@ -190,7 +191,7 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		durationComposite.setLayoutData(gridData);
 
-		new Label(durationComposite, SWT.NONE).setText("Duration (1h 1m)");
+		new Label(durationComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.durationLabel")); //$NON-NLS-1$
 		durationText = new TimeLengthComposite(durationComposite);
 		durationText.setDisplayZeroValues(false);
 		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -203,7 +204,7 @@ extends XComposite
 
 		Label subjectLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		subjectLabel.setLayoutData(new GridData());
-		subjectLabel.setText("Subject");
+		subjectLabel.setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.subjectLabel")); //$NON-NLS-1$
 
 		subjectText = new I18nTextEditor(subjectDescriptionComposite) {
 			@Override
@@ -217,14 +218,14 @@ extends XComposite
 		subjectText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				boolean hasSubjectText = !(subjectText.getI18nText().getText() != null && subjectText.getI18nText().getText().equals(""));
+				boolean hasSubjectText = !(subjectText.getI18nText().getText() != null && subjectText.getI18nText().getText().equals("")); //$NON-NLS-1$
 				createIssueQuickDialog.setOKButtonEnabled(hasSubjectText);
 			}
 		});
 		
 		Label descriptionLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
-		descriptionLabel.setText("Description");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.descriptionLabel")); //$NON-NLS-1$
 
 		descriptionText = new I18nTextEditorMultiLine(subjectDescriptionComposite, subjectText.getLanguageChooser());
 		descriptionText.setI18nText(newIssue.getDescription(), EditMode.DIRECT);

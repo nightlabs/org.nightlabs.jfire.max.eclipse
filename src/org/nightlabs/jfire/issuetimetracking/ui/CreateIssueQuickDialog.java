@@ -28,6 +28,7 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
+import org.nightlabs.jfire.issuetimetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -40,12 +41,12 @@ extends ResizableTitleAreaDialog
 		super(shell, null);
 	}
 
-	private static final String DEFAULT_MESSAGE = "Create a new Issue";
+	private static final String DEFAULT_MESSAGE = Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.message"); //$NON-NLS-1$
 	
 	private QuickCreateIssueComposite quickCreateComposite;
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("Create Issue");
+		setTitle(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.title")); //$NON-NLS-1$
 		setMessage(DEFAULT_MESSAGE);
 
 		Composite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER) {
@@ -66,7 +67,7 @@ extends ResizableTitleAreaDialog
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Title");
+		newShell.setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.dialogTitle")); //$NON-NLS-1$
 	}
 	
 	private static String[] FETCH_GROUP_ISSUE = new String[]{
@@ -88,7 +89,7 @@ extends ResizableTitleAreaDialog
 		newIssue = quickCreateComposite.getCreatingIssue();
 		getButton(OK).setEnabled(false);
 		try {
-			Job job = new Job("Setting the default values....") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.settingValueJob")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					String organisationID = Login.sharedInstance().getOrganisationID();
@@ -104,7 +105,7 @@ extends ResizableTitleAreaDialog
 						@Override
 						public void run() {
 							if (newIssue != null)
-								setMessage("New issue has been created. Please press cancel to close the dialog.");
+								setMessage(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.afterSavingMessage")); //$NON-NLS-1$
 							
 							Timer timer = new Timer();
 							TimerTask timerTask = new TimerTask(){

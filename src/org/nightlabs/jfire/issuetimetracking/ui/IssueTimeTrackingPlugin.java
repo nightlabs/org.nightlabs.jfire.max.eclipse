@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetimetracking.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.issuetimetracking.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -10,7 +11,7 @@ import org.osgi.framework.BundleContext;
 public class IssueTimeTrackingPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetimetracking.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetimetracking.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static IssueTimeTrackingPlugin plugin;
