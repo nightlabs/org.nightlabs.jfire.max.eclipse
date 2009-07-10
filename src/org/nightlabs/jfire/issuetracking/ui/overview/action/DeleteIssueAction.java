@@ -1,10 +1,12 @@
 package org.nightlabs.jfire.issuetracking.ui.overview.action;
 
+import java.util.Collection;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.ObjectIDUtil;
@@ -63,18 +65,29 @@ extends AbstractIssueAction
 
 	@Override
 	public void run() {
-		// It's possible that multiple Issues have been selected to be deleted.
-		for (IssueID issueID : getSelectedIssueIDs()) {
-			// Perform the delete only upon the confirmation from the UI.
-			// Erh... how the heck do I get access to the freaking table???
-			IWorkbenchPart part = getActivePart();
-			final IssueTable issueTable = ((IssueEntryListViewer) ((IssueEntryListEditor)part).getEntryViewer()).getIssueTable(); // <-- Uughhh :(
+		IWorkbenchPart part = getActivePart();
+		IssueTable issueTable = ((IssueEntryListViewer) ((IssueEntryListEditor)part).getEntryViewer()).getIssueTable(); // <-- Uughhh...
+		DeleteIssueAction.executeDeleteIssues(issueTable, getSelectedIssueIDs(), part.getSite().getShell());
+	}
 
-			// Won't it be more user-friendly if we ALSO show the Subject of the Issue to be deleted?
-			// i.e. Just the IssueID seem very rigid inside a User dialog. Kai.
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// ---[ The general routine for deleting selected Issues from the IssueTable ]--------------------------------------------------------|
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	/**
+	 * In most cases, the execution of the deletion of a Set of {@link Issue}, based on their {@link IssueID}s,
+	 * are directly corresponding to the {@link IssueTable} itself. Thus, given the parameters, we can execute
+	 * the deletion, with UI-interfaces.
+	 * @param issueTable the {@link IssueTable} from which the selected {@link Issue}s have been marked for deletion.
+	 * @param issueIDs the corresponding {@link IssueID}s of the selected {@link Issue} marked for deletion.
+	 */
+	public static void executeDeleteIssues(IssueTable issueTable, Collection<IssueID> issueIDs, Shell shell) {
+		for (IssueID issueID : issueIDs) {
+			// Retrieve useful information to display for the user, indicating the related Issue to be deleted.
 			Issue issueToBeDeleted = issueTable.getElementByID(issueID);
 			boolean result = MessageDialog.openConfirm(
-					getActivePart().getSite().getShell(),
+					shell,
 					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"), //$NON-NLS-1$
 					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text") //$NON-NLS-1$
 					+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + ") " //$NON-NLS-1$ //$NON-NLS-2$
@@ -86,24 +99,15 @@ extends AbstractIssueAction
 				Job deleteIssueJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.job.deleteIssue") + issueIDToDelete) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
-						IssueDAO.sharedInstance().deleteIssue(issueIDToDelete, monitor); // new SubProgressMonitor(monitor, 50));
-
-						// Shouldn't we refresh the table here? Otherwise, it makes no sense that any deletion has occured.
-						// i.e. At least remove the deleted entry from the UI.
-						// --> Alright, let's give it a try... Kai.
-						Display.getDefault().asyncExec(new Runnable() {
-							public void run() {
-								if (issueTable.removeElementByID(issueIDToDelete) != null)
-									issueTable.refresh();
-							}
-						});
-
+						IssueDAO.sharedInstance().deleteIssue(issueIDToDelete, monitor);
 						return Status.OK_STATUS;
 					}
 				};
 
 				deleteIssueJob.schedule();
 			}
+
 		}
 	}
+
 }

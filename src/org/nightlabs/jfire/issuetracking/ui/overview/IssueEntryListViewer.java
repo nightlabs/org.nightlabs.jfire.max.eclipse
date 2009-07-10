@@ -13,9 +13,11 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
@@ -26,6 +28,9 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.notification.NotificationEvent;
@@ -34,9 +39,11 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
+ * The view containing an {@link IssueTable}, listing all {@link Issue}s matching a given {@link IssueQuery}.
  *
  * @author Chairat Kongarayawetchakun
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
+ * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, IssueQuery> {
 	private QueryCollection<? extends IssueQuery> previousSavedQuery;
@@ -66,58 +73,10 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 			}
 		});
 
-
 		return issueTable;
 	}
 
 
-	@Override
-	public Composite createComposite(Composite parent) {
-		Composite resultComposite = super.createComposite(parent);
-
-		// Context-menu setup.
-		// Note: We can only setup the cont1ext-menu once the composite is created.
-//		createContextMenu(parent); <-- HERE!
-
-		return resultComposite;
-	}
-
-	private MenuManager menuMgr;
-	private DeleteIssueAction deleteIssueAction;
-	private EditIssueAction editIssueAction;
-
-	/**
-	 * Sets up the context menu to allow for the following operations:
-	 *   1. Edit selected Issue(s) --> Opens the Issue pages.
-	 *   2. Delete selected Issue(s) --> Invokes the delete dialogs.
-	 */
-	private void createContextMenu(Composite parent) {
-		menuMgr = getMenuManager(); // new MenuManager("#PopupMenu"); //$NON-NLS-1$
-		menuMgr.setRemoveAllWhenShown(true);
-
-		// Prepare the menu items.
-		editIssueAction = new EditIssueAction();
-		deleteIssueAction = new DeleteIssueAction();
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager m) {
-				menuMgr.add(editIssueAction);
-				menuMgr.add(deleteIssueAction);
-			}
-		});
-
-		// Create the menu and attach it to the IssueTable.
-		Menu menu = menuMgr.createContextMenu(issueTable);
-		issueTable.setMenu(menu);
-//		getSite().registerContextMenu(menuMgr, issueTable); // <-- How the heck to I do this here?? Is it necessary here??
-
-		// Define the behaviour of the menu items wrt the selections, or lack thereof, in the IssueTable.
-		issueTable.addSelectionChangedListener(new ISelectionChangedListener(){
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-//				handleRemoveAction();
-			}
-		});
-	}
 
 	/**
 	 * An implicit listener to handle the refreshing of the table's entry (or entries), in the case
@@ -147,6 +106,7 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 								if ( issueIDs.contains(dirtyObjectID.getObjectID()) ) {
 									issues = doSearch(previousSavedQuery, new SubProgressMonitor(monitor, 90));
 									issueTable.setInput(issues);
+									handleContextMenuItems();
 									break;
 								}
 							}
@@ -205,12 +165,73 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// ---[ Context-menu handling ]-------------------------------------------------------------------------------------------------------|
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	private MenuManager menuMgr;
+	private IssueEditAction editIssueAction;
+	private IssueDeleteAction deleteIssueAction;
+
+	/**
+	 * Sets up the context menu to allow for the following operations:
+	 *   1. Edit selected Issue(s) --> Opens the Issue pages.
+	 *   2. Delete selected Issue(s) --> Invokes the delete dialogs.
+	 */
+	private void createContextMenu() {
+		// Prepare the menu items.
+		editIssueAction = new IssueEditAction();
+		deleteIssueAction = new IssueDeleteAction();
+
+		// Relegate the menu-items to the menu-manager.
+		menuMgr = getMenuManager();
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager m) {
+				menuMgr.add(editIssueAction);
+				menuMgr.add(deleteIssueAction);
+			}
+		});
+
+		// Create the menu and attach it to the IssueTable.
+		Menu menu = menuMgr.createContextMenu(issueTable);
+		issueTable.setMenu(menu); // <-- Hmm... this seems enough? Do we need to do this: 'getSite().registerContextMenu(menuMgr, issueTable);'
+
+		// Define the behaviour of the menu items wrt the selections, or lack thereof, in the IssueTable.
+		issueTable.addSelectionChangedListener(new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) { handleContextMenuItems(); }
+		});
+	}
+
+	/**
+	 * Depending on what item(s) is(are) selected from the {@link IssueTable}, the context-menu item
+	 * should be correspondingly activated or deactivated.
+	 */
+	private void handleContextMenuItems() {
+		assert editIssueAction != null && deleteIssueAction != null;
+
+		// From the current behaviour, we can DELETE multiple Issues, but we can only EDIT one Issue.
+		int ctr = issueTable.getSelectionCount();
+		editIssueAction.setEnabled( ctr > 0 ); // OR should we also allow multiple Issues to be edited by opening multiple editors? Kai.
+		deleteIssueAction.setEnabled( ctr > 0 );
+	}
+
+	@Override
+	public Composite createComposite(Composite parent) {
+		// Note: We can only setup the context-menu once the composite is created.
+		//       And even then, we should check that the MenuManager in the super class is not null.
+		Composite resultComposite = super.createComposite(parent);
+		if (getMenuManager() != null) createContextMenu();
+		return resultComposite;
+	}
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
 	/**
 	 * Handles the action to remove the selected Issue(s).
 	 */
-	private class DeleteIssueAction extends Action {
-		public DeleteIssueAction() {
-			setId(DeleteIssueAction.class.getName());
+	private class IssueDeleteAction extends Action {
+		public IssueDeleteAction() {
+			setId(IssueDeleteAction.class.getName());
 			setImageDescriptor(SharedImages.DELETE_16x16);
 			setToolTipText("Delete selected Issue(s)");
 			setText("Delete selected Issue(s)");
@@ -218,17 +239,18 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 
 		@Override
 		public void run() {
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			DeleteIssueAction.executeDeleteIssues(issueTable, issueIDs, getComposite().getShell());
 		}
 	}
-
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
 	/**
 	 * Handles the action to edit the selected Issue(s).
 	 */
-	private class EditIssueAction extends Action {
-		public EditIssueAction() {
-			setId(EditIssueAction.class.getName());
+	private class IssueEditAction extends Action {
+		public IssueEditAction() {
+			setId(IssueEditAction.class.getName());
 			setImageDescriptor(SharedImages.EDIT_16x16);
 			setToolTipText("Edit selected Issue(s)");
 			setText("Edit selected Issue(s)");
@@ -236,8 +258,14 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 
 		@Override
 		public void run() {
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			for (IssueID issueID : issueIDs)
+				try {
+					RCPUtil.openEditor(new IssueEditorInput(issueID), IssueEditor.EDITOR_ID);
+				} catch (PartInitException e) {
+					throw new RuntimeException(e);
+				}
 		}
 	}
-
 
 }
