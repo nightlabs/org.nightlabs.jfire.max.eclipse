@@ -121,15 +121,23 @@
     </extension>
     <extension point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
         <issueLinkHandlerCategory
-            id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory" name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.name"/>
+              icon="icons/IssuePerspective.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
+              name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.name"/>
         <issueLinkHandlerFactory
-            categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue" name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue.name"/>
+              categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue"
+              icon="icons/issue/IssueLinkHandlerIssue-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue.name"/>
         <issueLinkHandlerCategory
-            id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person" name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person.name"/>
+              icon="icons/issuelink/person/IssueLinkHandlerPerson-LinkedObject.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
+              name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person.name"/>
         <issueLinkHandlerFactory
-            categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
-            class="org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson" name="%org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson.name"/>
+              categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
+              class="org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson"
+              icon="icons/issuelink/person/IssueLinkHandlerPerson-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.editor2perspective">
         <registry

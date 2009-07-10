@@ -67,6 +67,14 @@ implements IssueLinkHandlerFactory
 
 	}
 
+	public Image getImage() {
+		return null;
+	}
+	
+	public void setImage(Image image) {
+
+	}
+	
 	public void setInitializationData(IConfigurationElement arg0, String arg1,
 			Object arg2) throws CoreException {
 

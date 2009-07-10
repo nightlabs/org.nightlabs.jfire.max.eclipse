@@ -11,9 +11,10 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -23,6 +24,16 @@ public class IssueLinkHandlerFactoryRegistry
 extends AbstractEPProcessor
 {
 	protected static IssueLinkHandlerFactoryRegistry _sharedInstance = null;
+
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory"; //$NON-NLS-1$
+	public static final String ELEMENT_CATEGORY = "issueLinkHandlerCategory"; //$NON-NLS-1$
+	public static final String ELEMENT_FACTORY = "issueLinkHandlerFactory"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CATEGORY_ID = "categoryId"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PARENT_CATEGORY_ID = "parentCategoryId"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_NAME = "name"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ID = "id"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_ICON = "icon"; //$NON-NLS-1$
 	
 	public static synchronized IssueLinkHandlerFactoryRegistry sharedInstance()
 	throws EPProcessorException
@@ -99,19 +110,28 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element) 
 	throws Exception 
 	{
-		if (element.getName().equals("issueLinkHandlerFactory")) { //$NON-NLS-1$
+		if (element.getName().equals(ELEMENT_FACTORY)) { //$NON-NLS-1$
 			processIssueLinkHandlerFactory(extension, element);
-		} else if (element.getName().equals("issueLinkHandlerCategory")) { //$NON-NLS-1$
+		} else if (element.getName().equals(ELEMENT_CATEGORY)) { //$NON-NLS-1$
 			processIssueLinkHandlerCategory(extension, element);
 		}
 	}
 	
-	protected void processIssueLinkHandlerFactory(IExtension extension, IConfigurationElement element) throws Exception {
+	private void processIssueLinkHandlerFactory(IExtension extension, IConfigurationElement element) throws Exception {
 		try {
-			IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
-			String name = element.getAttribute("name"); //$NON-NLS-1$
+			IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) element.createExecutableExtension(ATTRIBUTE_CLASS); //$NON-NLS-1$
+			String name = element.getAttribute(ATTRIBUTE_NAME); //$NON-NLS-1$
+			String iconString = element.getAttribute(ATTRIBUTE_ICON);
 			
 			factory.setName(name);
+			
+			if (checkString(iconString)) {
+				ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
+						extension.getNamespaceIdentifier(), iconString);
+				if (imageDescriptor != null)
+					factory.setImage(imageDescriptor.createImage());
+			}
+			
 			addFactory(factory);
 			
 		} catch (Throwable t) {
@@ -119,11 +139,12 @@ extends AbstractEPProcessor
 		}		
 	}
 
-	protected void processIssueLinkHandlerCategory(IExtension extension, IConfigurationElement element) throws Exception {
-		String categoryId = element.getAttribute("id"); //$NON-NLS-1$
-		String name = element.getAttribute("name"); //$NON-NLS-1$
-		String parentCategoryId = element.getAttribute("parentCategoryId"); //$NON-NLS-1$
-
+	private void processIssueLinkHandlerCategory(IExtension extension, IConfigurationElement element) throws Exception {
+		String categoryId = element.getAttribute(ATTRIBUTE_ID); //$NON-NLS-1$
+		String name = element.getAttribute(ATTRIBUTE_NAME); //$NON-NLS-1$
+		String parentCategoryId = element.getAttribute(ATTRIBUTE_PARENT_CATEGORY_ID); //$NON-NLS-1$
+		String iconString = element.getAttribute(ATTRIBUTE_ICON);
+		
 		IssueLinkHandlerCategory category = new IssueLinkHandlerCategory();
 		category.setCategoryId(categoryId);
 		category.setName(name);
@@ -132,13 +153,19 @@ extends AbstractEPProcessor
 		}
 		category.setParentCategoryId(parentCategoryId);
 
+		if (checkString(iconString)) {
+			ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
+					extension.getNamespaceIdentifier(), iconString);
+			if (imageDescriptor != null)
+				category.setImage(imageDescriptor.createImage());
+		}
+		
 		List<IssueLinkHandlerCategory> cats = parentCategoryId2Categories.get(parentCategoryId);
 		if (cats == null) {
 			cats = new ArrayList<IssueLinkHandlerCategory>();
 			parentCategoryId2Categories.put(parentCategoryId, cats);
 		}
 		cats.add(category);
-
 	}
 	
 	@Override

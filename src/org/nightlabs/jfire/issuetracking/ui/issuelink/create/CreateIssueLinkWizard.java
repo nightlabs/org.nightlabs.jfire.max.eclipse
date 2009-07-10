@@ -51,10 +51,10 @@ extends DynamicPathWizard
 		selectIssueLinkHandlerFactoryPage.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				if (selectIssueLinkHandlerFactoryPage.getIssueLinkHandlerFactory() == null)
+				if (selectIssueLinkHandlerFactoryPage.getLinkHandlerFactoryTreeComposite().getIssueLinkHandlerFactory() == null)
 					issueLinkAdder = null;
 				else
-					issueLinkAdder = selectIssueLinkHandlerFactoryPage.getIssueLinkHandlerFactory().createIssueLinkAdder(issue);
+					issueLinkAdder = selectIssueLinkHandlerFactoryPage.getLinkHandlerFactoryTreeComposite().getIssueLinkHandlerFactory().createIssueLinkAdder(issue);
 
 				selectLinkedObjectPage.setIssueLinkAdder(issueLinkAdder);
 				selectIssueLinkTypePage.setIssueLinkAdder(issueLinkAdder);

@@ -1,32 +1,14 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink.create;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
-import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
-import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
@@ -37,26 +19,9 @@ public class SelectIssueLinkHandlerFactoryWizardPage
 extends DynamicPathWizardPage
 implements ISelectionProvider
 {
-	private TreeViewer treeViewer;
-
-	/**
-	 * The currently selected category or <code>null</code>. If a category is selected, the {@link #issueLinkHandlerFactory} is <code>null</code>,
-	 * if a factory is selected, this field is <code>null</code>. If nothing is selected, both fields are <code>null</code>.
-	 */
-	private IssueLinkHandlerCategory issueLinkHandlerCategory;
-
-	public IssueLinkHandlerCategory getIssueLinkHandlerCategory() {
-		return issueLinkHandlerCategory;
-	}
-
-	/**
-	 * The currently selected factory or <code>null</code>.
-	 * @see #issueLinkHandlerCategory
-	 */
-	private IssueLinkHandlerFactory<ObjectID, Object> issueLinkHandlerFactory;
-
-	public IssueLinkHandlerFactory<ObjectID, Object> getIssueLinkHandlerFactory() {
-		return issueLinkHandlerFactory;
+	private SelectIssueLinkHandlerFactoryTreeComposite linkHandlerFactoryTreeComposite;
+	public SelectIssueLinkHandlerFactoryTreeComposite getLinkHandlerFactoryTreeComposite() {
+		return linkHandlerFactoryTreeComposite;
 	}
 
 	public SelectIssueLinkHandlerFactoryWizardPage() {
@@ -69,56 +34,60 @@ implements ISelectionProvider
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
-		treeViewer = new TreeViewer(mainComposite, mainComposite.getBorderStyle());
-		treeViewer.setContentProvider(new IssueLinkCategoryContentProvider());
-		treeViewer.setLabelProvider(new IssueLinkCategoryLabelProvider());
-		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent e) {
-				Object firstElement = ((TreeSelection)e.getSelection()).getFirstElement();
-				if (firstElement instanceof IssueLinkHandlerFactory)
-					getContainer().showPage(getNextPage());
-				else
-					treeViewer.expandToLevel(firstElement, 1);
-			}
-		});
-
-		List<IssueLinkHandlerCategory> categoryItems = null;
-		try {
-			IssueLinkHandlerFactoryRegistry registry = IssueLinkHandlerFactoryRegistry.sharedInstance();
-			categoryItems = registry.getTopLevelCategories();
-		} catch (EPProcessorException e) {
-			throw new RuntimeException(e);
-		}
-
-		treeViewer.setInput(categoryItems);
-
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-
-		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
-			public void selectionChanged(SelectionChangedEvent e) {
-				Object firstElement = ((TreeSelection)e.getSelection()).getFirstElement();
-				issueLinkHandlerCategory = null;
-				issueLinkHandlerFactory = null;
-
-				if (firstElement instanceof IssueLinkHandlerCategory)
-					issueLinkHandlerCategory = (IssueLinkHandlerCategory) firstElement;
-				else if (firstElement instanceof IssueLinkHandlerFactory)
-					issueLinkHandlerFactory = (IssueLinkHandlerFactory<ObjectID, Object>) firstElement;
-
-				getContainer().updateButtons();
-
-				SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(SelectIssueLinkHandlerFactoryWizardPage.this, getSelection());
-				for (Object listener : selectionChangedListeners.getListeners())
-					((ISelectionChangedListener)listener).selectionChanged(selectionChangedEvent);
-			}
-		});
-
-		treeViewer.expandAll();	// Since, so far, we dont have that many items for linking; and they can all be comforably displayed in the tree. Kai.
+		linkHandlerFactoryTreeComposite = new SelectIssueLinkHandlerFactoryTreeComposite(mainComposite, mainComposite.getBorderStyle(), null);
+		for (Object l : selectionChangedListeners.getListeners())
+			linkHandlerFactoryTreeComposite.addSelectionChangedListener((ISelectionChangedListener)l);
+//		treeViewer = new TreeViewer(mainComposite, mainComposite.getBorderStyle());
+//		treeViewer.setContentProvider(new IssueLinkCategoryContentProvider());
+//		treeViewer.setLabelProvider(new IssueLinkCategoryLabelProvider());
+//		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+//			@Override
+//			public void doubleClick(DoubleClickEvent e) {
+//				Object firstElement = ((TreeSelection)e.getSelection()).getFirstElement();
+//				if (firstElement instanceof IssueLinkHandlerFactory)
+//					getContainer().showPage(getNextPage());
+//				else
+//					treeViewer.expandToLevel(firstElement, 1);
+//			}
+//		});
+//
+//		List<IssueLinkHandlerCategory> categoryItems = null;
+//		try {
+//			IssueLinkHandlerFactoryRegistry registry = IssueLinkHandlerFactoryRegistry.sharedInstance();
+//			categoryItems = registry.getTopLevelCategories();
+//		} catch (EPProcessorException e) {
+//			throw new RuntimeException(e);
+//		}
+//
+//		treeViewer.setInput(categoryItems);
+//
+//		GridData gridData = new GridData(GridData.FILL_BOTH);
+//		gridData.grabExcessHorizontalSpace = true;
+//		gridData.grabExcessVerticalSpace = true;
+//
+//		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+//
+//		linkHandlerFactoryTreeComposite.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener(){
+//			public void selectionChanged(SelectionChangedEvent e) {
+//				Object firstElement = ((TreeSelection)e.getSelection()).getFirstElement();
+//				issueLinkHandlerCategory = null;
+//				issueLinkHandlerFactory = null;
+//
+//				if (firstElement instanceof IssueLinkHandlerCategory)
+//					issueLinkHandlerCategory = (IssueLinkHandlerCategory) firstElement;
+//				else if (firstElement instanceof IssueLinkHandlerFactory)
+//					issueLinkHandlerFactory = (IssueLinkHandlerFactory<ObjectID, Object>) firstElement;
+//
+//				getContainer().updateButtons();
+//
+//				SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(SelectIssueLinkHandlerFactoryWizardPage.this, getSelection());
+//				for (Object listener : selectionChangedListeners.getListeners())
+//					((ISelectionChangedListener)listener).selectionChanged(selectionChangedEvent);
+//			}
+//		});
+//
+//		treeViewer.expandAll();	// Since, so far, we dont have that many items for linking; and they can all be comforably displayed in the tree. Kai.
+		linkHandlerFactoryTreeComposite.getTreeViewer().expandAll();
 		return mainComposite;
 	}
 
@@ -147,11 +116,32 @@ implements ISelectionProvider
 
 	@Override
 	public boolean isPageComplete() {
-		return issueLinkHandlerFactory != null;
+		return linkHandlerFactoryTreeComposite.getIssueLinkHandlerFactory() != null;
 //		return getWizardHop().getHopPages() != null && getWizardHop().getHopPages().size() != 0;
 	}
 
-	class IssueLinkCategoryContentProvider extends TreeContentProvider {
+	private ListenerList selectionChangedListeners = new ListenerList();
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.add(listener);
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return linkHandlerFactoryTreeComposite.getSelection();
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.remove(listener);
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		linkHandlerFactoryTreeComposite.setSelection(selection);
+	}
+
+/*	class IssueLinkCategoryContentProvider extends TreeContentProvider {
 		@Override
 		public Object getParent(Object childElement) {
 			// this method is not used since we don't use a DrillDownAdapter
@@ -214,30 +204,5 @@ implements ISelectionProvider
 
 			return String.valueOf(element);
 		}
-	}
-
-	private ListenerList selectionChangedListeners = new ListenerList();
-
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		selectionChangedListeners.add(listener);
-	}
-
-	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
-		selectionChangedListeners.remove(listener);
-	}
-
-	@Override
-	public ISelection getSelection() {
-		if (issueLinkHandlerFactory != null)
-			return new StructuredSelection(issueLinkHandlerFactory);
-
-		return new StructuredSelection(issueLinkHandlerCategory);
-	}
-
-	@Override
-	public void setSelection(ISelection selection) {
-		treeViewer.setSelection(selection);
-	}
+	}*/
 }
