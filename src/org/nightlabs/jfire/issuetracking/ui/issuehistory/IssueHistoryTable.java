@@ -56,13 +56,13 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 		});
 
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
-	    addDisposeListener(new DisposeListener() {
-	      public void widgetDisposed(DisposeEvent event) {
-	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
-	      }
-	    });
+		addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent event) {
+				JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
+			}
+		});
 
-	    getTableViewer().setComparator(new ViewerComparator() {
+		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
 				Arrays.sort(elements, new Comparator<Object>() {
@@ -74,24 +74,24 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 		});
 
 
-	    // Since 29 May 2009.
-	    addDisposeListener(new DisposeListener() {
+		// Since 29 May 2009.
+		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) { disposeAllImages(); }
-	    });
+		});
 	}
 
 	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.lifeCycleListener.loading.text")) { //$NON-NLS-1$
-	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
-	      Issue.class,
-	      true,
-	      JDOLifecycleState.NEW);
+		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
+				Issue.class,
+				true,
+				JDOLifecycleState.NEW);
 
-	    public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter() {
-	      return filter;
-	    }
+		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter() {
+			return filter;
+		}
 
-	    public void notify(JDOLifecycleEvent event) {}
+		public void notify(JDOLifecycleEvent event) {}
 	};
 
 	/* (non-Javadoc)
@@ -113,7 +113,7 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.action.text")); //$NON-NLS-1$
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{20, 30, 90});
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{15, 10, 75});
 		table.setLayout(layout);
 	}
 
@@ -154,9 +154,9 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 			if (element instanceof IssueHistoryItem) {
 				IssueHistoryItem issueHistoryItem = (IssueHistoryItem) element;
 				switch (columnIndex) {
-					case(0): return dateTimeFormat.format(issueHistoryItem.getCreateTimestamp());
-					case(1): return issueHistoryItem.getUser().getName();
-					case(2): return issueHistoryItem.getDescription(); //.getChange();
+				case(0): return dateTimeFormat.format(issueHistoryItem.getCreateTimestamp());
+				case(1): return issueHistoryItem.getUser().getName();
+				case(2): return issueHistoryItem.getDescription(); //.getChange();
 				}
 			}
 			return ""; //$NON-NLS-1$
@@ -198,19 +198,19 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 
 	//    TO CHECK: Do we really need these? Kai
 	// --> CHECKED: No we dont. Kai.
-//	private IssueID issueID;
-//	public void setIssueHistoryItems(IssueID issueID, Collection<IssueHistoryItem> issueHistoryItems) {
-//		if (issueID == null)
-//			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
-//
-//		this.issueID = issueID;
-//		super.setInput(issueHistoryItems);
-//	}
-//
-//	@Override
-//	public void setInput(Object input) {
-//		throw new UnsupportedOperationException("Use setIssueHistories(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
-//	}
+	//	private IssueID issueID;
+	//	public void setIssueHistoryItems(IssueID issueID, Collection<IssueHistoryItem> issueHistoryItems) {
+	//		if (issueID == null)
+	//			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
+	//
+	//		this.issueID = issueID;
+	//		super.setInput(issueHistoryItems);
+	//	}
+	//
+	//	@Override
+	//	public void setInput(Object input) {
+	//		throw new UnsupportedOperationException("Use setIssueHistories(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
+	//	}
 
 }
 

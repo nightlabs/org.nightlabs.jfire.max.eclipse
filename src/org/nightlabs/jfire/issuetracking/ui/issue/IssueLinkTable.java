@@ -261,7 +261,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		tableColumn.setMoveable(true);
 		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.linkObject.text")); //$NON-NLS-1$
 
-		WeightedTableLayout layout = new WeightedTableLayout( new int[]{30, 70} );
+		WeightedTableLayout layout = new WeightedTableLayout( new int[]{24, 76} );
 		table.setLayout(layout);
 	}
 

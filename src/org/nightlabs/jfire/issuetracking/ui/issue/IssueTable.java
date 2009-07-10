@@ -116,9 +116,8 @@ extends AbstractTableComposite<Issue>
 	private void disposeAllImages()
 	{
 		// dispose all images
-		for (Image image : imageKey2Image.values()) {
+		for (Image image : imageKey2Image.values())
 			image.dispose();
-		}
 		imageKey2Image.clear();
 	}
 
@@ -164,6 +163,7 @@ extends AbstractTableComposite<Issue>
 					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
 					ISSUE_MARKER_IMAGE_DIMENSION.height
 			);
+
 			//Create a transparent image, Chairat.
 			// Commented because does not worked under windows.
 //		    Color white = getDisplay().getSystemColor(SWT.COLOR_WHITE);
@@ -184,7 +184,7 @@ extends AbstractTableComposite<Issue>
 					IssueMarker issueMarker = itIssueMarkers.next();
 					String issueMarkerIDString = JDOHelper.getObjectId(issueMarker).toString();
 					Image icon = imageKey2Image.get(issueMarkerIDString);
-					if (icon == null) {
+					if (icon == null)
 						if (issueMarker.getIcon16x16Data() != null) {
 							ByteArrayInputStream in = new ByteArrayInputStream(issueMarker.getIcon16x16Data());
 							icon = new Image(getDisplay(), in);
@@ -192,7 +192,6 @@ extends AbstractTableComposite<Issue>
 //							in.close(); // not necessary, because it is a ByteArrayInputStream working solely in RAM - unfortunately it is declared with a throws clause - thus commenting it out. Marco.
 							imageKey2Image.put(issueMarkerIDString, icon);
 						}
-					}
 
 					if (icon != null)
 						gc.drawImage(icon, ISSUE_MARKER_IMAGE_DIMENSION.width * i + i, 0);
@@ -243,7 +242,7 @@ extends AbstractTableComposite<Issue>
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.column.markers.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
-		// <<-------------------------------------------------------------------------------------------------------------------|
+		// <<---------------------------------------------------------------------------------------------------------------------|
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 6
 		tc.setMoveable(true);
@@ -344,10 +343,8 @@ extends AbstractTableComposite<Issue>
 			// --- 8< --- KaiExperiments: since 19.05.2009 ------------------
 			// This accomodates for more than one Image icon. But we have a problem if not all fields have the same
 			// number of icons.
-			if (element != null && element instanceof Issue && columnIndex == 5) {
+			if (element != null && element instanceof Issue && columnIndex == 5)
 				return getCombiIssueMarkerImage((Issue) element);
-			}
-			// ------ KaiExperiments ----- >8 -------------------------------
 
 			return null;
 		}
@@ -359,12 +356,11 @@ extends AbstractTableComposite<Issue>
 		StatableLocal statableLocal = statable.getStatableLocal();
 		State state = statable.getState();
 		State state2 = statableLocal.getState();
-		if (state2 != null) {
+		if (state2 != null)
 			if (state == null)
 				state = state2;
 			else if (state.getCreateDT().compareTo(state2.getCreateDT()) < 0)
 				state = state2;
-		}
 
 		if (state != null)
 			return state.getStateDefinition().getName().getText();
@@ -385,11 +381,10 @@ extends AbstractTableComposite<Issue>
 		// OR do we need to refactor this (ask the server) when refactoring this whole search stuff to SWT.VIRTUAL?
 		disposeAllImages();
 		maxIssueMarkerCountPerIssue = -1;
-		if (input instanceof Collection) {
+		if (input instanceof Collection)
 			for (Object o : ((Collection<?>)input))
 				if (o instanceof Issue)
 					maxIssueMarkerCountPerIssue = Math.max(maxIssueMarkerCountPerIssue, ((Issue)o).getIssueMarkers().size());
-		}
 
 		super.setInput(input);
 	}

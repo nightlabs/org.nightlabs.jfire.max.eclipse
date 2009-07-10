@@ -12,6 +12,7 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
@@ -33,7 +34,9 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 	public String getLinkedObjectName(IssueLink issueLink, Issue linkedObject) {
 		return String.format(
 				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerIssue.linkedObjectName"), //$NON-NLS-1$
-				linkedObject.getPrimaryKey()); // TODO there must be the subject and maybe some other data be shown
+				"(ID:" + ObjectIDUtil.longObjectIDFieldToString(linkedObject.getIssueID()) + ") "
+				+ linkedObject.getSubject().getText()
+		);
 	}
 
 	@Override
@@ -60,7 +63,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 			{
 		return IssueDAO.sharedInstance().getIssues(
 				linkedObjectIDs,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
+				new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_SUBJECT }, // TODO do we need more?
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 			}

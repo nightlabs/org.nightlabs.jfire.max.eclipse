@@ -2,11 +2,19 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Collection;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
@@ -62,6 +70,55 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 		return issueTable;
 	}
 
+
+	@Override
+	public Composite createComposite(Composite parent) {
+		Composite resultComposite = super.createComposite(parent);
+
+		// Context-menu setup.
+		// Note: We can only setup the cont1ext-menu once the composite is created.
+//		createContextMenu(parent); <-- HERE!
+
+		return resultComposite;
+	}
+
+	private MenuManager menuMgr;
+	private DeleteIssueAction deleteIssueAction;
+	private EditIssueAction editIssueAction;
+
+	/**
+	 * Sets up the context menu to allow for the following operations:
+	 *   1. Edit selected Issue(s) --> Opens the Issue pages.
+	 *   2. Delete selected Issue(s) --> Invokes the delete dialogs.
+	 */
+	private void createContextMenu(Composite parent) {
+		menuMgr = getMenuManager(); // new MenuManager("#PopupMenu"); //$NON-NLS-1$
+		menuMgr.setRemoveAllWhenShown(true);
+
+		// Prepare the menu items.
+		editIssueAction = new EditIssueAction();
+		deleteIssueAction = new DeleteIssueAction();
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager m) {
+				menuMgr.add(editIssueAction);
+				menuMgr.add(deleteIssueAction);
+			}
+		});
+
+		// Create the menu and attach it to the IssueTable.
+		Menu menu = menuMgr.createContextMenu(issueTable);
+		issueTable.setMenu(menu);
+//		getSite().registerContextMenu(menuMgr, issueTable); // <-- How the heck to I do this here?? Is it necessary here??
+
+		// Define the behaviour of the menu items wrt the selections, or lack thereof, in the IssueTable.
+		issueTable.addSelectionChangedListener(new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+//				handleRemoveAction();
+			}
+		});
+	}
+
 	/**
 	 * An implicit listener to handle the refreshing of the table's entry (or entries), in the case
 	 * of a currently displayed Issue changed its fields or was deleted.
@@ -72,7 +129,7 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 			final ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer.task.updatingIssues"), 100); //$NON-NLS-1$
 			try {
-				if (previousSavedQuery != null && !getComposite().isDisposed()) {
+				if (previousSavedQuery != null && !getComposite().isDisposed())
 					getComposite().getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
@@ -95,7 +152,6 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 							}
 						}
 					});
-				}
 
 			} finally {
 				monitor.done();
@@ -145,4 +201,43 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 	{
 		return QUICK_SEARCH_REGISTRY_ID;
 	}
+
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	/**
+	 * Handles the action to remove the selected Issue(s).
+	 */
+	private class DeleteIssueAction extends Action {
+		public DeleteIssueAction() {
+			setId(DeleteIssueAction.class.getName());
+			setImageDescriptor(SharedImages.DELETE_16x16);
+			setToolTipText("Delete selected Issue(s)");
+			setText("Delete selected Issue(s)");
+		}
+
+		@Override
+		public void run() {
+		}
+	}
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	/**
+	 * Handles the action to edit the selected Issue(s).
+	 */
+	private class EditIssueAction extends Action {
+		public EditIssueAction() {
+			setId(EditIssueAction.class.getName());
+			setImageDescriptor(SharedImages.EDIT_16x16);
+			setToolTipText("Edit selected Issue(s)");
+			setText("Edit selected Issue(s)");
+		}
+
+		@Override
+		public void run() {
+		}
+	}
+
+
 }
