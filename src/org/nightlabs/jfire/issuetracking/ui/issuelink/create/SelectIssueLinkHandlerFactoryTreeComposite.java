@@ -54,20 +54,24 @@ implements ISelectionProvider
 		return issueLinkHandlerFactory;
 	}
 	
+	private List<IssueLinkHandlerCategory> categories;
+	public List<IssueLinkHandlerCategory> getIssueLinkHandlerCategories() {
+		return categories;
+	}
+	
 	public SelectIssueLinkHandlerFactoryTreeComposite(Composite parent, int style, IWorkbenchPartSite site)
 	{
 		super(parent, style, true, true, false);
 		this.site = site;
 		
-		List<IssueLinkHandlerCategory> categoryItems = null;
 		try {
 			IssueLinkHandlerFactoryRegistry registry = IssueLinkHandlerFactoryRegistry.sharedInstance();
-			categoryItems = registry.getTopLevelCategories();
+			categories = registry.getTopLevelCategories();
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
 
-		getTreeViewer().setInput(categoryItems);
+		getTreeViewer().setInput(categories);
 		
 		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -75,12 +79,17 @@ implements ISelectionProvider
 				issueLinkHandlerCategory = null;
 				issueLinkHandlerFactory = null;
 
+				if (firstElement == null) //In case of the check tree
+					return;
+				
 				if (firstElement instanceof IssueLinkHandlerCategory)
 					issueLinkHandlerCategory = (IssueLinkHandlerCategory) firstElement;
 				else if (firstElement instanceof IssueLinkHandlerFactory)
 					issueLinkHandlerFactory = (IssueLinkHandlerFactory<ObjectID, Object>) firstElement;
-
-				SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(SelectIssueLinkHandlerFactoryTreeComposite.this, getSelection());
+				
+				ISelection selection = getSelection();
+				SelectionChangedEvent selectionChangedEvent = 
+					new SelectionChangedEvent(SelectIssueLinkHandlerFactoryTreeComposite.this, selection);
 				for (Object listener : selectionChangedListeners.getListeners())
 					((ISelectionChangedListener)listener).selectionChanged(selectionChangedEvent);
 			}

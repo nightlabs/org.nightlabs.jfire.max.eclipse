@@ -180,6 +180,13 @@
             scope="global"
             sectionTitle="%queryfilterComposite.AdvancedIssueFilterProjectSectionTitle"
             targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterProjectSectionTitle"/>
+        <QueryFilter
+              orderHint="70"
+              queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryLinkedObjectRelated"
+              scope="global"
+              targetClass="org.nightlabs.jfire.issue.Issue"
+              title="%queryfilterComposite.AdvancedIssueFilterLinkedObjectSectionTitle">
+        </QueryFilter>
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.overview">
         <categoryFactory
