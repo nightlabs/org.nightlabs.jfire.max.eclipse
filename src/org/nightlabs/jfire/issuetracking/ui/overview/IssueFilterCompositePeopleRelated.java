@@ -178,7 +178,6 @@ public class IssueFilterCompositePeopleRelated
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		boolean sectionActive = false;
 		for (FieldChangeCarrier changedField : changedFields)
 		{
 			if (IssueQuery.FieldName.assigneeID.equals(changedField.getPropertyName()))
@@ -203,7 +202,7 @@ public class IssueFilterCompositePeopleRelated
 				assigneeButton.setEnabled(active);
 				assigneeText.setEnabled(active);
 				allAssigneeButton.setSelection(!active);
-				sectionActive = active;
+				setSearchSectionActive(active);
 				if (!active) {
 					assigneeText.setText(""); //$NON-NLS-1$
 					getQuery().setAssigneeID(null);
@@ -231,15 +230,13 @@ public class IssueFilterCompositePeopleRelated
 				reporterText.setEnabled(active);
 				reporterButton.setEnabled(active);
 				allReporterButton.setSelection(!active);
-				sectionActive = active;
+				setSearchSectionActive(active);
 				if (!active) {
 					reporterText.setText(""); //$NON-NLS-1$
 					getQuery().setReporterID(null);
 				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
-
-		setSearchSectionActive(sectionActive);
 	}
 
 	private static final Set<String> fieldNames;
