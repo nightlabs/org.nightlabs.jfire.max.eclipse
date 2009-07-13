@@ -144,14 +144,14 @@ extends AbstractArticleContainerListComposite<Offer>
 	}
 
 	@Override
-	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
-	{
-		if (columnIndex == 8) {
-			return OFFER_FINALIZE_DT_COMPARATOR;
+	protected Comparator<?> getAdditionalColumnComparator(Object element,
+			int additionalColumnIndex, int firstAdditionalColumnIndex,
+			int columnIndex) {
+		switch (additionalColumnIndex) {
+			case 0: return OFFER_FINALIZE_DT_COMPARATOR;
+			case 2: return OFFER_PRICE_COMPARATOR;
+			default: return null;
 		}
-		else if (columnIndex == 10) {
-			return OFFER_PRICE_COMPARATOR;
-		}
-		return super.getColumnComparator(element, columnIndex);
 	}
+	
 }

@@ -148,17 +148,14 @@ extends AbstractArticleContainerListComposite<Invoice>
 	}
 
 	@Override
-	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
-	{
-		if (columnIndex == 8) {
-			return INVOICE_FINALIZE_DT_COMPARATOR;
+	protected Comparator<?> getAdditionalColumnComparator(Object element,
+			int additionalColumnIndex, int firstAdditionalColumnIndex,
+			int columnIndex) {
+		switch (additionalColumnIndex) {
+			case 0: return INVOICE_FINALIZE_DT_COMPARATOR;
+			case 2: return INVOICE_PRICE_COMPARATOR;
+			case 3: return INVOICE_AMOUNT_TO_PAY_COMPARATOR;
+			default: return null;
 		}
-		else if (columnIndex == 10) {
-			return INVOICE_PRICE_COMPARATOR;
-		}
-		else if (columnIndex == 11) {
-			return INVOICE_AMOUNT_TO_PAY_COMPARATOR;
-		}
-		return super.getColumnComparator(element, columnIndex);
 	}
 }

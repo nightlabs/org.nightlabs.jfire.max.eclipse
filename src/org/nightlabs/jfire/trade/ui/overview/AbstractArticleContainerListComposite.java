@@ -32,6 +32,7 @@ import org.nightlabs.util.BaseComparator;
 public abstract class AbstractArticleContainerListComposite<O extends ArticleContainer>
 extends AbstractTableComposite<O>
 {
+	
 	public static final Comparator<ArticleContainer> ARTICLE_CONTAINER_CREATE_DT_COMPARATOR = new Comparator<ArticleContainer>(){
 		@Override
 		public int compare(ArticleContainer o1, ArticleContainer o2)
@@ -60,6 +61,14 @@ extends AbstractTableComposite<O>
 		}
 	};
 
+	public static final Comparator<ArticleContainer> ARTICLE_COUNT_COMPARATOR = new Comparator<ArticleContainer>(){
+		@Override
+		public int compare(ArticleContainer o1, ArticleContainer o2)
+		{
+			return Integer.valueOf(o1.getArticleCount()).compareTo(o2.getArticleCount());
+		}
+	};
+	
 	public class LabelProvider extends TableLabelProvider
 	{
 		@Override
@@ -163,7 +172,7 @@ extends AbstractTableComposite<O>
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createDateTableColumn.text")); //$NON-NLS-1$
 		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createDateTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(10));
-		addWeightedColumn(9);
+		addWeightedColumn(12);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createUserTableColumn.text")); //$NON-NLS-1$
@@ -246,13 +255,16 @@ extends AbstractTableComposite<O>
 	}
 
 	protected Comparator<?> getColumnComparator(Object element, int columnIndex) {
-		if (columnIndex == 1) {
-			return ArticleContainerUtil.ARTICLE_CONTAINER_COMPARATOR;
+		int firstAdditionalColumnIndex = getFirstAdditionalColumnIndex();
+		if (columnIndex >= firstAdditionalColumnIndex) {
+			return getAdditionalColumnComparator(element, columnIndex - firstAdditionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
 		}
-		else if (columnIndex == 4) {
-			return ARTICLE_CONTAINER_CREATE_DT_COMPARATOR;
+		switch (columnIndex) {
+			case 0: return ArticleContainerUtil.ARTICLE_CONTAINER_COMPARATOR;
+			case 3: return ARTICLE_CONTAINER_CREATE_DT_COMPARATOR;
+			case 5: return ARTICLE_COUNT_COMPARATOR;
+			default: return null;
 		}
-		return null;
 	}
 
 	protected Image getColumnImage(Object element, int columnIndex)
@@ -310,6 +322,13 @@ extends AbstractTableComposite<O>
 //
 //		return getAdditionalColumnText(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
 //	}
+	protected int getFirstAdditionalColumnIndex() {
+		int firstAdditionalColumnIndex = 6;
+		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
+			firstAdditionalColumnIndex = 7;
+		return firstAdditionalColumnIndex;
+	}
+	
 	protected String getColumnText(Object element, int columnIndex)
 	{
 		if (element instanceof ArticleContainer) {
@@ -329,10 +348,9 @@ extends AbstractTableComposite<O>
 					return String.valueOf(articleContainer.getArticleCount());
 			}
 		}
-		int firstAdditionalColumnIndex = 6;
-		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-			firstAdditionalColumnIndex = 7;
-
+		
+		int firstAdditionalColumnIndex = getFirstAdditionalColumnIndex();
+		
 		if (element instanceof Statable && columnIndex == 6) {
 			Statable statable = (Statable) element;
 			return getStateName(statable);
@@ -356,6 +374,17 @@ extends AbstractTableComposite<O>
 	 */
 	protected abstract String getAdditionalColumnText(Object element, int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex);
 
+	/**
+	 * @param element The element for which to obtain a column's image
+	 * @param additionalColumnIndex The 0-based index for additional columns. It is the result of: <code>columnIndex - firstAdditionalColumnIndex</code>
+	 * @param firstAdditionalColumnIndex The absolute column index of the first additional column.
+	 * @param columnIndex The absolute column index (0-based).
+	 * @return the <code>Comparator</code> to use for the given column, or null to use the default comparator.
+	 */
+	protected Comparator<?> getAdditionalColumnComparator(Object element, int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex) {
+		return null;
+	}
+	
 	/**
 	 * @param element The element for which to obtain a column's image
 	 * @param additionalColumnIndex The 0-based index for additional columns. It is the result of: <code>columnIndex - firstAdditionalColumnIndex</code>

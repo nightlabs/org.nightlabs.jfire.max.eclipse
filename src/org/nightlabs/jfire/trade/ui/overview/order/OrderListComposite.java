@@ -118,11 +118,12 @@ extends AbstractArticleContainerListComposite<Order>
 	}
 
 	@Override
-	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
-	{
-		if (columnIndex == 7) {
+	protected Comparator<?> getAdditionalColumnComparator(Object element,
+			int additionalColumnIndex, int firstAdditionalColumnIndex,
+			int columnIndex) {
+		if (additionalColumnIndex == 0) {
 			return ORDER_CHANGE_DT_COMPARATOR;
 		}
-		return super.getColumnComparator(element, columnIndex);
+		return null;
 	}
 }
