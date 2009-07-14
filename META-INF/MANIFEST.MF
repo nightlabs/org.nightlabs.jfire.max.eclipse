@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SimpleTradeAdmin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.simpletrade.admin.ui;singleton:=true
-Bundle-Version: 0.9.7.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.simpletrade.admin.ui.SimpleTradeAdminPlugin
 Bundle-Vendor: NightLabs.com
