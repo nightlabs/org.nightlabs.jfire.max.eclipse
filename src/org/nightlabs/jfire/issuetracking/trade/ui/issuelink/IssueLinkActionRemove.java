@@ -51,7 +51,7 @@ public class IssueLinkActionRemove extends WorkbenchPartAction { //Action {
 		setId(IssueLinkActionRemove.class.getName());
 		setImageDescriptor(SharedImages.DELETE_16x16);
 		setToolTipText("Remove link to selected issue");
-		setText("Remove selected issue link(s) +++ oh yeah Baby!!! +++");
+		setText("Remove selected issue link(s)");
 
 		this.issueTable = issueTable;
 		this.controller = controller;
