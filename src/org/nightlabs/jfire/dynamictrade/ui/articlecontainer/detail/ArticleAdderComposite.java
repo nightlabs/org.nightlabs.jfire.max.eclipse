@@ -18,7 +18,6 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
-import org.nightlabs.jfire.dynamictrade.ui.template.SelectDynamicProductTemplateDialog;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.Unit;
@@ -74,24 +73,20 @@ extends ArticleBaseComposite
 			}
 		});
 
-
-
-
-
-		// TODO BEGIN TEST - MOVE TO ArticleBaseComposite!
-		++comp1.getGridLayout().numColumns;
-		Button templateButton = new Button(comp1, SWT.PUSH);
-		templateButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		templateButton.setText("T");
-		templateButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				SelectDynamicProductTemplateDialog dialog = new SelectDynamicProductTemplateDialog(getShell());
-				dialog.open();
-			}
-		});
-		// TODO END TEST
+//		// TODO BEGIN TEST - MOVE TO ArticleBaseComposite!
+//		++comp1.getGridLayout().numColumns;
+//		Button templateButton = new Button(comp1, SWT.PUSH);
+//		templateButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+//		templateButton.setText("T");
+//		templateButton.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e)
+//			{
+//				SelectDynamicProductTemplateDialog dialog = new SelectDynamicProductTemplateDialog(getShell());
+//				dialog.open();
+//			}
+//		});
+//		// TODO END TEST
 	}
 
 	@Override
