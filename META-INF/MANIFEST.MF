@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.entityuserset.ui
-Bundle-Version: 0.9.7.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.nightlabs.jfire.entityuserset.ui.Activator
 Bundle-Vendor: nightlabs.org
 Require-Bundle: org.eclipse.ui,
