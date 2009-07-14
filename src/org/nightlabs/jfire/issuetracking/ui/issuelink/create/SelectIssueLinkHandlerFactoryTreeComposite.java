@@ -79,7 +79,7 @@ implements ISelectionProvider
 				issueLinkHandlerCategory = null;
 				issueLinkHandlerFactory = null;
 
-				if (firstElement == null) //In case of the check tree
+				if (firstElement == null) //In case of the check tree, when we click on the arrow, the selection will be null!!!!
 					return;
 				
 				if (firstElement instanceof IssueLinkHandlerCategory)

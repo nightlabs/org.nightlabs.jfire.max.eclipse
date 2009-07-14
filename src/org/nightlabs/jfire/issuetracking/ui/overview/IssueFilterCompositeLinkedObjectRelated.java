@@ -19,7 +19,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
@@ -35,7 +34,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeLinkedObjectRelated.class);
 
 	private CheckboxTreeViewer checkboxTreeViewer;
-	
+	private volatile Set<Class> selectedLinkedObjectClasses = new HashSet<Class>();
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -98,29 +97,47 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
-//				selectedProjectIDs.clear();
+				selectedLinkedObjectClasses.clear();
 				
-				//Child Checking
 				final boolean isChecked = event.getChecked();
 				Object checkedNode = event.getElement();
 				
 				if (checkedNode instanceof IssueLinkHandlerFactory) {
 					IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) checkedNode;
+
 					for (TreeItem treeItem : checkboxTreeViewer.getTree().getItems()) {
 						if (treeItem.getData() instanceof IssueLinkHandlerCategory) {
 							IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
-							if (category.getCategoryId().equals(factory.getCategoryId())) 
-								checkboxTreeViewer.setChecked(category, isChecked);
+							if (category.getCategoryId().equals(factory.getCategoryId())) { 
+								//check for all children
+								boolean allChecked = true;
+								for (IssueLinkHandlerFactory f : category.getChildFactories()) {
+									allChecked &= checkboxTreeViewer.getChecked(f);
+								}
+								checkboxTreeViewer.setChecked(category, allChecked);
+							}
+							
 						}
 					}
 				}
-				
 				else if (checkedNode instanceof IssueLinkHandlerCategory) {
-					linkedObjectTreeComposite.getTreeViewer().expandToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
 					checkboxTreeViewer.setSubtreeChecked(checkedNode, isChecked);
+					if (isChecked)
+						linkedObjectTreeComposite.getTreeViewer().expandToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
+					else 
+						linkedObjectTreeComposite.getTreeViewer().collapseToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
 				}
 				
+				for (Object checkElement : checkboxTreeViewer.getCheckedElements()) {
+					if (checkElement instanceof IssueLinkHandlerFactory) {
+						IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) checkElement;
+						selectedLinkedObjectClasses.add(factory.getLinkedObjectClass());
+					}
+				}
 				
+				getQuery().setLinkedObjectClasses(selectedLinkedObjectClasses);
+				boolean enable = !selectedLinkedObjectClasses.isEmpty();
+				getQuery().setFieldEnabled(IssueQuery.FieldName.linkedObjectClasses, enable);
 			}
 		});
 	}
@@ -131,6 +148,19 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
+			if (IssueQuery.FieldName.linkedObjectClasses.equals(changedField.getPropertyName()))
+			{
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.linkedObjectClasses).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(active);
+				if (!active) {
+					checkboxTreeViewer.setAllChecked(false);
+					getQuery().getProjectIDs().clear();
+				}
+			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
 
@@ -138,7 +168,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	static
 	{
 		fieldNames = new HashSet<String>(1);
-//		fieldNames.add();
+		fieldNames.add(IssueQuery.FieldName.linkedObjectClasses);
 	}
 
 	@Override
