@@ -22,6 +22,9 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
+ * 
+ * Removes the Issue Link between a Person(LegalEntity) and an Issue Link
+ * 
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */

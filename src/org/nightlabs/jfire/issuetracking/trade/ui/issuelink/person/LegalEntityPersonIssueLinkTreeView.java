@@ -1,17 +1,10 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
-import java.util.Iterator;
-
 import javax.jdo.FetchPlan;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -20,9 +13,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -33,11 +23,6 @@ import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.OrderTreeNode;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringRootTreeNode;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;

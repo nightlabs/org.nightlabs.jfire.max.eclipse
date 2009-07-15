@@ -21,6 +21,9 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
+ * 
+ * An action that addes the Issue Markers to the Issue link Node.
+ *
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */
