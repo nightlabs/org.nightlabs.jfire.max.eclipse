@@ -1,16 +1,11 @@
 package org.nightlabs.jfire.dynamictrade.admin.ui.editor;
 
-import javax.jdo.FetchPlan;
-
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
-import org.nightlabs.jfire.store.NestedProductTypeLocal;
-import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 import org.nightlabs.progress.ProgressMonitor;
@@ -39,15 +34,16 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 		super(editor, startBackgroundLoading);
 	}
 
-	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT,
-		ProductType.FETCH_GROUP_NAME,
-		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
-		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
-		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS,
-		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
-		NestedProductTypeLocal.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE
-	};
+// Not used => commenting it out (it should be deleted). Marco.
+//	public static final String[] FETCH_GROUPS = new String[] {
+//		FetchPlan.DEFAULT,
+//		ProductType.FETCH_GROUP_NAME,
+//		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
+//		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
+//		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS,
+//		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
+//		NestedProductTypeLocal.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE
+//	};
 
 	@Override
 	protected String[] getEntityFetchGroups() {
@@ -60,21 +56,16 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
-
 	}
 
 	@Override
-public  DynamicProductType getExtendedProductType(ProgressMonitor monitor ,ProductTypeID  extendedProductTypeID)
+	public  DynamicProductType getExtendedProductType(ProgressMonitor monitor ,ProductTypeID  extendedProductTypeID)
 	{
 		return  DynamicProductTypeDAO.sharedInstance().getDynamicProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
-
 	}
-
-
-
 
 	@Override
 	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor)
@@ -86,5 +77,4 @@ public  DynamicProductType getExtendedProductType(ProgressMonitor monitor ,Produ
 			throw new RuntimeException(t);
 		}
 	}
-
 }
