@@ -10,7 +10,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -21,9 +20,9 @@ public abstract class AbstractIssueEditorGeneralSection extends ToolBarSectionPa
 	private IssueEditorPageController controller;
 
 	private XComposite client;
-	
+
 	private Issue issue;
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -32,20 +31,20 @@ public abstract class AbstractIssueEditorGeneralSection extends ToolBarSectionPa
 	 */
 	public AbstractIssueEditorGeneralSection(FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(
-				page, parent, 
+				page, parent,
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
-				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.AbstractIssueEditorGeneralSection.title") //$NON-NLS-1$
+				"Section title" //$NON-NLS-1$ // this should be overridden somehow by subclasses - and it seems it is. Marco.
 		);
 		this.controller = controller;
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
-		
+
 		client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
-		
+		client.getGridLayout().numColumns = 1;
+
 		getSection().setClient(client);
 	}
-	
+
 	public IssueEditorPageController getController() {
 		return controller;
 	}
@@ -53,15 +52,15 @@ public abstract class AbstractIssueEditorGeneralSection extends ToolBarSectionPa
 	public XComposite getClient() {
 		return client;
 	}
-	
+
 	public void setIssue(Issue issue) {
 		this.issue = issue;
 		doSetIssue(issue);
 	}
-	
+
 	public Issue getIssue() {
 		return issue;
 	}
-	
+
 	protected abstract void doSetIssue(Issue issue);
 }

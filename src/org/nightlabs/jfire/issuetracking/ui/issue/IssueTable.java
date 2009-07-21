@@ -17,6 +17,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -34,8 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -56,6 +57,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
  *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
+ * @author marco schulze - marco at nightlabs dot de
  */
 public class IssueTable
 extends AbstractTableComposite<Issue>
@@ -300,14 +302,20 @@ extends AbstractTableComposite<Issue>
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ArrayContentProvider()); //(new TableContentProvider());
-		tableViewer.setLabelProvider(new IssueTableLabelProvider());
+		tableViewer.setLabelProvider(new IssueTableLabelProvider(tableViewer));
 	}
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 	class IssueTableLabelProvider
-	extends TableLabelProvider
+//	extends TableLabelProvider
+	extends ColumnSpanLabelProvider
 	{
+		public IssueTableLabelProvider(ColumnViewer columnViewer) {
+			super(columnViewer);
+		}
+
+		@Override
 		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof Issue) {
@@ -348,6 +356,9 @@ extends AbstractTableComposite<Issue>
 
 			return null;
 		}
+
+		@Override
+		protected int[][] getColumnSpan(Object element) { return null; }
 	}
 
 	protected String getStateName(Statable statable)
@@ -377,6 +388,17 @@ extends AbstractTableComposite<Issue>
 
 	@Override
 	public void setInput(Object input) {
+		// Disposing & recreating this is a *very* *bad* idea because it causes all
+		// listeners to be forgotten and has other side-effects, too.
+		// The solution to our problem is to use a ColumnSpanLabelProvider (see above),
+		// because it uses custom-draw (and works correctly).
+		// Marco.
+//		getTable().dispose();
+//		createTableViewer(getViewerStyle());
+//		createTableColumns(getTableViewer(), getTable());
+//		setTableProvider(getTableViewer());
+//		layout();
+
 		// For placement settings: Determine the maximum number of IssueMarkers per Issue
 		// OR do we need to refactor this (ask the server) when refactoring this whole search stuff to SWT.VIRTUAL?
 		disposeAllImages();
