@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.nightlabs.base.ui.composite.CalendarDateTimeEditLookupDialog;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -33,6 +34,7 @@ import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.l10n.DateFormatProvider;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -53,7 +55,7 @@ extends AbstractIssueEditorGeneralSection
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	
-	private boolean canStopWorking = false;
+	private boolean isLoginAssignee = false;
 
 	/**
 	 * @param section
@@ -75,36 +77,71 @@ extends AbstractIssueEditorGeneralSection
 		startStopButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent se) {
+				User newAssignee = null;
 				if (issue.isStarted()) { //End
-					if (!canStopWorking) {
-						boolean b = MessageDialog.openConfirm(
+					if (!isLoginAssignee) { //Warning if the login is not the assignee
+						boolean confirmStopWorking = MessageDialog.openConfirm(
 								getSection().getShell(), 
 								Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.dialog.stopWorking.title"),  //$NON-NLS-1$
 								Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.dialog.stopWorking.description")); //$NON-NLS-1$
-						if (!b)
+						if (!confirmStopWorking)
 							return;
 					}
-					
-					issue.endWorking(new Date());
-					markDirty();
-					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.		
-					
 				}
-
 				else {	//Start
 					if (issue.getAssignee() == null) {
 						UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
 						int returnCode = userSearchDialog.open();
 						if (returnCode == Dialog.OK) {
-							issue.setAssignee(userSearchDialog.getSelectedUser());
-							// does not work without assigned user
-							issue.startWorking(new Date());
+							newAssignee = userSearchDialog.getSelectedUser();
+//							issue.setAssignee(userSearchDialog.getSelectedUser());
+						}
+						else
+							return;
+					}
+				}
+				
+				//Show time choosing dialog
+				CalendarDateTimeEditLookupDialog timeDialog = new CalendarDateTimeEditLookupDialog(getSection().getShell(), DateFormatProvider.DATE_LONG | DateFormatProvider.TIME);
+				Date selectedTime = null;
+				boolean successful;
+				do {
+					successful = true;
+					selectedTime = null;
+					if (timeDialog.open() == Dialog.OK) {
+						selectedTime = timeDialog.getDate().getTime();
+						long timeMSec = selectedTime.getTime();
+						timeMSec /= 60000L;
+						timeMSec *= 60000L;
+						selectedTime = new Date(timeMSec);
+
+						if (!issue.isStarted()) {
+							if (newAssignee != null)
+								issue.setAssignee(newAssignee);
+
+							issue.startWorking(selectedTime);
+						}
+						else {
+							if (selectedTime.before(issue.getLastIssueWorkTimeRange().getFrom())) {
+								MessageDialog.openInformation(
+										getSection().getShell(), 
+										"Stop time is not correct!!",
+										"The stop time should not be the time before the start time. Please select again."
+								);
+								successful = false;
+								selectedTime = null;
+							}
+							else {
+								if (newAssignee != null)
+									issue.setAssignee(newAssignee);
+								
+								issue.endWorking(selectedTime);
+							}
 						}
 					}
-					else {
-						issue.startWorking(new Date());
-					}
-
+				} while (!successful);
+				
+				if (selectedTime != null) {
 					markDirty();
 					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
 				}
@@ -112,6 +149,7 @@ extends AbstractIssueEditorGeneralSection
 		});
 
 		new Label(getClient(), SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.startTime.text")); //$NON-NLS-1$
+		
 		startTimeLabel = new Label(getClient(), SWT.NONE);
 		startTimeLabel.setText(""); //$NON-NLS-1$
 		GridData gd = new GridData();
@@ -144,7 +182,7 @@ extends AbstractIssueEditorGeneralSection
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						canStopWorking = issue.getAssignee().equals(
+						isLoginAssignee = issue.getAssignee().equals(
 								Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, 
 										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 //						Display.getDefault().asyncExec(new Runnable() {
@@ -171,7 +209,7 @@ extends AbstractIssueEditorGeneralSection
 		else 
 			startStopButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.startStopButton.start.text")); //$NON-NLS-1$
 
-		IssueWorkTimeRange workTime = issue.getLastestIssueWorkTimeRange();
+		IssueWorkTimeRange workTime = issue.getLastIssueWorkTimeRange();
 		if (workTime != null) {
 			statusLabel.setText(issue.isStarted() ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.working.text") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.stopped.text")); //$NON-NLS-1$ //$NON-NLS-2$
 			startTimeLabel.setText(workTime.getFrom() == null ? "" : dateTimeFormat.format(workTime.getFrom())); //$NON-NLS-1$
