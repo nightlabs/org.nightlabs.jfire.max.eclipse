@@ -178,11 +178,11 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		projectNameText.forceFocus();
 	}
 	
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete();
-	}
-	
+//	@Override
+//	public boolean canFlipToNextPage() {
+//		return isPageComplete();
+//	}
+//	
 	@Override
 	public boolean isPageComplete() {
 		return !projectNameText.getEditText().isEmpty();

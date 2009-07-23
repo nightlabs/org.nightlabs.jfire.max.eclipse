@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
@@ -167,7 +168,7 @@ extends AbstractIssueEditorGeneralSection
 
 		@Override
 		public void run() {
-			UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+			UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null, UserSearchComposite.FLAG_TYPE_USER);
 			int returnCode = userSearchDialog.open();
 			if (returnCode == Dialog.OK) {
 				assigneeUser = userSearchDialog.getSelectedUser();
