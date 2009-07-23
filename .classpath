@@ -6,12 +6,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucher"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/KeyReader"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseBean"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jdo"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.query"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.query.jdo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.keyreader"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
