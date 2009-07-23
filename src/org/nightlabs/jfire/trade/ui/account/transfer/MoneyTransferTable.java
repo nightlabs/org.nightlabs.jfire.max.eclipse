@@ -120,30 +120,30 @@ extends AbstractTableComposite<MoneyTransfer>
 	{
 		public String getColumnText(Object element, int columnIndex)
 		{
-			if (element instanceof ManualMoneyTransfer) {
-				ManualMoneyTransfer manualMoneyTransfer = (ManualMoneyTransfer) element;
-				Anchor other = getOtherAnchor(manualMoneyTransfer);
+			if (element instanceof MoneyTransfer) {
+				MoneyTransfer moneyTransfer = (MoneyTransfer) element;
+				Anchor other = getOtherAnchor(moneyTransfer);
 				switch (columnIndex) {
-				case(0): return DateFormatter.formatDateShortTimeHM(manualMoneyTransfer.getTimestamp(), false);	//Timestamp
-				case(1):	//Direction
-					if (JDOHelper.getObjectId(manualMoneyTransfer.getFrom()).equals(currentAnchorID)) {
-						return "->"; //$NON-NLS-1$
-					}
+					case(0): return DateFormatter.formatDateShortTimeHM(moneyTransfer.getTimestamp(), false);	//Timestamp
+					case(1):	//Direction
+						if (JDOHelper.getObjectId(moneyTransfer.getFrom()).equals(currentAnchorID)) {
+							return "->"; //$NON-NLS-1$
+						}
 					return "<-"; //$NON-NLS-1$
-				case(2):	//Other
-					if (other instanceof Account)
-						return ((Account)other).getName().getText();
-					else
-						return ((LegalEntity)other).getPerson().getDisplayName();
-				case(3):	//Other type
-					if (other instanceof Account)
-						return ((Account)other).getAccountType().getName().getText();
-					else
-						return Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.column.legalEntity"); //$NON-NLS-1$
-				case(4): return NumberFormatter.formatCurrency(manualMoneyTransfer.getAmount(), manualMoneyTransfer.getCurrency(), true);	//Amount
-				case(5):return manualMoneyTransfer.getReason().getText();	//Reasons
+					case(2):	//Other
+						if (other instanceof Account)
+							return ((Account)other).getName().getText();
+						else
+							return ((LegalEntity)other).getPerson().getDisplayName();
+					case(3):	//Other type
+						if (other instanceof Account)
+							return ((Account)other).getAccountType().getName().getText();
+						else
+							return Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.column.legalEntity"); //$NON-NLS-1$
+					case(4): return NumberFormatter.formatCurrency(moneyTransfer.getAmount(), moneyTransfer.getCurrency(), true);	//Amount
+					case(5): return moneyTransfer.getDescription();
 				}
-				return ""; //$NON-NLS-1$
+				return null;
 			}
 			return null;
 		}
