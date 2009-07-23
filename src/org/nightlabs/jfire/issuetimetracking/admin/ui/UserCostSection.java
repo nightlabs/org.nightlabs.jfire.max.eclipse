@@ -7,6 +7,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -14,7 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
@@ -37,10 +39,10 @@ extends ToolBarSectionPart
 {
 	private XComposite client;
 	private ListComposite<User> userList;
-	private Text costText;
-	private Text revenueText;
+	private Spinner costSpinner;
+	private Spinner revenueSpinner;
 
-	private ProjectCostValue currentProjectCostValue;
+	private User selectedUser;
 	private ProjectCostEditorPageController controller;
 	/**
 	 * @param page
@@ -48,7 +50,7 @@ extends ToolBarSectionPart
 	 * @param style
 	 * @param title
 	 */
-	public UserCostSection(FormPage page, Composite parent, ProjectCostEditorPageController controller) {
+	public UserCostSection(FormPage page, Composite parent, final ProjectCostEditorPageController controller) {
 		super(
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
@@ -83,26 +85,14 @@ extends ToolBarSectionPart
 		userList.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				User selectedUser = userList.getSelectedElement();
-				String userID = selectedUser.getUserID();
+				selectedUser = userList.getSelectedElement();
 
-				currentProjectCostValue = projectCost.getProjectCostValue(userID);
-				if (currentProjectCostValue == null) {
-					createProjectCostValue(userID);
-//					currentProjectCostValue = new ProjectCostValue(projectCost, IDGenerator.nextID(ProjectCostValue.class));
-//
-//					if (priceFragmentType == null)
-//						priceFragmentType =  
-//							PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
-//									new String[] { FetchPlan.DEFAULT}, 
-//									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//									new NullProgressMonitor());
-//					currentProjectCostValue.getCost().setAmount(priceFragmentType, projectCost.getDefaultCost().getAmount());
-//					currentProjectCostValue.getRevenue().setAmount(priceFragmentType, projectCost.getDefaultRevenue().getAmount());
-//					projectCost.addProjectCostValue(userID, currentProjectCostValue);
-				}
-				costText.setText(Long.toString(currentProjectCostValue.getCost().getAmount()));
-				revenueText.setText(Long.toString(currentProjectCostValue.getRevenue().getAmount()));
+				ProjectCostValue projectCostValue = controller.getControllerObject().getProjectCostValue(selectedUser.getUserID());
+				if (projectCostValue == null) 
+					projectCostValue = createProjectCostValue(selectedUser);
+				
+				costSpinner.setSelection((int)(projectCostValue.getCost().getAmount()));
+				revenueSpinner.setSelection((int)(projectCostValue.getRevenue().getAmount()));
 			}
 		});
 
@@ -115,9 +105,9 @@ extends ToolBarSectionPart
 		//Cost
 		Label monthlyCostLabel = new Label(c, SWT.NONE);
 		monthlyCostLabel.setText("Hourly Cost");
-		costText = new Text(c, SWT.SINGLE);
-		costText.setEnabled(false);
-		costText.addListener (SWT.Verify, new Listener () {
+		costSpinner = new Spinner(c, SWT.NONE);
+		costSpinner.setEnabled(false);
+		costSpinner.addListener (SWT.Verify, new Listener () {
 			public void handleEvent (Event e) {
 				String string = e.text;
 				char [] chars = new char [string.length ()];
@@ -131,22 +121,24 @@ extends ToolBarSectionPart
 			}
 		});
 
-		costText.setTextLimit(20);
-		costText.addKeyListener(keyListener);
+		costSpinner.addModifyListener(modifyListener);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
 		gridData.verticalIndent = 5;
-		costText.setLayoutData(gridData);
-
+		costSpinner.setLayoutData(gridData);
+		costSpinner.setMinimum(0);
+		costSpinner.setMaximum(Integer.MAX_VALUE);
+		
 		//Revenue
 		Label monthlyRevenueLabel = new Label(c, SWT.NONE);
 		monthlyRevenueLabel.setText("Hourly Revenue");
-		revenueText = new Text(c, SWT.SINGLE);
-		revenueText.setTextLimit(20);
-		revenueText.setEnabled(false);
-		revenueText.addKeyListener(keyListener);
-		revenueText.addListener (SWT.Verify, new Listener () {
+		revenueSpinner = new Spinner(c, SWT.NONE);
+		revenueSpinner.setMinimum(0);
+		revenueSpinner.setMaximum(Integer.MAX_VALUE);
+		
+		revenueSpinner.setEnabled(false);
+		revenueSpinner.addListener (SWT.Verify, new Listener () {
 			public void handleEvent (Event e) {
 				String string = e.text;
 				char [] chars = new char [string.length ()];
@@ -159,12 +151,13 @@ extends ToolBarSectionPart
 				}
 			}
 		});
-
+		
+		revenueSpinner.addModifyListener(modifyListener);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
 		gridData.verticalIndent = 5;
-		revenueText.setLayoutData(gridData);
+		revenueSpinner.setLayoutData(gridData);
 
 		getSection().setClient(client);
 	}
@@ -175,8 +168,9 @@ extends ToolBarSectionPart
 
 	private PriceFragmentType priceFragmentType;
 
-	private KeyAdapter keyListener = new KeyAdapter() {
-		public void keyPressed(org.eclipse.swt.events.KeyEvent e) {
+	private ModifyListener modifyListener = new ModifyListener() {
+		@Override
+		public void modifyText(ModifyEvent e) {
 			if (priceFragmentType == null)
 				priceFragmentType =  
 					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
@@ -184,71 +178,45 @@ extends ToolBarSectionPart
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 							new NullProgressMonitor());
 
-			if (currentProjectCostValue != null) {
-				if (e.getSource() == costText)
-					currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText().isEmpty() ? "0" : costText.getText()));
-				if (e.getSource() == revenueText)
-					currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText().isEmpty() ? "0" : revenueText.getText()));
+			ProjectCostValue projectCostValue = controller.getControllerObject().getProjectCostValue(selectedUser.getUserID());
+			if (projectCostValue == null) {
+				projectCostValue = createProjectCostValue(selectedUser);
 			}
+
+			if (e.getSource() == costSpinner)
+				projectCostValue.getCost().setAmount(priceFragmentType, costSpinner.getSelection());
+			if (e.getSource() == revenueSpinner)
+				projectCostValue.getRevenue().setAmount(priceFragmentType, revenueSpinner.getSelection());
+
 			markDirty();
-		};
+
+		}
 	};
 
-	//	private ModifyListener modifyListener = new ModifyListener() {
-	//		public void modifyText(ModifyEvent e) {
-	//			if (priceFragmentType == null)
-	//				priceFragmentType =  
-	//					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
-	//							new String[] { FetchPlan.DEFAULT}, 
-	//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-	//							new NullProgressMonitor());
-	//
-	//			if (e.getSource() == costText)
-	//				currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText()));
-	//			if (e.getSource() == revenueText)
-	//				currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText()));
-	//			
-	//			markDirty();
-	//		}
-	//	};
-	//	private UserID selectedUserID;
-	//	public void setSelectedUserID(UserID userID) {
-	//		this.selectedUserID = userID;
-	//		ProjectCostValue projectCostValue = projectCost.getProjectCostValue(userID.userID);
-	//		costText.setText(Double.toString(projectCostValue.getCost().getAmountAsDouble()));
-	//		revenueText.setText(Double.toString(projectCostValue.getRevenue().getAmountAsDouble()));
-	//	}
-	//	
-	//	public UserID getSelectedUserID() {
-	//		return selectedUserID;
-	//	}
-
-	private ProjectCost projectCost;
 	public void setProjectCost(final ProjectCost projectCost) {
-		this.projectCost = projectCost;
-
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				userList.setInput(projectCost.getProject().getMembers());		
 				if (!projectCost.getProject().getMembers().isEmpty()) {
 					userList.selectElementByIndex(0);
-					User user = userList.getSelectedElement();
-					costText.setEnabled(true);
-					revenueText.setEnabled(true);
-					ProjectCostValue projectCostValue = projectCost.getProjectCostValue(user.getUserID());
+					selectedUser = userList.getSelectedElement();
+					costSpinner.setEnabled(true);
+					revenueSpinner.setEnabled(true);
+					ProjectCostValue projectCostValue = projectCost.getProjectCostValue(selectedUser.getUserID());
 					
 					if (projectCostValue == null)
-						projectCostValue = createProjectCostValue(user.getUserID());
-					costText.setText(Long.toString(projectCostValue.getCost().getAmount()));
-					revenueText.setText(Long.toString(projectCostValue.getRevenue().getAmount()));
+						projectCostValue = createProjectCostValue(selectedUser);
+
+					costSpinner.setSelection((int)(projectCostValue.getCost().getAmount()));
+					revenueSpinner.setSelection((int)(projectCostValue.getRevenue().getAmount()));
 				}
 			}
 		});
 	}
 
-	private ProjectCostValue createProjectCostValue(String userID) {
-		currentProjectCostValue = new ProjectCostValue(projectCost, IDGenerator.nextID(ProjectCostValue.class));
+	private ProjectCostValue createProjectCostValue(User user) {
+		ProjectCostValue projectCostValue = new ProjectCostValue(selectedUser, controller.getControllerObject(), IDGenerator.nextID(ProjectCostValue.class));
 
 		if (priceFragmentType == null)
 			priceFragmentType =  
@@ -256,10 +224,10 @@ extends ToolBarSectionPart
 						new String[] { FetchPlan.DEFAULT}, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						new NullProgressMonitor());
-		currentProjectCostValue.getCost().setAmount(priceFragmentType, projectCost.getDefaultCost().getAmount());
-		currentProjectCostValue.getRevenue().setAmount(priceFragmentType, projectCost.getDefaultRevenue().getAmount());
-		projectCost.addProjectCostValue(userID, currentProjectCostValue);
+		projectCostValue.getCost().setAmount(priceFragmentType, controller.getControllerObject().getDefaultCost().getAmount());
+		projectCostValue.getRevenue().setAmount(priceFragmentType, controller.getControllerObject().getDefaultRevenue().getAmount());
+		controller.getControllerObject().addProjectCostValue(projectCostValue);
 		
-		return currentProjectCostValue;
+		return projectCostValue;
 	}
 }

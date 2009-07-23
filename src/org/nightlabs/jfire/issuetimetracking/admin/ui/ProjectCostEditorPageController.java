@@ -11,6 +11,7 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.PriceFragment;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
@@ -43,8 +44,10 @@ extends ActiveEntityEditorPageController<ProjectCost>
 				ProjectCost.FETCH_GROUP_CURRENCY,
 				ProjectCost.FETCH_GROUP_DEFAULT_COST,
 				ProjectCost.FETCH_GROUP_DEFAULT_REVENUE,
+				ProjectCost.fETCH_GROUP_PROJECT_COST_VALUES,
 				ProjectCostValue.FETCH_GROUP_COST,
 				ProjectCostValue.FETCH_GROUP_REVENUE,
+				ProjectCostValue.FETCH_GROUP_USER,
 				Price.FETCH_GROUP_CURRENCY,
 				Price.FETCH_GROUP_FRAGMENTS,
 				PriceFragment.FETCH_GROUP_PRICE_FRAGMENT_TYPE
@@ -58,7 +61,9 @@ extends ActiveEntityEditorPageController<ProjectCost>
 		ProjectCost projectCost = ProjectCostDAO.sharedInstance().getProjectCost(projectID, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 
 		if (projectCost == null) {
-			projectCost = new ProjectCost(getProject(), CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()));
+			projectCost = new ProjectCost(getProject(), 
+					CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()),
+					IDGenerator.nextID(ProjectCost.class));
 			projectCost = ProjectCostDAO.sharedInstance().storeProjectCost(projectCost, 
 					getEntityFetchGroups(),
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -84,10 +89,6 @@ extends ActiveEntityEditorPageController<ProjectCost>
 		} finally {
 			monitor.done();
 		}
-	}
-
-	public ProjectID getProjectID() {
-		return projectID;
 	}
 
 	public Project getProject() {

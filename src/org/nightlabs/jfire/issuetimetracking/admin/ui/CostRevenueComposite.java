@@ -1,16 +1,20 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.trade.ui.currency.CurrencyCombo;
 
 /** 
@@ -20,8 +24,8 @@ public class CostRevenueComposite
 extends XComposite 
 {
 	private CurrencyCombo currencyCombo;
-	private Text costText;
-	private Text revenueText;
+	private Spinner costSpinner;
+	private Spinner revenueSpinner;
 
 	public CostRevenueComposite(Composite parent, int style) {
 		super(parent, style);
@@ -37,11 +41,18 @@ extends XComposite
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		currencyCombo.setLayoutData(gridData);
+		currencyCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				costSpinner.setDigits(currencyCombo.getSelectedCurrency().getDecimalDigitCount());
+				revenueSpinner.setDigits(currencyCombo.getSelectedCurrency().getDecimalDigitCount());
+			}
+		});
 
 		Label monthlyCostLabel = new Label(this, SWT.NONE);
 		monthlyCostLabel.setText("Hourly Cost");
-		costText = new Text(this, SWT.SINGLE);
-		costText.addListener (SWT.Verify, new Listener () {
+		costSpinner = new Spinner(this, SWT.BORDER);
+		costSpinner.addListener (SWT.Verify, new Listener () {
 			public void handleEvent (Event e) {
 				String string = e.text;
 				char [] chars = new char [string.length ()];
@@ -55,17 +66,20 @@ extends XComposite
 			}
 		});
 
-		costText.setTextLimit(20);
+		costSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		costSpinner.setMinimum(0);
+		costSpinner.setMaximum(Integer.MAX_VALUE);
+		
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
 		gridData.verticalIndent = 5;
-		costText.setLayoutData(gridData);
+		costSpinner.setLayoutData(gridData);
 
 		Label monthlyRevenueLabel = new Label(this, SWT.NONE);
 		monthlyRevenueLabel.setText("Hourly Revenue");
-		revenueText = new Text(this, SWT.SINGLE);
-		revenueText.addListener (SWT.Verify, new Listener () {
+		revenueSpinner = new Spinner(this, SWT.BORDER);
+		revenueSpinner.addListener (SWT.Verify, new Listener () {
 			public void handleEvent (Event e) {
 				String string = e.text;
 				char [] chars = new char [string.length ()];
@@ -79,12 +93,15 @@ extends XComposite
 			}
 		});
 
-		revenueText.setTextLimit(20);
+		revenueSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		revenueSpinner.setMinimum(0);
+		revenueSpinner.setMaximum(Integer.MAX_VALUE);
+		
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
 		gridData.verticalIndent = 5;
-		revenueText.setLayoutData(gridData);
+		revenueSpinner.setLayoutData(gridData);
 	}
 
 	public void setCurrency(Currency currency) {
@@ -95,21 +112,37 @@ extends XComposite
 		return currencyCombo.getSelectedCurrency();
 	}
 	
-	public void setProjectCost(ProjectCost projectCost) {
-		costText.setText(Long.toString(projectCost.getDefaultCost().getAmount()));
-		revenueText.setText(Long.toString(projectCost.getDefaultRevenue().getAmount()));
+//	public void setProjectCost(ProjectCost projectCost) {
+//		costSpinner.setText(Long.toString(projectCost.getDefaultCost().getAmount()));
+//		revenueSpinner.setText(Long.toString(projectCost.getDefaultRevenue().getAmount()));
+//	}
+//	
+//	public long getCost() {
+//		return costSpinner.getText() == null || costSpinner.getText().isEmpty() ? 0 :Long.parseLong(costSpinner.getText());
+//	}
+//	
+//	public long getRevenue() {
+//		return revenueSpinner.getText() == null || revenueSpinner.getText().isEmpty() ? 0 :Long.parseLong(revenueSpinner.getText());
+//	}
+	
+	public int getCost() {
+		return costSpinner.getSelection();
 	}
 	
-	public long getCost() {
-		return costText.getText() == null || costText.getText().isEmpty() ? 0 :Long.parseLong(costText.getText());
+	public int getRevenue() {
+		return revenueSpinner.getSelection();
 	}
 	
-	public long getRevenue() {
-		return revenueText.getText() == null || revenueText.getText().isEmpty() ? 0 :Long.parseLong(revenueText.getText());
+	public void setCost(int cost) {
+		costSpinner.setSelection(cost);
+	}
+	
+	public void setRevenue(int revenue) {
+		revenueSpinner.setSelection(revenue);
 	}
 	
 	public void addKeyListener(KeyListener listener) {
-		costText.addKeyListener(listener);
-		revenueText.addKeyListener(listener);
+		costSpinner.addKeyListener(listener);
+		revenueSpinner.addKeyListener(listener);
 	}
 }

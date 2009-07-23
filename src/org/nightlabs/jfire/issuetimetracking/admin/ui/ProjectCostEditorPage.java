@@ -16,15 +16,14 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.CurrencyConstants;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.PriceFragment;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
-import org.nightlabs.jfire.issuetimetracking.dao.ProjectCostDAO;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -102,7 +101,9 @@ extends EntityEditorPageWithProgress
 				public void run() {
 					//If it's already had a project cost, uses it!!!!
 					if (projectCost == null) {
-						projectCost = new ProjectCost(controller.getProject(), CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()));
+						projectCost = new ProjectCost(controller.getProject(), 
+								CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()), 
+								IDGenerator.nextID(ProjectCost.class));
 					}
 					projectCostSection.setProjectCost(projectCost);
 					userCostSection.setProjectCost(projectCost);
@@ -130,10 +131,6 @@ extends EntityEditorPageWithProgress
 		switchToContent();		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-//				Project project = controller.getProject();
-//				ProjectCostDAO projectCostDAO = ProjectCostDAO.sharedInstance();
-//				ProjectCost projectCost = 
-//					projectCostDAO.getProjectCost(project.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				if (projectCostSection != null && !projectCostSection.getSection().isDisposed()) {
 					projectCostSection.setProjectCost(controller.getControllerObject());
 				}

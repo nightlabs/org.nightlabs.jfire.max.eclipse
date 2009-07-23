@@ -67,7 +67,8 @@ extends ToolBarSectionPart
 	private ProjectCost projectCost;
 	public void setProjectCost(ProjectCost projectCost) {
 		this.projectCost = projectCost;
-		costRevenueComposite.setProjectCost(projectCost);
+		costRevenueComposite.setRevenue((int)projectCost.getDefaultRevenue().getAmount());
+		costRevenueComposite.setCost((int)projectCost.getDefaultCost().getAmount());
 	}
 	
 	public Currency getCurrency() {
