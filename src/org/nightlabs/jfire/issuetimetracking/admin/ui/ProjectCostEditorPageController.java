@@ -6,12 +6,10 @@ import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.CurrencyConstants;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.PriceFragment;
-import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
@@ -19,14 +17,15 @@ import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetimetracking.dao.ProjectCostDAO;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorInput;
+import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
-/** 
+/**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  */
-public class ProjectCostEditorPageController 
+public class ProjectCostEditorPageController
 extends ActiveEntityEditorPageController<ProjectCost>
 {
 	public ProjectCostEditorPageController(EntityEditor editor)
@@ -57,20 +56,46 @@ extends ActiveEntityEditorPageController<ProjectCost>
 	private ProjectID projectID;
 
 	@Override
-	protected ProjectCost retrieveEntity(ProgressMonitor monitor) {
-		ProjectCost projectCost = ProjectCostDAO.sharedInstance().getProjectCost(projectID, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
-
-		if (projectCost == null) {
-			projectCost = new ProjectCost(getProject(), 
-					CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()),
-					IDGenerator.nextID(ProjectCost.class));
-			projectCost = ProjectCostDAO.sharedInstance().storeProjectCost(projectCost, 
+	protected ProjectCost retrieveEntity(ProgressMonitor monitor)
+	{
+		monitor.beginTask("Loading project cost", 100);
+		try {
+			ProjectCost projectCost = ProjectCostDAO.sharedInstance().getProjectCost(
+					projectID,
 					getEntityFetchGroups(),
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new NullProgressMonitor());
-		}
+					getEntityMaxFetchDepth(),
+					new SubProgressMonitor(monitor, 70)
+			);
 
-		return projectCost;
+			if (projectCost == null) {
+				TradeConfigModule tradeConfigModule = ConfigUtil.getUserCfMod(
+						TradeConfigModule.class,
+						new String[] {
+							FetchPlan.DEFAULT,
+							TradeConfigModule.FETCH_GROUP_CURRENCY,
+						},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(monitor, 10)
+				);
+
+				projectCost = new ProjectCost(
+						getProject(),
+						tradeConfigModule.getCurrency()
+				);
+
+				projectCost = ProjectCostDAO.sharedInstance().storeProjectCost(projectCost,
+						getEntityFetchGroups(),
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(monitor, 20)
+				);
+			}
+			else
+				monitor.worked(30);
+
+			return projectCost;
+		} finally {
+			monitor.done();
+		}
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.SWT;
@@ -16,19 +19,15 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jfire.accounting.CurrencyConstants;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.PriceFragment;
-import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
-import org.nightlabs.progress.NullProgressMonitor;
 
-public class ProjectCostEditorPage 
-extends EntityEditorPageWithProgress 
+public class ProjectCostEditorPage
+extends EntityEditorPageWithProgress
 {
 	/**
 	 * The id of this page.
@@ -37,7 +36,7 @@ extends EntityEditorPageWithProgress
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link ProjectCostEditorPage}. 
+	 * new instances of {@link ProjectCostEditorPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
@@ -46,7 +45,7 @@ extends EntityEditorPageWithProgress
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			return new ProjectCostEditorPageController(editor); 
+			return new ProjectCostEditorPageController(editor);
 		}
 	}
 
@@ -54,9 +53,9 @@ extends EntityEditorPageWithProgress
 	 * <p>
 	 * This constructor is used by the entity editor
 	 * page extension system.
-	 * 
+	 *
 	 * @param editor The editor for which to create this
-	 * 		form page. 
+	 * 		form page.
 	 */
 	public ProjectCostEditorPage(FormEditor editor)
 	{
@@ -81,35 +80,23 @@ extends EntityEditorPageWithProgress
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
 
-		projectCostSection = new ProjectCostSection(this, mainComposite, controller);
+		projectCostSection = new ProjectCostSection(this, mainComposite);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		projectCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(projectCostSection);
+		projectCostSection.addPropertyChangeListener(ProjectCostSection.PROPERTY_KEY_CURRENCY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				userCostSection.refresh();
+			}
+		});
 
-		userCostSection = new UserCostSection(this, mainComposite, controller);
+		userCostSection = new UserCostSection(this, mainComposite);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
 		userCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(userCostSection);
-
-		if (controller.isLoaded()) {
-			projectCost = controller.getControllerObject();
-
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					//If it's already had a project cost, uses it!!!!
-					if (projectCost == null) {
-						projectCost = new ProjectCost(controller.getProject(), 
-								CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()), 
-								IDGenerator.nextID(ProjectCost.class));
-					}
-					projectCostSection.setProjectCost(projectCost);
-					userCostSection.setProjectCost(projectCost);
-				}
-			});
-		}
 	}
 
 	private static final String[] FETCH_GROUPS = new String[] {
@@ -128,7 +115,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
-		switchToContent();		
+		switchToContent();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (projectCostSection != null && !projectCostSection.getSection().isDisposed()) {
