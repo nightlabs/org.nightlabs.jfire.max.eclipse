@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.ui.currency;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -55,6 +58,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author marco schulze - marco at nightlabs dot de
+ * @author chairat kongarayawetchakun - chairat at nightlabs dot com
  */
 public class CurrencyCombo
 extends XComposite
@@ -63,11 +67,15 @@ implements ISelectionProvider
 
 	private List<Currency> currencies = new ArrayList<Currency>(0);
 	private XCombo combo;
-	
+
+	public static final String PROPERTY_KEY_LOAD_JOB_FINISHED = "LoadJobFinished";
+
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
 	public CurrencyCombo(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		setLayoutData( new GridData(GridData.FILL_HORIZONTAL));
-		combo = new XCombo(this, getBorderStyle());
+		combo = new XCombo(this, getBorderStyle() | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -79,6 +87,8 @@ implements ISelectionProvider
 				else
 					selectedCurrency = currencies.get(idx);
 
+				selectedCurrencyID = selectedCurrency == null ? null : selectedCurrency.getCurrencyID();
+
 				fireSelectionChangedEvent();
 			}
 		});
@@ -88,13 +98,8 @@ implements ISelectionProvider
 
 		org.nightlabs.base.ui.job.Job loadCurrenciesJob = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo.loadCurrenciesJob.name")) { //$NON-NLS-1$
 			@Override
-			@SuppressWarnings("unchecked") //$NON-NLS-1$
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
-//					final List<Currency> currencyList = new ArrayList<Currency>(
-//							AccountingUtil.getAccountingManager().getCurrencies(
-//									new String[]{ FetchPlan.ALL }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
-
 					final List<Currency> currencyList = CurrencyDAO.sharedInstance().getCurrencies(monitor);
 
 					Display.getDefault().asyncExec(new Runnable()
@@ -106,33 +111,35 @@ implements ISelectionProvider
 							int idx = -1; int i = 0;
 //							boolean fireSelectionChangedEvent = false;
 
-							if (selectedCurrency != null && !currencies.contains(selectedCurrency)) {
-//								fireSelectionChangedEvent = true;
-								selectedCurrency = null;
-							}
+							selectedCurrency = null;
 
 							for (Currency currency : currencies) {
 								combo.add(null, currency.getCurrencySymbol());
-								if (selectedCurrency != null && selectedCurrency.equals(currency)) {
+								if (selectedCurrencyID != null && selectedCurrencyID.equals(currency.getCurrencyID())) {
 									idx = i;
 								}
 								++i;
 							}
 							if (idx >= 0)
 								combo.select(idx);
-							else 
+							else
 								combo.select(0);
+
+							idx = combo.getSelectionIndex();
+							if (idx >= 0)
+								selectedCurrency = currencies.get(idx);
 
 //							if (selectedCurrency == null && !currencies.isEmpty()) {
 //								selectedCurrency = currencies.get(0);
 ////								fireSelectionChangedEvent = true;
 //							}
-							
-//							TODO: do not fire this selection event, since other listeners added from outside are
-//								also triggered and hence we cannot know what will happen by doing so. (marius)	
-//								Maybe a callback hook is what would be best here.
+
+//							We do not fire this selection event, since other listeners added from outside are
+//								also triggered and hence we cannot know what will happen by doing so. (marius)
+//							Instead we fire a property change event for those who are interested. Chairat & Marco.
 //							if (fireSelectionChangedEvent)
 //							fireSelectionChangedEvent();
+							propertyChangeSupport.firePropertyChange(PROPERTY_KEY_LOAD_JOB_FINISHED, null, selectedCurrency);
 						}
 					});
 
@@ -163,7 +170,10 @@ implements ISelectionProvider
 		return selectedCurrency;
 	}
 
+	private String selectedCurrencyID = null;
+
 	private void setSelectedCurrencyID(String currencyID) {
+		selectedCurrencyID = currencyID;
 		int idx = -1;
 		int i = 0;
 		for (Currency currency : currencies) {
@@ -233,5 +243,21 @@ implements ISelectionProvider
 			setSelectedCurrency((CurrencyID) selObj);
 		else
 			throw new IllegalArgumentException("selection.getFirstElement() is neither null, nor an instanceof " +Currency.class.getName()+ " or " +CurrencyID.class.getName()+ "! It is an instance of " + (selObj == null ? null : selObj.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String propertyKey, PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyKey, listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(String propertyKey, PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyKey, listener);
 	}
 }
