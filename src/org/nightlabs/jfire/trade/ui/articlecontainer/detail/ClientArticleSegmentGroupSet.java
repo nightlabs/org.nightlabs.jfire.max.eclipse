@@ -59,6 +59,7 @@ import org.nightlabs.jfire.trade.ArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
@@ -436,10 +437,32 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 			boolean removedFromArticleContainer = false;
 			if (articleContainerID instanceof InvoiceID)
 				removedFromArticleContainer = !articleContainerID.equals(newArticle.getInvoiceID());
-			if (articleContainerID instanceof DeliveryNoteID)
+			else if (articleContainerID instanceof DeliveryNoteID)
 				removedFromArticleContainer = !articleContainerID.equals(newArticle.getDeliveryNoteID());
-			if (articleContainerID instanceof ReceptionNoteID)
+			else if (articleContainerID instanceof ReceptionNoteID)
 				removedFromArticleContainer = !articleContainerID.equals(newArticle.getReceptionNoteID());
+
+			if (removedFromArticleContainer) {
+				// Even if the Article.invoice/deliveryNote/receptionNote isn't pointing to the active current
+				// ArticleContainer anymore, it might still be contained, since the relationship
+				// is m-n, now and the ArticleContainer's workflow might be aborted.
+				// Thus, we check this now.
+				// TODO we should do this in a more efficient way.
+				// Bieber's suggested solution is to ask the server for all affected articleIDs
+				// (outside of this loop) so that we transmit only the ArticleIDs of only those articles
+				// which are interesting and not all flat articles of the complete articleContainer
+				// as we do now (even though maybe 2 articles are interesting, only, we might fetch hundreds
+				// or thousands if the ArticleContainer contains that many).
+				ArticleContainer ac = ArticleContainerDAO.sharedInstance().getArticleContainer(
+						articleContainerID,
+						new String[] { ArticleContainer.FETCH_GROUP_ARTICLES },
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()
+				);
+				if (ac.getArticles().contains(newArticle))
+					removedFromArticleContainer = false;
+			}
+
 			// The above is NOT necessary for Order and Offer, because it can only be removed from these ArticleContainers by being deleted from the datastore.
 
 			if (!removedFromArticleContainer) {
