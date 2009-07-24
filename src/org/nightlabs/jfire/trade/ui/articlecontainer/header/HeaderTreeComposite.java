@@ -473,17 +473,18 @@ implements ISelectionProvider
 	 */
 	public ISelection getSelection()
 	{
-		ISelection selection = null;
+//		ISelection selection = null;
+//
+//		if (selectedNode instanceof HeaderTreeNode.ArticleContainerNode) {
+//			ArticleContainer articleContainer = ((HeaderTreeNode.ArticleContainerNode) selectedNode).getArticleContainer();
+//			ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
+//			selection = new StructuredSelection(articleContainerID);
+//		}
 
-		if (selectedNode instanceof HeaderTreeNode.ArticleContainerNode) {
-			ArticleContainer articleContainer = ((HeaderTreeNode.ArticleContainerNode) selectedNode).getArticleContainer();
-			ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
-			selection = new StructuredSelection(articleContainerID);
-		}
-		if (selection == null)
+		if (selectedNode == null)
 			return StructuredSelection.EMPTY;
 
-		return selection;
+		return new StructuredSelection(selectedNode);
 	}
 
 	/**
@@ -542,8 +543,6 @@ implements ISelectionProvider
 	{
 		return selectedNode;
 	}
-
-
 
 	public Image getImageOrderRootTreeNode() {
 		return imageOrderRootTreeNode;

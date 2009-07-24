@@ -73,13 +73,17 @@
                 icon="icons/refresh_productquicklist.gif"
                 id="org.nightlabs.jfire.trade.ui.producttype.quicklist.RefreshProductQuickListViewAction"
                 label="%RefreshProductQuickListViewAction.label"
-                style="push" toolbarPath="additions" tooltip="%RefreshProductQuickListViewAction.tooltip"/>
+                style="push"
+                toolbarPath="additions"
+                tooltip="%RefreshProductQuickListViewAction.tooltip" />
             <action
                 class="org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction"
                 icon="icons/filter_productquicklist.gif"
                 id="org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction"
                 label="%FilterProductQuickListViewAction.label"
-                style="push" toolbarPath="additions" tooltip="%FilterProductQuickListViewAction.tooltip"/>
+                style="push"
+                toolbarPath="additions"
+                tooltip="%FilterProductQuickListViewAction.tooltip"/>
         </viewContribution>
         <viewContribution
             id="org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeViewContribution" targetID="org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView">
@@ -88,13 +92,19 @@
                 icon="icons/articlecontainer/header/CreateOfferAction.16x16.png"
                 id="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate"
                 label="%org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate.label"
-                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate.tooltip"/>
+                style="push"
+                toolbarPath="additions"
+                tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate.tooltip"
+                enablesFor="+"/>
             <action
                 class="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate"
                 icon="icons/articlecontainer/header/CreateOrderAction.16x16.png"
                 id="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate"
                 label="%org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate.label"
-                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate.tooltip"/>
+                style="push"
+                toolbarPath="additions"
+                tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate.tooltip"
+                enablesFor="+"/>
         </viewContribution>
         <!-- This view seems non-existent and the class InvoiceFilterApplyAction doesn't exist either. Marco.
       <viewContribution
