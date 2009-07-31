@@ -204,8 +204,14 @@ implements ISelectionProvider
 					selection = structuredSelection.getFirstElement();
 
 				ArticleContainerEditorInput editorInput = null;
-				if (selection instanceof ArticleContainerID)
-					editorInput = new ArticleContainerEditorInput((ArticleContainerID) selection);
+				if (selection instanceof HeaderTreeNode.ArticleContainerNode) {
+					HeaderTreeNode.ArticleContainerNode node = (HeaderTreeNode.ArticleContainerNode) selection;
+					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(node.getArticleContainer());
+					if (articleContainerID == null)
+						throw new IllegalStateException("JDOHelper.getObjectId(node.getArticleContainer()) returned null for node.getArticleContainer()=" + node.getArticleContainer());
+
+					editorInput = new ArticleContainerEditorInput(articleContainerID);
+				}
 				else {
 					// expand/collapse currently selected node... and that's all.
 					if (selectedNode != null && selectedNode.hasChildren()) {

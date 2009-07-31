@@ -93,6 +93,7 @@ public class CreateOfferAction extends CreateArticleContainerAction
 	public void run()
 	{
 		final CreateOrderAction.CreateOrderJob createOrderJob = headerTreeComposite.getCreateOrderAction().newCreateOrderJob();
+		createOrderJob.setOpenOrderEditor(false);
 		Job createOfferJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction.job.creatingOrder")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
