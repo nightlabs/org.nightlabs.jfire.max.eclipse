@@ -70,7 +70,7 @@ extends Dialog
 		productTypeList = new ListComposite<ProductType>(area,
 				SWT.MULTI | AbstractListComposite.getDefaultWidgetStyle(parent),
 				(String) null, new ProductTypeListLabelProvider());
-		ProductType dummy = new ProductType("dummy", "dummy", null, ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$
+		ProductType dummy = new ProductType("dummy.dummy.org", "dummy", null, ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$
 			private static final long serialVersionUID = 1L; // get rid of the warning
 			private ProductTypeName name;
 			@Override
