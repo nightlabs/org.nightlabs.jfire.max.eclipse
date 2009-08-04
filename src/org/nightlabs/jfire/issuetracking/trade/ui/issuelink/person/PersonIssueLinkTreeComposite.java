@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -40,8 +41,8 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -119,7 +120,7 @@ extends AbstractTreeComposite
 			}
 		});
 
-		
+
 		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			   public void selectionChanged(SelectionChangedEvent event) {
 			       // if the selection is empty clear the label
@@ -153,14 +154,14 @@ extends AbstractTreeComposite
 
 		}
 		);
-		
+
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 
 		}});
-		
+
 		// Load the IssueMarkers references.
 		Job job = new Job(Messages.getString(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.job.loadIssueMarkers"))) { //$NON-NLS-1$
 			@Override
@@ -182,19 +183,19 @@ extends AbstractTreeComposite
 						createContextMenu();
 					}
 				});
-				
-				return Status.OK_STATUS;	
+
+				return Status.OK_STATUS;
 			}
 			};
-			
+
 			job.setPriority(Job.SHORT);
-			job.schedule();			
+			job.schedule();
 	}
-	
+
 	public Object getSelectedNode() {
 		return selectedNode;
 	}
-	
+
 	private void fillContextMenu(IMenuManager manager) {
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute their actions here
@@ -203,17 +204,17 @@ extends AbstractTreeComposite
 		if(selectedNode!= null && selectedNode instanceof IssueLink)
 		{
 			Issue issue = ((IssueLink)selectedNode).getIssue();
-			selectedIssueMarkers =  issue.getIssueMarkers();	
+			selectedIssueMarkers =  issue.getIssueMarkers();
 		}
 
 		for(IssueMarker issueMarker:issueMarkers)
 		{
 
-			AddIssueMarkerMenuAction addIssueMarkerMenuAction = new AddIssueMarkerMenuAction(); 
+			AddIssueMarkerMenuAction addIssueMarkerMenuAction = new AddIssueMarkerMenuAction();
 			addIssueMarkerMenuAction.init(this, issueMarker);
 			manager.add(addIssueMarkerMenuAction);
 			if(selectedIssueMarkers!= null)
-				addIssueMarkerMenuAction.setChecked(selectedIssueMarkers.contains(issueMarker));	
+				addIssueMarkerMenuAction.setChecked(selectedIssueMarkers.contains(issueMarker));
 
 		}
 	}
@@ -227,19 +228,19 @@ extends AbstractTreeComposite
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
-		
-	    
+
+
 		getTreeViewer().getControl().setMenu(menu);
 		site.registerContextMenu(menuMgr, getTreeViewer());
 	}
-	
+
 
 	private NotificationListener issueChangeListener = new NotificationAdapterJob() {
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.PersonIssueLinkTreeComposite.task.refreshNodes"), 100); //$NON-NLS-1$
-			setRootNode(partner, new SubProgressMonitor(monitor, 100));}		
+			setRootNode(partner, new SubProgressMonitor(monitor, 100));}
 	};
 
 	private class ContentProvider extends TreeContentProvider {
@@ -311,7 +312,16 @@ extends AbstractTreeComposite
 
 	private static Dimension ISSUE_MARKER_IMAGE_DIMENSION = new Dimension(16, 16);
 
-	private class LabelProvider extends TableLabelProvider {
+	private class LabelProvider
+	extends ColumnSpanLabelProvider
+//	extends TableLabelProvider {
+	{
+		public LabelProvider(ColumnViewer columnViewer) {
+			super(columnViewer);
+		}
+
+		//	extends TableLabelProvider {
+		@Override
 		public String getColumnText(Object element, int columnIndex) {
 
 			if(columnIndex==0)
@@ -363,7 +373,6 @@ extends AbstractTreeComposite
 		/**
 		 * @see org.nightlabs.base.ui.table.TableLabelProvider#getText(java.lang.Object)
 		 */
-		@Override
 		public String getText(Object element) {
 			if (element instanceof IssueLinkTreeNode)
 				return ((IssueLinkTreeNode)element).getName();
@@ -376,6 +385,12 @@ extends AbstractTreeComposite
 				return ((IssueDescription)element).getText();
 
 			return ""; //$NON-NLS-1$
+		}
+
+		@Override
+		protected int[][] getColumnSpan(Object element) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -423,7 +438,7 @@ extends AbstractTreeComposite
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new ContentProvider());
-		treeViewer.setLabelProvider(new LabelProvider());
+		treeViewer.setLabelProvider(new LabelProvider(treeViewer));
 		if (rootlegalEntityIssuesLinkNode != null) {
 			treeViewer.setInput(rootlegalEntityIssuesLinkNode);
 		}
