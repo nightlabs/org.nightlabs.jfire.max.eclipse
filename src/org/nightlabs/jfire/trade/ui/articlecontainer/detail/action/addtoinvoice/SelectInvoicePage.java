@@ -27,19 +27,22 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -51,12 +54,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
@@ -67,9 +70,15 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class SelectInvoicePage extends DynamicPathWizardPage
 {
@@ -88,6 +97,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 		super(SelectInvoicePage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.title")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(),
 				SelectInvoicePage.class, "", ImageDimension._75x70, ImageFormat.png)); //$NON-NLS-1$
+		setDescription("Select an existing (non-finalized) invoice to add the articles or create a new invoice for them.");
 	}
 
 	@Override
@@ -121,7 +131,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 			@Override
 			protected void setTableProvider(TableViewer tableViewer)
 			{
-				tableViewer.setContentProvider(new TableContentProvider());
+				tableViewer.setContentProvider(new ArrayContentProvider());
 				tableViewer.setLabelProvider(new TableLabelProvider() {
 					public String getColumnText(Object element, int columnIndex)
 					{
@@ -169,9 +179,9 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.loadInvoicesJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor)
+			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				loadDataInJob();
+				loadDataInJob(monitor);
 				return Status.OK_STATUS;
 			}
 		}.schedule();
@@ -184,14 +194,34 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 		return (AddToInvoiceWizard) getWizard();
 	}
 
-	private void loadDataInJob()
+	private void loadDataInJob(ProgressMonitor monitor) throws Exception
 	{
+		monitor.beginTask("Loading data", 100);
 		try {
+			Set<ArticleID> articleIDs = NLJDOHelper.getObjectIDSet(getAddToInvoiceWizard().getArticlesToAdd());
+			Collection<Article> articles = ArticleDAO.sharedInstance().getArticles(
+					articleIDs,
+					new String[] {
+							FetchPlan.DEFAULT,
+							Article.FETCH_GROUP_OFFER,
+							Offer.FETCH_GROUP_OFFER_LOCAL
+					},
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new SubProgressMonitor(monitor, 50)
+			);
+			final Set<Offer> nonAcceptedOffers = new HashSet<Offer>();
+			for (Article article : articles) {
+				if (!article.getOffer().getOfferLocal().isAccepted())
+					nonAcceptedOffers.add(article.getOffer());
+			}
+
 			AccountingManagerRemote accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			final List<Invoice> l = accountingManager.getNonFinalizedInvoices(
 					getAddToInvoiceWizard().getVendorID(),
 					getAddToInvoiceWizard().getCustomerID(),
 					FETCH_GROUPS_INVOICES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
+			monitor.worked(50);
 
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run()
@@ -199,10 +229,15 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 					invoices.clear();
 					invoices.addAll(l);
 					invoiceTable.refresh();
+
+					if (nonAcceptedOffers.isEmpty())
+						setMessage(null, WizardPage.WARNING);
+					else
+						setMessage("At least one of the articles has a non-accepted offer. If you continue, it will be accepted implicitely!", WizardPage.WARNING);
 				}
 			});
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} finally {
+			monitor.done();
 		}
 	}
 

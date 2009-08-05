@@ -102,6 +102,7 @@ public class CreateOfferAction extends CreateArticleContainerAction
 				if (rootTreeNode instanceof EndCustomerRootTreeNode)
 					return Status.CANCEL_STATUS;
 
+				boolean createOrderAndOffer = true;
 				if (selectedNode instanceof HeaderTreeNode.ArticleContainerNode) {
 					HeaderTreeNode.ArticleContainerNode orderTreeNode = (HeaderTreeNode.ArticleContainerNode) headerTreeComposite.getSelectedNode();
 					if (orderTreeNode.getArticleContainer() instanceof Offer) {
@@ -113,11 +114,15 @@ public class CreateOfferAction extends CreateArticleContainerAction
 							throw new IllegalStateException("Why the hell is the parent of an offer-tree-node, not an order?!?");
 					}
 
-					OrderID orderID = (OrderID) JDOHelper.getObjectId(orderTreeNode.getArticleContainer());
-					boolean recurring = orderTreeNode.getArticleContainer() instanceof RecurringOrder;
-					createOffer(orderID, recurring);
+					if (orderTreeNode.getArticleContainer() instanceof Order) {
+						createOrderAndOffer = false;
+						OrderID orderID = (OrderID) JDOHelper.getObjectId(orderTreeNode.getArticleContainer());
+						boolean recurring = orderTreeNode.getArticleContainer() instanceof RecurringOrder;
+						createOffer(orderID, recurring);
+					}
 				}
-				else {
+
+				if (createOrderAndOffer) {
 					if (!createOrderJob.isRunnable())
 						return Status.CANCEL_STATUS;
 
