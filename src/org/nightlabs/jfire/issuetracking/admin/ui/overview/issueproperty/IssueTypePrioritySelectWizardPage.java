@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
@@ -42,19 +42,19 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
-public class IssueTypePrioritySelectWizardPage 
-extends WizardHopPage 
+public class IssueTypePrioritySelectWizardPage
+extends WizardHopPage
 {
-	private Group choiceGroup;	
+	private Group choiceGroup;
 	private Button createNewCheckBox;
 	private Button selectFromCheckBox;
-	
+
 	private IssueType issueType;
-	
+
 	private IssuePriorityTable issuePriorityTable;
-	
+
 	private IssueTypePriorityGeneralWizardPage createPage;
-	
+
 	public IssueTypePrioritySelectWizardPage(IssueType issueType) {
 		super(	IssueTypePrioritySelectWizardPage.class.getName(),
 	    		Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySelectWizardPage.title"), //$NON-NLS-1$
@@ -65,7 +65,7 @@ extends WizardHopPage
 		createPage = new IssueTypePriorityGeneralWizardPage(null);
 	    setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySelectWizardPage.description")); //$NON-NLS-1$
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -73,32 +73,34 @@ extends WizardHopPage
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		
-		createNewCheckBox = new Button(comp, SWT.RADIO);		
+
+		createNewCheckBox = new Button(comp, SWT.RADIO);
 		createNewCheckBox.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySelectWizardPage.checkBox.createNew.text")); //$NON-NLS-1$
 		createNewCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createNewCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setCreateNew(true, true);
 			}
 		});
-		
+
 		selectFromCheckBox = new Button(comp, SWT.RADIO);
 		selectFromCheckBox.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySelectWizardPage.checkBox.selectFrom.text")); //$NON-NLS-1$
 		selectFromCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectFromCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setCreateNew(false, true);
 			}
 		});
-		
+
 		issuePriorityTable = new IssuePriorityTable(wrapper, SWT.NONE);
 		Display.getCurrent().asyncExec(new Runnable(){
 			public void run() {
 				List<IssuePriority> issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(
 						new String[] { FetchPlan.DEFAULT, IssuePriority.FETCH_GROUP_NAME }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issuePriorities.removeAll(issueType.getIssuePriorities());
-				
+
 				issuePriorityTable.setInput(issuePriorities);
 			}
 		});
@@ -106,7 +108,7 @@ extends WizardHopPage
 			public void selectionChanged(SelectionChangedEvent arg0) {
 				if (issuePriorityTable.getFirstSelectedElement() != null) {
 					selectFromCheckBox.setSelection(true);
-					setCreateNew(false, true);					
+					setCreateNew(false, true);
 				}
 			}
 		});
@@ -122,15 +124,16 @@ extends WizardHopPage
 			}
 		});
 		setCreateNew(false, false);
-		return wrapper; 
+		return wrapper;
 	}
-	
-	public void setCreateNew(boolean b, boolean updateButtons) {
+
+	public void setCreateNew(boolean isCreateNew, boolean updateButtons) {
 //		issuePriorityTable.setEnabled(!b);
-		createNewCheckBox.setSelection(b);
-		selectFromCheckBox.setSelection(!b);
-		if (b) {
-			getWizardHop().addHopPage(createPage);
+		createNewCheckBox.setSelection(isCreateNew);
+		selectFromCheckBox.setSelection(!isCreateNew);
+		if (isCreateNew) {
+			if (!getWizardHop().getHopPages().contains(createPage))
+				getWizardHop().addHopPage(createPage);
 		} else {
 			getWizardHop().removeAllHopPages();
 		}
@@ -142,11 +145,11 @@ extends WizardHopPage
 	public boolean isPageComplete() {
 		return createNewCheckBox.getSelection() || issuePriorityTable.getFirstSelectedElement() != null;
 	}
-	
+
 	public Collection<IssuePriority> getSelectedIssuePriorities() {
 		if (this.equals(getContainer().getCurrentPage()))
 			return new ArrayList<IssuePriority>(issuePriorityTable.getSelectedElements());
-		else 
+		else
 			return Collections.singleton(createPage.getPriorityComposite().getIssuePriority());
 	}
 }
