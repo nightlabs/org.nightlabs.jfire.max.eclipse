@@ -26,16 +26,17 @@
 
 package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype;
 
+import javax.jdo.FetchPlan;
+
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.IDynamicPathWizardPage;
-import org.nightlabs.i18n.I18nText;
-import org.nightlabs.i18n.I18nTextBuffer;
-import org.nightlabs.jdo.BaseObjectID;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -64,29 +65,33 @@ public class AddPriceFragmentTypeWizard extends DynamicPathWizard
 		return priceFragmentTypeSelectionPage;
 	}
 
-	/**
-	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish()
 	{
 		try {
 			PriceFragmentType priceFragmentType = null;
 			if (createNewPriceFragmentTypeEnabled) {
-				I18nTextBuffer priceFragmentTypeNameBuffer = createPriceFragmentTypePage.getPriceFragmentTypeNameBuffer();
+//				I18nTextBuffer priceFragmentTypeNameBuffer = createPriceFragmentTypePage.getPriceFragmentTypeNameBuffer();
+//
+//				String priceFragmentTypeID = createPriceFragmentTypePage.getPriceFragmentTypeID().getText();
+//				if ("".equals(priceFragmentTypeID)) //$NON-NLS-1$
+//					priceFragmentTypeID = ObjectIDUtil.makeValidIDString(
+//							priceFragmentTypeNameBuffer.getText(I18nText.DEFAULT_LANGUAGEID), true
+//					);
+//
+//				priceFragmentType = new PriceFragmentType(
+//						Login.getLogin().getOrganisationID(),
+//						priceFragmentTypeID);
+//
+////				priceFragmentTypeNameBuffer.store(priceFragmentType.getPriceFragmentTypeName()); // TO DO uncomment
 
-				String priceFragmentTypeID = createPriceFragmentTypePage.getPriceFragmentTypeID().getText();
-				if ("".equals(priceFragmentTypeID)) //$NON-NLS-1$
-					priceFragmentTypeID = BaseObjectID.makeValidIDString(
-							priceFragmentTypeNameBuffer.getText(I18nText.DEFAULT_LANGUAGEID), true);
-
-				priceFragmentType = new PriceFragmentType(
-						Login.getLogin().getOrganisationID(),
-						priceFragmentTypeID);
-
-//				priceFragmentTypeNameBuffer.store(priceFragmentType.getPriceFragmentTypeName()); // TODO uncomment
-
-				// TODO store the PriceFragmentType to the server?!
+				priceFragmentType = createPriceFragmentTypePage.createPriceFragmentType();
+				priceFragmentType = PriceFragmentTypeDAO.sharedInstance().storePriceFragmentType(
+						priceFragmentType, true,
+						new String[] { FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME },
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()
+				);
 			}
 			else
 				priceFragmentType = priceFragmentTypeSelectionPage.getSelectedPriceFragmentType();
