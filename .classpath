@@ -9,9 +9,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireIssueTracking"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireQueryStore"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jdo"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.query"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.query.jdo"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
