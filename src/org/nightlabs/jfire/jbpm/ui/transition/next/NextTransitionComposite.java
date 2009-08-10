@@ -10,9 +10,13 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -32,12 +36,19 @@ import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class NextTransitionComposite
-		extends XComposite
+extends XComposite
+implements ISelectionProvider
 {
 	private XComboComposite<Transition> nextTransitionCombo;
+	public static Transition EMPTY_TRANSITION = null;
 	private Button signalButton;
 
 	public NextTransitionComposite(Composite parent, int style)
+	{
+		this(parent, style, true);
+	}
+
+	public NextTransitionComposite(Composite parent, int style, boolean withSignalButton)
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		getGridLayout().numColumns = 2;
@@ -57,24 +68,29 @@ public class NextTransitionComposite
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				updateUI();
+				fireSelectionChangedEvent();
 			}
 		});
-		signalButton = new Button(this, SWT.PUSH);
-		signalButton.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.signalButton.text")); //$NON-NLS-1$
-		signalButton.setEnabled(false);
-		signalButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				setEnabled(false);
-				fireSignalEvent();
-			}
-		});
+
+		if (withSignalButton) {
+			signalButton = new Button(this, SWT.PUSH);
+			signalButton.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.signalButton.text")); //$NON-NLS-1$
+			signalButton.setEnabled(false);
+			signalButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					setEnabled(false);
+					fireSignalEvent();
+				}
+			});
+		}
 	}
 
 	private void updateUI()
 	{
-		signalButton.setEnabled(nextTransitionCombo.getSelectedElement() != null);
+		if (signalButton != null)
+			signalButton.setEnabled(nextTransitionCombo.getSelectedElement() != null);
 	}
 
 	private Statable statable;
@@ -102,7 +118,7 @@ public class NextTransitionComposite
 	public void setStatable(Statable _statable, ProgressMonitor monitor)
 	{
 		this.statable = _statable;
-		State state = statable.getStatableLocal().getState();
+		final State state = statable.getStatableLocal().getState();
 		stateID = (StateID) JDOHelper.getObjectId(state);
 
 		// fetch the possible further transitions for the current state
@@ -125,7 +141,18 @@ public class NextTransitionComposite
 					return;
 
 				nextTransitionCombo.removeAll();
+
+				//Creates EMPTY transition for using in undo process
+				if (EMPTY_TRANSITION == null) {
+					 EMPTY_TRANSITION = new Transition(state.getStateDefinition(), "empty");
+				}
+				String baseName = "org.nightlabs.jfire.jbpm.ui.resource.messages";
+				ClassLoader loader = NextTransitionComposite.class.getClassLoader();
+				EMPTY_TRANSITION.getName().readFromProperties(baseName, loader, "org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.empty.text");
+
+				nextTransitionCombo.addElement(EMPTY_TRANSITION);
 				nextTransitionCombo.addElements(transitions);
+				nextTransitionCombo.setSelection(0);
 				setEnabled(true);
 				updateUI();
 				layout(true);
@@ -178,4 +205,51 @@ public class NextTransitionComposite
 			l.signal(event);
 		}
 	}
+
+
+	private ListenerList selectionChangedListeners = new ListenerList();
+	private void fireSelectionChangedEvent()
+	{
+		if (selectionChangedListeners.isEmpty())
+			return;
+
+		SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
+
+		for (Object l : selectionChangedListeners.getListeners()) {
+			ISelectionChangedListener listener = (ISelectionChangedListener) l;
+			listener.selectionChanged(event);
+		}
+	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.add(listener);
+	}
+
+	@Override
+	public ISelection getSelection() {
+		Transition selectedTransition = getSelectedTransition();
+		if (selectedTransition == null)
+			return new StructuredSelection(new Object[0]);
+
+		return new StructuredSelection(selectedTransition);
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener)
+	{
+		selectionChangedListeners.remove(listener);
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		if (!(selection instanceof IStructuredSelection))
+			throw new IllegalArgumentException("selection is not an instance of " + IStructuredSelection.class.getName() + " but " + (selection == null ? null : selection.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$
+
+		IStructuredSelection sel = (IStructuredSelection) selection;
+		Object selObj = sel.getFirstElement();
+		if (selObj instanceof Transition)
+			nextTransitionCombo.setSelection((Transition) selObj);
+	}
+
 }
