@@ -43,6 +43,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.id.IssueMarkerID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
@@ -72,6 +73,7 @@ extends AbstractTableComposite<Issue>
 		Issue.FETCH_GROUP_ISSUE_TYPE,
 		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,
 		Statable.FETCH_GROUP_STATE,
@@ -184,7 +186,8 @@ extends AbstractTableComposite<Issue>
 						break;
 
 					IssueMarker issueMarker = itIssueMarkers.next();
-					String issueMarkerIDString = JDOHelper.getObjectId(issueMarker).toString();
+					IssueMarkerID issueMarkerID = (IssueMarkerID) JDOHelper.getObjectId(issueMarker);
+					String issueMarkerIDString = issueMarkerID.toString();
 					Image icon = imageKey2Image.get(issueMarkerIDString);
 					if (icon == null)
 						if (issueMarker.getIcon16x16Data() != null) {
@@ -260,6 +263,11 @@ extends AbstractTableComposite<Issue>
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
+
+		tc = new TableColumn(table, SWT.LEFT); // @column 9
+		tc.setMoveable(true);
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.assignee.text")); //$NON-NLS-1$
+		layout.addColumnData(new ColumnWeightData(20)); // Previously: 15
 
 		// commented because IMHO not necessary
 //		tc = new TableColumn(table, SWT.LEFT); // @column 9
@@ -339,6 +347,7 @@ extends AbstractTableComposite<Issue>
 				case 6: return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
 				case 7: return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
 				case 8: return getStateName(issue);
+				case 9: return issue.getAssignee() == null ? "None" : issue.getAssignee().getName();
 //				case 9: return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
 				default: return ""; //$NON-NLS-1$
 				}

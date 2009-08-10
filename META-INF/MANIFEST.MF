@@ -14,7 +14,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.base.ui,
  org.eclipse.ui.workbench.texteditor,
  org.nightlabs.jfire.querystore.ui,
- javax.jdo;bundle-version="2.3.0",
  org.nightlabs.jfire.base.ui,
  org.nightlabs.jfire.jbpm.ui
 Eclipse-LazyStart: true
