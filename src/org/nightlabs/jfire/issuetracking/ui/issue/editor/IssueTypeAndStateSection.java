@@ -1,17 +1,13 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -23,15 +19,13 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
-import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
-import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueTypeAndStateSection 
-extends AbstractIssueEditorGeneralSection 
+public class IssueTypeAndStateSection
+extends AbstractIssueEditorGeneralSection
 {
 	private Label projectLabel;
 	private ProjectComboComposite projectComboComposite;
@@ -90,11 +84,47 @@ extends AbstractIssueEditorGeneralSection
 		gd.horizontalSpan = 2;
 		currentStateComposite.setLayoutData(gd);
 
-		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
-		nextTransitionComposite.addSignalListener(new SignalListener() {
+		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE, false);
+		nextTransitionComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				Transition selectedTransition = nextTransitionComposite.getSelectedTransition();
+				if (JbpmConstants.TRANSITION_NAME_ASSIGN.equals(selectedTransition.getJbpmTransitionName()) &&
+						getIssue().getAssignee() == null)
+				{
+					((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
+					nextTransitionComposite.setEnabled(true);
+					getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
+					return;
+				}
+
+				if (JbpmConstants.TRANSITION_NAME_UNASSIGN.equals(selectedTransition.getJbpmTransitionName())) {
+					((IssueEditorGeneralPage)page).getIssueDetailSection().getUnassignAction().run();
+					nextTransitionComposite.setEnabled(true);
+					getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
+					return;
+				}
+
+//				if (getController().getEntityEditor().isDirty()) {
+//					if (!MessageDialog.openQuestion(nextTransitionComposite.getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.dialog.saveModification.title"), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.dialog.saveModification.description"))) { //$NON-NLS-1$ //$NON-NLS-2$
+//						nextTransitionComposite.setEnabled(true);
+//						return;
+//					}
+//				}
+
+				if (selectedTransition.equals(NextTransitionComposite.EMPTY_TRANSITION)) {
+					markUndirty();
+				}
+				else {
+					getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
+					markDirty();
+				}
+			}
+		});
+		/*nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
 				if (JbpmConstants.TRANSITION_NAME_ASSIGN.equals(event.getTransition().getJbpmTransitionName()) &&
-						getIssue().getAssignee() == null) 
+						getIssue().getAssignee() == null)
 				{
 					((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
 					nextTransitionComposite.setEnabled(true);
@@ -126,7 +156,7 @@ extends AbstractIssueEditorGeneralSection
 //				if (assigneeUser != null) {
 //				getIssue().setAssignee(assigneeUser);
 //				}
-//				}//if							
+//				}//if
 //				}
 //				}
 //				}
@@ -140,7 +170,7 @@ extends AbstractIssueEditorGeneralSection
 				markDirty();
 				getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
 			}
-		});
+		});*/
 
 		gd = new GridData();
 		gd.horizontalSpan = 3;
@@ -151,7 +181,7 @@ extends AbstractIssueEditorGeneralSection
 //	* The fetch groups of issue data.
 //	*/
 //	public static final String[] FETCH_GROUPS = new String[] {
-//	FetchPlan.DEFAULT, 
+//	FetchPlan.DEFAULT,
 //	Issue.FETCH_GROUP_ISSUE_LOCAL,
 //	IssueType.FETCH_GROUP_NAME,
 //	IssueLocal.FETCH_GROUP_STATE,
@@ -168,7 +198,7 @@ extends AbstractIssueEditorGeneralSection
 //	try {
 //	IssueID issueID = (IssueID)JDOHelper.getObjectId(getIssue());
 //	IssueManagerRemote = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties());
-////	Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(), 
+////	Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(),
 ////	true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //	im.signalIssue(issueID, event.getTransition().getJbpmTransitionName(), false, null, 1);
 //	// make sure the object cannot be loaded from the cache anymore (we would load an out-dated version, since the notification from the server is surely not yet here)
@@ -188,7 +218,7 @@ extends AbstractIssueEditorGeneralSection
 //	};
 //	job.setPriority(Job.SHORT);
 //	job.setUser(true);
-//	job.schedule();		
+//	job.schedule();
 //	}
 
 //	protected void signalAssign() {
@@ -200,7 +230,7 @@ extends AbstractIssueEditorGeneralSection
 //	try {
 //	IssueManagerRemote = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //	Issue issue = im.storeIssue(getController().getIssue(), true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//	issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN, 
+//	issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN,
 //	true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 //	currentStateComposite.setStatable(issue);
@@ -218,6 +248,7 @@ extends AbstractIssueEditorGeneralSection
 //	job.schedule();
 //	}
 
+	@Override
 	protected void doSetIssue(Issue issue) {
 		issueTypeLabel.setText(
 				String.format(
@@ -233,7 +264,7 @@ extends AbstractIssueEditorGeneralSection
 		projectComboComposite.setSelectedProject(issue.getProject());
 
 		currentStateComposite.setStatable(issue);
-		nextTransitionComposite.setStatable(issue);		
+		nextTransitionComposite.setStatable(issue);
 	}
 
 	public static final String[] FETCH_GROUPS_TRANSITION = {

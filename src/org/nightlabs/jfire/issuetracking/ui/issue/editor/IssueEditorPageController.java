@@ -42,7 +42,6 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistoryItem;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
-import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -59,8 +58,9 @@ import org.nightlabs.util.Util;
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  */
-public class IssueEditorPageController extends ActiveEntityEditorPageController<Issue> {
-
+public class IssueEditorPageController
+extends ActiveEntityEditorPageController<Issue>
+{
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_SUBJECT,
@@ -108,51 +108,6 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		IssueMarker.FETCH_GROUP_NAME,            // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_DESCRIPTION,     // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_ICON_16X16_DATA, // <-- Since 14.05.2009
-/*		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-//		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,
-		IssuePriority.FETCH_GROUP_NAME,
-		IssueSeverityType.FETCH_GROUP_NAME,
-		IssueResolution.FETCH_GROUP_NAME,
-		IssueComment.FETCH_GROUP_THIS_COMMENT,
-		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
-		Statable.FETCH_GROUP_STATE,
-		StatableLocal.FETCH_GROUP_STATE,
-		State.FETCH_GROUP_STATE_DEFINITION,
-		StateDefinition.FETCH_GROUP_NAME,
-		User.FETCH_GROUP_NAME,
-		IssueLinkType.FETCH_GROUP_NAME,
-//		Issue.FETCH_GROUP_SUBJECT,
-//		Issue.FETCH_GROUP_ISSUE_TYPE,
-//		Issue.FETCH_GROUP_DESCRIPTION,
-//		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
-//		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-//		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
-//		Issue.FETCH_GROUP_ISSUE_REPORTER,
-//		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
-//		Issue.FETCH_GROUP_ISSUE_FILELIST,
-//		Issue.FETCH_GROUP_ISSUE_LOCAL,
-//		Issue.FETCH_GROUP_ISSUE_LINKS,
-//		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT_NAMES,
-
-
-//		FetchPlan.DEFAULT,
-//		Issue.FETCH_GROUP_THIS_ISSUE,
-//		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-////		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION,
-////		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-//		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
-//		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-////		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-//		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
-//		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
-//		IssueComment.FETCH_GROUP_THIS_COMMENT,
-//		StatableLocal.FETCH_GROUP_STATE,
-//		Statable.FETCH_GROUP_STATE,
-//		State.FETCH_GROUP_STATE_DEFINITION,
-//		StateDefinition.FETCH_GROUP_NAME};*/
 	};
 
 	public IssueEditorPageController(EntityEditor editor)
@@ -218,22 +173,9 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 
 			Issue issue;
 			issue = IssueDAO.sharedInstance().storeIssue(
-					controllerObject, true/*jbpmTransitionName == null*/, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+					controllerObject, jbpmTransitionName, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
 					new SubProgressMonitor(monitor, 50)
 			);
-
-//			if (jbpmTransitionName == null)
-//				monitor.worked(50);
-//			else {
-			if (jbpmTransitionName != null &&
-					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_ASSIGN) &&
-					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_UNASSIGN)) {
-				issue = IssueDAO.sharedInstance().signalIssue(
-						issueID, jbpmTransitionName, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
-						new SubProgressMonitor(monitor, 50)
-				);
-				jbpmTransitionName = null;
-			}
 
 			return issue;
 		} finally {
