@@ -40,7 +40,7 @@ extends XComposite
 implements ISelectionProvider
 {
 	private XComboComposite<Transition> nextTransitionCombo;
-	public static Transition EMPTY_TRANSITION = null;
+	private static Transition EMPTY_TRANSITION = null;
 	private Button signalButton;
 
 	public NextTransitionComposite(Composite parent, int style)
@@ -90,7 +90,7 @@ implements ISelectionProvider
 	private void updateUI()
 	{
 		if (signalButton != null)
-			signalButton.setEnabled(nextTransitionCombo.getSelectedElement() != null);
+			signalButton.setEnabled(getSelectedTransition() != null);
 	}
 
 	private Statable statable;
@@ -186,6 +186,8 @@ implements ISelectionProvider
 
 	public Transition getSelectedTransition()
 	{
+		if (nextTransitionCombo.getSelectedElement() == EMPTY_TRANSITION)
+			return null;
 		return nextTransitionCombo.getSelectedElement();
 	}
 
