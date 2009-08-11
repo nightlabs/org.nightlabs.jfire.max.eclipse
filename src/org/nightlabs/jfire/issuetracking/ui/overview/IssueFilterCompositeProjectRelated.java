@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
@@ -40,7 +41,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 	private ProjectAdminTreeComposite projectTreeComposite;
 	private CheckboxTreeViewer checkboxTreeViewer;
-	
+
 	private volatile Set<ProjectID> selectedProjectIDs = new HashSet<ProjectID>();
 
 	/**
@@ -99,17 +100,17 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
 		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
 		checkboxTreeViewer.setInput(projectTreeComposite.getTreeViewer().getInput());
-		
+
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				selectedProjectIDs.clear();
-				
+
 				//Child Checking
 				final boolean isChecked = event.getChecked();
 				ProjectTreeNode checkedNode = (ProjectTreeNode)event.getElement();
-				
+
 				projectTreeComposite.getTreeViewer().expandToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
-				
+
 				checkedNode.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener<ProjectID, Project, ProjectTreeNode>() {
 					@Override
 					public void onJDOObjectsChanged(
@@ -117,26 +118,26 @@ extends AbstractQueryFilterComposite<IssueQuery>
 						for (ProjectTreeNode loadedNode : changedEvent.getLoadedTreeNodes()) {
 							projectTreeComposite.getTreeViewer().expandToLevel(loadedNode, AbstractTreeViewer.ALL_LEVELS);
 							checkboxTreeViewer.setChecked(loadedNode, isChecked);
-							
+
 							if (isChecked)
 								selectedProjectIDs.add(loadedNode.getJdoObject().getObjectId());
 						}
 					}
 				});
-				
+
 				//for isChecked == false
 				checkboxTreeViewer.setSubtreeChecked(checkedNode,	isChecked);
 				automateParentCheck((ProjectTreeNode)checkedNode.getParent());
-				
+
 				//End Child Checking
-				
+
 				for (Object object : checkboxTreeViewer.getCheckedElements()) {
 					if (object instanceof ProjectTreeNode) {
 						ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
 						selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
 					}
 				}
-				
+
 				getQuery().setProjectIDs(selectedProjectIDs);
 				boolean enable = !selectedProjectIDs.isEmpty();
 				getQuery().setFieldEnabled(IssueQuery.FieldName.projectIDs, enable);
@@ -170,21 +171,21 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			if (IssueQuery.FieldName.projectIDs.equals(changedField.getPropertyName()))
 			{
-				Set<ProjectID> tmpProjectIDs = (Set<ProjectID>) changedField.getNewValue();
-				if (tmpProjectIDs == null)
+				Set<ProjectID> newProjectIDs = (Set<ProjectID>) changedField.getNewValue();
+				if (newProjectIDs == null)
 				{
 				}
 				else
 				{
-					/*for (ProjectID projectID : tmpProjectIDs) {
+					for (ProjectID projectID : newProjectIDs) {
 						TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
 						for (TreeItem treeItem : treeItems) {
-							Project project = (Project)treeItem.getData();
-							if (project.getProjectID() == projectID.projectID) {
+							ProjectTreeNode projectTreeNode = (ProjectTreeNode)treeItem.getData();
+							if (projectTreeNode.getJdoObject().getProjectID() == projectID.projectID) {
 								treeItem.setChecked(true);
 							}
 						}
-					}*/
+					}
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.projectIDs).equals(

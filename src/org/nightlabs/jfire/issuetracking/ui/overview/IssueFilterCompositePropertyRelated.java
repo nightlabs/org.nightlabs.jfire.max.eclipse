@@ -129,14 +129,15 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssueType selectedIssueType = issueTypeCombo.getSelectedElement();
 
-				boolean selectAll = selectedIssueType.equals(ISSUE_TYPE_ALL);
+				boolean isSelectAll = selectedIssueType.equals(ISSUE_TYPE_ALL);
 
-				if (selectAll)
+				if (isSelectAll)
 					getQuery().setIssueTypeID(null);
-				else
+				else {
 					getQuery().setIssueTypeID((IssueTypeID)JDOHelper.getObjectId(selectedIssueType));
-
-				getQuery().setFieldEnabled(IssueQuery.FieldName.issueTypeID, ! selectAll);
+					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueTypeID))
+						getQuery().setFieldEnabled(IssueQuery.FieldName.issueTypeID, !isSelectAll);
+				}
 			}
 		});
 
@@ -149,14 +150,14 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssueSeverityType selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 
-				boolean selectAll = selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL);
-				if (selectAll)
+				boolean isSelectAll = selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL);
+				if (isSelectAll)
 					getQuery().setIssueSeverityTypeID(null);
-				else
-					getQuery().setIssueSeverityTypeID(
-							(IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-
-				getQuery().setFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID, ! selectAll);
+				else {
+					getQuery().setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
+					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID))
+						getQuery().setFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID, !isSelectAll);
+				}
 			}
 		});
 
@@ -169,14 +170,14 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssuePriority selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 
-				boolean selectAll = selectedIssuePriority.equals(ISSUE_PRIORITY_ALL);
-				if (selectAll)
+				boolean isSelectAll = selectedIssuePriority.equals(ISSUE_PRIORITY_ALL);
+				if (isSelectAll)
 					getQuery().setIssuePriorityID(null);
-				else
-					getQuery().setIssuePriorityID(
-							(IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
-
-				getQuery().setFieldEnabled(IssueQuery.FieldName.issuePriorityID, ! selectAll);
+				else {
+					getQuery().setIssuePriorityID((IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
+					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issuePriorityID))
+						getQuery().setFieldEnabled(IssueQuery.FieldName.issuePriorityID, true);
+				}
 			}
 		});
 
@@ -189,13 +190,15 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssueResolution selectedIssueResolution = issueResolutionCombo.getSelectedElement();
 
-				boolean selectAll = ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution);
-				if (selectAll)
+				boolean isSelectAll = ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution);
+				if (isSelectAll)
 					getQuery().setIssueResolutionID(null);
-				else
+				else {
 					getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
+					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueResolutionID))
+						getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, true);
+				}
 
-				getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, ! selectAll);
 			}
 		});
 
@@ -209,15 +212,15 @@ public class IssueFilterCompositePropertyRelated
 		{
 			if (IssueQuery.FieldName.issuePriorityID.equals(changedField.getPropertyName()))
 			{
-				IssuePriorityID tmpPriorityID = (IssuePriorityID) changedField.getNewValue();
-				if (tmpPriorityID == null)
+				IssuePriorityID newPriorityID = (IssuePriorityID) changedField.getNewValue();
+				if (newPriorityID == null)
 				{
 					issuePriorityCombo.setSelection(ISSUE_PRIORITY_ALL);
 				}
 				else
 				{
 					final IssuePriority newIssuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(
-							tmpPriorityID, new String[] { IssuePriority.FETCH_GROUP_NAME },
+							newPriorityID, new String[] { IssuePriority.FETCH_GROUP_NAME },
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 					issuePriorityCombo.setSelection(newIssuePriority);
@@ -229,24 +232,24 @@ public class IssueFilterCompositePropertyRelated
 			else if (getEnableFieldName(IssueQuery.FieldName.issuePriorityID).equals(
 					changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					getQuery().setIssuePriorityID(null);
 					issuePriorityCombo.setSelection(ISSUE_PRIORITY_ALL);
 				}
 			}
 			else if (IssueQuery.FieldName.issueResolutionID.equals(changedField.getPropertyName()))
 			{
-				final IssueResolutionID tmpResolutionID = (IssueResolutionID) changedField.getNewValue();
-				if (tmpResolutionID == null)
+				final IssueResolutionID newResolutionID = (IssueResolutionID) changedField.getNewValue();
+				if (newResolutionID == null)
 				{
 					issueResolutionCombo.setSelection(ISSUE_RESOLUTION_ALL);
 				}
 				else
 				{
 					final IssueResolution newIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(
-							tmpResolutionID,
+							newResolutionID,
 							new String[] { IssueResolution.FETCH_GROUP_NAME},
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
@@ -260,24 +263,24 @@ public class IssueFilterCompositePropertyRelated
 			else if (getEnableFieldName(IssueQuery.FieldName.issueResolutionID).equals(
 					changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					getQuery().setIssueResolutionID(null);
 					issueResolutionCombo.setSelection(ISSUE_RESOLUTION_ALL);
 				}
 			}
 			else if (IssueQuery.FieldName.issueSeverityTypeID.equals(changedField.getPropertyName()))
 			{
-				IssueSeverityTypeID tmpSeverityID = (IssueSeverityTypeID) changedField.getNewValue();
-				if (tmpSeverityID == null)
+				IssueSeverityTypeID newSeverityID = (IssueSeverityTypeID) changedField.getNewValue();
+				if (newSeverityID == null)
 				{
 					issueSeverityCombo.setSelection(ISSUE_SEVERITY_TYPE_ALL);
 				}
 				else
 				{
 					final IssueSeverityType newIssueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(
-							tmpSeverityID,
+							newSeverityID,
 							new String[] { IssueSeverityType.FETCH_GROUP_NAME },
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
@@ -290,24 +293,24 @@ public class IssueFilterCompositePropertyRelated
 			else if (getEnableFieldName(IssueQuery.FieldName.issueSeverityTypeID).equals(
 					changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					getQuery().setIssueSeverityTypeID(null);
 					issueSeverityCombo.setSelection(ISSUE_SEVERITY_TYPE_ALL);
 				}
 			}
 			else if (IssueQuery.FieldName.issueTypeID.equals(changedField.getPropertyName()))
 			{
-				IssueTypeID tmpTypeID = (IssueTypeID) changedField.getNewValue();
-				if (tmpTypeID == null)
+				IssueTypeID newIssueTypeID = (IssueTypeID) changedField.getNewValue();
+				if (newIssueTypeID == null)
 				{
 					issueTypeCombo.setSelection(ISSUE_TYPE_ALL);
 				}
 				else
 				{
 					final IssueType newIssueType = IssueTypeDAO.sharedInstance().getIssueType(
-							tmpTypeID,
+							newIssueTypeID,
 							new String[] { IssueType.FETCH_GROUP_NAME },
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
@@ -320,9 +323,9 @@ public class IssueFilterCompositePropertyRelated
 			else if (getEnableFieldName(IssueQuery.FieldName.issueTypeID).equals(
 					changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					getQuery().setIssueTypeID(null);
 					issueTypeCombo.setSelection(ISSUE_TYPE_ALL);
 				}
@@ -394,7 +397,7 @@ public class IssueFilterCompositePropertyRelated
 
 								issueSeverityCombo.removeAll();
 								issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
-								for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+								for (IssueSeverityType is : issueSeverityTypeList) {
 									if (!issueSeverityCombo.contains(is))
 										issueSeverityCombo.addElement(is);
 								}
@@ -408,7 +411,7 @@ public class IssueFilterCompositePropertyRelated
 
 								issuePriorityCombo.removeAll();
 								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
-								for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+								for (IssuePriority ip : issuePriorityList) {
 									if (!issuePriorityCombo.contains(ip))
 										issuePriorityCombo.addElement(ip);
 								}
@@ -422,7 +425,7 @@ public class IssueFilterCompositePropertyRelated
 
 								issueResolutionCombo.removeAll();
 								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
-								for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+								for (IssueResolution ir : issueResolutionList) {
 									if (!issueResolutionCombo.contains(ir))
 										issueResolutionCombo.addElement(ir);
 								}

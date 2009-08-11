@@ -154,17 +154,17 @@ public class IssueFilterCompositeIssueLinkRelated
 		{
 			if (IssueQuery.FieldName.issueLinkTypeID.equals(changedField.getPropertyName()))
 			{
-				IssueLinkTypeID tmpIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();
-				if (! Util.equals(JDOHelper.getObjectId(selectedIssueLinkType), tmpIssueLinkTypeID) )
+				IssueLinkTypeID newIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();
+				if (! Util.equals(JDOHelper.getObjectId(selectedIssueLinkType), newIssueLinkTypeID) )
 				{
-					if (tmpIssueLinkTypeID == null)
+					if (newIssueLinkTypeID == null)
 					{
 						issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
 					}
 					else
 					{
 						final IssueLinkType newIssueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
-								tmpIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME },
+								newIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME },
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 						);
 
@@ -177,10 +177,10 @@ public class IssueFilterCompositeIssueLinkRelated
 			else if (getEnableFieldName(IssueQuery.FieldName.issueLinkTypeID).equals(
 					changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID));
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive/*getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID)*/);
 
-				if (!active) {
+				if (!isActive) {
 					issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
 					getQuery().setIssueLinkTypeID(null);
 				}

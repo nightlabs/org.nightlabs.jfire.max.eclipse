@@ -182,28 +182,28 @@ public class IssueFilterCompositePeopleRelated
 		{
 			if (IssueQuery.FieldName.assigneeID.equals(changedField.getPropertyName()))
 			{
-				UserID tmpAssigneeID = (UserID) changedField.getNewValue();
-				if (tmpAssigneeID == null)
+				UserID newAssigneeID = (UserID) changedField.getNewValue();
+				if (newAssigneeID == null)
 				{
 					assigneeText.setText(""); //$NON-NLS-1$
 				}
 				else
 				{
-					final User selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
+					final User newAssignee = UserDAO.sharedInstance().getUser(newAssigneeID,
 							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new NullProgressMonitor());
 
-					assigneeText.setText(selectedAssignee.getName());
+					assigneeText.setText(newAssignee.getName());
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.assigneeID).equals(changedField.getPropertyName()))
 			{
-				final boolean active = (Boolean) changedField.getNewValue();
-				assigneeButton.setEnabled(active);
-				assigneeText.setEnabled(active);
-				allAssigneeButton.setSelection(!active);
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				assigneeButton.setEnabled(isActive);
+				assigneeText.setEnabled(isActive);
+				allAssigneeButton.setSelection(!isActive);
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					assigneeText.setText(""); //$NON-NLS-1$
 					getQuery().setAssigneeID(null);
 				}

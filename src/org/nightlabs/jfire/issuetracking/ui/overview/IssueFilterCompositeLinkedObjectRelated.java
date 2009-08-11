@@ -87,28 +87,28 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 2;
 
-		
+
 		new Label(mainComposite, SWT.NONE).setText("Type: ");
 		linkedObjectTreeComposite = new SelectIssueLinkHandlerFactoryTreeComposite(mainComposite, SWT.CHECK, null);
-		
+
 		checkboxTreeViewer = new CheckboxTreeViewer(linkedObjectTreeComposite.getTree());
 		checkboxTreeViewer.setContentProvider(linkedObjectTreeComposite.getTreeViewer().getContentProvider());
 		checkboxTreeViewer.setInput(linkedObjectTreeComposite.getTreeViewer().getInput());
-		
+
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				selectedLinkedObjectClasses.clear();
-				
+
 				final boolean isChecked = event.getChecked();
 				Object checkedNode = event.getElement();
-				
+
 				if (checkedNode instanceof IssueLinkHandlerFactory) {
 					IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) checkedNode;
 
 					for (TreeItem treeItem : checkboxTreeViewer.getTree().getItems()) {
 						if (treeItem.getData() instanceof IssueLinkHandlerCategory) {
 							IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
-							if (category.getCategoryId().equals(factory.getCategoryId())) { 
+							if (category.getCategoryId().equals(factory.getCategoryId())) {
 								//check for all children
 								boolean allChecked = true;
 								for (IssueLinkHandlerFactory f : category.getChildFactories()) {
@@ -116,7 +116,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 								}
 								checkboxTreeViewer.setChecked(category, allChecked);
 							}
-							
+
 						}
 					}
 				}
@@ -124,17 +124,17 @@ extends AbstractQueryFilterComposite<IssueQuery>
 					checkboxTreeViewer.setSubtreeChecked(checkedNode, isChecked);
 					if (isChecked)
 						linkedObjectTreeComposite.getTreeViewer().expandToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
-					else 
+					else
 						linkedObjectTreeComposite.getTreeViewer().collapseToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
 				}
-				
+
 				for (Object checkElement : checkboxTreeViewer.getCheckedElements()) {
 					if (checkElement instanceof IssueLinkHandlerFactory) {
 						IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) checkElement;
 						selectedLinkedObjectClasses.add(factory.getLinkedObjectClass());
 					}
 				}
-				
+
 				getQuery().setLinkedObjectClasses(selectedLinkedObjectClasses);
 				boolean enable = !selectedLinkedObjectClasses.isEmpty();
 				getQuery().setFieldEnabled(IssueQuery.FieldName.linkedObjectClasses, enable);
@@ -150,6 +150,29 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			if (IssueQuery.FieldName.linkedObjectClasses.equals(changedField.getPropertyName()))
 			{
+				Set<Class> newClasses = (Set<Class>) changedField.getNewValue();
+				if (newClasses == null)
+				{
+				}
+				else
+				{
+					checkboxTreeViewer.expandAll();
+					for (Class newClass : newClasses) {
+						TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
+						for (TreeItem treeItem : treeItems) {
+							if (treeItem.getData() instanceof IssueLinkHandlerCategory) {
+								IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
+								boolean isCheckAll = true;
+								for (IssueLinkHandlerFactory childFactory : category.getChildFactories()) {
+									if (childFactory.getLinkedObjectClass().equals(newClass))
+										checkboxTreeViewer.setChecked(childFactory, true);
+									isCheckAll &= checkboxTreeViewer.getChecked(childFactory);
+								}
+								checkboxTreeViewer.setChecked(category, isCheckAll);
+							}
+						}
+					}
+				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.linkedObjectClasses).equals(
 					changedField.getPropertyName()))
