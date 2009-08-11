@@ -89,20 +89,27 @@ extends AbstractIssueEditorGeneralSection
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				Transition selectedTransition = nextTransitionComposite.getSelectedTransition();
-				if (JbpmConstants.TRANSITION_NAME_ASSIGN.equals(selectedTransition.getJbpmTransitionName()) &&
-						getIssue().getAssignee() == null)
-				{
-					((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
-					nextTransitionComposite.setEnabled(true);
-					getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
-					return;
-				}
+				if (selectedTransition != null) {
+					if (JbpmConstants.TRANSITION_NAME_ASSIGN.equals(selectedTransition.getJbpmTransitionName()) &&
+							getIssue().getAssignee() == null)
+					{
+						((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
+						nextTransitionComposite.setEnabled(true);
+						getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
+						return;
+					}
 
-				if (JbpmConstants.TRANSITION_NAME_UNASSIGN.equals(selectedTransition.getJbpmTransitionName())) {
-					((IssueEditorGeneralPage)page).getIssueDetailSection().getUnassignAction().run();
-					nextTransitionComposite.setEnabled(true);
+					if (JbpmConstants.TRANSITION_NAME_UNASSIGN.equals(selectedTransition.getJbpmTransitionName())) {
+						((IssueEditorGeneralPage)page).getIssueDetailSection().getUnassignAction().run();
+						nextTransitionComposite.setEnabled(true);
+						getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
+						return;
+					}
 					getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
-					return;
+					markDirty();
+				}
+				else {
+					markUndirty();
 				}
 
 //				if (getController().getEntityEditor().isDirty()) {
@@ -111,14 +118,6 @@ extends AbstractIssueEditorGeneralSection
 //						return;
 //					}
 //				}
-
-				if (selectedTransition.equals(NextTransitionComposite.EMPTY_TRANSITION)) {
-					markUndirty();
-				}
-				else {
-					getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
-					markDirty();
-				}
 			}
 		});
 		/*nextTransitionComposite.addSignalListener(new SignalListener() {
