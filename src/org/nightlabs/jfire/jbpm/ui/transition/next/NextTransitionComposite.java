@@ -31,6 +31,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.jbpm.dao.TransitionDAO;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
@@ -41,7 +42,17 @@ extends XComposite
 implements ISelectionProvider
 {
 	private XComboComposite<Transition> nextTransitionCombo;
-	private static Transition EMPTY_TRANSITION = null;
+	private static final Transition EMPTY_TRANSITION;
+	static {
+		// Create EMPTY transition for allowing the user to deselect a previous selection.
+		@SuppressWarnings("deprecation")
+		StateDefinition stateDefinition = new StateDefinition() {
+			private static final long serialVersionUID = 1L;
+		};
+		 EMPTY_TRANSITION = new Transition(stateDefinition, "empty"); //$NON-NLS-1$
+		 EMPTY_TRANSITION.getName().setText(Locale.ENGLISH, " "); //$NON-NLS-1$
+	}
+
 	private Button signalButton;
 
 	public NextTransitionComposite(Composite parent, int style)
@@ -142,16 +153,6 @@ implements ISelectionProvider
 					return;
 
 				nextTransitionCombo.removeAll();
-
-				//Creates EMPTY transition for using in undo process
-				if (EMPTY_TRANSITION == null) {
-					 EMPTY_TRANSITION = new Transition(state.getStateDefinition(), "empty"); //$NON-NLS-1$
-				}
-//				String baseName = "org.nightlabs.jfire.jbpm.ui.resource.messages";
-//				ClassLoader loader = NextTransitionComposite.class.getClassLoader();
-//				EMPTY_TRANSITION.getName().readFromProperties(baseName, loader, "org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.empty.text"); //$NON-NLS-1$
-				EMPTY_TRANSITION.getName().setText(Locale.ENGLISH, " "); //$NON-NLS-1$
-
 				nextTransitionCombo.addElement(EMPTY_TRANSITION);
 				nextTransitionCombo.addElements(transitions);
 				nextTransitionCombo.setSelection(0);
