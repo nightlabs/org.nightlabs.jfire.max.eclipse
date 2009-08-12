@@ -3,6 +3,7 @@ package org.nightlabs.jfire.jbpm.ui.transition.next;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -144,11 +145,12 @@ implements ISelectionProvider
 
 				//Creates EMPTY transition for using in undo process
 				if (EMPTY_TRANSITION == null) {
-					 EMPTY_TRANSITION = new Transition(state.getStateDefinition(), "empty");
+					 EMPTY_TRANSITION = new Transition(state.getStateDefinition(), "empty"); //$NON-NLS-1$
 				}
-				String baseName = "org.nightlabs.jfire.jbpm.ui.resource.messages";
-				ClassLoader loader = NextTransitionComposite.class.getClassLoader();
-				EMPTY_TRANSITION.getName().readFromProperties(baseName, loader, "org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.empty.text");
+//				String baseName = "org.nightlabs.jfire.jbpm.ui.resource.messages";
+//				ClassLoader loader = NextTransitionComposite.class.getClassLoader();
+//				EMPTY_TRANSITION.getName().readFromProperties(baseName, loader, "org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.empty.text"); //$NON-NLS-1$
+				EMPTY_TRANSITION.getName().setText(Locale.ENGLISH, " "); //$NON-NLS-1$
 
 				nextTransitionCombo.addElement(EMPTY_TRANSITION);
 				nextTransitionCombo.addElements(transitions);
