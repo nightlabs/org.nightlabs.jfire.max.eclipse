@@ -17,6 +17,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.security.User;
@@ -30,7 +31,7 @@ public class CreateIssueWizard extends DynamicPathWizard
 	private CreateIssueDetailWizardPage createIssueDetailWizardPage;
 
 	public CreateIssueWizard(PropertySetID personID, ProgressMonitor monitor) {
-		monitor.beginTask("Initializing wizard", 60);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueWizard.task.initalizingWizard"), 60); //$NON-NLS-1$
 		try {
 			person = (Person) PropertySetDAO.sharedInstance().getPropertySet(personID, null, 1, new SubProgressMonitor(monitor, 20));
 

@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -36,10 +37,10 @@ public class CreateOrLinkIssueAction implements IViewActionDelegate
 		if (selectedPersonID == null)
 			return;
 
-		Job job = new Job("Opening wizard") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Opening wizard", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction.job.openingWizard.name"), 100); //$NON-NLS-1$
 				try {
 					final Person person = (Person) PropertySetDAO.sharedInstance().getPropertySet(
 							selectedPersonID, null, 1, monitor

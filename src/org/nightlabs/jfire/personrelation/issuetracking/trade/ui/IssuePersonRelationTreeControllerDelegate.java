@@ -31,6 +31,7 @@ import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.issuetracking.PersonRelationIssueParentResolver;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeControllerDelegate;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -64,15 +65,15 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 	@Override
 	public Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("retrieveChildCount: entered with " + parentIDs.size() + " parentIDs.");
+			logger.debug("retrieveChildCount: entered with " + parentIDs.size() + " parentIDs."); //$NON-NLS-1$ //$NON-NLS-2$
 			if (logger.isTraceEnabled()) {
 				for (ObjectID parentID : parentIDs) {
-					logger.trace("retrieveChildCount:   * " + parentID);
+					logger.trace("retrieveChildCount:   * " + parentID); //$NON-NLS-1$
 				}
 			}
 		}
 
-		monitor.beginTask("Loading linked issue counts for persons", 150);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssueCountsForPersons.name"), 150); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
 			Set<PersonRelationID> personRelationIDs = null;
@@ -155,7 +156,7 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 					PropertySetID personID = (PropertySetID) me.getKey();
 					List<PersonRelationID> prIDs = personID2personRelationIDs.get(personID);
 					if (prIDs == null)
-						throw new IllegalStateException("personID2personRelationIDs.get(personID) returned null! " + personID);
+						throw new IllegalStateException("personID2personRelationIDs.get(personID) returned null! " + personID); //$NON-NLS-1$
 
 					for (PersonRelationID personRelationID : prIDs) {
 						result.put(personRelationID, me.getValue());
@@ -175,9 +176,9 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 	@Override
 	public Collection<? extends ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) {
 		if (logger.isDebugEnabled())
-			logger.debug("retrieveChildObjectIDs: entered for: " + parentID);
+			logger.debug("retrieveChildObjectIDs: entered for: " + parentID); //$NON-NLS-1$
 
-		monitor.beginTask("Loading linked issues for person", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssuesForPerson.name"), 100); //$NON-NLS-1$
 		try {
 			PropertySetID personID = null;
 			if (parentID instanceof PropertySetID) {
@@ -224,10 +225,10 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 	@Override
 	public Collection<?> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("retrieveJDOObjects: entered with " + objectIDs.size() + " objectIDs.");
+			logger.debug("retrieveJDOObjects: entered with " + objectIDs.size() + " objectIDs."); //$NON-NLS-1$ //$NON-NLS-2$
 			if (logger.isTraceEnabled()) {
 				for (ObjectID objectID : objectIDs) {
-					logger.trace("retrieveJDOObjects:   * " + objectID);
+					logger.trace("retrieveJDOObjects:   * " + objectID); //$NON-NLS-1$
 				}
 			}
 		}

@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -27,12 +28,12 @@ public class DeletePersonRelationAction implements IViewActionDelegate
 		if (personRelation == null)
 			return;
 
-		Job job = new Job("Deleting person relation") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.DeletePersonRelationAction.job.deletingPersonRelation.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				PersonRelationTypeID personRelationTypeID = (PersonRelationTypeID) JDOHelper.getObjectId(personRelation.getPersonRelationType());
 				if (personRelationTypeID == null)
-					throw new IllegalStateException("JDOHelper.getObjectId(personRelation.getPersonRelationType()) returned null! personRelation=" + personRelation + " personRelationType=" + personRelation.getPersonRelationType());
+					throw new IllegalStateException("JDOHelper.getObjectId(personRelation.getPersonRelationType()) returned null! personRelation=" + personRelation + " personRelationType=" + personRelation.getPersonRelationType()); //$NON-NLS-1$ //$NON-NLS-2$
 
 				PersonRelationDAO.sharedInstance().deletePersonRelation(
 						personRelationTypeID,

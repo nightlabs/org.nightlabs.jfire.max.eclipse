@@ -6,6 +6,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueLinkID;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.util.NLLocale;
@@ -56,7 +57,7 @@ public class IssueLinkPersonRelationTreeLabelProviderDelegate extends PersonRela
 					sb.append('/');
 				}
 				sb.append(issue.getIssueID());
-				sb.append(": ");
+				sb.append(": "); //$NON-NLS-1$
 				sb.append(issue.getSubject().getText(languageID));
 				return sb.toString();
 			}

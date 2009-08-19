@@ -12,6 +12,7 @@ import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.ProgressMonitor;
@@ -35,10 +36,10 @@ public class CreateIssueAction implements IViewActionDelegate
 		final Shell shell = view.getSite().getShell();
 		final Display display = shell.getDisplay();
 
-		Job job = new Job("Opening wizard") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Opening wizard", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction.task.openingWizard.name"), 100); //$NON-NLS-1$
 				try {
 					final CreateIssueWizard wizard = new CreateIssueWizard(selectedPersonID, new SubProgressMonitor(monitor, 100));
 

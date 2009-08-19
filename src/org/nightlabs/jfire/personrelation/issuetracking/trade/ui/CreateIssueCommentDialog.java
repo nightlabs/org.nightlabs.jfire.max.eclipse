@@ -51,10 +51,10 @@ public class CreateIssueCommentDialog extends ResizableTrayDialog
 	protected void okPressed() {
 		final String newCommentText = commentText.getText();
 		final Display display = commentText.getDisplay();
-		Job job = new Job("Creating new comment") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentDialog.job.createNewComment.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Creating new comment", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentDialog.task.createNewComment.name"), 100); //$NON-NLS-1$
 				try {
 					Issue issue = IssueDAO.sharedInstance().getIssue(issueID, null, 1, new SubProgressMonitor(monitor, 20));
 					User user = Login.getLogin().getUser(null, 1, new SubProgressMonitor(monitor, 20));
@@ -80,7 +80,7 @@ public class CreateIssueCommentDialog extends ResizableTrayDialog
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		getShell().setText("Create issue comment");
+		getShell().setText(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentDialog.dialog.createIssueComment.title")); //$NON-NLS-1$
 		Composite dialogArea = (Composite) super.createDialogArea(parent);
 		commentText = new Text(dialogArea, SWT.BORDER | SWT.MULTI);
 		commentText.setLayoutData(new GridData(GridData.FILL_BOTH));
