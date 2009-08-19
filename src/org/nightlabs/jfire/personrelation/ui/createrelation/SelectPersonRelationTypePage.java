@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTypeList;
+import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 
 public class SelectPersonRelationTypePage
 extends WizardHopPage
@@ -16,8 +17,8 @@ extends WizardHopPage
 	private PersonRelationTypeList personRelationTypeList;
 
 	public SelectPersonRelationTypePage() {
-		super(SelectPersonRelationTypePage.class.getName(), "Select relation type");
-		setDescription("Please select the type of the new relation.");
+		super(SelectPersonRelationTypePage.class.getName(), Messages.getString("org.nightlabs.jfire.personrelation.ui.createrelation.SelectPersonRelationTypePage.page.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.personrelation.ui.createrelation.SelectPersonRelationTypePage.page.description")); //$NON-NLS-1$
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.personrelation.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -9,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class PersonRelationPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.personrelation.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.personrelation.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static PersonRelationPlugin plugin;

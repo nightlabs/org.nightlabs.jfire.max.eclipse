@@ -30,6 +30,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeContentProvide
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
+import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.util.NLLocale;
 
@@ -56,7 +57,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		jdoObjectClass2PersonRelationTreeLabelProviderDelegate.put(objectClass, delegate);
 
 		if (logger.isTraceEnabled())
-			logger.trace("addPersonRelationTreeLabelProviderDelegate: added " + delegate + " for objectClass " + (objectClass == null ? null : objectClass.getName()) + " and objectIDClass " + (objectIDClass == null ? null : objectIDClass.getName()));
+			logger.trace("addPersonRelationTreeLabelProviderDelegate: added " + delegate + " for objectClass " + (objectClass == null ? null : objectClass.getName()) + " and objectIDClass " + (objectIDClass == null ? null : objectIDClass.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	protected Set<PersonRelationTreeLabelProviderDelegate> getAllPersonRelationTreeLabelProviderDelegates()
@@ -194,14 +195,14 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		protected String getColumnText(Object element, int spanColIndex) {
 			if (element == null) {
 				if (logger.isDebugEnabled())
-					logger.debug("getColumnText: element is null => returning null.");
+					logger.debug("getColumnText: element is null => returning null."); //$NON-NLS-1$
 
 				return null;
 			}
 
 			if (!(element instanceof PersonRelationTreeNode)) {
 				if (logger.isDebugEnabled())
-					logger.debug("getColumnText: element is not a PersonRelationTreeNode (but a " + element.getClass().getName() + ") => returning element.toString().");
+					logger.debug("getColumnText: element is not a PersonRelationTreeNode (but a " + element.getClass().getName() + ") => returning element.toString()."); //$NON-NLS-1$ //$NON-NLS-2$
 
 				return String.valueOf(element);
 			}
@@ -212,7 +213,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 			String result = getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
 			if (logger.isDebugEnabled())
-				logger.debug("getColumnText: oid=" + jdoObjectID + " o=" +jdoObject+ " => returning: " + result);
+				logger.debug("getColumnText: oid=" + jdoObjectID + " o=" +jdoObject+ " => returning: " + result); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			return result;
 		}
@@ -321,12 +322,12 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	private void assertSWTThread()
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!");
+			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!"); //$NON-NLS-1$
 	}
 
 	private void assertNotDisposed() {
 		if (isDisposed())
-			throw new IllegalStateException("This PersonRelationTree is already disposed! " + this);
+			throw new IllegalStateException("This PersonRelationTree is already disposed! " + this); //$NON-NLS-1$
 	}
 
 	private PersonRelationTreeController personRelationTreeController;
@@ -364,11 +365,11 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		TableLayout tableLayout = new TableLayout();
 
 		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
-		column.setText("Relation");
+		column.setText(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTree.tree.column.relation.text")); //$NON-NLS-1$
 		tableLayout.addColumnData(new ColumnPixelData(120));
 
 		column = new TreeColumn(tree, SWT.LEFT);
-		column.setText("Person");
+		column.setText(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTree.tree.column.person.text")); //$NON-NLS-1$
 		tableLayout.addColumnData(new ColumnWeightData(70));
 
 		tree.setLayout(tableLayout);

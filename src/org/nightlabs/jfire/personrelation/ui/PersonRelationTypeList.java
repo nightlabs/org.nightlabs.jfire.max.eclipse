@@ -21,6 +21,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationTypeDAO;
+import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class PersonRelationTypeList
@@ -35,10 +36,10 @@ extends AbstractTableComposite<PersonRelationType>
 	public PersonRelationTypeList(Composite parent) {
 		super(parent, SWT.NONE);
 
-		setLoadingMessage("Loading...");
+		setLoadingMessage(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTypeList.loadingMessage")); //$NON-NLS-1$
 
 		final Display display = getDisplay();
-		Job job = new Job("Loading person relation types")
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTypeList.job.loadingPersonRelationTypes.name")) //$NON-NLS-1$
 		{
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
@@ -70,10 +71,10 @@ extends AbstractTableComposite<PersonRelationType>
 		TableColumn tc;
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Name");
+		tc.setText(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTypeList.table.column.name.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Description");
+		tc.setText(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTypeList.table.column.description.text")); //$NON-NLS-1$
 
 		table.setLayout(
 				new WeightedTableLayout(

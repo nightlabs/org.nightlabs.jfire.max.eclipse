@@ -23,6 +23,7 @@ import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
+import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -117,7 +118,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 	@Override
 	protected TreeNodeParentResolver createTreeNodeParentResolver() {
-		throw new UnsupportedOperationException("This method should not be called because we're using a TreeNode*Multi*ParentResolver!");
+		throw new UnsupportedOperationException("This method should not be called because we're using a TreeNode*Multi*ParentResolver!"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -141,7 +142,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 	@Override
 	protected Class<?> getJDOObjectClass() {
-		throw new UnsupportedOperationException("This method should not be called because we have overridden 'getJDOObjectClasses()' below.");
+		throw new UnsupportedOperationException("This method should not be called because we have overridden 'getJDOObjectClasses()' below."); //$NON-NLS-1$
 //		return PersonRelation.class;
 	}
 
@@ -170,7 +171,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 	@Override
 	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Retrieving objects", 110);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingObjects.name"), 110); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
 			Set<PersonRelationID> personRelationIDs = null;
@@ -239,7 +240,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 					for (Object object : objects) {
 						Object objectID = JDOHelper.getObjectId(object);
 						if (objectID == null)
-							throw new IllegalStateException("JDOHelper.getObjectId(object) returned null! delegate=" + delegate + " object=" + object);
+							throw new IllegalStateException("JDOHelper.getObjectId(object) returned null! delegate=" + delegate + " object=" + object); //$NON-NLS-1$ //$NON-NLS-2$
 
 						objectIDsLeft.remove(objectID);
 						result.add(object);
@@ -248,10 +249,10 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			}
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("retrieveJDOObjects: objectIDs.size=" + objectIDs.size() + " result.size=" + result.size());
+				logger.debug("retrieveJDOObjects: objectIDs.size=" + objectIDs.size() + " result.size=" + result.size()); //$NON-NLS-1$ //$NON-NLS-2$
 				if (logger.isTraceEnabled()) {
 					for (Object object : result) {
-						logger.trace("retrieveJDOObjects:   * " + object);
+						logger.trace("retrieveJDOObjects:   * " + object); //$NON-NLS-1$
 					}
 				}
 			}
@@ -268,7 +269,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		if (rootPersonIDs == null)
 			return Collections.emptyMap();
 
-		monitor.beginTask("Retrieving child counts", 110);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), 110); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
 			Set<PersonRelationID> personRelationIDs = null;
@@ -303,7 +304,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 			if (personIDs != null && !personIDs.isEmpty()) {
 				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixPerson);
-				subMonitor.beginTask("Retrieving child counts", personIDs.size());
+				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personIDs.size()); //$NON-NLS-1$
 				for (PropertySetID personID : personIDs) {
 					long personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
 							null, personID, null, new NullProgressMonitor()
@@ -328,7 +329,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				);
 
 				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixRelation / 2);
-				subMonitor.beginTask("Retrieving child counts", personRelations.size());
+				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personRelations.size()); //$NON-NLS-1$
 				for (PersonRelation personRelation : personRelations) {
 					PersonRelationID personRelationID = (PersonRelationID) JDOHelper.getObjectId(personRelation);
 					long personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
@@ -378,7 +379,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 		Collection<ObjectID> result = new ArrayList<ObjectID>();
 
-		monitor.beginTask("Retrieving child IDs", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100); //$NON-NLS-1$
 		try {
 			if (parentID == null) {
 				result.addAll(rootPersonIDs);

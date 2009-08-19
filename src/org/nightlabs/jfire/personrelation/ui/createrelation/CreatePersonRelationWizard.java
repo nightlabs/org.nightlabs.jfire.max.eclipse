@@ -15,6 +15,7 @@ import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
+import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.ProgressMonitor;
@@ -30,7 +31,7 @@ extends DynamicPathWizard
 
 	public CreatePersonRelationWizard(PropertySetID fromPersonID) {
 		if (fromPersonID == null)
-			throw new IllegalArgumentException("fromPersonID must not be null!");
+			throw new IllegalArgumentException("fromPersonID must not be null!"); //$NON-NLS-1$
 
 		this.fromPersonID = fromPersonID;
 	}
@@ -57,7 +58,7 @@ extends DynamicPathWizard
 				public void run(IProgressMonitor i_monitor) throws InvocationTargetException, InterruptedException
 				{
 					ProgressMonitor monitor = new ProgressMonitorWrapper(i_monitor);
-					monitor.beginTask("Creating person relation", 2 + selectedPersonRelationTypeIDs.size());
+					monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.createrelation.CreatePersonRelationWizard.task.creatingPersonRelation.name"), 2 + selectedPersonRelationTypeIDs.size()); //$NON-NLS-1$
 					try {
 						selectedPerson.deflate();
 						Person person = (Person) PropertySetDAO.sharedInstance().storeJDOObject(
