@@ -40,7 +40,8 @@ extends XComposite
 
 				IssueType issueType = (IssueType)s.getFirstElement();
 				try {
-					RCPUtil.openEditor(new IssueTypeEditorInput((IssueTypeID)JDOHelper.getObjectId(issueType)),
+					IssueTypeID issueTypeID = (IssueTypeID)JDOHelper.getObjectId(issueType);
+					RCPUtil.openEditor(new IssueTypeEditorInput(issueTypeID),
 							IssueTypeEditor.EDITOR_ID);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
