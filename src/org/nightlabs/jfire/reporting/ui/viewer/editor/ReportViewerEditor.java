@@ -3,6 +3,7 @@ package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
@@ -61,4 +62,6 @@ public interface ReportViewerEditor {
 	 * @return The prepared rendered layout the Editor is currently showing.
 	 */
 	public PreparedRenderedReportLayout getPreparedRenderedReportLayout();
+	
+	public RenderReportRequest getLastRenderReportRequest();
 }

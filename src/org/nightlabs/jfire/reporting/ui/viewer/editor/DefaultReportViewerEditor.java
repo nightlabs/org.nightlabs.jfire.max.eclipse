@@ -54,6 +54,8 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 
 	private DefaultReportViewerComposite defaultReportViewerComposite;
 	
+	private RenderReportRequest lastRenderReportRequest = null;
+	
 	/**
 	 * 
 	 */
@@ -85,6 +87,7 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 		request.setOutputFormat(format);
 		getViewerInput().setRenderReportRequest(request);
 		defaultReportViewerComposite.showReport(request);
+		lastRenderReportRequest = request;
 		updateEditorTitle();
 	}
 
@@ -94,6 +97,7 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	 */
 	public void showReport(final RenderedReportLayout reportLayout) {
 		defaultReportViewerComposite.showReport(reportLayout);
+		lastRenderReportRequest = null;
 		updateEditorTitle();
 	}
 	
@@ -130,6 +134,11 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	 */
 	public PreparedRenderedReportLayout getPreparedRenderedReportLayout() {
 		return defaultReportViewerComposite.getPreparedLayout();
+	}
+
+	@Override
+	public RenderReportRequest getLastRenderReportRequest() {
+		return lastRenderReportRequest;
 	}
 }
 

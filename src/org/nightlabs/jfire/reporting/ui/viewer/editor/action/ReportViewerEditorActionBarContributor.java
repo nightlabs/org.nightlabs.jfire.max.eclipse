@@ -28,6 +28,7 @@ public class ReportViewerEditorActionBarContributor extends
 	}
 
 	private PrintLayoutFromViewerAction printLayoutFromViewerAction;
+	private RefreshLayoutFromViewerAction refreshLayoutFromViewerAction;
 
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
@@ -35,7 +36,9 @@ public class ReportViewerEditorActionBarContributor extends
 		super.contributeToToolBar(toolBarManager);
 
 		printLayoutFromViewerAction = new PrintLayoutFromViewerAction((ReportViewerEditor) activeEditor);
+		refreshLayoutFromViewerAction = new RefreshLayoutFromViewerAction((ReportViewerEditor) activeEditor);
 		toolBarManager.add(printLayoutFromViewerAction);
+		toolBarManager.add(refreshLayoutFromViewerAction);
 	}
 
 	private IEditorPart activeEditor;
@@ -44,8 +47,11 @@ public class ReportViewerEditorActionBarContributor extends
 	public void setActiveEditor(IEditorPart targetEditor) {
 		super.setActiveEditor(targetEditor);
 		activeEditor = targetEditor;
-		if (activeEditor instanceof ReportViewerEditor)
+		if (activeEditor instanceof ReportViewerEditor) {
 			printLayoutFromViewerAction
 					.setReportViewerEditor((ReportViewerEditor) activeEditor);
+			refreshLayoutFromViewerAction
+					.setReportViewerEditor((ReportViewerEditor) activeEditor);
+		}
 	}
 }
