@@ -282,9 +282,9 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.processDefinitionID).equals(changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					getQuery().setProcessDefinitionID(null);
 				}
 			}
@@ -307,9 +307,9 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.jbpmNodeName).equals(changedField.getPropertyName()))
 			{
-				Boolean active = (Boolean) changedField.getNewValue();
-				setSearchSectionActive(active);
-				if (!active) {
+				boolean isActive = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(isActive);
+				if (!isActive) {
 					getQuery().setJbpmNodeName(null);
 				}
 			}
