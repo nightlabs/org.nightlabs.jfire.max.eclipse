@@ -25,7 +25,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -166,27 +165,27 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 2;
 
-		Group processDefinitionGroup = new Group(mainComposite, SWT.NONE);
-		processDefinitionGroup.setText("Process Definition");
-		processDefinitionGroup.setLayout(new GridLayout(2, false));
-		processDefinitionGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		processDefinitionActiveButton = new Button(processDefinitionGroup, SWT.CHECK);
-		processDefinitionActiveButton.setText("Active");
+//		Group processDefinitionGroup = new Group(mainComposite, SWT.NONE);
+//		processDefinitionGroup.setText("Process Definition");
+//		processDefinitionGroup.setLayout(new GridLayout(2, false));
+//		processDefinitionGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//
+//		processDefinitionActiveButton = new Button(processDefinitionGroup, SWT.CHECK);
+//		processDefinitionActiveButton.setText("Active");
+//		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.horizontalSpan = 2;
+//		processDefinitionActiveButton.setLayoutData(gridData);
+//		processDefinitionActiveButton.addSelectionListener(new ButtonSelectionListener()
+//		{
+//			@Override
+//			protected void handleSelection(boolean active)
+//			{
+//				getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, active);
+//			}
+//		});
+		new Label(mainComposite, SWT.NONE).setText("Issue Type");
+		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(mainComposite, SWT.NONE | SWT.READ_ONLY, stateDefinitionLabelProvider);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		processDefinitionActiveButton.setLayoutData(gridData);
-		processDefinitionActiveButton.addSelectionListener(new ButtonSelectionListener()
-		{
-			@Override
-			protected void handleSelection(boolean active)
-			{
-				getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, active);
-			}
-		});
-		new Label(processDefinitionGroup, SWT.NONE).setText("Issue Type");
-		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(processDefinitionGroup, getBorderStyle(), stateDefinitionLabelProvider);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		processDefinitionsCombo.setLayoutData(gridData);
 		processDefinitionsCombo.setLabelProvider(processDefinitionLabelProvider);
 		processDefinitionsCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -215,26 +214,26 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			}
 		});
 
-		Group stateDefinitionGroup = new Group(mainComposite, SWT.NONE);
-		stateDefinitionGroup.setText("State Definition");
-		stateDefinitionGroup.setLayout(new GridLayout(2, false));
-		stateDefinitionGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		stateDefinitionActiveButton = new Button(stateDefinitionGroup, SWT.CHECK);
-		stateDefinitionActiveButton.setText("Active");
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		stateDefinitionActiveButton.setLayoutData(gridData);
-		stateDefinitionActiveButton.addSelectionListener(new ButtonSelectionListener()
-		{
-			@Override
-			protected void handleSelection(boolean active)
-			{
-				getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, active);
-			}
-		});
-		new Label(stateDefinitionGroup, SWT.NONE).setText("State");
-		stateDefinitionsCombo = new XComboComposite<StateDefinition>(stateDefinitionGroup, getBorderStyle(), stateDefinitionLabelProvider);
+//		Group stateDefinitionGroup = new Group(mainComposite, SWT.NONE);
+//		stateDefinitionGroup.setText("State Definition");
+//		stateDefinitionGroup.setLayout(new GridLayout(2, false));
+//		stateDefinitionGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//
+//		stateDefinitionActiveButton = new Button(stateDefinitionGroup, SWT.CHECK);
+//		stateDefinitionActiveButton.setText("Active");
+//		gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.horizontalSpan = 2;
+//		stateDefinitionActiveButton.setLayoutData(gridData);
+//		stateDefinitionActiveButton.addSelectionListener(new ButtonSelectionListener()
+//		{
+//			@Override
+//			protected void handleSelection(boolean active)
+//			{
+//				getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, active);
+//			}
+//		});
+		new Label(mainComposite, SWT.NONE).setText("State");
+		stateDefinitionsCombo = new XComboComposite<StateDefinition>(mainComposite, SWT.NONE | SWT.READ_ONLY, stateDefinitionLabelProvider);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		stateDefinitionsCombo.setLayoutData(gridData);
 		stateDefinitionsCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -273,20 +272,45 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				else
 				{
 					for (ProcessDefinition processDefinition : processDefinitionsCombo.getElements()) {
-						if (JDOHelper.getObjectId(processDefinition).equals(newProcessDefinitionID)) {
-							processDefinitionsCombo.setSelection(processDefinition);
-							break;
-						}
+						if (processDefinition != ALL_PROCESS_DEFINITION)
+							if (JDOHelper.getObjectId(processDefinition).equals(newProcessDefinitionID)) {
+								processDefinitionsCombo.setSelection(processDefinition);
+								break;
+							}
 					}
 				}
 			}
-			else if (getEnableFieldName(IssueQuery.FieldName.processDefinitionID).equals(
-					changedField.getPropertyName()))
+			else if (getEnableFieldName(IssueQuery.FieldName.processDefinitionID).equals(changedField.getPropertyName()))
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
 				if (!active) {
 					getQuery().setProcessDefinitionID(null);
+				}
+			}
+			else if (IssueQuery.FieldName.jbpmNodeName.equals(changedField.getPropertyName()))
+			{
+				String newJbpmNodeName = (String) changedField.getNewValue();
+				if (newJbpmNodeName == null)
+				{
+
+				}
+				else
+				{
+					for (StateDefinition stateDefinition : stateDefinitionsCombo.getElements()) {
+						if (stateDefinition.getJbpmNodeName() != null && stateDefinition.getJbpmNodeName().equals(newJbpmNodeName)) {
+							stateDefinitionsCombo.setSelection(stateDefinition);
+							break;
+						}
+					}
+				}
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.jbpmNodeName).equals(changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(active);
+				if (!active) {
+					getQuery().setJbpmNodeName(null);
 				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
@@ -364,10 +388,10 @@ extends AbstractQueryFilterComposite<IssueQuery>
 							Set<ProcessDefinition> processDefinitions = processDefinition2StateDefinitions.keySet();
 							processDefinitionsCombo.addElement(ALL_PROCESS_DEFINITION);
 							processDefinitionsCombo.addElements(processDefinitions);
+							stateDefinitionsCombo.addElement(ALL_STATE_DEFINITION);
 							if (!processDefinitions.isEmpty()) {
 								ProcessDefinition firstProcessDefinition = processDefinitions.iterator().next();
 								List<StateDefinition> stateDefinitionList = processDefinition2StateDefinitions.get(firstProcessDefinition);
-								stateDefinitionsCombo.addElement(ALL_STATE_DEFINITION);
 								stateDefinitionsCombo.addElements(stateDefinitionList);
 								if (!stateDefinitionList.isEmpty()) {
 									stateDefinitionsCombo.selectElementByIndex(0);
