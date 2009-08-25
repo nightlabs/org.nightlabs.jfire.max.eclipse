@@ -180,8 +180,14 @@
             scope="global"
             sectionTitle="%queryfilterComposite.AdvancedIssueFilterProjectSectionTitle"
             targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterProjectSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="70"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryStateRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterStateSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterStateSectionTitle"/>
         <QueryFilter
-              orderHint="70"
+              orderHint="80"
               queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryLinkedObjectRelated"
               scope="global"
               targetClass="org.nightlabs.jfire.issue.Issue"
