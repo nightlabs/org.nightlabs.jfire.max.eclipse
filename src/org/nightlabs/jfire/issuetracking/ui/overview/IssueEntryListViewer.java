@@ -27,6 +27,9 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
@@ -45,9 +48,10 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
-public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, IssueQuery> {
+public class IssueEntryListViewer
+extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
+{
 	private QueryCollection<? extends IssueQuery> previousSavedQuery;
-
 
 	public IssueEntryListViewer(Entry entry) {
 		super(entry);
@@ -67,9 +71,24 @@ public class IssueEntryListViewer extends JDOQuerySearchEntryViewer<Issue, Issue
 		// --> Let's give this a go first, and then decide later on. Kai.
 		previousSavedQuery = null;
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeNotificationListener);
+
 		issueTable.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event) {
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, issueChangeNotificationListener);
+			}
+		});
+
+		issueTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
+				issuePropertyView.setIssue(issueTable.getFirstSelectedElement());
+
+				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
+				issueLinkView.setIssue(issueTable.getFirstSelectedElement());
+
+				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
+				issueHistoryView.setIssue(issueTable.getFirstSelectedElement());
 			}
 		});
 

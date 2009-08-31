@@ -15,6 +15,30 @@
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView"
             icon="icons/IssuePerspective.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView.name"/>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView"
+              icon="icons/composite/Issue-Search.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView"
+              name="Issue Description">
+        </view>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView"
+              icon="icons/issue/IssueLinkHandlerIssue-LinkedObject.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView"
+              name="Issue Link">
+        </view>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView"
+              icon="icons/issue/IssueLinkHandlerIssue-LinkedObject.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView"
+              name="Issue History">
+        </view>
         <category id="org.nightlabs.jfire.issuetracking.project" name="%org.nightlabs.jfire.issuetracking.project.name"/>
         <view category="org.nightlabs.jfire.issuetracking.project"
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView"
