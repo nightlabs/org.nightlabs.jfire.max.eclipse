@@ -82,13 +82,12 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
-				issuePropertyView.setIssue(issueTable.getFirstSelectedElement());
-
 				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
-				issueLinkView.setIssue(issueTable.getFirstSelectedElement());
-
 				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
-				issueHistoryView.setIssue(issueTable.getFirstSelectedElement());
+
+				if (issuePropertyView != null) issuePropertyView.setIssue(issueTable.getFirstSelectedElement());
+				if (issueLinkView != null) issueLinkView.setIssue(issueTable.getFirstSelectedElement());
+				if (issueHistoryView != null) issueHistoryView.setIssue(issueTable.getFirstSelectedElement());
 			}
 		});
 

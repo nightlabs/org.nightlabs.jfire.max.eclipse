@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
@@ -26,10 +27,6 @@ public class IssueLinkView
 extends LSDViewPart
 {
 	public static final String VIEW_ID = IssueLinkView.class.getName();
-
-	public IssueLinkView() {
-		super();
-	}
 
 	private IMemento initMemento = null;
 	/* (non-Javadoc)
@@ -85,5 +82,11 @@ extends LSDViewPart
 
 		if (issueLinkTable != null)
 			issueLinkTable.setIssue(this.issue);
+	}
+
+	@Override
+	public void partVisible(IWorkbenchPartReference partRef) {
+		if (issue != null)
+			setIssue(issue);
 	}
 }
