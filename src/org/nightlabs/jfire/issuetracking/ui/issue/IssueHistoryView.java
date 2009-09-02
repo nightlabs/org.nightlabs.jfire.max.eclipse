@@ -3,15 +3,16 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.util.Collection;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
@@ -19,7 +20,11 @@ import org.nightlabs.jfire.issue.history.FetchGroupsIssueHistoryItem;
 import org.nightlabs.jfire.issue.history.IssueHistoryItem;
 import org.nightlabs.jfire.issue.history.IssueHistoryItemDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
+import org.nightlabs.notification.NotificationAdapterCallerThread;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -50,6 +55,17 @@ extends LSDViewPart
 	{
 		issueHistoryTable = new IssueHistoryTable(parent, SWT.NONE);
 		issueHistoryTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		SelectionManager.sharedInstance().addNotificationListener(IssueTrackingPlugin.ZONE_PROPERTY, Issue.class, issueSelectionListener);
+
+//		if (initMemento != null)
+//			descriptionDetailComposite.init(initMemento);
+
+		issueHistoryTable.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				SelectionManager.sharedInstance().removeNotificationListener(IssueTrackingPlugin.ZONE_PROPERTY, Issue.class, issueSelectionListener);
+			}
+		});
 	}
 
 	/* (non-Javadoc)
@@ -67,25 +83,23 @@ extends LSDViewPart
 		super.saveState(memento);
 	}
 
-	private Issue issue;
-	public void setIssue(Issue issue) {
-		this.issue = issue;
+	public static String[] FETCH_GROUP = new String[] {FetchPlan.DEFAULT, FetchGroupsIssueHistoryItem.FETCH_GROUP_LIST};
 
-		if (issueHistoryTable != null) {
-			IssueID issueID = (IssueID)JDOHelper.getObjectId(issue);
-			Collection<IssueHistoryItem> issueHistoryItems = IssueHistoryItemDAO.sharedInstance().getIssueHistoryItems(
-					issueID,
-					new String[]{FetchPlan.DEFAULT, FetchGroupsIssueHistoryItem.FETCH_GROUP_LIST},	// Since 28 May 2009.
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new NullProgressMonitor());
+	private NotificationListener issueSelectionListener = new NotificationAdapterCallerThread(){
+		public void notify(NotificationEvent notificationEvent) {
+			Object firstSelection = notificationEvent.getFirstSubject();
+			if (firstSelection instanceof IssueID) {
+				IssueID issueID = (IssueID) firstSelection;
+				if (issueHistoryTable != null && !issueHistoryTable.isDisposed()) {
+					Collection<IssueHistoryItem> issueHistoryItems = IssueHistoryItemDAO.sharedInstance().getIssueHistoryItems(
+							issueID,
+							new String[]{FetchPlan.DEFAULT, FetchGroupsIssueHistoryItem.FETCH_GROUP_LIST},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor());
 
-			issueHistoryTable.setInput(issueHistoryItems);
+					issueHistoryTable.setInput(issueHistoryItems);
+				}
+			}
 		}
-	}
-
-	@Override
-	public void partVisible(IWorkbenchPartReference partRef) {
-		if (issue != null)
-			setIssue(issue);
-	}
+	};
 }

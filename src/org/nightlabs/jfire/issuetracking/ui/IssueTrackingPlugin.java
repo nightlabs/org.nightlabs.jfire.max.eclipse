@@ -33,13 +33,14 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class IssueTrackingPlugin extends AbstractUIPlugin 
+public class IssueTrackingPlugin extends AbstractUIPlugin
 {
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.ui"; //$NON-NLS-1$
-	
+	public static final String ZONE_PROPERTY = IssueTrackingPlugin.class.getName() + "#ZONE_PROPERTY"; //$NON-NLS-1$
+
+	public static final String PLUGIN_ID = IssueTrackingPlugin.class.getPackage().getName();
 	//The shared instance.
 	private static IssueTrackingPlugin plugin;
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -50,6 +51,7 @@ public class IssueTrackingPlugin extends AbstractUIPlugin
 	/**
 	 * This method is called upon plug-in activation.
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 	}
@@ -57,13 +59,14 @@ public class IssueTrackingPlugin extends AbstractUIPlugin
 	/**
 	 * This method is called when the plug-in is stopped.
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static IssueTrackingPlugin getDefault() {

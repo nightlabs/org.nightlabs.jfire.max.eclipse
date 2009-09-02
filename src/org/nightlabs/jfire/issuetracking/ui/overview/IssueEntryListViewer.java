@@ -2,6 +2,8 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Collection;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
+import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
@@ -27,9 +30,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
@@ -81,13 +82,20 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		issueTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
-				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
-				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
+				Issue issue = issueTable.getFirstSelectedElement();
 
-				if (issuePropertyView != null) issuePropertyView.setIssue(issueTable.getFirstSelectedElement());
-				if (issueLinkView != null) issueLinkView.setIssue(issueTable.getFirstSelectedElement());
-				if (issueHistoryView != null) issueHistoryView.setIssue(issueTable.getFirstSelectedElement());
+//				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
+//				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
+//				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
+//
+//				if (issuePropertyView != null) issuePropertyView.setIssue(issue);
+//				if (issueLinkView != null) issueLinkView.setIssue(issue);
+//				if (issueHistoryView != null) issueHistoryView.setIssue(issue);
+
+				IssueID issueID = (IssueID)JDOHelper.getObjectId(issue);
+				SelectionManager.sharedInstance().notify(
+						new NotificationEvent(this, IssueTrackingPlugin.ZONE_PROPERTY, issueID, Issue.class)
+				);
 			}
 		});
 
