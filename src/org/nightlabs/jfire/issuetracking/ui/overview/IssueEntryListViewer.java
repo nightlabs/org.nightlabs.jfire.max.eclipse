@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Collection;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.action.Action;
@@ -39,6 +40,7 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -62,7 +64,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
-//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
+		//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
 		issueTable = new IssueTable(parent, SWT.NONE);
 
 		// [Observation; 02.07.2009]
@@ -84,13 +86,13 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 			public void selectionChanged(SelectionChangedEvent event) {
 				Issue issue = issueTable.getFirstSelectedElement();
 
-//				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
-//				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
-//				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
-//
-//				if (issuePropertyView != null) issuePropertyView.setIssue(issue);
-//				if (issueLinkView != null) issueLinkView.setIssue(issue);
-//				if (issueHistoryView != null) issueHistoryView.setIssue(issue);
+				//				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
+				//				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
+				//				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
+				//
+				//				if (issuePropertyView != null) issuePropertyView.setIssue(issue);
+				//				if (issueLinkView != null) issueLinkView.setIssue(issue);
+				//				if (issueHistoryView != null) issueHistoryView.setIssue(issue);
 
 				IssueID issueID = (IssueID)JDOHelper.getObjectId(issue);
 				SelectionManager.sharedInstance().notify(
@@ -165,10 +167,10 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		previousSavedQuery = queryMap;
 
 		return IssueDAO.sharedInstance().getIssuesForQueries(
-			queryMap,
-			IssueTable.FETCH_GROUPS_ISSUE,
-			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-			monitor);
+				queryMap,
+				IssueTable.FETCH_GROUPS_ISSUE,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
 	}
 
 	@Override
@@ -196,6 +198,9 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 	private MenuManager menuMgr;
 	private IssueEditAction editIssueAction;
 	private IssueDeleteAction deleteIssueAction;
+	private IssueResolveAllAction resolveAllAction;
+	private IssueCloseAllAction closeAllAction;
+	private IssueAssignAllAction assignAllAction;
 
 	/**
 	 * Sets up the context menu to allow for the following operations:
@@ -206,6 +211,9 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		// Prepare the menu items.
 		editIssueAction = new IssueEditAction();
 		deleteIssueAction = new IssueDeleteAction();
+		resolveAllAction = new IssueResolveAllAction();
+		closeAllAction = new IssueCloseAllAction();
+		assignAllAction = new IssueAssignAllAction();
 
 		// Relegate the menu-items to the menu-manager.
 		menuMgr = getMenuManager();
@@ -214,6 +222,9 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 			public void menuAboutToShow(IMenuManager m) {
 				menuMgr.add(editIssueAction);
 				menuMgr.add(deleteIssueAction);
+				menuMgr.add(resolveAllAction);
+				menuMgr.add(closeAllAction);
+				menuMgr.add(assignAllAction);
 			}
 		});
 
@@ -265,8 +276,10 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
+			DeleteIssueAction deleteAction = new DeleteIssueAction();
 			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
-			DeleteIssueAction.executeDeleteIssues(issueTable, issueIDs, getComposite().getShell());
+			deleteAction.setSelectedIssueIDs(issueIDs);
+			deleteAction.run();
 		}
 	}
 
@@ -294,4 +307,72 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		}
 	}
 
+	/**
+	 * Handles the action to set resolved to the selected Issue(s).
+	 */
+	private class IssueResolveAllAction extends Action {
+		public IssueResolveAllAction() {
+			setId(IssueResolveAllAction.class.getName());
+			setImageDescriptor(SharedImages.SAVE_16x16);
+			setToolTipText("Resolve selected Issue(s)");
+			setText("Resolve selected Issue(s)");
+		}
+
+		@Override
+		public void run() {
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			for (IssueID issueID : issueIDs) {
+				IssueDAO.sharedInstance().signalIssue(
+						issueID,
+						"resolve",
+						false,
+						new String[] {FetchPlan.DEFAULT},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+				);
+			}
+		}
+	}
+
+	/**
+	 * Handles the action to set closed to the selected Issue(s).
+	 */
+	private class IssueCloseAllAction extends Action {
+		public IssueCloseAllAction() {
+			setId(IssueCloseAllAction.class.getName());
+			setImageDescriptor(SharedImages.DISCARD_16x16);
+			setToolTipText("Close selected Issue(s)");
+			setText("Close selected Issue(s)");
+		}
+
+		@Override
+		public void run() {
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			for (IssueID issueID : issueIDs) {
+				IssueDAO.sharedInstance().signalIssue(
+						issueID,
+						"close",
+						false,
+						new String[] {FetchPlan.DEFAULT},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+				);
+			}
+		}
+	}
+
+	/**
+	 * Handles the action to set assigned to the selected Issue(s).
+	 */
+	private class IssueAssignAllAction extends Action {
+		public IssueAssignAllAction() {
+			setId(IssueAssignAllAction.class.getName());
+			setImageDescriptor(SharedImages.EDIT_16x16);
+			setToolTipText("Assign selected Issue(s)");
+			setText("Assign selected Issue(s)");
+		}
+
+		@Override
+		public void run() {
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+		}
+	}
 }

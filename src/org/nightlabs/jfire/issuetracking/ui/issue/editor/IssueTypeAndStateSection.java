@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
+import org.nightlabs.jfire.issue.jbpm.JbpmConstantsIssue;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
@@ -90,7 +90,7 @@ extends AbstractIssueEditorGeneralSection
 			public void selectionChanged(SelectionChangedEvent event) {
 				Transition selectedTransition = nextTransitionComposite.getSelectedTransition();
 				if (selectedTransition != null) {
-					if (JbpmConstants.TRANSITION_NAME_ASSIGN.equals(selectedTransition.getJbpmTransitionName()) &&
+					if (JbpmConstantsIssue.TRANSITION_NAME_ASSIGN.equals(selectedTransition.getJbpmTransitionName()) &&
 							getIssue().getAssignee() == null)
 					{
 						((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
@@ -99,7 +99,7 @@ extends AbstractIssueEditorGeneralSection
 						return;
 					}
 
-					if (JbpmConstants.TRANSITION_NAME_UNASSIGN.equals(selectedTransition.getJbpmTransitionName())) {
+					if (JbpmConstantsIssue.TRANSITION_NAME_UNASSIGN.equals(selectedTransition.getJbpmTransitionName())) {
 						((IssueEditorGeneralPage)page).getIssueDetailSection().getUnassignAction().run();
 						nextTransitionComposite.setEnabled(true);
 						getController().setJbpmTransitionName(selectedTransition.getJbpmTransitionName());
