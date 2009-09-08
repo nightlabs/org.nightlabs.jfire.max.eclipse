@@ -96,7 +96,9 @@ extends LSDViewPart
 				IssueID issueID = (IssueID) firstSelection;
 				if (issueLinkTable != null && !issueLinkTable.isDisposed()) {
 					Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					issueLinkTable.setInput(issue.getIssueLinks());
+					issueLinkTable.setIssue(issue);
+
+//					issueLinkTable.setInput(issue.getIssueLinks());
 				}
 			}
 		}
