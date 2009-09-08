@@ -48,6 +48,7 @@ extends EntityEditorPageController
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_ISSUE,
 		Issue.FETCH_GROUP_ISSUE_TYPE,
+		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
 		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
@@ -121,7 +122,7 @@ extends EntityEditorPageController
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePageController.monitor.loadIssues.text"), 10); //$NON-NLS-1$
 
 		this.articleContainer =
-			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
 				null, // This must be the local organisationID! The backend now chooses this automatically, when passing null. Marco.
