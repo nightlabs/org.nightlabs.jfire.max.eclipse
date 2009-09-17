@@ -24,20 +24,20 @@ import org.nightlabs.jfire.security.SecurityReflector;
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
-public class IssueTypeResolutionComposite 
+public class IssueTypeResolutionComposite
 extends XComposite
 {
 	private I18nTextEditor resolutionNameI18nTextEditor;
 	private Button autoCreateIDCheckBox;
-	private Label idLabel; 
+	private Label idLabel;
 	private Text idText;
-	
+
 	private IssueResolution issueResolution;
-	
+
 	public IssueTypeResolutionComposite(IssueResolution issueResolution, Composite parent, int style) {
 		super(parent, style);
 		this.issueResolution = issueResolution;
-		
+
 		createComposite(this);
 	}
 
@@ -61,10 +61,10 @@ extends XComposite
 		});
 		// ID
 		Group idGroup = new Group(this, SWT.NONE);
-		idGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionComposite.group.priorityID.text")); //$NON-NLS-1$
+		idGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionComposite.group.resolutionID.text")); //$NON-NLS-1$
 		idGroup.setLayout(new GridLayout(1, false));
 		idGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		autoCreateIDCheckBox = new Button(idGroup, SWT.CHECK);
 		autoCreateIDCheckBox.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -80,7 +80,7 @@ extends XComposite
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		idText.setLayoutData(gridData);
-		
+
 		if(issueResolution != null) {
 			resolutionNameI18nTextEditor.setI18nText(issueResolution.getName());
 			idText.setText(issueResolution.getIssueResolutionID());
@@ -91,20 +91,20 @@ extends XComposite
 			idText.setText(""); //$NON-NLS-1$
 			setAutoCreateID(true);
 		}
-		
+
 		enableCheckingID(false);
 	}
-	
+
 	public void enableCheckingID(boolean b) {
 		idLabel.setEnabled(b);
 		idText.setEnabled(b);
 	}
-	
+
 	protected void setAutoCreateID(boolean b) {
 		autoCreateIDCheckBox.setSelection(b);
 		enableCheckingID(!b);
 	}
-	
+
 	public IssueResolution getIssueResolution() {
 		if (!isComplete())
 			return null;
@@ -122,7 +122,7 @@ extends XComposite
 	public boolean isComplete() {
 		return issueResolution != null || (!"".equals(idText.getText())); //$NON-NLS-1$
 	}
-	
+
 	public I18nTextEditor getResolutionNameI18nTextEditor() {
 		return resolutionNameI18nTextEditor;
 	}

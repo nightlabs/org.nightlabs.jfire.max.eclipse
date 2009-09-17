@@ -24,20 +24,20 @@ import org.nightlabs.jfire.security.SecurityReflector;
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
-public class IssueTypeSeverityTypeComposite 
+public class IssueTypeSeverityTypeComposite
 extends XComposite
 {
 	private I18nTextEditor severityTypeNameI18nTextEditor;
 	private Button autoCreateIDCheckBox;
-	private Label idLabel; 
+	private Label idLabel;
 	private Text idText;
-	
+
 	private IssueSeverityType issueSeverityType;
-	
+
 	public IssueTypeSeverityTypeComposite(IssueSeverityType issueSeverityType, Composite parent, int style) {
 		super(parent, style);
 		this.issueSeverityType = issueSeverityType;
-		
+
 		createComposite(this);
 	}
 
@@ -49,7 +49,7 @@ extends XComposite
 		setLayout(new GridLayout(1, false));
 
 		// Name
-		new Label(this, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeComposite.label.priorityName.text")); //$NON-NLS-1$
+		new Label(this, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeComposite.label.severityTypeName.text")); //$NON-NLS-1$
 		severityTypeNameI18nTextEditor = new I18nTextEditor(this);
 		severityTypeNameI18nTextEditor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent ev) {
@@ -61,10 +61,10 @@ extends XComposite
 		});
 		// ID
 		Group idGroup = new Group(this, SWT.NONE);
-		idGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeComposite.group.priorityID.text")); //$NON-NLS-1$
+		idGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeComposite.group.severityTypeID.text")); //$NON-NLS-1$
 		idGroup.setLayout(new GridLayout(1, false));
 		idGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		autoCreateIDCheckBox = new Button(idGroup, SWT.CHECK);
 		autoCreateIDCheckBox.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -80,7 +80,7 @@ extends XComposite
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		idText.setLayoutData(gridData);
-		
+
 		if(issueSeverityType != null) {
 			severityTypeNameI18nTextEditor.setI18nText(issueSeverityType.getIssueSeverityTypeText());
 			idText.setText(issueSeverityType.getIssueSeverityTypeID());
@@ -91,20 +91,20 @@ extends XComposite
 			idText.setText(""); //$NON-NLS-1$
 			setAutoCreateID(true);
 		}
-		
+
 		enableCheckingID(false);
 	}
-	
+
 	public void enableCheckingID(boolean b) {
 		idLabel.setEnabled(b);
 		idText.setEnabled(b);
 	}
-	
+
 	protected void setAutoCreateID(boolean b) {
 		autoCreateIDCheckBox.setSelection(b);
 		enableCheckingID(!b);
 	}
-	
+
 	public IssueSeverityType getIssueSeverityType() {
 		if (!isComplete())
 			return null;
@@ -122,7 +122,7 @@ extends XComposite
 	public boolean isComplete() {
 		return issueSeverityType != null || (!"".equals(idText.getText())); //$NON-NLS-1$
 	}
-	
+
 	public I18nTextEditor getSeverityTypeNameI18nTextEditor() {
 		return severityTypeNameI18nTextEditor;
 	}
