@@ -29,6 +29,8 @@ package org.nightlabs.jfire.scripting.admin.ui.script;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.jdo.JDOHelper;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -41,7 +43,9 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
@@ -49,13 +53,19 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.base.ui.part.PartVisibilityListener;
 import org.nightlabs.base.ui.part.PartVisibilityTracker;
+import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin;
+import org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditor;
+import org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditorInput;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.scripting.dao.ScriptRegistryItemDAO;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemNode;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
@@ -126,7 +136,16 @@ implements
 		public void doubleClick(DoubleClickEvent event) {
 //			contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedRegistryItems(), true, true);
 			ScriptRegistryItem item = registryItemTree.getSelectedRegistryItem();
+			
 			if (item instanceof Script) {
+				try {
+					ScriptRegistryItemID objectID = (ScriptRegistryItemID)JDOHelper.getObjectId(item);
+					ScriptEditorInput input = new ScriptEditorInput(objectID);
+					RCPUtil.openEditor( input, ScriptEditor.ID_EDITOR);
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 //				editScriptAction.run(registryItemTree.getSelectedRegistryItems());
 			}
 		}

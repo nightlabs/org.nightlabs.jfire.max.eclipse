@@ -6,6 +6,7 @@
         name="ScriptParameterSetAction Extension-Point" schema="schema/scriptParameterSetAction.exsd"/>
     <extension-point id="scriptEditor"
         name="ScriptEditor ExtensionPoint" schema="schema/scriptEditor.exsd"/>
+    <extension-point id="scriptEdit" name="Script-language-specific editing area" schema="schema/scriptEdit.exsd"/>
     <extension point="org.eclipse.ui.views">
         <view
             category="org.nightlabs.jfire.scripting.admin.ui.viewCategory"
@@ -19,6 +20,11 @@
             class="org.nightlabs.jfire.scripting.ui.admin.parameter.ParameterView"
             icon="icons/ScriptView.16x16.png"
             id="org.nightlabs.jfire.scripting.admin.ui.parameter.ParameterView" name="%org.nightlabs.jfire.scripting.admin.ui.parameter.ParameterView.name"/>
+        <view
+              class="org.nightlabs.jfire.scripting.admin.ui.script.XYZView"
+              id="org.nightlabs.jfire.scripting.admin.ui.script.XYZView"
+              name="XYZView">
+        </view>
     </extension>
     <extension point="org.nightlabs.jfire.scripting.admin.ui.scriptRegistryItemAction">
         <separator name="additions"/>
@@ -66,5 +72,49 @@
             id="org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction"
             name="%org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.name"
             toolbarPath="additions" tooltip="%org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.tooltip"/>
+    </extension>
+    <extension
+          point="org.eclipse.ui.editors">
+       <editor
+             class="org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditor"
+             default="false"
+             icon="icons/editor/ScriptEditor.16x16.png"
+             id="org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditor"
+             name="Script editor">
+       </editor>
+    </extension>
+    <extension
+          point="org.nightlabs.base.ui.entityEditor">
+       <pageFactory
+             class="org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditorMetaPage$Factory"
+             editorID="org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditor"
+             indexHint="100">
+       </pageFactory>
+       <pageFactory
+             class="org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditorContentPage$Factory"
+             editorID="org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditor"
+             indexHint="200">
+       </pageFactory>
+    </extension>
+    <extension
+          point="org.eclipse.ui.actionSets">
+       <actionSet
+             id="org.nightlabs.jfire.scripting.admin.ui.actionSet1"
+             label="label"
+             visible="true">
+       </actionSet>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.scripting.admin.ui.scriptEdit">
+       <scriptEditFactory
+             class="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javaclass.ScriptEditFactory"
+             id="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javaclass.ScriptEditFactory"
+             language="JavaClass">
+       </scriptEditFactory>
+       <scriptEditFactory
+             class="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javascript.ScriptEditFactory"
+             id="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javascript.ScriptEditFactory"
+             language="JavaScript">
+       </scriptEditFactory>
     </extension>
 </plugin>

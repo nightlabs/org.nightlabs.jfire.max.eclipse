@@ -3,7 +3,7 @@
 <schema targetNamespace="org.nightlabs.jfire.scripting.admin.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.scripting.admin.ui" id="scriptEditor" name="ScriptEditor ExtensionPoint"/>
+         <meta.schema plugin="org.nightlabs.jfire.scripting.admin.ui" id="scriptEdit" name="Script-language-specific editing area"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -17,8 +17,8 @@
          </appInfo>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="scriptEditor" minOccurs="1" maxOccurs="unbounded"/>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="scriptEditFactory"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,21 +47,26 @@
       </complexType>
    </element>
 
-   <element name="scriptEditor">
-      <annotation>
-         <appInfo>
-            <meta.element labelAttribute="scriptLanguage" deprecated="true"/>
-         </appInfo>
-      </annotation>
+   <element name="scriptEditFactory">
       <complexType>
-         <attribute name="editorID" type="string">
+         <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="scriptLanguage" type="string" use="required">
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.ScriptEditFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="language" type="string" use="required">
             <annotation>
                <documentation>
                   
@@ -91,7 +96,7 @@
 
    <annotation>
       <appInfo>
-         <meta.section type="apiInfo"/>
+         <meta.section type="apiinfo"/>
       </appInfo>
       <documentation>
          [Enter API information here.]
