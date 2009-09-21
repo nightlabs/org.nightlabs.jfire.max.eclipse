@@ -22,7 +22,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -58,8 +57,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 {
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeStateRelated.class);
 
-	private Button processDefinitionActiveButton;
-
 	private XComboComposite<ProcessDefinition> processDefinitionsCombo;
 	private ILabelProvider processDefinitionLabelProvider = new LabelProvider() {
 		@Override
@@ -85,7 +82,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		}
 	}
 
-	private Button stateDefinitionActiveButton;
 	private XComboComposite<StateDefinition> stateDefinitionsCombo;
 	private ILabelProvider stateDefinitionLabelProvider = new LabelProvider() {
 		@Override
@@ -193,14 +189,18 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
+				stateDefinitionsCombo.selectElement(ALL_STATE_DEFINITION);
+				stateDefinitionsComboSelected();
+
 				ProcessDefinition selectedProcessDefinition = processDefinitionsCombo.getSelectedElement();
 				boolean isSelectAll = selectedProcessDefinition.equals(ALL_PROCESS_DEFINITION);
-				if (isSelectAll)
+				if (isSelectAll) {
 					getQuery().setProcessDefinitionID(null);
+					getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, false);
+				}
 				else {
 					getQuery().setProcessDefinitionID((ProcessDefinitionID) JDOHelper.getObjectId(selectedProcessDefinition));
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.processDefinitionID))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, true);
+					getQuery().setFieldEnabled(IssueQuery.FieldName.processDefinitionID, true);
 				}
 
 				stateDefinitionsCombo.removeAll();
@@ -241,22 +241,27 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				StateDefinition selectedStateDefinition = stateDefinitionsCombo.getSelectedElement();
-				boolean isSelectAll = selectedStateDefinition.equals(ALL_STATE_DEFINITION);
-				if (isSelectAll)
-					getQuery().setJbpmNodeName(null);
-				else {
-					getQuery().setJbpmNodeName(selectedStateDefinition.getJbpmNodeName());
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.jbpmNodeName))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.jbpmNodeName, true);
-				}
+				stateDefinitionsComboSelected();
 			}
 		});
 
 		loadProperties();
 	}
 
-	@SuppressWarnings("unchecked")
+	private void stateDefinitionsComboSelected()
+	{
+		StateDefinition selectedStateDefinition = stateDefinitionsCombo.getSelectedElement();
+		boolean isSelectAll = selectedStateDefinition.equals(ALL_STATE_DEFINITION);
+		if (isSelectAll) {
+			getQuery().setJbpmNodeName(null);
+			getQuery().setFieldEnabled(IssueQuery.FieldName.jbpmNodeName, false);
+		}
+		else {
+			getQuery().setJbpmNodeName(selectedStateDefinition.getJbpmNodeName());
+			getQuery().setFieldEnabled(IssueQuery.FieldName.jbpmNodeName, true);
+		}
+	}
+
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
@@ -267,7 +272,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				ProcessDefinitionID newProcessDefinitionID = (ProcessDefinitionID) changedField.getNewValue();
 				if (newProcessDefinitionID == null)
 				{
-
+//					processDefinitionsCombo.setSelection(ALL_PROCESS_DEFINITION);
 				}
 				else
 				{
@@ -293,7 +298,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				String newJbpmNodeName = (String) changedField.getNewValue();
 				if (newJbpmNodeName == null)
 				{
-
+//					stateDefinitionsCombo.setSelection(ALL_STATE_DEFINITION);
 				}
 				else
 				{
@@ -377,7 +382,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 								monitor);
 						processDefinition2StateDefinitions.put(processDefinition, new ArrayList<StateDefinition>(stateDefinitions));
 					}
-
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {

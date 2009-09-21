@@ -135,9 +135,8 @@ public class IssueFilterCompositePropertyRelated
 					getQuery().setIssueTypeID(null);
 				else {
 					getQuery().setIssueTypeID((IssueTypeID)JDOHelper.getObjectId(selectedIssueType));
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueTypeID))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.issueTypeID, !isSelectAll);
 				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueTypeID, !isSelectAll);
 			}
 		});
 
@@ -151,13 +150,13 @@ public class IssueFilterCompositePropertyRelated
 				final IssueSeverityType selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 
 				boolean isSelectAll = selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL);
-				if (isSelectAll)
+				if (isSelectAll) {
 					getQuery().setIssueSeverityTypeID(null);
+				}
 				else {
 					getQuery().setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID, !isSelectAll);
 				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID, !isSelectAll);
 			}
 		});
 
@@ -175,9 +174,8 @@ public class IssueFilterCompositePropertyRelated
 					getQuery().setIssuePriorityID(null);
 				else {
 					getQuery().setIssuePriorityID((IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issuePriorityID))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.issuePriorityID, true);
 				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issuePriorityID, !isSelectAll);
 			}
 		});
 
@@ -195,9 +193,8 @@ public class IssueFilterCompositePropertyRelated
 					getQuery().setIssueResolutionID(null);
 				else {
 					getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueResolutionID))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, true);
 				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, !isSelectAll);
 
 			}
 		});

@@ -121,13 +121,12 @@ public class IssueFilterCompositeIssueLinkRelated
 
 				if (selectedIssueLinkType.equals(ISSUE_LINK_TYPE_ALL)) {
 					getQuery().setIssueLinkTypeID(null);
+					getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkTypeID, false);
 				}
 				else
 				{
-					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID))
-						getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkTypeID, true);
-
 					getQuery().setIssueLinkTypeID((IssueLinkTypeID) JDOHelper.getObjectId(selectedIssueLinkType));
+					getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkTypeID, true);
 				}
 			}
 		});
