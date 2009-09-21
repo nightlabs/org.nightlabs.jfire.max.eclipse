@@ -3,7 +3,10 @@
  */
 package org.nightlabs.jfire.scripting.ui;
 
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -15,6 +18,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.scripting.ScriptParameter;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.ui.resource.Messages;
+
 
 /**
  * A table displaying ScriptParameters.
@@ -78,10 +82,61 @@ public class ScriptParameterTable extends AbstractTableComposite<ScriptParameter
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(org.eclipse.jface.viewers.TableViewer, org.eclipse.swt.widgets.Table)
 	 */
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) {
+	protected void createTableColumns(final TableViewer tableViewer, Table table) {
 		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.scripting.ui.ScriptParameterTable.columnParameterID.name")); //$NON-NLS-1$
 		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.scripting.ui.ScriptParameterTable.columnParameterType.name")); //$NON-NLS-1$
+
+
 		table.setLayout(new WeightedTableLayout(new int[]{1,1}));
+
+		TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
+		column.setEditingSupport(new EditingSupport(tableViewer) {
+
+			private TextCellEditor textCellEditor=new TextCellEditor();
+
+			@Override
+			protected void setValue(Object element, Object value) {
+
+				 final ScriptParameter scriptParameter=(ScriptParameter)element;
+				if (value == null)
+				{
+
+					tableViewer.update(scriptParameter, null);
+					return;
+				}
+
+
+
+
+			}
+
+			@Override
+			protected boolean canEdit(Object element) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+
+
+
+			@Override
+			protected Object getValue(Object element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+
+
+
+
+
+			@Override
+			protected TextCellEditor getCellEditor(Object element) {
+
+				return textCellEditor;
+			}
+
+
+		});
 	}
 
 	/* (non-Javadoc)
