@@ -153,6 +153,15 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				Set<Class> newClasses = (Set<Class>) changedField.getNewValue();
 				if (newClasses == null)
 				{
+					checkboxTreeViewer.expandAll();
+					TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
+					for (TreeItem treeItem : treeItems) {
+						IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
+						for (IssueLinkHandlerFactory childFactory : category.getChildFactories()) {
+							checkboxTreeViewer.setChecked(childFactory, false);
+						}
+						treeItem.setChecked(false);
+					}
 				}
 				else
 				{

@@ -194,8 +194,6 @@ public class IssueFilterCompositePropertyRelated
 				else {
 					getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
 				}
-				getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, !isSelectAll);
-
 			}
 		});
 
@@ -221,9 +219,7 @@ public class IssueFilterCompositePropertyRelated
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 					issuePriorityCombo.setSelection(newIssuePriority);
-					if (! newIssuePriority.equals(issuePriorityCombo.getSelectedElement()))
-						selectedIssuePriority = newIssuePriority;
-
+					selectedIssuePriority = newIssuePriority;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issuePriorityID).equals(
@@ -252,9 +248,7 @@ public class IssueFilterCompositePropertyRelated
 					);
 
 					issueResolutionCombo.setSelection(newIssueResolution);
-					if (! newIssueResolution.equals(issueResolutionCombo.getSelectedElement()))
-						selectedIssueResolution = newIssueResolution;
-
+					selectedIssueResolution = newIssueResolution;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueResolutionID).equals(
@@ -283,8 +277,7 @@ public class IssueFilterCompositePropertyRelated
 					);
 
 					issueSeverityCombo.setSelection(newIssueSeverityType);
-					if (! newIssueSeverityType.equals(issueSeverityCombo.getSelectedElement()))
-						selectedIssueSeverityType = newIssueSeverityType;
+					selectedIssueSeverityType = newIssueSeverityType;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueSeverityTypeID).equals(
@@ -313,8 +306,7 @@ public class IssueFilterCompositePropertyRelated
 					);
 
 					issueTypeCombo.setSelection(newIssueType);
-					if (! newIssueType.equals(issueTypeCombo.getSelectedElement()))
-						selectedIssueType = newIssueType;
+					selectedIssueType = newIssueType;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueTypeID).equals(
@@ -449,19 +441,12 @@ public class IssueFilterCompositePropertyRelated
 					return Status.OK_STATUS;
 				} finally {
 					synchronized (mutex) {
-//						if (storedIssueQueryRunnable != null) {
-//						logger.debug("Running storedIssueQueryRunnable from load Job.");
-//						storedIssueQueryRunnable.run(monitor);
-//						storedIssueQueryRunnable = null;
-//						}
-//						loadJobRunning = false;
 						logger.debug("Load Job finished."); //$NON-NLS-1$
 					}
 				}
 			}
 		};
 
-		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
 	}
 

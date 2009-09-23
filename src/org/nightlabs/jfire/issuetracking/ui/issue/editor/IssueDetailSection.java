@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
@@ -22,8 +22,8 @@ import org.nightlabs.jfire.security.User;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueDetailSection 
-extends AbstractIssueEditorGeneralSection 
+public class IssueDetailSection
+extends AbstractIssueEditorGeneralSection
 {
 	private Label reporterLabel;
 	private Label reporterTextLabel;
@@ -36,11 +36,11 @@ extends AbstractIssueEditorGeneralSection
 
 	private Label updatedTimeLabel;
 	private Label updatedTimeTextLabel;
-	
+
 	private User assigneeUser;
-	
+
 	private Issue issue;
-	
+
 	private IssueEditorGeneralPage page;
 
 	/**
@@ -50,7 +50,7 @@ extends AbstractIssueEditorGeneralSection
 	public IssueDetailSection(FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(page, parent, controller);
 		this.page = (IssueEditorGeneralPage)page;
-		
+
 		getClient().getGridLayout().numColumns = 2;
 		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.section.text")); //$NON-NLS-1$
 
@@ -102,14 +102,15 @@ extends AbstractIssueEditorGeneralSection
 		return unassignAction;
 	}
 
+	@Override
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
-		
+
 		if (issue.getReporter() != null)
 			reporterTextLabel.setText(issue.getReporter().getName());
 		else
 			reporterTextLabel.setText(""); //$NON-NLS-1$
-		
+
 		if (issue.getAssignee() != null)
 			assigneeTextLabel.setText(issue.getAssignee().getName());
 		else
@@ -119,13 +120,13 @@ extends AbstractIssueEditorGeneralSection
 		updatedTimeTextLabel.setText(issue.getUpdateTimestamp() == null? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.label.updatedTimeText.noData.text") : issue.getUpdateTimestamp().toString()); //$NON-NLS-1$
 	}
 
-	public class AssignToMyselfAction extends Action {		
+	public class AssignToMyselfAction extends Action {
 		public AssignToMyselfAction() {
 			super();
 			setId(AssignToMyselfAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
+					IssueTrackingPlugin.getDefault(),
+					IssueDetailSection.class,
 					"Assign to myself")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToMyselfAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToMyselfAction.text")); //$NON-NLS-1$
@@ -133,16 +134,16 @@ extends AbstractIssueEditorGeneralSection
 
 		@Override
 		public void run() {
-		}		
+		}
 	}
-	
-	public class AssignToReporterAction extends Action {		
+
+	public class AssignToReporterAction extends Action {
 		public AssignToReporterAction() {
 			super();
 			setId(AssignToReporterAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
+					IssueTrackingPlugin.getDefault(),
+					IssueDetailSection.class,
 					"Assign to reporter")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToReporterAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToReporterAction.text")); //$NON-NLS-1$
@@ -151,16 +152,16 @@ extends AbstractIssueEditorGeneralSection
 		@Override
 		public void run() {
 
-		}		
+		}
 	}
-	
-	public class AssignAction extends Action {		
+
+	public class AssignAction extends Action {
 		public AssignAction() {
 			super();
 			setId(AssignAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
+					IssueTrackingPlugin.getDefault(),
+					IssueDetailSection.class,
 					"Assign")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignAction.text")); //$NON-NLS-1$
@@ -175,7 +176,7 @@ extends AbstractIssueEditorGeneralSection
 				if (assigneeUser != null) {
 					issue.setAssignee(assigneeUser);
 					assigneeTextLabel.setText(issue.getAssignee().getName());
-					
+
 					//disabled for the 0.9.4 release. This is bad to do here anyway. I just implemented this in the back-end! Marco.
 //					if (!issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.TRANSITION_NAME_ASSIGN)) {
 //						if (IssueTypeAndStateSection.assignInPossibleTransition(issue, new NullProgressMonitor()))
@@ -184,16 +185,16 @@ extends AbstractIssueEditorGeneralSection
 				}
 				markDirty();
 			}//if
-		}		
+		}
 	}
-	
-	public class UnassignAction extends Action {		
+
+	public class UnassignAction extends Action {
 		public UnassignAction() {
 			super();
 			setId(UnassignAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
+					IssueTrackingPlugin.getDefault(),
+					IssueDetailSection.class,
 			"Unassign")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.UnassignAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.UnassignAction.text")); //$NON-NLS-1$
@@ -204,16 +205,16 @@ extends AbstractIssueEditorGeneralSection
 			issue.setAssignee(null);
 			assigneeTextLabel.setText(""); //$NON-NLS-1$
 			markDirty();
-		}		
+		}
 	}
 
-//	class PrintIssueAction extends Action {		
+//	class PrintIssueAction extends Action {
 //		public PrintIssueAction() {
 //			super();
 //			setId(PrintIssueAction.class.getName());
 //			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-//					IssueTrackingPlugin.getDefault(), 
-//					IssueDetailSection.class, 
+//					IssueTrackingPlugin.getDefault(),
+//					IssueDetailSection.class,
 //			"Print"));
 //			setToolTipText("Print");
 //			setText("Print");
@@ -221,16 +222,16 @@ extends AbstractIssueEditorGeneralSection
 //
 //		@Override
 //		public void run() {
-//		}		
+//		}
 //	}
 //
-//	class PrintPreviewIssueAction extends Action {		
+//	class PrintPreviewIssueAction extends Action {
 //		public PrintPreviewIssueAction() {
 //			super();
 //			setId(PrintPreviewIssueAction.class.getName());
 //			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-//					IssueTrackingPlugin.getDefault(), 
-//					IssueDetailSection.class, 
+//					IssueTrackingPlugin.getDefault(),
+//					IssueDetailSection.class,
 //					"PrintPreview"));
 //			setToolTipText("Print Preview");
 //			setText("Print Preview");
@@ -238,6 +239,6 @@ extends AbstractIssueEditorGeneralSection
 //
 //		@Override
 //		public void run() {
-//		}		
+//		}
 //	}
 }

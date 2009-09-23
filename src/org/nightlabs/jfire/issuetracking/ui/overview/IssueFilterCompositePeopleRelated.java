@@ -186,6 +186,9 @@ public class IssueFilterCompositePeopleRelated
 				if (newAssigneeID == null)
 				{
 					assigneeText.setText(""); //$NON-NLS-1$
+					assigneeButton.setEnabled(true);
+					assigneeText.setEnabled(false);
+					allAssigneeButton.setSelection(true);
 				}
 				else
 				{
@@ -214,6 +217,9 @@ public class IssueFilterCompositePeopleRelated
 				if (tmpReporterID == null)
 				{
 					reporterText.setText(""); //$NON-NLS-1$
+					reporterButton.setEnabled(true);
+					reporterText.setEnabled(false);
+					allReporterButton.setSelection(true);
 				}
 				else
 				{

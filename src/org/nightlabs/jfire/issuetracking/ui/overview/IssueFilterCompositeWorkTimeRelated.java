@@ -150,8 +150,13 @@ public class IssueFilterCompositeWorkTimeRelated
 		{
 			if (IssueQuery.FieldName.issueWorkTimeRangeFrom.equals(changedField.getPropertyName()))
 			{
-				final Date tmpCreateDate = (Date) changedField.getNewValue();
-				startTimeEdit.setDate(tmpCreateDate);
+				final Date newCreateDate = (Date) changedField.getNewValue();
+				if (newCreateDate == null) {
+					startTimeEdit.setActive(false);
+				}
+				else {
+					startTimeEdit.setDate(newCreateDate);
+				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeFrom).equals(changedField.getPropertyName()))
 			{
@@ -164,8 +169,13 @@ public class IssueFilterCompositeWorkTimeRelated
 			}
 			else if (IssueQuery.FieldName.issueWorkTimeRangeTo.equals(changedField.getPropertyName()))
 			{
-				final Date tmpUpdateDate = (Date) changedField.getNewValue();
-				endTimeEdit.setDate(tmpUpdateDate);
+				final Date newUpdateDate = (Date) changedField.getNewValue();
+				if (newUpdateDate == null) {
+					endTimeEdit.setActive(false);
+				}
+				else {
+					endTimeEdit.setDate(newUpdateDate);
+				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeTo).equals(changedField.getPropertyName()))
 			{

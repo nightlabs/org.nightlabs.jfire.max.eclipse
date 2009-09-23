@@ -1,8 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -39,7 +39,6 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -52,7 +51,8 @@ public class IssueFilterCompositeIssueLinkRelated
 
 	private XComboComposite<IssueLinkType> issueLinkTypeCombo;
 
-//	private Set<IssueLink> issueLinks;
+	private Object mutex = new Object();
+
 	/**
 	 * Used to defer the selection of an element until the loading job is finished.
 	 */
@@ -149,40 +149,44 @@ public class IssueFilterCompositeIssueLinkRelated
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("Thread mismatch! Must be called on UI thread!");
+
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
 			if (IssueQuery.FieldName.issueLinkTypeID.equals(changedField.getPropertyName()))
 			{
 				IssueLinkTypeID newIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();
-				if (! Util.equals(JDOHelper.getObjectId(selectedIssueLinkType), newIssueLinkTypeID) )
+				if (newIssueLinkTypeID == null)
 				{
-					if (newIssueLinkTypeID == null)
-					{
-						issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
-					}
-					else
-					{
-						final IssueLinkType newIssueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
-								newIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME },
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-						);
+					issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+					selectedIssueLinkType = null;
+					logger.info("updateUI:1: selectedIssueLinkType == NULL");
+				}
+				else
+				{
+					final IssueLinkType newIssueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
+							newIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
 
-						issueLinkTypeCombo.setSelection(newIssueLinkType);
-						if (! newIssueLinkType.equals(issueLinkTypeCombo.getSelectedElement()))
-							selectedIssueLinkType = newIssueLinkType;
-					}
+					issueLinkTypeCombo.setSelection(newIssueLinkType);
+					selectedIssueLinkType = newIssueLinkType;
+					logger.info("updateUI:2: selectedIssueLinkType == " + selectedIssueLinkType);
 				}
 			}
-			else if (getEnableFieldName(IssueQuery.FieldName.issueLinkTypeID).equals(
-					changedField.getPropertyName()))
+			else if (getEnableFieldName(IssueQuery.FieldName.issueLinkTypeID).equals(changedField.getPropertyName()))
 			{
 				boolean isActive = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(isActive/*getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID)*/);
 
 				if (!isActive) {
-					issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
 					getQuery().setIssueLinkTypeID(null);
+					issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+					selectedIssueLinkType = null;
 				}
+
+				logger.info("updateUI:3: selectedIssueLinkType == " + isActive);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
@@ -197,25 +201,28 @@ public class IssueFilterCompositeIssueLinkRelated
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeIssueLinkRelated.job.loadingIssueLinkProperties.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
+				synchronized (mutex) {
+					logger.debug("Load Job running...."); //$NON-NLS-1$
+				}
 				try {
 					try {
 						final List<IssueLinkType> issueLinkTypeList = new ArrayList<IssueLinkType>(IssueLinkTypeDAO.sharedInstance().
 								getIssueLinkTypes(FETCH_GROUPS_ISSUE_LINK_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 
-						Display.getDefault().syncExec(new Runnable() {
+						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
 								issueLinkTypeCombo.removeAll();
 								issueLinkTypeCombo.addElement(ISSUE_LINK_TYPE_ALL);
-								for (Iterator<IssueLinkType> it = issueLinkTypeList.iterator(); it.hasNext(); ) {
-									IssueLinkType issueLinkType = it.next();
+								for (IssueLinkType issueLinkType : issueLinkTypeList) {
 									issueLinkTypeCombo.addElement(issueLinkType);
 								}
 								if (selectedIssueLinkType == null)
 									issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
 								else {
 									issueLinkTypeCombo.setSelection(selectedIssueLinkType);
-									selectedIssueLinkType = null;
 								}
+
+								logger.info("Display.getDefault().asyncExec: " + issueLinkTypeList);
 							}
 						});
 					}catch (Exception e1) {
@@ -225,12 +232,12 @@ public class IssueFilterCompositeIssueLinkRelated
 
 					return Status.OK_STATUS;
 				} finally {
-					logger.debug("Load Job finished."); //$NON-NLS-1$
+					synchronized (mutex) {
+						logger.debug("Load Job finished."); //$NON-NLS-1$
+					}
 				}
 			}
 		};
-
-		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
 	}
 

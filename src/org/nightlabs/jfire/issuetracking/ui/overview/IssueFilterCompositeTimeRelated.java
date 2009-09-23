@@ -150,8 +150,13 @@ public class IssueFilterCompositeTimeRelated
 		{
 			if (IssueQuery.FieldName.createTimestamp.equals(changedField.getPropertyName()))
 			{
-				final Date tmpCreateDate = (Date) changedField.getNewValue();
-				createdTimeEdit.setDate(tmpCreateDate);
+				final Date newCreateDate = (Date) changedField.getNewValue();
+				if (newCreateDate == null) {
+					createdTimeEdit.setActive(false);
+				}
+				else {
+					createdTimeEdit.setDate(newCreateDate);
+				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.createTimestamp).equals(changedField.getPropertyName()))
 			{
@@ -164,8 +169,13 @@ public class IssueFilterCompositeTimeRelated
 			}
 			else if (IssueQuery.FieldName.updateTimestamp.equals(changedField.getPropertyName()))
 			{
-				final Date tmpUpdateDate = (Date) changedField.getNewValue();
-				updatedTimeEdit.setDate(tmpUpdateDate);
+				final Date newUpdateDate = (Date) changedField.getNewValue();
+				if (newUpdateDate == null) {
+					updatedTimeEdit.setActive(false);
+				}
+				else {
+					updatedTimeEdit.setDate(newUpdateDate);
+				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.updateTimestamp).equals(changedField.getPropertyName()))
 			{

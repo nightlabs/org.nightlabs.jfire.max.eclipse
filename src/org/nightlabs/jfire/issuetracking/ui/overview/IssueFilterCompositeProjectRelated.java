@@ -174,6 +174,10 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				Set<ProjectID> newProjectIDs = (Set<ProjectID>) changedField.getNewValue();
 				if (newProjectIDs == null)
 				{
+					TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
+					for (TreeItem treeItem : treeItems) {
+						treeItem.setChecked(false);
+					}
 				}
 				else
 				{
