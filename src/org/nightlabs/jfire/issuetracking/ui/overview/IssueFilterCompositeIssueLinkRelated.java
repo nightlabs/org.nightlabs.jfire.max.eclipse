@@ -117,7 +117,7 @@ public class IssueFilterCompositeIssueLinkRelated
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				selectedIssueLinkType = issueLinkTypeCombo.getSelectedElement();
+				final IssueLinkType selectedIssueLinkType = issueLinkTypeCombo.getSelectedElement();
 
 				if (selectedIssueLinkType.equals(ISSUE_LINK_TYPE_ALL)) {
 					getQuery().setIssueLinkTypeID(null);
