@@ -150,12 +150,12 @@ public class IssueFilterCompositeWorkTimeRelated
 		{
 			if (IssueQuery.FieldName.issueWorkTimeRangeFrom.equals(changedField.getPropertyName()))
 			{
-				final Date newCreateDate = (Date) changedField.getNewValue();
-				if (newCreateDate == null) {
+				final Date newFromDate = (Date) changedField.getNewValue();
+				if (newFromDate == null) {
 					startTimeEdit.setActive(false);
 				}
 				else {
-					startTimeEdit.setDate(newCreateDate);
+					startTimeEdit.setDate(newFromDate);
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeFrom).equals(changedField.getPropertyName()))
@@ -164,17 +164,17 @@ public class IssueFilterCompositeWorkTimeRelated
 				if (startTimeEdit.isActive() != active)
 				{
 					startTimeEdit.setActive(active);
-					setSearchSectionActive(active);
 				}
+				setSearchSectionActive(active);
 			}
 			else if (IssueQuery.FieldName.issueWorkTimeRangeTo.equals(changedField.getPropertyName()))
 			{
-				final Date newUpdateDate = (Date) changedField.getNewValue();
-				if (newUpdateDate == null) {
+				final Date newToDate = (Date) changedField.getNewValue();
+				if (newToDate == null) {
 					endTimeEdit.setActive(false);
 				}
 				else {
-					endTimeEdit.setDate(newUpdateDate);
+					endTimeEdit.setDate(newToDate);
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeTo).equals(changedField.getPropertyName()))
@@ -183,8 +183,8 @@ public class IssueFilterCompositeWorkTimeRelated
 				if (endTimeEdit.isActive() != active)
 				{
 					endTimeEdit.setActive(active);
-					setSearchSectionActive(active);
 				}
+				setSearchSectionActive(active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}

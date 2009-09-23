@@ -164,8 +164,8 @@ public class IssueFilterCompositeTimeRelated
 				if (createdTimeEdit.isActive() != active)
 				{
 					createdTimeEdit.setActive(active);
-					setSearchSectionActive(active);
 				}
+				setSearchSectionActive(active);
 			}
 			else if (IssueQuery.FieldName.updateTimestamp.equals(changedField.getPropertyName()))
 			{
@@ -183,8 +183,8 @@ public class IssueFilterCompositeTimeRelated
 				if (updatedTimeEdit.isActive() != active)
 				{
 					updatedTimeEdit.setActive(active);
-					setSearchSectionActive(active);
 				}
+				setSearchSectionActive(active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
