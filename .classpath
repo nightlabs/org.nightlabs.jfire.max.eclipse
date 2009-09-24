@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jdo"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.reporting.birt"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
