@@ -48,11 +48,7 @@ extends ActiveEntityEditorPageController<Script>
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+
 
 		return (Script)item;
 	}

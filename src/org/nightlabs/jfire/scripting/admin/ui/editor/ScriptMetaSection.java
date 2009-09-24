@@ -163,13 +163,6 @@ extends ToolBarSectionPart
 		createResultClassNameText(container);
 	}
 
-//	@Override
-//	public void markDirty() {
-//		// fires dirtyStateChangedEvent of the editor
-//		notifyDirtyStateListeners(true);
-//		super.markDirty();
-//
-//	}
 
 	private Text resultClassNameText;
 	private void createResultClassNameText(Composite container){
@@ -205,22 +198,4 @@ extends ToolBarSectionPart
 		label.setLayoutData(gd);
 	}
 
-//	private void setScript(Script script) {
-//		this.script = script;
-//		Collection<String> languages = ScriptRegistryItemDAO.sharedInstance().getlanguages();
-//		for (String language : languages) {
-//			languageCombo.add(null, language);
-//		}
-//		// Select the script's language in the combo
-//		int i = 0;
-//		for (Iterator iterator = languages.iterator(); iterator.hasNext(); i++) {
-//			String language = (String)iterator.next();
-//			if (language.equals(script.getLanguage())) {
-//				languageCombo.select(i);
-//			}
-//		}
-//
-//		resultClassNameText.setText(script.getResultClassName());
-//
-//	}
 }

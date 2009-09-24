@@ -12,6 +12,11 @@ import org.nightlabs.jfire.scripting.ScriptParameter;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 
+/**
+ *
+ * @author vince
+ *
+ */
 public class ScriptParameterComposite
 extends XComposite{
 
@@ -32,7 +37,6 @@ extends XComposite{
 	protected void createComposite(Composite parent) {
 		setLayout(new GridLayout(1, false));
 		Group idGroup = new Group(this, SWT.NONE);
-	//	idGroup.setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.group.ScriptParameterComposite.EditParameter.text"));
 		idGroup.setLayout(new GridLayout(2, false));
 		idGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -66,7 +70,6 @@ extends XComposite{
 	public ScriptParameter getScriptParameter() {
 
 		scriptParameter.setScriptParameterClassName(parameterNameText.getText());
-	//	scriptParameter.getScriptParameterClassName();
 		return scriptParameter;
 	}
 }

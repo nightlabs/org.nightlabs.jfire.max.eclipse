@@ -8,6 +8,12 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 
+/**
+ *
+ * @author vince
+ *
+ */
+
 public class ScriptEditorMetaPage
 extends EntityEditorPageWithProgress
 {
@@ -40,13 +46,7 @@ extends EntityEditorPageWithProgress
 		getManagedForm().addPart(metaSection);
 		getManagedForm().addPart(tableSection);
 
-//		if (controller.isLoaded()) {
-//			Script script = controller.getControllerObject();
-//			metaSection.setScript(script);
-//			tableSection.setScript(script);
-//		}
-//		else
-//			System.out.println("NOT YET LOADED!");
+
 	}
 
 	@Override

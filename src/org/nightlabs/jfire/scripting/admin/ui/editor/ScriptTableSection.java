@@ -1,8 +1,8 @@
 package org.nightlabs.jfire.scripting.admin.ui.editor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
@@ -24,9 +24,13 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.scripting.IScriptParameter;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptParameter;
+import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.scripting.ui.ModificationListener;
+import org.nightlabs.jfire.scripting.ui.ModifyListenerEvent;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
+import org.nightlabs.jfire.scripting.ui.ScriptParameterTableOption;
 
 
 /**
@@ -37,29 +41,31 @@ import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
 public class ScriptTableSection
 extends ToolBarSectionPart
 {
-//	ScriptEditorPageController controller;
 
+	//	ScriptEditorPageController controller;
+	private String selectedParamID;
+	private String secondParamId;
 	private CreateParameterAction createAction;
 	private DeleteParameterAction deleteAction;
 	private EditParameterAction editAction;
-	IncreaseOrderParameterAction previousParameterAction;
-	DecreaseOrderParameterAction nextParameterAction;
+	private DecreaseOrderNumberAction previousParameterAction;
+	private IncreaseOrderNumberAction nextParameterAction;
 
-	Script script;
+	private Script script;
 
-	ScriptParameterTable scriptParameterTable;
+	private ScriptParameterTable scriptParameterTable;
 	public ScriptTableSection(FormPage page, Composite parent, ScriptEditorPageController controller){
 		super(page,parent,ExpandableComposite.EXPANDED
 				| ExpandableComposite.TITLE_BAR
 				| ExpandableComposite.TWISTIE ,
 				Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.sectionTitle"));
-	//	this.controller=controller;
+		//	this.controller=controller;
 		getSection().setExpanded(true);
 
 		createClient(getSection(), page.getEditor().getToolkit());
 
-		previousParameterAction= new IncreaseOrderParameterAction();
-		nextParameterAction =new DecreaseOrderParameterAction();
+		previousParameterAction= new DecreaseOrderNumberAction();
+		nextParameterAction =new IncreaseOrderNumberAction();
 		createAction = new CreateParameterAction();
 		deleteAction = new DeleteParameterAction();
 		editAction = new EditParameterAction();
@@ -108,16 +114,13 @@ extends ToolBarSectionPart
 		super.markDirty();
 	}
 
-
-
-
 	protected void createClient(Section section, FormToolkit toolkit){
-//		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Composite container = EntityEditorUtil.createCompositeClient(toolkit, section, 1);
 
 		XComposite composite=new XComposite(container, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		scriptParameterTable = new ScriptParameterTable(composite, SWT.NONE);
+		scriptParameterTable = new ScriptParameterTable(composite, SWT.NONE, ScriptParameterTableOption.editable);
 		scriptParameterTable.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
@@ -128,19 +131,25 @@ extends ToolBarSectionPart
 				return 0;
 			}
 		});
-		// scriptingparameterstable.addDoubleClickListener(new IDoubleClickListener(){
-		//scriptParameterTable.setf
-	//	scriptParameterTable.setInput(script.getParameterSet());
-	//	scriptParameterTable.getDisplay();
+
+
+          scriptParameterTable.addModificationListener(new ModificationListener() {
+
+			@Override
+			public void ModifyTextListener(ModifyListenerEvent event) {
+				// TODO Auto-generated method stub
+                 markDirty();
+			}
+		});
+
+
+
 	}
+	class DecreaseOrderNumberAction extends Action{
 
-
-
-	class IncreaseOrderParameterAction extends Action{
-
-		public IncreaseOrderParameterAction(){
+		public DecreaseOrderNumberAction(){
 			super();
-			setId(IncreaseOrderParameterAction.class.getName());
+			setId(DecreaseOrderNumberAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(ScriptingAdminPlugin.getDefault(),ScriptTableSection.class,"Up"));
 			setToolTipText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.PreviousParameterAction.toolTipText"));
 			setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.PreviousParameterAction.text"));
@@ -148,34 +157,29 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run(){
+
 			ScriptParameter selectedScriptParameter = scriptParameterTable.getFirstSelectedElement();
-			if(selectedScriptParameter !=null){
-				Collection<IScriptParameter> parameters = script.getParameterSet().getParameters();
-				List<IScriptParameter> parameterList=new ArrayList<IScriptParameter>(parameters);
+			if(selectedScriptParameter != null){
+				selectedParamID = selectedScriptParameter.getScriptParameterID();
 
-				script.getParameterSet().removeParameter(selectedScriptParameter.getScriptParameterID());
+				ScriptParameterSet parameterSet = script.getParameterSet();
+				SortedSet<IScriptParameter>  sortedParameters = parameterSet.getSortedParameters();
 
-				int orderNumber = selectedScriptParameter.getOrderNumber();
-				orderNumber++;
+				if(selectedScriptParameter.getOrderNumber() == 0){
+					return;
+				}
 
-//				script.getParameterSet().createParameter(scriptParameterID)
-//				selectedScriptParameter.
-				//	         int index=parameterList.indexOf(scriptParameterTable.getFirstSelectedElement());
-				//
-				//	           int ordernumber=parameterList.get(index).getOrderNumber();
-				// if()
-//				Collections.swap(parameterList,ordernumber,ordernumber+1);
-				//	Set<String> parameterIDs = controller.getScriptParameterSet().getParameterIDs();
-				//	List<String> ids = new ArrayList<String>(parameterIDs);
-				//int index = ids.indexOf(scriptParameterTable.getFirstSelectedElement().getScriptParameterID());
+				List<IScriptParameter> parameterList=new ArrayList<IScriptParameter>(sortedParameters);
+				for(IScriptParameter parameter : parameterList){
+					if(selectedParamID.equals(parameter.getScriptParameterID())){
+						int firstOrderNum = parameter.getOrderNumber();
+						int secondOrderNum = --firstOrderNum;
+						secondParamId = parameterList.get(secondOrderNum).getScriptParameterID();
+						parameterSet.swapParameters(selectedParamID, secondParamId);
+					}
+				}
 
-				//	int index=ids.indexOf(scriptParameterTable.getFirstSelectedElement());
-				//  if(index < controller.getScriptParameterSet().getParameterIDs().size() -1){
-				//if(index < script.getParameterSet().getParameterIDs().size() -1){
-				//	Collections.swap(ids, index,index+1);
-
-				scriptParameterTable.setInput(parameterList);
-
+				scriptParameterTable.setInput(parameterSet);
 				markDirty();
 			}
 
@@ -183,13 +187,11 @@ extends ToolBarSectionPart
 	}
 
 
+	class IncreaseOrderNumberAction extends Action {
 
-
-	class DecreaseOrderParameterAction extends Action {
-
-		public DecreaseOrderParameterAction(){
+		public IncreaseOrderNumberAction(){
 			super();
-			setId(DecreaseOrderParameterAction.class.getName());
+			setId(IncreaseOrderNumberAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(ScriptingAdminPlugin.getDefault(),ScriptTableSection.class,"Down"));
 			setToolTipText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.NextParameterAction.toolTipText"));
 			setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.NextParameterAction.text"));
@@ -198,28 +200,42 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 
+			ScriptParameter selectedScriptParameter = scriptParameterTable.getFirstSelectedElement();
+			if(selectedScriptParameter != null){
+				selectedParamID = selectedScriptParameter.getScriptParameterID();
 
-    		 ScriptParameterWizard wizard=new ScriptParameterWizard(false,script);
-    		 try {
+				ScriptParameterSet parameterSet = script.getParameterSet();
+				SortedSet<IScriptParameter>  sortedParameters = parameterSet.getSortedParameters();
 
-    			  DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), wizard);
- 				int result = dialog.open();
- 				if(result == Dialog.OK) {
 
- 					scriptParameterTable.setInput(script.getParameterSet());
- 					scriptParameterTable.refresh(true);
- 					markDirty();
- 				}
- 			} catch (Exception ex) {
- 				throw new RuntimeException(ex);
- 			}
-    	}
+				List<IScriptParameter> parameterList=new ArrayList<IScriptParameter>(sortedParameters);
+
+
+				if(selectedScriptParameter.getOrderNumber() == parameterList.size()-1){
+					return;
+				}
+
+				for(IScriptParameter parameter : parameterList){
+					if(selectedParamID.equals(parameter.getScriptParameterID())){
+						int firstOrderNum = parameter.getOrderNumber();
+						int secondOrderNum = ++firstOrderNum;
+						secondParamId = parameterList.get(secondOrderNum).getScriptParameterID();
+						parameterSet.swapParameters(selectedParamID, secondParamId);
+					}
+				}
+
+				scriptParameterTable.setInput(parameterSet);
+				markDirty();
+			}
+
+
+		}
 
 	}
 
 	class  CreateParameterAction extends Action{
-    	public CreateParameterAction(){
-    		super();
+		public CreateParameterAction(){
+			super();
 			setId(CreateParameterAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					ScriptingAdminPlugin.getDefault(),
@@ -229,26 +245,26 @@ extends ToolBarSectionPart
 			setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.CreateParameterAction.text"));
 		}
 
-    	@Override
+		@Override
 		public void run() {
 
 
-    		 ScriptParameterWizard wizard=new ScriptParameterWizard(false,script);
-    		 try {
+			ScriptParameterWizard wizard=new ScriptParameterWizard(false,script);
+			try {
 
-    			  DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), wizard);
- 				int result = dialog.open();
- 				if(result == Dialog.OK) {
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), wizard);
+				int result = dialog.open();
+				if(result == Dialog.OK) {
 
- 					scriptParameterTable.setInput(script.getParameterSet());
- 					scriptParameterTable.refresh(true);
- 					markDirty();
- 				}
- 			} catch (Exception ex) {
- 				throw new RuntimeException(ex);
- 			}
-    	}
-    }
+					scriptParameterTable.setInput(script.getParameterSet());
+					scriptParameterTable.refresh(true);
+					markDirty();
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
 
 	class DeleteParameterAction extends Action{
 		public DeleteParameterAction(){
@@ -257,7 +273,7 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					ScriptingAdminPlugin.getDefault(),
 					ScriptTableSection.class,
-					"Delete")); //$NON-NLS-1$
+			"Delete")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.DeleteParameterAction.toolTipText"));
 			setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.DeleteParameterAction.text"));
 
@@ -266,14 +282,15 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run() {
-	        boolean confirm= MessageDialog.openConfirm(getSection().getShell(),Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.DeleteParameterAction.dialog.confirmDelete.title"),Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.DeleteParameterAction.dialog.confirmDelete.description"));
+			boolean confirm= MessageDialog.openConfirm(getSection().getShell(),Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.DeleteParameterAction.dialog.confirmDelete.title"),Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.DeleteParameterAction.dialog.confirmDelete.description"));
 
 			if(confirm) {
-				//  script.getParameterSet().getParameters().removeAll(scriptParameterTable.getSelectedElements());
+
+
+
 				script.getParameterSet().removeParameter(scriptParameterTable.getFirstSelectedElement().getScriptParameterID());
-				//controller.getIssueType().getIssueSeverityTypes().removeAll(issueSeverityTypeTable.getSelectedElements());
-				//issueSeverityTypeTable.refresh(true);
-			     scriptParameterTable.refresh(true);
+
+				scriptParameterTable.refresh(true);
 				markDirty();
 			}
 		}
@@ -287,7 +304,7 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					ScriptingAdminPlugin.getDefault(),
 					ScriptTableSection.class,
-					"Edit")); //$NON-NLS-1$
+			"Edit")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.EditParameterAction.toolTipText"));
 			setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.EditParameterAction.text"));
 		}
@@ -295,12 +312,12 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 
-		    ScriptParameter parameter=scriptParameterTable.getFirstSelectedElement();
-		    ScriptEditWizard wizard = new ScriptEditWizard(parameter, false,null);
+			ScriptParameter parameter=scriptParameterTable.getFirstSelectedElement();
+			ScriptEditWizard wizard = new ScriptEditWizard(parameter, false,null);
 
 			try {
 
-				  DynamicPathWizardDialog dialog =new DynamicPathWizardDialog(getSection().getShell(), wizard);
+				DynamicPathWizardDialog dialog =new DynamicPathWizardDialog(getSection().getShell(), wizard);
 				if(dialog.open() == Dialog.OK) {
 
 					scriptParameterTable.refresh(true);
@@ -313,9 +330,4 @@ extends ToolBarSectionPart
 	}
 
 
-//	public void setScript(Script script){
-//
-//		this.script=script;
-//		scriptParameterTable.setInput(script.getParameterSet());
-//	}
 }

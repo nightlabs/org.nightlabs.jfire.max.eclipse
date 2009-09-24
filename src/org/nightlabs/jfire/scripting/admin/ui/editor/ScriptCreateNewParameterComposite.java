@@ -10,6 +10,12 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
+/**
+ *
+ * @author vince
+ *
+ */
+
 public class ScriptCreateNewParameterComposite extends XComposite {
 
 	private Label parameterIdLabel;
@@ -56,16 +62,16 @@ public class ScriptCreateNewParameterComposite extends XComposite {
 		parameterNameText.setLayoutData(gridData);
 
 
-		       parameterIdText.getText();
-			    parameterNameText.getText();
+		parameterIdText.getText();
+		parameterNameText.getText();
 
 
 
 
 
 
-		}
 	}
+}
 
 
 

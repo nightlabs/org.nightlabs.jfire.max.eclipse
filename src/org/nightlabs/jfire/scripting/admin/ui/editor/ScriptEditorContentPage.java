@@ -47,37 +47,6 @@ extends EntityEditorPageWithProgress
 	}
 
 
-//	@Override
-//	protected void createFormContent(IManagedForm managedForm) {
-//		ScrolledForm form = managedForm.getForm();
-//
-//		configureForm(form);
-//		configureBody(form.getBody());
-//		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
-//		int style = SWT.MULTI  |SWT.BORDER| SWT.V_SCROLL |SWT.H_SCROLL;
-//		contentText = new Text(form.getBody(), style);
-//		contentText.setLayoutData(new GridData(GridData.FILL_BOTH));
-//
-//		addSections(form.getBody());
-//		// this will notify immediately, in case there was already an event.
-//		getPageController().addModifyListener(new IEntityEditorPageControllerModifyListener() {
-//			public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
-//				switchToContent();
-//				handleControllerObjectModified(modifyEvent);
-//			}
-//		});
-//	}
-
-//	@Override
-//	protected void handleControllerObjectModified(
-//			EntityEditorPageControllerModifyEvent modifyEvent) {
-//		switchToContent(); // multiple calls don't hurt
-//		Display.getDefault().asyncExec(new Runnable() {
-//			public void run() {
-//				contentText.setText(getController().getScript().getText());
-//			}
-//		});
-//	}
 
 	private Composite container;
 	private Map<String, ScriptEdit> language2ScriptEdit = new HashMap<String, ScriptEdit>();
@@ -126,11 +95,6 @@ extends EntityEditorPageWithProgress
 		container = parent;
 
 
-//		asyncLoadJob.schedule();
-//		//Do nothing!!!!!!!!!!!!
-//		if (getController().isLoaded()) {
-//			contentText.setText(getController().getScript().getText());
-//		}
 	}
 
 	@Override
@@ -142,20 +106,5 @@ extends EntityEditorPageWithProgress
 		return (ScriptEditorPageController)getPageController();
 	}
 
-//	private Job asyncLoadJob = new Job(Messages.getString("org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress.loadJob.name")) { //$NON-NLS-1$
-//		@Override
-//		protected IStatus run(ProgressMonitor monitor) {
-//			final IEntityEditorPageController controller = getPageController();
-//			if (controller != null) {
-//
-////				CompoundProgressMonitor compoundMonitor = new CompoundProgressMonitor(new ProgressMonitorWrapper(progressMonitorPart), monitor);
-//				if (controller instanceof EntityEditorPageController) {
-//					((EntityEditorPageController)controller).load(new NullProgressMonitor());
-//				} // (controller instanceof EntityEditorPageController)
-//				else
-//					controller.doLoad(new NullProgressMonitor());
-//			}
-//			return Status.OK_STATUS;
-//		}
-//	};
+
 }

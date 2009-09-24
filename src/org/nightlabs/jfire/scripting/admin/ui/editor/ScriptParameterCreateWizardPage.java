@@ -6,11 +6,17 @@ import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.scripting.ScriptParameter;
 
+/**
+ *
+ * @author vince
+ *
+ */
+
 public class ScriptParameterCreateWizardPage extends WizardHopPage {
-	
+
 
 	private ScriptCreateNewParameterComposite scriptParameterComposite;
-	
+
 
 	public ScriptCreateNewParameterComposite getScriptParameterComposite() {
 		return scriptParameterComposite;
@@ -18,14 +24,14 @@ public class ScriptParameterCreateWizardPage extends WizardHopPage {
 
 	public ScriptParameterCreateWizardPage(ScriptParameter scriptparameter) {
 		super(ScriptParameterCreateWizardPage.class.getName());
-		
+
 	}
 
 	@Override
 	public Control createPageContents(Composite parent) {
         scriptParameterComposite = new ScriptCreateNewParameterComposite( parent, SWT.NONE);
-		
-		return  scriptParameterComposite; 
+
+		return  scriptParameterComposite;
 	}
 
 }
