@@ -14,7 +14,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -71,7 +70,7 @@ extends AbstractTableComposite<ScriptParameter>
 	public ScriptParameterTable(Composite parent, int style, ScriptParameterTableOption ... options) {
 		super(parent, style, false);
 		this.scriptParameterTableOptions = createScriptParameterTableOptions(options);
-		init();
+		initTable();
 	}
 
 	protected ScriptParameterTable(Composite parent, int style, boolean initTable, ScriptParameterTableOption ... options) {
@@ -79,7 +78,7 @@ extends AbstractTableComposite<ScriptParameter>
 		this.scriptParameterTableOptions = createScriptParameterTableOptions(options);
 
 		if (initTable)
-			init();
+			initTable();
 	}
 
 	protected ScriptParameterTable(Composite parent, int style, boolean initTable, int viewerStyle, ScriptParameterTableOption ... options)
@@ -88,7 +87,7 @@ extends AbstractTableComposite<ScriptParameter>
 		this.scriptParameterTableOptions = createScriptParameterTableOptions(options);
 
 		if (initTable)
-			init();
+			initTable();
 	}
 
 	public static final String KEY_COLUMN_ID = "param_id";
@@ -171,7 +170,11 @@ extends AbstractTableComposite<ScriptParameter>
 			}
 
 			getTableViewer().update(scriptParameter, new String[] { property });
+			fireModification();
+
 		}
+
+
 	}
 
 	protected static class ScriptParamentTableContentProvider implements IStructuredContentProvider {
@@ -204,18 +207,27 @@ extends AbstractTableComposite<ScriptParameter>
 
 	private ListenerList modificationListeners = new ListenerList();
 
-	public void addModificationListener(ModifyListener listener) {
+	public void addModificationListener(ModificationListener listener) {
 		modificationListeners.add(listener);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.language.II18nTextEditor#removeModificationFinishedListener(org.nightlabs.base.ui.language.ModificationFinishedListener)
 	 */
-	public void removeModificationListener(ModifyListener listener) {
+	public void removeModificationListener(ModificationListener listener) {
 		modificationListeners.remove(listener);
 	}
 
+	private void fireModification()
+	{
+	   ModifyListenerEvent event =  new ModifyListenerEvent(this);
+	   for( int i=0; i< modificationListeners.size(); i++){
+		   ModificationListener modifylistener = (ModificationListener)modificationListeners.getListeners()[i];
+		   modifylistener.ModifyTextListener(event);
+	   }
 
+
+	}
 
 
 }
