@@ -43,6 +43,7 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
@@ -111,6 +112,7 @@ implements IReportEditorPage
 	private XComposite wrapper;
 	private XComposite topWrapper;
 	private Button parameterButton;
+	private Button refreshButton;
 
 	private BirtOutputCombo outputCombo;
 	private ComboComposite<Locale> localeCombo;
@@ -136,7 +138,7 @@ implements IReportEditorPage
 		logger.debug("create part Control"); //$NON-NLS-1$
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		topWrapper = new XComposite(wrapper, SWT.NONE);
-		topWrapper.getGridLayout().numColumns = 5;
+		topWrapper.getGridLayout().numColumns = 6;
 		topWrapper.getGridLayout().makeColumnsEqualWidth = false;
 		topWrapper.getGridData().grabExcessVerticalSpace = false;
 		topWrapper.getGridData().verticalAlignment = SWT.TOP;
@@ -155,6 +157,17 @@ implements IReportEditorPage
 				showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 			}
 		});
+
+		refreshButton = new Button(topWrapper, SWT.PUSH);
+		refreshButton.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage.refreshButton.text")); //$NON-NLS-1$);
+		refreshButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
+				showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
+			}
+		});
+
 		Label label = new Label(topWrapper, SWT.NONE);
 		label.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage.outputTypeLabel.text")); //$NON-NLS-1$
 		outputCombo = new BirtOutputCombo(topWrapper, SWT.READ_ONLY);
