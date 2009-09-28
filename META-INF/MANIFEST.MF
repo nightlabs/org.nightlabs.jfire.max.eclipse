@@ -8,6 +8,8 @@ Bundle-Activator: org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.scripting.admin.ui,
+ org.nightlabs.jfire.scripting.admin.ui.editor,
+ org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit,
  org.nightlabs.jfire.scripting.admin.ui.parameter.action,
  org.nightlabs.jfire.scripting.admin.ui.parameter.action.add,
  org.nightlabs.jfire.scripting.admin.ui.parameter.action.edit,
@@ -19,8 +21,7 @@ Export-Package: org.nightlabs.jfire.scripting.admin.ui,
  org.nightlabs.jfire.scripting.ui.admin.parameter
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.nightlabs.jfire.scripting.ui,
- org.nightlabs.jfire.base.ui,
+ org.nightlabs.jfire.scripting.ui;visibility:=reexport,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.ui.editors,
  org.eclipse.jface.text,

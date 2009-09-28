@@ -10,7 +10,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * 
+ *
  * @author vince
  *
  */
@@ -21,8 +21,7 @@ public class ScriptEditor extends ActiveEntityEditor {
 	@Override
 	protected String getEditorTitleFromEntity(Object entity) {
 		String text=((Script)entity).getName().getText();
-		return text;	
-
+		return text;
 	}
 
 	@Override

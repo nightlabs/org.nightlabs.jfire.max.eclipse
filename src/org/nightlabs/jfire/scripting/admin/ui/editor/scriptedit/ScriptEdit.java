@@ -2,7 +2,10 @@ package org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.IManagedForm;
 import org.nightlabs.jfire.scripting.Script;
+import org.nightlabs.jfire.scripting.admin.ui.editor.IScriptEditorContentPage;
+import org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditorPageController;
 
 public interface ScriptEdit
 {
@@ -31,4 +34,12 @@ public interface ScriptEdit
 
 	void setScript(Script script);
 	Script getScript();
+
+	void setFormPage(IScriptEditorContentPage formPage);
+	IScriptEditorContentPage getFormPage();
+
+	IManagedForm getManagedForm();
+
+	void setController(ScriptEditorPageController controller);
+	ScriptEditorPageController getController();
 }

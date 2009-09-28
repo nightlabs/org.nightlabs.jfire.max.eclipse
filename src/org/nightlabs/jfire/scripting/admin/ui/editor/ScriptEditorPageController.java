@@ -77,4 +77,22 @@ extends ActiveEntityEditorPageController<Script>
 	public void fireModifyEvent(Object oldObject, Object newObject, boolean resetDirtyState) {
 		super.fireModifyEvent(oldObject, newObject, resetDirtyState);
 	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if (getEntityEditor().getActivePageInstance() instanceof ScriptEditorContentPage) {
+			ScriptEditorContentPage contentPage = (ScriptEditorContentPage) getEntityEditor().getActivePageInstance();
+			contentPage.getManagedForm().dirtyStateChanged();
+		}
+	}
+
+	@Override
+	public void markUndirty() {
+		super.markUndirty();
+		if (getEntityEditor().getActivePageInstance() instanceof ScriptEditorContentPage) {
+			ScriptEditorContentPage contentPage = (ScriptEditorContentPage) getEntityEditor().getActivePageInstance();
+			contentPage.getManagedForm().dirtyStateChanged();
+		}
+	}
 }

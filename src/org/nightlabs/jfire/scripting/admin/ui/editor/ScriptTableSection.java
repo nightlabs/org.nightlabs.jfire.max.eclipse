@@ -101,18 +101,7 @@ extends ToolBarSectionPart
 		super.refresh();
 	}
 
-	@Override
-	public void commit(boolean onSave) {
-		// write UI data into the edited object, i.e. 'this.script'
-		super.commit(onSave);
-	}
 
-	@Override
-	public void markDirty() {
-		// fires dirtyStateChangedEvent of the editor
-		notifyDirtyStateListeners(true);
-		super.markDirty();
-	}
 
 	protected void createClient(Section section, FormToolkit toolkit){
 		//		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

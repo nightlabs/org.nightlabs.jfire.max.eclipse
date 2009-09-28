@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -25,6 +26,7 @@ import org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.ScriptEditFactor
  */
 public class ScriptEditorContentPage
 extends EntityEditorPageWithProgress
+implements IScriptEditorContentPage
 {
 	private Text contentText;
 	public static class Factory implements IEntityEditorPageFactory{
@@ -42,11 +44,11 @@ extends EntityEditorPageWithProgress
 		}
 	}
 
+	private static final String DEFAULT_PAGE_FORM_TITLE = "Content";
+
 	public ScriptEditorContentPage(FormEditor editor) {
-		super(editor, ScriptEditorContentPage.class.getName(), "Content");
+		super(editor, ScriptEditorContentPage.class.getName(), DEFAULT_PAGE_FORM_TITLE);
 	}
-
-
 
 	private Composite container;
 	private Map<String, ScriptEdit> language2ScriptEdit = new HashMap<String, ScriptEdit>();
@@ -60,7 +62,11 @@ extends EntityEditorPageWithProgress
 
 		getManagedForm().getForm().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				// Dispose old UI.
+				if (scriptEdit != null)
+					// Dispose old UI.
+					for (IFormPart part : getManagedForm().getParts())
+						getManagedForm().removePart(part);
+
 				for (Control child : container.getChildren())
 					child.dispose();
 
@@ -79,8 +85,17 @@ extends EntityEditorPageWithProgress
 					language2ScriptEdit.put(script.getLanguage(), scriptEdit);
 				}
 
+				// tell the ScriptEdit in which IFormPage it is (to allow it creating sections).
+				getManagedForm().getForm().setText(getPageFormTitle());
+				setPartName(getPageFormTitle());
+				scriptEdit.setFormPage(ScriptEditorContentPage.this);
+
 				// Assign current script to be edited.
 				scriptEdit.setScript(script);
+
+				//scriptEdit.setDirtyStateManager()
+				scriptEdit.setController((ScriptEditorPageController)getPageController());
+
 
 				// Create new UI.
 				scriptEdit.createControl(container);
@@ -90,21 +105,20 @@ extends EntityEditorPageWithProgress
 		});
 	}
 
+
+
 	@Override
 	protected void addSections(Composite parent) {
 		container = parent;
-
-
 	}
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Content";
+		return DEFAULT_PAGE_FORM_TITLE;
 	}
 
-	protected ScriptEditorPageController getController() {
-		return (ScriptEditorPageController)getPageController();
+	@Override
+	public void setPartName(String partName) {
+		super.setPartName(partName);
 	}
-
-
 }

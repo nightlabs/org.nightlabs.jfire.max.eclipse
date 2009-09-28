@@ -111,10 +111,5 @@
              id="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javaclass.ScriptEditFactory"
              language="JavaClass">
        </scriptEditFactory>
-       <scriptEditFactory
-             class="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javascript.ScriptEditFactory"
-             id="org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.impl.javascript.ScriptEditFactory"
-             language="JavaScript">
-       </scriptEditFactory>
     </extension>
 </plugin>
