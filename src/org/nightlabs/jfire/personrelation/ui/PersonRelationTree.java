@@ -333,7 +333,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	private PersonRelationTreeController personRelationTreeController;
 
 	public PersonRelationTree(Composite parent) {
-		super(parent, SWT.VIRTUAL);
+		super(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
 
 		personRelationTreeController = new PersonRelationTreeController() {
 			@Override
