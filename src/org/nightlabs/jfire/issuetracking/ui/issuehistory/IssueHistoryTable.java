@@ -3,10 +3,12 @@ package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -20,21 +22,28 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.history.FetchGroupsIssueHistoryItem;
 import org.nightlabs.jfire.issue.history.IssueHistoryItem;
+import org.nightlabs.jfire.issue.history.IssueHistoryItemDAO;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
+import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * This composite lists all {@link IssueHistoryItem}s of an issue in a table.
@@ -91,7 +100,23 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 			return filter;
 		}
 
-		public void notify(JDOLifecycleEvent event) {}
+		public void notify(final JDOLifecycleEvent event) {
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					Collection<DirtyObjectID> dirtyObjectIDs = event.getDirtyObjectIDs();
+					for (DirtyObjectID dirtyObjectID : dirtyObjectIDs) {
+						IssueID issueID = (IssueID)dirtyObjectID.getObjectID();
+						Collection<IssueHistoryItem> histories = IssueHistoryItemDAO.sharedInstance().getIssueHistoryItems(
+								issueID,
+								new String[] {FetchPlan.DEFAULT, FetchGroupsIssueHistoryItem.FETCH_GROUP_LIST},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								new NullProgressMonitor());
+						setInput(histories);
+					}
+				}
+			});
+		}
 	};
 
 	/* (non-Javadoc)
