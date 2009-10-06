@@ -3,8 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.holongate.draw2d_2.3.0/holongate-draw2d.jar" sourcepath="/WORKSPACE/org.holongate.draw2d/src"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.holongate.gef_2.3.0/holongate-gef.jar" sourcepath="/WORKSPACE/org.holongate.gef/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScriptingEditor2D"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScripting"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucher"/>
