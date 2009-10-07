@@ -28,6 +28,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectAttachedIssueWizardPage.ActionForIssue;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -36,7 +37,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class AttachIssueSelectIssueLinkTypeWizardPage 
+public class AttachIssueSelectIssueLinkTypeWizardPage
 extends WizardHopPage
 {
 	private ListComposite<IssueLinkType> issueLinkTypeList;
@@ -93,9 +94,9 @@ extends WizardHopPage
 					public void run() {
 						IssueLinkTypeDAO issueLinkTypeDAO = IssueLinkTypeDAO.sharedInstance();
 						Collection<IssueLinkType> issueLinkTypes = issueLinkTypeDAO.getIssueLinkTypes(
-								attachedObject.getClass(), 
-								new String[] {FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								attachedObject.getClass(),
+								new String[] {FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, 10));
 
 						if (issueLinkTypes.size() > 0) {
@@ -106,9 +107,10 @@ extends WizardHopPage
 							getContainer().updateButtons();
 
 							if(issueLinkTypes.size() == 1 && JDOHelper.getObjectId(selectedIssueLinkType).equals(IssueLinkType.ISSUE_LINK_TYPE_ID_RELATED)) {
-								if (getNextPage() instanceof SelectIssueWizardPage) {
-									SelectIssueWizardPage selectPage = (SelectIssueWizardPage)getNextPage();
+								if (getNextPage() instanceof SelectAttachedIssueWizardPage) {
+									SelectAttachedIssueWizardPage selectPage = (SelectAttachedIssueWizardPage)getNextPage();
 									selectPage.setIssueLinkType(selectedIssueLinkType);
+									selectPage.setIssueAction(ActionForIssue.createNewIssue);
 								}
 								getContainer().showPage(getNextPage());
 							}
@@ -141,9 +143,9 @@ extends WizardHopPage
 //	@Override
 //	protected IStatus run(ProgressMonitor monitor) throws Exception {
 //	final Collection<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypes(
-//	issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass(), 
-//	new String[] {IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT}, 
-//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//	issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass(),
+//	new String[] {IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT},
+//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //	monitor);
 
 //	Display.getDefault().asyncExec(new Runnable() {

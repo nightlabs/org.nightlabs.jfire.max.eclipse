@@ -60,12 +60,12 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		super(entry);
 	}
 
-	private IssueTable issueTable;
+	private IssueTable issueResultTable;
 
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
 		//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
-		issueTable = new IssueTable(parent, SWT.NONE);
+		issueResultTable = new IssueTable(parent, SWT.NONE);
 
 		// [Observation; 02.07.2009]
 		// It seems a good idea to have a NotificationListener here, to note whether an
@@ -75,16 +75,16 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		previousSavedQuery = null;
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeNotificationListener);
 
-		issueTable.addDisposeListener(new DisposeListener() {
+		issueResultTable.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event) {
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, issueChangeNotificationListener);
 			}
 		});
 
-		issueTable.addSelectionChangedListener(new ISelectionChangedListener() {
+		issueResultTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				Issue issue = issueTable.getFirstSelectedElement();
+				Issue issue = issueResultTable.getFirstSelectedElement();
 
 				//				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
 				//				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
@@ -101,7 +101,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 			}
 		});
 
-		return issueTable;
+		return issueResultTable;
 	}
 
 
@@ -120,7 +120,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 					getComposite().getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							Collection<Issue> issues = issueTable.getElements();
+							Collection<Issue> issues = issueResultTable.getElements();
 							if (issues.isEmpty())	return;
 
 							Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issues);
@@ -133,7 +133,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 								DirtyObjectID dirtyObjectID = (DirtyObjectID) obj;
 								if ( issueIDs.contains(dirtyObjectID.getObjectID()) ) {
 									issues = doSearch(previousSavedQuery, new SubProgressMonitor(monitor, 90));
-									issueTable.setInput(issues);
+									issueResultTable.setInput(issues);
 									handleContextMenuItems();
 									break;
 								}
@@ -155,8 +155,8 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		super.addResultTableListeners(tableComposite);
 	}
 
-	public IssueTable getIssueTable() {
-		return issueTable;
+	public IssueTable getResultTable() {
+		return issueResultTable;
 	}
 
 	@Override
@@ -229,11 +229,11 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		});
 
 		// Create the menu and attach it to the IssueTable.
-		Menu menu = menuMgr.createContextMenu(issueTable);
-		issueTable.setMenu(menu); // <-- Hmm... this seems enough? Do we need to do this: 'getSite().registerContextMenu(menuMgr, issueTable);'
+		Menu menu = menuMgr.createContextMenu(issueResultTable);
+		issueResultTable.setMenu(menu); // <-- Hmm... this seems enough? Do we need to do this: 'getSite().registerContextMenu(menuMgr, issueTable);'
 
 		// Define the behaviour of the menu items wrt the selections, or lack thereof, in the IssueTable.
-		issueTable.addSelectionChangedListener(new ISelectionChangedListener(){
+		issueResultTable.addSelectionChangedListener(new ISelectionChangedListener(){
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) { handleContextMenuItems(); }
 		});
@@ -247,7 +247,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		assert editIssueAction != null && deleteIssueAction != null;
 
 		// From the current behaviour, we can DELETE multiple Issues, but we can only EDIT one Issue.
-		int ctr = issueTable.getSelectionCount();
+		int ctr = issueResultTable.getSelectionCount();
 		editIssueAction.setEnabled( ctr > 0 ); // OR should we also allow multiple Issues to be edited by opening multiple editors? Kai.
 		deleteIssueAction.setEnabled( ctr > 0 );
 	}
@@ -277,7 +277,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		@Override
 		public void run() {
 			DeleteIssueAction deleteAction = new DeleteIssueAction();
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
 			deleteAction.setSelectedIssueIDs(issueIDs);
 			deleteAction.run();
 		}
@@ -297,7 +297,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
 			for (IssueID issueID : issueIDs)
 				try {
 					RCPUtil.openEditor(new IssueEditorInput(issueID), IssueEditor.EDITOR_ID);
@@ -320,7 +320,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
 			for (IssueID issueID : issueIDs) {
 				IssueDAO.sharedInstance().signalIssue(
 						issueID,
@@ -346,7 +346,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
 			for (IssueID issueID : issueIDs) {
 				IssueDAO.sharedInstance().signalIssue(
 						issueID,
@@ -372,7 +372,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueTable.getSelectedElements());
+			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
 		}
 	}
 }

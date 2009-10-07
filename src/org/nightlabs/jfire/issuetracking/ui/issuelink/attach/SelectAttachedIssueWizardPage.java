@@ -14,12 +14,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.ObjectID;
@@ -27,23 +25,23 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueSearchComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage;
-import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
-import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  */
-public class SelectIssueWizardPage
+public class SelectAttachedIssueWizardPage
 extends WizardHopPage
 {
 	//Issue
 	private Button createNewIssueRadio;
 	private Button selectExistingIssueRadio;
 
-	private Composite issueEntryListViewerComposite;
-	private IssueEntryListViewer issueEntryListViewer;
+//	private Composite issueEntryListViewerComposite;
+//	private IssueEntryListViewer issueEntryListViewer;
 
 	//Used Objects
 	private Issue selectedIssue;
@@ -79,8 +77,8 @@ extends WizardHopPage
 		getContainer().updateButtons();
 	}
 
-	public SelectIssueWizardPage(Object attachedObject) {
-		super(SelectIssueWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.titleDefault"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class)); //$NON-NLS-1$
+	public SelectAttachedIssueWizardPage(Object attachedObject) {
+		super(SelectAttachedIssueWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.titleDefault"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectAttachedIssueWizardPage.class)); //$NON-NLS-1$
 		this.attachedObject = attachedObject;
 
 		setTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.title")); //$NON-NLS-1$
@@ -88,6 +86,8 @@ extends WizardHopPage
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.description") + objectNameString); //$NON-NLS-1$
 	}
+
+	private IssueSearchComposite issueSearchComposite;
 
 	@Override
 	public Control createPageContents(Composite parent) {
@@ -115,42 +115,29 @@ extends WizardHopPage
 			}
 		});
 
-
-		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
-			@Override
-			protected void addResultTableListeners(AbstractTableComposite<Issue> tableComposite) {
-				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
-					@Override
-					public void doubleClick(DoubleClickEvent evt) {
-						// Do nothing!!!
-						// --> Or maybe we can already react for 'Finish' on the double-click (which will standardise with the rest)? Kai.
-						issueDoubleClick();
-					}
-				});
-
-				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
-					public void selectionChanged(SelectionChangedEvent e) {
-						selectedIssue = issueEntryListViewer.getIssueTable().getFirstSelectedElement();
-						setIssueAction(ActionForIssue.selectExistingIssue);
-						getContainer().updateButtons();
-					}
-				});
-			}
-		};
-
-		issueEntryListViewerComposite = issueEntryListViewer.createComposite(mainComposite);
+		issueSearchComposite = new IssueSearchComposite(mainComposite, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		issueEntryListViewerComposite.setLayoutData(gridData);
+		issueSearchComposite.setLayoutData(gridData);
 
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				getShell().layout(true, true);
-				issueEntryListViewer.search();
-				setIssueAction(ActionForIssue.selectExistingIssue);
+		final IssueTable resultTable = issueSearchComposite.getIssueEntryListViewer().getResultTable();
+		resultTable.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent evt) {
+				// Do nothing!!!
+				// --> Or maybe we can already react for 'Finish' on the double-click (which will standardise with the rest)? Kai.
+				issueDoubleClick();
 			}
 		});
 
-		issueEntryListViewer.getIssueTable().setIsTableInWizard(true);
+		resultTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent e) {
+				selectedIssue = resultTable.getFirstSelectedElement();
+				setIssueAction(ActionForIssue.selectExistingIssue);
+				getContainer().updateButtons();
+			}
+		});
+
+		resultTable.setIsTableInWizard(true);
 
 		return mainComposite;
 	}

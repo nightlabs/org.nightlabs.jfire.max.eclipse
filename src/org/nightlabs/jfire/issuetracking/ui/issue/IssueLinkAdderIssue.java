@@ -65,9 +65,9 @@ extends AbstractIssueLinkAdder
 		};
 
 		iViewer.createComposite(parent);
-		iViewer.getIssueTable().setIsTableInWizard(true);
+		iViewer.getResultTable().setIsTableInWizard(true);
 
-		iViewer.getIssueTable().getTableViewer().addFilter(new ViewerFilter() {
+		iViewer.getResultTable().getTableViewer().addFilter(new ViewerFilter() {
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				return !element.equals(issue);

@@ -42,7 +42,7 @@ extends DynamicPathWizard
 {
 	private Object attachedObject;
 	private AttachIssueSelectIssueLinkTypeWizardPage selectIssueLinkTypePage;
-	private SelectIssueWizardPage selectIssueWizardPage;
+	private SelectAttachedIssueWizardPage selectIssueWizardPage;
 
 	private Issue selectedIssue;
 
@@ -56,7 +56,7 @@ extends DynamicPathWizard
 		selectIssueLinkTypePage = new AttachIssueSelectIssueLinkTypeWizardPage(attachedObject);
 		addPage(selectIssueLinkTypePage);
 
-		selectIssueWizardPage = new SelectIssueWizardPage(attachedObject);
+		selectIssueWizardPage = new SelectAttachedIssueWizardPage(attachedObject);
 		addPage(selectIssueWizardPage);
 	}
 
