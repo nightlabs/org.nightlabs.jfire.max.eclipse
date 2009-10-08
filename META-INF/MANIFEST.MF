@@ -11,11 +11,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.forms,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
- org.nightlabs.base.ui,
+ org.nightlabs.base.ui;visibility:=reexport,
  org.eclipse.ui.workbench.texteditor,
- org.nightlabs.jfire.querystore.ui,
- org.nightlabs.jfire.base.ui,
- org.nightlabs.jfire.jbpm.ui
+ org.nightlabs.jfire.querystore.ui;visibility:=reexport,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.jfire.jbpm.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.ui,
  org.nightlabs.jfire.issuetracking.ui.issue,
