@@ -20,15 +20,6 @@ import org.nightlabs.util.NLLocale;
  */
 public class ScriptParameterSetTable extends AbstractTableComposite<ScriptParameterSet> {
 
-//	private static class ContentProvider extends TableContentProvider {
-//		@Override
-//		public Object[] getElements(Object inputElement) {
-//			if (inputElement instanceof Collection)
-//				return ((Collection)inputElement).toArray();
-//			return super.getElements(inputElement);
-//		}
-//	}
-
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof ScriptParameterSet) {

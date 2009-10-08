@@ -33,6 +33,7 @@ import org.nightlabs.util.CollectionUtil;
  * A table displaying ScriptParameters.
  *
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
+ * @author Vince<mato_cpe@hotmail.com>
  *
  */
 public class ScriptParameterTable
@@ -177,7 +178,7 @@ extends AbstractTableComposite<ScriptParameter>
 
 	}
 
-	protected static class ScriptParamentTableContentProvider implements IStructuredContentProvider {
+	protected class ScriptParamentTableContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof ScriptParameterSet) {
