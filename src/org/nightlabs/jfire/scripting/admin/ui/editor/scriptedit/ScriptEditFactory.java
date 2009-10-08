@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.IExecutableExtension;
  * <b>Important!</b> It is recommended to not directly implement this interface, but instead subclass {@link AbstractScriptEditFactory}.
  * </p>
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 public interface ScriptEditFactory extends IExecutableExtension

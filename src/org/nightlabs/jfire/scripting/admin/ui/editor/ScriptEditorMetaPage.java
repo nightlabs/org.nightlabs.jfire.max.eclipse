@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 

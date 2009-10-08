@@ -8,7 +8,7 @@ import org.nightlabs.jfire.scripting.ScriptParameter;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 

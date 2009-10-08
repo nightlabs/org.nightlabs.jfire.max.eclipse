@@ -30,7 +30,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 public class ScriptMetaSection

@@ -14,7 +14,7 @@ import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 public class ScriptParameterComposite
@@ -56,16 +56,9 @@ extends XComposite{
 
 			parameterNameText.setText(scriptParameter.getScriptParameterClassName());
 
-
 		}
 
-
-
-
-
 	}
-
-
 
 	public ScriptParameter getScriptParameter() {
 

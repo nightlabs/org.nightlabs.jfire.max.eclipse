@@ -20,8 +20,8 @@ public class ScriptParameterWizard extends DynamicPathWizard {
 	private Script script;
 	private ScriptParameterCreateWizardPage parameterCreatepage;
 	private ScriptParameter scriptparameter;
-	 boolean storeOnServer;
-	 String[] fetchGroups;
+	private boolean storeOnServer;
+	private String[] fetchGroups;
 
 
 	public ScriptParameterWizard( boolean storeOnServer, Script script){
@@ -56,7 +56,7 @@ public class ScriptParameterWizard extends DynamicPathWizard {
 
 
 
-			ScriptParameterDAO.sharedInstance().storeParameter(scriptparameter, true, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,  new NullProgressMonitor());
+			ScriptParameterDAO.sharedInstance().storeParameter(scriptParameter, true, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,  new NullProgressMonitor());
 
 		}
 

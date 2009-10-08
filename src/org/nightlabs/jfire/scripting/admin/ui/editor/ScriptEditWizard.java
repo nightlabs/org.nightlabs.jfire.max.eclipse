@@ -6,13 +6,13 @@ import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 
 public class ScriptEditWizard extends DynamicPathWizard {
 
-	private ScriptParameterEditWizardPage parameterCreatepage;
+	private ScriptParameterEditWizardPage parameterEditpage;
 	private ScriptParameter scriptparameter;
 	private boolean storeOnServer;
 	String[] fetchGroups;
@@ -32,14 +32,14 @@ public class ScriptEditWizard extends DynamicPathWizard {
 	@Override
 	public void addPages() {
 
-		parameterCreatepage= new ScriptParameterEditWizardPage(scriptparameter);
+		parameterEditpage= new ScriptParameterEditWizardPage(scriptparameter);
 
-		addPage(parameterCreatepage);
+		addPage(parameterEditpage);
 	}
 
 	@Override
 	public boolean performFinish() {
-		scriptparameter =parameterCreatepage.getScriptParameterComposite().getScriptParameter();
+		scriptparameter =parameterEditpage.getScriptParameterComposite().getScriptParameter();
 		return true;
 
 	}

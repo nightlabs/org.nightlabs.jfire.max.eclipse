@@ -9,7 +9,7 @@ import org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditorPageController;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 
@@ -17,8 +17,6 @@ public abstract class AbstractScriptEdit
 implements ScriptEdit
 {
 	private Control control;
-
-
 	protected abstract Control _createControl(Composite parent);
 
 	@Override

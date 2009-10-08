@@ -9,21 +9,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
-
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
-
 public class ScriptCreateNewParameterComposite extends XComposite {
 
 	private Label parameterIdLabel;
 	private Label parameterNameLabel;
 	private Text parameterIdText;
-
-
-
 	private Text parameterNameText;
 	public Text getParameterNameText() {
 		return parameterNameText;
@@ -60,15 +55,6 @@ public class ScriptCreateNewParameterComposite extends XComposite {
 		gridData.grabExcessHorizontalSpace = true;
 		parameterIdText.setLayoutData(gridData);
 		parameterNameText.setLayoutData(gridData);
-
-
-		parameterIdText.getText();
-		parameterNameText.getText();
-
-
-
-
-
 
 	}
 }

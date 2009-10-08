@@ -15,7 +15,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 public class ScriptEditorPageController
@@ -68,6 +68,8 @@ extends ActiveEntityEditorPageController<Script>
 		ScriptEditorInput input = (ScriptEditorInput) getEntityEditor().getEditorInput();
 		return input.getJDOObjectID();
 	}
+
+
 
 	public Script getScript() {
 		return getControllerObject();

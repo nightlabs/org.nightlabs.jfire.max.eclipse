@@ -35,14 +35,13 @@ import org.nightlabs.jfire.scripting.ui.ScriptParameterTableOption;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 public class ScriptTableSection
 extends ToolBarSectionPart
 {
 
-	//	ScriptEditorPageController controller;
 	private String selectedParamID;
 	private String secondParamId;
 	private CreateParameterAction createAction;
@@ -50,16 +49,15 @@ extends ToolBarSectionPart
 	private EditParameterAction editAction;
 	private DecreaseOrderNumberAction previousParameterAction;
 	private IncreaseOrderNumberAction nextParameterAction;
+    private Script script;
+    private ScriptParameterTable scriptParameterTable;
 
-	private Script script;
-
-	private ScriptParameterTable scriptParameterTable;
-	public ScriptTableSection(FormPage page, Composite parent, ScriptEditorPageController controller){
+    public ScriptTableSection(FormPage page, Composite parent, ScriptEditorPageController controller){
 		super(page,parent,ExpandableComposite.EXPANDED
 				| ExpandableComposite.TITLE_BAR
 				| ExpandableComposite.TWISTIE ,
 				Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptTableSection.sectionTitle"));
-		//	this.controller=controller;
+
 		getSection().setExpanded(true);
 
 		createClient(getSection(), page.getEditor().getToolkit());
@@ -75,10 +73,6 @@ extends ToolBarSectionPart
 		getToolBarManager().add(editAction);
 		getToolBarManager().add(previousParameterAction);
 		getToolBarManager().add(nextParameterAction);
-
-
-
-
 		updateToolBarManager();
 	}
 
@@ -100,8 +94,6 @@ extends ToolBarSectionPart
 
 		super.refresh();
 	}
-
-
 
 	protected void createClient(Section section, FormToolkit toolkit){
 		//		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

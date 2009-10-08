@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -21,14 +20,14 @@ import org.nightlabs.jfire.scripting.admin.ui.editor.scriptedit.ScriptEditFactor
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 public class ScriptEditorContentPage
 extends EntityEditorPageWithProgress
 implements IScriptEditorContentPage
 {
-	private Text contentText;
+
 	public static class Factory implements IEntityEditorPageFactory{
 		@Override
 		public IFormPage createPage(FormEditor formEditor) {
@@ -104,8 +103,6 @@ implements IScriptEditorContentPage
 			}
 		});
 	}
-
-
 
 	@Override
 	protected void addSections(Composite parent) {

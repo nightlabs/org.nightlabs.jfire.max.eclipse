@@ -6,7 +6,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 

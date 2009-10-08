@@ -9,7 +9,7 @@ import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  *
- * @author vince
+ * @author vince - vince at guinaree dot com
  *
  */
 
@@ -18,12 +18,9 @@ public class ScriptParameterEditWizardPage extends WizardHopPage {
 	private ScriptParameter scriptparameter;
 	private ScriptParameterComposite scriptParameterComposite;
 
-
-
 	public ScriptParameterComposite getScriptParameterComposite() {
 		return scriptParameterComposite;
 	}
-
 	public ScriptParameterEditWizardPage(ScriptParameter scriptparameter) {
 
 		super(ScriptParameterEditWizardPage.class.getName(),Messages.getString("org.nightlabs.jfire.scripting.admin.ui.editor.ScriptParameterEditWizardPage.title"));
