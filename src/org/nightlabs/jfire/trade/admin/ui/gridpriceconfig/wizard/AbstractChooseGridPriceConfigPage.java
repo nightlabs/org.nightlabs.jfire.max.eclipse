@@ -388,8 +388,8 @@ extends WizardHopPage
 			break;
 		case create:
 			newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-			IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
-			priceConfig = createPriceConfig(getNewPriceConfigNameBuffer());
+//			IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
+			IInnerPriceConfig priceConfig = createPriceConfig(getNewPriceConfigNameBuffer());
 			newProductType.setInnerPriceConfig(priceConfig);
 			break;
 		case select:
