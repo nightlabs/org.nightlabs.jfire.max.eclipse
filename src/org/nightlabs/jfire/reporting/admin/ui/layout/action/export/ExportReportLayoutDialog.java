@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.export;
 
@@ -27,7 +27,7 @@ import org.nightlabs.util.IOUtil;
 
 /**
  * Dialog to export a layout as needed for the initialisation in the server.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class ExportReportLayoutDialog extends ResizableTrayDialog {
@@ -57,9 +57,10 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 	protected Control createDialogArea(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
 		layoutFileName = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.label.selectExportFileName")); //$NON-NLS-1$
+		layoutFileName.setText(layoutID.reportRegistryItemID + ".rptdesign");
 		folderComposite = new FileSelectionComposite(
-				wrapper, 
-				SWT.NONE, FileSelectionComposite.OPEN_DIR, 
+				wrapper,
+				SWT.NONE, FileSelectionComposite.OPEN_DIR,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.label.selectExportFolder"), //$NON-NLS-1$
 		Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog.label.selectFolder")); //$NON-NLS-1$
 		return wrapper;
@@ -82,13 +83,13 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 			PreparedLayoutL10nData l10nData = ReportLayoutL10nUtil.prepareReportLayoutL10nData(editorInput);
 			File resourceFolder = new File(fileName, "resource"); //$NON-NLS-1$
 			resourceFolder.mkdirs();
-			for (ReportLayoutLocalisationData data : l10nData.getLocalisationBundle().values()) {				
+			for (ReportLayoutLocalisationData data : l10nData.getLocalisationBundle().values()) {
 				String l10nFileName = reportID;
 				if ("".equals(data.getLocale())) //$NON-NLS-1$
 					l10nFileName = l10nFileName + ".properties"; //$NON-NLS-1$
 				else
 					l10nFileName = l10nFileName + "_" + data.getLocale() + ".properties";  //$NON-NLS-1$ //$NON-NLS-2$
-				
+
 				try {
 					File dataFile = new File(resourceFolder, l10nFileName);
 					dataFile.createNewFile();
@@ -103,7 +104,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-			}		
+			}
 
 
 		}

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart;
 
@@ -55,7 +55,7 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 		FetchPlan.DEFAULT, ReportTextPartConfiguration.FETCH_GROUP_REPORT_TEXT_PARTS,
 		ReportTextPart.FETCH_GROUP_NAME, ReportTextPart.FETCH_GROUP_CONTENT
 	};
-	
+
 	private ScrolledForm form;
 	private NightlabsFormsToolkit toolkit;
 	private ReportTextPartConfigurationEditComposite configurationEditComposite;
@@ -66,13 +66,13 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			markDirty();
 		}
 	};
-	
+
 	private volatile ReportTextPartConfiguration reportTextPartConfiguration;
 
 	private AddReportTextPartAction addReportTextPartAction;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ReportTextPartConfigurationEditor() {
 	}
@@ -100,9 +100,9 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 	protected void updateConfigurationEditComposite() {
 		if (configurationEditComposite == null)
 			return;
-		configurationEditComposite.setReportTextPartConfiguration(reportTextPartConfiguration);		
+		configurationEditComposite.setReportTextPartConfiguration(reportTextPartConfiguration);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
 	 */
@@ -119,7 +119,7 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 		setInput(input);
 		JFireRemoteReportEditorInput reportEditorInput = (JFireRemoteReportEditorInput) input;
 		final ReportRegistryItemID reportRegistryItemID = reportEditorInput.getReportRegistryItemID();
-		
+
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.job.loadReportTextPartConfiguration")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -164,7 +164,7 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 		dirty = true;
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
 	 */
@@ -184,22 +184,22 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			GridLayout gl = new GridLayout();
 			XComposite.configureLayout(LayoutMode.ORDINARY_WRAPPER, gl);
 			form.getBody().setLayout(gl);
-			
+
 			ToolBarSectionPart section = new ToolBarSectionPart(
-					toolkit, form.getBody(), 
+					toolkit, form.getBody(),
 					ExpandableComposite.TITLE_BAR,
 					Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.section.textPartConfig.name") //$NON-NLS-1$
 				);
 			XComposite comp = new XComposite(section.getSection(), SWT.NONE);
 			comp.setToolkit(toolkit);
 			section.getSection().setClient(comp);
-			
+
 			form.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationEditor.form.textPartConfig.name")); //$NON-NLS-1$
-			
+
 			addReportTextPartAction = new AddReportTextPartAction(this);
 			section.registerAction(addReportTextPartAction);
 			section.updateToolBarManager();
-			
+
 			LanguageChooserCombo languageChooser = new LanguageChooserCombo(comp);
 			languageChooser.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END | GridData.HORIZONTAL_ALIGN_END));
 			configurationEditComposite = new ReportTextPartConfigurationEditComposite(comp, SWT.NONE, languageChooser, true);
@@ -212,7 +212,7 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			});
 			configurationEditComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 			comp.adaptToToolkit();
-			
+
 			if (reportTextPartConfiguration != null) {
 				updateConfigurationEditComposite();
 			}
@@ -226,11 +226,11 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 	public void setFocus() {
 		configurationEditComposite.setFocus();
 	}
-	
+
 	protected ReportTextPartConfigurationEditComposite getConfigurationEditComposite() {
 		return configurationEditComposite;
 	}
-	
+
 	protected ReportTextPartConfiguration getReportTextPartConfiguration() {
 		return reportTextPartConfiguration;
 	}
