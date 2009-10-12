@@ -39,7 +39,9 @@ public class AddCurrencyWizard extends DynamicPathWizard
 {
 	private Dimension dimension;
 
+	private boolean createNewCurrencyEnabled = false;
 	private CurrencySelectionPage currencySelectionPage;
+	private CreateCurrencyPage createCurrencyPage;
 
 	public AddCurrencyWizard(Dimension dimension)
 	{
@@ -53,6 +55,7 @@ public class AddCurrencyWizard extends DynamicPathWizard
 	public IDynamicPathWizardPage createWizardEntryPage()
 	{
 		currencySelectionPage = new CurrencySelectionPage();
+		createCurrencyPage = new CreateCurrencyPage();
 		return currencySelectionPage;
 	}
 
@@ -70,6 +73,15 @@ public class AddCurrencyWizard extends DynamicPathWizard
 				new DimensionValue.CurrencyDimensionValue(dimension, currency));
 
 		return true;
+	}
+
+	protected void setCreateNewCurrencyEnabled(boolean enabled) {
+		removeAllDynamicWizardPages();
+		if (enabled)
+			addDynamicWizardPage(createCurrencyPage);
+
+		createNewCurrencyEnabled = enabled;
+		updateDialog();
 	}
 
 }

@@ -36,6 +36,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -58,6 +59,8 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	private List<Currency> currencies = new ArrayList<Currency>();
 	private org.eclipse.swt.widgets.List currencyList;
 	private Currency selectedCurrency = null;
+	private Button createNewCurrencyRadio;
+	private Button chooseExistingCurrencyRadio;
 
 	public CurrencySelectionPage()
 	{
@@ -72,6 +75,24 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+
+		createNewCurrencyRadio = new Button(page, SWT.RADIO);
+		createNewCurrencyRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage.createNewCurrencyRadio.text"));
+        createNewCurrencyRadio.addSelectionListener(new SelectionAdapter() {
+
+        	@Override
+        	public void widgetSelected(SelectionEvent event){
+        	((AddCurrencyWizard)getWizard()).setCreateNewCurrencyEnabled(createNewCurrencyRadio.getSelection());
+
+        	}
+		});
+
+		chooseExistingCurrencyRadio = new Button(page,SWT.RADIO);
+		chooseExistingCurrencyRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage.chooseExistingCurrencyRadio.text"));
+		chooseExistingCurrencyRadio.setSelection(true);
+
+
 		currencyList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		currencyList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		currencyList.addSelectionListener(new SelectionAdapter() {
@@ -110,7 +131,7 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 
 				return Status.OK_STATUS;
 			}
-			
+
 		};
 		loadJob.schedule();
 		return page;

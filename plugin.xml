@@ -169,5 +169,39 @@
              id="org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard"
              name="%org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard.name">
        </wizard>
+       <wizard
+             category="org.nightlabs.jfire.trade.accounting"
+             class="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyCreateWizard"
+             icon="icons/account/CurrencyCreateWizard.16x16.png"
+             id="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyCreateWizard"
+             name="%org.nightlabs.jfire.trade.admin.ui.editor.CurrencyCreateWizard.name">
+       </wizard>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.trade.admin.ui.overview">
+       <category
+             class="org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTypeCategoryFactory"
+             icon="icons/overview/CurrencyTypeCategoryFactory.16x16.png"
+             index="600"
+             name="%org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTypeCategoryFactory.name">
+       </category>
+    </extension>
+    <extension
+          point="org.eclipse.ui.editors">
+       <editor
+             class="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor"
+             default="false"
+             icon="icons/editor/CurrencyEditor.16x16.png"
+             id="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor"
+             name="%org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor.name">
+       </editor>
+    </extension>
+    <extension
+          point="org.nightlabs.base.ui.entityEditor">
+       <pageFactory
+             class="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditorMetaPage$Factory"
+             editorID="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor"
+             indexHint="100">
+       </pageFactory>
     </extension>
 </plugin>
