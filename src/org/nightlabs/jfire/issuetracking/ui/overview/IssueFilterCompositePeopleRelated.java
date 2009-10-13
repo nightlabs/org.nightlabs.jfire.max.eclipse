@@ -124,9 +124,11 @@ public class IssueFilterCompositePeopleRelated
 				if (Window.OK == userSearchDialog.open())
 				{
 					final User selectedUser = userSearchDialog.getSelectedUser();
-					final UserID reporterID = (UserID) JDOHelper.getObjectId(selectedUser);
-					reporterText.setText(selectedUser.getName());
-					getQuery().setReporterID(reporterID);
+					if (selectedUser != null) {
+						final UserID reporterID = (UserID) JDOHelper.getObjectId(selectedUser);
+						reporterText.setText(selectedUser.getName());
+						getQuery().setReporterID(reporterID);
+					}
 				}//if
 			}
 		});
@@ -165,9 +167,11 @@ public class IssueFilterCompositePeopleRelated
 				if (Window.OK == userSearchDialog.open())
 				{
 					final User selectedAssignee = userSearchDialog.getSelectedUser();
-					final UserID selectedAssigneeID = (UserID) JDOHelper.getObjectId(selectedAssignee);
-					assigneeText.setText(selectedAssignee.getName());
-					getQuery().setAssigneeID(selectedAssigneeID);
+					if (selectedAssignee != null) {
+						final UserID selectedAssigneeID = (UserID) JDOHelper.getObjectId(selectedAssignee);
+						assigneeText.setText(selectedAssignee.getName());
+						getQuery().setAssigneeID(selectedAssigneeID);
+					}
 				}//if
 			}
 		});
