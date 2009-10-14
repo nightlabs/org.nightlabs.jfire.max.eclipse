@@ -17,7 +17,6 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class DeleteIssueAction extends AbstractIssueAction {
@@ -70,19 +69,26 @@ public class DeleteIssueAction extends AbstractIssueAction {
 //		IssueTable issueTable = ((IssueEntryListViewer) ((IssueEntryListEditor)part).getEntryViewer()).getIssueTable(); // <-- Uughhh...
 
 		Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(getSelectedIssueIDs());
-		for (IssueID issueID : issueIDs) {
-			// Retrieve useful information to display for the user, indicating the related Issue to be deleted.
-			Issue issueToBeDeleted =
-				IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			boolean result = MessageDialog.openConfirm(
-					RCPUtil.getActiveShell(),
-					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"), //$NON-NLS-1$
-					Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text") //$NON-NLS-1$
-					+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + ") " //$NON-NLS-1$ //$NON-NLS-2$
-					+ "\"" + issueToBeDeleted.getSubject().getText() + "\"" //$NON-NLS-1$ //$NON-NLS-2$
-					+ "?"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-			if (result) {
+		String descriptionText = String.format(
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text"),
+				issueIDs.size()
+				);
+
+		boolean result = MessageDialog.openConfirm(
+				RCPUtil.getActiveShell(),
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"), //$NON-NLS-1$
+				descriptionText);
+				 //$NON-NLS-1$
+//				+ "(ID:" + ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + ") " //$NON-NLS-1$ //$NON-NLS-2$
+//				+ "\"" + issueToBeDeleted.getSubject().getText() + "\"" //$NON-NLS-1$ //$NON-NLS-2$
+//				+ "?"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+// 				Retrieve useful information to display for the user, indicating the related Issue to be deleted.
+//				Issue issueToBeDeleted =
+//					IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
+		if (result) {
+			for (IssueID issueID : issueIDs) {
 				final IssueID issueIDToDelete = issueID;
 				Job deleteIssueJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.job.deleteIssue") + issueIDToDelete) { //$NON-NLS-1$
 					@Override
@@ -94,7 +100,6 @@ public class DeleteIssueAction extends AbstractIssueAction {
 
 				deleteIssueJob.schedule();
 			}
-
 		}
 
 //		DeleteIssueAction.executeDeleteIssues(issueTable, getSelectedIssueIDs(), part.getSite().getShell());
