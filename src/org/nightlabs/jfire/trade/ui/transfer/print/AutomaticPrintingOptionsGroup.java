@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class AutomaticPrintingOptionsGroup extends XComposite {
@@ -73,6 +74,9 @@ public class AutomaticPrintingOptionsGroup extends XComposite {
 					printCount = printCountSpinner.getSelection();
 				}
 				updateInfoLabel();
+
+				if (dirtyStateManager != null)
+					dirtyStateManager.markDirty();
 			}
 		});
 		printCountSpinner.addSelectionListener(new SelectionAdapter() {
@@ -82,6 +86,9 @@ public class AutomaticPrintingOptionsGroup extends XComposite {
 				doPrint = doPrintCheckbox.getSelection();
 				printCount = printCountSpinner.getSelection();
 				updateInfoLabel();
+
+				if (dirtyStateManager != null)
+					dirtyStateManager.markDirty();
 			}
 		});
 	}
@@ -121,5 +128,10 @@ public class AutomaticPrintingOptionsGroup extends XComposite {
 
 	public boolean getDoPrint() {
 		return doPrint;
+	}
+
+	private IDirtyStateManager dirtyStateManager;
+	public void setDirtyStateManager(IDirtyStateManager dirtyStateManager) {
+		this.dirtyStateManager = dirtyStateManager;
 	}
 }
