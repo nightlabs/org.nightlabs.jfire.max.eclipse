@@ -16,10 +16,10 @@ import org.nightlabs.jfire.security.AuthorizedObject;
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
  *
  */
-public abstract class AbstractEntitySection<Entity> 
-extends ToolBarSectionPart 
+public abstract class AbstractEntitySection<Entity>
+extends ToolBarSectionPart
 {
-	class SelectAllAction extends Action 
+	class SelectAllAction extends Action
 	{
 		public SelectAllAction() {
 			super();
@@ -27,18 +27,20 @@ extends ToolBarSectionPart
 			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntitySection.action.selectAll.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), SelectAllAction.class));
 		}
-		
+
 		@Override
 		public void run() {
-			for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
-				entry.setValue(true);
+			if (entities != null) { //IMHO: I think this is better than initializing an empty map, Chairat
+				for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
+					entry.setValue(true);
+				}
+				table.setEntityInput(entities);
+				markDirty();
 			}
-			table.setEntityInput(entities);
-			markDirty();
 		}
 	}
 
-	class DeselectAllAction extends Action 
+	class DeselectAllAction extends Action
 	{
 		public DeselectAllAction() {
 			super();
@@ -46,21 +48,23 @@ extends ToolBarSectionPart
 			setToolTipText(Messages.getString("org.nightlabs.jfire.entityuserset.ui.AbstractEntitySection.action.deselectAll.tooltip")); //$NON-NLS-1$
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeselectAllAction.class));
 		}
-		
+
 		@Override
 		public void run() {
-			for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
-				entry.setValue(false);
+			if (entities != null) {
+				for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
+					entry.setValue(false);
+				}
+				table.setEntityInput(entities);
+				markDirty();
 			}
-			table.setEntityInput(entities);
-			markDirty();
 		}
 	}
-	
+
 	private AbstractEntityTable<Entity> table;
 	private EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper;
 	private Map<Entity, Boolean> entities;
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -80,12 +84,12 @@ extends ToolBarSectionPart
 	 * @return the implementation of {@link AbstractTableComposite} which shows the entities.
 	 */
 	protected abstract AbstractEntityTable<Entity> createTable(Composite parent);
-	
+
 	public void setEntityUserSetPageControllerHelper(EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper) {
 		this.entityUserSetPageControllerHelper = entityUserSetPageControllerHelper;
 	}
-		
-	public void setAuthorizedObject(AuthorizedObject authorizedObject) 
+
+	public void setAuthorizedObject(AuthorizedObject authorizedObject)
 	{
 		if (entityUserSetPageControllerHelper != null) {
 			entities = entityUserSetPageControllerHelper.getEntities(authorizedObject);
