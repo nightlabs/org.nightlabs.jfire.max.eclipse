@@ -43,6 +43,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
@@ -65,7 +66,7 @@ import com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor;
 /**
  * A page for the Report Designer that lets the user edit a reports localisation bundle.
  * It is based on the Eclipse ResourceBundle Editor (http://sourceforge.net/projects/eclipse-rbe/).
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -85,7 +86,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	private Control control;
 	private FormEditor editor;
 	private JFireRemoteReportEditorInput reportEditorInput;
-	
+
 	private ReportRegistryItemID reportLayoutID;
 	private Map<String, ReportLayoutLocalisationData> localisationBundle;
 	private IFolder bundleFolder;
@@ -101,7 +102,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 			PreparedLayoutL10nData l10nData = ReportLayoutL10nUtil.prepareReportLayoutL10nData(input);
 			bundleFolder = l10nData.getBundleFolder();
 			localisationBundle = l10nData.getLocalisationBundle();
-			
+
 			IFile file = bundleFolder.getFile(ReportLayoutLocalisationData.PROPERIES_FILE_PREFIX+".properties"); //$NON-NLS-1$
 			FileEditorInput newInput = new FileEditorInput(file);
 			addPropertyListener(new IPropertyListener() {
@@ -153,7 +154,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	public boolean isDirty() {
 		return super.isDirty();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getEditor()
@@ -316,15 +317,15 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		}
 		return super.getAdapter( required );
 	}
-	
+
 	private boolean pagesCreated = false;
-	
+
 	@Override
 	protected void createPages() {
 		super.createPages();
 		pagesCreated = true;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void saveLocalisationBundle(IProgressMonitor monitor) {
 		if (!pagesCreated)
@@ -366,7 +367,9 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+
 		editor.editorDirtyStateChanged();
+
 		localisationBundle = new HashMap<String, ReportLayoutLocalisationData>();
 		for (ReportLayoutLocalisationData data : bundle) {
 			localisationBundle.put(data.getLocale(), data);
@@ -376,5 +379,14 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	@SuppressWarnings("unchecked")
 	public Collection<Locale> getBundleLocales() {
 		return getResourceManager() != null ? new ArrayList<Locale>(getResourceManager().getLocales()) : null;
+	}
+
+	@Override
+	protected void pageChange(int newPageIndex) {
+		super.pageChange(newPageIndex);
+		if (newPageIndex == 0) {  // switched to first page
+            if (editor.isDirty())
+            	editor.doSave(new NullProgressMonitor());
+        }
 	}
 }
