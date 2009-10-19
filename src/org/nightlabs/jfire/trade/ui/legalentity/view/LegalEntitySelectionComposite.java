@@ -409,9 +409,10 @@ extends XComposite
 					Display.getDefault().asyncExec(new Runnable()
 					{
 						public void run() {
-							leEditor.disposeControl();
-							leEditorControl = null;
-
+							if (leEditor != null) {
+								leEditor.disposeControl();
+								leEditorControl = null;
+							}
 							setLegalEntityVisualisation(selectedLegalEntity);
 						};
 					});
