@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.legalentity.edit;
 
-import java.util.Iterator;
-
 import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.layout.GridData;
@@ -51,10 +49,10 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class LegalEntityPersonEditor extends FieldBasedEditor {
 
 	public static final String EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY = "field-based-disguised-legal-entity"; //$NON-NLS-1$
-	
+
 	public static final String[] FETCH_GROUPS_FULL_LE_DATA = new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA};
-	
-	
+
+
 	@Override
 	protected GridLayout createGridLayout() {
 		GridLayout result = new GridLayout();
@@ -62,12 +60,12 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 		result.verticalSpacing = 0;
 		return result;
 	}
-	
+
 	@Override
 	protected boolean setLayoutDataForWrapper() {
 		return true;
 	}
-	
+
 
 
 	@Override
@@ -89,7 +87,7 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public LegalEntityPersonEditor() {
 		super();
@@ -97,42 +95,42 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 	}
 
 	private boolean doSetConfiguration = true;
-	
+
 	public void refreshStructFieldConfiguration() {
 		doSetConfiguration = true;
 	}
-	
+
 	protected void setStructFieldConfiguration() {
 		if (!doSetConfiguration)
 			return;
 
-		LegalEntityViewConfigModule cfMod = (LegalEntityViewConfigModule)ConfigUtil.getUserCfMod(
+		LegalEntityViewConfigModule cfMod = ConfigUtil.getUserCfMod(
 				LegalEntityViewConfigModule.class,
 				new String[] {FetchPlan.DEFAULT, LegalEntityViewConfigModule.FETCH_GROUP_PERSONSTRUCTFIELDS},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()
 			);
-		
+
 		EditorStructFieldRegistry.sharedInstance().clearEditorStructFieldIDs(EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY);
-		if (cfMod.getStructFields().isEmpty()) {
+		if (cfMod.getStructFields().isEmpty()) { //default fields
 			cfMod.getStructFields().add(PersonStruct.PERSONALDATA_COMPANY.toString());
 			cfMod.getStructFields().add(PersonStruct.PERSONALDATA_NAME.toString());
 			cfMod.getStructFields().add(PersonStruct.PERSONALDATA_FIRSTNAME.toString());
-			
+
 			cfMod.getStructFields().add(PersonStruct.POSTADDRESS_ADDRESS.toString());
 			cfMod.getStructFields().add(PersonStruct.POSTADDRESS_POSTCODE.toString());
 			cfMod.getStructFields().add(PersonStruct.POSTADDRESS_CITY.toString());
 			cfMod.getStructFields().add(PersonStruct.INTERNET_EMAIL.toString());
 		}
-		for (Iterator<String> iter = cfMod.getStructFields().iterator(); iter.hasNext();) {
-			String structFieldID = iter.next();
+
+		for (String structFieldID : cfMod.getStructFields()) {
 			try {
 				EditorStructFieldRegistry.sharedInstance().addEditorStructFieldID(EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY, new StructFieldID(structFieldID));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		doSetConfiguration = false;
 	}
 
@@ -141,14 +139,14 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 		setStructFieldConfiguration();
 		super.refreshControl();
 	}
-	
+
 	@Override
 	public void disposeControl() {
 		super.disposeControl();
 		doSetConfiguration = true;
 	}
-	
-	
-	
-	
+
+
+
+
 }

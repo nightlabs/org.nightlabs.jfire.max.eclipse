@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.legalentity.view;
 
+import java.util.Iterator;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -26,12 +28,16 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
@@ -57,7 +63,7 @@ extends XComposite
 		LegalEntity.FETCH_GROUP_PERSON,
 		PropertySet.FETCH_GROUP_FULL_DATA,
 		FetchPlan.DEFAULT
-		};
+	};
 
 	private LegalEntityPersonEditor leEditor;
 	private Control leEditorControl;
@@ -149,9 +155,9 @@ extends XComposite
 	private void initGUI() {
 		FormToolkit toolkit = new FormToolkit(Display.getDefault());
 		setToolkit(new NightlabsFormsToolkit(toolkit.getColors()));
-//		adaptToToolkit();
+		//		adaptToToolkit();
 		form = toolkit.createForm(this);
-//		form = new Form(this, SWT.BORDER);
+		//		form = new Form(this, SWT.BORDER);
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		form.getBody().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout formLayout = new GridLayout();
@@ -165,9 +171,9 @@ extends XComposite
 		searchSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.searchSection.text")); //$NON-NLS-1$
 		searchSection.setLayout(new GridLayout());
 
-//		quickSearchGroup = new Composite(wrapper, SWT.BORDER);
+		//		quickSearchGroup = new Composite(wrapper, SWT.BORDER);
 		XComposite quickSearchGroup = new XComposite(searchSection, SWT.NONE);
-//		quickSearchGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchGroup.text")); //$NON-NLS-1$
+		//		quickSearchGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchGroup.text")); //$NON-NLS-1$
 		quickSearchGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 2;
@@ -220,8 +226,14 @@ extends XComposite
 			public void widgetDisposed(DisposeEvent arg0)
 			{
 				setSelectedLegalEntity(null);
+
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(
+						LegalEntityViewConfigModule.class, notificationListener);
 			}
 		});
+
+		JDOLifecycleManager.sharedInstance().addNotificationListener(
+				LegalEntityViewConfigModule.class, notificationListener);
 	}
 
 	protected LegalEntity getSelectedLegalEntity() {
@@ -236,7 +248,7 @@ extends XComposite
 	{
 		if (leEditorControl != null) {
 			leEditor.disposeControl();
-//			leEditorControl.dispose();
+			//			leEditorControl.dispose();
 			leEditorControl = null;
 		}
 		if (anonymousLegalEntityComposite == null)
@@ -244,7 +256,7 @@ extends XComposite
 		editorSection.setClient(anonymousLegalEntityComposite);
 		editorSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.editorSection.anonymous")); //$NON-NLS-1$
 		layout(true, true);
-//		form.layout(true, true);
+		//		form.layout(true, true);
 		redraw();
 	}
 
@@ -269,14 +281,14 @@ extends XComposite
 			displayName = ""; //$NON-NLS-1$
 		editorSection.setText(displayName);
 		layout(true, true);
-//		form.layout(true, true);
+		//		form.layout(true, true);
 		redraw();
 	}
 
 	private void setSelectedLegalEntity(LegalEntity legalEntity)
 	{
-//		if (legalEntity == null)
-//			throw new IllegalArgumentException("legalEntity must not be null!"); //$NON-NLS-1$
+		//		if (legalEntity == null)
+		//			throw new IllegalArgumentException("legalEntity must not be null!"); //$NON-NLS-1$
 
 		AnchorID leID = null;
 		if (legalEntity != null) {
@@ -341,7 +353,7 @@ extends XComposite
 						FETCH_GROUPS_LEGALENTITY,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor
-					);
+				);
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
@@ -383,7 +395,28 @@ extends XComposite
 	}
 
 	public String getQuickSearchText() {
-//		return quickSearchText.getTextControl().getText();
+		//		return quickSearchText.getTextControl().getText();
 		return quickSearchText.getText();
 	}
+
+	private NotificationListener notificationListener = new NotificationAdapterJob() {
+		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
+			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+				DirtyObjectID dirtyObjectID = it.next();
+
+				switch (dirtyObjectID.getLifecycleState()) {
+				case DIRTY:
+					Display.getDefault().asyncExec(new Runnable()
+					{
+						public void run() {
+							leEditor.disposeControl();
+							leEditorControl = null;
+
+							setLegalEntityVisualisation(selectedLegalEntity);
+						};
+					});
+				}
+			}
+		}
+	};
 }
