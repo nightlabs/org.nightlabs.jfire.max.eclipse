@@ -88,8 +88,10 @@ public class TariffOrderCfModComposite extends XComposite {
 	{
 		if (tariffList.getSelectionIndex() == 0) {
 			upButton.setEnabled(false);
+			downButton.setEnabled(true);
 		}
 		else if (tariffList.getSelectionIndex() == tariffList.getItemCount()-1) {
+			upButton.setEnabled(true);
 			downButton.setEnabled(false);
 		}
 		else if (tariffList.getSelectionIndex() == -1) {
