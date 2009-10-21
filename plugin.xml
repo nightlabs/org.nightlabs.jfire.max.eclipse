@@ -50,6 +50,10 @@
             class="org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandlerHTML"
             format="ppt">
       </renderedReportHandler>
+      <renderedReportHandler
+            class="org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandlerHTML"
+            format="xls">
+      </renderedReportHandler>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
