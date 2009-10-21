@@ -11,10 +11,10 @@
                class="org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction"
                icon="icons/QuickCreateIssueAction-Create.16x16.png"
                id="org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction"
-               label="Create Issue Quick Wizard"
+               label="%org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction.label"
                style="push"
                toolbarPath="additions"
-               tooltip="Create an Issue"/>
+               tooltip="%org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction.tooltip"/>
       </actionSet>
    </extension>
 
