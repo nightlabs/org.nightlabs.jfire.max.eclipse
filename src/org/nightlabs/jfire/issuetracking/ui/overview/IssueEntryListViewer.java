@@ -12,6 +12,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
@@ -32,6 +33,8 @@ import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
+import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
+import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -44,6 +47,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -354,16 +358,25 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
-			for (IssueID issueID : issueIDs) {
-				IssueDAO.sharedInstance().signalIssue(
-						issueID,
-						"close",
-						false,
-						new String[] {FetchPlan.DEFAULT},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-				);
-			}
+			final Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
+			Job job = new Job("Signal Issues..............") {
+
+				@Override
+				protected IStatus run(ProgressMonitor monitor) throws Exception {
+					for (IssueID issueID : issueIDs) {
+						IssueDAO.sharedInstance().signalIssue(
+								issueID,
+								"close",
+								false,
+								new String[] {FetchPlan.DEFAULT},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.SHORT);
+			job.schedule();
 		}
 	}
 
@@ -380,7 +393,26 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		@Override
 		public void run() {
-			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
+			final Collection<Issue> issues = issueResultTable.getSelectedElements();
+			UserSearchDialog userSearchDialog = new UserSearchDialog(getComposite().getShell(), null, UserSearchComposite.FLAG_TYPE_USER);
+			int returnCode = userSearchDialog.open();
+			if (returnCode == Dialog.OK) {
+				final User assigneeUser = userSearchDialog.getSelectedUser();
+				if (assigneeUser != null) {
+					Job job = new Job("Signal Issues..............") {
+						@Override
+						protected IStatus run(ProgressMonitor monitor) throws Exception {
+							for (Issue issue : issues) {
+								issue.setAssignee(assigneeUser);
+								IssueDAO.sharedInstance().storeIssue(issue, false, new String[] {FetchGroup.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+							}
+							return Status.OK_STATUS;
+						}
+					};
+					job.setPriority(Job.SHORT);
+					job.schedule();
+				}
+			}
 		}
 	}
 
@@ -421,9 +453,9 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		}
 	}
 
-	private static String[] FETCH_GROUP_FOR_ISSUE = new String[] {FetchGroup.DEFAULT,
-		Issue.FETCH_GROUP_ISSUE_TYPE,
-		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
-		Issue.FETCH_GROUP_ISSUE_RESOLUTION};
+//	private static String[] FETCH_GROUP_FOR_ISSUE = new String[] {FetchGroup.DEFAULT,
+//		Issue.FETCH_GROUP_ISSUE_TYPE,
+//		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+//		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+//		Issue.FETCH_GROUP_ISSUE_RESOLUTION};
 }
