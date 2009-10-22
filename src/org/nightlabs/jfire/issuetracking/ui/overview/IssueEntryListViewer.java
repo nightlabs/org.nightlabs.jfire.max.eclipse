@@ -2,21 +2,26 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Collection;
 
+import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -32,6 +37,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssuePropertyDialog;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
@@ -201,7 +207,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 	private IssueResolveAllAction resolveAllAction;
 	private IssueCloseAllAction closeAllAction;
 	private IssueAssignAllAction assignAllAction;
-
+	private IssueSetPropertyAction setPropertyAction;
 	/**
 	 * Sets up the context menu to allow for the following operations:
 	 *   1. Edit selected Issue(s) --> Opens the Issue pages.
@@ -214,6 +220,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		resolveAllAction = new IssueResolveAllAction();
 		closeAllAction = new IssueCloseAllAction();
 		assignAllAction = new IssueAssignAllAction();
+		setPropertyAction = new IssueSetPropertyAction();
 
 		// Relegate the menu-items to the menu-manager.
 		menuMgr = getMenuManager();
@@ -225,6 +232,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 				menuMgr.add(resolveAllAction);
 				menuMgr.add(closeAllAction);
 				menuMgr.add(assignAllAction);
+				menuMgr.add(setPropertyAction);
 			}
 		});
 
@@ -375,4 +383,47 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 			Collection<IssueID> issueIDs = NLJDOHelper.getObjectIDList(issueResultTable.getSelectedElements());
 		}
 	}
+
+	/**
+	 * Handles the action to change properties to the selected Issue(s).
+	 */
+	private class IssueSetPropertyAction extends Action {
+		public IssueSetPropertyAction() {
+			setId(IssueAssignAllAction.class.getName());
+			setImageDescriptor(SharedImages.EDIT_16x16);
+			setToolTipText("Edit properties");
+			setText("Edit properties");
+		}
+
+		@Override
+		public void run() {
+			final Collection<Issue> selectedIssues = issueResultTable.getSelectedElements();
+			final IssuePropertyDialog issuePropertyDialog = new IssuePropertyDialog(selectedIssues, getComposite().getShell());
+			int returnType = issuePropertyDialog.open();
+			if (returnType == Window.OK) {
+				Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer.task.updatingIssues")) {
+					@Override
+					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						for (Issue issue : selectedIssues) {
+							issue.setIssueType(issuePropertyDialog.getSelectedIssueType());
+							issue.setIssuePriority(issuePropertyDialog.getSelectedIssuePriority());
+							issue.setIssueSeverityType(issuePropertyDialog.getSelectedIssueSeverityType());
+							issue.setIssueResolution(issuePropertyDialog.getSelectedIssueResolution());
+
+							IssueDAO.sharedInstance().storeIssue(issue, false, new String[] {FetchGroup.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setPriority(Job.LONG);
+				job.schedule();
+			}
+		}
+	}
+
+	private static String[] FETCH_GROUP_FOR_ISSUE = new String[] {FetchGroup.DEFAULT,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+		Issue.FETCH_GROUP_ISSUE_RESOLUTION};
 }

@@ -4,7 +4,7 @@ import org.nightlabs.base.ui.action.WorkbenchPartSelectionAction;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard;
 
-public class AddIssueAction 
+public class AddIssueAction
 extends WorkbenchPartSelectionAction
 {
 	public boolean calculateEnabled() {

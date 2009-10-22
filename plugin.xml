@@ -88,10 +88,11 @@
     <extension point="org.nightlabs.base.ui.editorActionBarContribution">
         <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor">
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-                name="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.name"
-                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip"/>
+                  class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+                  id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+                  name="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip"/>
             <editorActionBarContribution
                   actionDefinitionId="org.eclipse.ui.file.save"
                   class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
@@ -109,11 +110,12 @@
                   toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
                   tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
-                icon="icons/overview/action/AddIssueAction.16x16.png"
-                id="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
-                name="%org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction.name"
-                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction.tooltip"/>
+                  class="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
+                  icon="icons/overview/action/AddIssueAction.16x16.png"
+                  id="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
+                  name="%org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction.tooltip"/>
             <editorActionBarContribution
                 class="org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction"
                 icon="icons/overview/action/EditIssueAction.16x16.png"
