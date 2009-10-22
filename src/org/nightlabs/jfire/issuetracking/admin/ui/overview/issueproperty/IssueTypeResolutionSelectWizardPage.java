@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -28,6 +30,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueResolutionDAO;
@@ -39,19 +42,19 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
-public class IssueTypeResolutionSelectWizardPage 
-extends WizardHopPage 
+public class IssueTypeResolutionSelectWizardPage
+extends WizardHopPage
 {
-	private Group choiceGroup;	
+	private Group choiceGroup;
 	private Button createNewCheckBox;
 	private Button selectFromCheckBox;
-	
+
 	private IssueType issueType;
-	
+
 	private IssueResolutionTable issueTypeResolutionTable;
-	
+
 	private IssueTypeResolutionGeneralWizardPage createPage;
-	
+
 	public IssueTypeResolutionSelectWizardPage(IssueType issueType) {
 		super(	IssueTypeResolutionSelectWizardPage.class.getName(),
 	    		Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.title"), //$NON-NLS-1$
@@ -62,7 +65,9 @@ extends WizardHopPage
 		createPage = new IssueTypeResolutionGeneralWizardPage(null);
 	    setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.description")); //$NON-NLS-1$
 	}
-	
+
+	public static final String[] FETCH_GROUP = {FetchPlan.DEFAULT, IssueResolution.FETCH_GROUP_NAME};
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -70,31 +75,33 @@ extends WizardHopPage
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		
-		createNewCheckBox = new Button(comp, SWT.RADIO);		
+
+		createNewCheckBox = new Button(comp, SWT.RADIO);
 		createNewCheckBox.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.checkBox.createNew.text")); //$NON-NLS-1$
 		createNewCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createNewCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setCreateNew(true, true);
 			}
 		});
-		
+
 		selectFromCheckBox = new Button(comp, SWT.RADIO);
 		selectFromCheckBox.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.checkBox.selectFrom.text")); //$NON-NLS-1$
 		selectFromCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectFromCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setCreateNew(false, true);
 			}
 		});
-		
+
 		issueTypeResolutionTable = new IssueResolutionTable(wrapper, SWT.NONE);
 		Display.getCurrent().asyncExec(new Runnable(){
 			public void run() {
-				List<IssueResolution> issueResolutions = IssueResolutionDAO.sharedInstance().getIssueResolutions(new NullProgressMonitor());
+				List<IssueResolution> issueResolutions = IssueResolutionDAO.sharedInstance().getIssueResolutions(FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issueResolutions.removeAll(issueType.getIssueResolutions());
-				
+
 				issueTypeResolutionTable.setInput(issueResolutions);
 			}
 		});
@@ -102,7 +109,7 @@ extends WizardHopPage
 			public void selectionChanged(SelectionChangedEvent e) {
 				if (issueTypeResolutionTable.getFirstSelectedElement() != null) {
 					selectFromCheckBox.setSelection(true);
-					setCreateNew(false, true);					
+					setCreateNew(false, true);
 				}
 			}
 		});
@@ -118,9 +125,9 @@ extends WizardHopPage
 			}
 		});
 		setCreateNew(false, false);
-		return wrapper; 
+		return wrapper;
 	}
-	
+
 	public void setCreateNew(boolean b, boolean updateButtons) {
 		createNewCheckBox.setSelection(b);
 		selectFromCheckBox.setSelection(!b);
@@ -137,7 +144,7 @@ extends WizardHopPage
 	public boolean isPageComplete() {
 		return createNewCheckBox.getSelection() || issueTypeResolutionTable.getFirstSelectedElement() != null;
 	}
-	
+
 	public Collection<IssueResolution> getSelectedIssueResolutions() {
 		if (this.equals(getContainer().getCurrentPage()))
 			return new ArrayList<IssueResolution>(issueTypeResolutionTable.getSelectedElements());
