@@ -52,27 +52,27 @@ import org.nightlabs.util.NLLocale;
 
 /**
  * A composite that contains UIs for adding {@link Issue}.
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class QuickCreateIssueComposite 
+public class QuickCreateIssueComposite
 extends XComposite
 {
 	private	StructID issueStructID;
 	private IStruct issueStruct;
 	private DepartmentDataField departmentDataField;
-	
+
 	private CreateIssueQuickDialog createIssueQuickDialog;
 	/**
 	 * Contructs a composite used for adding {@link Issue}.
-	 * 
+	 *
 	 * @param parent -the parent composite
-	 * @param style - the SWT style flag 
+	 * @param style - the SWT style flag
 	 */
 	public QuickCreateIssueComposite(CreateIssueQuickDialog createIssueQuickDialog, Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		this.createIssueQuickDialog = createIssueQuickDialog;
-		
+
 		issueStructID = StructID.create(Organisation.DEV_ORGANISATION_ID, Issue.class, Struct.DEFAULT_SCOPE);
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.loadingIssueStruct")){ //$NON-NLS-1$
 			@Override
@@ -84,7 +84,7 @@ extends XComposite
 		};
 		job.setPriority(Job.SHORT);
 		job.schedule();
-				
+
 		initData();
 		createComposite();
 		initUI();
@@ -117,7 +117,7 @@ extends XComposite
 		new Label(projectComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.projectLabel")); //$NON-NLS-1$
 
 		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
-		
+
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComboComposite.setLayoutData(gridData);
 		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -132,9 +132,9 @@ extends XComposite
 
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		departmentComposite.setLayoutData(gridData);
-		
+
 		new Label(departmentComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.departmentLabel")); //$NON-NLS-1$
-		
+
 		departmentComboComposite = new DepartmentComboComposite(departmentComposite){
 			@Override
 			protected XCombo createCombo() {
@@ -150,7 +150,7 @@ extends XComposite
 		};
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		departmentComboComposite.setLayoutData(gridData);
-		
+
 		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -161,7 +161,7 @@ extends XComposite
 					departmentDataField.setData(departmentComboComposite.getSelectedDepartment());
 				}
 				catch (Exception ex) {
-					throw new RuntimeException(ex); 
+					throw new RuntimeException(ex);
 				}
 			}
 		});
@@ -214,7 +214,7 @@ extends XComposite
 				setTabList(new Control[]{getText()});
 			}
 		};
-		
+
 		subjectText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -222,7 +222,7 @@ extends XComposite
 				createIssueQuickDialog.setOKButtonEnabled(hasSubjectText);
 			}
 		});
-		
+
 		Label descriptionLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.descriptionLabel")); //$NON-NLS-1$
@@ -253,7 +253,7 @@ extends XComposite
 
 		Calendar startDateTimeCalendar = Calendar.getInstance(NLLocale.getDefault());
 		startDateTimeCalendar.setTime(startDateControl.getDate());
-		
+
 		Date startTime = startTimeControl.getDate();
 		if (startTime == null) {
 			startDateTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -263,7 +263,7 @@ extends XComposite
 		else {
 			startDateTimeCalendar.setTime(startTime);
 		}
-		
+
 		newIssue.startWorking(startDateTimeCalendar.getTime());
 		startDateTimeCalendar.add(Calendar.MILLISECOND, (int)durationText.getTimeLength());
 		newIssue.endWorking(startDateTimeCalendar.getTime());
@@ -274,7 +274,7 @@ extends XComposite
 	}
 
 	private Calendar previousStartDateTime;
-	
+
 	public void initUI() {
 		if (previousStartDateTime == null) {
 			previousStartDateTime = Calendar.getInstance(NLLocale.getDefault());
@@ -282,19 +282,19 @@ extends XComposite
 			previousStartDateTime.set(Calendar.MINUTE, 0);
 			previousStartDateTime.set(Calendar.SECOND, 0);
 		}
-		
+
 		startDateControl.setDate(previousStartDateTime.getTime());
 		startTimeControl.clearDate();
 		durationText.setTimeLength(0);
-		
+
 		subjectText.setI18nText(new I18nTextBuffer());
 		descriptionText.setI18nText(new I18nTextBuffer());
 	}
-	
+
 	private User currentUser;
 	public void initData() {
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-		
+
 		if (currentUser == null)
 			currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
 		newIssue.setAssignee(currentUser);
