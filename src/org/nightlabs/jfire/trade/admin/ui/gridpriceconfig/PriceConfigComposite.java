@@ -67,6 +67,7 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculationException;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
+import org.nightlabs.jfire.accounting.priceconfig.PriceConfigName;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
@@ -352,6 +353,8 @@ public abstract class PriceConfigComposite extends XComposite
 				int returnCode = dialog.open();
 				if (returnCode == Window.OK) {
 					assignNewPriceConfig(wizard);
+					Composite parent = getParent();
+					parent.notify();
 				}
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -710,14 +713,19 @@ public abstract class PriceConfigComposite extends XComposite
 	{
 		wizard.getAbstractChooseGridPriceConfigPage().configureProductType(packageProductType);
 
+		PriceConfigName newName = null;
 		IInnerPriceConfig innerPC = packageProductType.getInnerPriceConfig();
 		if (innerPC != null) {
+			newName = packageProductType.getInnerPriceConfig().getName(); //Backup it!!!
 			PriceConfigID innerPCID = (PriceConfigID) JDOHelper.getObjectId(innerPC);
 			if (innerPCID != null) {
 				innerPC = retrieveInnerPriceConfigForEditing(innerPCID);
 				packageProductType.setInnerPriceConfig(innerPC);
 			}
 		}
+
+		if (newName != null)
+			packageProductType.getInnerPriceConfig().getName().copyFrom(newName);
 
 		if (packageProductType.getInnerPriceConfig() != null) {
 			GridPriceConfig packagePriceConfig = (GridPriceConfig)packageProductType.getPackagePriceConfig();
