@@ -191,10 +191,10 @@ extends XComposite
 							issueTypeCombo.addElement(issueType);
 						}
 
-						if (defaultIssueType != null && !isIssueTypeConflict)
-							issueTypeCombo.selectElement(defaultIssueType);
+						if (lastIssueType != null && !isIssueTypeConflict)
+							issueTypeCombo.selectElement(lastIssueType);
 						else
-							issueTypeCombo.selectElementByIndex(0);
+							issueTypeCombo.selectElement(defaultIssueType);
 
 						selectedIssueType = issueTypeCombo.getSelectedElement();
 						setIssueType(selectedIssueType);
@@ -237,10 +237,10 @@ extends XComposite
 				priorityCombo.addElement(priority);
 			}
 
-			if (defaultIssuePriority != null && !isIssuePriorityConflict)
-				priorityCombo.selectElement(defaultIssuePriority);
+			if (lastIssuePriority != null && !isIssuePriorityConflict)
+				priorityCombo.selectElement(lastIssuePriority);
 			else
-				priorityCombo.selectElementByIndex(0);
+				priorityCombo.selectElement(defaultIssuePriority);
 		}
 		selectedIssuePriority = priorityCombo.getSelectedElement();
 
@@ -254,10 +254,10 @@ extends XComposite
 				severityTypeCombo.addElement(severityType);
 			}
 
-			if (defaultIssueSeverityType != null && !isIssueSeverityTypeConflict)
-				severityTypeCombo.selectElement(defaultIssueSeverityType);
+			if (lastIssueSeverityType != null && !isIssueSeverityTypeConflict)
+				severityTypeCombo.selectElement(lastIssueSeverityType);
 			else
-				severityTypeCombo.selectElementByIndex(0);
+				severityTypeCombo.selectElement(defaultIssueSeverityType);
 		}
 		selectedIssueSeverityType = severityTypeCombo.getSelectedElement();
 
@@ -270,10 +270,10 @@ extends XComposite
 					defaultIssueResolution = resolution;
 			}
 
-			if (defaultIssueResolution != null && !isIssueResolutionConflict)
-				resolutionCombo.selectElement(defaultIssueResolution);
+			if (lastIssueResolution != null && !isIssueResolutionConflict)
+				resolutionCombo.selectElement(lastIssueResolution);
 			else
-				resolutionCombo.selectElementByIndex(0);
+				resolutionCombo.selectElement(defaultIssueResolution);
 
 		}
 		selectedIssueResolution = resolutionCombo.getSelectedElement();
@@ -332,11 +332,12 @@ extends XComposite
 	private boolean isIssueSeverityTypeConflict = false;
 	private boolean isIssueResolutionConflict = false;
 
+	private IssueType lastIssueType = null;
+	private IssuePriority lastIssuePriority = null;
+	private IssueSeverityType lastIssueSeverityType = null;
+	private IssueResolution lastIssueResolution = null;
+
 	private void findConflictValues(Collection<Issue> issues) {
-		IssueType lastIssueType = null;
-		IssuePriority lastIssuePriority = null;
-		IssueSeverityType lastIssueSeverityType = null;
-		IssueResolution lastIssueResolution = null;
 		boolean isFirst = true;
 		for (Issue issue : issues) {
 			if (isFirst) {

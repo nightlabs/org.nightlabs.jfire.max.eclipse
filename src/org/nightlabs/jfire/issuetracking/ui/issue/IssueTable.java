@@ -40,6 +40,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -72,7 +73,7 @@ extends AbstractTableComposite<Issue>
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_ISSUE_TYPE,
 		Issue.FETCH_GROUP_SUBJECT,
-		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_DESCRIPTION, //Should be removed soon!
 		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,
@@ -82,8 +83,9 @@ extends AbstractTableComposite<Issue>
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		IssueType.FETCH_GROUP_NAME,
-		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		IssueResolution.FETCH_GROUP_NAME,
 		StateDefinition.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_MARKERS,          // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_NAME,             // <-- Since 14.05.2009
@@ -252,20 +254,25 @@ extends AbstractTableComposite<Issue>
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 6
 		tc.setMoveable(true);
-		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 7
 		tc.setMoveable(true);
-		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 8
 		tc.setMoveable(true);
-		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.resolution.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 9
+		tc.setMoveable(true);
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
+		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
+
+		tc = new TableColumn(table, SWT.LEFT); // @column 10
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.assignee.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(20)); // Previously: 15
@@ -316,10 +323,7 @@ extends AbstractTableComposite<Issue>
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
-	class IssueTableLabelProvider
-//	extends TableLabelProvider
-	extends ColumnSpanLabelProvider
-	{
+	private class IssueTableLabelProvider extends ColumnSpanLabelProvider {
 		public IssueTableLabelProvider(ColumnViewer columnViewer) {
 			super(columnViewer);
 		}
@@ -345,10 +349,11 @@ extends AbstractTableComposite<Issue>
 					}
 				break;
 				// case 5 <-- Reserved for displaying IssueMarker icons only.
-				case 6: return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
-				case 7: return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
-				case 8: return getStateName(issue);
-				case 9: return issue.getAssignee() == null ? "None" : issue.getAssignee().getName();
+				case 6: return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
+				case 7: return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
+				case 8: return issue.getIssueResolution() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.resolution.noData") : issue.getIssueResolution().getName().getText(); //$NON-NLS-1$
+				case 9: return getStateName(issue);
+				case 10: return issue.getAssignee() == null ? "None" : issue.getAssignee().getName();
 //				case 9: return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
 				default: return ""; //$NON-NLS-1$
 				}
@@ -389,11 +394,6 @@ extends AbstractTableComposite<Issue>
 		return ""; //$NON-NLS-1$
 	}
 
-//	public void setLoadingStatus()
-//	{
-//		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.table.loading.text")); //$NON-NLS-1$
-//	}
-
 	private int maxIssueMarkerCountPerIssue = -1;
 
 	@Override
@@ -420,8 +420,6 @@ extends AbstractTableComposite<Issue>
 
 		super.setInput(input);
 	}
-
-
 
 	// ---[ Proposed additional helper methods ]----------------------------------------------------------------------|
 	// --->> Which perhaps can be upgraded into the super class?
@@ -465,7 +463,4 @@ extends AbstractTableComposite<Issue>
 
 		return issue;
 	}
-
-
-
 }
