@@ -182,7 +182,7 @@
        <category
              class="org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTypeCategoryFactory"
              icon="icons/overview/CurrencyTypeCategoryFactory.16x16.png"
-             index="600"
+             index="1000"
              name="%org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTypeCategoryFactory.name">
        </category>
     </extension>
