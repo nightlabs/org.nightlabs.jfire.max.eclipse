@@ -195,10 +195,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 					
 					ReportViewPrintConfigModule cfMod = ReportViewPrintConfigModule.sharedInstance();
 					UseCaseConfig useCaseConfig = cfMod.getReportUseCaseConfigs().get(useCaseID);
-					String format = "html"; //$NON-NLS-1$
-					if (useCaseConfig != null)
-						format = useCaseConfig.getViewerFormat();
-					Birt.OutputFormat outFormat = Birt.OutputFormat.valueOf(format);
+					Birt.OutputFormat outFormat = getOutputFormat(useCaseConfig);
 					
 					String reportViewerID = null;
 					if (useCaseConfig != null)
@@ -267,5 +264,13 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	 */
 	public void setNextRunParams(Map<String, Object> nextRunParams) {
 		this.nextRunParams = nextRunParams;
+	}
+	
+	protected Birt.OutputFormat getOutputFormat(UseCaseConfig useCaseConfig) {		
+		String format = "html"; //$NON-NLS-1$
+		if (useCaseConfig != null)
+			format = useCaseConfig.getViewerFormat();
+		Birt.OutputFormat outFormat = Birt.OutputFormat.valueOf(format);
+		return outFormat;
 	}
 }
