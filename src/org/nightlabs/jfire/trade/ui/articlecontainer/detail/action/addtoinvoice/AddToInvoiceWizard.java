@@ -62,11 +62,11 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 	public AddToInvoiceWizard(Collection<Article> articles)
 	{
 		super(articles);
-		for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
-			Article article = it.next();
-			if (article.getInvoiceID() != null)
-				throw new IllegalArgumentException("At least one Article (" + article.getPrimaryKey() + ") is already in an invoice! An Article can only be in one invoice!"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+//		for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) { //Removed by Chairat, I took a look at the method AddToInvoiceWizard.getArticlesToadd(), it does check if the article has already the ID or not. If not, it will add the article to the invoice.
+//			Article article = it.next();
+//			if (article.getInvoiceID() != null)
+//				throw new IllegalArgumentException("At least one Article (" + article.getPrimaryKey() + ") is already in an invoice! An Article can only be in one invoice!"); //$NON-NLS-1$ //$NON-NLS-2$
+//		}
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceWizard.windowTitle")); //$NON-NLS-1$
 	}
 
