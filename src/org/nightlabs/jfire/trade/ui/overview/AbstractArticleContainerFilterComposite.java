@@ -179,7 +179,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.createUserID, active);
 			}
 		});
-		userText = new Text(userGroup, getBorderStyle());
+		userText = new Text(userGroup, SWT.READ_ONLY | getBorderStyle());
 		userText.setEnabled(false);
 		userText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		userText.addSelectionListener(userSelectionListener);
@@ -205,7 +205,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.vendorID, active);
 			}
 		});
-		vendorText = new Text(vendorGroup, getBorderStyle());
+		vendorText = new Text(vendorGroup, SWT.READ_ONLY | getBorderStyle());
 		vendorText.setEnabled(false);
 		vendorText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorText.addSelectionListener(vendorSelectionListener);
@@ -223,7 +223,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		GridData customerLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		customerLabelData.horizontalSpan = 2;
 		customerActiveButton.setLayoutData(customerLabelData);
-		customerText = new Text(customerGroup, getBorderStyle());
+		customerText = new Text(customerGroup, SWT.READ_ONLY | getBorderStyle());
 		customerText.setEnabled(false);
 		customerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		customerText.addSelectionListener(customerSelectionListener);
@@ -249,7 +249,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		GridData productTypeLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		productTypeLabelData.horizontalSpan = 2;
 		productTypeActiveButton.setLayoutData(productTypeLabelData);
-		productTypeText = new Text(productTypeGroup, getBorderStyle());
+		productTypeText = new Text(productTypeGroup, SWT.READ_ONLY | getBorderStyle());
 		productTypeText.setEnabled(false);
 		productTypeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeText.addSelectionListener(productTypeSelectionListener);

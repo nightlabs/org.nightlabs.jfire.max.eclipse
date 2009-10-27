@@ -137,7 +137,7 @@ public class StatableFilterSearchComposite
 	{
 		Group group = new Group(this, SWT.NONE);
 		group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.group.text"));		 //$NON-NLS-1$
-		group.setLayout(new GridLayout(4, false));
+		group.setLayout(new GridLayout(2, false));
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
@@ -186,7 +186,7 @@ public class StatableFilterSearchComposite
 			}
 		});
 
-		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(wrapper, getBorderStyle(), processDefinitionLabelProvider);
+		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(wrapper, SWT.READ_ONLY | getBorderStyle(), processDefinitionLabelProvider);
 		GridData data2 = new GridData(GridData.FILL_HORIZONTAL);
 		data2.horizontalSpan = 1;
 		processDefinitionsCombo.setLayoutData(data2);
@@ -205,7 +205,7 @@ public class StatableFilterSearchComposite
 			}
 		});
 
-		stateDefinitionsCombo = new XComboComposite<StateDefinition>(wrapper, getBorderStyle(), stateDefinitionLabelProvider);
+		stateDefinitionsCombo = new XComboComposite<StateDefinition>(wrapper, SWT.READ_ONLY | getBorderStyle(), stateDefinitionLabelProvider);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		stateDefinitionsCombo.setLayoutData(data);
