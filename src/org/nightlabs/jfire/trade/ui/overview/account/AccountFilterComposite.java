@@ -216,7 +216,7 @@ public class AccountFilterComposite
 				getQuery().setFieldEnabled(AccountQuery.FieldName.ownerID, active);
 			}
 		});
-		ownerText = new Text(ownerGroup, XComposite.getBorderStyle(ownerGroup));
+		ownerText = new Text(ownerGroup, SWT.READ_ONLY | XComposite.getBorderStyle(ownerGroup));
 		ownerText.setEnabled(false);
 		ownerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ownerBrowseButton = new Button(ownerGroup, SWT.NONE);
@@ -256,7 +256,7 @@ public class AccountFilterComposite
 			}
 		});
 		accountTypeList = new XComboComposite<AccountType>(
-				accountTypeGroup, XComposite.getBorderStyle(accountTypeGroup),
+				accountTypeGroup, SWT.READ_ONLY | XComposite.getBorderStyle(accountTypeGroup),
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {

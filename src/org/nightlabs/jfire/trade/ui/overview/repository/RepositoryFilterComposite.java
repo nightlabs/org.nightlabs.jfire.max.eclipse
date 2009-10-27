@@ -116,7 +116,7 @@ public class RepositoryFilterComposite
 		GridData vendorLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		vendorLabelData.horizontalSpan = 2;
 		ownerActiveButton.setLayoutData(vendorLabelData);
-		ownerText = new Text(ownerGroup, getBorderStyle());
+		ownerText = new Text(ownerGroup, SWT.READ_ONLY | getBorderStyle());
 		ownerText.setEnabled(false);
 		ownerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ownerText.addSelectionListener(ownerSelectionListener);
@@ -141,7 +141,7 @@ public class RepositoryFilterComposite
 		repositoryTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdActiveButton.text")); //$NON-NLS-1$
 		repositoryTypeActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		repositoryTypeList = new XComboComposite<RepositoryType>(
-				repositoryTypeGroup, getBorderStyle(),
+				repositoryTypeGroup, SWT.READ_ONLY | getBorderStyle(),
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
