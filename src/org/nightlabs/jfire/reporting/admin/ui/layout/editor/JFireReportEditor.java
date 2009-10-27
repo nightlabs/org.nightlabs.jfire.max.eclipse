@@ -59,7 +59,10 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 	@Override
 	public void init(IEditorSite editorSite, IEditorInput editorInput) throws PartInitException {
 		super.init(editorSite, editorInput);
-		setPartName(editorInput.getName());
+		//---------Added by Chairat-----------
+		JFireRemoteReportEditorInput reportEditorInput = (JFireRemoteReportEditorInput)editorInput;
+		setPartName(reportEditorInput.getReportRegistryItemID().reportRegistryItemID + ":" + reportEditorInput.getName());
+		//---------------End------------------
 		editorSite.getSelectionProvider().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				for (int i = 0; i < getPageCount(); i++) {
