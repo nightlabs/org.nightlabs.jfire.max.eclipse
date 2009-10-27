@@ -4,7 +4,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -22,24 +21,24 @@ extends XComposite
 
 	private Label accountNameLbl;
 	private I18nTextEditor accountNameEditor;
-	
+
 	private Label ownerLbl;
 	private Text ownerText;
-	
+
 	private Label anchorTypeIDLbl;
 	private Text anchorTypeIDText;
-	
+
 //	private Label revenueInAccLbl;
 //	private Text revenueInAccText;
 //
 //	private Label revenueOutAccLbl;
 //	private Text revenueOutAccText;
-	
+
 	private Label balanceLbl;
 	private Text balanceText;
-	
+
 	private IDirtyStateManager dirtyStateManager;
-	
+
 	public AccountGeneralComposite(Composite parent, int style) {
 		this(parent, style, null);
 	}
@@ -47,30 +46,34 @@ extends XComposite
 	public AccountGeneralComposite(Composite parent, int style, IDirtyStateManager dirtyStateManager) {
 		super(parent, style);
 		this.dirtyStateManager = dirtyStateManager;
-		createControl();
+		createControl(parent);
 	}
-	
-	public void createControl()
+
+	public void createControl(Composite parent)
 	{
-		setLayout(new GridLayout(2, false));		
-		int textStyle = SWT.READ_ONLY | getBorderStyle();
-		
-		accountNameLbl = new Label(this, SWT.NONE);
+		XComposite mainComposite = new XComposite(this, SWT.NONE,
+				LayoutMode.TIGHT_WRAPPER);
+		mainComposite.getGridLayout().numColumns = 1;
+		int textStyle = SWT.READ_ONLY | XComposite.getBorderStyle(mainComposite);
+
+		accountNameLbl = new Label(mainComposite, SWT.NONE);
 		accountNameLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.accountName")); //$NON-NLS-1$
-		accountNameEditor = new I18nTextEditor(this);
+
+		accountNameEditor = new I18nTextEditor(mainComposite);
 		accountNameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		accountNameEditor.addModifyListener(nameModifyListener);
-		
-		ownerLbl = new Label(this, SWT.NONE);
+
+		ownerLbl = new Label(mainComposite, SWT.NONE);
 		ownerLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.owner")); //$NON-NLS-1$
-		ownerText = new Text(this, textStyle);
+
+		ownerText = new Text(mainComposite, textStyle);
 		ownerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		anchorTypeIDLbl = new Label(this, SWT.NONE);
+
+		anchorTypeIDLbl = new Label(mainComposite, SWT.NONE);
 		anchorTypeIDLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.anchorTypeID")); //$NON-NLS-1$
-		anchorTypeIDText = new Text(this, textStyle);
+		anchorTypeIDText = new Text(mainComposite, textStyle);
 		anchorTypeIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 //		revenueInAccLbl = new Label(this, SWT.NONE);
 //		revenueInAccLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.revenueInAcc")); //$NON-NLS-1$
 //		revenueInAccText = new Text(this, textStyle);
@@ -80,13 +83,13 @@ extends XComposite
 //		revenueOutAccLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.revenueOutAcc")); //$NON-NLS-1$
 //		revenueOutAccText = new Text(this, textStyle);
 //		revenueOutAccText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		balanceLbl = new Label(this, SWT.NONE);
+
+		balanceLbl = new Label(mainComposite, SWT.NONE);
 		balanceLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.balance")); //$NON-NLS-1$
-		balanceText = new Text(this, textStyle);
+		balanceText = new Text(mainComposite, textStyle);
 		balanceText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
+
 	public void setAccount(Account account)
 	{
 		this.account = account;
@@ -104,7 +107,7 @@ extends XComposite
 	public Account getAccount() {
 		return account;
 	}
-	
+
 	private ModifyListener nameModifyListener = new ModifyListener(){
 		public void modifyText(ModifyEvent e) {
 			if (dirtyStateManager != null)
