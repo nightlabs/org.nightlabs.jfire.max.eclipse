@@ -271,15 +271,23 @@ public class AccountFilterComposite
 		AccountType dummyAccountType = new AccountType("dummy.b.c", "dummy", false); //$NON-NLS-1$ //$NON-NLS-2$
 		dummyAccountType.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.loadingAccountTypes")); //$NON-NLS-1$
 		accountTypeList.setInput(Collections.singletonList(dummyAccountType));
-		accountTypeList.addSelectionListener(new SelectionAdapter()
-		{
+//		accountTypeList.addSelectionListener(new SelectionAdapter()
+//		{
+//			@Override
+//			public void widgetSelected(SelectionEvent e)
+//			{
+//				final AccountTypeID selectedAccountTypeID = (AccountTypeID)
+//					JDOHelper.getObjectId(accountTypeList.getSelectedElement());
+//
+//				getQuery().setAccountTypeID(selectedAccountTypeID);
+//			}
+//		});
+		accountTypeList.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				final AccountTypeID selectedAccountTypeID = (AccountTypeID)
-					JDOHelper.getObjectId(accountTypeList.getSelectedElement());
-
+			public void selectionChanged(SelectionChangedEvent event) {
+				final AccountTypeID selectedAccountTypeID = (AccountTypeID)JDOHelper.getObjectId(accountTypeList.getSelectedElement());
 				getQuery().setAccountTypeID(selectedAccountTypeID);
+
 			}
 		});
 
@@ -373,8 +381,9 @@ public class AccountFilterComposite
 					changedField.getPropertyName()))
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
-				maxBalanceEntry.setActive(active);
-				setSearchSectionActive(active);
+//				maxBalanceEntry.setActive(active);
+				setSearchSectionActive(maxBalanceEntry.getActiveButton(), active);
+//				setSearchSectionActive(active);
 			}
 			else if (AccountQuery.FieldName.minBalance.equals(changedField.getPropertyName()))
 			{
@@ -387,8 +396,9 @@ public class AccountFilterComposite
 					changedField.getPropertyName()))
 			{
 				boolean active = (Boolean) changedField.getNewValue();
-				minBalanceEntry.setActive(active);
-				setSearchSectionActive(active);
+//				minBalanceEntry.setActive(active);
+				setSearchSectionActive(minBalanceEntry.getActiveButton(), active);
+//				setSearchSectionActive(active);
 			}
 			else if (AccountQuery.FieldName.currencyID.equals(changedField.getPropertyName()))
 			{

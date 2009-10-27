@@ -64,6 +64,8 @@ extends AbstractTableComposite<Account>
 
 		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
+				if (isDisposed()) return;
+
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())
 					return;
@@ -78,14 +80,14 @@ extends AbstractTableComposite<Account>
 				}
 			}
 		});
-		
+
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Account.class, accountChangedListener);
 		addDisposeListener(new DisposeListener()
 		{
 			@Override
 			public void widgetDisposed(DisposeEvent e)
 			{
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);				
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);
 			}
 		});
 	}
@@ -95,16 +97,16 @@ extends AbstractTableComposite<Account>
 	{
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.id"));  //$NON-NLS-1$
-		
+
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountName"));	//$NON-NLS-1$
-		
+
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.owner"));	//$NON-NLS-1$
-		
+
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountTypeName"));	//$NON-NLS-1$
-		
+
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.balance"));	//$NON-NLS-1$
 //		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
@@ -114,7 +116,7 @@ extends AbstractTableComposite<Account>
 //					return null;
 //				return NumberFormatter.formatCurrency(((Account) element).getBalance(), ((Account) element).getCurrency(), true);
 //			}
-//			
+//
 //			@Override
 //			public Color getForeground(Object element) {
 //				if (element instanceof Account) {
@@ -125,7 +127,7 @@ extends AbstractTableComposite<Account>
 //				}
 //				return null;
 //			}
-//			
+//
 ////			@Override
 ////			public Color getBackground(Object element) {
 ////				if (element instanceof Account) {
@@ -213,7 +215,7 @@ extends AbstractTableComposite<Account>
 			return new Color(getDisplay(), 0, 255, 0);
 		}
 	}
-	
+
 //	public static String getAnchorTypeIDName(String anchorTypeID )
 //	{
 ////		String anchorTypeID = account.getAnchorTypeID();
@@ -253,7 +255,7 @@ extends AbstractTableComposite<Account>
 //
 //		return anchorTypeID;
 //	}
-	
+
 	private NotificationListener accountChangedListener = new NotificationAdapterCallerThread()
 	{
 		public void notify(NotificationEvent notificationEvent) {
@@ -281,7 +283,7 @@ extends AbstractTableComposite<Account>
 									{
 										if (loadAccountJob != thisJob)
 											return;
-										
+
 										if(!getTable().isDisposed())
 											getTableViewer().update(newAccount, null);
 									}
@@ -289,7 +291,7 @@ extends AbstractTableComposite<Account>
 								return Status.OK_STATUS;
 							}
 						};
-						
+
 						loadAccountJob = job;
 						job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 						job.schedule();
@@ -298,17 +300,17 @@ extends AbstractTableComposite<Account>
 			}//for
 		}
 	};
-	
+
 	private Job loadAccountJob = null;
-	
-	
+
+
 	@Override
 	public void dispose()
 	{
 		JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);
 		super.dispose();
 	}
-	
+
 	public void removeAccount(final AnchorID anchorID){
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountEditor.loadingAccountJob.name")) //$NON-NLS-1$
 		{
