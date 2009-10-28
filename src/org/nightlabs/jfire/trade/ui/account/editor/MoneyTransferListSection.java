@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -20,12 +22,21 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageControllerModifyList
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.query.QueryCollection;
+import org.nightlabs.jfire.accounting.ManualMoneyTransfer;
 import org.nightlabs.jfire.accounting.MoneyTransfer;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
+import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
+import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
+import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable;
 import org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizard;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
@@ -61,6 +72,14 @@ public class MoneyTransferListSection extends ToolBarSectionPart{
 			}
 		});
 
+		JDOLifecycleManager.sharedInstance().addLifecycleListener(moneyTransferLifecycleListener);
+
+		getSection().addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent event) {
+				JDOLifecycleManager.sharedInstance().removeLifecycleListener(moneyTransferLifecycleListener);
+			}
+		});
+
 		this.controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
 			public void controllerObjectModified(final EntityEditorPageControllerModifyEvent modifyEvent)
 			{
@@ -90,6 +109,32 @@ public class MoneyTransferListSection extends ToolBarSectionPart{
 		getToolBarManager().add(transferMoneyAction);
 		updateToolBarManager();
 	}
+
+	private JDOLifecycleListener moneyTransferLifecycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferPageController.loadMoneyTransfersJob.name")) { //$NON-NLS-1$
+		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
+				ManualMoneyTransfer.class, false, JDOLifecycleState.NEW, JDOLifecycleState.DELETED
+		);
+
+		@Override
+		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter() { return filter; }
+
+		@Override
+		public void notify(JDOLifecycleEvent event) {
+			ProgressMonitor monitor = getProgressMonitor();
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferPageController.loadMoneyTransfersJob.name"), 100); //$NON-NLS-1$
+			try {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						controller.fireMoneyTransferQueryChange();
+					}
+				});
+
+			} finally {
+				monitor.done();
+			}
+		}
+	};
 
 	private boolean ignoreMoneyTransferQueryChanged = false;
 	/**
@@ -123,25 +168,25 @@ public class MoneyTransferListSection extends ToolBarSectionPart{
 		moneyTransferTable.setMoneyTransfers(controller.getCurrentAnchorID(), moneyTransferList);
 	}
 
-	public class ManualMoneyTransferAction 
-	extends Action 
-	{		
-		public ManualMoneyTransferAction() 
+	public class ManualMoneyTransferAction
+	extends Action
+	{
+		public ManualMoneyTransferAction()
 		{
 			super();
 			setId(ManualMoneyTransferAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					TradePlugin.getDefault(), 
-					MoneyTransferListSection.class, 
+					TradePlugin.getDefault(),
+					MoneyTransferListSection.class,
 			"Transfer")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.action.toolitp")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.action.text")); //$NON-NLS-1$
 		}
 
 		@Override
-		public void run() 
+		public void run()
 		{
-			AnchorID accountID = (AnchorID) controller.getCurrentAnchorID();
+			AnchorID accountID = controller.getCurrentAnchorID();
 
 			if (accountID == null)
 				return;
@@ -149,6 +194,6 @@ public class MoneyTransferListSection extends ToolBarSectionPart{
 			ManualMoneyTransferWizard wizard = new ManualMoneyTransferWizard(accountID);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 			dialog.open();
-		}		
+		}
 	}
 }

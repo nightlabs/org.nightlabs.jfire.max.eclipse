@@ -182,7 +182,7 @@ public class ManualMoneyTransferComposite extends XComposite {
 		transferButton.setText("<----->"); //$NON-NLS-1$
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER,
 				GridData.VERTICAL_ALIGN_CENTER);
-		gridData.heightHint = 20;
+		gridData.heightHint = 50;
 		transferButton.setLayoutData(gridData);
 		transferButton.addSelectionListener(transferButtonListener);
 
