@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.SectionPart;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -353,8 +354,10 @@ public abstract class PriceConfigComposite extends XComposite
 				int returnCode = dialog.open();
 				if (returnCode == Window.OK) {
 					assignNewPriceConfig(wizard);
-					Composite parent = getParent();
-					parent.notify();
+					if (dirtyStateManager instanceof SectionPart) {
+						SectionPart sectionPart = (SectionPart) dirtyStateManager;
+						sectionPart.getSection().setText(packageProductType.getInnerPriceConfig().getName().getText());
+					}
 				}
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
