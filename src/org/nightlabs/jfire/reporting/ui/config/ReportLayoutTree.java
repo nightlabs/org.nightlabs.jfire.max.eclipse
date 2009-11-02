@@ -74,16 +74,16 @@ implements ICellModifier
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(ReportLayoutTree.class);
-	
+
 	private static class LabelProvider extends TableLabelProvider {
 
 		private ICellModifier cellModifier;
-		
+
 		public LabelProvider(ICellModifier cellModifier) {
 			super();
 			this.cellModifier = cellModifier;
 		}
-		
+
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex)
@@ -100,7 +100,7 @@ implements ICellModifier
 					else
 						return null;
 				}
-			
+
 				ReportRegistryItem item = node.getJdoObject();
 				if (item.getClass().equals(ReportCategory.class)) {
 					if (((ReportCategory)node.getJdoObject()).isInternal())
@@ -132,9 +132,9 @@ implements ICellModifier
 			return ""; //$NON-NLS-1$
 		}
 	}
-	
+
 	private ReportLayoutConfigPreferencePage preferencePage;
-	
+
 	/**
 	 * @param parent
 	 */
@@ -150,7 +150,7 @@ implements ICellModifier
 		super(parent, treeStyle, true, true, true);
 		this.preferencePage = preferencePage;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
@@ -164,7 +164,7 @@ implements ICellModifier
 			}
 		});
 		treeViewer.setLabelProvider(new LabelProvider(this));
-		
+
 		treeViewer.setCellModifier(this);
 		treeViewer.setColumnProperties(
 				new String[] {
@@ -181,10 +181,10 @@ implements ICellModifier
 				}
 			);
 	}
-	
+
 	private static final String PROPERTY_AVAILABLE = "available"; //$NON-NLS-1$
 	private static final String PROPERTY_DEFAULT = "default"; //$NON-NLS-1$
-	
+
 	private ActiveReportRegistryItemTreeController itemTreeController = new ActiveReportRegistryItemTreeController(null) {
 		@Override
 		protected void onJDOObjectsChanged(JDOTreeNodesChangedEvent<ReportRegistryItemID, ReportRegistryItemNode> changedEvent) {
@@ -202,25 +202,25 @@ implements ICellModifier
 		column.setResizable(true);
 		// TODO: Set better width
 		column.setWidth(310);
-		
+
 		TreeColumn availCol = new TreeColumn(getTree(), SWT.CENTER);
 		availCol.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportLayoutTree.availColumn.text")); //$NON-NLS-1$
 		availCol.setResizable(true);
 		// TODO: Set better width
 		availCol.setWidth(35);
-		
+
 		TreeColumn defaultCol = new TreeColumn(getTree(), SWT.CENTER);
 		defaultCol.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportLayoutTree.defaultColumn.text")); //$NON-NLS-1$
 		defaultCol.setResizable(true);
 		// TODO: Set better width
 		defaultCol.setWidth(35);
-		
+
 	}
 
 	private ReportRegistryItem getReportRegistryItem(Object element) {
 		return ((ReportRegistryItemNode)element).getJdoObject();
 	}
-	
+
 	public boolean canModify(Object element, String property) {
 		logger.debug("getValue() called with "+property+" = "+element); //$NON-NLS-1$ //$NON-NLS-2$
 		ReportRegistryItem item = getReportRegistryItem(element);
@@ -234,11 +234,11 @@ implements ICellModifier
 		ReportRegistryItem item = getReportRegistryItem(element);
 		if (item == null || configModule == null)
 			return new Boolean(false);
-		
+
 		ReportLayoutAvailEntry entry = configModule.getAvailEntry(item.getReportRegistryItemType());
 		if (entry == null)
 			return new Boolean(false);
-		
+
 		if (PROPERTY_AVAILABLE.equals(property))
 			return new Boolean(entry.getAvailableReportLayoutKeys().contains(JDOHelper.getObjectId(item).toString()));
 		if (PROPERTY_DEFAULT.equals(property)) {
@@ -248,18 +248,18 @@ implements ICellModifier
 					entry.getDefaultReportLayoutKey().equals(JDOHelper.getObjectId(item).toString())
 				);
 		}
-		
+
 		return new Boolean(false);
 	}
 
-	public void modify(Object element, String property, Object value) {		
+	public void modify(Object element, String property, Object value) {
 		logger.debug("modify() called with "+property+" = "+value); //$NON-NLS-1$ //$NON-NLS-2$
 		ReportRegistryItem item = getReportRegistryItem(((TreeItem)element).getData());
 		if (item == null || configModule == null)
 			return;
-		
+
 		ReportLayoutAvailEntry entry = configModule.getAvailEntry(item.getReportRegistryItemType());
-		
+
 		if (PROPERTY_AVAILABLE.equals(property)) {
 			boolean isAvail = ((Boolean)value).booleanValue();
 			if (isAvail)
@@ -278,13 +278,14 @@ implements ICellModifier
 		if (preferencePage != null)
 			preferencePage.setChanged(true);
 	}
-	
-	
+
+
 	private ReportLayoutConfigModule configModule;
-	
+
 	public void setConfigModule(ReportLayoutConfigModule configModule) {
 		this.configModule = configModule;
 		boolean doExpand = getTreeViewer().getInput() == null;
+		Object[] expandedElements = getTreeViewer().getExpandedElements();
 		getTreeViewer().setInput(itemTreeController);
 		getTreeViewer().addTreeListener(new ITreeViewerListener() {
 			public void treeCollapsed(TreeExpansionEvent event) {
@@ -293,14 +294,17 @@ implements ICellModifier
 			public void treeExpanded(TreeExpansionEvent event) {
 				event.getElement();
 			}
-				
+
 		});
+
 		if (doExpand)
 			getTreeViewer().expandToLevel(3);
+		else
+			getTreeViewer().setExpandedElements(expandedElements);
 	}
 
-	
-	
+
+
 	@Override
 	protected ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> getJDOObjectTreeController() {
 		return itemTreeController;
