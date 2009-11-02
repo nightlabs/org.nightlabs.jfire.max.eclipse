@@ -20,6 +20,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
@@ -67,6 +68,7 @@ extends DynamicPathWizard
 		Issue.FETCH_GROUP_DESCRIPTION,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
 		Statable.FETCH_GROUP_STATE,
 		Issue.FETCH_GROUP_ISSUE_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE,
@@ -74,6 +76,7 @@ extends DynamicPathWizard
 		IssueType.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
+		IssueResolution.FETCH_GROUP_NAME,
 		StateDefinition.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_MARKERS,
 		IssueMarker.FETCH_GROUP_NAME,
