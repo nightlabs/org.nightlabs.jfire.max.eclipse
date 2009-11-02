@@ -18,11 +18,9 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -36,6 +34,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
@@ -217,65 +216,52 @@ extends AbstractTableComposite<Issue>
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn tc;
-		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 0
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.id.text")); //$NON-NLS-1$
-		// Must be so big, because otherwise under windows id is not visible, first column behaves strange
-		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 1
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.date.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20)); // Previously: 40
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 2
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.type.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(12)); // Previously: 20
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 3
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.subject.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(22)); // Previously: 20
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 4
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.description.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(30)); // Previously: 20
 
 		// ---->> Added to display IssueMarker icons, whenever they are available in an Issue ------------------------------------|
 		tc = new TableColumn(table, SWT.LEFT); // @column 5
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.column.markers.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10));
 		// <<---------------------------------------------------------------------------------------------------------------------|
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 6
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 7
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 8
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.resolution.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 9
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(12)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 10
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.assignee.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20)); // Previously: 15
 
 		// commented because IMHO not necessary
 //		tc = new TableColumn(table, SWT.LEFT); // @column 9
@@ -283,6 +269,19 @@ extends AbstractTableComposite<Issue>
 //		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.status.text")); //$NON-NLS-1$
 //		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
+//		table.setLayout(layout);
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{
+				10,	//ID @ Column 0
+				30,	//Date @ Column 1
+				12, //Type @ Column 2
+				35, //Subject @ Column 3
+				35, //Description @ Column 4
+				15, //Marker @ Column 5
+				15, //Priority @ Column 6
+				15, //Severity @ Column 7
+				15, //Resolution @ Column 8
+				15, //State @ Column 9
+				20}); //Assignee @ Column 10
 		table.setLayout(layout);
 
 		addDoubleClickListener(new IDoubleClickListener() {
