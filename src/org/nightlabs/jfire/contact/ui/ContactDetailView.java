@@ -13,6 +13,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
@@ -67,19 +68,73 @@ extends LSDViewPart
 		this.parent = parent;
 		toolkit = new FormToolkit(parent.getDisplay());
 		scrolledForm = toolkit.createScrolledForm(parent);
-		scrolledForm.setText("No issue selected");
+		scrolledForm.setText("No contact selected");
 
 		body = scrolledForm.getBody();
 		GridLayout layout = new GridLayout(1, true);
 		body.setLayout(layout);
 
-		SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
+		try {
+			contactSelectionListener  = new NotificationAdapterCallerThread(){
+				public void notify(NotificationEvent notificationEvent) {
+					Object firstSelection = notificationEvent.getFirstSubject();
+					if (firstSelection instanceof PropertySetID) {
+						ValidationResultHandler resultManager = new ValidationResultHandler() {
+							@Override
+							public void handleValidationResult(ValidationResult validationResult) {
+							}
+						};
 
-		scrolledForm.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				SelectionManager.sharedInstance().removeNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
-			}
-		});
+
+						if (firstSelection != null) {
+							person = PropertySetDAO.sharedInstance().getPropertySet((PropertySetID)firstSelection, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+							StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
+									person.getStructLocalObjectID(),
+									new NullProgressMonitor()
+							);
+							person.inflate(personStruct);
+						}
+
+						try {
+							scrolledForm.setText(((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText());
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+
+						if (fullDataBlockCoverageComposite == null) {
+							fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
+									body,
+									SWT.NONE,
+									person,
+									null,
+									resultManager) {
+								@Override
+								protected BlockBasedEditor createBlockBasedEditor() {
+									return new PersonBlockBasedEditor();
+								}
+							};
+
+							fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+						}
+						else {
+							fullDataBlockCoverageComposite.refresh(person);
+						}
+						scrolledForm.reflow(true);
+					}
+				}
+			};
+
+			SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
+
+			scrolledForm.addDisposeListener(new DisposeListener() {
+				public void widgetDisposed(DisposeEvent e) {
+					SelectionManager.sharedInstance().removeNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
+				}
+			});
+		}
+		catch (Exception x) {
+			ExceptionHandlerRegistry.asyncHandleException(x);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -99,51 +154,5 @@ extends LSDViewPart
 
 	private PropertySet person;
 	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
-	private NotificationListener contactSelectionListener = new NotificationAdapterCallerThread(){
-		public void notify(NotificationEvent notificationEvent) {
-			Object firstSelection = notificationEvent.getFirstSubject();
-			if (firstSelection instanceof PropertySetID) {
-				ValidationResultHandler resultManager = new ValidationResultHandler() {
-					@Override
-					public void handleValidationResult(ValidationResult validationResult) {
-					}
-				};
-
-				if (firstSelection != null) {
-					person = PropertySetDAO.sharedInstance().getPropertySet((PropertySetID)firstSelection, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
-							person.getStructLocalObjectID(),
-							new NullProgressMonitor()
-					);
-					person.inflate(personStruct);
-				}
-
-				try {
-					scrolledForm.setText(((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText());
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-
-				if (fullDataBlockCoverageComposite == null) {
-					fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
-							body,
-							SWT.NONE,
-							person,
-							null,
-							resultManager) {
-						@Override
-						protected BlockBasedEditor createBlockBasedEditor() {
-							return new PersonBlockBasedEditor();
-						}
-					};
-
-					fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-				}
-				else {
-					fullDataBlockCoverageComposite.refresh(person);
-				}
-				scrolledForm.reflow(true);
-			}
-		}
-	};
+	private NotificationListener contactSelectionListener;
 }
