@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
@@ -61,6 +62,9 @@ extends EntityEditorPageWithProgress
 	@Override
 	protected void addSections(Composite parent)
 	{
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
+
 		structLocalScopeSection = new IssueStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
 

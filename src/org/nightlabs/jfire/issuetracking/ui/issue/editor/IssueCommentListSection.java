@@ -50,6 +50,7 @@ extends AbstractIssueEditorGeneralSection
 	}
 
 	private boolean firstLoaded = true;
+
 	@Override
 	protected void doSetIssue(Issue newIssue) {
 
@@ -68,13 +69,13 @@ extends AbstractIssueEditorGeneralSection
 		if (firstLoaded) {
 			List<IssueComment> comments = newIssue.getComments();
 			for (int i = 0; i < comments.size(); i++) {
-				addComment(comments.get(i), i == comments.size() - 1 ? true : false);
+				addComment(commentComposite, comments.get(i), i == comments.size() - 1 ? true : false);
 			}
 			firstLoaded = false;
 		}
 		else {
 			if (newIssue.getComments().size() > 0) {
-				addComment(newIssue.getComments().get(newIssue.getComments().size() - 1), true);
+				addComment(commentComposite, newIssue.getComments().get(newIssue.getComments().size() - 1), true);
 			}
 		}
 
@@ -88,9 +89,9 @@ extends AbstractIssueEditorGeneralSection
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
-	public void addComment(IssueComment comment, boolean expand) {
+	private void addComment(Composite parent, IssueComment comment, boolean expand) {
 		ExpandableComposite commentEntry = new ExpandableComposite(
-				commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+				parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
 		commentEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		commentEntry.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.BOLD))); //$NON-NLS-1$
 		commentEntry.setText(String.format("%s - %s",  //$NON-NLS-1$

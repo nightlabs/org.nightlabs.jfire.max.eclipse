@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
@@ -85,6 +86,9 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 	@Override
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
+
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
 
 		issueHistorySection = new IssueHistoryListSection(this, parent); //, controller);
 		getManagedForm().addPart(issueHistorySection);

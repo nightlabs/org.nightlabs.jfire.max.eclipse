@@ -40,7 +40,7 @@ extends AbstractIssueEditorGeneralSection
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;
 
-		commentText = new Text(client, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		commentText = new Text(client, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		commentText.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL))); //$NON-NLS-1$
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);

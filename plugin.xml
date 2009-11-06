@@ -39,6 +39,14 @@
               id="org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView"
               name="Issue History">
         </view>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueCommentView"
+              icon="icons/IssuePerspective.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueCommentView"
+              name="Issue Comment">
+        </view>
         <category id="org.nightlabs.jfire.issuetracking.project" name="%org.nightlabs.jfire.issuetracking.project.name"/>
         <view category="org.nightlabs.jfire.issuetracking.project"
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView"

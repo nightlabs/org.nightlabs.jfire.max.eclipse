@@ -35,6 +35,7 @@ public class IssuePerspective implements IPerspectiveFactory{
 		bottom.addView(IssueDescriptionView.VIEW_ID);
 		bottom.addView(IssueLinkView.VIEW_ID);
 		bottom.addView(IssueHistoryView.VIEW_ID);
+		bottom.addView(IssueCommentView.VIEW_ID);
 
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
 		layout.addShowViewShortcut(IssueOverviewView.VIEW_ID);
