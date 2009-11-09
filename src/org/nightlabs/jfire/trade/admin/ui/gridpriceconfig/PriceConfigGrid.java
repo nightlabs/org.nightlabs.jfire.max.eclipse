@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -60,7 +61,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.forms.IMessageManager;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.editor.MessageSectionPart;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
@@ -89,11 +92,26 @@ public class PriceConfigGrid extends XComposite
 	private DimensionValueSelector dimensionValueSelector;
 	private DimensionXYSelector dimensionXYSelector;
 	
+	private MessageSectionPart  	managedForm;
+	
+	
+	
+	public MessageSectionPart  getSection() {
+		return managedForm;
+	}
+
+	public void setSection(MessageSectionPart managedForm) {
+		this.managedForm = managedForm;
+	}
+	
+	
 	private PriceConfigGridCell[][] cells = null;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
+	public static final String PRICE_CALCULATOR_ERROR = "PRICECALCULATORERROR"; //$NON-NLS-1$
 
+	
 	public PriceConfigGrid(
 			Composite parent,
 			ProductTypeSelector productInfoSelector,
@@ -642,9 +660,22 @@ public class PriceConfigGrid extends XComposite
 		{
 			try {
 				if (priceCalculator != null)
-					priceCalculator.calculatePrices();
+					priceCalculator.calculatePrices();				
+				if(getSection() != null)
+				{
+					// remove all previous error messages.
+					getSection().getManagedForm().getMessageManager().removeAllMessages();
+				}
+
 			} catch (PriceCalculationException e) {
-				throw new RuntimeException(e);
+				if(getSection() != null)
+				{
+					// shows the formula calculation error message on the section form
+					IMessageManager messageManager = getSection().getManagedForm().getMessageManager();
+					messageManager.addMessage(PRICE_CALCULATOR_ERROR, e.getMessage(), null, IMessageProvider.ERROR);
+				}
+				else
+					throw new RuntimeException(e);
 			}
 			updateTableData();
 

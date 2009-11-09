@@ -57,7 +57,8 @@ extends ToolBarSectionPart
 		this.orgTitle = title;
 		priceConfigComposite = createPriceConfigComposite(getContainer());
 		priceConfigComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+        priceConfigComposite.setSection(this);
+
 		AssignNewPriceConfigAction assignNewPriceConfigAction = new AssignNewPriceConfigAction();
 		getToolBarManager().add(assignNewPriceConfigAction);
 		
