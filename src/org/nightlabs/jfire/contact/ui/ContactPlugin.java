@@ -11,7 +11,7 @@ public class ContactPlugin extends AbstractUIPlugin {
 	public static final String ZONE_PROPERTY = ContactPlugin.class.getName() + "#ZONE_PROPERTY"; //$NON-NLS-1$
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.contact.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.contact.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static ContactPlugin plugin;

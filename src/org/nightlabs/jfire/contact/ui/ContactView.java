@@ -5,6 +5,8 @@ import javax.jdo.JDOHelper;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -18,6 +20,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
+import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.notification.NotificationEvent;
@@ -48,7 +51,7 @@ extends LSDViewPart
 	@Override
 	public void createPartContents(Composite parent)
 	{
-		searchComposite = new PersonSearchComposite(parent, SWT.NONE, "");
+		searchComposite = new PersonSearchComposite(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.searchString")); //$NON-NLS-1$
 		Composite buttonBar = searchComposite.getButtonBar();
 		final Display display = searchComposite.getDisplay();
 		GridLayout gl = new GridLayout();
@@ -65,17 +68,17 @@ extends LSDViewPart
 			public void selectionChanged(SelectionChangedEvent event) {
 				Person person = searchComposite.getResultTable().getFirstSelectedElement();
 
-				//				IssueDescriptionView issuePropertyView = (IssueDescriptionView)RCPUtil.findView(IssueDescriptionView.VIEW_ID);
-				//				IssueLinkView issueLinkView = (IssueLinkView)RCPUtil.findView(IssueLinkView.VIEW_ID);
-				//				IssueHistoryView issueHistoryView = (IssueHistoryView)RCPUtil.findView(IssueHistoryView.VIEW_ID);
-				//
-				//				if (issuePropertyView != null) issuePropertyView.setIssue(issue);
-				//				if (issueLinkView != null) issueLinkView.setIssue(issue);
-				//				if (issueHistoryView != null) issueHistoryView.setIssue(issue);
-
 				PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(person);
 				SelectionManager.sharedInstance().notify(
 						new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
+				);
+			}
+		});
+
+		searchComposite.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				SelectionManager.sharedInstance().notify(
+						new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, null, Person.class)
 				);
 			}
 		});

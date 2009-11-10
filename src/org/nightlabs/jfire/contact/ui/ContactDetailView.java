@@ -11,23 +11,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
-import org.nightlabs.jfire.base.ui.person.edit.blockbased.PersonBlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.ValidationResultHandler;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
 import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
-import org.nightlabs.jfire.prop.datafield.TextDataField;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.prop.validation.ValidationResult;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
@@ -45,9 +41,9 @@ extends LSDViewPart
 	public static final String VIEW_ID = ContactDetailView.class.getName();
 
 	private IMemento initMemento = null;
-	private FormToolkit toolkit;
-	private ScrolledForm scrolledForm;
-	private Composite parent;
+	private PropertySet selectedPerson;
+	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
+	private NotificationListener contactSelectionListener;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
@@ -58,21 +54,15 @@ extends LSDViewPart
 		this.initMemento = memento;
 	}
 
-	private Composite body;
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	public void createPartContents(Composite parent)
 	{
-		this.parent = parent;
-		toolkit = new FormToolkit(parent.getDisplay());
-		scrolledForm = toolkit.createScrolledForm(parent);
-		scrolledForm.setText("No contact selected");
-
-		body = scrolledForm.getBody();
+		final XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(1, true);
-		body.setLayout(layout);
+		mainComposite.setLayout(layout);
 
 		try {
 			contactSelectionListener  = new NotificationAdapterCallerThread(){
@@ -82,51 +72,45 @@ extends LSDViewPart
 						ValidationResultHandler resultManager = new ValidationResultHandler() {
 							@Override
 							public void handleValidationResult(ValidationResult validationResult) {
+
 							}
 						};
 
 
 						if (firstSelection != null) {
-							person = PropertySetDAO.sharedInstance().getPropertySet((PropertySetID)firstSelection, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+							selectedPerson = PropertySetDAO.sharedInstance().getPropertySet((PropertySetID)firstSelection, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 							StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
-									person.getStructLocalObjectID(),
+									selectedPerson.getStructLocalObjectID(),
 									new NullProgressMonitor()
 							);
-							person.inflate(personStruct);
-						}
-
-						try {
-							scrolledForm.setText(((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText());
-						} catch (Exception e) {
-							throw new RuntimeException(e);
+							selectedPerson.inflate(personStruct);
 						}
 
 						if (fullDataBlockCoverageComposite == null) {
 							fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
-									body,
+									mainComposite,
 									SWT.NONE,
-									person,
+									selectedPerson,
 									null,
 									resultManager) {
 								@Override
 								protected BlockBasedEditor createBlockBasedEditor() {
-									return new PersonBlockBasedEditor();
+									return new BlockBasedEditor(false);
 								}
 							};
 
 							fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 						}
 						else {
-							fullDataBlockCoverageComposite.refresh(person);
+							fullDataBlockCoverageComposite.refresh(selectedPerson);
 						}
-						scrolledForm.reflow(true);
 					}
 				}
 			};
 
 			SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
 
-			scrolledForm.addDisposeListener(new DisposeListener() {
+			mainComposite.addDisposeListener(new DisposeListener() {
 				public void widgetDisposed(DisposeEvent e) {
 					SelectionManager.sharedInstance().removeNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
 				}
@@ -151,8 +135,4 @@ extends LSDViewPart
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 	}
-
-	private PropertySet person;
-	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
-	private NotificationListener contactSelectionListener;
 }
