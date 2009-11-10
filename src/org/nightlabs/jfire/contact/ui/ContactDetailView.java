@@ -2,6 +2,8 @@ package org.nightlabs.jfire.contact.ui;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -14,6 +16,7 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.prop.edit.ValidationResultHandler;
@@ -44,6 +47,8 @@ extends LSDViewPart
 	private PropertySet selectedPerson;
 	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
 	private NotificationListener contactSelectionListener;
+	
+	private SaveDetailsChangesAction saveDetailsChangesAction;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
@@ -108,6 +113,9 @@ extends LSDViewPart
 				}
 			};
 
+			// Kai: [10 Nov 2009]
+			contributeToActionBars();
+			
 			SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
 
 			mainComposite.addDisposeListener(new DisposeListener() {
@@ -134,5 +142,32 @@ extends LSDViewPart
 	@Override
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
+	}
+	
+	
+	/**
+	 * Prepares the ActionBar.
+	 */
+	private void contributeToActionBars() {
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		saveDetailsChangesAction = new SaveDetailsChangesAction();
+		toolBarManager.add(saveDetailsChangesAction);
+	}
+	
+	/**
+	 * Allows to click on Action to save changes.
+	 */
+	protected class SaveDetailsChangesAction extends Action {
+		public SaveDetailsChangesAction() {
+			setId(SaveDetailsChangesAction.class.getName());
+			setImageDescriptor(SharedImages.SAVE_16x16);
+			setToolTipText("Save changes...");
+			setText("Save changes...");
+		}
+		
+		@Override
+		public void run() {
+			// TODO Methods to save changes.
+		}
 	}
 }

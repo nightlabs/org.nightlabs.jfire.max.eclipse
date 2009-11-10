@@ -7,6 +7,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -18,8 +21,11 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.ui.person.search.PersonResultTable;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
+import org.nightlabs.jfire.base.ui.prop.PropertySetTable;
 import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -49,19 +55,64 @@ extends LSDViewPart
 	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	public void createPartContents(Composite parent)
-	{
-		searchComposite = new PersonSearchComposite(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.searchString")); //$NON-NLS-1$
+	public void createPartContents(Composite parent) {
+		//searchComposite = new PersonSearchComposite(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.searchString")); //$NON-NLS-1$
+
+		// Kai: [10 Nov 2009]
+		// Attempting to make resultTable to allow for only single selection.
+		// Need to access the style and change it, i.e.
+		// searchComposite.getResultTable().getStyle() <-- Can only get the style but cannot change after instantiation.
+		//
+		// It seems that the only way to change this behaviour is during the construction of the PropertySetTable
+		// and ensure that it invokes AbstractTableComposite(Composite parent, int style, boolean initTable, int viewerStyle),
+		// so that we can specify the viewerStyle as AbstractTableComposite.DEFAULT_STYLE_SINGLE.
+		//
+		// Notes:
+		// 1. To get to: AbstractTableComposite(Composite parent, int style, boolean initTable, int viewerStyle)
+		// -- [noted]
+		//
+		// 2. PropertySetTable<ProperySetType> extends AbstractTableComposite<ProperySetType>
+		//    >> Abstract class has only a single constrcutor: PropertySetTable(Composite parent, int style)
+		// -- [added constructor]: PropertySetTable(Composite parent, int style, int viewerStyle)
+		//
+		// 3. PersonResultTable extends PropertySetTable<Person>
+		//    >> Has only a single constructor: PersonResultTable(Composite parent, int style)		
+		// -- [added constructor]: PersonResultTable(Composite parent, int style, int viewerStyle)
+		//
+		// 4. To modify: PersonSearchComposite.createResultTable(Composite parent)
+		//               >> returns: PropertySetTable<Person> <-- new PersonResultTable(parent, SWT.NONE)
+		// -- [Overrode]:
+		searchComposite = new PersonSearchComposite(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.searchString")) { //$NON-NLS-1$
+			@Override
+			protected PropertySetTable<Person> createResultTable(Composite parent) {
+				return new PersonResultTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+			}
+		};
+		
 		Composite buttonBar = searchComposite.getButtonBar();
 		final Display display = searchComposite.getDisplay();
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.LEFT_RIGHT_WRAPPER, gl);
 		gl.numColumns = 2;
 
+		// Kai: [10 Nov 2009]
+		// Allow to create new Person.
+		gl.numColumns++;
+		Button createNewButton = new Button(buttonBar, SWT.PUSH);
+		createNewButton.setText("Create new person");
+		createNewButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		createNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+//				TODO Method to create new Person.
+			}
+		});
+
 		buttonBar.setLayout(gl);
 		new XComposite(buttonBar, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
-
+		
 		Button searchButton = searchComposite.createSearchButton(buttonBar);
+		
 
 		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
