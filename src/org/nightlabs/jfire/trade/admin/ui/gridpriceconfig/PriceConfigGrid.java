@@ -672,7 +672,7 @@ public class PriceConfigGrid extends XComposite
 				{
 					// shows the formula calculation error message on the section form
 					IMessageManager messageManager = getSection().getManagedForm().getMessageManager();
-					messageManager.addMessage(PRICE_CALCULATOR_ERROR, e.getMessage(), null, IMessageProvider.ERROR);
+					messageManager.addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);
 				}
 				else
 					throw new RuntimeException(e);

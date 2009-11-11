@@ -537,8 +537,19 @@ public abstract class PriceConfigComposite extends XComposite
 					priceCalculator.preparePriceCalculation();
 					try {
 						priceCalculator.calculatePrices();
-					} catch (PriceCalculationException e) {
-						throw new RuntimeException(e);
+					} catch (PriceCalculationException e) {					
+						Shell shell = null;
+						try {
+							shell = getShell();
+						} catch (SWTException swte) {
+							// the composite might be disposed already, try to get another shell
+							shell = Display.getDefault().getActiveShell();
+						}
+						// Display the Error dialog
+						MessageDialog.openError(shell, 
+								e.getTitleErrorMessage(),
+								e.getShortenedErrorMessage());
+						return;	
 					}
 
 					// The packagePriceConfig defines all parameters (dimension values) we need to know.
@@ -703,8 +714,8 @@ public abstract class PriceConfigComposite extends XComposite
 				}
 				// Display the Error dialog
 				MessageDialog.openError(shell, 
-						"Price Calculation Error",
-						e.getMessage());
+						e.getTitleErrorMessage(),
+						e.getShortenedErrorMessage());
 				return false;		
 			}
 		}
