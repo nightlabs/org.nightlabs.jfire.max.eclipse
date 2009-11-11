@@ -93,8 +93,7 @@ public class PriceConfigGrid extends XComposite
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
-	private PriceCalculationException priceCalculationException = null;
-
+	public static final String PROPERTY_PRICE_CALCULATION_DONE = "priceCalculationDone"; //$NON-NLS-1$
 		
 	public PriceConfigGrid(
 			Composite parent,
@@ -140,13 +139,6 @@ public class PriceConfigGrid extends XComposite
 		gridTableCursor.addSelectionListener(gridTableCursorSelectionListener);
 	}
 
-	
-	public Boolean checkPriceCalculationResult() throws PriceCalculationException{
-		if(priceCalculationException != null)
-			throw priceCalculationException;
-		else
-			return true;
-	}
 	
 	private KeyListener gridTableCursorKeyListener = new KeyListener() {
 		public void keyPressed(KeyEvent event) {
@@ -655,11 +647,11 @@ public class PriceConfigGrid extends XComposite
 			try {
 				if (priceCalculator != null)
 					priceCalculator.calculatePrices();				
-				priceCalculationException = null;
-			} catch (PriceCalculationException e) {			
-				priceCalculationException = e;
+				propertyChangeSupport.firePropertyChange(PROPERTY_PRICE_CALCULATION_DONE, null, null);
+			}
+			catch (PriceCalculationException e) {			
 				// the event is needed to inform the listener about the wrong formula
-				propertyChangeSupport.firePropertyChange(PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED, null, null);
+				propertyChangeSupport.firePropertyChange(PROPERTY_PRICE_CALCULATION_DONE, null, e);
 				return; // since the formula is wrong then simply return and dont update the table.
 			}
 			updateTableData();

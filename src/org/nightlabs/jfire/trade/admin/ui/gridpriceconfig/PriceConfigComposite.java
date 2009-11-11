@@ -302,25 +302,28 @@ public abstract class PriceConfigComposite extends XComposite
 			public void propertyChange(PropertyChangeEvent event)
 			{
 				if (dirtyStateManager != null)
-				{
 					dirtyStateManager.markDirty();
+			}
+		});
+
+		priceConfigGrid.addPropertyChangeListener(PriceConfigGrid.PROPERTY_PRICE_CALCULATION_DONE,
+				new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent event)
+			{
+				if (dirtyStateManager != null)
+				{
 					if (dirtyStateManager instanceof SectionPart) {
 						SectionPart sectionPart = (SectionPart) dirtyStateManager;
-						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-						try {
-							getPriceConfigGrid().checkPriceCalculationResult();
-							sectionPart.getManagedForm().getMessageManager().removeAllMessages();	
-						}
-						catch(PriceCalculationException e)
-						{
-							// shows the formula calculation error message on the section form	
-							sectionPart.getManagedForm().getMessageManager().addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);
-						}
+						PriceCalculationException e = (PriceCalculationException)event.getNewValue();
+						if (e != null)
+							sectionPart.getManagedForm().getMessageManager().addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);			
+						else
+							sectionPart.getManagedForm().getMessageManager().removeAllMessages();
 					}
 				}
 			}
 		});
-
+		
 		cellDetail = createCellDetail(sfGrid);
 		// add listeners to notify dirty state
 //		cellDetail.getCellDetailText().addModifyListener(cellEditModifyListener);
