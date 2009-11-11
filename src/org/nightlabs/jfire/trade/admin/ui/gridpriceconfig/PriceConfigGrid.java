@@ -658,8 +658,9 @@ public class PriceConfigGrid extends XComposite
 				priceCalculationException = null;
 			} catch (PriceCalculationException e) {			
 				priceCalculationException = e;
+				// the event is needed to inform the listener about the wrong formula
 				propertyChangeSupport.firePropertyChange(PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED, null, null);
-				return; // since the formula is wrong the return and dont update.
+				return; // since the formula is wrong then simply return and dont update the table.
 			}
 			updateTableData();
 
