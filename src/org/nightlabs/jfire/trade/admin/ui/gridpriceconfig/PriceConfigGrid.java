@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -61,9 +60,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.forms.IMessageManager;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.editor.MessageSectionPart;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
@@ -90,28 +87,15 @@ public class PriceConfigGrid extends XComposite
 
 	private ProductTypeSelector productTypeSelector;
 	private DimensionValueSelector dimensionValueSelector;
-	private DimensionXYSelector dimensionXYSelector;
-	
-	private MessageSectionPart  	managedForm;
-	
-	
-	
-	public MessageSectionPart  getSection() {
-		return managedForm;
-	}
-
-	public void setSection(MessageSectionPart managedForm) {
-		this.managedForm = managedForm;
-	}
-	
+	private DimensionXYSelector dimensionXYSelector;	
 	
 	private PriceConfigGridCell[][] cells = null;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
-	public static final String PRICE_CALCULATOR_ERROR = "PRICECALCULATORERROR"; //$NON-NLS-1$
+	private PriceCalculationException priceCalculationException = null;
 
-	
+		
 	public PriceConfigGrid(
 			Composite parent,
 			ProductTypeSelector productInfoSelector,
@@ -156,6 +140,14 @@ public class PriceConfigGrid extends XComposite
 		gridTableCursor.addSelectionListener(gridTableCursorSelectionListener);
 	}
 
+	
+	public Boolean checkPriceCalculationResult() throws PriceCalculationException{
+		if(priceCalculationException != null)
+			throw priceCalculationException;
+		else
+			return true;
+	}
+	
 	private KeyListener gridTableCursorKeyListener = new KeyListener() {
 		public void keyPressed(KeyEvent event) {
 		}
@@ -655,27 +647,19 @@ public class PriceConfigGrid extends XComposite
 		return new PriceCoordinate(priceCoordinate);
 	}
 
+
+	
 	private PropertyChangeListener cellChangedListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt)
 		{
 			try {
 				if (priceCalculator != null)
 					priceCalculator.calculatePrices();				
-				if(getSection() != null)
-				{
-					// remove all previous error messages.
-					getSection().getManagedForm().getMessageManager().removeAllMessages();
-				}
-
-			} catch (PriceCalculationException e) {
-				if(getSection() != null)
-				{
-					// shows the formula calculation error message on the section form
-					IMessageManager messageManager = getSection().getManagedForm().getMessageManager();
-					messageManager.addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);
-				}
-				else
-					throw new RuntimeException(e);
+				priceCalculationException = null;
+			} catch (PriceCalculationException e) {			
+				priceCalculationException = e;
+				propertyChangeSupport.firePropertyChange(PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED, null, null);
+				return; // since the formula is wrong the return and dont update.
 			}
 			updateTableData();
 

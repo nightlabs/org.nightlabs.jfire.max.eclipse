@@ -40,7 +40,7 @@ extends ToolBarSectionPart
 	private PriceConfigComposite priceConfigComposite = null;
 	private volatile Job inheritPressedLoadJob = null;
 	private ProductType packageProductType;
-	
+
 	public AbstractGridPriceConfigSection(IFormPage page, Composite parent, int style) {
 		this(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.title")); //$NON-NLS-1$
 	}
@@ -56,17 +56,16 @@ extends ToolBarSectionPart
 		super(page, parent, style, title);
 		this.orgTitle = title;
 		priceConfigComposite = createPriceConfigComposite(getContainer());
-		priceConfigComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-        priceConfigComposite.setSection(this);
+		priceConfigComposite.setLayoutData(new GridData(GridData.FILL_BOTH));	
 
 		AssignNewPriceConfigAction assignNewPriceConfigAction = new AssignNewPriceConfigAction();
 		getToolBarManager().add(assignNewPriceConfigAction);
-		
+
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
 				inheritPressed();
-//				setSelection(!isSelection());
+				//				setSelection(!isSelection());
 			}
 		};
 		inheritanceAction.setEnabled(false);
@@ -74,42 +73,48 @@ extends ToolBarSectionPart
 
 		updateToolBarManager();
 
-//		Composite buttonWrapper = new XComposite(getSection(), SWT.NONE,
-//				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
-//		inheritButton = new InheritanceToggleButton(buttonWrapper);
-//		inheritButton.addSelectionListener(new SelectionListener(){
-//			public void widgetSelected(SelectionEvent e) {
-//				inheritPressed();
-//			}
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//				widgetSelected(e);
-//			}
-//		});
-//
-//		Button assignNewPriceConfigButton = new Button(buttonWrapper, SWT.NONE);
-//		assignNewPriceConfigButton.setImage(SharedImages.getSharedImage(
-//				TradeAdminPlugin.getDefault(), AbstractGridPriceConfigSection.class, "AssignPriceConfig"));
-//		assignNewPriceConfigButton.setToolTipText("Assign new Price Configuration");
-//		assignNewPriceConfigButton.addSelectionListener(new SelectionListener(){
-//			public void widgetSelected(SelectionEvent e) {
-//				assignNewPressed();
-//			}
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//				widgetSelected(e);
-//			}
-//		});
-//
-//		getSection().setTextClient(buttonWrapper);
+		//		Composite buttonWrapper = new XComposite(getSection(), SWT.NONE,
+		//				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
+		//		inheritButton = new InheritanceToggleButton(buttonWrapper);
+		//		inheritButton.addSelectionListener(new SelectionListener(){
+		//			public void widgetSelected(SelectionEvent e) {
+		//				inheritPressed();
+		//			}
+		//			public void widgetDefaultSelected(SelectionEvent e) {
+		//				widgetSelected(e);
+		//			}
+		//		});
+		//
+		//		Button assignNewPriceConfigButton = new Button(buttonWrapper, SWT.NONE);
+		//		assignNewPriceConfigButton.setImage(SharedImages.getSharedImage(
+		//				TradeAdminPlugin.getDefault(), AbstractGridPriceConfigSection.class, "AssignPriceConfig"));
+		//		assignNewPriceConfigButton.setToolTipText("Assign new Price Configuration");
+		//		assignNewPriceConfigButton.addSelectionListener(new SelectionListener(){
+		//			public void widgetSelected(SelectionEvent e) {
+		//				assignNewPressed();
+		//			}
+		//			public void widgetDefaultSelected(SelectionEvent e) {
+		//				widgetSelected(e);
+		//			}
+		//		});
+		//
+		//		getSection().setTextClient(buttonWrapper);
 	}
 
-//	private InheritanceToggleButton inheritButton = null;
-	
+	//	private InheritanceToggleButton inheritButton = null;
+
 	protected abstract PriceConfigComposite createPriceConfigComposite(Composite parent);
-	
+
 	public PriceConfigComposite getPriceConfigComposite() {
 		return priceConfigComposite;
 	}
-		
+
+
+
+
+
+
+
 	protected void inheritPressed() {
 		if (inheritanceAction.isChecked()) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.job.loadExtendendProductType.name")) { //$NON-NLS-1$
@@ -171,6 +176,7 @@ extends ToolBarSectionPart
 
 		priceConfigComposite._setPackageProductType(productType);
 		this.packageProductType = productType;
+
 	}
 
 	protected void assignNewPressed()
@@ -178,7 +184,7 @@ extends ToolBarSectionPart
 		AbstractChooseGridPriceConfigWizard wizard = getPriceConfigComposite().createChoosePriceConfigWizard(
 				(ProductTypeID) JDOHelper.getObjectId(getPriceConfigComposite().getPackageProductType().getExtendedProductType()));
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
-//		dialog.setTitle("Choose Price Configuration");
+		//		dialog.setTitle("Choose Price Configuration");
 		int returnType = dialog.open();
 		if (returnType == Window.OK) {
 			getPriceConfigComposite().assignNewPriceConfig(wizard);
@@ -192,7 +198,7 @@ extends ToolBarSectionPart
 			markDirty();
 		}
 	}
-	
+
 	class AssignNewPriceConfigAction
 	extends Action
 	{

@@ -41,6 +41,7 @@ import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -60,7 +61,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.SectionPart;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.editor.MessageSectionPart;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -100,21 +100,9 @@ public abstract class PriceConfigComposite extends XComposite
 	private PriceConfigGrid priceConfigGrid;
 	private CellDetail cellDetail;
 	private PriceCalculator priceCalculator;
-	private MessageSectionPart 	parentSection;
-	
-	
-	
-	public MessageSectionPart getSection() {
-		return parentSection;
-	}
+	public static final String PRICE_CALCULATOR_ERROR = "PRICECALCULATORERROR"; //$NON-NLS-1$
 
-	/**
-	 * @return Returns the Parent Section MessageSectionPart.
-	 */
-	public void setSection(MessageSectionPart managedForm) {
-		this.parentSection = managedForm;
-	}
-
+	
 	protected ProductTypeSelector createProductTypeSelector(Composite parent)
 	{
 		return new ProductTypeSelectorListImpl(parent, SWT.NONE);
@@ -310,13 +298,29 @@ public abstract class PriceConfigComposite extends XComposite
 		sfGrid.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		priceConfigGrid = createPriceConfigGrid(sfGrid);
-		priceConfigGrid.setSection(getSection());
 		priceConfigGrid.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt)
+			public void propertyChange(PropertyChangeEvent event)
 			{
 				if (dirtyStateManager != null)
 					dirtyStateManager.markDirty();
+				else
+					return;
+				
+				if (dirtyStateManager instanceof SectionPart) {
+					SectionPart sectionPart = (SectionPart) dirtyStateManager;
+					sectionPart.getManagedForm().getMessageManager().removeAllMessages();
+					try{
+						getPriceConfigGrid().checkPriceCalculationResult();
+						sectionPart.getManagedForm().getMessageManager().removeAllMessages();	
+					}
+					catch(PriceCalculationException e)
+					{
+						// shows the formula calculation error message on the section form	
+						sectionPart.getManagedForm().getMessageManager().addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);
+					}
+				}
 			}
+
 		});
 
 		cellDetail = createCellDetail(sfGrid);
@@ -336,26 +340,30 @@ public abstract class PriceConfigComposite extends XComposite
 //				}
 //			}
 //		);
-		// if the message section is set then adds a gain focus listener to remove previous error messages.
-		if(getSection() != null)
-		{
-			cellDetail.getCellDetailText().addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusGained(FocusEvent e) 
-				{
-					getSection().getManagedForm().getMessageManager().removeAllMessages();
+		// remove all error calculation messages from the section form.	
+		cellDetail.getCellDetailText().addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) 
+			{
+				if (dirtyStateManager instanceof SectionPart) {
+					SectionPart sectionPart = (SectionPart) dirtyStateManager;
+					sectionPart.getManagedForm().getMessageManager().removeAllMessages();
 				}
+			}
 
-			});
+		});
 
-			cellDetail.getCellDetailFallbackText().addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusGained(FocusEvent e) 
-				{
-					getSection().getManagedForm().getMessageManager().removeAllMessages();
-				}		
-			});
-		}
+		cellDetail.getCellDetailFallbackText().addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) 
+			{
+				if (dirtyStateManager instanceof SectionPart) {
+					SectionPart sectionPart = (SectionPart) dirtyStateManager;
+					sectionPart.getManagedForm().getMessageManager().removeAllMessages();
+				}
+			}		
+		});
+		
 		
 		dimensionValueSelector.addPropertyChangeListener(
 				DimensionValueSelector.PROPERTYCHANGEKEY_ADDDIMENSIONVALUE,
@@ -366,10 +374,11 @@ public abstract class PriceConfigComposite extends XComposite
 				dimensionValueChangeListener);
 
 		sfGrid.setWeights(new int[] {1, 1});
-
+		
 		return sfLeftRight;
 	}
-
+	
+	
 	protected Composite getNoPriceConfigAssignedComposite()
 	{
 		if (noPriceConfigAssignedComposite == null)
