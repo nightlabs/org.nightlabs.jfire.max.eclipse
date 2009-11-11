@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.MessageComposite;
@@ -258,7 +260,18 @@ extends FadeableComposite
 				try {
 					priceCalculator.calculatePrices();
 				} catch (PriceCalculationException e) {
-					throw new RuntimeException(e);
+					Shell shell = null;
+					try {
+						shell = getShell();
+					} catch (SWTException swte) {
+						// the composite might be disposed already, try to get another shell
+						shell = Display.getDefault().getActiveShell();
+					}
+					// Display the Error dialog
+					MessageDialog.openError(shell, 
+							e.getTitleErrorMessage(),
+							e.getShortenedErrorMessage());
+					return;	
 				}
 
 			}
@@ -487,7 +500,18 @@ extends FadeableComposite
 					try {
 						priceCalculator.calculatePrices();
 					} catch (PriceCalculationException e) {
-						throw new RuntimeException(e);
+						Shell shell = null;
+						try {
+							shell = getShell();
+						} catch (SWTException swte) {
+							// the composite might be disposed already, try to get another shell
+							shell = Display.getDefault().getActiveShell();
+						}
+						// Display the Error dialog
+						MessageDialog.openError(shell, 
+								e.getTitleErrorMessage(),
+								e.getShortenedErrorMessage());
+						return Status.CANCEL_STATUS;
 					}
 
 					Collections.sort(tariffs, new Comparator<Tariff>() {
