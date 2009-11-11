@@ -2,6 +2,8 @@ package org.nightlabs.jfire.contact.ui;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -15,6 +17,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -33,6 +36,8 @@ import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -47,7 +52,7 @@ extends LSDViewPart
 	private PropertySet selectedPerson;
 	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
 	private NotificationListener contactSelectionListener;
-	
+
 	private SaveDetailsChangesAction saveDetailsChangesAction;
 
 	/* (non-Javadoc)
@@ -115,7 +120,7 @@ extends LSDViewPart
 
 			// Kai: [10 Nov 2009]
 			contributeToActionBars();
-			
+
 			SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
 
 			mainComposite.addDisposeListener(new DisposeListener() {
@@ -143,8 +148,8 @@ extends LSDViewPart
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 	}
-	
-	
+
+
 	/**
 	 * Prepares the ActionBar.
 	 */
@@ -153,7 +158,7 @@ extends LSDViewPart
 		saveDetailsChangesAction = new SaveDetailsChangesAction();
 		toolBarManager.add(saveDetailsChangesAction);
 	}
-	
+
 	/**
 	 * Allows to click on Action to save changes.
 	 */
@@ -164,10 +169,34 @@ extends LSDViewPart
 			setToolTipText("Save changes...");
 			setText("Save changes...");
 		}
-		
+
 		@Override
 		public void run() {
-			// TODO Methods to save changes.
+			Job job = new Job("Saving........") {
+				@Override
+				protected IStatus run(ProgressMonitor _monitor) throws Exception {
+					_monitor.beginTask("Begin...", 100);
+					try {
+						selectedPerson.deflate();
+						selectedPerson = PropertySetDAO.sharedInstance().storeJDOObject(
+								selectedPerson, true, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, 1,
+								new SubProgressMonitor(_monitor, 2)
+						);
+
+						StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
+								selectedPerson.getStructLocalObjectID(),
+								new NullProgressMonitor()
+						);
+						selectedPerson.inflate(personStruct);
+						fullDataBlockCoverageComposite.refresh(selectedPerson);
+					} finally {
+						_monitor.done();
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.SHORT);
+			job.schedule();
 		}
 	}
 }

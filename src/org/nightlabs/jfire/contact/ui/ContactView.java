@@ -2,6 +2,9 @@ package org.nightlabs.jfire.contact.ui;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -14,15 +17,19 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.ui.person.create.CreatePersonWizard;
 import org.nightlabs.jfire.base.ui.person.search.PersonResultTable;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
 import org.nightlabs.jfire.base.ui.prop.PropertySetTable;
@@ -30,6 +37,7 @@ import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -76,7 +84,7 @@ extends LSDViewPart
 		// -- [added constructor]: PropertySetTable(Composite parent, int style, int viewerStyle)
 		//
 		// 3. PersonResultTable extends PropertySetTable<Person>
-		//    >> Has only a single constructor: PersonResultTable(Composite parent, int style)		
+		//    >> Has only a single constructor: PersonResultTable(Composite parent, int style)
 		// -- [added constructor]: PersonResultTable(Composite parent, int style, int viewerStyle)
 		//
 		// 4. To modify: PersonSearchComposite.createResultTable(Composite parent)
@@ -88,7 +96,7 @@ extends LSDViewPart
 				return new PersonResultTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 			}
 		};
-		
+
 		Composite buttonBar = searchComposite.getButtonBar();
 		final Display display = searchComposite.getDisplay();
 		GridLayout gl = new GridLayout();
@@ -104,15 +112,46 @@ extends LSDViewPart
 		createNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				TODO Method to create new Person.
+				final Shell shell = getSite().getShell();
+				final Display display = shell.getDisplay();
+
+				Job job = new Job("Open wizard......") {
+					@Override
+					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						monitor.beginTask("Begin task......", 100);
+						try {
+							final CreatePersonWizard wizard = new CreatePersonWizard();
+
+							display.asyncExec(new Runnable() {
+								public void run() {
+									DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(shell, wizard);
+									if (dialog.open() == Dialog.OK) {
+										//TODO update the result table and select the correct one.
+										PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(wizard.getPerson());
+										SelectionManager.sharedInstance().notify(
+												new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
+										);
+									}
+								}
+							});
+
+							return Status.OK_STATUS;
+						} finally {
+							monitor.done();
+						}
+					}
+				};
+				job.setUser(true);
+				job.setPriority(Job.INTERACTIVE);
+				job.schedule();
 			}
 		});
 
 		buttonBar.setLayout(gl);
 		new XComposite(buttonBar, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		
+
 		Button searchButton = searchComposite.createSearchButton(buttonBar);
-		
+
 
 		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
