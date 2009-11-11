@@ -302,25 +302,23 @@ public abstract class PriceConfigComposite extends XComposite
 			public void propertyChange(PropertyChangeEvent event)
 			{
 				if (dirtyStateManager != null)
+				{
 					dirtyStateManager.markDirty();
-				else
-					return;
-				
-				if (dirtyStateManager instanceof SectionPart) {
-					SectionPart sectionPart = (SectionPart) dirtyStateManager;
-					sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-					try{
-						getPriceConfigGrid().checkPriceCalculationResult();
-						sectionPart.getManagedForm().getMessageManager().removeAllMessages();	
-					}
-					catch(PriceCalculationException e)
-					{
-						// shows the formula calculation error message on the section form	
-						sectionPart.getManagedForm().getMessageManager().addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);
+					if (dirtyStateManager instanceof SectionPart) {
+						SectionPart sectionPart = (SectionPart) dirtyStateManager;
+						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
+						try{
+							getPriceConfigGrid().checkPriceCalculationResult();
+							sectionPart.getManagedForm().getMessageManager().removeAllMessages();	
+						}
+						catch(PriceCalculationException e)
+						{
+							// shows the formula calculation error message on the section form	
+							sectionPart.getManagedForm().getMessageManager().addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);
+						}
 					}
 				}
 			}
-
 		});
 
 		cellDetail = createCellDetail(sfGrid);
@@ -345,10 +343,11 @@ public abstract class PriceConfigComposite extends XComposite
 			@Override
 			public void focusGained(FocusEvent e) 
 			{
-				if (dirtyStateManager instanceof SectionPart) {
-					SectionPart sectionPart = (SectionPart) dirtyStateManager;
-					sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-				}
+				if (dirtyStateManager != null)
+					if (dirtyStateManager instanceof SectionPart) {
+						SectionPart sectionPart = (SectionPart) dirtyStateManager;
+						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
+					}
 			}
 
 		});
@@ -357,10 +356,11 @@ public abstract class PriceConfigComposite extends XComposite
 			@Override
 			public void focusGained(FocusEvent e) 
 			{
-				if (dirtyStateManager instanceof SectionPart) {
-					SectionPart sectionPart = (SectionPart) dirtyStateManager;
-					sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-				}
+				if (dirtyStateManager != null)
+					if (dirtyStateManager instanceof SectionPart) {
+						SectionPart sectionPart = (SectionPart) dirtyStateManager;
+						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
+					}
 			}		
 		});
 		
