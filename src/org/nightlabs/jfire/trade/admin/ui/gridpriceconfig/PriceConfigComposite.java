@@ -307,7 +307,7 @@ public abstract class PriceConfigComposite extends XComposite
 					if (dirtyStateManager instanceof SectionPart) {
 						SectionPart sectionPart = (SectionPart) dirtyStateManager;
 						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-						try{
+						try {
 							getPriceConfigGrid().checkPriceCalculationResult();
 							sectionPart.getManagedForm().getMessageManager().removeAllMessages();	
 						}
