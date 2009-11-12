@@ -4,6 +4,8 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -28,6 +30,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -52,6 +55,9 @@ extends LSDViewPart
 	public static final String VIEW_ID = ContactView.class.getName();
 
 	private IMemento initMemento = null;
+
+	private AddNewContactAction addNewContactAction;
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
 	 */
@@ -115,38 +121,7 @@ extends LSDViewPart
 		createNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				final Shell shell = getSite().getShell();
-				final Display display = shell.getDisplay();
-
-				Job job = new Job("Open wizard......") {
-					@Override
-					protected IStatus run(ProgressMonitor monitor) throws Exception {
-						monitor.beginTask("Begin task......", 100);
-						try {
-							final CreatePersonWizard wizard = new CreatePersonWizard();
-
-							display.asyncExec(new Runnable() {
-								public void run() {
-									DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(shell, wizard);
-									if (dialog.open() == Dialog.OK) {
-										//TODO update the result table and select the correct one.
-										PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(wizard.getPerson());
-										SelectionManager.sharedInstance().notify(
-												new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
-										);
-									}
-								}
-							});
-
-							return Status.OK_STATUS;
-						} finally {
-							monitor.done();
-						}
-					}
-				};
-				job.setUser(true);
-				job.setPriority(Job.INTERACTIVE);
-				job.schedule();
+				handleCreateNewContact();
 			}
 		});
 
@@ -154,6 +129,9 @@ extends LSDViewPart
 		new XComposite(buttonBar, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
 
 		Button searchButton = searchComposite.createSearchButton(buttonBar);
+
+		// Kai: [12 Nov 2009]
+		contributeToActionBars();
 
 		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -203,5 +181,71 @@ extends LSDViewPart
 	@Override
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
+	}
+
+
+	/**
+	 * Handles the creation of a new contact.
+	 */
+	private void handleCreateNewContact() {
+		final Shell shell = getSite().getShell();
+		final Display display = shell.getDisplay();
+
+		Job job = new Job("Open wizard......") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				monitor.beginTask("Begin task......", 100);
+				try {
+					final CreatePersonWizard wizard = new CreatePersonWizard();
+
+					display.asyncExec(new Runnable() {
+						public void run() {
+							DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(shell, wizard);
+							if (dialog.open() == Dialog.OK) {
+								//TODO update the result table and select the correct one.
+								PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(wizard.getPerson());
+								SelectionManager.sharedInstance().notify(
+										new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
+								);
+							}
+						}
+					});
+
+					return Status.OK_STATUS;
+				} finally {
+					monitor.done();
+				}
+			}
+		};
+		job.setUser(true);
+		job.setPriority(Job.INTERACTIVE);
+		job.schedule();
+	}
+
+
+	/**
+	 * Prepares the ActionBar.
+	 */
+	private void contributeToActionBars() {
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		addNewContactAction = new AddNewContactAction();
+		toolBarManager.add(addNewContactAction);
+	}
+
+	/**
+	 * Allows to click on Action to add/create a new Contact.
+	 */
+	protected class AddNewContactAction extends Action {
+		public AddNewContactAction() {
+			setId(AddNewContactAction.class.getName());
+			setImageDescriptor(SharedImages.ADD_16x16);
+			setToolTipText("Create new person...");
+			setText("Create new person...");
+		}
+
+		@Override
+		public void run() {
+			handleCreateNewContact();
+		}
 	}
 }
