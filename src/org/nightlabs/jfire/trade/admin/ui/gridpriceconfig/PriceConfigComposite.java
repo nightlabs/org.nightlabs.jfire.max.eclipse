@@ -559,7 +559,7 @@ public abstract class PriceConfigComposite extends XComposite
 						}
 						// Display the Error dialog
 						MessageDialog.openError(shell, 
-								e.getTitleErrorMessage(),
+								"Wrong Price Calculation Script",
 								e.getShortenedErrorMessage());
 						return;	
 					}
@@ -726,7 +726,7 @@ public abstract class PriceConfigComposite extends XComposite
 				}
 				// Display the Error dialog
 				MessageDialog.openError(shell, 
-						e.getTitleErrorMessage(),
+						"Wrong Price Calculation Script",
 						e.getShortenedErrorMessage());
 				return false;		
 			}
