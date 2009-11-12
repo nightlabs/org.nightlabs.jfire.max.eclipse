@@ -5,11 +5,9 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -27,6 +25,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.person.create.CreatePersonWizard;
@@ -152,26 +151,52 @@ extends LSDViewPart
 
 		Button searchButton = searchComposite.createSearchButton(buttonBar);
 
-
-		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
+		/*searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				Person person = searchComposite.getResultTable().getFirstSelectedElement();
 
 				PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(person);
-				SelectionManager.sharedInstance().notify(
-						new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
-				);
+				try {
+					if (RCPUtil.getActiveWorkbenchPage().getActiveEditor() == null) {
+						RCPUtil.openEditor(
+								new ContactEditorInput(personID),
+								ContactEditor.EDITOR_ID);
+					}
+					else {
+						IEditorPart editor = RCPUtil.getActiveWorkbenchPage().getActiveEditor();
+						editor.init(editor.getEditorSite(), new ContactEditorInput(personID));
+					}
+				} catch (PartInitException e) {
+					throw new RuntimeException(e);
+				}
+//				SelectionManager.sharedInstance().notify(
+//						new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
+//				);
+			}
+		});*/
+		searchComposite.getResultTable().addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				Person person = searchComposite.getResultTable().getFirstSelectedElement();
+				PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(person);
+				try {
+					RCPUtil.openEditor(
+							new ContactEditorInput(personID),
+							ContactEditor.EDITOR_ID);
+				} catch (PartInitException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		});
 
-		searchComposite.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				SelectionManager.sharedInstance().notify(
-						new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, null, Person.class)
-				);
-			}
-		});
+//		searchComposite.addDisposeListener(new DisposeListener() {
+//			public void widgetDisposed(DisposeEvent e) {
+//				SelectionManager.sharedInstance().notify(
+//						new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, null, Person.class)
+//				);
+//			}
+//		});
 	}
 
 	/* (non-Javadoc)

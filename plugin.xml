@@ -26,4 +26,17 @@
               name="Details">
         </view>
     </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            class="org.nightlabs.jfire.contact.ui.ContactEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="false"
+            icon="icons/person.png"
+            id="org.nightlabs.jfire.contact.ui.ContactEditor" name="org.nightlabs.jfire.contact.ui.ContactEditor"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
+            class="org.nightlabs.jfire.contact.ui.ContactDetailEditorPage$Factory"
+            editorID="org.nightlabs.jfire.contact.ui.ContactEditor" indexHint="10"/>
+    </extension>
 </plugin>

@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.contact.ui;
 
-import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
@@ -16,14 +15,14 @@ implements IPerspectiveFactory
 
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
-		layout.setEditorAreaVisible(false);
+		layout.setEditorAreaVisible(true);
 		layout.addView(ContactView.VIEW_ID, IPageLayout.TOP, 0.5f, IPageLayout.ID_EDITOR_AREA);
 
-		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
-		bottom.addView(ContactDetailView.VIEW_ID);
+//		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
+//		bottom.addView(ContactDetailView.VIEW_ID);
 
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
-		layout.addShowViewShortcut(ContactDetailView.VIEW_ID);
+//		layout.addShowViewShortcut(ContactDetailView.VIEW_ID);
 
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}
