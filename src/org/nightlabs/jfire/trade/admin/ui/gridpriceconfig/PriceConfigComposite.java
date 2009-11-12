@@ -41,15 +41,11 @@ import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -100,9 +96,7 @@ public abstract class PriceConfigComposite extends XComposite
 	private PriceConfigGrid priceConfigGrid;
 	private CellDetail cellDetail;
 	private PriceCalculator priceCalculator;
-	public static final String PRICE_CALCULATOR_ERROR = "PRICECALCULATORERROR"; //$NON-NLS-1$
 
-	
 	protected ProductTypeSelector createProductTypeSelector(Composite parent)
 	{
 		return new ProductTypeSelectorListImpl(parent, SWT.NONE);
@@ -255,8 +249,7 @@ public abstract class PriceConfigComposite extends XComposite
 			getGridLayout().numColumns = 2;
 
 			Label title = new Label(this, SWT.NONE);
-			//title.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.title")); //$NON-NLS-1$
-			title.setText("I'm here");
+			title.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.title")); //$NON-NLS-1$
 			priceConfigName = new Text(this, getBorderStyle() | SWT.READ_ONLY);
 			priceConfigName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -299,31 +292,13 @@ public abstract class PriceConfigComposite extends XComposite
 
 		priceConfigGrid = createPriceConfigGrid(sfGrid);
 		priceConfigGrid.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent event)
+			public void propertyChange(PropertyChangeEvent evt)
 			{
 				if (dirtyStateManager != null)
 					dirtyStateManager.markDirty();
 			}
 		});
 
-		priceConfigGrid.addPropertyChangeListener(PriceConfigGrid.PROPERTY_PRICE_CALCULATION_DONE,
-				new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent event)
-			{
-				if (dirtyStateManager != null)
-				{
-					if (dirtyStateManager instanceof SectionPart) {
-						SectionPart sectionPart = (SectionPart) dirtyStateManager;
-						PriceCalculationException e = (PriceCalculationException)event.getNewValue();
-						if (e != null)
-							sectionPart.getManagedForm().getMessageManager().addMessage(PRICE_CALCULATOR_ERROR, e.getShortenedErrorMessage(), null, IMessageProvider.ERROR);			
-						else
-							sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-					}
-				}
-			}
-		});
-		
 		cellDetail = createCellDetail(sfGrid);
 		// add listeners to notify dirty state
 //		cellDetail.getCellDetailText().addModifyListener(cellEditModifyListener);
@@ -341,33 +316,7 @@ public abstract class PriceConfigComposite extends XComposite
 //				}
 //			}
 //		);
-		// remove all error calculation messages from the section form.	
-		cellDetail.getCellDetailText().addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) 
-			{
-				if (dirtyStateManager != null)
-					if (dirtyStateManager instanceof SectionPart) {
-						SectionPart sectionPart = (SectionPart) dirtyStateManager;
-						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-					}
-			}
 
-		});
-
-		cellDetail.getCellDetailFallbackText().addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) 
-			{
-				if (dirtyStateManager != null)
-					if (dirtyStateManager instanceof SectionPart) {
-						SectionPart sectionPart = (SectionPart) dirtyStateManager;
-						sectionPart.getManagedForm().getMessageManager().removeAllMessages();
-					}
-			}		
-		});
-		
-		
 		dimensionValueSelector.addPropertyChangeListener(
 				DimensionValueSelector.PROPERTYCHANGEKEY_ADDDIMENSIONVALUE,
 				dimensionValueChangeListener);
@@ -377,11 +326,10 @@ public abstract class PriceConfigComposite extends XComposite
 				dimensionValueChangeListener);
 
 		sfGrid.setWeights(new int[] {1, 1});
-		
+
 		return sfLeftRight;
 	}
-	
-	
+
 	protected Composite getNoPriceConfigAssignedComposite()
 	{
 		if (noPriceConfigAssignedComposite == null)
@@ -549,19 +497,8 @@ public abstract class PriceConfigComposite extends XComposite
 					priceCalculator.preparePriceCalculation();
 					try {
 						priceCalculator.calculatePrices();
-					} catch (PriceCalculationException e) {					
-						Shell shell = null;
-						try {
-							shell = getShell();
-						} catch (SWTException swte) {
-							// the composite might be disposed already, try to get another shell
-							shell = Display.getDefault().getActiveShell();
-						}
-						// Display the Error dialog
-						MessageDialog.openError(shell, 
-								"Wrong Price Calculation Script",
-								e.getShortenedErrorMessage());
-						return;	
+					} catch (PriceCalculationException e) {
+						throw new RuntimeException(e);
 					}
 
 					// The packagePriceConfig defines all parameters (dimension values) we need to know.
@@ -704,35 +641,6 @@ public abstract class PriceConfigComposite extends XComposite
 				return false;
 		}
 
-		
-		// In case the new price configs have not all data that's necessary now
-		// (e.g. that's the case with DynamicTradePriceConfig, which does not store packagingResultPriceConfigs),
-		// we ensure this now:
-		if (packageProductType.getInnerPriceConfig() != null) {
-			priceCalculator.preparePriceCalculation();
-			try {
-				// We must actually recalculate as well, because otherwise the TransientStablePriceConfig contains only 0.00
-				// in every cell (which will be shown in the UI as soon as a dimension-value is modified).
-				// See: https://www.jfire.org/modules/bugs/view.php?id=1084
-				priceCalculator.calculatePrices();
-			} catch (PriceCalculationException e) {
-				//	throw new RuntimeException(e);
-				Shell shell = null;
-				try {
-					shell = getShell();
-				} catch (SWTException swte) {
-					// the composite might be disposed already, try to get another shell
-					shell = Display.getDefault().getActiveShell();
-				}
-				// Display the Error dialog
-				MessageDialog.openError(shell, 
-						"Wrong Price Calculation Script",
-						e.getShortenedErrorMessage());
-				return false;		
-			}
-		}
-		
-		
 		// store the price configs to the server (it will recalculate all affected product types)
 		Collection<GridPriceConfig> newPCs = storePriceConfigs(
 				priceConfigs,
@@ -750,7 +658,20 @@ public abstract class PriceConfigComposite extends XComposite
 			}
 		}
 
-
+		// In case the new price configs have not all data that's necessary now
+		// (e.g. that's the case with DynamicTradePriceConfig, which does not store packagingResultPriceConfigs),
+		// we ensure this now:
+		if (packageProductType.getInnerPriceConfig() != null) {
+			priceCalculator.preparePriceCalculation();
+			try {
+				// We must actually recalculate as well, because otherwise the TransientStablePriceConfig contains only 0.00
+				// in every cell (which will be shown in the UI as soon as a dimension-value is modified).
+				// See: https://www.jfire.org/modules/bugs/view.php?id=1084
+				priceCalculator.calculatePrices();
+			} catch (PriceCalculationException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
 		return true;
 	}

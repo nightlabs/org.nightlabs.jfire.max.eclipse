@@ -87,14 +87,13 @@ public class PriceConfigGrid extends XComposite
 
 	private ProductTypeSelector productTypeSelector;
 	private DimensionValueSelector dimensionValueSelector;
-	private DimensionXYSelector dimensionXYSelector;	
+	private DimensionXYSelector dimensionXYSelector;
 	
 	private PriceConfigGridCell[][] cells = null;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
-	public static final String PROPERTY_PRICE_CALCULATION_DONE = "priceCalculationDone"; //$NON-NLS-1$
-		
+
 	public PriceConfigGrid(
 			Composite parent,
 			ProductTypeSelector productInfoSelector,
@@ -139,7 +138,6 @@ public class PriceConfigGrid extends XComposite
 		gridTableCursor.addSelectionListener(gridTableCursorSelectionListener);
 	}
 
-	
 	private KeyListener gridTableCursorKeyListener = new KeyListener() {
 		public void keyPressed(KeyEvent event) {
 		}
@@ -639,22 +637,14 @@ public class PriceConfigGrid extends XComposite
 		return new PriceCoordinate(priceCoordinate);
 	}
 
-
-	
 	private PropertyChangeListener cellChangedListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt)
 		{
 			try {
 				if (priceCalculator != null)
-				{
-					priceCalculator.calculatePrices();				
-					propertyChangeSupport.firePropertyChange(PROPERTY_PRICE_CALCULATION_DONE, null, null);
-				}
-			}
-			catch (PriceCalculationException e) {			
-				// the event is needed to inform the listener about the wrong formula
-				propertyChangeSupport.firePropertyChange(PROPERTY_PRICE_CALCULATION_DONE, null, e);
-				return; // since the formula is wrong then simply return and dont update the table.
+					priceCalculator.calculatePrices();
+			} catch (PriceCalculationException e) {
+				throw new RuntimeException(e);
 			}
 			updateTableData();
 
