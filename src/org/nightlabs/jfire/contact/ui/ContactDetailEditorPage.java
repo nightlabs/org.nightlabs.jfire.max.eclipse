@@ -14,6 +14,8 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.ValidationResultHandler;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
@@ -88,6 +90,16 @@ extends EntityEditorPageWithProgress
 				}
 			};
 			fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+			fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
+
+				@Override
+				public void dataBlockEditorChanged(
+						DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
+					controller.markDirty();
+					getManagedForm().dirtyStateChanged();
+				}
+			});
+
 		}
 	}
 
@@ -95,4 +107,5 @@ extends EntityEditorPageWithProgress
 	protected String getPageFormTitle() {
 		return "Contact Detail";
 	}
+
 }

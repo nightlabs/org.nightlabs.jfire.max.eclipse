@@ -40,8 +40,17 @@ extends ActiveEntityEditorPageController<Person>
 	@Override
 	protected Person storeEntity(Person controllerObject,
 			ProgressMonitor monitor) {
-		//TODO implement this
-		return null;
+		monitor.beginTask("Storing...", 100);
+		try {
+			controllerObject.deflate();
+			controllerObject = (Person) PropertySetDAO.sharedInstance().storeJDOObject(
+					controllerObject, true, FETCH_GROUPS, 1,
+					new SubProgressMonitor(monitor, 100)
+			);
+			controllerObject.deflate();
+		} finally {
+			monitor.done();
+		}
+		return controllerObject;
 	}
-
 }
