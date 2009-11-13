@@ -29,14 +29,13 @@ extends ActiveEntityEditor
 	protected String getEditorTitleFromEntity(Object entity) {
 		if (entity instanceof Person) {
 			Person person = (Person)entity;
-			String personName;
+			String titleString;
 			try {
-				personName = ((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText();
+				titleString = ((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText();
 			} catch (Exception ex) {
-				personName = "";
-//				throw new RuntimeException(ex);
+				titleString = "";
 			}
-			return "(ID:" + ObjectIDUtil.longObjectIDFieldToString(person.getPropertySetID()) + ") " + personName;
+			return "(ID:" + ObjectIDUtil.longObjectIDFieldToString(person.getPropertySetID()) + ") " + titleString;
 		}
 
 		return null;
@@ -49,4 +48,23 @@ extends ActiveEntityEditor
 		return PropertySetDAO.sharedInstance().getPropertySet(personID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
+	@Override
+	protected String getEditorTooltipFromEntity(Object entity) {
+		if (entity instanceof Person) {
+			Person person = (Person)entity;
+			String tooltipString;
+			try {
+				tooltipString = String.format("%s %s - %s",  //$NON-NLS-1$
+						((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText(),
+						((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_FIRSTNAME)).getText(),
+						((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_COMPANY)).getText());
+				;
+			} catch (Exception ex) {
+				tooltipString = "";
+			}
+			return tooltipString;
+		}
+
+		return null;
+	}
 }

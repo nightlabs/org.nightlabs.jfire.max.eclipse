@@ -22,8 +22,7 @@ implements IPerspectiveFactory
 //		bottom.addView(ContactDetailView.VIEW_ID);
 
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
-//		layout.addShowViewShortcut(ContactDetailView.VIEW_ID);
-
+		layout.addShowViewShortcut(ContactDetailView.VIEW_ID);
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}
 }

@@ -39,4 +39,8 @@
             class="org.nightlabs.jfire.contact.ui.ContactDetailEditorPage$Factory"
             editorID="org.nightlabs.jfire.contact.ui.ContactEditor" indexHint="10"/>
     </extension>
+    <extension point="org.nightlabs.base.ui.editor2perspective">
+        <registry
+            editorID="org.nightlabs.jfire.contact.ui.ContactEditor" perspectiveID="org.nightlabs.jfire.contact.ui.ContactPerspective"/>
+    </extension>
 </plugin>

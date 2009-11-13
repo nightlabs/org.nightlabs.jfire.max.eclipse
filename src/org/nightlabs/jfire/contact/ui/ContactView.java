@@ -28,6 +28,7 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -203,7 +204,17 @@ extends LSDViewPart
 							DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(shell, wizard);
 							if (dialog.open() == Dialog.OK) {
 								//TODO update the result table and select the correct one.
+								searchComposite.performSearch();
+
 								PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(wizard.getPerson());
+
+								ContactEditorInput contactEditorInput = new ContactEditorInput(personID);
+								try {
+									Editor2PerspectiveRegistry.sharedInstance().openEditor(contactEditorInput, ContactEditor.EDITOR_ID);
+								} catch (Exception ex) {
+									throw new RuntimeException(ex);
+								}
+
 								SelectionManager.sharedInstance().notify(
 										new NotificationEvent(this, ContactPlugin.ZONE_PROPERTY, personID, Person.class)
 								);
