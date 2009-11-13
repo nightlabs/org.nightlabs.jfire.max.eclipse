@@ -6,10 +6,8 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditor;
 import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
-import org.nightlabs.jfire.prop.datafield.TextDataField;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -29,12 +27,7 @@ extends ActiveEntityEditor
 	protected String getEditorTitleFromEntity(Object entity) {
 		if (entity instanceof Person) {
 			Person person = (Person)entity;
-			String titleString;
-			try {
-				titleString = ((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText();
-			} catch (Exception ex) {
-				titleString = "";
-			}
+			String titleString = person.getDisplayName();
 			return "(ID:" + ObjectIDUtil.longObjectIDFieldToString(person.getPropertySetID()) + ") " + titleString;
 		}
 
@@ -52,16 +45,7 @@ extends ActiveEntityEditor
 	protected String getEditorTooltipFromEntity(Object entity) {
 		if (entity instanceof Person) {
 			Person person = (Person)entity;
-			String tooltipString;
-			try {
-				tooltipString = String.format("%s %s - %s",  //$NON-NLS-1$
-						((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText(),
-						((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_FIRSTNAME)).getText(),
-						((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_COMPANY)).getText());
-				;
-			} catch (Exception ex) {
-				tooltipString = "";
-			}
+			String tooltipString = person.getDisplayName();;
 			return tooltipString;
 		}
 
