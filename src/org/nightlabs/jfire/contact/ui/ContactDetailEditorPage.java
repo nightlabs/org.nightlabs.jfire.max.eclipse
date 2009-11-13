@@ -4,11 +4,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
@@ -51,56 +53,24 @@ extends EntityEditorPageWithProgress
 			return new ContactEditorPageController(editor);
 		}
 	}
-
+	
+	private ScrolledForm scrolledForm;
+	private Composite body;
+	private FormToolkit toolkit;
+	
 	@Override
 	protected void addSections(Composite parent) {
 		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
 
-		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		toolkit = new FormToolkit(parent.getDisplay());
 		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
 
-		ScrolledForm scrolledForm = toolkit.createScrolledForm(parent);
+		scrolledForm = toolkit.createScrolledForm(parent);
 		scrolledForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Composite body = scrolledForm.getBody();
+		body = scrolledForm.getBody();
 		GridLayout layout = new GridLayout(1, true);
 		body.setLayout(layout);
-
-		if (controller.isLoaded()) {
-			ValidationResultHandler resultManager = new ValidationResultHandler() {
-				@Override
-				public void handleValidationResult(ValidationResult validationResult) {
-
-				}
-			};
-			StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-					controller.getControllerObject().getStructLocalObjectID(),
-					new NullProgressMonitor()
-			);
-			controller.getControllerObject().inflate(structLocal);
-			fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
-					body,
-					SWT.NONE,
-					controller.getControllerObject(),
-					null,
-					resultManager) {
-				@Override
-				protected BlockBasedEditor createBlockBasedEditor() {
-					return new BlockBasedEditor(false);
-				}
-			};
-			fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-			fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
-
-				@Override
-				public void dataBlockEditorChanged(
-						DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
-					controller.markDirty();
-					getManagedForm().dirtyStateChanged();
-				}
-			});
-
-		}
 	}
 
 	@Override
@@ -108,4 +78,51 @@ extends EntityEditorPageWithProgress
 		return "Contact Detail";
 	}
 
+	@Override
+	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
+		Display.getDefault().asyncExec(new Runnable()
+		{
+			public void run()
+			{
+				ValidationResultHandler resultManager = new ValidationResultHandler() {
+					@Override
+					public void handleValidationResult(ValidationResult validationResult) {
+
+					}
+				};
+				StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
+						controller.getControllerObject().getStructLocalObjectID(),
+						new NullProgressMonitor()
+				);
+				controller.getControllerObject().inflate(structLocal);
+				fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
+						body,
+						SWT.NONE,
+						controller.getControllerObject(),
+						null,
+						resultManager) {
+					@Override
+					protected BlockBasedEditor createBlockBasedEditor() {
+						return new BlockBasedEditor(false);
+					}
+				};
+				fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+				fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
+
+					@Override
+					public void dataBlockEditorChanged(
+							DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
+						controller.markDirty();
+						getManagedForm().dirtyStateChanged();
+					}
+				});
+				
+				toolkit.adapt(fullDataBlockCoverageComposite);
+				body.layout(true, true);
+				scrolledForm.layout(true, true);
+				switchToContent();
+			}
+		});
+	}
 }
