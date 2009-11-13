@@ -28,6 +28,7 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -55,7 +56,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.SectionPart;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -97,6 +97,17 @@ public abstract class PriceConfigComposite extends XComposite
 	private CellDetail cellDetail;
 	private PriceCalculator priceCalculator;
 
+
+	// -------> Kai: 2009-11-13
+	// Handles property changes related to all components in this PriceConfigComposite more efficiently.
+	// Was previously handled specifically in PriceConfigGrid.
+	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
+	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR = "priceConfigError"; //$NON-NLS-1$
+	public static final String PROPERTY_CHANGE_KEY_NO_PRICE_CONFIG_COMPOSITE = "noPriceConfigComp"; //$NON-NLS-1$
+
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+	// <-------
+
 	protected ProductTypeSelector createProductTypeSelector(Composite parent)
 	{
 		return new ProductTypeSelectorListImpl(parent, SWT.NONE);
@@ -135,25 +146,7 @@ public abstract class PriceConfigComposite extends XComposite
 				getProductTypeSelector(),
 				getDimensionValueSelector(),
 				getDimensionXYSelector());
-
-
-//		// Kai: 2009-11-12
-//		PriceConfigGrid pcg = new PriceConfigGrid(parent, getProductTypeSelector(), getDimensionValueSelector(), getDimensionXYSelector()) {
-//			@Override
-//			protected void handleErrorMessage(PriceCalculationException e) {
-//				delegateErrorMessage(e.getShortenedErrorMessage());
-//			}
-//		};
-//		return pcg;
 	}
-
-//	// Kai: 2009-11-12
-//	/**
-//	 * Override this method to handle the behaviour of displaying (perhaps a more elegant, user-friendly manner)
-//	 * error messages, specific to the application's domain.
-//	 */
-//	protected void delegateErrorMessage(String errorMsg) {}
-
 
 
 	protected CellDetail createCellDetail(Composite parent)
@@ -231,6 +224,8 @@ public abstract class PriceConfigComposite extends XComposite
 		productTypeNotSetComposite = new XComposite(stackWrapper, SWT.NONE);
 		new Label(productTypeNotSetComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.text")); //$NON-NLS-1$
 		stackLayout.topControl = productTypeNotSetComposite;
+
+		getPriceConfigEditComposite();
 	}
 
 	protected Composite createLeftCarrierComposite(Composite parent)
@@ -313,6 +308,8 @@ public abstract class PriceConfigComposite extends XComposite
 		priceConfigGrid.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt)
 			{
+				propertyChangeSupport.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+
 				if (dirtyStateManager != null)
 					dirtyStateManager.markDirty();
 			}
@@ -373,10 +370,18 @@ public abstract class PriceConfigComposite extends XComposite
 				int returnCode = dialog.open();
 				if (returnCode == Window.OK) {
 					assignNewPriceConfig(wizard);
-					if (dirtyStateManager instanceof SectionPart) {
-						SectionPart sectionPart = (SectionPart) dirtyStateManager;
-						sectionPart.getSection().setText(packageProductType.getInnerPriceConfig().getName().getText());
-					}
+
+//					if (dirtyStateManager instanceof SectionPart) {
+//						SectionPart sectionPart = (SectionPart) dirtyStateManager;
+//						sectionPart.getSection().setText(packageProductType.getInnerPriceConfig().getName().getText());
+//					}
+
+					// Kai: 2009-11-13
+					// A revision of the above codes: Without explicitly casting dirtyStateManager as a SectionPart.
+					// SEE -- The corresponding registered listener in AbstractGridPriceConfigSection.
+					// BUT -- Is the triggering of the properChangeListener appropriate here?? Mebbe other more appropriate listeners are avaiable.
+					String innerPriceConfigName = packageProductType.getInnerPriceConfig().getName().getText();
+					propertyChangeSupport.firePropertyChange(PriceConfigComposite.PROPERTY_CHANGE_KEY_NO_PRICE_CONFIG_COMPOSITE, null, innerPriceConfigName);
 				}
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -649,7 +654,7 @@ public abstract class PriceConfigComposite extends XComposite
 		try {
 			priceCalculator.calculatePrices();
 		} catch (PriceCalculationException e) {
-			throw new RuntimeException(e.getShortenedErrorMessage());
+			throw new RuntimeException("Invalid or incomplete formula in the price configuration(s): " + e.getShortenedErrorMessage().trim() + ".");
 		}
 
 		if (!priceConfigIDs.isEmpty()) {
@@ -769,4 +774,19 @@ public abstract class PriceConfigComposite extends XComposite
 	}
 
 
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+	}
 }

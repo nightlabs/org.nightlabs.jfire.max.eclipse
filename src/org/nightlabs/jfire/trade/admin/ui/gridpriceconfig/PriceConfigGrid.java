@@ -90,10 +90,8 @@ public class PriceConfigGrid extends XComposite
 	private DimensionXYSelector dimensionXYSelector;
 
 	private PriceConfigGridCell[][] cells = null;
-
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
-	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR = "priceConfigError"; //$NON-NLS-1$
+
 
 	public PriceConfigGrid(
 			Composite parent,
@@ -643,19 +641,19 @@ public class PriceConfigGrid extends XComposite
 		{
 			try {
 				if (priceCalculator != null)
-					priceCalculator.calculatePrices();	// <-- Kai: Note PLURAL. Check if this suggests ALL cells? Hmm... seems to be.
+					priceCalculator.calculatePrices();	// <-- Kai: Note the PLURAL term. Check if this suggests ALL cells? Hmm... seems to be.
 			} catch (PriceCalculationException e) {
 //				throw new RuntimeException(e);
 
 				// Kai: 2009-11-12
 				// This is where the error originates. Full error message is contained in the exception caught from priceCalculator.calculatePrices().
 				// But we try to display the error in a more user-friendly way.
-				propertyChangeSupport.firePropertyChange(PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR, null, e);
+				propertyChangeSupport.firePropertyChange(PriceConfigComposite.PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR, null, e);
 				return;
 			}
 			updateTableData();
 
-			propertyChangeSupport.firePropertyChange(PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED, null, null);
+			propertyChangeSupport.firePropertyChange(PriceConfigComposite.PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED, null, null);
 		}
 	};
 

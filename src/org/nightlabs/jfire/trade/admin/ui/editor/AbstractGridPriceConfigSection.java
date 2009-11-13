@@ -1,10 +1,14 @@
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -16,6 +20,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculationException;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -40,7 +45,7 @@ extends ToolBarSectionPart
 	private PriceConfigComposite priceConfigComposite = null;
 	private volatile Job inheritPressedLoadJob = null;
 	private ProductType packageProductType;
-	
+
 	public AbstractGridPriceConfigSection(IFormPage page, Composite parent, int style) {
 		this(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.title")); //$NON-NLS-1$
 	}
@@ -57,10 +62,10 @@ extends ToolBarSectionPart
 		this.orgTitle = title;
 		priceConfigComposite = createPriceConfigComposite(getContainer());
 		priceConfigComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		AssignNewPriceConfigAction assignNewPriceConfigAction = new AssignNewPriceConfigAction();
 		getToolBarManager().add(assignNewPriceConfigAction);
-		
+
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -99,16 +104,43 @@ extends ToolBarSectionPart
 //		});
 //
 //		getSection().setTextClient(buttonWrapper);
+
+		// Kai: 2009-11-13
+		// Register the listener that will convert/handle long techincal error messages to more user-friendly ones.
+		priceConfigComposite.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(PriceConfigComposite.PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR)) {
+					// In the case of handling errors in a PriceConfigGrid's cell, due to incomplete or invalid formula, the Exception thrown
+					// by the priceCalculator.calculatePrices() is appended in the PropertyChangeEvent's new value.
+					String errMsg = ((PriceCalculationException)evt.getNewValue()).getShortenedErrorMessage().trim() + ".";
+					getManagedForm().getMessageManager().addMessage(evt.getPropertyName(), errMsg, null, IMessageProvider.ERROR);
+				}
+				else
+					getManagedForm().getMessageManager().removeAllMessages();
+			}
+		});
+
+		// Register the listener that will handle the case when there is no price config composite.
+		priceConfigComposite.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(PriceConfigComposite.PROPERTY_CHANGE_KEY_NO_PRICE_CONFIG_COMPOSITE)) {
+					// The PropertyChangeEvent's new value contains the string if the innerPriceConfigName.
+					getSection().setText((String)evt.getNewValue());
+				}
+			}
+		});
 	}
 
 //	private InheritanceToggleButton inheritButton = null;
-	
+
 	protected abstract PriceConfigComposite createPriceConfigComposite(Composite parent);
-	
+
 	public PriceConfigComposite getPriceConfigComposite() {
 		return priceConfigComposite;
 	}
-		
+
 	protected void inheritPressed() {
 		if (inheritanceAction.isChecked()) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.job.loadExtendendProductType.name")) { //$NON-NLS-1$
@@ -191,7 +223,7 @@ extends ToolBarSectionPart
 			markDirty();
 		}
 	}
-	
+
 	class AssignNewPriceConfigAction
 	extends Action
 	{
