@@ -135,7 +135,26 @@ public abstract class PriceConfigComposite extends XComposite
 				getProductTypeSelector(),
 				getDimensionValueSelector(),
 				getDimensionXYSelector());
+
+
+//		// Kai: 2009-11-12
+//		PriceConfigGrid pcg = new PriceConfigGrid(parent, getProductTypeSelector(), getDimensionValueSelector(), getDimensionXYSelector()) {
+//			@Override
+//			protected void handleErrorMessage(PriceCalculationException e) {
+//				delegateErrorMessage(e.getShortenedErrorMessage());
+//			}
+//		};
+//		return pcg;
 	}
+
+//	// Kai: 2009-11-12
+//	/**
+//	 * Override this method to handle the behaviour of displaying (perhaps a more elegant, user-friendly manner)
+//	 * error messages, specific to the application's domain.
+//	 */
+//	protected void delegateErrorMessage(String errorMsg) {}
+
+
 
 	protected CellDetail createCellDetail(Composite parent)
 	{
@@ -624,6 +643,15 @@ public abstract class PriceConfigComposite extends XComposite
 		// if there are priceConfigs which have never been stored (i.e. no ID assigned), we ignore them silently.
 		while (priceConfigIDs.remove(null));
 
+
+		// Kai: 2009-11-13
+		// Check to see if there are STILL any more errors contained in the price configs; i.e. dont save if errors persist.
+		try {
+			priceCalculator.calculatePrices();
+		} catch (PriceCalculationException e) {
+			throw new RuntimeException(e.getShortenedErrorMessage());
+		}
+
 		if (!priceConfigIDs.isEmpty()) {
 			// show the consequences and ask the user whether he really wants to save
 			Shell shell = null;
@@ -739,4 +767,6 @@ public abstract class PriceConfigComposite extends XComposite
 		_setPackageProductType(packageProductType);
 		dirtyStateManager.markDirty();
 	}
+
+
 }

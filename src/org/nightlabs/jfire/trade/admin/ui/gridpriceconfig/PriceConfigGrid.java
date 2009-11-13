@@ -88,11 +88,12 @@ public class PriceConfigGrid extends XComposite
 	private ProductTypeSelector productTypeSelector;
 	private DimensionValueSelector dimensionValueSelector;
 	private DimensionXYSelector dimensionXYSelector;
-	
+
 	private PriceConfigGridCell[][] cells = null;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_CHANGED = "priceConfigChanged"; //$NON-NLS-1$
+	public static final String PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR = "priceConfigError"; //$NON-NLS-1$
 
 	public PriceConfigGrid(
 			Composite parent,
@@ -151,7 +152,7 @@ public class PriceConfigGrid extends XComposite
 
 	private MouseMoveListener gridTableMouseMoveListener = new MouseMoveListener() {
 		public void mouseMove(MouseEvent event) {
-			
+
 		}
 	};
 
@@ -184,7 +185,7 @@ public class PriceConfigGrid extends XComposite
 		@Override
 		public void mouseUp(MouseEvent event) {
 			gridTableSelectionStop = getCellCoordinate(event);
-			
+
 			if (gridTableSelectionStart != null && gridTableSelectionStop != null) {
 				selectedCellCoordinates.clear();
 
@@ -199,7 +200,7 @@ public class PriceConfigGrid extends XComposite
 	private static final int DEFAULT_DATALEFT = 1;
 	private static final int DEFAULT_DATATOP = 1;
 	private static final Point DEFAULT_DATALEFTTOP = new Point(1, 1);
-	
+
 	/**
 	 * @return Returns the column index, where data is starting.
 	 * @see #getDataLeftTop()
@@ -354,7 +355,7 @@ public class PriceConfigGrid extends XComposite
 					Point cellCoordinate = new Point(col, row);
 					if (col == 0 && selectedCellCoordinates.contains(cellCoordinate))
 						addMode = false;
-					
+
 					if (addMode)
 						selectedCellCoordinates.add(cellCoordinate);
 					else
@@ -477,7 +478,7 @@ public class PriceConfigGrid extends XComposite
 				dimensionValueSelector.getDimensionIdxPriceFragmentType(), throwExceptionIfNothingSelected);
 		if (dv == null)
 			return null;
-	
+
 		return (PriceFragmentType) dv.getObject();
 	}
 
@@ -498,14 +499,14 @@ public class PriceConfigGrid extends XComposite
 		if (productTypeSelector.getSelectedProductTypeItem(false) == null)
 			doResetSelectedCells = true;
 		else {
-	
+
 			NestedProductTypeLocal nestedProductTypeLocal = null;
 			ProductType selectedProductType = productTypeSelector.getSelectedProductTypeItem(true).getProductType();
 			if (!productTypeSelector.getPackageProductType().getPrimaryKey().equals(selectedProductType.getPrimaryKey())) {
 				nestedProductTypeLocal = productTypeSelector.getPackageProductType().getProductTypeLocal().getNestedProductTypeLocal(
 						selectedProductType.getOrganisationID(), selectedProductType.getProductTypeID(), true);
 			}
-	
+
 			IFormulaPriceConfig formulaPriceConfig = productTypeSelector.getSelectedProductType_FormulaPriceConfig(false);
 //			IResultPriceConfig resultPriceConfig = productTypeSelector.getSelectedProductType_ResultPriceConfig(true);
 			IResultPriceConfig resultPriceConfig = productTypeSelector.getSelectedProductType_ResultPriceConfig(false);
@@ -516,12 +517,12 @@ public class PriceConfigGrid extends XComposite
 		//		TableColumn[] cols = gridTable.getColumns();
 		//		for (int i = 0; i < cols.length; ++i)
 		//			cols[i].dispose();
-		
+
 				new TableColumn(gridTable, SWT.LEFT);
-				
+
 				Dimension gridDimensionX = dimensionXYSelector.getDimensionX();
 				Dimension gridDimensionY = dimensionXYSelector.getDimensionY();
-		
+
 				int x = 1;
 				TableItem headerX = new TableItem(gridTable, SWT.NONE);
 				for (Iterator it = gridDimensionX.getValues().iterator(); it.hasNext(); ) {
@@ -530,12 +531,12 @@ public class PriceConfigGrid extends XComposite
 					headerX.setText(x, dvX.getName());
 					++x;
 				}
-		
+
 				IPriceCoordinate priceCoordinate = dimensionValueSelector.preparePriceCoordinate();
 				if (priceCoordinate == null) // we have no dimensionvalues in at least one dimension
 					return;
 				PriceFragmentType priceFragmentType = getSelectedPriceFragmentType(true);
-		
+
 				if (cells != null) {
 					if (cells.length != gridDimensionY.getValues().size())
 						cells = null;
@@ -544,35 +545,35 @@ public class PriceConfigGrid extends XComposite
 					else if (cells[0].length != gridDimensionX.getValues().size())
 						cells = null;
 				}
-				
+
 				if (cells == null) {
 					cells = new PriceConfigGridCell[gridDimensionY.getValues().size()][gridDimensionX.getValues().size()];
 					doResetSelectedCells = true;
 				}
-		
+
 				int cellsY = 0;
 				for (Iterator itY = gridDimensionY.getValues().iterator(); itY.hasNext(); ) {
 					DimensionValue dvY = (DimensionValue)itY.next();
 					TableItem row = new TableItem(gridTable, SWT.NONE);
 					row.setText(0, dvY.getName());
-		
+
 					if (dvY instanceof DimensionValue.PriceFragmentTypeDimensionValue)
 						priceFragmentType = (PriceFragmentType) dvY.getObject();
 					else
 						dvY.adjustPriceCoordinate(priceCoordinate);
-		
+
 					int tableX = 1; int cellsX = 0;
 					for (Iterator it = gridDimensionX.getValues().iterator(); it.hasNext(); ) {
 						DimensionValue dvX = (DimensionValue)it.next();
-		
+
 						if (dvX instanceof DimensionValue.PriceFragmentTypeDimensionValue)
 							priceFragmentType = (PriceFragmentType) dvX.getObject();
 						else
 							dvX.adjustPriceCoordinate(priceCoordinate);
-		
+
 						if (nestedProductTypeLocal != null)
 							priceCoordinate = priceCalculator.createMappedLocalPriceCoordinate(nestedProductTypeLocal, priceFragmentType, priceCoordinate);
-		
+
 						PriceCell priceCell = resultPriceConfig.getPriceCell(priceCoordinate, false);
 						if (priceCell != null) {
 							long amount = priceCell.getPrice().getAmount(priceFragmentType);
@@ -580,7 +581,7 @@ public class PriceConfigGrid extends XComposite
 //							row.setText(tableX, Long.toString(amount));
 							row.setText(tableX, NumberFormatter.formatCurrency(amount, currency, false));
 						}
-		
+
 						PriceConfigGridCell cell = cells[cellsY][cellsX];
 						if (cell == null ||
 								formulaPriceConfig != cell.getFormulaPriceConfig() ||
@@ -595,18 +596,18 @@ public class PriceConfigGrid extends XComposite
 							cells[cellsY][cellsX].addPropertyChangeListener(cellChangedListener);
 							doResetSelectedCells = true;
 						}
-		
+
 						cellsX = tableX++;
 					}
 					++cellsY;
 				}
-		
+
 				// Make sure we never have illegal selected cells (out of range)
 				// but keep the selection if possible.
 				if (oldRowCount != gridTable.getItemCount() || oldColCount != gridTable.getColumnCount()) {
 					selectedCellCoordinates.clear();
 					cursorCellCoordinate = null;
-		
+
 		//			Point coordinate = getCursorCellCoordinate();
 		//
 		//			if (coordinate.y > gridTable.getItemCount() - 1)
@@ -614,9 +615,9 @@ public class PriceConfigGrid extends XComposite
 		//
 		//			if (coordinate.x > gridTable.getColumnCount() - 1)
 		//				coordinate.x = gridTable.getColumnCount() - 1;
-		
+
 		//			gridTableCursor. // .setSelection(null, 0); // coordinate.x, coordinate.y);
-		
+
 					doResetSelectedCells = true;
 				}
 			} // if (formulaPriceConfig != null)
@@ -642,9 +643,15 @@ public class PriceConfigGrid extends XComposite
 		{
 			try {
 				if (priceCalculator != null)
-					priceCalculator.calculatePrices();
+					priceCalculator.calculatePrices();	// <-- Kai: Note PLURAL. Check if this suggests ALL cells? Hmm... seems to be.
 			} catch (PriceCalculationException e) {
-				throw new RuntimeException(e);
+//				throw new RuntimeException(e);
+
+				// Kai: 2009-11-12
+				// This is where the error originates. Full error message is contained in the exception caught from priceCalculator.calculatePrices().
+				// But we try to display the error in a more user-friendly way.
+				propertyChangeSupport.firePropertyChange(PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR, null, e);
+				return;
 			}
 			updateTableData();
 
@@ -706,14 +713,14 @@ public class PriceConfigGrid extends XComposite
 		if (dimensionXYSelector.getDimensionX() instanceof Dimension.PriceFragmentTypeDimension)
 			priceFragmentType = (PriceFragmentType)((DimensionValue)dimensionXYSelector.getDimensionX()
 					.getValues().get(dimensionXIndex)).getObject();
-	
+
 		if (dimensionXYSelector.getDimensionY() instanceof Dimension.PriceFragmentTypeDimension)
 			priceFragmentType = (PriceFragmentType)((DimensionValue)dimensionXYSelector.getDimensionY()
 					.getValues().get(dimensionYIndex)).getObject();
-	
+
 		if (priceFragmentType == null)
 			priceFragmentType = getSelectedPriceFragmentType(true);
-	
+
 		return priceFragmentType;
 	}
 
@@ -801,4 +808,5 @@ public class PriceConfigGrid extends XComposite
 	{
 		propertyChangeSupport.removePropertyChangeListener(listener);
 	}
+
 }
