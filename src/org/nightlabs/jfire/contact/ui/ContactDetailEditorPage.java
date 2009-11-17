@@ -53,11 +53,11 @@ extends EntityEditorPageWithProgress
 			return new ContactEditorPageController(editor);
 		}
 	}
-	
+
 	private ScrolledForm scrolledForm;
 	private Composite body;
 	private FormToolkit toolkit;
-	
+
 	@Override
 	protected void addSections(Composite parent) {
 		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
@@ -75,7 +75,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Contact Detail";
+		return "Contact Details";
 	}
 
 	@Override
@@ -117,7 +117,7 @@ extends EntityEditorPageWithProgress
 						getManagedForm().dirtyStateChanged();
 					}
 				});
-				
+
 				toolkit.adapt(fullDataBlockCoverageComposite);
 				body.layout(true, true);
 				scrolledForm.layout(true, true);

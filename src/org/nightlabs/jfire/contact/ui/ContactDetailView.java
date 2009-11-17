@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -24,6 +25,8 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.prop.edit.ValidationResultHandler;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
@@ -88,6 +91,28 @@ extends LSDViewPart
 
 
 						if (firstSelection != null) {
+							// [2009-11-17 Kai]:
+							// Check to see if the Person record has been modified before allowing uset to navigate to another
+							// record. If so prompt to save changes.
+							if (saveDetailsChangesAction != null && saveDetailsChangesAction.isEnabled()) {
+								boolean isSaveChanges = MessageDialog.openQuestion(mainComposite.getShell(), "Record modified",
+										"Changes have been made to Person record '" + selectedPerson.getDisplayName()
+										+ "'. Save changes?");
+
+								if (isSaveChanges) {
+									selectedPerson.deflate();
+									selectedPerson = PropertySetDAO.sharedInstance().storeJDOObject(
+											selectedPerson, true, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, 1,
+											new NullProgressMonitor()
+									);
+								}
+//								else TODO: Something is still not correct here. Restore previous data? Clear changes from cache?
+
+								// Done.
+								saveDetailsChangesAction.setEnabled(false);
+							}
+
+
 							selectedPerson = PropertySetDAO.sharedInstance().getPropertySet((PropertySetID)firstSelection, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 							StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
 									selectedPerson.getStructLocalObjectID(),
@@ -110,6 +135,15 @@ extends LSDViewPart
 							};
 
 							fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+							// Check to see if contents of the view is modified.
+							fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
+								@Override
+								public void dataBlockEditorChanged(DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
+									if (saveDetailsChangesAction != null && !saveDetailsChangesAction.isEnabled())
+										saveDetailsChangesAction.setEnabled(true);
+								}
+							});
 						}
 						else {
 							fullDataBlockCoverageComposite.refresh(selectedPerson);
@@ -157,6 +191,7 @@ extends LSDViewPart
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		saveDetailsChangesAction = new SaveDetailsChangesAction();
 		toolBarManager.add(saveDetailsChangesAction);
+		saveDetailsChangesAction.setEnabled(false);
 	}
 
 	/**
@@ -168,6 +203,9 @@ extends LSDViewPart
 			setImageDescriptor(SharedImages.SAVE_16x16);
 			setToolTipText("Save changes...");
 			setText("Save changes...");
+
+			// By default, this button should always be disabled.
+			setEnabled(false);
 		}
 
 		@Override
@@ -197,6 +235,8 @@ extends LSDViewPart
 			};
 			job.setPriority(Job.SHORT);
 			job.schedule();
+
+			setEnabled(false);
 		}
 	}
 }
