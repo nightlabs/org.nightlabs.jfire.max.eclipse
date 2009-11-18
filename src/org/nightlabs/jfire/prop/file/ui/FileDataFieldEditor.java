@@ -3,13 +3,14 @@ package org.nightlabs.jfire.prop.file.ui;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -20,8 +21,18 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PlatformUI;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.ui.io.FileEditorInput;
+import org.nightlabs.base.ui.part.PartAdapter;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor;
@@ -30,7 +41,6 @@ import org.nightlabs.jfire.base.ui.prop.edit.fieldbased.FieldBasedEditor;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.file.FileDataField;
 import org.nightlabs.jfire.prop.file.FileStructField;
-import org.nightlabs.jfire.prop.file.ui.resource.Messages;
 import org.nightlabs.language.LanguageCf;
 import org.nightlabs.util.IOUtil;
 import org.nightlabs.util.NLLocale;
@@ -70,16 +80,17 @@ extends AbstractDataFieldEditor<FileDataField>
 		}
 	}
 
+	private Shell shell;
 	private LanguageCf language;
 
 	private Button openButton;
+	private Button saveToDiskButton;
 	private Text filenameTextbox;
 	private Button openFileChooserButton;
 	private Button clearButton;
 	private Group group;
 	private Label sizeLabel;
 	private String fileDialogFilterPath;
-	private Desktop desktop;
 
 	public FileDataFieldEditor(IStruct struct, FileDataField data) {
 		super(struct, data);
@@ -94,65 +105,109 @@ extends AbstractDataFieldEditor<FileDataField>
 		super.setDataField(dataField);
 	}
 
+	private static Set<File> dirsToDelete = new HashSet<File>();
+
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				synchronized(dirsToDelete) {
+					for (File dir : dirsToDelete)
+						IOUtil.deleteDirectoryRecursively(dir);
+				}
+			}
+		});
+	}
+
+	private boolean determineOpenButtonEnabled()
+	{
+		boolean result = true;
+		if (!isChanged() && getDataField().isEmpty())
+			result = false;
+
+		if (isChanged() && filenameTextbox.getText().isEmpty())
+			result = false;
+
+		if (openButton.isEnabled() != result)
+			openButton.setEnabled(result);
+
+		return result;
+	}
+
+	private boolean determineSaveToDiskButtonEnabled()
+	{
+		boolean result = true;
+		if (!isChanged() && getDataField().isEmpty())
+			result = false;
+
+		if (isChanged() && filenameTextbox.getText().isEmpty())
+			result = false;
+
+		if (saveToDiskButton.isEnabled() != result)
+			saveToDiskButton.setEnabled(result);
+
+		return result;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#createControl(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	public Control createControl(final Composite parent) {
+		shell = parent.getShell();
 		group = new Group(parent, SWT.NONE);
-		group.setLayout(new GridLayout(5, false));
+		group.setLayout(new GridLayout(6, false));
 
 		XComposite.setLayoutDataMode(LayoutDataMode.GRID_DATA, group);
 
 		openButton = new Button(group, SWT.PUSH);
-		openButton.setText(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.openButton.text")); //$NON-NLS-1$
-		openButton.setToolTipText("Open with the file with the default application.");
-//		openButton.setLayoutData(new GridData());
+		openButton.setEnabled(false);
+//		openButton.setText("Open");
+		openButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "openButton"));
+		openButton.setToolTipText("Open with the file with the default editor or application.");
 		openButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (getDataField().isEmpty())
-					return;
-
-				try {
-					File file = getDataField().saveToDir(IOUtil.getTempDir());
-					desktop.open(file);
-				} catch (IOException x) {
-					throw new RuntimeException(x);
-				}
+				openButtonPressed();
 			}
 		});
 
-		openButton.setEnabled(false);
-		if (Desktop.isDesktopSupported()) {
-			desktop = Desktop.getDesktop();
-			if (desktop.isSupported(Desktop.Action.OPEN))
-				openButton.setEnabled(true);
-		}
-		if (!openButton.isEnabled())
-			openButton.setToolTipText("Your operating system or the java version do not support the 'desktop/open' action.");
+
+		saveToDiskButton = new Button(group, SWT.PUSH);
+		saveToDiskButton.setEnabled(false);
+		saveToDiskButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "saveToDiskButton"));
+		saveToDiskButton.setToolTipText("Save the file locally to a medium of the local computer.");
+		saveToDiskButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				saveToDiskButtonPressed();
+			}
+		});
+
 
 		filenameTextbox = new Text(group, XComposite.getBorderStyle(parent));
 		filenameTextbox.setEditable(false);
 		filenameTextbox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		openFileChooserButton = new Button(group, SWT.PUSH);
-		openFileChooserButton.setText("...");
-		openFileChooserButton.setToolTipText("Browse for a file");
+//		openFileChooserButton.setText("...");
+		openFileChooserButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "openFileChooserButton"));
+		openFileChooserButton.setToolTipText("Browse for a file and load it into this field.");
 		openFileChooserButton.setLayoutData(new GridData());
-		openFileChooserButton.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {}
+		openFileChooserButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				fileChooserButtonPressed();
 			}
 		});
 
 		clearButton = new Button(group, SWT.PUSH);
-		clearButton.setText("&Clear");
+		clearButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "clearButton"));
+//		clearButton.setText("&Clear");
 		clearButton.setToolTipText("Clear the field, i.e. delete the data.");
 		clearButton.setLayoutData(new GridData());
-		clearButton.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {}
+		clearButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				clearButtonPressed();
 			}
@@ -162,6 +217,118 @@ extends AbstractDataFieldEditor<FileDataField>
 		sizeLabel = new Label(group, SWT.NONE);
 
 		return group;
+	}
+
+	private void openButtonPressed()
+	{
+		if (!determineOpenButtonEnabled())
+			return;
+
+		try {
+			String fileName = null;
+			File _tmpDir = null;
+			File _file;
+			if (isChanged()) {
+				fileName = filenameTextbox.getText();
+				_file = new File(fileName);
+			}
+			else {
+				_tmpDir = new File(IOUtil.getTempDir(), Long.toString(System.currentTimeMillis(), 36) + ".jfire");
+				synchronized(dirsToDelete) {
+					dirsToDelete.add(_tmpDir);
+				}
+				_tmpDir.mkdir();
+				_file = getDataField().saveToDir(_tmpDir);
+			}
+			final File tmpDir = _tmpDir;
+			final File file = _file;
+
+			if (!file.exists()) {
+				showFileDoesNotExistDialog(file);
+				return;
+			}
+
+			IEditorDescriptor defaultEditor = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getAbsolutePath());
+			if (defaultEditor != null) {
+				final IEditorPart editor = RCPUtil.openEditor(
+						new FileEditorInput(file),
+						defaultEditor.getId()
+				);
+				if (editor != null && tmpDir != null) {
+					final IWorkbenchPage activeWorkbenchPage = RCPUtil.getActiveWorkbenchPage();
+					activeWorkbenchPage.addPartListener(new PartAdapter() {
+						@Override
+						public void partClosed(IWorkbenchPartReference reference) {
+							IWorkbenchPart part = reference.getPart(false);
+							if (editor == part) {
+								activeWorkbenchPage.removePartListener(this);
+								if (IOUtil.deleteDirectoryRecursively(tmpDir)) {
+									synchronized(dirsToDelete) {
+										dirsToDelete.remove(tmpDir);
+									}
+								}
+							}
+						}
+					});
+				}
+			}
+			else {
+				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN))
+					Desktop.getDesktop().open(file);
+				else
+					MessageDialog.openError(shell, "Cannot open!", "No default editor registered and Java-Desktop-API not supported!");
+			}
+		} catch (RuntimeException x) {
+			throw x;
+		} catch (Exception x) {
+			throw new RuntimeException(x);
+		}
+	}
+
+	private void showFileDoesNotExistDialog(File file)
+	{
+		MessageDialog.openError(
+				shell,
+				"File does not exist!",
+				String.format("The file \"%s\" does not exist! Cannot open non-existing file!", file.getAbsolutePath())
+		);
+	}
+
+	private void saveToDiskButtonPressed()
+	{
+		if (!determineSaveToDiskButtonEnabled())
+			return;
+
+		File localFile = null;
+		String fileName;
+		if (isChanged()) {
+			localFile = new File(filenameTextbox.getText());
+			if (!localFile.exists()) {
+				showFileDoesNotExistDialog(localFile);
+				return;
+			}
+
+			fileName = localFile.getName();
+		}
+		else
+			fileName = getDataField().getFileName();
+
+		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+		fileDialog.setFileName(fileName);
+		String saveFilePath = fileDialog.open();
+		if (saveFilePath == null)
+			return; // User cancelled.
+
+		File saveFile = new File(saveFilePath);
+
+		try {
+			if (localFile != null)
+				IOUtil.copyFile(localFile, saveFile);
+			else
+				getDataField().saveToFile(saveFile);
+		} catch (IOException x) {
+			throw new RuntimeException(x);
+		}
 	}
 
 	@Override
@@ -184,6 +351,8 @@ extends AbstractDataFieldEditor<FileDataField>
 		sizeLabel.getParent().layout(true, true);
 
 		handleManagedBy(dataField.getManagedBy());
+		determineOpenButtonEnabled();
+		determineSaveToDiskButtonEnabled();
 	}
 
 	protected void handleManagedBy(String managedBy)
@@ -303,6 +472,8 @@ extends AbstractDataFieldEditor<FileDataField>
 //			try {
 				filenameTextbox.setText(filename);
 				setChanged(true);
+				determineOpenButtonEnabled();
+				determineSaveToDiskButtonEnabled();
 //				// there is already layout code in displayFile()... I moved this top-level layout stuff to this method, too. Marc
 ////						Composite top = parent;
 ////						while (top.getParent() != null)
@@ -325,6 +496,8 @@ extends AbstractDataFieldEditor<FileDataField>
 	{
 		filenameTextbox.setText(""); //$NON-NLS-1$
 		setChanged(true);
+		determineOpenButtonEnabled();
+		determineSaveToDiskButtonEnabled();
 	}
 }
 
