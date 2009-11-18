@@ -5,16 +5,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
-import org.nightlabs.jfire.base.ui.resource.Messages;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 
 public class SelectDynamicProductTemplateDialog extends ResizableTrayDialog
 {
 	public SelectDynamicProductTemplateDialog(Shell parentShell) {
-		super(parentShell, Messages.getBundle());
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 	}
 
 	public SelectDynamicProductTemplateDialog(IShellProvider parentShell) {
-		super(parentShell, Messages.getBundle());
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 	}
 
 	@Override
