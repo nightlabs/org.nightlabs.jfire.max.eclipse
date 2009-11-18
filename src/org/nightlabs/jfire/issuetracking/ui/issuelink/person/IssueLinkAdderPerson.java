@@ -17,21 +17,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
-import org.nightlabs.jfire.base.ui.resource.Messages;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdderPerson 
-extends AbstractIssueLinkAdder 
+public class IssueLinkAdderPerson
+extends AbstractIssueLinkAdder
 {
 	private PersonSearchComposite personSearchComposite;
 	/**
@@ -39,7 +39,7 @@ extends AbstractIssueLinkAdder
 	 */
 	public IssueLinkAdderPerson() {
 	}
-	
+
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, ""); //$NON-NLS-1$
@@ -61,7 +61,7 @@ extends AbstractIssueLinkAdder
 
 	public Button createSearchButton(Composite parent) {
 		Button searchButton = new Button(parent, SWT.PUSH);
-		searchButton.setText(Messages.getString("org.nightlabs.jfire.base.ui.prop.PropertySetSearchComposite.searchButton.text")); //$NON-NLS-1$
+		searchButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkAdderPerson.searchButton.text")); //$NON-NLS-1$
 		searchButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		searchButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -76,9 +76,9 @@ extends AbstractIssueLinkAdder
 	protected void doSearch() {
 		personSearchComposite.performSearch();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Collection<Person> elements = personSearchComposite.getResultTable().getSelectedElements();
@@ -86,7 +86,7 @@ extends AbstractIssueLinkAdder
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isComplete() {
