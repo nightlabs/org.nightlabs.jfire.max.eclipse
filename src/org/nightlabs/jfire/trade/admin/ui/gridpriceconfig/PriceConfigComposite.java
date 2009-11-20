@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -40,6 +42,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
+import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
@@ -47,6 +50,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -225,8 +230,72 @@ public abstract class PriceConfigComposite extends XComposite
 		new Label(productTypeNotSetComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.text")); //$NON-NLS-1$
 		stackLayout.topControl = productTypeNotSetComposite;
 
+		// Forces the composites to be created.
 		getPriceConfigEditComposite();
+
+		// Incorporates the inactivity-timeout, to check if formula is valid while idle after typing.
+		initKeyTimeOutListener();
 	}
+
+	/**
+	 * Initialises the inactivity-timeout, to check if formula is valid while idle after typing.
+	 * Should call this only after getPriceConfigEditComposite() has been executed.
+	 */
+	protected void initKeyTimeOutListener() {
+		// Kai 2009-11-19:
+		// Incorporating the inactivity-timeout, to check if formula is valid.
+		// Alternatively, we can use the TimerText class. But that would require further amendments to
+		// the JSEdiorComposite class, which should then extend the TimerTextClass and manage its Document.
+		keyTimeOutListener = new KeyTimeOutListener();
+		timer = new Timer(TIMEOUT, keyTimeOutListener);
+		cellDetail.getCellDetailText().addKeyListener(keyTimeOutListener);
+		cellDetail.getCellDetailFallbackText().addKeyListener(keyTimeOutListener);
+
+		timer.setRepeats(true);
+	}
+
+	// Kai 2009-11-19:
+	// Very lightweight machination (instead of calibrating the TimerTextClass?), in addition to the initKeyTimeOutListener().
+	public static final int TIMEOUT = 1005;	// milliseconds. Seems to be a comfortable timeout delay.
+	private Timer timer;
+	private KeyTimeOutListener keyTimeOutListener;
+	private class KeyTimeOutListener implements KeyListener, ActionListener {
+		private Object delayedModifyListenersMutex = new Object();
+		private long lastEventMarkTm = System.currentTimeMillis();
+
+		@Override
+		public void keyPressed(KeyEvent event)  {}
+
+		@Override
+		public void keyReleased(KeyEvent event) { recordLastEvent(event); }
+
+		private void recordLastEvent(KeyEvent event) {
+			synchronized (delayedModifyListenersMutex) {
+				if (!timer.isRunning())
+					timer.start();
+
+				lastEventMarkTm = System.currentTimeMillis();
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			synchronized (delayedModifyListenersMutex) {
+				if (System.currentTimeMillis() - lastEventMarkTm >= TIMEOUT) {
+					timer.stop();
+
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							cellDetail.forceFocus(); // Need this to trigger the formula checking. The current listeners will know how to react already.
+							cellDetail.setFocus();   // To return the focus and cursor back to the last typed position.
+						}
+					});
+				}
+			}
+		}
+	}
+
 
 	protected Composite createLeftCarrierComposite(Composite parent)
 	{
