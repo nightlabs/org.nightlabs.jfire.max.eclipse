@@ -106,7 +106,12 @@ extends LSDViewPart
 											new NullProgressMonitor()
 									);
 								}
-//								else TODO: Something is still not correct here. Restore previous data? Clear changes from cache?
+//								else TODO: Discard all changes; i.e. keep the original.
+								// Something is still not correct here.
+								// Problem symptom: (1) User decides NOT to save Record_A. (2) Navigates to other records.
+								//                  (3) Some time later comes back to (unsaved) Record_A.
+								//                  ==> The modified-unsaved Record_A is displayed, instead of the original Record_A.
+								// So: Restore previous (clean) data? Clear changes from cache? Or what??
 
 								// Done.
 								saveDetailsChangesAction.setEnabled(false);
