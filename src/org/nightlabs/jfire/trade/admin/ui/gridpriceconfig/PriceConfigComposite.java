@@ -723,7 +723,7 @@ public abstract class PriceConfigComposite extends XComposite
 		try {
 			priceCalculator.calculatePrices();
 		} catch (PriceCalculationException e) {
-			throw new RuntimeException("Invalid or incomplete formula in the price configuration(s): " + e.getShortenedErrorMessage().trim() + ".");
+			throw new RuntimeException("Invalid or incomplete formula in the price configuration(s): " + e.getShortenedErrorMessage());
 		}
 
 		if (!priceConfigIDs.isEmpty()) {

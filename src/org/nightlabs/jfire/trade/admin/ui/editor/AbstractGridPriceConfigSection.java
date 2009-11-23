@@ -113,7 +113,7 @@ extends ToolBarSectionPart
 				if (evt.getPropertyName().equals(PriceConfigComposite.PROPERTY_CHANGE_KEY_PRICE_CONFIG_ERROR)) {
 					// In the case of handling errors in a PriceConfigGrid's cell, due to incomplete or invalid formula, the Exception thrown
 					// by the priceCalculator.calculatePrices() is appended in the PropertyChangeEvent's new value.
-					String errMsg = ((PriceCalculationException)evt.getNewValue()).getShortenedErrorMessage().trim() + ".";
+					String errMsg = ((PriceCalculationException)evt.getNewValue()).getShortenedErrorMessage();
 					getManagedForm().getMessageManager().addMessage(evt.getPropertyName(), errMsg, null, IMessageProvider.ERROR);
 				}
 				else
