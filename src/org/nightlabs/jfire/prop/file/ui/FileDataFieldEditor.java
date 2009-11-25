@@ -41,6 +41,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.fieldbased.FieldBasedEditor;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.file.FileDataField;
 import org.nightlabs.jfire.prop.file.FileStructField;
+import org.nightlabs.jfire.prop.file.ui.resource.Messages;
 import org.nightlabs.language.LanguageCf;
 import org.nightlabs.util.IOUtil;
 import org.nightlabs.util.NLLocale;
@@ -163,8 +164,8 @@ extends AbstractDataFieldEditor<FileDataField>
 		openButton = new Button(group, SWT.PUSH);
 		openButton.setEnabled(false);
 //		openButton.setText("Open");
-		openButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "openButton"));
-		openButton.setToolTipText("Open with the file with the default editor or application.");
+		openButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "openButton")); //$NON-NLS-1$
+		openButton.setToolTipText(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.openButton.toolTipText")); //$NON-NLS-1$
 		openButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -175,8 +176,8 @@ extends AbstractDataFieldEditor<FileDataField>
 
 		saveToDiskButton = new Button(group, SWT.PUSH);
 		saveToDiskButton.setEnabled(false);
-		saveToDiskButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "saveToDiskButton"));
-		saveToDiskButton.setToolTipText("Save the file locally to a medium of the local computer.");
+		saveToDiskButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "saveToDiskButton")); //$NON-NLS-1$
+		saveToDiskButton.setToolTipText(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.saveToDiskButton.toolTipText")); //$NON-NLS-1$
 		saveToDiskButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -191,8 +192,8 @@ extends AbstractDataFieldEditor<FileDataField>
 
 		openFileChooserButton = new Button(group, SWT.PUSH);
 //		openFileChooserButton.setText("...");
-		openFileChooserButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "openFileChooserButton"));
-		openFileChooserButton.setToolTipText("Browse for a file and load it into this field.");
+		openFileChooserButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "openFileChooserButton")); //$NON-NLS-1$
+		openFileChooserButton.setToolTipText(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.openFileChooserButton.toolTipText")); //$NON-NLS-1$
 		openFileChooserButton.setLayoutData(new GridData());
 		openFileChooserButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -202,9 +203,9 @@ extends AbstractDataFieldEditor<FileDataField>
 		});
 
 		clearButton = new Button(group, SWT.PUSH);
-		clearButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "clearButton"));
+		clearButton.setImage(SharedImages.getSharedImage(Activator.getDefault(), FileDataFieldEditor.class, "clearButton")); //$NON-NLS-1$
 //		clearButton.setText("&Clear");
-		clearButton.setToolTipText("Clear the field, i.e. delete the data.");
+		clearButton.setToolTipText(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.clearButton.toolTipText")); //$NON-NLS-1$
 		clearButton.setLayoutData(new GridData());
 		clearButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -233,7 +234,7 @@ extends AbstractDataFieldEditor<FileDataField>
 				_file = new File(fileName);
 			}
 			else {
-				_tmpDir = new File(IOUtil.getTempDir(), Long.toString(System.currentTimeMillis(), 36) + ".jfire");
+				_tmpDir = new File(IOUtil.getTempDir(), Long.toString(System.currentTimeMillis(), 36) + ".jfire"); //$NON-NLS-1$
 				synchronized(dirsToDelete) {
 					dirsToDelete.add(_tmpDir);
 				}
@@ -276,7 +277,7 @@ extends AbstractDataFieldEditor<FileDataField>
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN))
 					Desktop.getDesktop().open(file);
 				else
-					MessageDialog.openError(shell, "Cannot open!", "No default editor registered and Java-Desktop-API not supported!");
+					MessageDialog.openError(shell, Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.errorDialog[desktopApiNotSupported].title"), Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.errorDialog[desktopApiNotSupported].text")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} catch (RuntimeException x) {
 			throw x;
@@ -289,8 +290,8 @@ extends AbstractDataFieldEditor<FileDataField>
 	{
 		MessageDialog.openError(
 				shell,
-				"File does not exist!",
-				String.format("The file \"%s\" does not exist! Cannot open non-existing file!", file.getAbsolutePath())
+				Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.errorDialog[fileDoesNotExist].title"), //$NON-NLS-1$
+				String.format(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.errorDialog[fileDoesNotExist].text"), file.getAbsolutePath()) //$NON-NLS-1$
 		);
 	}
 
@@ -342,10 +343,10 @@ extends AbstractDataFieldEditor<FileDataField>
 			filenameTextbox.setText(dataField.getFileName());
 		}
 		else
-			filenameTextbox.setText("");
+			filenameTextbox.setText(""); //$NON-NLS-1$
 
 		sizeLabel.setText(
-				String.format("(max %d KB)",
+				String.format(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.maxSizeLabel.text"), //$NON-NLS-1$
 						new Object[] { new Long(fileStructField.getMaxSizeKB()) }));
 		sizeLabel.pack();
 		sizeLabel.getParent().layout(true, true);
@@ -361,7 +362,7 @@ extends AbstractDataFieldEditor<FileDataField>
 			child.setEnabled(managedBy == null);
 		}
 		if (managedBy != null)
-			group.setToolTipText(String.format("This field cannot be modified, because it is managed by a different system: %s", managedBy));
+			group.setToolTipText(String.format(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.managedByMessage"), managedBy)); //$NON-NLS-1$
 		else
 			group.setToolTipText(null);
 	}
@@ -379,7 +380,7 @@ extends AbstractDataFieldEditor<FileDataField>
 
 		String[] extensions = new String[extList.size()+1];
 		String[] names = new String[extList.size()+1];
-		names[0] = "All supported files";
+		names[0] = Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.fileType[allSupportedFormats].name"); //$NON-NLS-1$
 		int i = 1;
 		for (String ext : extList) {
 			String extension = EXTENSION_PREFIX + ext.toLowerCase() + EXTENSION_SEPARATOR + EXTENSION_PREFIX + ext.toUpperCase();
@@ -388,12 +389,12 @@ extends AbstractDataFieldEditor<FileDataField>
 			else
 				extensions[0] += EXTENSION_SEPARATOR + extension;
 			extensions[i] = extension;
-			names[i] = String.format("%s Files", ext.toUpperCase());
+			names[i] = String.format(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.fileType[specificFormat].name"), ext.toUpperCase()); //$NON-NLS-1$
 			i++;
 		}
 
 		FileDialog fileDialog = new FileDialog(parent);
-		fileDialog.setText("Choose a file");
+		fileDialog.setText(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.fileDialog.text")); //$NON-NLS-1$
 		fileDialog.setFilterNames(names);
 		fileDialog.setFilterExtensions(extensions);
 		fileDialog.setFilterPath(fileDialogFilterPath);
@@ -461,31 +462,18 @@ extends AbstractDataFieldEditor<FileDataField>
 			if (!fileStructField.validateSize(file.length()/1024)) {
 				MessageDialog.openError(
 						openFileChooserButton.getShell(),
-						"Error: File too big!",
+						Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.errorDialog[fileTooBig].title"), //$NON-NLS-1$
 						String.format(
-								"The maximum file size is %1$d KB.\n\nThe selected file's size is %2$d KB. Please choose a smaller one.",
+								Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.errorDialog[fileTooBig].text"), //$NON-NLS-1$
 								new Object[] { new Long(fileStructField.getMaxSizeKB()), new Long((file.length() / 1024))})
 				);
 				return;
 			}
 
-//			try {
-				filenameTextbox.setText(filename);
-				setChanged(true);
-				determineOpenButtonEnabled();
-				determineSaveToDiskButtonEnabled();
-//				// there is already layout code in displayFile()... I moved this top-level layout stuff to this method, too. Marc
-////						Composite top = parent;
-////						while (top.getParent() != null)
-////							top = top.getParent();
-////						top.layout(true, true); // this is necessary, because otherwise a bigger file doesn't cause the widgets to grow and is therefore cut
-//			} catch(SWTException swtex) {
-//				MessageDialog.openError(
-//						openFileChooserButton.getShell(),
-//						"",
-//						""
-//				);
-//			}
+			filenameTextbox.setText(filename);
+			setChanged(true);
+			determineOpenButtonEnabled();
+			determineSaveToDiskButtonEnabled();
 		}
 	}
 

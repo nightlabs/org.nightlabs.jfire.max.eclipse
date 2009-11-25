@@ -21,7 +21,6 @@ import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.prop.structedit.AbstractStructFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.structedit.AbstractStructFieldEditorFactory;
-import org.nightlabs.jfire.base.ui.prop.structedit.StructFieldEditor;
 import org.nightlabs.jfire.prop.ModifyListener;
 import org.nightlabs.jfire.prop.file.FileStructField;
 import org.nightlabs.jfire.prop.file.ui.resource.Messages;
@@ -36,7 +35,7 @@ public class FileStructFieldEditor extends AbstractStructFieldEditor<FileStructF
 //		}
 
 		@Override
-		public StructFieldEditor createStructFieldEditor() {
+		public FileStructFieldEditor createStructFieldEditor() {
 			return new FileStructFieldEditor();
 		}
 	}
