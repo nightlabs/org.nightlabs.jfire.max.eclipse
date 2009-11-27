@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 /**

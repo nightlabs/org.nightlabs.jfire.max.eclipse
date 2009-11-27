@@ -12,7 +12,6 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
-import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.security.id.UserID;
 
 /**

@@ -3,8 +3,6 @@
  */
 package org.nightlabs.jfire.reporting.ui.viewer.editor.action;
 
-import java.io.File;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
@@ -16,7 +14,6 @@ import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUti
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.viewer.editor.ReportViewerEditor;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * Prints the entryURL of a report shown by an {@link ReportViewerEditor}.
