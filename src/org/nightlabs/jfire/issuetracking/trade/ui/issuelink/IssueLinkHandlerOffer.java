@@ -13,7 +13,6 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
-import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
