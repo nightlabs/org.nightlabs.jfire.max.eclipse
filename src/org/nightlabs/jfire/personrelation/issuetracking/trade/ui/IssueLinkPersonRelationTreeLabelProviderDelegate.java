@@ -6,7 +6,6 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueLinkID;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.util.NLLocale;

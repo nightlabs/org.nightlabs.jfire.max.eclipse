@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
