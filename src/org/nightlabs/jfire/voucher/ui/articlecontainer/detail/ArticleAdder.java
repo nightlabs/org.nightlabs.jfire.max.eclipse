@@ -7,9 +7,10 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.MessageComposite;
-import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
@@ -22,7 +23,6 @@ import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder;
 import org.nightlabs.jfire.voucher.VoucherManagerRemote;
-import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
@@ -86,7 +86,7 @@ extends AbstractArticleAdder
 				fetchGroupTrade_article,
 				FetchPlan.DEFAULT,
 				ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
-				VoucherPriceConfig.FETCH_GROUP_CURRENCIES
+				PriceConfig.FETCH_GROUP_CURRENCIES
 		};
 	}
 
