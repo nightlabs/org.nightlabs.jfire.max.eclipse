@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Contact Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.contact.ui;singleton:=true
-Bundle-Version: 1.1.9.qualifier
+Bundle-Version: 1.1.10.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.contact.ui.ContactPlugin
 Bundle-Vendor: NightLabs.org
@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms,
  org.nightlabs.config,
  org.nightlabs.base.ui;visibility:=reexport,
- org.nightlabs.jfire.base.ui
+ org.nightlabs.jfire.base.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Export-Package: org.nightlabs.jfire.contact.ui
