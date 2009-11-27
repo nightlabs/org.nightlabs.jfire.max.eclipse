@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TradeAdmin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.trade.admin.ui;singleton:=true
-Bundle-Version: 1.1.5.qualifier
+Bundle-Version: 1.1.6.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin
-Bundle-Vendor: NightLabs.com
+Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.trade.admin.ui,
  org.nightlabs.jfire.trade.admin.ui.account,
