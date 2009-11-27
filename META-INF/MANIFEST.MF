@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Scripting Print Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.scripting.print.ui
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: org.nightlabs.jfire.scripting.print.ui.ScriptingPrintPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin

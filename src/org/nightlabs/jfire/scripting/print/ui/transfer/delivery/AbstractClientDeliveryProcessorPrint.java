@@ -20,7 +20,6 @@ import org.nightlabs.jfire.store.deliver.DeliveryResult;
 import org.nightlabs.jfire.store.id.ProductID;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor;
-import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
