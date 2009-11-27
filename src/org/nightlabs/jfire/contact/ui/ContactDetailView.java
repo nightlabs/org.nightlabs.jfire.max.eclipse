@@ -135,7 +135,6 @@ extends LSDViewPart
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		saveDetailsChangesAction = new SaveDetailsChangesAction();
 		toolBarManager.add(saveDetailsChangesAction);
-		saveDetailsChangesAction.setEnabled(false);
 		toolBarManager.update(true);
 	}
 
