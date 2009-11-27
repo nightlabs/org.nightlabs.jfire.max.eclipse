@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.message.IErrorMessageDisplayer;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.store.id.ProductID;
@@ -26,8 +27,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  */
 public class ReverseProductDialog
-extends ResizableTitleAreaDialog
-implements IErrorMessageDisplayer
+	extends ResizableTitleAreaDialog
+	implements IErrorMessageDisplayer
 {
 //	private static final Logger logger = Logger.getLogger(ReverseProductDialog.class);
 
@@ -116,5 +117,14 @@ implements IErrorMessageDisplayer
 	public ReverseProductComposite getReverseProductComposite() {
 		return reverseProductComposite;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.base.ui.message.IMessageDisplayer#setMessage(java.lang.String, org.nightlabs.base.ui.message.MessageType)
+	 */
+	@Override
+	public void setMessage(String message, MessageType type)
+	{
+		setMessage(message, type.ordinal());
+	}
 }
-;

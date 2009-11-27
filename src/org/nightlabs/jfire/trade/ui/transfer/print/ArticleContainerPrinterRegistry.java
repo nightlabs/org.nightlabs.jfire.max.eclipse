@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * Extension-Point Registry for registering {@link IArticleContainerPrinterFactory}s.

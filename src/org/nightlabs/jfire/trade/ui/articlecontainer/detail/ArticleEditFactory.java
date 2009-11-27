@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;

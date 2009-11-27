@@ -19,7 +19,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
@@ -147,7 +147,7 @@ extends HeaderComposite{
 
 	private void updateState()
 	{
-		MessageComposite.MessageType iconType = MessageComposite.MessageType.INFO;
+		MessageType iconType = MessageType.INFORMATION;
 
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE))
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),true);
@@ -159,7 +159,7 @@ extends HeaderComposite{
 			if (Messages.RESOURCE_BUNDLE.containsKey(typeKey)) {
 				String msgtype = Messages.getString(typeKey);
 				if (msgtype != null && !"".equals(msgtype)) //$NON-NLS-1$
-					iconType = MessageComposite.MessageType.valueOf(msgtype.toUpperCase());
+					iconType = MessageType.valueOf(msgtype.toUpperCase());
 			}
 			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message." + recurringOffer.getStatusKey()), iconType); //$NON-NLS-1$
 		}

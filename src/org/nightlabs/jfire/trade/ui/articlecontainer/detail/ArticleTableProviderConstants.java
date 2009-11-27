@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de

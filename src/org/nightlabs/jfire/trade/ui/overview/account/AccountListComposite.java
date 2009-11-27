@@ -8,6 +8,7 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -23,7 +24,6 @@ import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -145,7 +145,7 @@ extends AbstractTableComposite<Account>
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 //		tableViewer.setLabelProvider(new AccountTableLabelProvider());
 		tableViewer.setLabelProvider(new AcountListLabelProvider());
 	}
@@ -258,6 +258,7 @@ extends AbstractTableComposite<Account>
 
 	private NotificationListener accountChangedListener = new NotificationAdapterCallerThread()
 	{
+		@SuppressWarnings("unchecked")
 		public void notify(NotificationEvent notificationEvent) {
 			List<Account> accountList = (List<Account>)getTableViewer().getInput();
 			for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
@@ -330,5 +331,6 @@ extends AbstractTableComposite<Account>
 				return Status.OK_STATUS;
 			}
 		};
+		job.schedule();
 	}
 }

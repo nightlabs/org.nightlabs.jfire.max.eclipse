@@ -28,8 +28,8 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
 

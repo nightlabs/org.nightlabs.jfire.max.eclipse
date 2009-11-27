@@ -1,20 +1,13 @@
 package org.nightlabs.jfire.trade.ui.overview.action;
 
-import java.util.Locale;
-
-import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.nightlabs.base.ui.action.WorkbenchPartSelectionAction;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * A base Action for actions that should be invoked on an {@link ArticleContainer}.

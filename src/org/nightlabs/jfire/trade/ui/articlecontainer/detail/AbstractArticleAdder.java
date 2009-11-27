@@ -31,7 +31,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.MessageComposite;
-import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
@@ -165,7 +165,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 					TradePlugin.getArticleContainerTypeString(ac.getClass(), false), TradePlugin.getArticleContainerTypeString(ac.getClass(), true),
 					ArticleContainerUtil.getArticleContainerID(ac)
 					);
-			return new MessageComposite(parent, SWT.NONE, message, MessageType.INFO);
+			return new MessageComposite(parent, SWT.NONE, message, MessageType.INFORMATION);
 		}
 		return null;
 	}

@@ -27,8 +27,8 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.order;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
