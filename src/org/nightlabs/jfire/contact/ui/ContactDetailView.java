@@ -184,4 +184,8 @@ extends LSDViewPart
 			job.schedule();
 		}
 	}
+
+	public PropertySet getPerson() {
+		return contactDetailComposite.getPerson();
+	}
 }
