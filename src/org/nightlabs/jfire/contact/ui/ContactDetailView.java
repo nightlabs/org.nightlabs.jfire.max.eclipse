@@ -132,6 +132,9 @@ extends LSDViewPart
 	 * Prepares the ActionBar.
 	 */
 	private void contributeToActionBars() {
+		if (saveDetailsChangesAction != null)
+			return;
+
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		saveDetailsChangesAction = new SaveDetailsChangesAction();
 		toolBarManager.add(saveDetailsChangesAction);
