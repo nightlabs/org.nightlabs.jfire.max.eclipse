@@ -3,7 +3,7 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;

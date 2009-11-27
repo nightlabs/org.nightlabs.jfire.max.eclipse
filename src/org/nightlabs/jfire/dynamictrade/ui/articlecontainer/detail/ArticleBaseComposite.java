@@ -39,8 +39,8 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -95,7 +95,7 @@ extends FadeableComposite
 	private static Logger logger = Logger.getLogger(ArticleBaseComposite.class);
 
 	private String nameMessageText;
-	
+
 	protected ArticleContainer articleContainer;
 	protected ProductTypeID productTypeID;
 
@@ -108,7 +108,7 @@ extends FadeableComposite
 	protected Button productNameDialogButton;
 	protected InputPriceFragmentTypeTable inputPriceFragmentTypeTable;
 
-	
+
 
 	protected XComposite comp1;
 
@@ -137,8 +137,8 @@ extends FadeableComposite
 	 * Whether to check for a script syntax in the name of the dynamic product type
 	 */
 	private boolean isScriptable = false;
-	
-	
+
+
 	public boolean isScriptable() {
 		return isScriptable;
 	}
@@ -208,12 +208,12 @@ extends FadeableComposite
 
 		XComposite comp3 = new XComposite(comp2, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp3.getGridLayout().numColumns = 2;
-	
-		XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);		
+
+		XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		compName.setLayout(new GridLayout(1,false));
-		
-		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFO); //$NON-NLS-1$
-		nameMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+
+		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFORMATION); //$NON-NLS-1$
+		nameMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	    GridData data = (GridData)nameMessageLabel.getLayoutData();
 	    data.exclude = true;
 		nameMessageLabel.setVisible(false);
@@ -226,7 +226,7 @@ extends FadeableComposite
 				productNameModified = true;
 			}
 		});
-		
+
 //		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		((GridData)productNameText.getLayoutData()).heightHint = productTypeNameLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 3;
 		productNameDialogButton = new Button(comp3, SWT.PUSH);
@@ -314,15 +314,15 @@ extends FadeableComposite
 		loadDynamicProductType();
 		if(isScriptable())
 		{
-			showTextNameMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.textNameMessage"),MessageType.INFO); //$NON-NLS-1$
+			showTextNameMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.textNameMessage"),MessageType.INFORMATION); //$NON-NLS-1$
 			this.nameMessageText = nameMessageLabel.getMessage();
 			this.productNameText.addFocusListener(  new FocusListener(){
-				/** remove the error message shown once the user clicks 
+				/** remove the error message shown once the user clicks
 				on the text box to enter the name again*/
 				@Override
 				public void focusGained(FocusEvent arg0) {
-					showTextNameMessage(nameMessageText,MessageType.INFO);
-				}				
+					showTextNameMessage(nameMessageText,MessageType.INFORMATION);
+				}
 				@Override
 				public void focusLost(FocusEvent arg0) {
 					// TODO Auto-generated method stub
@@ -331,7 +331,7 @@ extends FadeableComposite
 
 			});
 		}
-		
+
 	}
 
 	private double lastValidQuantity = 1;
@@ -468,7 +468,7 @@ extends FadeableComposite
 
 					dynamicProductType = (DynamicProductType) Util.cloneSerializable(
 							PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(productTypeID, monitor));
-					
+
 					// TODO we should only list tariffs that are available to the current user according to the TariffUserSet. Marco.
 
 					dynamicTradePriceConfig = (DynamicTradePriceConfig) dynamicProductType.getInnerPriceConfig();
@@ -557,7 +557,7 @@ extends FadeableComposite
 										return;
 									}
 								}
-								
+
 								productTypeNameLabel.setText(
 										dynamicProductType.getName().getText(NLLocale.getDefault().getLanguage()));
 
@@ -611,7 +611,7 @@ extends FadeableComposite
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 	}
-	
+
 	private void _relayout()
 	{
 		Composite parent = getParent();
@@ -620,21 +620,21 @@ extends FadeableComposite
 		}
 		parent.layout(true, true);
 	}
-	
+
 	private void showMessageNoPricesAvailable()
 	{
 		// remove all UI that has been created previously
 		for (Control child : getChildren())
 			child.dispose();
 
-		
+
 		MessageComposite mc = new MessageComposite(
 				this, SWT.NONE,
 				String.format(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.message"), dynamicProductType.getName().getText()), //$NON-NLS-1$
 				MessageType.WARNING
 		);
 		mc.adaptToToolkit();
-		
+
 //		Text txt = new Text(this, SWT.WRAP);
 //		txt.setText(String.format("The price configuration of the product type \"%s\" contains no tariffs or no currencies; or they are not available to you.", dynamicProductType.getName().getText()));
 		_relayout();
@@ -807,19 +807,19 @@ extends FadeableComposite
 		if (!tariffCombo.selectElement(article.getTariff()))
 			throw new IllegalStateException("Tariff not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
 
-		DynamicProductInfo dynamicProductInfo; 
+		DynamicProductInfo dynamicProductInfo;
 		if (product != null)
 			dynamicProductInfo = product;
 		else
 			dynamicProductInfo = (DynamicProductInfo) article;
-		
-		
-		
-		
+
+
+
+
 		productName.copyFrom(dynamicProductInfo.getName());
 		updateProductNameUI();
 		productNameModified = false;
-		
+
 		if (!unitCombo.selectElement(dynamicProductInfo.getUnit()))
 			throw new IllegalStateException("Unit not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
 
@@ -849,7 +849,7 @@ extends FadeableComposite
 						ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
 						final Article articleWithPriceFragments = ArticleDAO.sharedInstance().getArticle(
 								articleID,
-								new String[] { FetchPlan.DEFAULT, DynamicProductTypeRecurringArticle.FETCH_GROUP_DYNAMIC_PRODUCT_TYPE_RECURRING_ARTICLE_SINGLEPRICE, 
+								new String[] { FetchPlan.DEFAULT, DynamicProductTypeRecurringArticle.FETCH_GROUP_DYNAMIC_PRODUCT_TYPE_RECURRING_ARTICLE_SINGLEPRICE,
 										Article.FETCH_GROUP_PRODUCT, DynamicProduct.FETCH_GROUP_SINGLE_PRICE, Price.FETCH_GROUP_THIS_PRICE },
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, 100));
@@ -858,13 +858,13 @@ extends FadeableComposite
 						{
 							public void run()
 							{
-								DynamicProduct product = (DynamicProduct) articleWithPriceFragments.getProduct();		
-								DynamicProductInfo dynamicProductInfo; 
+								DynamicProduct product = (DynamicProduct) articleWithPriceFragments.getProduct();
+								DynamicProductInfo dynamicProductInfo;
 								if (product != null)
 									dynamicProductInfo = product;
 								else
 									dynamicProductInfo = (DynamicProductInfo) articleWithPriceFragments;
-								
+
 								for (InputPriceFragmentType ipft : inputPriceFragmentTypes) {
 									long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
 									PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
@@ -901,10 +901,10 @@ extends FadeableComposite
 			}
 		});
 	}
-	
+
 
 	/**
-	 * shows the statues Text Message Label above the name text dialog, 
+	 * shows the statues Text Message Label above the name text dialog,
 	 * this method should be called after the GUI has been created.
 	 */
 	public void showTextNameMessage(String message,MessageType msgType)
@@ -914,11 +914,11 @@ extends FadeableComposite
 			if(!nameMessageLabel.isVisible())
 			{
 				GridData data = (GridData)nameMessageLabel.getLayoutData();
-				data.exclude = false;		
-				nameMessageLabel.setVisible(true);	
+				data.exclude = false;
+				nameMessageLabel.setVisible(true);
 			}
 			nameMessageLabel.setMessage(message, msgType);
-			productNameText.setToolTipText(message);	
+			productNameText.setToolTipText(message);
 		}
 	}
 

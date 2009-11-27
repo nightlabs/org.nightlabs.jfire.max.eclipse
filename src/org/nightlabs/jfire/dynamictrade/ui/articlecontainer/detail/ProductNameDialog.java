@@ -9,9 +9,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.MessageComposite;
-import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.base.ui.message.MessageType;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
@@ -40,7 +40,7 @@ extends ResizableTrayDialog
 		this.productName = productName;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
-		
+
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
@@ -49,15 +49,15 @@ extends ResizableTrayDialog
 		area.setLayout(new GridLayout(1,false));
 		if(isScriptable)
 		{
-			this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFO); //$NON-NLS-1$
-			this.statusMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-			this.statusMessageLabel.setMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.message"),MessageType.INFO);		 //$NON-NLS-1$
+			this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFORMATION); //$NON-NLS-1$
+			this.statusMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			this.statusMessageLabel.setMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.message"),MessageType.INFORMATION);		 //$NON-NLS-1$
 		}
 		this.productNameEditor = new I18nTextEditorMultiLine(area);
 		this.productNameEditor.setEditable(editable);
 		this.productNameEditor.setI18nText(productName, EditMode.BUFFERED);
 		this.productNameEditor.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		return area;
 	}
 
@@ -67,9 +67,9 @@ extends ResizableTrayDialog
 		if(isScriptable)
 			if(!checkScript())
 				return;
-		
+
 		super.okPressed();
-		productNameEditor.copyToOriginal();		
+		productNameEditor.copyToOriginal();
 	}
 
 	private boolean checkScript()
@@ -78,13 +78,13 @@ extends ResizableTrayDialog
 		String err = script.validateContent();
 		if(err !=null)
 		{
-			statusMessageLabel.setMessage(err,MessageType.ERROR);		
+			statusMessageLabel.setMessage(err,MessageType.ERROR);
 			productNameEditor.addFocusListener(  new FocusListener(){
 				@Override
 				public void focusGained(FocusEvent arg0) {
-					statusMessageLabel.setMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.message"),MessageType.INFO);		 //$NON-NLS-1$
+					statusMessageLabel.setMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.message"),MessageType.INFORMATION);		 //$NON-NLS-1$
 					productNameEditor.removeFocusListener(this);
-				}				
+				}
 				@Override
 				public void focusLost(FocusEvent arg0) {
 					// TODO Auto-generated method stub
