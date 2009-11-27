@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModuleController;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModulePreferencePage;
-import org.nightlabs.jfire.config.ConfigModule;
 import org.nightlabs.jfire.reporting.trade.config.TradeDocumentsLocaleConfigModule;
 
 /**
