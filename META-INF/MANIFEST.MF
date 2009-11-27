@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Issue Time Tracking Admin Ui Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetimetracking.admin.ui;singleton:=true
-Bundle-Version: 0.9.7.qualifier
+Bundle-Version: 0.9.8.qualifier
 Bundle-Activator: org.nightlabs.jfire.issuetimetracking.admin.ui.IssueTimeTrackingAdminPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.ui;bundle-version="0.9.7",
  org.nightlabs.jfire.trade.ui;bundle-version="0.9.7"
 Eclipse-LazyStart: true
+Bundle-Vendor: NightLabs.org
