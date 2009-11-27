@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.ui;bundle-version="0.9.7",
  org.nightlabs.jfire.department.ui;bundle-version="0.9.7"
 Eclipse-LazyStart: true
+Bundle-Vendor: NightLabs.org
