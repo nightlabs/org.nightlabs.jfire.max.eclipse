@@ -3,7 +3,6 @@ package org.nightlabs.jfire.contact.ui;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditor;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
@@ -28,7 +27,9 @@ extends ActiveEntityEditor
 		if (entity instanceof Person) {
 			Person person = (Person)entity;
 			String titleString = person.getDisplayName();
-			return "(ID:" + ObjectIDUtil.longObjectIDFieldToString(person.getPropertySetID()) + ") " + titleString;
+//			return "(ID:" + ObjectIDUtil.longObjectIDFieldToString(person.getPropertySetID()) + ") " + titleString;
+			// @Yo: Either we put the complete ID into the string or none at all. For the complete ID, we can omit the organisationID, if it is local - but only then.
+			return titleString;
 		}
 
 		return null;

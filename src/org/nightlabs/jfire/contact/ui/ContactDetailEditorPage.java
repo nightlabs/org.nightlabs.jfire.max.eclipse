@@ -4,13 +4,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
@@ -19,6 +18,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.validation.ValidationResult;
@@ -60,7 +60,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected void addSections(Composite parent) {
-		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
+//		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
 
 		toolkit = new FormToolkit(parent.getDisplay());
 		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
@@ -71,35 +71,42 @@ extends EntityEditorPageWithProgress
 		body = scrolledForm.getBody();
 		GridLayout layout = new GridLayout(1, true);
 		body.setLayout(layout);
+
+		getManagedForm().addPart(thisPart);
 	}
 
-	@Override
-	protected String getPageFormTitle() {
-		return "Contact Details";
-	}
+	AbstractFormPart thisPart = new AbstractFormPart() {
+		private PropertySet propertySet;
+		@Override
+		public boolean setFormInput(Object input) {
+			this.propertySet = (PropertySet) input;
+			super.setFormInput(input);
+			markStale();
+			return true;
+		}
 
-	@Override
-	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
-		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
-		Display.getDefault().asyncExec(new Runnable()
-		{
-			public void run()
-			{
-				ValidationResultHandler resultManager = new ValidationResultHandler() {
-					@Override
-					public void handleValidationResult(ValidationResult validationResult) {
+		@Override
+		public void refresh() {
+			if (propertySet == null)
+				return;
 
-					}
-				};
-				StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-						controller.getControllerObject().getStructLocalObjectID(),
-						new NullProgressMonitor()
-				);
-				controller.getControllerObject().inflate(structLocal);
+			ValidationResultHandler resultManager = new ValidationResultHandler() {
+				@Override
+				public void handleValidationResult(ValidationResult validationResult) {
+
+				}
+			};
+			StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
+					propertySet.getStructLocalObjectID(),
+					new NullProgressMonitor()
+			);
+			propertySet.inflate(structLocal);
+
+			if (fullDataBlockCoverageComposite == null) {
 				fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
 						body,
 						SWT.NONE,
-						controller.getControllerObject(),
+						propertySet,
 						null,
 						resultManager) {
 					@Override
@@ -109,20 +116,89 @@ extends EntityEditorPageWithProgress
 				};
 				fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 				fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
-
 					@Override
-					public void dataBlockEditorChanged(
-							DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
-						controller.markDirty();
-						getManagedForm().dirtyStateChanged();
+					public void dataBlockEditorChanged(DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
+	//					controller.markDirty();
+	//					getManagedForm().dirtyStateChanged();
+						thisPart.markDirty();
 					}
 				});
-
 				toolkit.adapt(fullDataBlockCoverageComposite);
-				body.layout(true, true);
-				scrolledForm.layout(true, true);
-				switchToContent();
 			}
-		});
+			else
+				fullDataBlockCoverageComposite.refresh(propertySet);
+
+			body.layout(true, true);
+			scrolledForm.layout(true, true);
+
+			super.refresh();
+		}
+
+		@Override
+		public void commit(boolean onSave) {
+			if (fullDataBlockCoverageComposite != null)
+				fullDataBlockCoverageComposite.updatePropertySet();
+
+			super.commit(onSave);
+		}
+
+		@Override
+		public void markDirty() {
+			getPageController().markDirty();
+			super.markDirty();
+		}
+	};
+
+	@Override
+	protected String getPageFormTitle() {
+		return "Contact Details";
 	}
+
+//	@Override
+//	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+//		final ContactEditorPageController controller = (ContactEditorPageController)getPageController();
+//		Display.getDefault().asyncExec(new Runnable()
+//		{
+//			public void run()
+//			{
+//				ValidationResultHandler resultManager = new ValidationResultHandler() {
+//					@Override
+//					public void handleValidationResult(ValidationResult validationResult) {
+//
+//					}
+//				};
+//				StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
+//						controller.getControllerObject().getStructLocalObjectID(),
+//						new NullProgressMonitor()
+//				);
+//				controller.getControllerObject().inflate(structLocal);
+//				fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
+//						body,
+//						SWT.NONE,
+//						controller.getControllerObject(),
+//						null,
+//						resultManager) {
+//					@Override
+//					protected BlockBasedEditor createBlockBasedEditor() {
+//						return new BlockBasedEditor(false);
+//					}
+//				};
+//				fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+//				fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
+//
+//					@Override
+//					public void dataBlockEditorChanged(DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
+////						controller.markDirty();
+////						getManagedForm().dirtyStateChanged();
+//						thisPart.markDirty();
+//					}
+//				});
+//
+//				toolkit.adapt(fullDataBlockCoverageComposite);
+//				body.layout(true, true);
+//				scrolledForm.layout(true, true);
+//				switchToContent();
+//			}
+//		});
+//	}
 }

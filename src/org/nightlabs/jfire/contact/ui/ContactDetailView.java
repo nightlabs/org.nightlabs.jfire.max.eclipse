@@ -1,46 +1,33 @@
 package org.nightlabs.jfire.contact.ui;
 
-import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.PartInitException;
-import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
-import org.nightlabs.jfire.base.ui.prop.edit.ValidationResultHandler;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
-import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.PropertySetID;
-import org.nightlabs.jfire.prop.validation.ValidationResult;
-import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.util.Util;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -51,21 +38,11 @@ extends LSDViewPart
 {
 	public static final String VIEW_ID = ContactDetailView.class.getName();
 
-	private IMemento initMemento = null;
-	private PropertySet selectedPerson;
-	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
-	private NotificationListener contactSelectionListener;
-
 	private SaveDetailsChangesAction saveDetailsChangesAction;
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
-	 */
-	@Override
-	public void init(IViewSite site, IMemento memento) throws PartInitException {
-		super.init(site, memento);
-		this.initMemento = memento;
-	}
+	private Display display;
+	private ContactDetailComposite contactDetailComposite;
+	private NotificationListener contactSelectionListener;
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
@@ -73,104 +50,73 @@ extends LSDViewPart
 	@Override
 	public void createPartContents(Composite parent)
 	{
-		final XComposite mainComposite = new XComposite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, true);
-		mainComposite.setLayout(layout);
+		display = parent.getDisplay();
+		contactDetailComposite = new ContactDetailComposite(parent);
+		contributeToActionBars();
+		contactDetailComposite.addChangeListener(new DataBlockEditorChangedListener() {
+			@Override
+			public void dataBlockEditorChanged(DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
+				if (saveDetailsChangesAction != null && !saveDetailsChangesAction.isEnabled())
+					saveDetailsChangesAction.setEnabled(true);
+			}
+		});
 
-		try {
-			contactSelectionListener  = new NotificationAdapterCallerThread(){
-				public void notify(NotificationEvent notificationEvent) {
-					Object firstSelection = notificationEvent.getFirstSubject();
-					if (firstSelection instanceof PropertySetID) {
-						ValidationResultHandler resultManager = new ValidationResultHandler() {
-							@Override
-							public void handleValidationResult(ValidationResult validationResult) {
-
-							}
-						};
-
-
-						if (firstSelection != null) {
-							// [2009-11-17 Kai]:
-							// Check to see if the Person record has been modified before allowing uset to navigate to another
-							// record. If so prompt to save changes.
-							if (saveDetailsChangesAction != null && saveDetailsChangesAction.isEnabled()) {
-								boolean isSaveChanges = MessageDialog.openQuestion(mainComposite.getShell(), "Record modified",
-										"Changes have been made to Person record '" + selectedPerson.getDisplayName()
-										+ "'. Save changes?");
-
-								if (isSaveChanges) {
-									selectedPerson.deflate();
-									selectedPerson = PropertySetDAO.sharedInstance().storeJDOObject(
-											selectedPerson, true, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, 1,
-											new NullProgressMonitor()
-									);
-								}
-//								else TODO: Discard all changes; i.e. keep the original.
-								// Something is still not correct here.
-								// Problem symptom: (1) User decides NOT to save Record_A. (2) Navigates to other records.
-								//                  (3) Some time later comes back to (unsaved) Record_A.
-								//                  ==> The modified-unsaved Record_A is displayed, instead of the original Record_A.
-								// So: Restore previous (clean) data? Clear changes from cache? Or what??
-
-								// Done.
-								saveDetailsChangesAction.setEnabled(false);
-							}
-
-
-							selectedPerson = PropertySetDAO.sharedInstance().getPropertySet((PropertySetID)firstSelection, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-							StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
-									selectedPerson.getStructLocalObjectID(),
-									new NullProgressMonitor()
+		contactSelectionListener  = new NotificationAdapterSWTThreadAsync() {
+			@Override
+			public void notify(NotificationEvent notificationEvent) {
+				final PropertySet selectedPerson = contactDetailComposite.getPerson();
+				final Object firstSelection = notificationEvent.getFirstSubject();
+				if (firstSelection instanceof PropertySetID) {
+					if (firstSelection != null) {
+						// [2009-11-17 Kai]:
+						// Check to see if the Person record has been modified before allowing uset to navigate to another
+						// record. If so prompt to save changes.
+						if (selectedPerson != null && saveDetailsChangesAction != null && saveDetailsChangesAction.isEnabled()) {
+							boolean isSaveChanges = MessageDialog.openQuestion(
+									RCPUtil.getActiveShell(),
+									"Record modified",
+									String.format("Changes have been made to person '%s'. Save changes?", selectedPerson.getDisplayName())
 							);
-							selectedPerson.inflate(personStruct);
+
+							if (isSaveChanges) {
+								final PropertySet person = Util.cloneSerializable(selectedPerson);
+								Job job = new Job("Saving person") {
+									@Override
+									protected IStatus run(ProgressMonitor monitor) throws Exception {
+										person.deflate();
+										PropertySetDAO.sharedInstance().storeJDOObject(
+												person, false, null, 1,
+												monitor
+										);
+										return Status.OK_STATUS;
+									}
+								};
+								job.setPriority(Job.LONG);
+								job.schedule();
+							}
+							// @Kai: The problem you described in the following is solved by Util.cloneSerializable(...)
+							// Something is still not correct here.
+							// Problem symptom: (1) User decides NOT to save Record_A. (2) Navigates to other records.
+							//                  (3) Some time later comes back to (unsaved) Record_A.
+							//                  ==> The modified-unsaved Record_A is displayed, instead of the original Record_A.
+							// So: Restore previous (clean) data? Clear changes from cache? Or what??
+							// @Kai: No! We need to clone the object! Marco.
+							saveDetailsChangesAction.setEnabled(false);
 						}
 
-						if (fullDataBlockCoverageComposite == null) {
-							fullDataBlockCoverageComposite = new FullDataBlockCoverageComposite(
-									mainComposite,
-									SWT.NONE,
-									selectedPerson,
-									null,
-									resultManager) {
-								@Override
-								protected BlockBasedEditor createBlockBasedEditor() {
-									return new BlockBasedEditor(false);
-								}
-							};
-
-							fullDataBlockCoverageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-							// Check to see if contents of the view is modified.
-							fullDataBlockCoverageComposite.addChangeListener(new DataBlockEditorChangedListener() {
-								@Override
-								public void dataBlockEditorChanged(DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
-									if (saveDetailsChangesAction != null && !saveDetailsChangesAction.isEnabled())
-										saveDetailsChangesAction.setEnabled(true);
-								}
-							});
-						}
-						else {
-							fullDataBlockCoverageComposite.refresh(selectedPerson);
-						}
+						contactDetailComposite.setPersonID((PropertySetID)firstSelection);
 					}
 				}
-			};
+			}
+		};
 
-			// Kai: [10 Nov 2009]
-			contributeToActionBars();
+		SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
 
-			SelectionManager.sharedInstance().addNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
-
-			mainComposite.addDisposeListener(new DisposeListener() {
-				public void widgetDisposed(DisposeEvent e) {
-					SelectionManager.sharedInstance().removeNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
-				}
-			});
-		}
-		catch (Exception x) {
-			ExceptionHandlerRegistry.asyncHandleException(x);
-		}
+		contactDetailComposite.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				SelectionManager.sharedInstance().removeNotificationListener(ContactPlugin.ZONE_PROPERTY, Person.class, contactSelectionListener);
+			}
+		});
 	}
 
 	/* (non-Javadoc)
@@ -178,16 +124,9 @@ extends LSDViewPart
 	 */
 	@Override
 	public void setFocus() {
+		if (contactDetailComposite != null)
+			contactDetailComposite.setFocus();
 	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
-	 */
-	@Override
-	public void saveState(IMemento memento) {
-		super.saveState(memento);
-	}
-
 
 	/**
 	 * Prepares the ActionBar.
@@ -197,6 +136,7 @@ extends LSDViewPart
 		saveDetailsChangesAction = new SaveDetailsChangesAction();
 		toolBarManager.add(saveDetailsChangesAction);
 		saveDetailsChangesAction.setEnabled(false);
+		toolBarManager.update(true);
 	}
 
 	/**
@@ -215,23 +155,24 @@ extends LSDViewPart
 
 		@Override
 		public void run() {
-			Job job = new Job("Saving........") {
+			final PropertySet selectedPerson = contactDetailComposite.getPerson();
+			if (selectedPerson == null)
+				return;
+
+			final PropertySet person = Util.cloneSerializable(selectedPerson);
+			final PropertySetID personID = (PropertySetID) JDOHelper.getObjectId(person);
+
+			Job job = new Job("Saving contact") {
 				@Override
 				protected IStatus run(ProgressMonitor _monitor) throws Exception {
-					_monitor.beginTask("Begin...", 100);
+					_monitor.beginTask("Saving contact", 100);
 					try {
-						selectedPerson.deflate();
-						selectedPerson = PropertySetDAO.sharedInstance().storeJDOObject(
-								selectedPerson, true, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA}, 1,
-								new SubProgressMonitor(_monitor, 2)
+						person.deflate();
+						PropertySetDAO.sharedInstance().storeJDOObject(
+								person, false, null, 1,
+								new SubProgressMonitor(_monitor, 50)
 						);
-
-						StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(
-								selectedPerson.getStructLocalObjectID(),
-								new NullProgressMonitor()
-						);
-						selectedPerson.inflate(personStruct);
-						fullDataBlockCoverageComposite.refresh(selectedPerson);
+						contactDetailComposite.setPersonID(personID, new SubProgressMonitor(_monitor, 50));
 					} finally {
 						_monitor.done();
 					}
@@ -239,9 +180,9 @@ extends LSDViewPart
 				}
 			};
 			job.setPriority(Job.SHORT);
-			job.schedule();
-
+			job.setUser(true);
 			setEnabled(false);
+			job.schedule();
 		}
 	}
 }
