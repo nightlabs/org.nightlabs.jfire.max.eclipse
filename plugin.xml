@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.nightlabs.jfire.pbx.ui.ContactDetailViewContribution"
+            targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
+         <action
+               class="org.nightlabs.jfire.pbx.ui.ContactDetailViewCallAction"
+               id="org.nightlabs.jfire.pbx.ui.ContactDetailViewCallAction"
+               label="Call"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
+</plugin>
