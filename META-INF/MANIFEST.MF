@@ -7,7 +7,7 @@ Bundle-Activator: org.nightlabs.jfire.pbx.ui.PBXPlugin
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.nightlabs.jfire.contact.ui;visibility:=reexport
+ org.nightlabs.jfire.base.ui;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.pbx.ui,

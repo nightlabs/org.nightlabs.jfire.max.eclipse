@@ -10,21 +10,6 @@
             name="Phone system">
       </page>
    </extension>
-
-   <extension
-         point="org.eclipse.ui.viewActions">
-      <viewContribution
-            id="org.nightlabs.jfire.pbx.ui.ContactDetailViewContribution"
-            targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
-         <action
-               class="org.nightlabs.jfire.pbx.ui.call.action.ContactDetailViewCallAction"
-               id="org.nightlabs.jfire.pbx.ui.call.action.ContactDetailViewCallAction"
-               label="Call"
-               style="push"
-               toolbarPath="additions">
-         </action>
-      </viewContribution>
-   </extension>
    <extension
          point="org.nightlabs.jfire.pbx.ui.callHandler">
       <callHandler
