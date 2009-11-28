@@ -10,6 +10,8 @@
                class="org.nightlabs.jfire.pbx.ui.ContactDetailViewCallAction"
                id="org.nightlabs.jfire.pbx.ui.ContactDetailViewCallAction"
                label="Call"
+               tooltip="Call this person."
+               icon="icons/ContactDetailViewCallAction.16x16.png"
                style="push"
                toolbarPath="additions">
          </action>
