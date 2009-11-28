@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Contact Asterisk Plug-in
+Bundle-Name: Asterisk Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.asterisk.ui;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.asterisk.ui.ContactAsteriskPlugin
 Bundle-Vendor: NightLabs.org
