@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="callHandler" name="Call handler" schema="schema/callHandler.exsd"/>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage"
+            id="org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage"
+            name="Phone system">
+      </page>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.nightlabs.jfire.pbx.ui.ContactDetailViewContribution"
+            targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
+         <action
+               class="org.nightlabs.jfire.pbx.ui.call.action.ContactDetailViewCallAction"
+               id="org.nightlabs.jfire.pbx.ui.call.action.ContactDetailViewCallAction"
+               label="Call"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.pbx.ui.callHandler">
+      <callHandler
+            class="org.nightlabs.jfire.pbx.ui.call.DefaultCallHandler"
+            id="org.nightlabs.jfire.pbx.ui.call.DefaultCallHandler"
+            phoneSystemClass="org.nightlabs.jfire.contact.pbx.PhoneSystem">
+      </callHandler>
+   </extension>
+</plugin>

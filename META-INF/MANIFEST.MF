@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JFire Contact PBX UI
+Bundle-SymbolicName: org.nightlabs.jfire.pbx.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.nightlabs.jfire.pbx.ui.PBXPlugin
+Bundle-Vendor: NightLabs.org
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.jfire.contact.ui;visibility:=reexport
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-LazyStart: true
+Export-Package: org.nightlabs.jfire.pbx.ui,
+ org.nightlabs.jfire.pbx.ui.call,
+ org.nightlabs.jfire.pbx.ui.config
