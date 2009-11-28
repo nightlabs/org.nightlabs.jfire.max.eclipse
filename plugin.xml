@@ -4,11 +4,11 @@
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
-            id="org.nightlabs.jfire.pbx.ui.ContactDetailViewContribution"
+            id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewContribution"
             targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
          <action
-               class="org.nightlabs.jfire.pbx.ui.ContactDetailViewCallAction"
-               id="org.nightlabs.jfire.pbx.ui.ContactDetailViewCallAction"
+               class="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
+               id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
                label="Call"
                tooltip="Call this person."
                icon="icons/ContactDetailViewCallAction.16x16.png"
