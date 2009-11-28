@@ -72,7 +72,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.contact.pbx.PhoneSystem:"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.pbx.PhoneSystem:"/>
                </appInfo>
             </annotation>
          </attribute>

@@ -15,7 +15,7 @@
       <callHandler
             class="org.nightlabs.jfire.pbx.ui.call.DefaultCallHandler"
             id="org.nightlabs.jfire.pbx.ui.call.DefaultCallHandler"
-            phoneSystemClass="org.nightlabs.jfire.contact.pbx.PhoneSystem">
+            phoneSystemClass="org.nightlabs.jfire.pbx.PhoneSystem">
       </callHandler>
    </extension>
 </plugin>
