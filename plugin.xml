@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.viewActions">
-      <viewContribution
-            id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewContribution"
-            targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
-         <action
-               class="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
-               id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
-               label="Call"
-               tooltip="Call this person."
-               icon="icons/ContactDetailViewCallAction.16x16.png"
-               style="push"
-               toolbarPath="additions">
-         </action>
-      </viewContribution>
-   </extension>
+    <extension point="org.eclipse.ui.viewActions">
+        <viewContribution
+            id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewContribution" targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
+            <action
+                class="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
+                icon="icons/ContactDetailViewCallAction.16x16.png"
+                id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
+                label="%org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction.tooltip"/>
+        </viewContribution>
+    </extension>
 </plugin>
