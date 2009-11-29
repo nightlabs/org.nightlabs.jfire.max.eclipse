@@ -55,7 +55,7 @@ extends LSDViewPart
 {
 	public static final String VIEW_ID = ContactView.class.getName();
 
-	private IMemento initMemento = null;
+//	private IMemento initMemento = null;
 
 	private AddNewContactAction addNewContactAction;
 
@@ -65,7 +65,7 @@ extends LSDViewPart
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
-		this.initMemento = memento;
+//		this.initMemento = memento;
 	}
 
 	private PersonSearchComposite searchComposite;
@@ -74,7 +74,7 @@ extends LSDViewPart
 	 */
 	@Override
 	public void createPartContents(Composite parent) {
-		//searchComposite = new PersonSearchComposite(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.searchString")); //$NON-NLS-1$
+		//searchComposite = new PersonSearchComposite(parent, SWT.NONE, ""); //$NON-NLS-1$
 
 		// Kai: [10 Nov 2009]
 		// Attempting to make resultTable to allow for only single selection.
@@ -100,7 +100,7 @@ extends LSDViewPart
 		// 4. To modify: PersonSearchComposite.createResultTable(Composite parent)
 		//               >> returns: PropertySetTable<Person> <-- new PersonResultTable(parent, SWT.NONE)
 		// -- [Overrode]:
-		searchComposite = new PersonSearchComposite(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.searchString")) { //$NON-NLS-1$
+		searchComposite = new PersonSearchComposite(parent, SWT.NONE, "") { //$NON-NLS-1$
 			@Override
 			protected PropertySetTable<Person> createResultTable(Composite parent) {
 				return new PersonResultTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
@@ -117,7 +117,7 @@ extends LSDViewPart
 		// Allow to create new Person.
 		gl.numColumns++;
 		Button createNewButton = new Button(buttonBar, SWT.PUSH);
-		createNewButton.setText("Create new person");
+		createNewButton.setText(Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.createNewButton.text")); //$NON-NLS-1$
 		createNewButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 		createNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -192,10 +192,10 @@ extends LSDViewPart
 		final Shell shell = getSite().getShell();
 		final Display display = shell.getDisplay();
 
-		Job job = new Job("Open wizard......") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.openWizardJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Begin task......", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.openWizardJob.name"), 100); //$NON-NLS-1$
 				try {
 					final CreatePersonWizard wizard = new CreatePersonWizard();
 
@@ -238,6 +238,9 @@ extends LSDViewPart
 	 * Prepares the ActionBar.
 	 */
 	private void contributeToActionBars() {
+		if (addNewContactAction != null)
+			return; // this method might be called multiple times - e.g. when doing: login, logout & re-login.
+
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		addNewContactAction = new AddNewContactAction();
 		toolBarManager.add(addNewContactAction);
@@ -250,8 +253,8 @@ extends LSDViewPart
 		public AddNewContactAction() {
 			setId(AddNewContactAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Create new person...");
-			setText("Create new person...");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.AddNewContactAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.contact.ui.ContactView.AddNewContactAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

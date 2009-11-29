@@ -23,6 +23,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
+import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
@@ -43,7 +44,7 @@ public class ContactDetailComposite extends XComposite
 	private PropertySet selectedPerson;
 	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
 
-	private NotificationListener notificationListenerPersonChanged = new NotificationAdapterJob("Loading changed person") {
+	private NotificationListener notificationListenerPersonChanged = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailComposite.notificationListenerPersonChanged.jobName")) { //$NON-NLS-1$
 		@Override
 		public void notify(NotificationEvent notificationEvent) {
 			PropertySetID selectedPersonID = (PropertySetID) JDOHelper.getObjectId(selectedPerson);
@@ -128,7 +129,7 @@ public class ContactDetailComposite extends XComposite
 
 	public void setPersonID(final PropertySetID personID)
 	{
-		Job job = new Job("Loading selected person") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailComposite.loadSelectedPersonJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				setPersonID(personID, monitor);
@@ -142,9 +143,9 @@ public class ContactDetailComposite extends XComposite
 	public void setPersonID(PropertySetID personID, ProgressMonitor monitor)
 	{
 		if (Display.getCurrent() != null)
-			throw new IllegalStateException("This method must be called in a Job!");
+			throw new IllegalStateException("This method must be called in a Job!"); //$NON-NLS-1$
 
-		monitor.beginTask("Loading person", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailComposite.loadSelectedPersonJob.name"), 100); //$NON-NLS-1$
 		try {
 			// step 1
 			PropertySet p = personID == null ? null : PropertySetDAO.sharedInstance().getPropertySet(
@@ -190,7 +191,7 @@ public class ContactDetailComposite extends XComposite
 
 	public PropertySet getPerson() {
 		if (Display.getCurrent() != display)
-			throw new IllegalStateException("Thread mismatch! This method must be called on the SWT UI thread!");
+			throw new IllegalStateException("Thread mismatch! This method must be called on the SWT UI thread!"); //$NON-NLS-1$
 
 		if (fullDataBlockCoverageComposite != null && !fullDataBlockCoverageComposite.isDisposed())
 			fullDataBlockCoverageComposite.updatePropertySet();

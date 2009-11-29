@@ -4,6 +4,7 @@ import javax.jdo.FetchPlan;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
+import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
@@ -40,7 +41,7 @@ extends ActiveEntityEditorPageController<Person>
 	@Override
 	protected Person storeEntity(Person controllerObject,
 			ProgressMonitor monitor) {
-		monitor.beginTask("Storing...", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.contact.ui.ContactEditorPageController.storeEntity.monitor.task.name"), 100); //$NON-NLS-1$
 		try {
 			controllerObject.deflate();
 			controllerObject = (Person) PropertySetDAO.sharedInstance().storeJDOObject(

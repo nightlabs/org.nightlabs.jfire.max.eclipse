@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
+import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
@@ -38,7 +39,7 @@ extends LSDViewPart
 {
 	public static final String VIEW_ID = ContactDetailView.class.getName();
 
-	private SaveDetailsChangesAction saveDetailsChangesAction;
+	private SaveAction saveAction;
 
 	private Display display;
 	private ContactDetailComposite contactDetailComposite;
@@ -56,8 +57,8 @@ extends LSDViewPart
 		contactDetailComposite.addChangeListener(new DataBlockEditorChangedListener() {
 			@Override
 			public void dataBlockEditorChanged(DataBlockEditorChangedEvent dataBlockEditorChangedEvent) {
-				if (saveDetailsChangesAction != null && !saveDetailsChangesAction.isEnabled())
-					saveDetailsChangesAction.setEnabled(true);
+				if (saveAction != null && !saveAction.isEnabled())
+					saveAction.setEnabled(true);
 			}
 		});
 
@@ -71,16 +72,16 @@ extends LSDViewPart
 						// [2009-11-17 Kai]:
 						// Check to see if the Person record has been modified before allowing uset to navigate to another
 						// record. If so prompt to save changes.
-						if (selectedPerson != null && saveDetailsChangesAction != null && saveDetailsChangesAction.isEnabled()) {
+						if (selectedPerson != null && saveAction != null && saveAction.isEnabled()) {
 							boolean isSaveChanges = MessageDialog.openQuestion(
 									RCPUtil.getActiveShell(),
-									"Record modified",
-									String.format("Changes have been made to person '%s'. Save changes?", selectedPerson.getDisplayName())
+									Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.askUserSaveChangesDialog.title"), //$NON-NLS-1$
+									String.format(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.askUserSaveChangesDialog.text"), selectedPerson.getDisplayName()) //$NON-NLS-1$
 							);
 
 							if (isSaveChanges) {
 								final PropertySet person = Util.cloneSerializable(selectedPerson);
-								Job job = new Job("Saving person") {
+								Job job = new Job(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.savePersonJob.name")) { //$NON-NLS-1$
 									@Override
 									protected IStatus run(ProgressMonitor monitor) throws Exception {
 										person.deflate();
@@ -101,7 +102,7 @@ extends LSDViewPart
 							//                  ==> The modified-unsaved Record_A is displayed, instead of the original Record_A.
 							// So: Restore previous (clean) data? Clear changes from cache? Or what??
 							// @Kai: No! We need to clone the object! Marco.
-							saveDetailsChangesAction.setEnabled(false);
+							saveAction.setEnabled(false);
 						}
 
 						contactDetailComposite.setPersonID((PropertySetID)firstSelection);
@@ -132,24 +133,24 @@ extends LSDViewPart
 	 * Prepares the ActionBar.
 	 */
 	private void contributeToActionBars() {
-		if (saveDetailsChangesAction != null)
+		if (saveAction != null)
 			return;
 
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		saveDetailsChangesAction = new SaveDetailsChangesAction();
-		toolBarManager.add(saveDetailsChangesAction);
+		saveAction = new SaveAction();
+		toolBarManager.add(saveAction);
 		toolBarManager.update(true);
 	}
 
 	/**
 	 * Allows to click on Action to save changes.
 	 */
-	protected class SaveDetailsChangesAction extends Action {
-		public SaveDetailsChangesAction() {
-			setId(SaveDetailsChangesAction.class.getName());
+	private class SaveAction extends Action {
+		public SaveAction() {
+			setId(SaveAction.class.getName());
 			setImageDescriptor(SharedImages.SAVE_16x16);
-			setToolTipText("Save changes...");
-			setText("Save changes...");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.SaveAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.SaveAction.text")); //$NON-NLS-1$
 
 			// By default, this button should always be disabled.
 			setEnabled(false);
@@ -164,10 +165,10 @@ extends LSDViewPart
 			final PropertySet person = Util.cloneSerializable(selectedPerson);
 			final PropertySetID personID = (PropertySetID) JDOHelper.getObjectId(person);
 
-			Job job = new Job("Saving contact") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.savePersonJob.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor _monitor) throws Exception {
-					_monitor.beginTask("Saving contact", 100);
+					_monitor.beginTask(Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailView.savePersonJob.name"), 100); //$NON-NLS-1$
 					try {
 						person.deflate();
 						PropertySetDAO.sharedInstance().storeJDOObject(

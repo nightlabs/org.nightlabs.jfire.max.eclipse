@@ -18,6 +18,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.FullDataBlockCoverageComposite;
+import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
@@ -33,12 +34,12 @@ extends EntityEditorPageWithProgress
 	private FullDataBlockCoverageComposite fullDataBlockCoverageComposite;
 
 	public ContactDetailEditorPage(FormEditor editor) {
-		super(editor, ContactDetailEditorPage.class.getName(), null);
+		super(editor, ContactDetailEditorPage.class.getName(), Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailEditorPage.name")); //$NON-NLS-1$
 	}
 
-	public ContactDetailEditorPage(FormEditor editor, String id, String name) {
-		super(editor, id, name);
-	}
+//	public ContactDetailEditorPage(FormEditor editor, String id, String name) {
+//		super(editor, id, name);
+//	}
 
 	/**
 	 * The Factory is registered to the extension-point and creates
@@ -151,7 +152,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Contact Details";
+		return Messages.getString("org.nightlabs.jfire.contact.ui.ContactDetailEditorPage.pageFormTitle"); //$NON-NLS-1$
 	}
 
 //	@Override
