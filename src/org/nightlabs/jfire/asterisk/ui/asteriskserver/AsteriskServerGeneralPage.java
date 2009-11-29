@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -47,7 +48,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public AsteriskServerGeneralPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "General");
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerGeneralPage.name")); //$NON-NLS-1$
 	}
 
 //	private ScrolledComposite scrolledComposite;
@@ -99,6 +100,6 @@ extends EntityEditorPageWithProgress
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "General";
+		return Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerGeneralPage.pageFormTitle"); //$NON-NLS-1$
 	}
 }

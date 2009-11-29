@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,6 +27,7 @@ import org.nightlabs.jfire.asterisk.AsteriskServer;
 import org.nightlabs.jfire.asterisk.config.AsteriskConfigModule;
 import org.nightlabs.jfire.asterisk.ui.AddCallFilePropertyDialog;
 import org.nightlabs.jfire.asterisk.ui.ContactAsteriskPlugin;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 import org.nightlabs.jfire.base.ui.config.AbstractWorkstationConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 import org.nightlabs.jfire.config.id.ConfigID;
@@ -35,6 +37,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ * @author marco หงุ่ยตระกูล-Schulze - marco at nightlabs dot de
  */
 public class AsteriskServerWorkstationCfModPreferencePage
 extends AbstractWorkstationConfigModulePreferencePage
@@ -42,10 +45,10 @@ extends AbstractWorkstationConfigModulePreferencePage
 	private Shell shell;
 	private Display display;
 
-	private Action addAction = new Action("Add property...") {
+	private Action addAction = new Action(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.AddAction.text")) { //$NON-NLS-1$
 		{
 			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Add a new property.");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.AddAction.toolTipText")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -55,7 +58,7 @@ extends AbstractWorkstationConfigModulePreferencePage
 			if (returnCode == Dialog.OK) {
 				String key = addDialog.getKey();
 				String value = addDialog.getValue();
-				if ("".equals(value))
+				if ("".equals(value)) //$NON-NLS-1$
 					value = null;
 
 				AsteriskConfigModule cfMod = getConfigModule();
@@ -77,6 +80,10 @@ extends AbstractWorkstationConfigModulePreferencePage
 		return new AsteriskServerConfigModuleController(this);
 	}
 
+	private XComposite editArea;
+	private StackLayout editAreaLayout;
+	private Label unsupportedPhoneSystemLabel;
+
 	@Override
 	protected void createPreferencePage(Composite parent) {
 		shell = getShell();
@@ -85,20 +92,28 @@ extends AbstractWorkstationConfigModulePreferencePage
 		XComposite asteriskServerComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		asteriskServerComp.getGridLayout().numColumns = 3;
 		Label phoneSystemNameLabel = new Label(asteriskServerComp, SWT.NONE);
-		phoneSystemNameLabel.setText("Phone system:");
-		phoneSystemNameLabel.setToolTipText("");
+		phoneSystemNameLabel.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.phoneSystemNameLabel.text")); //$NON-NLS-1$
+		phoneSystemNameLabel.setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.phoneSystemNameLabel.toolTipText")); //$NON-NLS-1$
 		phoneSystemNameText = new Text(asteriskServerComp, XComposite.getBorderStyle(parent) | SWT.READ_ONLY);
 		phoneSystemNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		phoneSystemNameText.setToolTipText(phoneSystemNameLabel.getToolTipText());
 
 		reloadButton = new Button(asteriskServerComp, SWT.PUSH);
-		reloadButton.setToolTipText("Reload the currently assigned phone system.");
-		reloadButton.setImage(SharedImages.getSharedImage(ContactAsteriskPlugin.getDefault(), AsteriskServerWorkstationCfModPreferencePage.class, "reloadButton"));
+		reloadButton.setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.reloadButton.toolTipText")); //$NON-NLS-1$
+		reloadButton.setImage(SharedImages.getSharedImage(ContactAsteriskPlugin.getDefault(), AsteriskServerWorkstationCfModPreferencePage.class, "reloadButton")); //$NON-NLS-1$
 
-		callFilePropertyCfModTable = new CallFilePropertyCfModTable(parent, getPageDirtyStateManager());
+		editArea = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		editAreaLayout = new StackLayout();
+		editArea.setLayout(editAreaLayout);
+		callFilePropertyCfModTable = new CallFilePropertyCfModTable(editArea, getPageDirtyStateManager());
 		callFilePropertyCfModTable.addContextMenuContribution(addAction);
+		unsupportedPhoneSystemLabel = new Label(editArea, SWT.WRAP);
 
-		final Job loadAsteriskServersJob = new Job("Loading asterisk servers") {
+		phoneSystemNameText.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.phoneSystemNameText[loading].text")); //$NON-NLS-1$
+		unsupportedPhoneSystemLabel.setText(phoneSystemNameText.getText());
+		editAreaLayout.topControl = unsupportedPhoneSystemLabel;
+
+		final Job loadAsteriskServerJob = new Job(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.loadAsteriskServerJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				ConfigID configID = getConfigModuleController().getConfigID();
@@ -122,75 +137,44 @@ extends AbstractWorkstationConfigModulePreferencePage
 
 						phoneSystem = ps;
 						phoneSystemNameText.setText(
-								String.format("%s (%s)", phoneSystem.getName().getText(), phoneSystem.getClass().getName())
+								String.format(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.phoneSystemNameText.text"), phoneSystem.getName().getText(), phoneSystem.getClass().getName()) //$NON-NLS-1$
 						);
 						if (ps instanceof AsteriskServer) {
-							setErrorMessage(null);
+							editAreaLayout.topControl = callFilePropertyCfModTable;
 							callFilePropertyCfModTable.setAsteriskServer((AsteriskServer) phoneSystem);
+							editArea.layout();
 						}
 						else {
-							setErrorMessage(
+							editAreaLayout.topControl = unsupportedPhoneSystemLabel;
+							unsupportedPhoneSystemLabel.setText(
 									String.format(
-											"The phone system \"%s\" is not an asterisk server! It is an instance of class %s, which is not supported by this configuration page.",
+											Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.unsupportedPhoneSystemLabel.text"), //$NON-NLS-1$
 											phoneSystem.getName().getText(),
 											phoneSystem.getClass().getName()
 									)
 							);
 							callFilePropertyCfModTable.setAsteriskServer(null);
+							editArea.layout();
 						}
 					}
 				});
 				return Status.OK_STATUS;
 			}
 		};
-		loadAsteriskServersJob.setPriority(Job.INTERACTIVE);
-		loadAsteriskServersJob.schedule();
+		loadAsteriskServerJob.setPriority(Job.INTERACTIVE);
+		loadAsteriskServerJob.schedule();
 
 		reloadButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				loadAsteriskServersJob.schedule();
+				phoneSystemNameText.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.phoneSystemNameText[loading].text")); //$NON-NLS-1$
+				unsupportedPhoneSystemLabel.setText(phoneSystemNameText.getText());
+				editAreaLayout.topControl = unsupportedPhoneSystemLabel;
+
+				loadAsteriskServerJob.schedule();
 			}
 		});
 	}
-
-//	private void asteriskServerSelected()
-//	{
-//		final AsteriskServer newAsteriskServer = asteriskServerCombo.getSelectedElement();
-//		if (Util.equals(newAsteriskServer, getConfigModule().getAsteriskServer()))
-//			return;
-//
-//		final AsteriskServerID newAsteriskServerID = (AsteriskServerID) JDOHelper.getObjectId(newAsteriskServer);
-//
-//		Job job = new Job("Loading asterisk server") {
-//			@Override
-//			protected IStatus run(ProgressMonitor monitor) throws Exception {
-//				final AsteriskServer[] asteriskServer = new AsteriskServer[1];
-//				try {
-//					asteriskServer[0] = AsteriskServerDAO.sharedInstance().getAsteriskServer(newAsteriskServerID,
-//							AsteriskServerConfigModuleController.FETCH_GROUPS_ASTERISK_SERVER,
-//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//							monitor
-//					);
-//				} finally {
-//					display.asyncExec(new Runnable() {
-//						public void run() {
-//							parentComposite.setEnabled(true);
-//							if (asteriskServer[0] != null) {
-//								callFilePropertyCfModTable.setAsteriskServer(asteriskServer[0]); // this should update the config-module, too
-//								getPageDirtyStateManager().markDirty();
-//							}
-//						}
-//					});
-//				}
-//				return Status.OK_STATUS;
-//			}
-//		};
-//		job.setPriority(Job.INTERACTIVE);
-//		job.setUser(true);
-//		parentComposite.setEnabled(false);
-//		job.schedule();
-//	}
 
 	@Override
 	public void updateConfigModule() {

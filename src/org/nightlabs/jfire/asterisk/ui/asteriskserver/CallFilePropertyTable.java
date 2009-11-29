@@ -31,6 +31,7 @@ import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -38,8 +39,8 @@ import org.nightlabs.jfire.asterisk.AsteriskServer;
 public class CallFilePropertyTable
 extends AbstractTableComposite<Map.Entry<String, String>>
 {
-	public static final String KEY_COLUMN_ID = "key";
-	public static final String VALUE_COLUMN_ID = "value";
+	public static final String KEY_COLUMN_ID = "key"; //$NON-NLS-1$
+	public static final String VALUE_COLUMN_ID = "value"; //$NON-NLS-1$
 
 	/**
 	 * @param parent
@@ -118,11 +119,11 @@ extends AbstractTableComposite<Map.Entry<String, String>>
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 0
 		tc.setMoveable(true);
-		tc.setText("Key");
+		tc.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CallFilePropertyTable.columnHeader[key].text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 1
 		tc.setMoveable(true);
-		tc.setText("Value");
+		tc.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CallFilePropertyTable.columnHeader[value].text")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{
 				30,

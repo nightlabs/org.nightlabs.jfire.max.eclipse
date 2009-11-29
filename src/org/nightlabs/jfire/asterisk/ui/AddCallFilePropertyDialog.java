@@ -41,7 +41,7 @@ extends ResizableTrayDialog
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Add new property");
+		newShell.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.AddCallFilePropertyDialog.windowTitle")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -51,7 +51,7 @@ extends ResizableTrayDialog
 		//			XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		Composite mainComposite = (Composite) super.createDialogArea(parent);
 
-		new Label(mainComposite, SWT.NONE).setText("Please enter the entry's key");
+		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.AddCallFilePropertyDialog.keyLabel.text")); //$NON-NLS-1$
 
 		keyText = new Text(mainComposite, SWT.BORDER);
 		keyText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -62,7 +62,7 @@ extends ResizableTrayDialog
 			}
 		});
 
-		new Label(mainComposite, SWT.NONE).setText("And its value");
+		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.AddCallFilePropertyDialog.valueLabel.text")); //$NON-NLS-1$
 		valueText = new Text(mainComposite, SWT.BORDER);
 		valueText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 

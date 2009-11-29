@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.pbx.dao.PhoneSystemDAO;
 import org.nightlabs.jfire.pbx.id.PhoneSystemID;
@@ -51,7 +52,7 @@ public class AsteriskServerEditorPageController extends ActiveEntityEditorPageCo
 
 	@Override
 	protected AsteriskServer retrieveEntity(ProgressMonitor monitor) {
-		monitor.beginTask("Begin Task", 1);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditorPageController.retrieveEntity.monitor.task.name"), 1); //$NON-NLS-1$
 		try {
 			if(asteriskServerID != null) {
 				// load asteriskServer
@@ -73,7 +74,7 @@ public class AsteriskServerEditorPageController extends ActiveEntityEditorPageCo
 
 	@Override
 	protected AsteriskServer storeEntity(AsteriskServer controllerObject, ProgressMonitor monitor) {
-		monitor.beginTask("Loading.............", 5);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditorPageController.storeEntity.monitor.task.name"), 5); //$NON-NLS-1$
 		try	{
 			monitor.worked(1);
 			return (AsteriskServer) PhoneSystemDAO.sharedInstance().storePhoneSystem(

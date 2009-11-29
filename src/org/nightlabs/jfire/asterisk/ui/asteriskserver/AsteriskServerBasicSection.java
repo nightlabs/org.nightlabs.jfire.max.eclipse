@@ -17,6 +17,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -38,7 +39,7 @@ extends RestorableSectionPart
 
 	private void createClient(Section section, FormToolkit toolkit) {
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		section.setText("Basic settings");
+		section.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerBasicSection.title")); //$NON-NLS-1$
 
 		Composite container = EntityEditorUtil.createCompositeClient(toolkit, section, 1);
 
@@ -50,21 +51,21 @@ extends RestorableSectionPart
 			}
 		};
 
-		name = new I18nTextEditor(container, "Name");
+		name = new I18nTextEditor(container, Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerBasicSection.nameLabel.text")); //$NON-NLS-1$
 		name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		name.addModifyListener(markDirtyModifyListener);
 
 		Label callFileDirectoryLabel = new Label(container, SWT.NONE);
-		callFileDirectoryLabel.setText("Call file directory");
-		callFileDirectoryLabel.setToolTipText("The directory on the server into which the call files will be placed. This directory should be the one which Asterisk scans as outgoing spool directory (default is '/var/spool/asterisk/outgoing').");
+		callFileDirectoryLabel.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerBasicSection.callFileDirectoryLabel.text")); //$NON-NLS-1$
+		callFileDirectoryLabel.setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerBasicSection.callFileDirectoryLabel.toolTipText")); //$NON-NLS-1$
 		callFileDirectory = new Text(container, XComposite.getBorderStyle(container));
 		callFileDirectory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		callFileDirectory.setToolTipText(callFileDirectoryLabel.getToolTipText());
 		callFileDirectory.addModifyListener(markDirtyModifyListener);
 
 		Label internationalCallPrefixLabel = new Label(container, SWT.NONE);
-		internationalCallPrefixLabel.setText("International call prefix");
-		internationalCallPrefixLabel.setToolTipText("The prefix which must be dialed for international connections before the country code. Usually, this is '00', but some countries use other prefixes.");
+		internationalCallPrefixLabel.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerBasicSection.internationalCallPrefixLabel.text")); //$NON-NLS-1$
+		internationalCallPrefixLabel.setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerBasicSection.internationalCallPrefixLabel.toolTipText")); //$NON-NLS-1$
 		internationalCallPrefix = new Text(container, XComposite.getBorderStyle(container));
 		internationalCallPrefix.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		internationalCallPrefix.setToolTipText(internationalCallPrefixLabel.getToolTipText());

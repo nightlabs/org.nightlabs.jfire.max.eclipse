@@ -27,10 +27,10 @@ extends ToolBarSectionPart
 {
 	private CallFilePropertyTable callFilePropertyTable;
 
-	private Action addAction = new Action("Add property...") {
+	private Action addAction = new Action(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerCallFilePropertiesSection.AddAction.text")) { //$NON-NLS-1$
 		{
 			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Add a new property.");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerCallFilePropertiesSection.AddAction.toolTipText")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -45,10 +45,10 @@ extends ToolBarSectionPart
 		}
 	};
 
-	private Action removeAction = new Action("Remove selected properties...") {
+	private Action removeAction = new Action(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerCallFilePropertiesSection.RemoveAction.text")) { //$NON-NLS-1$
 		{
 			setImageDescriptor(SharedImages.DELETE_16x16);
-			setToolTipText("Delete the selected properties.");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerCallFilePropertiesSection.RemoveAction.toolTipText")); //$NON-NLS-1$
 		}
 
 		@Override

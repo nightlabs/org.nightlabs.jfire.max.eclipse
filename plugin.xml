@@ -1,47 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
 <plugin>
-   <extension point="org.nightlabs.base.ui.entityEditor">
-         <category
-             class="org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer"
-             icon="icons/asteriskserver/EntityTreeCategoryAsteriskServer.16x16.png"
-             id="org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer"
-             name="Asterisk servers">
-           	   	<viewBinding
-                      editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor"
-                      indexHint="20"
-                      viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView">
-         		 </viewBinding>
-     	  </category>
-       <pageFactory
-             class="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerGeneralPage$Factory"
-             editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor"
-             indexHint="10">
-       </pageFactory>
-   </extension>
+    <extension point="org.nightlabs.base.ui.entityEditor">
+        <category
+            class="org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer"
+            icon="icons/asteriskserver/EntityTreeCategoryAsteriskServer.16x16.png"
+            id="org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer" name="%org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer.name">
+            <viewBinding
+                editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor"
+                indexHint="20" viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView"/>
+        </category>
+        <pageFactory
+            class="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerGeneralPage$Factory"
+            editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor" indexHint="10"/>
+    </extension>
     <extension point="org.eclipse.ui.editors">
         <editor
             class="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor"
             icon="icons/asteriskserver/EntityTreeCategoryAsteriskServer.16x16.png"
-            id="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor" name="Asterisk server editor"/>
-   </extension>
-   <extension point="org.eclipse.ui.preferencePages">
-<!--
-TODO think about correct way to categorize - if this category is "Contact", it should be provided by the "Contact" plug-in - not here!
+            id="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor" name="%org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.preferencePages">
         <page
-              category="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerCategoryPreferencePage"
-              class="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage"
-              id="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage"
-              name="Asterisk server"/>
-        <page
-              class="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerCategoryPreferencePage"
-              id="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerCategoryPreferencePage"
-              name="Contact">
-        </page>
--->
-		<page
-              class="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage"
-              id="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage"
-              name="Asterisk server"/>
+     		category="org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage"
+            class="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage"
+            id="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage" name="%org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.name"/>
     </extension>
 </plugin>

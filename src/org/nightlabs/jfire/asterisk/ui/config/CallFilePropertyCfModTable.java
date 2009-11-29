@@ -34,6 +34,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.EmulatedNativeCheckBoxTableLabelProvider;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
 import org.nightlabs.jfire.asterisk.config.AsteriskConfigModule;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
@@ -43,10 +44,10 @@ import org.nightlabs.util.Util;
 public class CallFilePropertyCfModTable
 extends AbstractTableComposite<String>
 {
-	public static final String KEY_COLUMN_ID = "property-key";
-	public static final String DEFAULT_VALUE_COLUMN_ID = "default-property-value";
-	public static final String OVERRIDDEN_COLUMN_ID = "overridden";
-	public static final String PROPERTY_VALUE_COLUMN_ID = "property-value";
+	public static final String KEY_COLUMN_ID = "property-key"; //$NON-NLS-1$
+	public static final String DEFAULT_VALUE_COLUMN_ID = "default-property-value"; //$NON-NLS-1$
+	public static final String OVERRIDDEN_COLUMN_ID = "overridden"; //$NON-NLS-1$
+	public static final String PROPERTY_VALUE_COLUMN_ID = "property-value"; //$NON-NLS-1$
 
 	private IDirtyStateManager dirtyStateManager;
 
@@ -73,7 +74,7 @@ extends AbstractTableComposite<String>
 		emulatedNativeCheckBoxTableLabelProvider = new EmulatedNativeCheckBoxTableLabelProvider(getTableViewer()) {
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
-				throw new UnsupportedOperationException("This method should never be called!");
+				throw new UnsupportedOperationException("This method should never be called!"); //$NON-NLS-1$
 			}
 		};
 		getTableViewer().setSorter(new ViewerSorter());
@@ -137,19 +138,19 @@ extends AbstractTableComposite<String>
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 0
 		tc.setMoveable(true);
-		tc.setText("Key");
+		tc.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.CallFilePropertyCfModTable.columnHeader[key].text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 1
 		tc.setMoveable(true);
-		tc.setText("Default Value");
+		tc.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.CallFilePropertyCfModTable.columnHeader[asteriskServerValue].text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 2
 		tc.setMoveable(true);
-		tc.setText("Overridden");
+		tc.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.CallFilePropertyCfModTable.columnHeader[overridden].text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT); // @column 3
 		tc.setMoveable(true);
-		tc.setText("Value");
+		tc.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.config.CallFilePropertyCfModTable.columnHeader[value].text")); //$NON-NLS-1$
 
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{
@@ -234,7 +235,7 @@ extends AbstractTableComposite<String>
 
 	@Override
 	public void setInput(Object input) {
-		throw new IllegalArgumentException("This table should not be set with the input directly, use setConfigModule instead!");
+		throw new IllegalArgumentException("This table should not be set with the input directly, use setConfigModule instead!"); //$NON-NLS-1$
 	}
 
 //	protected class CallFilePropertyContentProvider implements IStructuredContentProvider {
@@ -359,7 +360,7 @@ extends AbstractTableComposite<String>
 			}
 			else if(property.equals(PROPERTY_VALUE_COLUMN_ID)){
 				String value = asteriskConfigModule.getCallFileProperties().get(key);
-				return value == null ? "" : value;
+				return value == null ? "" : value; //$NON-NLS-1$
 			}
 			return null;
 		}
