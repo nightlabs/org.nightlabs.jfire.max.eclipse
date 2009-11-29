@@ -20,16 +20,19 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.pbx.ui.resource.Messages;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.datafield.PhoneNumberDataField;
 
 public class SelectPhoneNumberDialog extends ResizableTitleAreaDialog
 {
+	private PropertySet person;
 	private List<PhoneNumberDataField> phoneNumberDataFields;
 	private TableViewer tableViewer;
 	private PhoneNumberDataField selectedPhoneNumberDataField;
 
-	public SelectPhoneNumberDialog(Shell shell, List<PhoneNumberDataField> phoneNumberDataFields) {
+	public SelectPhoneNumberDialog(Shell shell, PropertySet person, List<PhoneNumberDataField> phoneNumberDataFields) {
 		super(shell, Messages.RESOURCE_BUNDLE);
+		this.person = person;
 		this.phoneNumberDataFields = phoneNumberDataFields;
 	}
 
@@ -44,9 +47,20 @@ public class SelectPhoneNumberDialog extends ResizableTitleAreaDialog
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite area = (Composite) super.createDialogArea(parent);
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(
+				String.format("Call: %s", person.getDisplayName())
+		);
+	}
 
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		setTitle(
+				String.format("Please select the phone number to call.", person.getDisplayName())
+		);
+
+		Composite area = (Composite) super.createDialogArea(parent);
 		tableViewer = new TableViewer(area, SWT.BORDER | SWT.FULL_SELECTION);
 		Table table = tableViewer.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));

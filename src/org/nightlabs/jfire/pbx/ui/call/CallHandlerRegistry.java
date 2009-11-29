@@ -146,7 +146,7 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 				Display.getDefault().syncExec(new Runnable() { // important to use syncExec because otherwise the shell might be closed before the dialog is opened.
 					@Override
 					public void run() {
-						SelectPhoneNumberDialog dialog = new SelectPhoneNumberDialog(RCPUtil.getActiveShell(), phoneNumberDataFields);
+						SelectPhoneNumberDialog dialog = new SelectPhoneNumberDialog(RCPUtil.getActiveShell(), person, phoneNumberDataFields);
 						dialog.open();
 						tmp[0] = dialog.getSelectedPhoneNumberDataField();
 					}
