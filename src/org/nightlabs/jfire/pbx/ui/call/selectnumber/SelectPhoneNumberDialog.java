@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -103,6 +105,16 @@ public class SelectPhoneNumberDialog extends ResizableTitleAreaDialog
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				phoneNumberSelected();
+			}
+		});
+
+		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (tableViewer.getSelection().isEmpty())
+					return;
+
+				okPressed();
 			}
 		});
 
