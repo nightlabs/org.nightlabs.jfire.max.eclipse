@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.pbx.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.pbx.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -9,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class PBXPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.pbx.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.pbx.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static PBXPlugin plugin;

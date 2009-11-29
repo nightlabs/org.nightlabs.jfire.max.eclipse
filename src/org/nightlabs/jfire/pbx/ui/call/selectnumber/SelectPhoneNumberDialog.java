@@ -50,14 +50,14 @@ public class SelectPhoneNumberDialog extends ResizableTitleAreaDialog
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(
-				String.format("Call: %s", person.getDisplayName())
+				String.format(Messages.getString("org.nightlabs.jfire.pbx.ui.call.selectnumber.SelectPhoneNumberDialog.windowTitle"), person.getDisplayName()) //$NON-NLS-1$
 		);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle(
-				String.format("Please select the phone number to call.", person.getDisplayName())
+				String.format(Messages.getString("org.nightlabs.jfire.pbx.ui.call.selectnumber.SelectPhoneNumberDialog.title"), person.getDisplayName()) //$NON-NLS-1$
 		);
 
 		Composite area = (Composite) super.createDialogArea(parent);
@@ -85,15 +85,15 @@ public class SelectPhoneNumberDialog extends ResizableTitleAreaDialog
 
 		TableLayout tl = new TableLayout();
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Block");
+		tc.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.call.selectnumber.SelectPhoneNumberDialog.columnHeader[block].text")); //$NON-NLS-1$
 		tl.addColumnData(new ColumnWeightData(33));
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Field");
+		tc.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.call.selectnumber.SelectPhoneNumberDialog.columnHeader[field].text")); //$NON-NLS-1$
 		tl.addColumnData(new ColumnWeightData(33));
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Number");
+		tc.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.call.selectnumber.SelectPhoneNumberDialog.columnHeader[number].text")); //$NON-NLS-1$
 		tl.addColumnData(new ColumnWeightData(33));
 
 		table.setLayout(tl);

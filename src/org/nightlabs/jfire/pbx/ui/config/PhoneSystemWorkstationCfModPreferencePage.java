@@ -28,6 +28,7 @@ import org.nightlabs.jfire.pbx.Call;
 import org.nightlabs.jfire.pbx.PhoneSystem;
 import org.nightlabs.jfire.pbx.config.PhoneSystemConfigModule;
 import org.nightlabs.jfire.pbx.dao.PhoneSystemDAO;
+import org.nightlabs.jfire.pbx.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
@@ -61,12 +62,12 @@ extends AbstractWorkstationConfigModulePreferencePage
 				return ((PhoneSystem)element).getName().getText(locale);
 			}
 		});
-		PhoneSystem loadingMessageDummy = new PhoneSystem(Organisation.DEV_ORGANISATION_ID, "_dummy_") {
+		PhoneSystem loadingMessageDummy = new PhoneSystem(Organisation.DEV_ORGANISATION_ID, "_dummy_") { //$NON-NLS-1$
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void call(Call call) { }
 		};
-		loadingMessageDummy.getName().setText(Locale.getDefault(), "Loading data...");
+		loadingMessageDummy.getName().setText(Locale.getDefault(), Messages.getString("org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage.phoneSystemCombo.loadingMessage")); //$NON-NLS-1$
 		phoneSystemCombo.addElement(loadingMessageDummy);
 		phoneSystemCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -75,7 +76,7 @@ extends AbstractWorkstationConfigModulePreferencePage
 			}
 		});
 
-		Job loadPhoneSystemsJob = new Job("Loading phone systems") {
+		Job loadPhoneSystemsJob = new Job(Messages.getString("org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage.loadPhoneSystemsJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final List<PhoneSystem> phoneSystems = new ArrayList<PhoneSystem>(PhoneSystemDAO.sharedInstance().getPhoneSystems(
