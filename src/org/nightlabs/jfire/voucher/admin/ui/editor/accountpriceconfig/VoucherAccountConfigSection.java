@@ -178,15 +178,18 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	protected void updateContents()
 	{
 		accountsDelegateMap =  new HashMap<Currency, Account>();
+		if (voucherLocalAccountantDelegate != null) {
+			for (Map.Entry<String, Account> me : voucherLocalAccountantDelegate.getAccounts().entrySet()) {		
+				accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
+			}		
+			String str = String.format("%s - %s",Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.accountConfiguration"),voucherLocalAccountantDelegate.getName().getText());				 //$NON-NLS-1$ //$NON-NLS-2$
+			getSection().setText(str);
+		}
+		else
+			getSection().setText("Account configuration");
 
-		for (Map.Entry<String, Account> me : voucherLocalAccountantDelegate.getAccounts().entrySet()) {		
-			accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
-		}		
 		localAccountinheritance = inheritanceAction.isChecked();
 		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
-		// puts the accounts inside the widget
-		String str = String.format("%s - %s",Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.accountConfiguration"),voucherLocalAccountantDelegate.getName().getText());				 //$NON-NLS-1$ //$NON-NLS-2$
-		getSection().setText(str);
 		copyMap.putAll(accountsDelegateMap);
 		accountantDelegateComposite.setMap(copyMap);
 	}

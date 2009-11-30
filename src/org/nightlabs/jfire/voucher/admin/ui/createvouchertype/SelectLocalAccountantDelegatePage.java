@@ -134,7 +134,7 @@ extends WizardHopPage
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				final VoucherType parentVoucherType = VoucherTypeDAO.sharedInstance().getVoucherType(
+				final VoucherType parentVoucherType = parentVoucherTypeID == null ? null : VoucherTypeDAO.sharedInstance().getVoucherType(
 						parentVoucherTypeID,
 						new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL, ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE, LocalAccountantDelegate.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
@@ -153,7 +153,10 @@ extends WizardHopPage
 				{
 					public void run()
 					{
-						inheritedLocalAccountantDelegate = (VoucherLocalAccountantDelegate) parentVoucherType.getProductTypeLocal().getLocalAccountantDelegate();
+						inheritedLocalAccountantDelegate = null;
+						if (parentVoucherType != null)
+							inheritedLocalAccountantDelegate = (VoucherLocalAccountantDelegate) parentVoucherType.getProductTypeLocal().getLocalAccountantDelegate();
+
 						if (inheritedLocalAccountantDelegate == null)
 							setInheritedLocalAccountantDelegateName(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectLocalAccountantDelegatePage.inheritedLocalAccountantDelegateName_noneAssigned")); //$NON-NLS-1$
 						else
