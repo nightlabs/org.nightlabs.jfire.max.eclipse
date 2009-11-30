@@ -42,10 +42,10 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author fitas [at] NightLabs [dot] de
- *
+ * @author marco schulze - marco at nightlabs dot de
  */
-public class VoucherAccountConfigSection extends ToolBarSectionPart{
-
+public class VoucherAccountConfigSection extends ToolBarSectionPart
+{
 	private InheritanceAction inheritanceAction;
 	private VoucherType voucherType;
 	private VoucherLocalAccountantDelegate voucherLocalAccountantDelegate;
@@ -55,8 +55,8 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	private VoucherLocalAccountantDelegateComposite accountantDelegateComposite;
 
 	public static final String[] FETCH_GROUPS_VOUCHER_ACCOUNT = {
-		FetchPlan.DEFAULT, 
-		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID, 
+		FetchPlan.DEFAULT,
+		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
 		ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
 		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
@@ -64,14 +64,13 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,Account.FETCH_GROUP_NAME
 	};
 
-
 	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.section.name")); //$NON-NLS-1$
 
-		
+
 		AssignAccountConfigAction assignAccountConfigAction = new AssignAccountConfigAction();
 		getToolBarManager().add(assignAccountConfigAction);
-		
+
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -95,59 +94,52 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 						if(!accountsDelegateMap.equals(accountantDelegateComposite.getMap()))
 						{
 							markDirty();
-						}		
+						}
 					}
 				});
 
 		stackLayout.topControl = accountantDelegateComposite;
 		updateToolBarManager();
-
 	}
 
 	@Override
 	public void commit(boolean onSave) {
 		super.commit(onSave);
-		
-		
-		if (voucherLocalAccountantDelegate== null)
-			return;
-			
-		Collection<VoucherType> vouchers = VoucherTypeDAO.sharedInstance().getVoucherTypesByLocalAccountantDelegateId((ObjectID) JDOHelper.getObjectId(voucherLocalAccountantDelegate),
-				VoucherTypeQuickListFilter.FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				
-		if (!vouchers.isEmpty()) 
-		{
-			String title = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.title"); //$NON-NLS-1$
-			String message1 = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.message1"); //$NON-NLS-1$
-			String message2 = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.message2"); //$NON-NLS-1$
-			VoucherTypeTableDialog dlg = new VoucherTypeTableDialog(RCPUtil.getActiveShell(), vouchers, title, message1, message2) {
-				@Override
-				protected void createButtonsForButtonBar(Composite parent) {
-					createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
-					createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
-				}
-				
-			};
-			
-			if(dlg.open() == Window.CANCEL)
-				return;
-		}
-		
+
+		if (voucherLocalAccountantDelegate != null) {
+			Collection<VoucherType> vouchers = VoucherTypeDAO.sharedInstance().getVoucherTypesByLocalAccountantDelegateId((ObjectID) JDOHelper.getObjectId(voucherLocalAccountantDelegate),
+					VoucherTypeQuickListFilter.FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
+			if (!vouchers.isEmpty())
+			{
+				String title = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.title"); //$NON-NLS-1$
+				String message1 = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.message1"); //$NON-NLS-1$
+				String message2 = Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.message2"); //$NON-NLS-1$
+				VoucherTypeTableDialog dlg = new VoucherTypeTableDialog(RCPUtil.getActiveShell(), vouchers, title, message1, message2) {
+					@Override
+					protected void createButtonsForButtonBar(Composite parent) {
+						createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
+						createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
+					}
+				};
+
+				if(dlg.open() == Window.CANCEL)
+					return;
+			}
+
 			// copy the values from the local account widget
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
-				voucherLocalAccountantDelegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
-			}	
-			
-			voucherType.getProductTypeLocal().getFieldMetaData(
-					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(
-							localAccountinheritance);		
-			voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
-				
-		
+				voucherLocalAccountantDelegate.setAccount(me.getKey().getCurrencyID(), me.getValue());
+			}
+		}
+
+		voucherType.getProductTypeLocal().getFieldMetaData(
+				ProductTypeLocal.FieldName.localAccountantDelegate
+		).setValueInherited(localAccountinheritance);
+		voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
 	}
 
-
-	VoucherLocalAccountantDelegate getVoucherLocalAccountantDelegate()	
+	protected VoucherLocalAccountantDelegate getVoucherLocalAccountantDelegate()
 	{
 		if (this.voucherType.getProductTypeLocal().getLocalAccountantDelegate() == null)
 			return null;
@@ -158,10 +150,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			throw new IllegalStateException("LocalAccountantDelegate is not an instance of VoucherLocalAccountantDelegate"); //$NON-NLS-1$
 	}
 
-
 	public void setVoucherType(VoucherType voucherType)
 	{
-		this.voucherType = voucherType; 
+		this.voucherType = voucherType;
 		voucherLocalAccountantDelegate = getVoucherLocalAccountantDelegate();
 		orginalVoucherLocalAccountantDelegate = voucherLocalAccountantDelegate;
 		inheritanceAction.setChecked(
@@ -174,14 +165,13 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		updateContents();
 	}
 
-
 	protected void updateContents()
 	{
 		accountsDelegateMap =  new HashMap<Currency, Account>();
 		if (voucherLocalAccountantDelegate != null) {
-			for (Map.Entry<String, Account> me : voucherLocalAccountantDelegate.getAccounts().entrySet()) {		
+			for (Map.Entry<String, Account> me : voucherLocalAccountantDelegate.getAccounts().entrySet()) {
 				accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
-			}		
+			}
 			String str = String.format("%s - %s",Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.accountConfiguration"),voucherLocalAccountantDelegate.getName().getText());				 //$NON-NLS-1$ //$NON-NLS-2$
 			getSection().setText(str);
 		}
@@ -190,11 +180,10 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
 		localAccountinheritance = inheritanceAction.isChecked();
 		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
+		copyMap.clear();
 		copyMap.putAll(accountsDelegateMap);
 		accountantDelegateComposite.setMap(copyMap);
 	}
-
-
 
 	protected void inheritPressed() {
 		if( inheritanceAction.isChecked() )
@@ -203,22 +192,20 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 					voucherType.getExtendedProductTypeID(),
 					FETCH_GROUPS_VOUCHER_ACCOUNT,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			
-					voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) parentVoucherType.getProductTypeLocal().getLocalAccountantDelegate();
+
+			voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) parentVoucherType.getProductTypeLocal().getLocalAccountantDelegate();
 		}
 		else
 			voucherLocalAccountantDelegate = orginalVoucherLocalAccountantDelegate;
-		
+
 		updateContents();
 		markDirty();
 	}
 
-	
-	
 	protected void assignAccountConfigClicked()
 	{
 		AccountVoucherTypeWizard accountVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID());
-		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(accountVoucherTypeWizard);
+		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(getSection().getShell(), accountVoucherTypeWizard);
 		if( wizardDialog.open() == Window.OK)
 		{
 			voucherLocalAccountantDelegate = accountVoucherTypeWizard.selectedVoucherLocalAccountantDelegate();
@@ -227,7 +214,6 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			markDirty();
 		}
 	}
-
 
 	class AssignAccountConfigAction
 	extends Action
@@ -238,7 +224,8 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					VoucherAdminPlugin.getDefault(),
 					VoucherPriceConfigSection.class,
-			"AssignAccountConfig")); //$NON-NLS-1$
+					"AssignAccountConfig")
+			); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.action.assignAccountConfig.tooltip"));  //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.action.assignAccountConfig.text")); //$NON-NLS-1$
 		}
@@ -248,7 +235,4 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			assignAccountConfigClicked();
 		}
 	}
-
-	
-	
 }
