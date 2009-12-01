@@ -96,6 +96,23 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.pbx.ui.call.CallHandlerRegistry.callJob.name"), 100); //$NON-NLS-1$
 		try {
+			PhoneSystem phoneSystem = PhoneSystemDAO.sharedInstance().getPhoneSystem((WorkstationID)null, new String[] {FetchPlan.DEFAULT, PhoneSystem.FETCH_GROUP_CALLABLE_STRUCT_FIELDS}, 1, new SubProgressMonitor(monitor, 50));
+			if (phoneSystem == null) {
+				WorkstationID workstationID = null;
+
+				Login login;
+				try {
+					login = Login.getLogin();
+				} catch (LoginException e) {
+					throw new RuntimeException(e);
+				}
+
+				if (login.getWorkstationID() != null)
+					workstationID = WorkstationID.create(login.getOrganisationID(), login.getWorkstationID());
+
+				throw new NoPhoneSystemAssignedException(workstationID);
+			}
+			
 			// load person, collect phone numbers and (if more than one) ask the user which one to call.
 			final PropertySet p = PropertySetDAO.sharedInstance().getPropertySet(
 					personID, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -112,7 +129,7 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 				if (dataField.isEmpty())
 					continue;
 
-				if (dataField instanceof PhoneNumberDataField)
+				if (dataField instanceof PhoneNumberDataField && phoneSystem.getCallableStructFields().contains(dataField.getStructField()))
 					phoneNumberDataFields.add((PhoneNumberDataField) dataField);
 			}
 
@@ -160,7 +177,7 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 			if (phoneNumberDataField != null) {
 				DataFieldID phoneNumberDataFieldID = (DataFieldID) JDOHelper.getObjectId(phoneNumberDataField);
 				Call call = new Call(phoneNumberDataFieldID);
-				call(call, new SubProgressMonitor(monitor, 40));
+				call(phoneSystem, call, new SubProgressMonitor(monitor, 40));
 			}
 
 		} finally {
@@ -173,7 +190,24 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.pbx.ui.call.CallHandlerRegistry.callJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				call(call, monitor);
+				PhoneSystem phoneSystem = PhoneSystemDAO.sharedInstance().getPhoneSystem((WorkstationID)null, null, 1, new SubProgressMonitor(monitor, 50));
+				if (phoneSystem == null) {
+					WorkstationID workstationID = null;
+
+					Login login;
+					try {
+						login = Login.getLogin();
+					} catch (LoginException e) {
+						throw new RuntimeException(e);
+					}
+
+					if (login.getWorkstationID() != null)
+						workstationID = WorkstationID.create(login.getOrganisationID(), login.getWorkstationID());
+
+					throw new NoPhoneSystemAssignedException(workstationID);
+				}
+				
+				call(phoneSystem, call, monitor);
 				return Status.OK_STATUS;
 			}
 		};
@@ -182,27 +216,10 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 		job.schedule();
 	}
 
-	public void call(Call call, ProgressMonitor monitor) throws PhoneSystemException
+	public void call(PhoneSystem phoneSystem, Call call, ProgressMonitor monitor) throws PhoneSystemException
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.pbx.ui.call.CallHandlerRegistry.callJob.name"), 100); //$NON-NLS-1$
 		try {
-			PhoneSystem phoneSystem = PhoneSystemDAO.sharedInstance().getPhoneSystem((WorkstationID)null, null, 1, new SubProgressMonitor(monitor, 50));
-			if (phoneSystem == null) {
-				WorkstationID workstationID = null;
-
-				Login login;
-				try {
-					login = Login.getLogin();
-				} catch (LoginException e) {
-					throw new RuntimeException(e);
-				}
-
-				if (login.getWorkstationID() != null)
-					workstationID = WorkstationID.create(login.getOrganisationID(), login.getWorkstationID());
-
-				throw new NoPhoneSystemAssignedException(workstationID);
-			}
-
 			IConfigurationElement configurationElement = null;
 			Class<? extends PhoneSystem> clazz = phoneSystem.getClass();
 			while (clazz != null) {

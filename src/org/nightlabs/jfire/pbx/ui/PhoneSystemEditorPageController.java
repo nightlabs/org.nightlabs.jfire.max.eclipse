@@ -10,6 +10,7 @@ import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageControlle
 import org.nightlabs.jfire.pbx.PhoneSystem;
 import org.nightlabs.jfire.pbx.dao.PhoneSystemDAO;
 import org.nightlabs.jfire.pbx.id.PhoneSystemID;
+import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -21,6 +22,7 @@ public class PhoneSystemEditorPageController extends ActiveEntityEditorPageContr
 
 	private static final String[] FETCH_GROUPS_PHONE_SYSTEM = new String[] {
 		FetchPlan.DEFAULT,
+		StructField.FETCH_GROUP_NAME,
 		PhoneSystem.FETCH_GROUP_NAME,
 		PhoneSystem.FETCH_GROUP_CALLABLE_STRUCT_FIELDS
 	};
