@@ -22,6 +22,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
 import org.nightlabs.jfire.asterisk.ui.AddCallFilePropertyDialog;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -32,8 +33,9 @@ extends WizardHopPage
 	private AsteriskServer asteriskServer;
 
 	public CreateAsteriskServerCallFilePropertyWizardPage(AsteriskServer asteriskServer) {
-		super(CreateAsteriskServerCallFilePropertyWizardPage.class.getName(), "Title");
+		super(CreateAsteriskServerCallFilePropertyWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerCallFilePropertyWizardPage.pageTitle")); //$NON-NLS-1$
 		this.asteriskServer = asteriskServer;
+		setDescription(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerCallFilePropertyWizardPage.description")); //$NON-NLS-1$
 	}
 
 	private CallFilePropertyTable callFilePropertyTable;
@@ -48,7 +50,7 @@ extends WizardHopPage
 		XComposite buttonComposite = new  XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		Button addButton = new Button(buttonComposite, SWT.PUSH);
-		addButton.setText("Add");
+		addButton.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerCallFilePropertyWizardPage.addButtonText")); //$NON-NLS-1$
 		addButton.setImage(SharedImages.ADD_16x16.createImage());
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.addSelectionListener(new SelectionAdapter() {
@@ -65,7 +67,7 @@ extends WizardHopPage
 		});
 
 		Button removeButton = new Button(buttonComposite, SWT.PUSH);
-		removeButton.setText("Remove");
+		removeButton.setText(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerCallFilePropertyWizardPage.removeButtonText")); //$NON-NLS-1$
 		removeButton.setImage(SharedImages.DELETE_16x16.createImage());
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.addSelectionListener(new SelectionAdapter() {

@@ -27,8 +27,9 @@ extends WizardHopPage
 	private AsteriskServer asteriskServer;
 
 	public CreateAsteriskServerWizardPage(AsteriskServer asteriskServer) {
-		super(CreateAsteriskServerWizardPage.class.getName(), "Create Asterisk server");
+		super(CreateAsteriskServerWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerWizardPage.pageTitle")); //$NON-NLS-1$
 		this.asteriskServer = asteriskServer;
+		setDescription(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerWizardPage.description")); //$NON-NLS-1$
 	}
 
 	private I18nTextEditor name;
@@ -47,7 +48,7 @@ extends WizardHopPage
 			public void modifyText(ModifyEvent event) {
 				getContainer().updateButtons();
 				if (name.getEditText().equals("")) { //$NON-NLS-1$
-					setErrorMessage("The name should not be empty");
+					setErrorMessage(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerWizardPage.errorMessage.emptyName")); //$NON-NLS-1$
 				}
 			}
 		});
@@ -97,7 +98,7 @@ extends WizardHopPage
 	public boolean isPageComplete() {
 		boolean result = true;
 		setErrorMessage(null);
-		if (name.getEditText().equals("") || name.getI18nText().getText() == null)
+		if (name.getEditText().equals("") || name.getI18nText().getText() == null) //$NON-NLS-1$
 			result = false;
 		
 		if (result == true && optionalPage == null) {

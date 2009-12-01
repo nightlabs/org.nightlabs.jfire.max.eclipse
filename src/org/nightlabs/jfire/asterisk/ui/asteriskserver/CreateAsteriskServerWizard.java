@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
 import org.nightlabs.jfire.asterisk.dao.AsteriskServerDAO;
+import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.pbx.PhoneSystem;
 import org.nightlabs.jfire.pbx.id.PhoneSystemID;
@@ -31,7 +32,7 @@ implements INewWizard
 	
 	public CreateAsteriskServerWizard()
 	{
-		setWindowTitle("Create new Asterisk server");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerWizard.windowTitle")); //$NON-NLS-1$
 		newAsteriskServer = new AsteriskServer(IDGenerator.getOrganisationID(), IDGenerator.nextIDString(PhoneSystem.class));
 	}
 
