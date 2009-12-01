@@ -24,11 +24,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.pbx.PhoneSystem;
+import org.nightlabs.jfire.pbx.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.prop.DataField;
@@ -57,13 +57,13 @@ extends ToolBarSectionPart
 		super(
 				page, parent,
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR,
-				"Title");
+				Messages.getString("org.nightlabs.jfire.pbx.uihoneSystemCallableFieldSection.title")); //$NON-NLS-1$
 		createClient(getSection(), page.getEditor().getToolkit());
 	}
 
 	private void createClient(Section section, FormToolkit toolkit) {
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
-		section.setText("Callable Fields");
+		section.setText(Messages.getString("org.nightlabs.jfire.pbx.uihoneSystemCallableFieldSection.sectionText")); //$NON-NLS-1$
 		
 		Composite container = getContainer();//EntityEditorUtil.createCompositeClient(toolkit, section, 1);
 		GridLayout gridLayout = new GridLayout(3, false);
@@ -79,10 +79,9 @@ extends ToolBarSectionPart
 		});
 		
 		XComposite buttonComposite = new XComposite(container, SWT.NONE);
-		buttonComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+		buttonComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		addButton = new Button(buttonComposite, SWT.NONE);
-		addButton.setText("Add >");
+		addButton.setText(Messages.getString("org.nightlabs.jfire.pbx.uihoneSystemCallableFieldSection.addText")); //$NON-NLS-1$
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		addButton.setLayoutData(gridData);
 		addButton.addSelectionListener(new SelectionAdapter() {
@@ -95,7 +94,7 @@ extends ToolBarSectionPart
 		});
 		
 		removeButton = new Button(buttonComposite, SWT.NONE);
-		removeButton.setText("< Remove");
+		removeButton.setText(Messages.getString("org.nightlabs.jfire.pbx.uihoneSystemCallableFieldSection.removeText")); //$NON-NLS-1$
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		removeButton.setLayoutData(gridData);
 		removeButton.addSelectionListener(new SelectionAdapter() {
@@ -108,7 +107,7 @@ extends ToolBarSectionPart
 		});
 		
 		addAllButton = new Button(buttonComposite, SWT.NONE);
-		addAllButton.setText("Add All >>");
+		addAllButton.setText(Messages.getString("org.nightlabs.jfire.pbx.uihoneSystemCallableFieldSection.addAllText")); //$NON-NLS-1$
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		addAllButton.setLayoutData(gridData);
 		addAllButton.addSelectionListener(new SelectionAdapter() {
@@ -121,7 +120,7 @@ extends ToolBarSectionPart
 		});
 		
 		removeAllButton = new Button(buttonComposite, SWT.NONE);
-		removeAllButton.setText("<< Remove All");
+		removeAllButton.setText(Messages.getString("org.nightlabs.jfire.pbx.uihoneSystemCallableFieldSection.removeAllText")); //$NON-NLS-1$
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		removeAllButton.setLayoutData(gridData);
 		removeAllButton.addSelectionListener(new SelectionAdapter() {
@@ -169,7 +168,7 @@ extends ToolBarSectionPart
 					
 					updateButtonStates();
 				} catch (StructBlockNotFoundException e) {
-					//
+					throw new RuntimeException(e);
 				}
 			}
 		});

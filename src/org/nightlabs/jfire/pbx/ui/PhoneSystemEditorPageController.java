@@ -10,6 +10,7 @@ import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageControlle
 import org.nightlabs.jfire.pbx.PhoneSystem;
 import org.nightlabs.jfire.pbx.dao.PhoneSystemDAO;
 import org.nightlabs.jfire.pbx.id.PhoneSystemID;
+import org.nightlabs.jfire.pbx.ui.resource.Messages;
 import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -51,7 +52,7 @@ public class PhoneSystemEditorPageController extends ActiveEntityEditorPageContr
 
 	@Override
 	protected PhoneSystem retrieveEntity(ProgressMonitor monitor) {
-		monitor.beginTask("Begin", 1);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemEditorPageController.retrieveEntityTask"), 1); //$NON-NLS-1$
 		try {
 			if(phoneSystemID != null) {
 				PhoneSystem phoneSystem = (PhoneSystem) PhoneSystemDAO.sharedInstance().getPhoneSystem(
@@ -72,7 +73,7 @@ public class PhoneSystemEditorPageController extends ActiveEntityEditorPageContr
 
 	@Override
 	protected PhoneSystem storeEntity(PhoneSystem controllerObject, ProgressMonitor monitor) {
-		monitor.beginTask("Begin", 5);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemEditorPageController.storeEntityTask"), 5); //$NON-NLS-1$
 		try	{
 			monitor.worked(1);
 			return (PhoneSystem) PhoneSystemDAO.sharedInstance().storePhoneSystem(

@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.pbx.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -45,7 +46,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public PhoneSystemConfigPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Settings");
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemConfigPage.name")); //$NON-NLS-1$
 	}
 
 	private PhoneSystemCallableFieldSection phoneSystemCallableFieldSection;
@@ -65,6 +66,6 @@ extends EntityEditorPageWithProgress
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "Settings";
+		return Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemConfigPage.pageFormTitle"); //$NON-NLS-1$
 	}
 }
