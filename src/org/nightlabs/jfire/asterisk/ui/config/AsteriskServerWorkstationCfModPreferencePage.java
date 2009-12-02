@@ -187,6 +187,12 @@ extends AbstractWorkstationConfigModulePreferencePage
 
 	@Override
 	protected void updatePreferencePage() {
+		if (display != callFilePropertyCfModTable.getDisplay())
+			throw new IllegalStateException("display != callFilePropertyCfModTable.getDisplay()");
+
+		if (Display.getCurrent() != display)
+			throw new IllegalStateException("Thread mismatch! This method should be called on the UI thread! What happened here!?");
+
 		AsteriskConfigModule configModule = getConfigModule();
 		callFilePropertyCfModTable.setConfigModule(configModule);
 	}

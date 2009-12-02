@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Asterisk Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.asterisk.ui;singleton:=true
-Bundle-Version: 1.0.5.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.asterisk.ui.ContactAsteriskPlugin
 Bundle-Vendor: NightLabs.org
@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.contact.ui;visibility:=reexport,
- org.nightlabs.jfire.pbx.ui;bundle-version="1.0.2"
+ org.nightlabs.jfire.pbx.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.config

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
@@ -22,6 +23,7 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -30,10 +32,11 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.EmulatedNativeCheckBoxTableLabelProvider;
 import org.nightlabs.jfire.asterisk.AsteriskServer;
 import org.nightlabs.jfire.asterisk.config.AsteriskConfigModule;
+import org.nightlabs.jfire.asterisk.ui.ContactAsteriskPlugin;
 import org.nightlabs.jfire.asterisk.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
@@ -44,10 +47,12 @@ import org.nightlabs.util.Util;
 public class CallFilePropertyCfModTable
 extends AbstractTableComposite<String>
 {
-	public static final String KEY_COLUMN_ID = "property-key"; //$NON-NLS-1$
-	public static final String DEFAULT_VALUE_COLUMN_ID = "default-property-value"; //$NON-NLS-1$
-	public static final String OVERRIDDEN_COLUMN_ID = "overridden"; //$NON-NLS-1$
-	public static final String PROPERTY_VALUE_COLUMN_ID = "property-value"; //$NON-NLS-1$
+	private static final Logger logger = Logger.getLogger(CallFilePropertyCfModTable.class);
+
+	private static final String KEY_COLUMN_ID = "property-key"; //$NON-NLS-1$
+	private static final String DEFAULT_VALUE_COLUMN_ID = "default-property-value"; //$NON-NLS-1$
+	private static final String OVERRIDDEN_COLUMN_ID = "overridden"; //$NON-NLS-1$
+	private static final String PROPERTY_VALUE_COLUMN_ID = "property-value"; //$NON-NLS-1$
 
 	private IDirtyStateManager dirtyStateManager;
 
@@ -71,12 +76,12 @@ extends AbstractTableComposite<String>
 		super(parent, style, true, viewerStyle);
 		this.dirtyStateManager = dirtyStateManager;
 		getTable().setHeaderVisible(true);
-		emulatedNativeCheckBoxTableLabelProvider = new EmulatedNativeCheckBoxTableLabelProvider(getTableViewer()) {
-			@Override
-			public String getColumnText(Object element, int columnIndex) {
-				throw new UnsupportedOperationException("This method should never be called!"); //$NON-NLS-1$
-			}
-		};
+//		emulatedNativeCheckBoxTableLabelProvider = new EmulatedNativeCheckBoxTableLabelProvider(getTableViewer()) {
+//			@Override
+//			public String getColumnText(Object element, int columnIndex) {
+//				throw new UnsupportedOperationException("This method should never be called!"); //$NON-NLS-1$
+//			}
+//		};
 		getTableViewer().setSorter(new ViewerSorter());
 		hookContextMenu();
 	}
@@ -181,12 +186,22 @@ extends AbstractTableComposite<String>
 	}
 
 	public void setConfigModule(AsteriskConfigModule configModule) {
+		super.setInput(null);
+
+		if (Display.getCurrent() != getDisplay())
+			throw new IllegalStateException("Thread mismatch! This method must be called on the SWT UI thread!");
+
 		this.asteriskConfigModule = configModule;
 //		setAsteriskServer(asteriskConfigModule.getAsteriskServer());
 		setAsteriskServer(asteriskServer);
 	}
 
 	public void setAsteriskServer(AsteriskServer asteriskServer) {
+		super.setInput(null);
+
+		if (Display.getCurrent() != getDisplay())
+			throw new IllegalStateException("Thread mismatch! This method must be called on the SWT UI thread!");
+
 		this.asteriskServer = asteriskServer;
 		if (asteriskServer == null || asteriskConfigModule == null) {
 			super.setInput(null);
@@ -266,7 +281,7 @@ extends AbstractTableComposite<String>
 //		}
 //	}
 
-	private EmulatedNativeCheckBoxTableLabelProvider emulatedNativeCheckBoxTableLabelProvider;
+//	private EmulatedNativeCheckBoxTableLabelProvider emulatedNativeCheckBoxTableLabelProvider;
 
 	private class CallFilePropertyLabelProvider
 	extends ColumnSpanLabelProvider
@@ -289,11 +304,17 @@ extends AbstractTableComposite<String>
 			case 0:
 				return key;
 			case 1:
-				return asteriskServer.getCallFileProperties().get(key);
+				if (asteriskServer == null)
+					return null;
+				else
+					return asteriskServer.getCallFileProperties().get(key);
 			case 2:
 				return null; //overriden column
 			case 3:
-				return asteriskConfigModule.getCallFileProperties().get(key);
+				if (asteriskConfigModule == null)
+					return null;
+				else
+					return asteriskConfigModule.getCallFileProperties().get(key);
 			default: return "";//$NON-NLS-1$
 			}
 		}
@@ -315,28 +336,30 @@ extends AbstractTableComposite<String>
 // @Yo: First, you should not use GIF files, but only PNG, because PNGs have a real alpha channel and look better.
 // Second, our SharedImages utility automatically determines the correct path and thus minimizes the risk of
 // inconsistent naming (e.g. due to refactorings). I changed the code to use the SharedImages class:
-//
-//				if (Boolean.valueOf(asteriskConfigModule.getOverrideCallFilePropertyKeys().contains(entry.getKey()))) {
-//					return SharedImages.getSharedImage(
-//							ContactAsteriskPlugin.getDefault(),
-//							CallFilePropertyCfModTable.CallFilePropertyLabelProvider.class,
-//							"override-checked" // We use this only here, thus we don't need a constant.
-//					);
-//				} else {
-//					return SharedImages.getSharedImage(
-//							ContactAsteriskPlugin.getDefault(),
-//							CallFilePropertyCfModTable.CallFilePropertyLabelProvider.class,
-//							"override-unchecked"
-//					);
-//				}
+
+				if (Boolean.valueOf(asteriskConfigModule.getOverrideCallFilePropertyKeys().contains(key))) {
+					return SharedImages.getSharedImage(
+							ContactAsteriskPlugin.getDefault(),
+							CallFilePropertyCfModTable.CallFilePropertyLabelProvider.class,
+							"override-checked" // We use this only here, thus we don't need a constant.
+					);
+				} else {
+					return SharedImages.getSharedImage(
+							ContactAsteriskPlugin.getDefault(),
+							CallFilePropertyCfModTable.CallFilePropertyLabelProvider.class,
+							"override-unchecked"
+					);
+				}
+// Added 2009-12-01: Unfortunately, the below code doesn't work properly and often renders a bad image. I therefore
+// had to switch to the above code using static pictures :-( Marco.
 //
 // However, the above code would cause the check-box to look the same on all systems, but
 // it is nicer to use sth. that looks like a native check-box. Hence, we
 // delegate to our emulated-native-check-box-drawing-tool ;-)
 // Marco.
-				return emulatedNativeCheckBoxTableLabelProvider.getCheckBoxImage(
-						asteriskConfigModule.getOverrideCallFilePropertyKeys().contains(key)
-				);
+//				return emulatedNativeCheckBoxTableLabelProvider.getCheckBoxImage(
+//						asteriskConfigModule.getOverrideCallFilePropertyKeys().contains(key)
+//				);
 			}
 			return null;
 
@@ -367,6 +390,14 @@ extends AbstractTableComposite<String>
 
 		@Override
 		public void modify(Object element, String property, Object value) {
+			if (element == null) {
+				logger.warn("element is null!!! property='" + property + "', value='" + value + "'", new IllegalStateException("element == null"));
+				// I think this happens, when the input is set while the data is edited. IMHO this happens when asynchronous load operations are still running
+				// while the user already clicks into the cell editor. The best way to handle this is not yet clear to me. For the moment, this warn-log
+				// and a silent return seems to be the best. Marco.
+				return;
+			}
+
 			if (!(property.equals(OVERRIDDEN_COLUMN_ID) ||
 					property.equals(PROPERTY_VALUE_COLUMN_ID))){
 				return;
