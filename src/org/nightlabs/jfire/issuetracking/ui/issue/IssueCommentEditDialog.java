@@ -62,6 +62,7 @@ extends ResizableTitleAreaDialog
 			@Override
 			public void modifyText(ModifyEvent e) {
 				getButton(OK).setEnabled(!commentText.getText().isEmpty());
+				comment.setText(commentText.getText());
 			}
 		});
 		
@@ -73,7 +74,6 @@ extends ResizableTitleAreaDialog
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueCommentEditDialog.job.storingComment.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				comment.setText(commentText.getText());
 				IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, 1, monitor);
 				return Status.OK_STATUS;
 			}
