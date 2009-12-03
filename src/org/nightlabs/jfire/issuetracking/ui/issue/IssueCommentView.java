@@ -6,6 +6,7 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.DisposeEvent;
@@ -32,6 +33,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
@@ -108,6 +110,11 @@ extends LSDViewPart
 			}
 		};
 		job.schedule();
+		
+		if (issue != null) {
+			scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
+			createCommentsByToolkit(issue);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -131,12 +138,13 @@ extends LSDViewPart
 		Issue.FETCH_GROUP_SUBJECT,
 		IssueComment.FETCH_GROUP_USER};
 
+	private Issue issue;
 	private NotificationListener issueSelectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
 			Object firstSelection = notificationEvent.getFirstSubject();
 			if (firstSelection instanceof IssueID) {
 				IssueID issueID = (IssueID) firstSelection;
-				Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
 
 				createCommentsByToolkit(issue);
@@ -183,7 +191,11 @@ extends LSDViewPart
 					@Override
 					public void linkActivated(HyperlinkEvent e) {
 						IssueCommentEditDialog dialog = new IssueCommentEditDialog(RCPUtil.getActiveShell(), comment);
-						dialog.open();
+						int result = dialog.open();
+						if (result == Dialog.OK) {
+							LSDPartController.sharedInstance().disposePartContents(IssueCommentView.this);
+							LSDPartController.sharedInstance().updatePart(IssueCommentView.this);
+						}
 					}
 				});
 				
