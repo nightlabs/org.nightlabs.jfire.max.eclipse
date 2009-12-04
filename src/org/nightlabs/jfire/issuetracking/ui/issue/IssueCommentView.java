@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.text.DateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jdo.FetchPlan;
 
@@ -8,7 +10,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
@@ -16,6 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
@@ -33,7 +35,6 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
@@ -58,7 +59,6 @@ extends LSDViewPart
 
 	private FormToolkit toolkit;
 	private ScrolledForm scrolledForm;
-	private Browser browser;
 	private Composite body;
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
@@ -83,6 +83,15 @@ extends LSDViewPart
 	{
 		this.parent = parent;
 
+		Job job = new Job("Loading login user...") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				user = Login.sharedInstance().getUser(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+		
 		toolkit = new FormToolkit(parent.getDisplay());
 		scrolledForm = toolkit.createScrolledForm(parent);
 		scrolledForm.setText("No issue selected");
@@ -101,20 +110,6 @@ extends LSDViewPart
 				SelectionManager.sharedInstance().removeNotificationListener(IssueTrackingPlugin.ZONE_PROPERTY, Issue.class, issueSelectionListener);
 			}
 		});
-
-		Job job = new Job("Loading login user...") {
-			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				user = Login.sharedInstance().getUser(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
-		
-		if (issue != null) {
-			scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
-			createCommentsByToolkit(issue);
-		}
 	}
 	
 	/* (non-Javadoc)
@@ -136,7 +131,8 @@ extends LSDViewPart
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_ISSUE_COMMENTS,
 		Issue.FETCH_GROUP_SUBJECT,
-		IssueComment.FETCH_GROUP_USER};
+		IssueComment.FETCH_GROUP_USER,
+		IssueComment.FETCH_GROUP_ISSUE};
 
 	private Issue issue;
 	private NotificationListener issueSelectionListener = new NotificationAdapterCallerThread(){
@@ -157,80 +153,86 @@ extends LSDViewPart
 		for (Control control : body.getChildren()) {
 			control.dispose();
 		}
-
-		Color backgroundColor1 = new Color(scrolledForm.getShell().getDisplay(), 200, 200, 232);
-		Color backgroundColor2 = new Color(scrolledForm.getShell().getDisplay(), 232, 232, 232);
-
+		
 		for (final IssueComment comment : issue.getComments()) {
-			/**Reporter**/
-			Composite reporterComposite = toolkit.createComposite(body);
-			GridLayout gridLayout = new GridLayout(1, false);
-			reporterComposite.setLayout(gridLayout);
-			reporterComposite.setBackground(backgroundColor1);
-			//Label
-			Hyperlink idLink = toolkit.createHyperlink(reporterComposite, "(" + Long.toString(comment.getCommentID()) + ")", SWT.NONE);
-			idLink.setBackground(backgroundColor1);
-			
-			Hyperlink userNameLink = toolkit.createHyperlink(reporterComposite, comment.getUser().getName(), SWT.NONE);
-			userNameLink.setBackground(backgroundColor1);
-			
-			Label createTimeLabel = toolkit.createLabel(reporterComposite, dateTimeFormat.format(comment.getCreateTimestamp()));
-			createTimeLabel.setBackground(backgroundColor1);
-
-			//Actions
-			if (user.getUserID().equals(comment.getUser().getUserID())) {
-				Composite actionComposite = toolkit.createComposite(reporterComposite);
-				actionComposite.setLayout(new GridLayout(3, false));
-				actionComposite.setBackground(backgroundColor1);
-				//Images
-				ImageHyperlink editLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
-				editLink.setImage(SharedImages.EDIT_16x16.createImage(scrolledForm.getShell().getDisplay()));
-				editLink.setHoverImage(SharedImages.EDIT_24x24.createImage(scrolledForm.getShell().getDisplay()));
-				editLink.setBackground(backgroundColor1);
-				editLink.addHyperlinkListener(new HyperlinkAdapter() {
-					@Override
-					public void linkActivated(HyperlinkEvent e) {
-						IssueCommentEditDialog dialog = new IssueCommentEditDialog(RCPUtil.getActiveShell(), comment);
-						int result = dialog.open();
-						if (result == Dialog.OK) {
-							LSDPartController.sharedInstance().disposePartContents(IssueCommentView.this);
-							LSDPartController.sharedInstance().updatePart(IssueCommentView.this);
-						}
-					}
-				});
-				
-				ImageHyperlink deleteLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
-				deleteLink.setImage(SharedImages.DELETE_16x16.createImage());
-				deleteLink.setHoverImage(SharedImages.DELETE_24x24.createImage());
-				deleteLink.setBackground(backgroundColor1);
-
-				ImageHyperlink printLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
-				printLink.setImage(SharedImages.PRINT_16x16.createImage());
-				printLink.setHoverImage(SharedImages.PRINT_24x24.createImage());
-				printLink.setBackground(backgroundColor1);
-			}
-			
-			GridData gridData = new GridData(GridData.FILL_BOTH);
-			gridData.horizontalSpan = 1;
-			reporterComposite.setLayoutData(gridData);
-
-			/**Detail**/
-			Composite textComposite = toolkit.createComposite(body);
-			textComposite.setLayout(new GridLayout(3, false));
-			textComposite.setBackground(backgroundColor2);
-
-			//Label
-			Text text = toolkit.createText(textComposite, comment.getText(), SWT.WRAP);
-			text.setBackground(backgroundColor2);
-
-			gridData = new GridData(GridData.FILL_BOTH);
-			gridData.horizontalSpan = 3;
-			textComposite.setLayoutData(gridData);
+			createCommentEntry(body, comment);
 		}
 
 		scrolledForm.reflow(true);
 	}
 
+	private static Color reportBackgroundColor = new Color(Display.getCurrent(), 200, 200, 232);
+	private static Color commentBackgroundColor = new Color(Display.getCurrent(), 232, 232, 232);
+	private Map<Long, Text> commentMap = new HashMap<Long, Text>();
+	private void createCommentEntry(final Composite body, final IssueComment comment) {
+		/**Reporter**/
+		Composite reporterComposite = toolkit.createComposite(body);
+		GridLayout gridLayout = new GridLayout(1, false);
+		reporterComposite.setLayout(gridLayout);
+		reporterComposite.setBackground(reportBackgroundColor);
+		//Label
+		Hyperlink idLink = toolkit.createHyperlink(reporterComposite, "(" + Long.toString(comment.getCommentID()) + ")", SWT.NONE);
+		idLink.setBackground(reportBackgroundColor);
+		
+		Hyperlink userNameLink = toolkit.createHyperlink(reporterComposite, comment.getUser().getName(), SWT.NONE);
+		userNameLink.setBackground(reportBackgroundColor);
+		
+		Label timeLabel = toolkit.createLabel(reporterComposite, dateTimeFormat.format(comment.getCreateTimestamp()));
+		timeLabel.setBackground(reportBackgroundColor);
+
+		//Actions
+		if (user.getUserID().equals(comment.getUser().getUserID())) {
+			Composite actionComposite = toolkit.createComposite(reporterComposite);
+			actionComposite.setLayout(new GridLayout(3, false));
+			actionComposite.setBackground(reportBackgroundColor);
+			//Images
+			ImageHyperlink editLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
+			editLink.setImage(SharedImages.EDIT_16x16.createImage(scrolledForm.getShell().getDisplay()));
+			editLink.setHoverImage(SharedImages.EDIT_24x24.createImage(scrolledForm.getShell().getDisplay()));
+			editLink.setBackground(reportBackgroundColor);
+			editLink.addHyperlinkListener(new HyperlinkAdapter() {
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					IssueCommentEditDialog dialog = new IssueCommentEditDialog(RCPUtil.getActiveShell(), comment);
+					int result = dialog.open();
+					if (result == Dialog.OK) {
+						Text t = commentMap.get(comment.getCommentID());
+						t.setText(comment.getText());
+						t.getParent().layout();
+						body.layout();
+					}
+				}
+			});
+			
+			ImageHyperlink deleteLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
+			deleteLink.setImage(SharedImages.DELETE_16x16.createImage());
+			deleteLink.setHoverImage(SharedImages.DELETE_24x24.createImage());
+			deleteLink.setBackground(reportBackgroundColor);
+
+			ImageHyperlink printLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
+			printLink.setImage(SharedImages.PRINT_16x16.createImage());
+			printLink.setHoverImage(SharedImages.PRINT_24x24.createImage());
+			printLink.setBackground(reportBackgroundColor);
+		}
+		
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 1;
+		reporterComposite.setLayoutData(gridData);
+
+		/**Detail**/
+		Composite textComposite = toolkit.createComposite(body);
+		textComposite.setLayout(new GridLayout(3, false));
+		textComposite.setBackground(commentBackgroundColor);
+
+		//Label
+		Text text = toolkit.createText(textComposite, comment.getText(), SWT.WRAP);
+		text.setBackground(commentBackgroundColor);
+		commentMap.put(comment.getCommentID(), text);
+
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 3;
+		textComposite.setLayoutData(gridData);
+	}
 	
 	/*private URL url = FileLocator.find(IssueTrackingPlugin.getDefault().getBundle(), new Path("default.css"), null);
 	private void createCommentsByBrowser(Issue issue) {
