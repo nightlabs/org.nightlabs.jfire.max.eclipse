@@ -2,6 +2,7 @@ package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -25,6 +26,9 @@ import org.nightlabs.jfire.issue.id.IssueDescriptionID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.personrelation.PersonRelationType;
+import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
+import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
@@ -38,6 +42,7 @@ import org.nightlabs.notification.NotificationListener;
 public class PersonRelationIssueTreeView
 extends LSDViewPart
 {
+	protected static final int	DefaultMaximumSearchDepth	= 10;
 	private PersonRelationTree personRelationTree;
 	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
 
@@ -126,14 +131,21 @@ extends LSDViewPart
 
 			final PropertySetID personID = (PropertySetID) (legalEntity == null ? null : JDOHelper.getObjectId(legalEntity.getPerson()));
 
+			final Collection<PropertySetID> roots;
+			if (personID == null)
+				roots = Collections.emptySet();
+			else
+				roots = PersonRelationDAO.sharedInstance().getRelationRoots(getAllowedPersonRelationTypes(), personID,
+						getMaxSearchDepth(), getProgressMonitor());
+
 			personRelationTree.getDisplay().asyncExec(new Runnable() {
 				public void run() {
 					if (personRelationTree.isDisposed())
 						return;
 
-					@SuppressWarnings("unchecked")
-					Collection<PropertySetID> personIDs = (Collection<PropertySetID>) (personID != null ? Collections.singleton(personID) : Collections.emptyList());
-					personRelationTree.setInputPersonIDs(personIDs);
+					personRelationTree.setInputPersonIDs(roots);
+					// FIXME: set the selection on the personID! This is currently not possible in the lazy tree construction.
+//					personRelationTree.setSelection(new StructuredSelection(personID)); this is not working, yet.
 				}
 			});
 		}
@@ -141,5 +153,23 @@ extends LSDViewPart
 
 	public PersonRelationTree getPersonRelationTree() {
 		return personRelationTree;
+	}
+
+	protected Set<PersonRelationTypeID> allowedRelationTypes;
+	protected Set<PersonRelationTypeID> getAllowedPersonRelationTypes()
+	{
+		if (allowedRelationTypes == null)
+		{
+			allowedRelationTypes = new HashSet<PersonRelationTypeID>();
+			allowedRelationTypes.add(PersonRelationType.PredefinedRelationTypes.branchOffice);
+			allowedRelationTypes.add(PersonRelationType.PredefinedRelationTypes.subsidiary);
+			allowedRelationTypes.add(PersonRelationType.PredefinedRelationTypes.employed);
+		}
+		return allowedRelationTypes;
+	}
+
+	protected int getMaxSearchDepth()
+	{
+		return DefaultMaximumSearchDepth;
 	}
 }
