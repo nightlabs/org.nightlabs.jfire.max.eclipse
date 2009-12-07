@@ -306,6 +306,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixPerson);
 				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personIDs.size()); //$NON-NLS-1$
 				for (PropertySetID personID : personIDs) {
+					// TODO: In case we want to have a hierarchical view on the graph, there should be a way to exclude RelationTypes from the child search (e.g. only display the subcompanies (subsidiaries, employees, etc.) and NOT the reverse relations.
 					long personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
 							null, personID, null, new NullProgressMonitor()
 					);
