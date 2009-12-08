@@ -100,7 +100,7 @@ extends LSDViewPart
 		body = scrolledForm.getBody();
 		body.setBackground(null);
 		
-		GridLayout layout = new GridLayout(4, true);
+		GridLayout layout = new GridLayout(4, false);
 		body.setLayout(layout);
 
 		SelectionManager.sharedInstance().addNotificationListener(IssueTrackingPlugin.ZONE_PROPERTY, Issue.class, issueSelectionListener);
@@ -173,18 +173,26 @@ extends LSDViewPart
 		//Label
 		Hyperlink idLink = toolkit.createHyperlink(reporterComposite, "(" + Long.toString(comment.getCommentID()) + ")", SWT.NONE);
 		idLink.setBackground(reportBackgroundColor);
+		GridData gridData = new GridData();
+		idLink.setLayoutData(gridData);
 		
 		Hyperlink userNameLink = toolkit.createHyperlink(reporterComposite, comment.getUser().getName(), SWT.NONE);
 		userNameLink.setBackground(reportBackgroundColor);
+		gridData = new GridData();
+		userNameLink.setLayoutData(gridData);
 		
 		Label timeLabel = toolkit.createLabel(reporterComposite, dateTimeFormat.format(comment.getCreateTimestamp()));
 		timeLabel.setBackground(reportBackgroundColor);
+		gridData = new GridData();
+		timeLabel.setLayoutData(gridData);
 
 		//Actions
 		if (user.getUserID().equals(comment.getUser().getUserID())) {
 			Composite actionComposite = toolkit.createComposite(reporterComposite);
 			actionComposite.setLayout(new GridLayout(3, false));
 			actionComposite.setBackground(reportBackgroundColor);
+			gridData = new GridData();
+			actionComposite.setLayoutData(gridData);
 			//Images
 			ImageHyperlink editLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
 			editLink.setImage(SharedImages.EDIT_16x16.createImage(scrolledForm.getShell().getDisplay()));
@@ -198,8 +206,8 @@ extends LSDViewPart
 					if (result == Dialog.OK) {
 						Text t = commentMap.get(comment.getCommentID());
 						t.setText(comment.getText());
-						t.getParent().layout();
-						body.layout();
+						scrolledForm.layout(true, true);
+						scrolledForm.reflow(true);
 					}
 				}
 			});
@@ -215,7 +223,7 @@ extends LSDViewPart
 			printLink.setBackground(reportBackgroundColor);
 		}
 		
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.horizontalSpan = 1;
 		reporterComposite.setLayoutData(gridData);
 
