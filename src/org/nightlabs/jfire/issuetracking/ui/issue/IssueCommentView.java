@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -38,7 +42,9 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
+import org.nightlabs.jfire.issue.dao.IssueCommentDAO;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.id.IssueCommentID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.security.User;
@@ -83,6 +89,8 @@ extends LSDViewPart
 	{
 		this.parent = parent;
 
+		contributeToActionBars();
+
 		Job job = new Job("Loading login user...") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -91,15 +99,15 @@ extends LSDViewPart
 			}
 		};
 		job.schedule();
-		
+
 		toolkit = new FormToolkit(parent.getDisplay());
 		scrolledForm = toolkit.createScrolledForm(parent);
 		scrolledForm.setText("No issue selected");
 		scrolledForm.setBackground(null);
-		
+
 		body = scrolledForm.getBody();
 		body.setBackground(null);
-		
+
 		GridLayout layout = new GridLayout(4, false);
 		body.setLayout(layout);
 
@@ -111,7 +119,7 @@ extends LSDViewPart
 			}
 		});
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.login.part.LSDViewPart#setFocus()
 	 */
@@ -153,7 +161,7 @@ extends LSDViewPart
 		for (Control control : body.getChildren()) {
 			control.dispose();
 		}
-		
+
 		for (final IssueComment comment : issue.getComments()) {
 			createCommentEntry(body, comment);
 		}
@@ -175,12 +183,12 @@ extends LSDViewPart
 		idLink.setBackground(reportBackgroundColor);
 		GridData gridData = new GridData();
 		idLink.setLayoutData(gridData);
-		
+
 		Hyperlink userNameLink = toolkit.createHyperlink(reporterComposite, comment.getUser().getName(), SWT.NONE);
 		userNameLink.setBackground(reportBackgroundColor);
 		gridData = new GridData();
 		userNameLink.setLayoutData(gridData);
-		
+
 		Label timeLabel = toolkit.createLabel(reporterComposite, dateTimeFormat.format(comment.getCreateTimestamp()));
 		timeLabel.setBackground(reportBackgroundColor);
 		gridData = new GridData();
@@ -211,18 +219,46 @@ extends LSDViewPart
 					}
 				}
 			});
-			
+
 			ImageHyperlink deleteLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
 			deleteLink.setImage(SharedImages.DELETE_16x16.createImage());
 			deleteLink.setHoverImage(SharedImages.DELETE_24x24.createImage());
 			deleteLink.setBackground(reportBackgroundColor);
+			deleteLink.addHyperlinkListener(new HyperlinkAdapter() {
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					boolean result = MessageDialog.openConfirm(
+							RCPUtil.getActiveShell(),
+							"Confirm delete",
+					"Are you sure to delete the comment?");
+					if (result) {
+						Job deleteIssueJob = new Job("Deleting issue comment: " + comment.getCommentID()) {
+							@Override
+							protected IStatus run(ProgressMonitor monitor) {
+								IssueCommentDAO.sharedInstance().deleteIssueComment((IssueCommentID)JDOHelper.getObjectId(comment), monitor);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+										scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
+
+										createCommentsByToolkit(issue);
+									}
+								});
+								return Status.OK_STATUS;
+							}
+						};
+						deleteIssueJob.schedule();
+					}
+				}
+			});
 
 			ImageHyperlink printLink = toolkit.createImageHyperlink(actionComposite, SWT.NONE);
 			printLink.setImage(SharedImages.PRINT_16x16.createImage());
 			printLink.setHoverImage(SharedImages.PRINT_24x24.createImage());
 			printLink.setBackground(reportBackgroundColor);
 		}
-		
+
 		gridData = new GridData(GridData.FILL_VERTICAL);
 		gridData.horizontalSpan = 1;
 		reporterComposite.setLayoutData(gridData);
@@ -241,7 +277,7 @@ extends LSDViewPart
 		gridData.horizontalSpan = 3;
 		textComposite.setLayoutData(gridData);
 	}
-	
+
 	/*private URL url = FileLocator.find(IssueTrackingPlugin.getDefault().getBundle(), new Path("default.css"), null);
 	private void createCommentsByBrowser(Issue issue) {
 		try {
@@ -288,9 +324,62 @@ extends LSDViewPart
 		scrolledForm.reflow(true);
 	}*/
 
+	/**
+	 * Prepares the ActionBar.
+	 */
+	private void contributeToActionBars() {
+		if (addCommentAction != null)
+			return;
+
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		addCommentAction = new AddCommentAction();
+		toolBarManager.add(addCommentAction);
+		toolBarManager.update(true);
+	}
+
 	@Override
 	public void dispose() {
 		toolkit.dispose();
 		super.dispose();
 	};
+
+	private AddCommentAction addCommentAction;
+	private class AddCommentAction extends Action {
+		public AddCommentAction() {
+			setId(AddCommentAction.class.getName());
+			setImageDescriptor(SharedImages.ADD_16x16);
+			setToolTipText("Tool tip");
+			setText("Text");
+		}
+
+		@Override
+		public void run() {
+			IssueCommentAddDialog dialog = new IssueCommentAddDialog(RCPUtil.getActiveShell(), issue, user);
+			int result = dialog.open();
+			if (result == Dialog.OK) {
+				final IssueComment comment = new IssueComment(issue, dialog.getCommentString(), user);
+				Job job = new Job("Storing comment") {
+					@Override
+					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, 1, monitor);
+						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
+
+								createCommentsByToolkit(issue);
+
+								scrolledForm.layout(true, true);
+								scrolledForm.reflow(true);
+							}
+						});
+						return Status.OK_STATUS;
+					}
+				};
+				job.schedule();
+				
+			}
+		}
+	}
 }
