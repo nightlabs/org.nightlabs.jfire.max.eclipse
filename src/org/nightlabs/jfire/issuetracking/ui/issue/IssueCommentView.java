@@ -47,6 +47,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueCommentID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
@@ -91,7 +92,7 @@ extends LSDViewPart
 
 		contributeToActionBars();
 
-		Job job = new Job("Loading login user...") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.loadUserJob.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				user = Login.sharedInstance().getUser(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
@@ -102,7 +103,7 @@ extends LSDViewPart
 
 		toolkit = new FormToolkit(parent.getDisplay());
 		scrolledForm = toolkit.createScrolledForm(parent);
-		scrolledForm.setText("No issue selected");
+		scrolledForm.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.scrolledForm.noIssue.text")); //$NON-NLS-1$
 		scrolledForm.setBackground(null);
 
 		body = scrolledForm.getBody();
@@ -149,7 +150,7 @@ extends LSDViewPart
 			if (firstSelection instanceof IssueID) {
 				IssueID issueID = (IssueID) firstSelection;
 				issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
+				scrolledForm.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.scrolledForm.issue.text") + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
 
 				createCommentsByToolkit(issue);
 			}
@@ -179,7 +180,7 @@ extends LSDViewPart
 		reporterComposite.setLayout(gridLayout);
 		reporterComposite.setBackground(reportBackgroundColor);
 		//Label
-		Hyperlink idLink = toolkit.createHyperlink(reporterComposite, "(" + Long.toString(comment.getCommentID()) + ")", SWT.NONE);
+		Hyperlink idLink = toolkit.createHyperlink(reporterComposite, "(" + Long.toString(comment.getCommentID()) + ")", SWT.NONE); //$NON-NLS-1$ //$NON-NLS-2$
 		idLink.setBackground(reportBackgroundColor);
 		GridData gridData = new GridData();
 		idLink.setLayoutData(gridData);
@@ -229,10 +230,10 @@ extends LSDViewPart
 				public void linkActivated(HyperlinkEvent e) {
 					boolean result = MessageDialog.openConfirm(
 							RCPUtil.getActiveShell(),
-							"Confirm delete",
-					"Are you sure to delete the comment?");
+							Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.confirmDelete.title"), //$NON-NLS-1$
+					Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.confirmDelete.description")); //$NON-NLS-1$
 					if (result) {
-						Job deleteIssueJob = new Job("Deleting issue comment: " + comment.getCommentID()) {
+						Job deleteIssueJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.deleteCommentJob") + comment.getCommentID()) { //$NON-NLS-1$
 							@Override
 							protected IStatus run(ProgressMonitor monitor) {
 								IssueCommentDAO.sharedInstance().deleteIssueComment((IssueCommentID)JDOHelper.getObjectId(comment), monitor);
@@ -240,7 +241,7 @@ extends LSDViewPart
 									@Override
 									public void run() {
 										issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-										scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
+										scrolledForm.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.9") + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
 
 										createCommentsByToolkit(issue);
 									}
@@ -348,8 +349,8 @@ extends LSDViewPart
 		public AddCommentAction() {
 			setId(AddCommentAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Tool tip");
-			setText("Text");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.AddCommentAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.AddCommentAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -358,7 +359,7 @@ extends LSDViewPart
 			int result = dialog.open();
 			if (result == Dialog.OK) {
 				final IssueComment comment = new IssueComment(issue, dialog.getCommentString(), user);
-				Job job = new Job("Storing comment") {
+				Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.storeCommentJob.text")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) throws Exception {
 						IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, 1, monitor);
@@ -366,7 +367,7 @@ extends LSDViewPart
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText());
+								scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
 
 								createCommentsByToolkit(issue);
 

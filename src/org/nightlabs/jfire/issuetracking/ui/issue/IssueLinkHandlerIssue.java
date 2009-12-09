@@ -34,7 +34,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 	public String getLinkedObjectName(IssueLink issueLink, Issue linkedObject) {
 		return String.format(
 				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerIssue.linkedObjectName"), //$NON-NLS-1$
-				"(ID:" + ObjectIDUtil.longObjectIDFieldToString(linkedObject.getIssueID()) + ") "
+				"(ID:" + ObjectIDUtil.longObjectIDFieldToString(linkedObject.getIssueID()) + ") " //$NON-NLS-1$ //$NON-NLS-2$
 				+ linkedObject.getSubject().getText()
 		);
 	}
