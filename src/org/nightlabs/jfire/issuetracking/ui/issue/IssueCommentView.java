@@ -34,10 +34,15 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
@@ -48,6 +53,9 @@ import org.nightlabs.jfire.issue.id.IssueCommentID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
+import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
+import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
+import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
@@ -95,10 +103,13 @@ extends LSDViewPart
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.loadUserJob.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				monitor.beginTask("Loading login user", 100);
 				user = Login.sharedInstance().getUser(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				monitor.done();
 				return Status.OK_STATUS;
 			}
 		};
+		job.setPriority(Job.SHORT);
 		job.schedule();
 
 		toolkit = new FormToolkit(parent.getDisplay());
@@ -108,7 +119,6 @@ extends LSDViewPart
 
 		body = scrolledForm.getBody();
 		body.setBackground(null);
-
 		GridLayout layout = new GridLayout(4, false);
 		body.setLayout(layout);
 
@@ -119,6 +129,53 @@ extends LSDViewPart
 				SelectionManager.sharedInstance().removeNotificationListener(IssueTrackingPlugin.ZONE_PROPERTY, Issue.class, issueSelectionListener);
 			}
 		});
+
+		JDOLifecycleManager.sharedInstance().addLifecycleListener(issueCommentAddNotificationListener);
+		scrolledForm.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent event) {
+				JDOLifecycleManager.sharedInstance().removeLifecycleListener(issueCommentAddNotificationListener);
+			}
+		});
+	}
+
+	private JDOLifecycleListener issueCommentAddNotificationListener = new JDOLifecycleAdapterJob("Loading Issue") {
+		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
+				IssueComment.class,
+				false,
+				JDOLifecycleState.NEW,
+				JDOLifecycleState.DELETED);
+
+		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
+		{
+			return filter;
+		}
+
+		public void notify(JDOLifecycleEvent event)
+		{
+			ProgressMonitor monitor = getProgressMonitor();
+			monitor.beginTask("Reloading Data...", 100);
+			reloadIssue();
+			monitor.done();
+		}
+	};
+
+	public void reloadIssue() {
+		Job job = new Job("Loading Issue...") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				final Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						
+						scrolledForm.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.scrolledForm.issue.text") + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
+						createComments(issue);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	/* (non-Javadoc)
@@ -136,31 +193,27 @@ extends LSDViewPart
 		super.saveState(memento);
 	}
 
-	private static String[] FETCH_GROUP = new String[] {
+	private static String[] FETCH_GROUP_ISSUE = new String[] {
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_ISSUE_COMMENTS,
 		Issue.FETCH_GROUP_SUBJECT,
 		IssueComment.FETCH_GROUP_USER,
 		IssueComment.FETCH_GROUP_ISSUE};
 
-	private Issue issue;
+	private IssueID issueID;
 	private NotificationListener issueSelectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
 			Object firstSelection = notificationEvent.getFirstSubject();
 			if (firstSelection instanceof IssueID) {
-				IssueID issueID = (IssueID) firstSelection;
-				issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				scrolledForm.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.scrolledForm.issue.text") + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
-
-				createCommentsByToolkit(issue);
+				issueID = (IssueID) firstSelection;
+				reloadIssue();
 			}
 		}
 	};
 
-	private void createCommentsByToolkit(Issue issue) {
-		//Dispose old controls
-		for (Control control : body.getChildren()) {
-			control.dispose();
+	private void createComments(final Issue issue) {
+		for (Control child : body.getChildren()) {
+			child.dispose();
 		}
 
 		for (final IssueComment comment : issue.getComments()) {
@@ -231,24 +284,18 @@ extends LSDViewPart
 					boolean result = MessageDialog.openConfirm(
 							RCPUtil.getActiveShell(),
 							Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.confirmDelete.title"), //$NON-NLS-1$
-					Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.confirmDelete.description")); //$NON-NLS-1$
+							Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.confirmDelete.description")); //$NON-NLS-1$
 					if (result) {
 						Job deleteIssueJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.deleteCommentJob") + comment.getCommentID()) { //$NON-NLS-1$
 							@Override
 							protected IStatus run(ProgressMonitor monitor) {
+								monitor.beginTask("Deleting comment", 100);
 								IssueCommentDAO.sharedInstance().deleteIssueComment((IssueCommentID)JDOHelper.getObjectId(comment), monitor);
-								Display.getDefault().asyncExec(new Runnable() {
-									@Override
-									public void run() {
-										issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-										scrolledForm.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.9") + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
-
-										createCommentsByToolkit(issue);
-									}
-								});
+								monitor.done();
 								return Status.OK_STATUS;
 							}
 						};
+						deleteIssueJob.setPriority(Job.SHORT);
 						deleteIssueJob.schedule();
 					}
 				}
@@ -345,7 +392,10 @@ extends LSDViewPart
 	};
 
 	private AddCommentAction addCommentAction;
-	private class AddCommentAction extends Action {
+	private class AddCommentAction 
+	extends Action 
+	{
+		private Issue issue = null;
 		public AddCommentAction() {
 			setId(AddCommentAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
@@ -355,6 +405,14 @@ extends LSDViewPart
 
 		@Override
 		public void run() {
+			new Job("Loading Issue...") {
+				@Override
+				protected IStatus run(ProgressMonitor monitor) throws Exception {
+					issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					return Status.OK_STATUS;
+				}
+			}.schedule();
+			 
 			IssueCommentAddDialog dialog = new IssueCommentAddDialog(RCPUtil.getActiveShell(), issue, user);
 			int result = dialog.open();
 			if (result == Dialog.OK) {
@@ -362,24 +420,15 @@ extends LSDViewPart
 				Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.storeCommentJob.text")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						monitor.beginTask("Storing comment", 100);
 						IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, 1, monitor);
-						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-						Display.getDefault().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								scrolledForm.setText("Issue " + issue.getIssueID() + " - " + issue.getSubject().getText()); //$NON-NLS-1$ //$NON-NLS-2$
-
-								createCommentsByToolkit(issue);
-
-								scrolledForm.layout(true, true);
-								scrolledForm.reflow(true);
-							}
-						});
+						monitor.done();
 						return Status.OK_STATUS;
 					}
 				};
+				job.setPriority(Job.SHORT);
 				job.schedule();
-				
+
 			}
 		}
 	}
