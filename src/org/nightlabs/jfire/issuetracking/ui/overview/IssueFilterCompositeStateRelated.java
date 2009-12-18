@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +28,7 @@ import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
@@ -58,28 +58,56 @@ extends AbstractQueryFilterComposite<IssueQuery>
 {
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeStateRelated.class);
 
+	private String baseName = "org.nightlabs.jfire.issuetracking.ui.resource.messages"; //$NON-NLS-1$
+	private ClassLoader loader = IssueFilterCompositeStateRelated.class.getClassLoader();
+	
 	private XComboComposite<ProcessDefinition> processDefinitionsCombo;
 	private ILabelProvider processDefinitionLabelProvider = new LabelProvider() {
 		@Override
 		public String getText(Object element)
 		{
+			if (element instanceof DummyProcessDefinition) {
+				DummyProcessDefinition dDefinition = (DummyProcessDefinition) element;
+				return dDefinition.getName().getText();
+			}
 			if (element instanceof ProcessDefinition) {
 				ProcessDefinition processDefinition = (ProcessDefinition) element;
 				return processDefinition.getProcessDefinitionID();
 			}
+			
 			return super.getText(element);
 		}
 	};
 
 	private DummyProcessDefinition ALL_PROCESS_DEFINITION = new DummyProcessDefinition();
 	private class DummyProcessDefinition extends ProcessDefinition {
+		private class DummyProcessDefinitionName extends I18nText {
+			protected Map<String, String> names = new HashMap<String, String>();
+			@Override
+			protected String getFallBackValue(String languageID) {
+				return "All"; //$NON-NLS-1$
+			}
+
+			@Override
+			protected Map<String, String> getI18nMap() {
+				return names;
+			}
+		}
+		private DummyProcessDefinitionName name;
 		@SuppressWarnings("deprecation")
 		public DummyProcessDefinition() {
+			name = new DummyProcessDefinitionName();
+			name.readFromProperties(baseName, loader,
+			"org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeStateRelated.processDefinition.all"); //$NON-NLS-1$
 		}
 
 		@Override
 		public String getProcessDefinitionID() {
-			return "All";
+			return "All"; //$NON-NLS-1$
+		}
+		
+		public DummyProcessDefinitionName getName() {
+			return name;
 		}
 	}
 
@@ -90,7 +118,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			if (element instanceof StateDefinition) {
 				StateDefinition stateDefinition = (StateDefinition) element;
-				return (stateDefinition.getProcessDefinitionID() == null?"": stateDefinition.getProcessDefinitionID() + ":" ) + stateDefinition.getName().getText();
+				return (stateDefinition.getProcessDefinitionID() == null?"": stateDefinition.getProcessDefinitionID() + ":" ) + stateDefinition.getName().getText(); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			return super.getText(element);
@@ -106,7 +134,9 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		@Override
 		public StateDefinitionName getName() {
 			StateDefinitionName stateDefinitionName = new StateDefinitionName(this);
-			stateDefinitionName.setText(Locale.ENGLISH, "All");
+			stateDefinitionName.readFromProperties(baseName, loader,
+			"org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeStateRelated.stateDefinition.all"); //$NON-NLS-1$
+			
 			return stateDefinitionName;
 		}
 	}
@@ -162,7 +192,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 2;
 
-		new Label(mainComposite, SWT.NONE).setText("Issue Type");
+		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeStateRelated.issueTypeLabel")); //$NON-NLS-1$
 		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(mainComposite, SWT.NONE | SWT.READ_ONLY, stateDefinitionLabelProvider);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		processDefinitionsCombo.setLayoutData(gridData);
@@ -202,7 +232,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			}
 		});
 
-		new Label(mainComposite, SWT.NONE).setText("State");
+		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeStateRelated.stateLabel")); //$NON-NLS-1$
 		stateDefinitionsCombo = new XComboComposite<StateDefinition>(mainComposite, SWT.NONE | SWT.READ_ONLY, stateDefinitionLabelProvider);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		stateDefinitionsCombo.setLayoutData(gridData);

@@ -23,6 +23,7 @@ import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkHandlerFactoryTreeComposite;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -88,7 +89,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		mainComposite.getGridLayout().numColumns = 2;
 
 
-		new Label(mainComposite, SWT.NONE).setText("Type: ");
+		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeLinkedObjectRelated.linkedObjectLabel")); //$NON-NLS-1$
 		linkedObjectTreeComposite = new SelectIssueLinkHandlerFactoryTreeComposite(mainComposite, SWT.CHECK, null);
 
 		checkboxTreeViewer = new CheckboxTreeViewer(linkedObjectTreeComposite.getTree());
