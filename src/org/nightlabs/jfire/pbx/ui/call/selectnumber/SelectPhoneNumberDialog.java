@@ -41,10 +41,10 @@ public class SelectPhoneNumberDialog extends ResizableTitleAreaDialog
 	@Override
 	protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
 		Button button = super.createButton(parent, id, label, defaultButton);
-
-		if (OK == id)
+		if (OK == id) {
+			button.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.call.selectnumber.SelectPhoneNumberDialog.callButton.text")); //$NON-NLS-1$
 			button.setEnabled(false);
-
+		}
 		return button;
 	}
 
