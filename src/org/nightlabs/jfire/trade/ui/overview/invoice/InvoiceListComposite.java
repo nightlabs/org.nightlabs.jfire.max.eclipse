@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.accounting.Price;
+import org.nightlabs.jfire.accounting.PriceFragment;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -78,6 +80,10 @@ extends AbstractArticleContainerListComposite<Invoice>
 		FetchPlan.DEFAULT,
 		Invoice.FETCH_GROUP_THIS_INVOICE,
 		Invoice.FETCH_GROUP_INVOICE_LOCAL,
+		Invoice.FETCH_GROUP_PRICE,
+		Price.FETCH_GROUP_CURRENCY,
+		Price.FETCH_GROUP_FRAGMENTS,
+		PriceFragment.FETCH_GROUP_PRICE_FRAGMENT_TYPE,
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
