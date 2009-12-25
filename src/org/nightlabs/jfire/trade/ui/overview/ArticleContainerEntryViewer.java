@@ -1,15 +1,15 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.accounting.Currency;
@@ -43,7 +43,7 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 		tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent arg0) {
-				displayTotals(tableComposite.getSelectedElements(), "Selection total: ", footerTextSelection);
+				displayTotals(tableComposite.getSelectedElements(), footerTextSelection);
 			}
 		});
 	}
@@ -54,16 +54,26 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 			XComposite footer = new XComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 			footer.getGridLayout().numColumns = 2;
 			
-			footerTextTotal = new StyledText(footer, SWT.WRAP);
-			footerTextTotal.setAlignment(SWT.RIGHT);
-			GridData gridData = new GridData(GridData.FILL_BOTH);
-			footerTextTotal.setLayoutData(gridData);
+			Label selectionLabel = new Label(footer, SWT.RIGHT);
+			selectionLabel.setText("Selection: ");
+			selectionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
 			footerTextSelection = new StyledText(footer, SWT.WRAP);
 			footerTextSelection.setAlignment(SWT.RIGHT);
+			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 			footerTextSelection.setLayoutData(gridData);
-			gridData = new GridData(GridData.FILL_BOTH);
-			footerTextSelection.setLayoutData(new GridData(GridData.FILL_BOTH));
+			footerTextSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			displayTotals((Collection<R>) Collections.emptySet(), footerTextSelection);
+			
+			Label totalLabel = new Label(footer, SWT.RIGHT);
+			totalLabel.setText("Total: ");
+			totalLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			
+			footerTextTotal = new StyledText(footer, SWT.WRAP);
+			footerTextTotal.setAlignment(SWT.RIGHT);
+			gridData = new GridData(GridData.FILL_HORIZONTAL);
+			footerTextTotal.setLayoutData(gridData);
+			displayTotals((Collection<R>) Collections.emptySet(), footerTextTotal);
 			
 			return footer;
 		}
@@ -75,11 +85,11 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 		super.displaySearchResult(result);
 		if (footerTextTotal != null) {
 			Collection<R> elements = getListComposite().getElements();
-			displayTotals(elements, "Total: ", footerTextTotal);
+			displayTotals(elements, footerTextTotal);
 		}
 	}
 
-	private void displayTotals(Collection<R> articleContainers, String prefix, StyledText styledText) {
+	private void displayTotals(Collection<R> articleContainers, StyledText styledText) {
 		// TODO: Sum per currency
 		// TODO: Sum separate (configurable) price-fragments
 		long totalSum = 0;
@@ -92,9 +102,9 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 			}
 		}
 		if (totalSum != 0) {
-			styledText.setText(prefix + curr.toDouble(totalSum) + " " + curr.getCurrencySymbol());
+			styledText.setText(curr.toDouble(totalSum) + " " + curr.getCurrencySymbol());
 		} else {
-			styledText.setText(prefix + "0");
+			styledText.setText("0");
 		}
 	}
 
