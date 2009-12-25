@@ -5,9 +5,11 @@ import java.util.Collection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.accounting.Currency;
@@ -27,8 +29,8 @@ import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q extends AbstractArticleContainerQuery>
 	extends JDOQuerySearchEntryViewer<R, Q>
 {
-	private Text footerTextTotal;
-	private Text footerTextSelection;
+	private StyledText footerTextTotal;
+	private StyledText footerTextSelection;
 
 	public ArticleContainerEntryViewer(Entry entry) {
 		super(entry);
@@ -52,12 +54,15 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 			XComposite footer = new XComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 			footer.getGridLayout().numColumns = 2;
 			
-			footerTextTotal = new Text(footer, SWT.MULTI | SWT.RIGHT);
-			footerTextTotal.setEditable(false);
-			footerTextTotal.setLayoutData(new GridData(GridData.FILL_BOTH));
+			footerTextTotal = new StyledText(footer, SWT.WRAP);
+			footerTextTotal.setAlignment(SWT.RIGHT);
+			GridData gridData = new GridData(GridData.FILL_BOTH);
+			footerTextTotal.setLayoutData(gridData);
 			
-			footerTextSelection = new Text(footer, SWT.MULTI | SWT.RIGHT);
-			footerTextSelection.setEditable(false);
+			footerTextSelection = new StyledText(footer, SWT.WRAP);
+			footerTextSelection.setAlignment(SWT.RIGHT);
+			footerTextSelection.setLayoutData(gridData);
+			gridData = new GridData(GridData.FILL_BOTH);
 			footerTextSelection.setLayoutData(new GridData(GridData.FILL_BOTH));
 			
 			return footer;
@@ -74,7 +79,7 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 		}
 	}
 
-	private void displayTotals(Collection<R> articleContainers, String prefix, Text text) {
+	private void displayTotals(Collection<R> articleContainers, String prefix, StyledText styledText) {
 		// TODO: Sum per currency
 		// TODO: Sum separate (configurable) price-fragments
 		long totalSum = 0;
@@ -87,9 +92,9 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 			}
 		}
 		if (totalSum != 0) {
-			text.setText(prefix + curr.toDouble(totalSum) + " " + curr.getCurrencySymbol());
+			styledText.setText(prefix + curr.toDouble(totalSum) + " " + curr.getCurrencySymbol());
 		} else {
-			text.setText(prefix + "0");
+			styledText.setText(prefix + "0");
 		}
 	}
 
