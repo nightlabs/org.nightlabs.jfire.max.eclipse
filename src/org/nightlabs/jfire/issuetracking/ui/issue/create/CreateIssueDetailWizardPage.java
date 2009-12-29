@@ -302,6 +302,9 @@ extends WizardHopPage
 
 	@Override
 	public boolean isPageComplete() {
+		if (subjectText == null)
+			return false; // If we didn't even create our UI yet, we're definitely not complete.
+
 		boolean result = true;
 		setErrorMessage(null);
 

@@ -198,8 +198,8 @@ extends DynamicPathWizard
 		return selectedIssue;
 	}
 
-	@Override
-	public boolean canFinish() {
-		return getContainer().getCurrentPage().isPageComplete();
-	}
+//	@Override
+//	public boolean canFinish() {
+//		return getContainer().getCurrentPage().isPageComplete();
+//	}
 }

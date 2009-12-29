@@ -31,7 +31,6 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectAttachedIssueWizardPage.ActionForIssue;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -89,17 +88,17 @@ extends WizardHopPage
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueSelectIssueLinkTypeWizardPage.job.loadingIssueLinkType.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) throws Exception {
+				final IssueLinkTypeDAO issueLinkTypeDAO = IssueLinkTypeDAO.sharedInstance();
+				final Collection<IssueLinkType> issueLinkTypes = issueLinkTypeDAO.getIssueLinkTypes(
+						attachedObject.getClass(),
+						new String[] {FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor);
+
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						IssueLinkTypeDAO issueLinkTypeDAO = IssueLinkTypeDAO.sharedInstance();
-						Collection<IssueLinkType> issueLinkTypes = issueLinkTypeDAO.getIssueLinkTypes(
-								attachedObject.getClass(),
-								new String[] {FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-								new SubProgressMonitor(monitor, 10));
-
-						if (issueLinkTypes.size() > 0) {
+//						if (issueLinkTypes.size() > 0) {
 							issueLinkTypeList.setInput(issueLinkTypes);
 							issueLinkTypeList.setSelection(0);
 							selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
@@ -114,7 +113,7 @@ extends WizardHopPage
 								}
 								getContainer().showPage(getNextPage());
 							}
-						}
+//						}
 					}
 				});
 				return Status.OK_STATUS;
