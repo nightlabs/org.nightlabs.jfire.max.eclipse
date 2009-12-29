@@ -69,7 +69,6 @@ extends LSDViewPart
 				final Object firstSelection = notificationEvent.getFirstSubject();
 				if (firstSelection instanceof PropertySetID) {
 					if (firstSelection != null) {
-						// [2009-11-17 Kai]:
 						// Check to see if the Person record has been modified before allowing uset to navigate to another
 						// record. If so prompt to save changes.
 						if (selectedPerson != null && saveAction != null && saveAction.isEnabled()) {
@@ -102,6 +101,7 @@ extends LSDViewPart
 							//                  ==> The modified-unsaved Record_A is displayed, instead of the original Record_A.
 							// So: Restore previous (clean) data? Clear changes from cache? Or what??
 							// @Kai: No! We need to clone the object! Marco.
+							// @Marco: Ok. Kapish.
 							saveAction.setEnabled(false);
 						}
 
