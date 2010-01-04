@@ -15,7 +15,9 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 
 /**
@@ -57,7 +59,7 @@ public class ClientResourceLocator extends DefaultResourceLocator implements
 	}
 	
 	public static IFolder getReportLayoutResourceFolder(ReportRegistryItemID reportLayoutID) {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("ReportLocalisation"); //$NON-NLS-1$
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(ReportLayoutL10nUtil.PROJECT_NAME_REPORT_LOCALISATION);
 		try {
 			if (!project.exists())
 				project.create(null);
@@ -66,7 +68,9 @@ public class ClientResourceLocator extends DefaultResourceLocator implements
 		} catch (CoreException e) {
 			throw new RuntimeException(e);
 		}
-		IFolder bundleFolder = project.getFolder(reportLayoutID.reportRegistryItemType+"-"+reportLayoutID.reportRegistryItemID); //$NON-NLS-1$
+		IFolder bundleFolder = project.getFolder(reportLayoutID.organisationID
+				+ IPath.SEPARATOR + reportLayoutID.reportRegistryItemType
+				+ "-" + reportLayoutID.reportRegistryItemID); //$NON-NLS-1$
 		return bundleFolder;
 	}
 	

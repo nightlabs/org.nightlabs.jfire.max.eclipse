@@ -55,11 +55,13 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil.PreparedLayoutL10nData;
 import org.nightlabs.jfire.reporting.layout.ReportLayoutLocalisationData;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
-import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
+import org.nightlabs.jfire.security.SecurityReflector;
 
 import com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor;
 
@@ -93,7 +95,6 @@ implements IReportEditorPage, IReportLayoutL10nManager
 
 	private int index;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof JFireRemoteReportEditorInput) {
@@ -303,19 +304,16 @@ implements IReportEditorPage, IReportLayoutL10nManager
 
 	private ActionRegistry registry;
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter( Class required )
-	{
-//		System.out.println("Get Adapter called for "+required);
-		if ( required.equals( ActionRegistry.class ) )
-		{
-			if ( registry == null )
-			{
-				registry = new ActionRegistry( );
+	public Object getAdapter(Class required) {
+		if (required.equals(ActionRegistry.class)) {
+			if (registry == null) {
+				registry = new ActionRegistry();
 			}
 			return registry;
 		}
-		return super.getAdapter( required );
+		return super.getAdapter(required);
 	}
 
 	private boolean pagesCreated = false;
@@ -326,7 +324,6 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		pagesCreated = true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void saveLocalisationBundle(IProgressMonitor monitor) {
 		if (!pagesCreated)
 			return;
@@ -360,7 +357,9 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		}
 		Collection<ReportLayoutLocalisationData> bundle = null;
 		try {
-			bundle = ReportingPlugin.getReportManager().storeReportLayoutLocalisationBundle(dataToStore, true,
+			ReportManagerRemote reportManager = JFireEjb3Factory.getRemoteBean(
+					ReportManagerRemote.class, SecurityReflector.getInitialContextProperties());
+			bundle = reportManager.storeReportLayoutLocalisationBundle(dataToStore, true,
 					new String[] {FetchPlan.DEFAULT, ReportLayoutLocalisationData.FETCH_GROUP_LOCALISATOIN_DATA},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 				);
@@ -376,7 +375,6 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Collection<Locale> getBundleLocales() {
 		return getResourceManager() != null ? new ArrayList<Locale>(getResourceManager().getLocales()) : null;
 	}
