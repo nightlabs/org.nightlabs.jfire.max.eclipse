@@ -40,7 +40,6 @@ public class OpenJDOQLEditorAction implements IWorkbenchWindowActionDelegate {
 	public void run(IAction action) {
 		try {
 			RCPUtil.openEditor(new JDOQLEditorInput(), JDOQLEditor.class.getName());
-//			RCPUtil.openEditor(new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getProject("ReportLocalisation").getFile("JFireReportingTrade-Reporting-Invoice-Default-InvoiceLayout/reportMessages.properties")), "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
