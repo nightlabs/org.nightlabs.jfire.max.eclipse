@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -131,19 +131,27 @@ extends LSDViewPart
 
 			final PropertySetID personID = (PropertySetID) (legalEntity == null ? null : JDOHelper.getObjectId(legalEntity.getPerson()));
 
-			final Collection<PropertySetID> roots;
+			final Set<Deque<PropertySetID>> rootToSourcePaths;
 			if (personID == null)
-				roots = Collections.emptySet();
+				rootToSourcePaths = Collections.emptySet();
 			else
-				roots = PersonRelationDAO.sharedInstance().getRelationRoots(getAllowedPersonRelationTypes(), personID,
+				rootToSourcePaths = PersonRelationDAO.sharedInstance().getRelationRoots(getAllowedPersonRelationTypes(), personID,
 						getMaxSearchDepth(), getProgressMonitor());
+
+			final Set<PropertySetID> rootNodes = new HashSet<PropertySetID>();
+			for (Deque<PropertySetID> path : rootToSourcePaths)
+			{
+				rootNodes.add(path.peek());
+			}
 
 			personRelationTree.getDisplay().asyncExec(new Runnable() {
 				public void run() {
 					if (personRelationTree.isDisposed())
 						return;
 
-					personRelationTree.setInputPersonIDs(roots, personID);
+					personRelationTree.setInputPersonIDs(rootNodes, personID);
+
+					// TODO: expand the tree to show the rootToSourcePaths. (marius)
 				}
 			});
 		}
