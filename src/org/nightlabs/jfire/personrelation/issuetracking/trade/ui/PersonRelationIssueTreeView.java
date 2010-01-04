@@ -143,9 +143,7 @@ extends LSDViewPart
 					if (personRelationTree.isDisposed())
 						return;
 
-					personRelationTree.setInputPersonIDs(roots);
-					// FIXME: set the selection on the personID! This is currently not possible in the lazy tree construction.
-//					personRelationTree.setSelection(new StructuredSelection(personID)); this is not working, yet.
+					personRelationTree.setInputPersonIDs(roots, personID);
 				}
 			});
 		}
