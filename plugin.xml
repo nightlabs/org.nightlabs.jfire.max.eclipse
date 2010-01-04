@@ -92,6 +92,14 @@
             name="Export ReportLayout"
             scope="reporting.admin"
             tooltip="Export ReportLayout"/>      
+      <reportRegistryItemAction
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.importLayout.ImportReportLayoutAction"
+            contextmenuPath="reporting.admin"
+            icon="icons/layout/action/import/ImportReportLayoutAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.importLayout.ImportReportLayoutAction"
+            name="Import ReportLayout"
+            scope="reporting.admin"
+            toolbarPath="reporting.admin"/>
       <separator name="reporting.admin.separator"/>
    </extension>
    <extension
