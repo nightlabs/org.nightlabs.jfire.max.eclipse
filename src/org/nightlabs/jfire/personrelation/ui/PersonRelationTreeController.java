@@ -380,7 +380,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 		Collection<ObjectID> result = new ArrayList<ObjectID>();
 
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100); //$NON-NLS-1$
+		final List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100 + delegates.size()); //$NON-NLS-1$
 		try {
 			if (parentID == null) {
 				result.addAll(rootPersonIDs);
@@ -388,7 +389,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			else if (parentID instanceof PropertySetID) {
 				Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
 						null, (PropertySetID)parentID, null,
-						new SubProgressMonitor(monitor, 80)
+						new SubProgressMonitor(monitor, 100)
 				);
 
 				result.addAll(childPersonRelationIDs);
@@ -418,9 +419,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				}
 			}
 
-			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 			for (PersonRelationTreeControllerDelegate delegate : delegates) {
-				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new NullProgressMonitor()); // TODO monitor!
+				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new SubProgressMonitor(monitor, 1));
 				if (childObjectIDs != null)
 					result.addAll(childObjectIDs);
 			}

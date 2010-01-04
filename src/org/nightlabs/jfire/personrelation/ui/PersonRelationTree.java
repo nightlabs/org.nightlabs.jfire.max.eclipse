@@ -383,7 +383,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		treeViewer.setLabelProvider(new PersonRelationTreeLabelProvider(treeViewer));
 	}
 
-	public void setInputPersonIDs(Collection<PropertySetID> personIDs)
+	public void setInputPersonIDs(Collection<PropertySetID> personIDs, PropertySetID source)
 	{
 		assertSWTThread();
 		assertNotDisposed();
@@ -395,7 +395,49 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		personRelationTreeController.setRootPersonIDs(personIDs);
 		super.setInput(personRelationTreeController);
-//		refresh(true);
+
+		// if source is set -> select it in the tree.
+//		if (source != null)
+//		{
+//			Set<PersonRelationTreeNode> currentLevel = new HashSet<PersonRelationTreeNode>();
+//			Set<PersonRelationTreeNode> nextLevel = new HashSet<PersonRelationTreeNode>();
+//
+//			for (int i=0; i < personIDs.size(); i++)
+//			{
+				// FIXME: We never know when the elements we need is fetched by the backround jobs, unless using the listener.
+				//        But synchronising the listener to these calls is not really nice.
+				//        We need some method that retrieves the shallow objects (only ObjectID) immediately. (marius)
+//				PersonRelationTreeNode node = personRelationTreeController.getNode(null, i);
+//			}
+//
+//			PersonRelationTreeNode dummyNode = personRelationTreeController.createNode();
+//			dummyNode.setJdoObjectID(source);
+//			do
+//			{
+//				if (currentLevel.contains(dummyNode))
+//				{
+//					setSelection(dummyNode);
+//					break;
+//				}
+//				currentLevel = nextLevel;
+//				nextLevel = new HashSet<PersonRelationTreeNode>();
+//
+//				for (PersonRelationTreeNode personRelationTreeNode : currentLevel)
+//				{
+//					int childCount = (int) personRelationTreeController.getNodeCount(personRelationTreeNode);
+//					for (int i=0; i < childCount; i++)
+//					{
+//						nextLevel.add( personRelationTreeController.getNode(personRelationTreeNode, i) );
+//					}
+//				}
+//
+//			} while (true);
+//		}
+	}
+
+	public void setInputPersonIDs(Collection<PropertySetID> personIDs)
+	{
+		setInputPersonIDs(personIDs, null);
 	}
 
 	public Collection<PropertySetID> getInputPersonIDs() {
