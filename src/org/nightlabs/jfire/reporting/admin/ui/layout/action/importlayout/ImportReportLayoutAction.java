@@ -24,69 +24,81 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.reporting.admin.ui.layout.action.importLayout;
+package org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout;
 
-import javax.security.auth.login.LoginException;
+import java.util.Collection;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.composite.FileSelectionComposite;
-import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
-import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.reporting.ReportManagerRemote;
+import javax.jdo.FetchPlan;
+import javax.jdo.JDODetachedFieldAccessException;
+import javax.jdo.JDOHelper;
+
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
+import org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog;
+import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
+import org.nightlabs.jfire.reporting.layout.ReportCategory;
+import org.nightlabs.jfire.reporting.layout.ReportLayout;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author  Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class ImportReportLayoutDialog 
-extends ResizableTrayDialog 
+public class ImportReportLayoutAction 
+extends ReportRegistryItemAction 
 {
-	private XComposite wrapper;
-	private FileSelectionComposite fileSelectionComposite;
-	private ReportRegistryItemID layoutID;
+	/**
+	 * 
+	 */
+	public ImportReportLayoutAction() {
+		super();
+	}
 
 	/**
-	 * @param parentShell
+	 * @param text
 	 */
-	public ImportReportLayoutDialog(Shell parentShell, ReportRegistryItemID layoutID) {
-		super(parentShell, null);
-		setShellStyle(getShellStyle() | SWT.RESIZE);
-		this.layoutID = layoutID;
+	public ImportReportLayoutAction(String text) {
+		super(text);
 	}
 
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Title");
-		newShell.setSize(400, 400);
+	/**
+	 * @param text
+	 * @param image
+	 */
+	public ImportReportLayoutAction(String text, ImageDescriptor image) {
+		super(text, image);
 	}
 
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		wrapper = new XComposite(parent, SWT.NONE);
-		fileSelectionComposite = new FileSelectionComposite(
-				wrapper,
-				SWT.NONE, FileSelectionComposite.OPEN_FILE,
-				"Name",	"Caption");
-		return wrapper;
+	/**
+	 * @param text
+	 * @param style
+	 */
+	public ImportReportLayoutAction(String text, int style) {
+		super(text, style);
 	}
-
+	
 	@Override
-	protected void okPressed() {
-		ReportManagerRemote rm;
-		try {
-			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			rm.importReportLayoutZipFile(fileSelectionComposite.getFile());
-		} catch (LoginException e) {
-			throw new RuntimeException(e);
+	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
+		if (registryItems.size() != 1)
+			return false;
+		ReportRegistryItem item = registryItems.iterator().next();
+		if (item instanceof ReportCategory) {
+			return true;
 		}
-		super.okPressed();
+		return false;
+	}
+	
+	@Override
+	public void run(Collection<ReportRegistryItem> reportRegistryItems) {		
+		if (reportRegistryItems.size() != 1)
+			return;
+		ReportRegistryItem item = reportRegistryItems.iterator().next();
+		
+		ImportReportLayoutDialog ilg = new ImportReportLayoutDialog(Display.getDefault().getActiveShell(), (ReportRegistryItemID) JDOHelper.getObjectId(item));
+		ilg.open();
 	}
 
 }

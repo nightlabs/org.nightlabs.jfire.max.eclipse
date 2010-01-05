@@ -93,7 +93,7 @@
             scope="reporting.admin"
             tooltip="Export ReportLayout"/>      
       <reportRegistryItemAction
-            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.importLayout.ImportReportLayoutAction"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout.ImportReportLayoutAction"
             contextmenuPath="reporting.admin"
             icon="icons/layout/action/import/ImportReportLayoutAction.16x16.png"
             id="org.nightlabs.jfire.reporting.admin.ui.layout.action.importLayout.ImportReportLayoutAction"
