@@ -145,7 +145,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 			if (needZipButton.getSelection() == true) {
 				File outputFilePath = new File(folderComposite.getFile(), layoutFileName.getText() + ZIP_SUFFIX);
 				try {
-					IOUtil.zipFolder(outputFilePath, IOUtil.getUserTempDir("jfire_report.exported.", null));
+					IOUtil.zipFolder(outputFilePath, IOUtil.getUserTempDir("jfire_report.exported.", "." + layoutFileName.getText()));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
