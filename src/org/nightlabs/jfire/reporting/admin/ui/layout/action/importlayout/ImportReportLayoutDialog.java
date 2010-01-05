@@ -34,10 +34,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItemName;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 
 /**
@@ -49,15 +51,17 @@ extends ResizableTrayDialog
 {
 	private XComposite wrapper;
 	private FileSelectionComposite fileSelectionComposite;
-	private ReportRegistryItemID layoutID;
+//	private I18nTextEditor nameEditor;
+	
+	private ReportRegistryItemID reportCategoryID;
 
 	/**
 	 * @param parentShell
 	 */
-	public ImportReportLayoutDialog(Shell parentShell, ReportRegistryItemID layoutID) {
+	public ImportReportLayoutDialog(Shell parentShell, ReportRegistryItemID reportCategoryID) {
 		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
-		this.layoutID = layoutID;
+		this.reportCategoryID = reportCategoryID;
 	}
 
 	@Override
@@ -74,6 +78,8 @@ extends ResizableTrayDialog
 				wrapper,
 				SWT.NONE, FileSelectionComposite.OPEN_FILE,
 				"Name",	"Caption");
+		
+//		nameEditor = new I18nTextEditor(wrapper);
 		return wrapper;
 	}
 
@@ -82,7 +88,7 @@ extends ResizableTrayDialog
 		ReportManagerRemote rm;
 		try {
 			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			rm.importReportLayoutZipFile(fileSelectionComposite.getFile());
+			rm.importReportLayoutZipFile(fileSelectionComposite.getFile(), reportCategoryID, null);
 		} catch (LoginException e) {
 			throw new RuntimeException(e);
 		}
