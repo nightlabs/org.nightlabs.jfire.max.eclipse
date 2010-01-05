@@ -2,10 +2,8 @@ package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -17,6 +15,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +37,6 @@ import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
-import org.nightlabs.jfire.personrelation.dao.PersonRelationTypeDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
@@ -112,22 +110,49 @@ extends LSDViewPart
 						Job job = new Job("Loading relations") {
 							@Override
 							protected IStatus run(ProgressMonitor monitor) throws Exception {
-								// One-time setup.
-								if (name2PersRelnTypeID == null) {
-									List<PersonRelationType> persRelTypes = PersonRelationTypeDAO.sharedInstance().getPersonRelationTypes(
-											new String[] {FetchPlan.DEFAULT, PersonRelationType.FETCH_GROUP_NAME },
-											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-
-									name2PersRelnTypeID = new HashMap<String, PersonRelationTypeID>();
-									for (PersonRelationType prt : persRelTypes)
-										name2PersRelnTypeID.put(prt.getPersonRelationTypeID(), PersonRelationTypeID.create(prt.getOrganisationID(), prt.getPersonRelationTypeID()));
-								}
+//								// One-time setup.
+//								if (name2PersRelnTypeID == null) {
+//									List<PersonRelationType> persRelTypes = PersonRelationTypeDAO.sharedInstance().getPersonRelationTypes(
+//											new String[] {FetchPlan.DEFAULT, PersonRelationType.FETCH_GROUP_NAME },
+//											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+//
+//									name2PersRelnTypeID = new HashMap<String, PersonRelationTypeID>();
+//									for (PersonRelationType prt : persRelTypes)
+//										name2PersRelnTypeID.put(prt.getPersonRelationTypeID(), PersonRelationTypeID.create(prt.getOrganisationID(), prt.getPersonRelationTypeID()));
+//								}
 
 
 								// If a Person-Trading-Partner has been selected; see notes.
 								// Otherwise, the selected 'organisation' becomes the new root.
 								if (personRelnType.getPersonRelationTypeID().equals("employing")) {
 									// TODO Call the server method here; get the new roots; and update the tree.
+									final Set<Deque<ObjectID>> paths = PersonRelationDAO.sharedInstance().getRelationRoots(
+											getAllowedPersonRelationTypes(), personID, 10, monitor);
+
+//									final Set<ObjectID> roots = new HashSet<ObjectID>();
+//									for (Deque<ObjectID> path : paths)
+//										roots.add(path.peek());
+
+									personRelationTree.getDisplay().asyncExec(new Runnable() {
+										public void run() {
+											if (!personRelationTree.isDisposed()) {
+//												personRelationTree.setInputPersonIDs(Collections.EMPTY_LIST);
+//												personRelationTree.setInputPersonIDs(roots);
+
+//												Set<Deque<? extends ObjectID>> tmp = CollectionUtil.castSet(paths);
+												List<TreePath> treePaths = personRelationTree.getPersonRelationTreeController().expandPaths(paths);
+												for (TreePath treePath : treePaths) {
+													personRelationTree.getTreeViewer().expandToLevel(treePath, 0);
+												}
+
+//												personRelationTree.getTreeViewer().ref
+//												personRelationTree.getTreeViewer().expandToLevel(new TreePath(), level);
+//												personRelationTree.getTreeViewer().expandToLevel(3);
+											}
+										}
+									});
+
+
 								}
 								else {
 									personRelationTree.getDisplay().asyncExec(new Runnable() {
@@ -205,7 +230,7 @@ extends LSDViewPart
 
 
 	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
-	private Map<String, PersonRelationTypeID> name2PersRelnTypeID = null; // Maintain a one-time reference to a working set of PersonRelationTypeID by their names.
+//	private Map<String, PersonRelationTypeID> name2PersRelnTypeID = null; // Maintain a one-time reference to a working set of PersonRelationTypeID by their names.
 
 	/**
 	 * Traverses up the tree in search for the first node containing a representation of a Person-related object.
@@ -258,7 +283,7 @@ extends LSDViewPart
 
 			final PropertySetID personID = (PropertySetID) (legalEntity == null ? null : JDOHelper.getObjectId(legalEntity.getPerson()));
 
-			final Set<Deque<PropertySetID>> rootToSourcePaths;
+			final Set<Deque<ObjectID>> rootToSourcePaths;
 			if (personID == null)
 				rootToSourcePaths = Collections.emptySet();
 			else
@@ -266,9 +291,9 @@ extends LSDViewPart
 						getMaxSearchDepth(), getProgressMonitor());
 
 			final Set<PropertySetID> rootNodes = new HashSet<PropertySetID>();
-			for (Deque<PropertySetID> path : rootToSourcePaths)
+			for (Deque<ObjectID> path : rootToSourcePaths)
 			{
-				rootNodes.add(path.peek());
+				rootNodes.add((PropertySetID) path.peek());
 			}
 
 			personRelationTree.getDisplay().asyncExec(new Runnable() {
