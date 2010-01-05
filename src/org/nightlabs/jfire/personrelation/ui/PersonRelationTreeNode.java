@@ -11,6 +11,12 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
 public class PersonRelationTreeNode
 extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController>
 {
+	// ----------------------------- FARK-MARK --------------->>
+	//private List<PropertySetID> filterChil
+	// ----------------------------- FARK-MARK --------------->>
+
+
+
 	// Attempt to stop the unending iteration. At least for use with Behr's descriptions. See notes.
 	/**
 	 * Based on the PropertySetID represented by this node, check to see if the same PropertySetID

@@ -306,7 +306,6 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixPerson);
 				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personIDs.size()); //$NON-NLS-1$
 				for (PropertySetID personID : personIDs) {
-					// TODO: In case we want to have a hierarchical view on the graph, there should be a way to exclude RelationTypes from the child search (e.g. only display the subcompanies (subsidiaries, employees, etc.) and NOT the reverse relations.
 					long personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
 							null, personID, null, new NullProgressMonitor()
 					);
@@ -380,8 +379,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 		Collection<ObjectID> result = new ArrayList<ObjectID>();
 
-		final List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100 + delegates.size()); //$NON-NLS-1$
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100); //$NON-NLS-1$
 		try {
 			if (parentID == null) {
 				result.addAll(rootPersonIDs);
@@ -389,7 +387,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			else if (parentID instanceof PropertySetID) {
 				Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
 						null, (PropertySetID)parentID, null,
-						new SubProgressMonitor(monitor, 100)
+						new SubProgressMonitor(monitor, 80)
 				);
 
 				result.addAll(childPersonRelationIDs);
@@ -419,8 +417,9 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				}
 			}
 
+			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 			for (PersonRelationTreeControllerDelegate delegate : delegates) {
-				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new SubProgressMonitor(monitor, 1));
+				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new NullProgressMonitor()); // TODO monitor!
 				if (childObjectIDs != null)
 					result.addAll(childObjectIDs);
 			}
