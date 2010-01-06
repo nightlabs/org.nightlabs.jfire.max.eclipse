@@ -95,7 +95,8 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 		long totalSum = 0;
 		Currency curr = null;
 		for (R ac : articleContainers) {
-			Price acPrice = getACPrice(ac);
+			PricedArticleContainer pac = (PricedArticleContainer) ac;
+			Price acPrice = pac.getPrice();
 			if (acPrice != null) {
 				totalSum += acPrice.getAmount();
 				curr = acPrice.getCurrency();
@@ -108,19 +109,19 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 		}
 	}
 
-	/**
-	 * Returns Article containers' price
-	 * @param ac
-	 * @return
-	 */
-	private Price getACPrice(R ac) {
-		if (ac instanceof Offer) {
-			return ((Offer)ac).getPrice();
-		} else if (ac instanceof Invoice) {
-			return ((Invoice) ac).getPrice();
-		}
-		return null;
-	}
+//	/**
+//	 * Returns Article containers' price
+//	 * @param ac
+//	 * @return
+//	 */
+//	private Price getACPrice(R ac) {
+//		if (ac instanceof Offer) {
+//			return ((Offer)ac).getPrice();
+//		} else if (ac instanceof Invoice) {
+//			return ((Invoice) ac).getPrice();
+//		}
+//		return null;
+//	}
 	
 //	private void show
 
