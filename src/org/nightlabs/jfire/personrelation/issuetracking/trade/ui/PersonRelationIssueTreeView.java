@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,8 +11,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -27,7 +24,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
-import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.selection.SelectionProviderProxy;
@@ -55,7 +51,6 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.progress.ProgressMonitor;
 
 public class PersonRelationIssueTreeView
 extends LSDViewPart
@@ -115,77 +110,65 @@ extends LSDViewPart
 					final PropertySetID personID = getPropertySetID(objectID, object);
 
 					if (personID != null) {
-						final PersonRelation personReln = (PersonRelation) object;
-						final PersonRelationType personRelnType = personReln.getPersonRelationType();
+						// Join this with the entry-point-listener of this View, since the behaviour is exactly the same.
+						notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
 
-						Job job = new Job("Loading relations") {
-							@Override
-							protected IStatus run(ProgressMonitor monitor) throws Exception {
-								// [A] If a Person-Trading-Partner has been selected; see notes.
-								// [B] Otherwise, the selected 'organisation' becomes the new root.
+						// But we should be able to use the general one too?
+						// ... So that we can trigger other views listening for the same event too.
+						// ... But somehow, the 'subject' is not there?? Kai.
+//						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
 
-								// <--- See [A].
-								if (personRelnType.getPersonRelationTypeID().equals("employing")) {
-									// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
-									// relationship up through the hierachy of organisations, and terminates under one of the following
-									// three conditions:
-									//    1. When it reaches the mother of all subsidiary organisations (known as c^ \elemof C).
-									//    2. When it detects a cyclic / nested-cyclic relationship between subsidiary-groups.
-									//    3. When the length of the path reaches the preset DefaultMaximumSearchDepth.
-									// For the sake of simplicity, let c^ be the terminal element in a path. Then all the unique c^'s
-									// collated from the returned paths are the new roots for PersonRelationTree.
-									Set<Deque<PropertySetID>> pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
-											getAllowedPersonRelationTypes(), personID, DEFAULT_MAX_SEARCH_DEPTH, monitor);
 
-									// Initialise the path-expansion trackers.
-									pathsToExpand = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
-									expandedPaths = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
-
-									// Prepare the new roots (the unique c^), and give references to the path-expansion trackers.
-									final Set<PropertySetID> rootIDs = new HashSet<PropertySetID>();
-									int index = 0;
-									for (Deque<PropertySetID> path : pathsToBeExpanded) {
-										rootIDs.add( path.peekFirst() );
-										showDequePaths("   pathToExpand[" + index + "]", path, true);
-
-										pathsToExpand.put(index, path);
-										expandedPaths.put(index, new LinkedList<PropertySetID>());
-										index++;
-									}
-
-									// Update the tree.
-									personRelationTree.getDisplay().asyncExec(new Runnable() {
-										public void run() {
-											// Each path \elemOf paths is represented in a Deque in a reverse-order traversal to the root's
-											// PropertySetID c^ as follows:
-											//   path = { p_i, c_0, c_1, ..., c_j, c^ },
-											//   where p_i \elemOf P is the PropertySetID of the trading partner (in this case, a Person); and
-											//         c_i \elemOf C is the PropertySetID of an organisation.
-											if (!personRelationTree.isDisposed()) {
-												personRelationTree.setInputPersonIDs(rootIDs);
-
-												// Now, we wait until everything's loaded from these rootIDs in the new tree, and
-												// let the system of Listeners do the trick.
-											}
-										}
-									});
-								}
-
-								// <--- See [B].
-								else
-									personRelationTree.getDisplay().asyncExec(new Runnable() {
-										public void run() {
-											if (!personRelationTree.isDisposed())
-												personRelationTree.setInputPersonIDs(Collections.singleton(personID));
-										}
-									});
-
-								return Status.OK_STATUS;
-							}
-						};
-
-						job.setPriority(Job.SHORT);
-						job.schedule();
+//						Job job = new Job("Loading relations") {
+//							@Override
+//							protected IStatus run(ProgressMonitor monitor) throws Exception {
+//								// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
+//								// relationship up through the hierachy of organisations, and terminates under one of the following
+//								// three conditions:
+//								//    1. When it reaches the mother of all subsidiary organisations (known as c^ \elemof C).
+//								//    2. When it detects a cyclic / nested-cyclic relationship between subsidiary-groups.
+//								//    3. When the length of the path reaches the preset DefaultMaximumSearchDepth.
+//								// For the sake of simplicity, let c^ be the terminal element in a path. Then all the unique c^'s
+//								// collated from the returned paths are the new roots for PersonRelationTree.
+//								// See original comments in revision #16575.
+//								Set<Deque<PropertySetID>> pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
+//										getAllowedPersonRelationTypes(), personID, DEFAULT_MAX_SEARCH_DEPTH, monitor);
+//
+//								// Initialise the path-expansion trackers.
+//								pathsToExpand = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
+//								expandedPaths = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
+//
+//								// Prepare the new roots (the unique c^), and give references to the path-expansion trackers.
+//								final Set<PropertySetID> rootIDs = new HashSet<PropertySetID>();
+//								int index = 0;
+//								for (Deque<PropertySetID> path : pathsToBeExpanded) {
+//									rootIDs.add( path.peekFirst() );
+//									showDequePaths("   pathToExpand[" + index + "]", path, true);
+//
+//									pathsToExpand.put(index, path);
+//									expandedPaths.put(index, new LinkedList<PropertySetID>());
+//									index++;
+//								}
+//
+//								// Update the bloody tree.
+//								personRelationTree.getDisplay().asyncExec(new Runnable() {
+//									public void run() {
+//										// Each path \elemOf paths is represented in a Deque in a reverse-order traversal to the root's
+//										// PropertySetID c^ as follows:
+//										//   path = { p_i, c_0, c_1, ..., c_n, c^ },
+//										//   where p_i \elemOf P is the PropertySetID of the trading partner (in this case, a Person); and
+//										//         c_i \elemOf C is the PropertySetID of an organisation.
+//										if (!personRelationTree.isDisposed())
+//											personRelationTree.setInputPersonIDs(rootIDs);
+//									}
+//								});
+//
+//								return Status.OK_STATUS;
+//							}
+//						};
+//
+//						job.setPriority(Job.SHORT);
+//						job.schedule();
 					}
 
 				}
@@ -239,10 +222,6 @@ extends LSDViewPart
 					if (personID != null)
 						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
 				}
-
-//				// ----------------------------- FARK-MARK ----------------------->>
-//				showExpandedTreePaths();
-//				// ----------------------------- FARK-MARK ----------------------->>
 			}
 		});
 
@@ -250,7 +229,6 @@ extends LSDViewPart
 
 
 
-		// ----------------------------- FARK-MARK ----------------------->>
 		// Unravel the tree: Open it up to those paths we've discovered! Kai.
 		// This listener is expected to unravel the tree, appropriately following the pre-identified paths in pathsToBeExpanded.
 		// Each path contains a Deque of PropertySetID, and will guide the lazy-expansion events once data becomes available, and
@@ -274,36 +252,22 @@ extends LSDViewPart
 					return;
 
 
-				// Fine-tuned, version.
+				// Fine-tuned, recursive version.
 				Deque<PropertySetID> propertySetIDsToRoot = (LinkedList<PropertySetID>)node.getPropertySetIDsToRoot();
-				String[] segID = node_propID.toString().split("&");
 				boolean isNodeMarkedForExpansion = false;
 				boolean isNodeMarkedForSelection = false;
-
-//				showDequePaths("-->> @Node[ID:" + segID[1] + "] ::", propertySetIDsToRoot, !true);
 				for (int index : pathsToExpand.keySet()) {
 					Deque<PropertySetID> pathToExpand = pathsToExpand.get(index);
 					Deque<PropertySetID> expandedPath = expandedPaths.get(index);
 
-//					System.err.println(" ::::::::::::::::::::: @index: " + index);
 					if (!pathToExpand.isEmpty() && pathToExpand.peekFirst().equals(node_propID)) {
-//						showDequePaths("~~ Checking: >> pathToExpand[" + index + "]", pathToExpand, !true);
-//						showDequePaths("~~ Checking: << expandedPath[" + index + "]", expandedPath, !true);
-
 						boolean isMatch = isMatchingSubPath(propertySetIDsToRoot, expandedPath, true, true);
-//						System.err.println("  :::::: isMatchingSubPath = " + (isMatch ? "True" : "False"));
 						if (isMatch || expandedPath.isEmpty()) {
 							isNodeMarkedForExpansion |= isMatch;
 							expandedPath.push( pathToExpand.pop() );
 
-//							showDequePaths("  ++ Amended path: >> pathToExpand[" + index + "]", pathToExpand, !true);
-//							showDequePaths("  ++ Amended path: << expandedPath[" + index + "]", expandedPath, !true);
-
-							// Check if we need to get the node selected.
 							isNodeMarkedForSelection |= pathToExpand.isEmpty();
 						}
-
-//						System.err.println();
 					}
 				}
 
@@ -311,25 +275,18 @@ extends LSDViewPart
 				// Reflect changes on the node, if any.
 				if (isNodeMarkedForSelection)
 					personRelationTree.getTree().setSelection(treeItem);
-				else if (isNodeMarkedForExpansion) {
+				else if (isNodeMarkedForExpansion)
 					treeItem.setExpanded(true);
-//					showDequePaths("EXPANDING :: @Node[ID:" + segID[1] + "] ::", propertySetIDsToRoot, !true);
-				}
-
-				System.err.println("\n\n");
 
 
-				// Check to see the still non-expanded paths.
-				for(int index : pathsToExpand.keySet())
-					showDequePaths("   pathToExpand*[" + index + "]", pathsToExpand.get(index), !true);
+//				// Check to see the still non-expanded paths.
+//				for(int index : pathsToExpand.keySet())
+//					showDequePaths("   pathToExpand*[" + index + "]", pathsToExpand.get(index), !true);
 			}
 		});
-
-		// ----------------------------- FARK-MARK ----------------------->>
 	}
 
 
-	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
 	/**
 	 * @return true if and only if the given expandedPath is a proper sub-path of the given pathToRoot.
 	 */
@@ -384,7 +341,7 @@ extends LSDViewPart
 
 	/**
 	 * Given the jdoObjectID and/or the jdoObject, return the PropertySetID if either inputs are of the Person-related object.
-	 * @return null if neither paramters are related to a Person object.
+	 * @return null if neither parameters are related to a Person object.
 	 */
 	private PropertySetID getPropertySetID(ObjectID jdoObjectID, Object jdoObject) {
 		if (jdoObjectID != null && jdoObjectID instanceof PropertySetID)
@@ -396,8 +353,9 @@ extends LSDViewPart
 		return null;
 	}
 
+	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
 	// For debugging...
-	private void showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
+	protected void showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
 		System.err.print("++ " + preamble + " :: {");
 
 		Iterator<? extends ObjectID> iter = isReversed ? path.descendingIterator() : path.iterator();
@@ -409,7 +367,7 @@ extends LSDViewPart
 		System.err.print("}\n");
 	}
 
-	private void showExpandedTreePaths() {
+	protected void showExpandedTreePaths() {
 		TreePath[] treePaths = personRelationTree.getTreeViewer().getExpandedTreePaths();
 		for (TreePath treePath : treePaths) {
 			System.err.print(" -->> treePath[len:" + treePath.getSegmentCount() + "] :: ");
@@ -429,42 +387,57 @@ extends LSDViewPart
 	private NotificationListener notificationListenerLegalEntitySelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 	{
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-			AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
-			LegalEntity legalEntity = null;
-			if (legalEntityID != null) {
-				legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
-						legalEntityID,
-						new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON },
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						getProgressMonitor()
-				);
-			}
+			Object subject = notificationEvent.getFirstSubject();
+			PropertySetID personID = null;
 
-			final PropertySetID personID = (PropertySetID) (legalEntity == null ? null : JDOHelper.getObjectId(legalEntity.getPerson()));
-
-			final Set<Deque<PropertySetID>> rootToSourcePaths;
-			if (personID == null)
-				rootToSourcePaths = Collections.emptySet();
-			else
-				rootToSourcePaths = PersonRelationDAO.sharedInstance().getRelationRoots(getAllowedPersonRelationTypes(), personID,
-						getMaxSearchDepth(), getProgressMonitor());
-
-			final Set<PropertySetID> rootNodes = new HashSet<PropertySetID>();
-			for (Deque<PropertySetID> path : rootToSourcePaths)
-			{
-				rootNodes.add(path.peek());
-			}
-
-			personRelationTree.getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					if (personRelationTree.isDisposed())
-						return;
-
-					personRelationTree.setInputPersonIDs(rootNodes, personID);
-
-					// TODO: expand the tree to show the rootToSourcePaths. (marius)
+			if ( !(subject instanceof PropertySetID) ) {
+				AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
+				LegalEntity legalEntity = null;
+				if (legalEntityID != null) {
+					legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
+							legalEntityID,
+							new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							getProgressMonitor()
+					);
 				}
-			});
+
+				personID = (PropertySetID) (legalEntity == null ? null : JDOHelper.getObjectId(legalEntity.getPerson()));
+			}
+			else
+				personID = (PropertySetID) subject;
+
+
+			if (personID != null) {
+				// The root (or roots) of the PersonRelationTree shall now have a new interpreted meaning.
+				// It refers to the c^ \elemOf C.
+				Set<Deque<PropertySetID>> pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
+						getAllowedPersonRelationTypes(), personID, DEFAULT_MAX_SEARCH_DEPTH, getProgressMonitor());
+
+				// Initialise the path-expansion trackers.
+				pathsToExpand = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
+				expandedPaths = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
+
+				// Prepare the new roots (the unique c^), and give references to the path-expansion trackers.
+				final Set<PropertySetID> rootIDs = new HashSet<PropertySetID>();
+				int index = 0;
+				for (Deque<PropertySetID> path : pathsToBeExpanded) {
+					rootIDs.add( path.peekFirst() );
+					showDequePaths("   pathToExpand[" + index + "]", path, true);
+
+					pathsToExpand.put(index, path);
+					expandedPaths.put(index, new LinkedList<PropertySetID>());
+					index++;
+				}
+
+				// Update the tree.
+				personRelationTree.getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						if (!personRelationTree.isDisposed())
+							personRelationTree.setInputPersonIDs(rootIDs);
+					}
+				});
+			}
 		}
 	};
 
