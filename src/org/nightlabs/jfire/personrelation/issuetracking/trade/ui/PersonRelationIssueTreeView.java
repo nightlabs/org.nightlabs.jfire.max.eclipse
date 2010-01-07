@@ -2,9 +2,11 @@ package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -58,11 +60,9 @@ import org.nightlabs.progress.ProgressMonitor;
 public class PersonRelationIssueTreeView
 extends LSDViewPart
 {
-	protected static final int DefaultMaximumSearchDepth	= 10;
-//	private Set<Deque<ObjectID>> pathsToBeExpanded = null; // See notes on Behr's specification with the PersonRelationTree. Kai.
-	private Set<Deque<PropertySetID>> pathsToBeExpanded = null; // See notes on Behr's specification with the PersonRelationTree. Kai.
-	private Deque<PropertySetID> testPath = null;
-	private Deque<PropertySetID> testPathExpanded = null;
+	protected static final int DEFAULT_MAX_SEARCH_DEPTH = 10;
+	private Map<Integer, Deque<PropertySetID>> pathsToExpand; // }--> See notes on Behr's specification with the PersonRelationTree. Kai.
+	private Map<Integer, Deque<PropertySetID>> expandedPaths; // }
 
 	private PersonRelationTree personRelationTree;
 	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
@@ -121,13 +121,11 @@ extends LSDViewPart
 						Job job = new Job("Loading relations") {
 							@Override
 							protected IStatus run(ProgressMonitor monitor) throws Exception {
-								// FIXME These remarks have changed a bit. We no longer use PersonRelationIDs to expand.
 								// [A] If a Person-Trading-Partner has been selected; see notes.
 								// [B] Otherwise, the selected 'organisation' becomes the new root.
 
 								// <--- See [A].
 								if (personRelnType.getPersonRelationTypeID().equals("employing")) {
-									// --- FARK-MARK --- CHANGED to PropertySetID°
 									// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
 									// relationship up through the hierachy of organisations, and terminates under one of the following
 									// three conditions:
@@ -136,78 +134,38 @@ extends LSDViewPart
 									//    3. When the length of the path reaches the preset DefaultMaximumSearchDepth.
 									// For the sake of simplicity, let c^ be the terminal element in a path. Then all the unique c^'s
 									// collated from the returned paths are the new roots for PersonRelationTree.
-									pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
-											getAllowedPersonRelationTypes(), personID, DefaultMaximumSearchDepth, monitor);
+									Set<Deque<PropertySetID>> pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
+											getAllowedPersonRelationTypes(), personID, DEFAULT_MAX_SEARCH_DEPTH, monitor);
 
-									// Prepare the new roots (the unique c^).
+									// Initialise the path-expansion trackers.
+									pathsToExpand = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
+									expandedPaths = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
+
+									// Prepare the new roots (the unique c^), and give references to the path-expansion trackers.
 									final Set<PropertySetID> rootIDs = new HashSet<PropertySetID>();
+									int index = 0;
 									for (Deque<PropertySetID> path : pathsToBeExpanded) {
 										rootIDs.add( path.peekFirst() );
-										showDequePaths("   pathToExpand", path, false);
+										showDequePaths("   pathToExpand[" + index + "]", path, true);
+
+										pathsToExpand.put(index, path);
+										expandedPaths.put(index, new LinkedList<PropertySetID>());
+										index++;
 									}
-
-									testPath = pathsToBeExpanded.iterator().next(); // For current testing.
-
 
 									// Update the tree.
 									personRelationTree.getDisplay().asyncExec(new Runnable() {
 										public void run() {
 											// Each path \elemOf paths is represented in a Deque in a reverse-order traversal to the root's
 											// PropertySetID c^ as follows:
-											//   path = { g(p_i), g(c_0), g(c_1), ..., g(c_j), c^ },
-											//   where p_i \elemOf P is the PropertySetID of the trading partner (in this case, a Person);
-											//         c_i \elemOf C is the PropertySetID of an organisation; and
-											//         g(x) is the PersonRelationID of x, where x be an arbitrary PropertySetID.
-											// The paths are passed to the Tree's controller to load the necessary nodes through the
-											// expandPaths() method, and returns the TreePaths, which we shall use to inform the TreeViewer
-											// to expand to the levels we want displayed.
+											//   path = { p_i, c_0, c_1, ..., c_j, c^ },
+											//   where p_i \elemOf P is the PropertySetID of the trading partner (in this case, a Person); and
+											//         c_i \elemOf C is the PropertySetID of an organisation.
 											if (!personRelationTree.isDisposed()) {
 												personRelationTree.setInputPersonIDs(rootIDs);
-												showDequePaths(">> testPath", testPath, false);
 
-												// Naive approach IIa.v16.9.8b:
-												//   --> We wait until everything's loaded from these rootIDs in the new tree.
-												//   --> Afterwhich, endeavour to expand the paths we found.
-												// We let the system of Listeners do the trick!
-
-
-												// ----------------------------- FARK-MARK ----------------------->>
-//												// Go and freaking expand the paths!!!
-//												List<TreePath> treePaths = personRelationTree.getPersonRelationTreeController().expandPaths(paths);
-//												System.err.println("::::: Paths to expand :::");
-//												for (TreePath treePath : treePaths) {
-//													System.err.print(" -->> treePath[len:" + treePath.getSegmentCount() + "] :: ");
-//													for (int i=0; i<treePath.getSegmentCount(); i++) {
-//														PersonRelationTreeNode segment = (PersonRelationTreeNode) treePath.getSegment(i);
-//														String[] segID = segment.getJdoObjectID().toString().split("&");
-//														System.err.print("[ID:" + segID[1] + "," + segment.getChildNodeCount() + "]");
-//													}
-//
-//													System.err.println();
-//												}
-//												System.err.println("\n");
-//
-//
-//
-//												for (TreePath treePath : treePaths)
-//													personRelationTree.getTreeViewer().expandToLevel(treePath, 100);
-//
-//
-//												// Now check with the TreeViewer?
-//												System.err.println("::::: Expanded paths from the TreeViewer :::");
-//												TreePath[] etreePaths = personRelationTree.getTreeViewer().getExpandedTreePaths();
-//												for (TreePath treePath : etreePaths) {
-//													System.err.print(" -->> treePath[len:" + treePath.getSegmentCount() + "] :: ");
-//													for (int i=0; i<treePath.getSegmentCount(); i++) {
-//														PersonRelationTreeNode segment = (PersonRelationTreeNode) treePath.getSegment(i);
-//														String[] segID = segment.getJdoObjectID().toString().split("&");
-//														System.err.print("[ID:" + segID[1] + "," + segment.getChildNodeCount() + "]");
-//													}
-//
-//													System.err.println();
-//												}
-//												System.err.println("\n");
-												// ----------------------------- FARK-MARK ----------------------->>
+												// Now, we wait until everything's loaded from these rootIDs in the new tree, and
+												// let the system of Listeners do the trick.
 											}
 										}
 									});
@@ -282,9 +240,9 @@ extends LSDViewPart
 						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
 				}
 
-				// ----------------------------- FARK-MARK ----------------------->>
-				showExpandedTreePaths();
-				// ----------------------------- FARK-MARK ----------------------->>
+//				// ----------------------------- FARK-MARK ----------------------->>
+//				showExpandedTreePaths();
+//				// ----------------------------- FARK-MARK ----------------------->>
 			}
 		});
 
@@ -294,75 +252,76 @@ extends LSDViewPart
 
 		// ----------------------------- FARK-MARK ----------------------->>
 		// Unravel the tree: Open it up to those paths we've discovered! Kai.
-		// HOWEVER...
-		//   This approach requires the 'unique' PropertySetIDs in the pathToExpand, because the PersonRelationIDs
-		//   retrived and the PersonRelationIDs created on the tree are NOT the same.
-		//
-		// E.g.
-		// pathToExpand :: [propertySetID=6][personRelationID=25][personRelationID=23][personRelationID=20] ~~ Retrieved from server.
-		//
-		// On the client side:
-		// [01]
-		// ++ objectIDsToRoot :: [propertySetID=7]
-		// ++ objectIDsToRoot :: [propertySetID=6] <------------ FOUND! Expanding...
-		//
-		// [02]
-		// ++ objectIDsToRoot :: [propertySetID=7]
-		// ++ objectIDsToRoot :: [propertySetID=6][personRelationID=24]
-		// ++ objectIDsToRoot :: [propertySetID=6][personRelationID=26]
-		// ++ objectIDsToRoot :: [propertySetID=6][personRelationID=28]
-		// ++ objectIDsToRoot :: [propertySetID=6][personRelationID=3a]
-		//
-		// DONE.
-		//
-		// We fail to detect the [personRelationID=25] after [propertySetID=6] on the second level.
-		// On inspection of the data, we found that [personRelationID=25] is supposed to be [personRelationID=24], which we wanted
-		// to detect to further our expansion.
-		testPathExpanded = new LinkedList<PropertySetID>();
+		// This listener is expected to unravel the tree, appropriately following the pre-identified paths in pathsToBeExpanded.
+		// Each path contains a Deque of PropertySetID, and will guide the lazy-expansion events once data becomes available, and
+		// becomes necessary to be displayed.
 		personRelationTree.getTree().addListener(SWT.SetData, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				// Guard #1.
-				if (pathsToBeExpanded == null || pathsToBeExpanded.isEmpty() || !(event.item instanceof TreeItem))
+				if (arePathsToBeExpandedEmpty() || !(event.item instanceof TreeItem))
 					return;
 
 				// Guard #2.
 				TreeItem treeItem = (TreeItem) event.item;
-				if (!(treeItem.getData() instanceof PersonRelationTreeNode) || treeItem.getItemCount() <= 1)
+				if (!(treeItem.getData() instanceof PersonRelationTreeNode)) // || treeItem.getItemCount() <= 1)
 					return;
 
 				// Guard #3.
 				PersonRelationTreeNode node = (PersonRelationTreeNode) treeItem.getData();
-				if (node.getPropertySetID() == null)
+				PropertySetID node_propID = node.getPropertySetID();
+				if (node_propID == null)
 					return;
 
+
+				// Fine-tuned, version.
 				Deque<PropertySetID> propertySetIDsToRoot = (LinkedList<PropertySetID>)node.getPropertySetIDsToRoot();
-				String[] segID = node.getPropertySetID().toString().split("&");
-				showDequePaths("--------------------> @Node[ID:" + segID[1] + "] ::", propertySetIDsToRoot, true);
+				String[] segID = node_propID.toString().split("&");
+				boolean isNodeMarkedForExpansion = false;
+				boolean isNodeMarkedForSelection = false;
 
-				PropertySetID id_onPath = testPath.peekFirst();
-				if (propertySetIDsToRoot.contains(id_onPath)) {
-					showDequePaths("~~ Checking: propertySetIDsToRoot", propertySetIDsToRoot, true);
-					showDequePaths("~~ Checking:     testPathExpanded", testPathExpanded, !true);
+//				showDequePaths("-->> @Node[ID:" + segID[1] + "] ::", propertySetIDsToRoot, !true);
+				for (int index : pathsToExpand.keySet()) {
+					Deque<PropertySetID> pathToExpand = pathsToExpand.get(index);
+					Deque<PropertySetID> expandedPath = expandedPaths.get(index);
 
-					boolean isMatch = isMatching(propertySetIDsToRoot, testPathExpanded, true, true);
-					System.err.println("  :::::: isMatch = " + (isMatch ? "True" : "False"));
-					if (testPathExpanded.isEmpty() || isMatch) {
-						testPathExpanded.push( testPath.pop() );
-						showDequePaths("EXPANDING: propertySetIDsToRoot", propertySetIDsToRoot, true);
-						showDequePaths(">> testPath", testPath, !true);
-						showDequePaths(">> testPathExpanded", testPathExpanded, !true);
+//					System.err.println(" ::::::::::::::::::::: @index: " + index);
+					if (!pathToExpand.isEmpty() && pathToExpand.peekFirst().equals(node_propID)) {
+//						showDequePaths("~~ Checking: >> pathToExpand[" + index + "]", pathToExpand, !true);
+//						showDequePaths("~~ Checking: << expandedPath[" + index + "]", expandedPath, !true);
 
-						if (testPath.isEmpty()) {
-							// Highlight here.
-							personRelationTree.getTree().setSelection(treeItem);
+						boolean isMatch = isMatchingSubPath(propertySetIDsToRoot, expandedPath, true, true);
+//						System.err.println("  :::::: isMatchingSubPath = " + (isMatch ? "True" : "False"));
+						if (isMatch || expandedPath.isEmpty()) {
+							isNodeMarkedForExpansion |= isMatch;
+							expandedPath.push( pathToExpand.pop() );
+
+//							showDequePaths("  ++ Amended path: >> pathToExpand[" + index + "]", pathToExpand, !true);
+//							showDequePaths("  ++ Amended path: << expandedPath[" + index + "]", expandedPath, !true);
+
+							// Check if we need to get the node selected.
+							isNodeMarkedForSelection |= pathToExpand.isEmpty();
 						}
-						else
-							treeItem.setExpanded(true);
 
-						System.err.println();
+//						System.err.println();
 					}
 				}
+
+
+				// Reflect changes on the node, if any.
+				if (isNodeMarkedForSelection)
+					personRelationTree.getTree().setSelection(treeItem);
+				else if (isNodeMarkedForExpansion) {
+					treeItem.setExpanded(true);
+//					showDequePaths("EXPANDING :: @Node[ID:" + segID[1] + "] ::", propertySetIDsToRoot, !true);
+				}
+
+				System.err.println("\n\n");
+
+
+				// Check to see the still non-expanded paths.
+				for(int index : pathsToExpand.keySet())
+					showDequePaths("   pathToExpand*[" + index + "]", pathsToExpand.get(index), !true);
 			}
 		});
 
@@ -371,7 +330,10 @@ extends LSDViewPart
 
 
 	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
-	protected boolean isMatching(Deque<? extends ObjectID> pathToRoot, Deque<? extends ObjectID> expandedPath, boolean isReversePathToRoot, boolean isReverseExpandedPath) {
+	/**
+	 * @return true if and only if the given expandedPath is a proper sub-path of the given pathToRoot.
+	 */
+	private boolean isMatchingSubPath(Deque<? extends ObjectID> pathToRoot, Deque<? extends ObjectID> expandedPath, boolean isReversePathToRoot, boolean isReverseExpandedPath) {
 		if (pathToRoot.size() < expandedPath.size())
 			return false;
 
@@ -388,37 +350,18 @@ extends LSDViewPart
 		return true;
 	}
 
-
-
-	protected boolean isMatchingSubPath(Deque<? extends ObjectID> pathToRoot, Deque<? extends ObjectID> pathToExpand, boolean isReversePathToRoot) {
-		if (pathToRoot.size() >= pathToExpand.size()-1)
-			return false;
-
-		Iterator<? extends ObjectID> iterToRoot = isReversePathToRoot ? pathToRoot.descendingIterator() : pathToRoot.iterator();
-		Iterator<? extends ObjectID> iterToExpand = pathToExpand.iterator();
-		while (iterToRoot.hasNext() && iterToExpand.hasNext()) {
-			ObjectID oid_1 = iterToRoot.next();
-			ObjectID oid_2 = iterToExpand.next();
-
-			if (!oid_1.equals(oid_2))
-				return false;
+	/**
+	 * @return true if all the paths in pathsToExpand are empty.
+	 */
+	private boolean arePathsToBeExpandedEmpty() {
+		if (pathsToExpand != null && !pathsToExpand.isEmpty()) {
+			for (Deque<PropertySetID> path : pathsToExpand.values())
+				if (!path.isEmpty())
+					return false;
 		}
 
 		return true;
 	}
-
-	protected void showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
-		System.err.print("++ " + preamble + " :: ");
-
-		Iterator<? extends ObjectID> iter = isReversed ? path.descendingIterator() : path.iterator();
-		while (iter.hasNext()) {
-			String[] segID = iter.next().toString().split("&");
-			System.err.print("[" + segID[1] + "]");
-		}
-
-		System.err.println();
-	}
-
 
 	/**
 	 * Traverses up the tree in search for the first node containing a representation of a Person-related object.
@@ -453,8 +396,19 @@ extends LSDViewPart
 		return null;
 	}
 
-	// Quick screen debug-output.
-	// Check out: getVisibleExpandedElements().
+	// For debugging...
+	private void showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
+		System.err.print("++ " + preamble + " :: {");
+
+		Iterator<? extends ObjectID> iter = isReversed ? path.descendingIterator() : path.iterator();
+		while (iter.hasNext()) {
+			String[] segID = iter.next().toString().split("&");
+			System.err.print("[" + segID[1] + "]");
+		}
+
+		System.err.print("}\n");
+	}
+
 	private void showExpandedTreePaths() {
 		TreePath[] treePaths = personRelationTree.getTreeViewer().getExpandedTreePaths();
 		for (TreePath treePath : treePaths) {
@@ -533,6 +487,6 @@ extends LSDViewPart
 
 	protected int getMaxSearchDepth()
 	{
-		return DefaultMaximumSearchDepth;
+		return DEFAULT_MAX_SEARCH_DEPTH;
 	}
 }
