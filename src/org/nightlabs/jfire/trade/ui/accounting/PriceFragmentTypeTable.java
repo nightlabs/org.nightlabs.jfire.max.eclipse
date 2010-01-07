@@ -31,10 +31,16 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -56,25 +62,24 @@ import org.nightlabs.util.NLLocale;
 public class PriceFragmentTypeTable 
 extends AbstractTableComposite<PriceFragmentType> 
 {
-	
-	private static final String[] DEFAULT_FETCH_GROUPS = new String[]{
+	public static final String[] DEFAULT_FETCH_GROUPS = new String[]{
 		FetchPlan.DEFAULT,
 		PriceFragmentType.FETCH_GROUP_NAME
 	};
 	
-	private static class ContentProvider extends TableContentProvider {
-		/**
-		 * @see org.nightlabs.base.ui.table.TableContentProvider#getElements(java.lang.Object)
-		 */
-		@Override
-		public Object[] getElements(Object inputElement) {
-			// TODO load asynchronously in a Job!!! And not in the ContentProvider!			
-			return PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
-					DEFAULT_FETCH_GROUPS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					new NullProgressMonitor()).toArray();
-		}
-	}
+//	private static class ContentProvider extends TableContentProvider {
+//		/**
+//		 * @see org.nightlabs.base.ui.table.TableContentProvider#getElements(java.lang.Object)
+//		 */
+//		@Override
+//		public Object[] getElements(Object inputElement) {
+//			// TODO load asynchronously in a Job!!! And not in the ContentProvider!			
+//			return PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
+//					DEFAULT_FETCH_GROUPS, 
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//					new NullProgressMonitor()).toArray();
+//		}
+//	}
 
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
@@ -129,11 +134,35 @@ extends AbstractTableComposite<PriceFragmentType>
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new ContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.setInput(tableViewer.getContentProvider());
 		
 		tableViewer.setSorter(new ViewerSorter());
 	}
 
+	public void loadPriceFragmentTypes() {
+		Job job = new Job("Loading Price Fragment Types.....") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Loading Price Fragment Types", 100);
+				final Object[] priceFragmentTypeObjects = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
+						PriceFragmentTypeTable.DEFAULT_FETCH_GROUPS, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor()).toArray();
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						setInput(priceFragmentTypeObjects);
+					}
+				});
+				
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
+	}
 }

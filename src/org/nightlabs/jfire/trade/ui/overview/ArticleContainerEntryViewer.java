@@ -42,8 +42,9 @@ public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q 
 		super.addResultTableListeners(tableComposite);
 		tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent arg0) {
-				displayTotals(tableComposite.getSelectedElements(), footerTextSelection);
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (PricedArticleContainer.class.isAssignableFrom(getTargetType()))
+					displayTotals(tableComposite.getSelectedElements(), footerTextSelection);
 			}
 		});
 	}

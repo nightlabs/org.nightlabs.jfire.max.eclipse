@@ -24,65 +24,71 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.trade.ui.accounting;
+package org.nightlabs.jfire.trade.ui.articlecontainer.config;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.wizard.DynamicPathWizard;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
-import org.nightlabs.jfire.accounting.PriceFragmentType;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
+import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
+import org.nightlabs.jfire.trade.config.SummedPriceFracmentTypeConfigModule;
+import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeTable;
 
 /**
- * 
- * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  */
-public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
+public class SummedPriceFracmentTypeConfigPreferencePage
+extends AbstractUserConfigModulePreferencePage
 {
-	private PriceFragmentTypeTable priceFragmentTypeList;
-
-	public PriceFragmentTypeSelectionPage() {
-		super(PriceFragmentTypeSelectionPage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeSelectionPage.title")); //$NON-NLS-1$
-		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeSelectionPage.description")); //$NON-NLS-1$
+	private Shell shell;
+	private Display display;
+	
+	@Override
+	protected IConfigModuleController createConfigModuleController() {
+		return new SummedPriceFracmentTypeConfigController(this);
 	}
 
-	/**
-	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
-	public Control createPageContents(Composite parent)
-	{
-		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+	protected void createPreferencePage(Composite parent) {
+		shell = getShell();
+		display = shell.getDisplay();
+		
+		XComposite wrapper = new XComposite(parent, SWT.NONE);
+		wrapper.getGridLayout().numColumns = 2;
+		wrapper.getGridLayout().makeColumnsEqualWidth = false;
+		
+		PriceFragmentTypeTable priceFragmentTypeTable = new PriceFragmentTypeTable(wrapper, SWT.NONE);
+		priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
+		
+		XComposite buttonComposite = new XComposite(wrapper, SWT.NONE);
+		buttonComposite.getGridData().grabExcessHorizontalSpace = false;
+		
+		Button addButton = new Button(buttonComposite, SWT.PUSH);
+		addButton.setText("Add");
+		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		Button removeButton = new Button(buttonComposite, SWT.PUSH);
+		removeButton.setText("Remove");
+		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
 
-		priceFragmentTypeList = new PriceFragmentTypeTable(page, SWT.BORDER);
-		priceFragmentTypeList.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event) {
-				((DynamicPathWizard)getWizard()).updateDialog();
-			}
-		});
-		priceFragmentTypeList.loadPriceFragmentTypes();
-		return page;
+	@Override
+	public void updateConfigModule() {
+		
+	}
+
+	@Override
+	protected void updatePreferencePage() {
 	}
 	
-	/**
-	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
-	 */
-	@Override
-	public boolean isPageComplete()
-	{
-		return priceFragmentTypeList != null && priceFragmentTypeList.getSelectedPriceFragmentType() != null;
-	}
-
-	/**
-	 * @return Returns the selectedPriceFragmentType.
-	 */
-	public PriceFragmentType getSelectedPriceFragmentType()
-	{
-		return priceFragmentTypeList.getSelectedPriceFragmentType();
+	private SummedPriceFracmentTypeConfigModule getConfigModule() {
+		return (SummedPriceFracmentTypeConfigModule) getConfigModuleController().getConfigModule();
 	}
 }

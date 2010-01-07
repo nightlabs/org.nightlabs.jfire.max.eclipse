@@ -308,6 +308,11 @@
               id="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               name="%org.nightlabs.jfire.trade.ui.preference.TradePreferencePage.name">
         </page>
+        <page
+        	  category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.config.SummedPriceFracmentTypeConfigPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.config.SummedPriceFracmentTypeConfigPreferencePage"
+              name="Summed Price Fragment Settings"/>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory
