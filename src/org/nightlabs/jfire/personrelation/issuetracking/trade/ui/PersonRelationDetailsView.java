@@ -7,7 +7,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -30,7 +29,8 @@ import org.nightlabs.notification.NotificationListener;
 /**
  * @author khaireel <!-- khaireel [AT] nightlabs [DOT] de -->
  */
-public class PersonRelationDetailsView extends LSDViewPart {
+public class PersonRelationDetailsView extends LSDViewPart 
+{
 	public static final String VIEW_ID = PersonRelationDetailsView.class.getName();
 
 	// Quick refs.
@@ -41,7 +41,6 @@ public class PersonRelationDetailsView extends LSDViewPart {
 	private TabFolder detailsFolder;
 	private Section editorSection;
 
-
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -51,9 +50,10 @@ public class PersonRelationDetailsView extends LSDViewPart {
 		detailsFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		// TabItem 1: Quick-details: The expected configurable customer-view section.
-		FormToolkit toolkit = new FormToolkit(Display.getDefault());
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		editorSection = toolkit.createSection(detailsFolder, ExpandableComposite.TITLE_BAR);
-		editorSection.setText("RESERVED the configurable quick-details customer-view/section");
+//		editorSection.setText("RESERVED the configurable quick-details customer-view/section");
+		editorSection.setText("Please select person in the relation view");
 		editorSection.setLayoutData(new GridData(GridData.FILL_BOTH));
 		editorSection.setLayout(new GridLayout());
 
@@ -67,11 +67,11 @@ public class PersonRelationDetailsView extends LSDViewPart {
 		fullDetails.setText("Full details");
 		fullDetails.setControl(new PersonRelationDetailsComposite(detailsFolder));
 
-
+		wrapper = new Wrapper();
 
 		// Listeners baby, listenersssss.....
 		personRelationDetailsComposite = (PersonRelationDetailsComposite)fullDetails.getControl();
-		personSelectionListener  = new NotificationAdapterSWTThreadAsync() {
+		personSelectionListener = new NotificationAdapterSWTThreadAsync() {
 			@Override
 			public void notify(NotificationEvent notificationEvent) {
 				final Object subject = notificationEvent.getFirstSubject();
@@ -85,9 +85,9 @@ public class PersonRelationDetailsView extends LSDViewPart {
 					else if (subject instanceof Person) {
 						Person person = (Person)subject;
 						if (person.getDisplayName().equals("Anonymous"))
-							setAnonymousVisualisation();
+							wrapper.setAnonymousVisualisation();
 						else
-							setLegalEntityVisualisation(person);
+							wrapper.setLegalEntityVisualisation(person);
 					}
 				}
 			}
@@ -107,48 +107,52 @@ public class PersonRelationDetailsView extends LSDViewPart {
 		});
 	}
 
+	private Wrapper wrapper;
 
+	private class Wrapper {
 
-	// -------------------------------------------------------------------------->> FARK-MARK
-	private Control leEditorControl;
-	private LegalEntityPersonEditor leEditor;
-	private AnonymousLegalEntityComposite anonymousLegalEntityComposite;
+		// -------------------------------------------------------------------------->> FARK-MARK
+		private Control leEditorControl;
+		private LegalEntityPersonEditor leEditor;
+		private AnonymousLegalEntityComposite anonymousLegalEntityComposite;
 
-	protected void setAnonymousVisualisation() {
-		if (leEditorControl != null) {
-			leEditor.disposeControl();
-			//			leEditorControl.dispose();
-			leEditorControl = null;
+		protected void setAnonymousVisualisation() {
+			if (leEditorControl != null) {
+				leEditor.disposeControl();
+				//			leEditorControl.dispose();
+				leEditorControl = null;
+			}
+			if (anonymousLegalEntityComposite == null)
+				anonymousLegalEntityComposite = new AnonymousLegalEntityComposite(editorSection, SWT.NONE);
+			editorSection.setClient(anonymousLegalEntityComposite);
+			editorSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.editorSection.anonymous")); //$NON-NLS-1$
+			detailsFolder.layout(true, true);
+			detailsFolder.redraw();
 		}
-		if (anonymousLegalEntityComposite == null)
-			anonymousLegalEntityComposite = new AnonymousLegalEntityComposite(editorSection, SWT.NONE);
-		editorSection.setClient(anonymousLegalEntityComposite);
-		editorSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.editorSection.anonymous")); //$NON-NLS-1$
-		detailsFolder.layout(true, true);
-		detailsFolder.redraw();
-	}
 
-	protected void setLegalEntityVisualisation(Person person) {
-		// Minor change from the original codes:
-		// Instead of using the LegalEntity, we directly use the Person reference.
-		if (anonymousLegalEntityComposite != null) {
-			anonymousLegalEntityComposite.dispose();
-			anonymousLegalEntityComposite = null;
+		protected void setLegalEntityVisualisation(Person person) {
+			// Minor change from the original codes:
+			// Instead of using the LegalEntity, we directly use the Person reference.
+			if (anonymousLegalEntityComposite != null) {
+				anonymousLegalEntityComposite.dispose();
+				anonymousLegalEntityComposite = null;
+			}
+			if (leEditor == null)
+				leEditor = new LegalEntityPersonEditor();
+			if (leEditorControl == null)
+				leEditorControl = leEditor.createControl(editorSection, false);
+			if (person != null) {
+				leEditor.setPropertySet(person);
+				leEditor.refreshControl();
+			}
+			editorSection.setClient(leEditorControl);
+			String displayName = person.getDisplayName();
+			if (displayName == null)
+				displayName = ""; //$NON-NLS-1$
+			editorSection.setText(displayName);
+			detailsFolder.layout(true, true);
+			detailsFolder.redraw();
 		}
-		if (leEditor == null)
-			leEditor = new LegalEntityPersonEditor();
-		if (leEditorControl == null)
-			leEditorControl = leEditor.createControl(editorSection, false);
-		if (person != null) {
-			leEditor.setPropertySet(person);
-			leEditor.refreshControl();
-		}
-		editorSection.setClient(leEditorControl);
-		String displayName = person.getDisplayName();
-		if (displayName == null)
-			displayName = ""; //$NON-NLS-1$
-		editorSection.setText(displayName);
-		detailsFolder.layout(true, true);
-		detailsFolder.redraw();
+
 	}
 }
