@@ -48,6 +48,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.notification.SubjectCarrier;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
@@ -380,6 +381,19 @@ extends XComposite
 	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterCallerThread() {
 
 		public void notify(final NotificationEvent event) {
+			// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
+			// ... still waiting for PropertySetID to come in through this event -- which should have been triggered from the
+			//     PersonRelationIssueTreeView on the double-click listener.
+			System.err.println("[@notificationListenerCustomerSelected] event.source.class: " + event.getSource().getClass().getSimpleName());
+			if (event.getSubjectCarriers() != null) {
+				for (SubjectCarrier sCarrier : event.getSubjectCarriers()) {
+					Object subject = sCarrier.getSubject();
+					if (subject != null)
+						System.err.println(" ~~ sCarrier.subject[" + subject.getClass().getSimpleName() + "]: " + subject.toString());
+				}
+			}
+			// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
+
 			if (LegalEntitySelectionComposite.this.equals(event.getSource()))
 				return;
 

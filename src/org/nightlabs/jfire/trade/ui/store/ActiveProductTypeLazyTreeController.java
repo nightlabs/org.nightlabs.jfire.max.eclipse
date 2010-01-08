@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.store;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,6 +63,13 @@ public class ActiveProductTypeLazyTreeController extends ActiveJDOObjectLazyTree
 	protected Map<ProductTypeID, Long> retrieveChildCount(
 			Set<ProductTypeID> parentIDs, ProgressMonitor monitor) {
 		return ProductTypeDAO.sharedInstance().getChildProductTypeCounts(parentIDs, monitor);
+	}
+
+	@Override
+	protected Collection<ProductTypeID> retrieveChildObjectIDs(
+			List<ProductTypeID> objectIDsToRoot, ProgressMonitor monitor) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
