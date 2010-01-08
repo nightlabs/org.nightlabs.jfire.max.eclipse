@@ -108,69 +108,14 @@ extends LSDViewPart
 				// See notes for description, look under "Specifications for Behr" ---------------------------------->>
 				if (object != null && object instanceof PersonRelation) {
 					final PropertySetID personID = getPropertySetID(objectID, object);
-
 					if (personID != null) {
 						// Join this with the entry-point-listener of this View, since the behaviour is exactly the same.
-						notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
-
 						// But we should be able to use the general one too?
 						// ... So that we can trigger other views listening for the same event too.
 						// ... But somehow, the 'subject' is not there?? Kai.
 //						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
-
-
-//						Job job = new Job("Loading relations") {
-//							@Override
-//							protected IStatus run(ProgressMonitor monitor) throws Exception {
-//								// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
-//								// relationship up through the hierachy of organisations, and terminates under one of the following
-//								// three conditions:
-//								//    1. When it reaches the mother of all subsidiary organisations (known as c^ \elemof C).
-//								//    2. When it detects a cyclic / nested-cyclic relationship between subsidiary-groups.
-//								//    3. When the length of the path reaches the preset DefaultMaximumSearchDepth.
-//								// For the sake of simplicity, let c^ be the terminal element in a path. Then all the unique c^'s
-//								// collated from the returned paths are the new roots for PersonRelationTree.
-//								// See original comments in revision #16575.
-//								Set<Deque<PropertySetID>> pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
-//										getAllowedPersonRelationTypes(), personID, DEFAULT_MAX_SEARCH_DEPTH, monitor);
-//
-//								// Initialise the path-expansion trackers.
-//								pathsToExpand = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
-//								expandedPaths = new HashMap<Integer, Deque<PropertySetID>>(pathsToBeExpanded.size());
-//
-//								// Prepare the new roots (the unique c^), and give references to the path-expansion trackers.
-//								final Set<PropertySetID> rootIDs = new HashSet<PropertySetID>();
-//								int index = 0;
-//								for (Deque<PropertySetID> path : pathsToBeExpanded) {
-//									rootIDs.add( path.peekFirst() );
-//									showDequePaths("   pathToExpand[" + index + "]", path, true);
-//
-//									pathsToExpand.put(index, path);
-//									expandedPaths.put(index, new LinkedList<PropertySetID>());
-//									index++;
-//								}
-//
-//								// Update the bloody tree.
-//								personRelationTree.getDisplay().asyncExec(new Runnable() {
-//									public void run() {
-//										// Each path \elemOf paths is represented in a Deque in a reverse-order traversal to the root's
-//										// PropertySetID c^ as follows:
-//										//   path = { p_i, c_0, c_1, ..., c_n, c^ },
-//										//   where p_i \elemOf P is the PropertySetID of the trading partner (in this case, a Person); and
-//										//         c_i \elemOf C is the PropertySetID of an organisation.
-//										if (!personRelationTree.isDisposed())
-//											personRelationTree.setInputPersonIDs(rootIDs);
-//									}
-//								});
-//
-//								return Status.OK_STATUS;
-//							}
-//						};
-//
-//						job.setPriority(Job.SHORT);
-//						job.schedule();
+						notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
 					}
-
 				}
 
 				// Handles Issue stuffs ----------------------------------------------------------------------------->>
@@ -201,33 +146,6 @@ extends LSDViewPart
 
 			}
 		});
-
-		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
-		// See Rev. 16511 for other (FARK-MARKed) notes on manupulating the nodes and their contents. Kai.
-		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				PersonRelationTreeNode node = personRelationTree.getFirstSelectedElement();
-				if (node != null) {
-					// Kai: It is possible that the selected treeNode does not contain a Person-related object (e.g. Issue, IssueComment, etc.).
-					// But we may be interested of the Person-related object to which the selected treeNode belongs to.
-					// --> Thus, in this case, we traverse up the parent until we get to a node representing a Person-related object.
-					// --> This iterative traversal always have a base case, since the root node(s) in the PersonRelationTree is always a Person-related object.
-					node = traverseUpUntilPerson(node);
-
-					ObjectID jdoObjectID = node.getJdoObjectID();
-					Object jdoObject = node.getJdoObject();
-
-					PropertySetID personID = getPropertySetID(jdoObjectID, jdoObject);
-					if (personID != null)
-						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
-				}
-			}
-		});
-
-		selectionProviderProxy.addRealSelectionProvider(personRelationTree);
-
-
 
 		// Unravel the tree: Open it up to those paths we've discovered! Kai.
 		// This listener is expected to unravel the tree, appropriately following the pre-identified paths in pathsToBeExpanded.
@@ -284,6 +202,31 @@ extends LSDViewPart
 //					showDequePaths("   pathToExpand*[" + index + "]", pathsToExpand.get(index), !true);
 			}
 		});
+
+		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
+		// See Rev. 16511 for other (FARK-MARKed) notes on manupulating the nodes and their contents. Kai.
+		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				PersonRelationTreeNode node = personRelationTree.getFirstSelectedElement();
+				if (node != null) {
+					// Kai: It is possible that the selected treeNode does not contain a Person-related object (e.g. Issue, IssueComment, etc.).
+					// But we may be interested of the Person-related object to which the selected treeNode belongs to.
+					// --> Thus, in this case, we traverse up the parent until we get to a node representing a Person-related object.
+					// --> This iterative traversal always have a base case, since the root node(s) in the PersonRelationTree is always a Person-related object.
+					node = traverseUpUntilPerson(node);
+
+					ObjectID jdoObjectID = node.getJdoObjectID();
+					Object jdoObject = node.getJdoObject();
+
+					PropertySetID personID = getPropertySetID(jdoObjectID, jdoObject);
+					if (personID != null)
+						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
+				}
+			}
+		});
+
+		selectionProviderProxy.addRealSelectionProvider(personRelationTree);
 	}
 
 
@@ -387,6 +330,18 @@ extends LSDViewPart
 	private NotificationListener notificationListenerLegalEntitySelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 	{
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
+			// Kai. The behaviour of the PersonRelationTree has been amended to comform to Behr's specification.
+			//      i.e. The root of the tree represents the mother of all organisation(s) currently having the currently
+			//           input Person; and the Person entry itself (can also be several instances) is expanded from
+			//           whichever branch(es) it comes from. The input Person itself will be duly highlighted.
+			//           --> If multiple instances exists, then (at least for now) ONE of them will be selected.
+			//           --> Also, it is possible to have multiple rootS, symbolising multiple motherS of organisationS.
+			//
+			//           The root (or roots) of the PersonRelationTree shall now have a new interpreted meaning. It refers
+			//           to the c^ \elemOf C.
+			//
+			// To revert back to the original behaviour is simple:
+			// Just pass the PropertySetID of the trading-partner/customer to be displayed as root.
 			Object subject = notificationEvent.getFirstSubject();
 			PropertySetID personID = null;
 
@@ -409,8 +364,15 @@ extends LSDViewPart
 
 
 			if (personID != null) {
-				// The root (or roots) of the PersonRelationTree shall now have a new interpreted meaning.
-				// It refers to the c^ \elemOf C.
+				// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
+				// relationship up through the hierachy of organisations, and terminates under one of the following
+				// three conditions:
+				//    1. When it reaches the mother of all subsidiary organisations (known as c^ \elemof C).
+				//    2. When it detects a cyclic / nested-cyclic relationship between subsidiary-groups.
+				//    3. When the length of the path reaches the preset DefaultMaximumSearchDepth.
+				// For the sake of simplicity, let c^ be the terminal element in a path. Then all the unique c^'s
+				// collated from the returned paths are the new roots for PersonRelationTree.
+				// See original comments in revision #16575.
 				Set<Deque<PropertySetID>> pathsToBeExpanded = PersonRelationDAO.sharedInstance().getRelationRoots(
 						getAllowedPersonRelationTypes(), personID, DEFAULT_MAX_SEARCH_DEPTH, getProgressMonitor());
 
