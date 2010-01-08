@@ -53,18 +53,18 @@ public class PersonRelationDetailsView extends LSDViewPart
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		editorSection = toolkit.createSection(detailsFolder, ExpandableComposite.TITLE_BAR);
 //		editorSection.setText("RESERVED the configurable quick-details customer-view/section");
-		editorSection.setText("Please select person in the relation view");
+		editorSection.setText(org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView.editorSection.text")); //$NON-NLS-1$
 		editorSection.setLayoutData(new GridData(GridData.FILL_BOTH));
 		editorSection.setLayout(new GridLayout());
 
 		TabItem quickDetails = new TabItem(detailsFolder, SWT.NONE);
-		quickDetails.setText("Quick details");
+		quickDetails.setText(org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView.tab.quickDetails.text")); //$NON-NLS-1$
 		quickDetails.setControl(editorSection);
 
 
 		// TabItem 2: Full details.
 		TabItem fullDetails = new TabItem(detailsFolder, SWT.NONE);
-		fullDetails.setText("Full details");
+		fullDetails.setText(org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView.tab.fullDetails.text")); //$NON-NLS-1$
 		fullDetails.setControl(new PersonRelationDetailsComposite(detailsFolder));
 
 		wrapper = new Wrapper();
@@ -84,7 +84,7 @@ public class PersonRelationDetailsView extends LSDViewPart
 
 					else if (subject instanceof Person) {
 						Person person = (Person)subject;
-						if (person.getDisplayName().equals("Anonymous"))
+						if (person.getDisplayName().equals("Anonymous")) //$NON-NLS-1$
 							wrapper.setAnonymousVisualisation();
 						else
 							wrapper.setLegalEntityVisualisation(person);
