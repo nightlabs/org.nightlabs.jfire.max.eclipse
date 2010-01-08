@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -29,6 +30,8 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.selection.SelectionProviderProxy;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
@@ -46,6 +49,7 @@ import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -113,9 +117,18 @@ extends LSDViewPart
 						// But we should be able to use the general one too?
 						// ... So that we can trigger other views listening for the same event too. Main thing here is that I want to
 						//     trigger the 'notificationListenerCustomerSelected' in LegalEntitySelectionComposite.
-						// FIXME ... But somehow something is terribly wrong, the 'subject' is not there?? Kai.
-//						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
-						notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
+						try {
+							TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+							LegalEntity le = tm.getLegalEntityForPerson(personID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+							if (le != null) {
+								AnchorID anchorID = (AnchorID) JDOHelper.getObjectId(le);
+								SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class));
+							}
+							else
+								notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
+						} catch (LoginException e) {
+							throw new RuntimeException(e);
+						}
 					}
 				}
 
