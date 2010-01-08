@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -429,5 +430,97 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			monitor.done();
 		}
 	}
+
+	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
+	// Test. Dont add children if its ID is already listed in the path to the root.
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDs(List<ObjectID> objectIDsToRoot, ProgressMonitor monitor) {
+		Collection<PropertySetID> rootPersonIDs = this.rootPersonIDs;
+		if (rootPersonIDs == null)
+			return Collections.emptyList();
+
+		Collection<ObjectID> result = new ArrayList<ObjectID>();
+		ObjectID parentID = objectIDsToRoot != null && !objectIDsToRoot.isEmpty() ? objectIDsToRoot.get(0) : null;
+
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100); //$NON-NLS-1$
+		try {
+			if (parentID == null) {
+				result.addAll(rootPersonIDs);
+			}
+			else if (parentID instanceof PropertySetID) {
+				Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+						null, (PropertySetID)parentID, null,
+						new SubProgressMonitor(monitor, 80)
+				);
+
+				result.addAll(childPersonRelationIDs);
+			}
+			else if (parentID instanceof PersonRelationID) {
+				Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
+
+				List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
+						personRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+				);
+
+				if (!personRelations.isEmpty()) {
+					PersonRelation personRelation = personRelations.iterator().next();
+					Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+							null, personRelation.getToID(), null,
+							new SubProgressMonitor(monitor, 80)
+					);
+
+					// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
+					List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
+							childPersonRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+					);
+
+					Iterator<PersonRelationID> cID_iter = childPersonRelationIDs.iterator();
+					Iterator<PersonRelation> cReln_iter = cRelns.iterator();
+					while (cID_iter.hasNext()) {
+						PersonRelationID cID = cID_iter.next();
+						PropertySetID cReln_propID = cReln_iter.next().getToID();
+
+						if (!objectIDsToRoot.contains(cID) && !objectIDsToRoot.contains(cReln_propID))
+							result.add(cID);
+					}
+
+					// ---> Is this enough? Do we also need to check with retrieveChildCount()?
+					// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
+				}
+			}
+
+
+			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new NullProgressMonitor()); // TODO monitor!
+				if (childObjectIDs != null)
+					result.addAll(childObjectIDs);
+			}
+
+			return result;
+		} finally {
+			monitor.done();
+		}
+	}
+
+//	// For debugging...
+//	private void showObjectIDs(String preamble, Collection<? extends ObjectID> objectIDs) {
+//		System.err.print("++ " + preamble + " :: [" + objectIDs.size() + "] {");
+//		for (ObjectID objectID : objectIDs) {
+//			if (objectID != null) {
+//				String[] segID = objectID.toString().split("&");
+//				System.err.print("[" + segID[1] + "]");
+//			}
+//			else
+//				System.err.print("[null]");
+//		}
+//
+//
+//		System.err.print("}\n");
+//	}
+	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
+
 
 }
