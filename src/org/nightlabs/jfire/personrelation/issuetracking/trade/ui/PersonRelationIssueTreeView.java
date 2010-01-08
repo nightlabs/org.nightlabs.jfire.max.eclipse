@@ -111,8 +111,9 @@ extends LSDViewPart
 					if (personID != null) {
 						// Join this with the entry-point-listener of this View, since the behaviour is exactly the same.
 						// But we should be able to use the general one too?
-						// ... So that we can trigger other views listening for the same event too.
-						// ... But somehow, the 'subject' is not there?? Kai.
+						// ... So that we can trigger other views listening for the same event too. Main thing here is that I want to
+						//     trigger the 'notificationListenerCustomerSelected' in LegalEntitySelectionComposite.
+						// FIXME ... But somehow something is terribly wrong, the 'subject' is not there?? Kai.
 //						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
 						notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
 					}
@@ -385,14 +386,13 @@ extends LSDViewPart
 				int index = 0;
 				for (Deque<PropertySetID> path : pathsToBeExpanded) {
 					rootIDs.add( path.peekFirst() );
-					showDequePaths("   pathToExpand[" + index + "]", path, true);
 
 					pathsToExpand.put(index, path);
 					expandedPaths.put(index, new LinkedList<PropertySetID>());
 					index++;
 				}
 
-				// Update the tree.
+				// Done and ready. Update the tree.
 				personRelationTree.getDisplay().asyncExec(new Runnable() {
 					public void run() {
 						if (!personRelationTree.isDisposed())
