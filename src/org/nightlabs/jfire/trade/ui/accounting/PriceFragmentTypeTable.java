@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.accounting;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,10 @@ import javax.jdo.FetchPlan;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -46,7 +50,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
@@ -141,20 +144,21 @@ extends AbstractTableComposite<PriceFragmentType>
 		tableViewer.setSorter(new ViewerSorter());
 	}
 
+	private Collection<PriceFragmentType> priceFragmentTypes;
 	public void loadPriceFragmentTypes() {
 		Job job = new Job("Loading Price Fragment Types.....") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Loading Price Fragment Types", 100);
-				final Object[] priceFragmentTypeObjects = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
+				priceFragmentTypes = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
 						PriceFragmentTypeTable.DEFAULT_FETCH_GROUPS, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new NullProgressMonitor()).toArray();
+						new NullProgressMonitor());
 
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						setInput(priceFragmentTypeObjects);
+						setInput(priceFragmentTypes);
 					}
 				});
 				
@@ -164,5 +168,15 @@ extends AbstractTableComposite<PriceFragmentType>
 		};
 		job.setPriority(Job.SHORT);
 		job.schedule();
+//		job.addJobChangeListener(new JobChangeAdapter() {
+//			@Override
+//			public void done(IJobChangeEvent event) {
+//				
+//			}
+//		});
+	}
+	
+	public Collection<PriceFragmentType> getPriceFragmentTypes() {
+		return priceFragmentTypes;
 	}
 }

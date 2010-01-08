@@ -26,16 +26,19 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.config;
 
+import java.util.Collection;
+
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 import org.nightlabs.jfire.trade.config.SummedPriceFracmentTypeConfigModule;
@@ -49,6 +52,8 @@ extends AbstractUserConfigModulePreferencePage
 {
 	private Shell shell;
 	private Display display;
+	
+	private PriceFragmentTypeTable priceFragmentTypeTable;
 	
 	@Override
 	protected IConfigModuleController createConfigModuleController() {
@@ -64,7 +69,7 @@ extends AbstractUserConfigModulePreferencePage
 		wrapper.getGridLayout().numColumns = 2;
 		wrapper.getGridLayout().makeColumnsEqualWidth = false;
 		
-		PriceFragmentTypeTable priceFragmentTypeTable = new PriceFragmentTypeTable(wrapper, SWT.NONE);
+		priceFragmentTypeTable = new PriceFragmentTypeTable(wrapper, SWT.NONE);
 		priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
 		
 		XComposite buttonComposite = new XComposite(wrapper, SWT.NONE);
@@ -73,19 +78,48 @@ extends AbstractUserConfigModulePreferencePage
 		Button addButton = new Button(buttonComposite, SWT.PUSH);
 		addButton.setText("Add");
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		addButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				PriceFragmentTypeChooserDialog chooserDialog = new PriceFragmentTypeChooserDialog(getShell());
+				chooserDialog.setExcludedPriceFragmentTypes(getConfigModule().getSummedPriceFracmentTypeList());
+			
+				int returnCode = chooserDialog.open();
+				if (returnCode == Dialog.OK) {
+					getConfigModule().addPriceFracmentTypes(chooserDialog.getSelectedPriceFragmentTypes());
+					priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
+					getPageDirtyStateManager().markDirty();
+				}
+			}
+		});
 		
 		Button removeButton = new Button(buttonComposite, SWT.PUSH);
 		removeButton.setText("Remove");
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		removeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getConfigModule().removePriceFracmentTypes(priceFragmentTypeTable.getSelectedPriceFragmentTypes());
+				priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
+			}
+		});
 	}
 
 	@Override
 	public void updateConfigModule() {
-		
 	}
 
 	@Override
 	protected void updatePreferencePage() {
+		if (display != priceFragmentTypeTable.getDisplay())
+			throw new IllegalStateException("display != priceFragmentTypeTable.getDisplay()");
+
+		if (Display.getCurrent() != display)
+			throw new IllegalStateException("Thread mismatch! This method should be called on the UI thread! What happened here!?");
+
+		SummedPriceFracmentTypeConfigModule configModule = getConfigModule();
+		
+		priceFragmentTypeTable.setInput(configModule.getSummedPriceFracmentTypeList());
 	}
 	
 	private SummedPriceFracmentTypeConfigModule getConfigModule() {
