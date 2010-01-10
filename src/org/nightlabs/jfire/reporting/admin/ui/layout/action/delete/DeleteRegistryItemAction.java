@@ -30,10 +30,21 @@ import java.util.Collection;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
+import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
+import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor;
+import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.layout.ReportCategory;
+import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
@@ -78,9 +89,18 @@ public class DeleteRegistryItemAction extends ReportRegistryItemAction {
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.ReportRegistryItemAction#run(org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItem)
 	 */
 	public @Override void run(Collection<ReportRegistryItem> reportRegistryItems) {
+		// confirm the delete
+		boolean confirm = MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.delete.deleteregistryitemaction.title"), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.delete.deleteregistryitemaction.description"));  //$NON-NLS-1$ //$NON-NLS-2$
+		if(!confirm)
+			return;
 		for (ReportRegistryItem reportRegistryItem : reportRegistryItems) {
 			ReportRegistryItemID itemID = (ReportRegistryItemID) JDOHelper.getObjectId(reportRegistryItem);
-			try {
+			if (reportRegistryItem instanceof ReportLayout)
+				RCPUtil.closeEditor(new JFireRemoteReportEditorInput(itemID), false);
+			// closes all open ReportLayouts in the Editor if we delete a category
+			if (reportRegistryItem instanceof ReportCategory)
+				RCPUtil.getActiveWorkbenchPage().closeAllEditors(false);
+			 try {
 				ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
 				rm.deleteRegistryItem(itemID);
 			} catch (Exception e) {
