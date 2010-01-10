@@ -38,10 +38,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
-import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.util.NLLocale;
 
 /**
@@ -51,17 +52,14 @@ import org.nightlabs.util.NLLocale;
 public class AddReportLayoutWizardPage extends I18nTextEditorWizardPage {
 
 	
-	private LabeledText registryItemID;
 	private Group choice;
 	private Button reportFromFile;
 	private Button reportFromTemplate;
 	private FileSelectionComposite fileSelectComposite;
+	protected final String  REPORT_LAYOUT_SUFFIX = "R";
 	
 	private ModifyListener modifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent arg0) {
-			String editLang = getTextEditor().getLanguageChooser().getLanguage().getLanguageID();
-			if (editLang.equals(NLLocale.getDefault().getLanguage()))
-				registryItemID.getTextControl().setText(ObjectIDUtil.makeValidIDString(getTextEditor().getEditText()));
 			getWizard().getContainer().updateButtons();
 		}
 	};
@@ -80,7 +78,7 @@ public class AddReportLayoutWizardPage extends I18nTextEditorWizardPage {
 	 */
 	@Override
 	protected void createAdditionalContents(Composite wrapper) {
-		registryItemID = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutWizardPage.registryItemIDLabel.text")); //$NON-NLS-1$
+//		registryItemID = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutWizardPage.registryItemIDLabel.text")); //$NON-NLS-1$
 		choice = new Group(wrapper, SWT.NONE);
 		choice.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutWizardPage.creationStyleGroup")); //$NON-NLS-1$
 		choice.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -114,8 +112,9 @@ public class AddReportLayoutWizardPage extends I18nTextEditorWizardPage {
 	}
 
 	public String getRegistryItemID() {
-		return registryItemID.getTextControl().getText();
-	}
+		String name = getI18nText().getText(NLLocale.getDefault().getLanguage());
+		return ObjectIDUtil.makeValidIDString(name) + IDGenerator.nextIDString(ReportRegistryItem.class, REPORT_LAYOUT_SUFFIX);
+		}
 	
 	@Override
 	public boolean isPageComplete() {

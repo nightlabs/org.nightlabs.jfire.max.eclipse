@@ -28,7 +28,9 @@ package org.nightlabs.jfire.reporting.admin.ui.layout.action.add;
 
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.util.NLLocale;
 
 /**
@@ -37,6 +39,7 @@ import org.nightlabs.util.NLLocale;
  */
 public class AddReportCategoryWizardPage extends I18nTextEditorWizardPage {
 
+	protected final String  REPORT_CATEGORY_SUFFIX = "C";
 	/**
 	 * @param pageName
 	 * @param editorCaption
@@ -47,8 +50,7 @@ public class AddReportCategoryWizardPage extends I18nTextEditorWizardPage {
 	
 	public String getReportCategoryID() {
 		String name = getI18nText().getText(NLLocale.getDefault().getLanguage());
-		String id = ObjectIDUtil.makeValidIDString(name);
-		return id;
+		return ObjectIDUtil.makeValidIDString(name) + IDGenerator.nextIDString(ReportRegistryItem.class, REPORT_CATEGORY_SUFFIX);
 	}
 
 }
