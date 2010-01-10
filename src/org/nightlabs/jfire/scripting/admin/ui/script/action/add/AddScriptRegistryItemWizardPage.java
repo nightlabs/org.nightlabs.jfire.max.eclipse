@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.util.NLLocale;
 
@@ -42,19 +44,10 @@ import org.nightlabs.util.NLLocale;
 public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 
 	private String pItemType;
-	private LabeledText registryItemID;
 	private LabeledText registryItemType;
+	protected final String SCRIPT_REGISTRY_ITEM_SUFFIX = "S";
 	
 	private ModifyListener modifyListener = new ModifyListener() {
-		public void modifyText(ModifyEvent arg0) {
-			String editLang = getTextEditor().getLanguageChooser().getLanguage().getLanguageID();
-			if (editLang.equals(NLLocale.getDefault().getLanguage()))
-				registryItemID.getTextControl().setText(ObjectIDUtil.makeValidIDString(getTextEditor().getEditText()));
-			getWizard().getContainer().updateButtons();
-		}
-	};
-	
-	private ModifyListener genModifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent arg0) {
 			getWizard().getContainer().updateButtons();
 		}
@@ -75,20 +68,18 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	 */
 	@Override
 	protected void createAdditionalContents(Composite wrapper) {
-		registryItemID = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.registryItemID.label.text")); //$NON-NLS-1$
-//		registryItemID.setEnabled(false);
 		getTextEditor().addModifyListener(modifyListener);
 		registryItemType = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.registryItemType.label.text")); //$NON-NLS-1$
 		if (pItemType != null && !"".equals(pItemType)) { //$NON-NLS-1$
 			registryItemType.getTextControl().setText(pItemType);
 			registryItemType.setEnabled(false);
 		}
-		registryItemID.getTextControl().addModifyListener(genModifyListener);
-		registryItemType.getTextControl().addModifyListener(genModifyListener);
+		registryItemType.getTextControl().addModifyListener(modifyListener);
 	}
 	
 	public String getRegistryItemID() {
-		return registryItemID.getTextControl().getText();
+		String name = getI18nText().getText(NLLocale.getDefault().getLanguage());
+		return ObjectIDUtil.makeValidIDString(name);// + IDGenerator.nextIDString(ScriptRegistryItem.class, SCRIPT_REGISTRY_ITEM_SUFFIX);
 	}
 	
 	public String getRegistryItemType() {
@@ -100,8 +91,7 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	 */
 	@Override
 	public boolean isPageComplete() {
-		return ( registryItemID.getTextControl().getText() != null && !"".equals(registryItemID.getTextControl().getText())) && //$NON-NLS-1$
-						( registryItemType.getTextControl().getText() != null && !"".equals(registryItemType.getTextControl().getText())); //$NON-NLS-1$
+		return ( registryItemType.getTextControl().getText() != null && !"".equals(registryItemType.getTextControl().getText())); //$NON-NLS-1$
 	}
 	
 }
