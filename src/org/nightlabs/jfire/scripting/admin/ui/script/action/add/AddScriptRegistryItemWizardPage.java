@@ -79,7 +79,7 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	
 	public String getRegistryItemID() {
 		String name = getI18nText().getText(NLLocale.getDefault().getLanguage());
-		return ObjectIDUtil.makeValidIDString(name);// + IDGenerator.nextIDString(ScriptRegistryItem.class, SCRIPT_REGISTRY_ITEM_SUFFIX);
+		return ObjectIDUtil.makeValidIDString(name) + IDGenerator.nextIDString(ScriptRegistryItem.class, SCRIPT_REGISTRY_ITEM_SUFFIX);
 	}
 	
 	public String getRegistryItemType() {
