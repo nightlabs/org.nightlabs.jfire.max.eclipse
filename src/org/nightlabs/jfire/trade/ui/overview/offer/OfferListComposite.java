@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.jfire.accounting.Price;
+import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -41,6 +42,8 @@ extends AbstractArticleContainerListComposite<Offer>
 		Offer.FETCH_GROUP_OFFER_LOCAL,
 		Offer.FETCH_GROUP_STATE,
 		Price.FETCH_GROUP_CURRENCY,
+		Price.FETCH_GROUP_FRAGMENTS,
+		PriceFragmentType.FETCH_GROUP_NAME,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON,

@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.config;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -41,13 +42,13 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
-import org.nightlabs.jfire.trade.config.SummedPriceFracmentTypeConfigModule;
+import org.nightlabs.jfire.trade.config.SummedPriceFragmentTypeConfigModule;
 import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeTable;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  */
-public class SummedPriceFracmentTypeConfigPreferencePage
+public class SummedPriceFragmentTypeConfigPreferencePage
 extends AbstractUserConfigModulePreferencePage
 {
 	private Shell shell;
@@ -57,7 +58,7 @@ extends AbstractUserConfigModulePreferencePage
 	
 	@Override
 	protected IConfigModuleController createConfigModuleController() {
-		return new SummedPriceFracmentTypeConfigController(this);
+		return new SummedPriceFragmentTypeConfigController(this);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ extends AbstractUserConfigModulePreferencePage
 		wrapper.getGridLayout().makeColumnsEqualWidth = false;
 		
 		priceFragmentTypeTable = new PriceFragmentTypeTable(wrapper, SWT.NONE);
-		priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
+		priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFragmentTypeList());
 		
 		XComposite buttonComposite = new XComposite(wrapper, SWT.NONE);
 		buttonComposite.getGridData().grabExcessHorizontalSpace = false;
@@ -82,12 +83,12 @@ extends AbstractUserConfigModulePreferencePage
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PriceFragmentTypeChooserDialog chooserDialog = new PriceFragmentTypeChooserDialog(getShell());
-				chooserDialog.setExcludedPriceFragmentTypes(getConfigModule().getSummedPriceFracmentTypeList());
+				chooserDialog.setExcludedPriceFragmentTypes(getConfigModule().getSummedPriceFragmentTypeList());
 			
 				int returnCode = chooserDialog.open();
 				if (returnCode == Dialog.OK) {
-					getConfigModule().addPriceFracmentTypes(chooserDialog.getSelectedPriceFragmentTypes());
-					priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
+					getConfigModule().addPriceFragmentTypes(chooserDialog.getSelectedPriceFragmentTypes());
+					priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFragmentTypeList());
 					getPageDirtyStateManager().markDirty();
 				}
 			}
@@ -99,8 +100,39 @@ extends AbstractUserConfigModulePreferencePage
 		removeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				getConfigModule().removePriceFracmentTypes(priceFragmentTypeTable.getSelectedPriceFragmentTypes());
-				priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFracmentTypeList());
+				getConfigModule().removePriceFragmentTypes(priceFragmentTypeTable.getSelectedPriceFragmentTypes());
+				priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFragmentTypeList());
+				getPageDirtyStateManager().markDirty();
+			}
+		});
+		
+		Button upButton = new Button(buttonComposite, SWT.PUSH);
+		upButton.setText("Up");
+		upButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		upButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int idx = getConfigModule().getSummedPriceFragmentTypeList().indexOf(priceFragmentTypeTable.getSelectedPriceFragmentType());
+				if (idx > 0) {
+					Collections.swap(getConfigModule().getSummedPriceFragmentTypeList(), idx, idx - 1);
+					priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFragmentTypeList());
+					getPageDirtyStateManager().markDirty();
+				}
+			}
+		});
+		
+		Button downButton = new Button(buttonComposite, SWT.PUSH);
+		downButton.setText("Down");
+		downButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		downButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int idx = getConfigModule().getSummedPriceFragmentTypeList().indexOf(priceFragmentTypeTable.getSelectedPriceFragmentType());
+				if (idx < getConfigModule().getSummedPriceFragmentTypeList().size() - 1) {
+					Collections.swap(getConfigModule().getSummedPriceFragmentTypeList(), idx, idx + 1);
+					priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFragmentTypeList());
+					getPageDirtyStateManager().markDirty();
+				}
 			}
 		});
 	}
@@ -117,12 +149,12 @@ extends AbstractUserConfigModulePreferencePage
 		if (Display.getCurrent() != display)
 			throw new IllegalStateException("Thread mismatch! This method should be called on the UI thread! What happened here!?");
 
-		SummedPriceFracmentTypeConfigModule configModule = getConfigModule();
+		SummedPriceFragmentTypeConfigModule configModule = getConfigModule();
 		
-		priceFragmentTypeTable.setInput(configModule.getSummedPriceFracmentTypeList());
+		priceFragmentTypeTable.setInput(configModule.getSummedPriceFragmentTypeList());
 	}
 	
-	private SummedPriceFracmentTypeConfigModule getConfigModule() {
-		return (SummedPriceFracmentTypeConfigModule) getConfigModuleController().getConfigModule();
+	private SummedPriceFragmentTypeConfigModule getConfigModule() {
+		return (SummedPriceFragmentTypeConfigModule) getConfigModuleController().getConfigModule();
 	}
 }

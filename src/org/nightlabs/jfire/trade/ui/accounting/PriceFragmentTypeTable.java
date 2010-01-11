@@ -139,9 +139,9 @@ extends AbstractTableComposite<PriceFragmentType>
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
-		tableViewer.setInput(tableViewer.getContentProvider());
-		
-		tableViewer.setSorter(new ViewerSorter());
+//		tableViewer.setInput(tableViewer.getContentProvider());
+//		
+//		tableViewer.setSorter(new ViewerSorter());
 	}
 
 	private Collection<PriceFragmentType> priceFragmentTypes;
