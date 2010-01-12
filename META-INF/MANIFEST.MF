@@ -8,7 +8,8 @@ Bundle-Activator: org.nightlabs.jfire.scripting.ui.ScriptingPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.scripting.ui,
- org.nightlabs.jfire.scripting.ui.condition
+ org.nightlabs.jfire.scripting.ui.condition,
+ org.nightlabs.jfire.scripting.ui.tree
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport
