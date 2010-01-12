@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.jfire.base.ui.edit.TextEditComposite;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.RegexDataFieldEditor;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.TextDataFieldComposite;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.datafield.RegexDataField;
 
@@ -25,18 +25,15 @@ public class LegalEntityFieldBasedRegexDataFieldEditor extends RegexDataFieldEdi
 		super(struct, data);
 	}
 
-	private TextDataFieldComposite<RegexDataField> textDataFieldComposite;
+	private TextEditComposite textEditComposite;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Control createControl(Composite parent) {
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, gl);
 		gl.numColumns = 2;
 
-		textDataFieldComposite = new TextDataFieldComposite<RegexDataField>(this, parent, SWT.NONE, getSwtModifyListener(), gl) {
+		textEditComposite = new TextEditComposite(parent, SWT.NONE, 1) {
 			@Override
 			protected int getTextBorderStyle() {
 				return SWT.READ_ONLY;
@@ -49,13 +46,14 @@ public class LegalEntityFieldBasedRegexDataFieldEditor extends RegexDataFieldEdi
 			}
 
 		};
-		textDataFieldComposite.refresh();
-		return textDataFieldComposite;
+		
+//		textEditComposite.refresh();
+		return textEditComposite;
 	}
 
-	@Override
-	public void doRefresh() {
-		if (textDataFieldComposite != null)
-			textDataFieldComposite.refresh();
-	}
+//	@Override
+//	public void doRefresh() {
+//		if (textEditComposite != null)
+//			textEditComposite.refresh();
+//	}
 }

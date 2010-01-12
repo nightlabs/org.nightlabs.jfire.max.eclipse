@@ -10,10 +10,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.TextDataFieldComposite;
+import org.nightlabs.jfire.base.ui.edit.TextEditComposite;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.TextDataFieldEditor;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
+import org.nightlabs.jfire.prop.structfield.TextStructField;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -26,7 +27,7 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 		super(struct, data);
 	}
 
-	private TextDataFieldComposite<TextDataField> textDataFieldComposite;
+	private TextEditComposite textEditComposite;
 
 	/**
 	 * {@inheritDoc}
@@ -37,7 +38,7 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, gl);
 		gl.numColumns = 2;
 
-		textDataFieldComposite = new TextDataFieldComposite<TextDataField>(this, parent, SWT.NONE, getSwtModifyListener(), gl) {
+		textEditComposite = new TextEditComposite(parent, SWT.NONE, ((TextStructField) getStructField()).getLineCount()) {
 			@Override
 			protected int getTextBorderStyle() {
 				return SWT.READ_ONLY;
@@ -50,14 +51,14 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 				return gd;
 			}
 		};
-		textDataFieldComposite.refresh();
-		return textDataFieldComposite;
+//		textDataFieldComposite.refresh();
+		return textEditComposite;
 	}
 
-	@Override
-	public void doRefresh() {
-		if (textDataFieldComposite != null)
-			textDataFieldComposite.refresh();
-	}
+//	@Override
+//	public void doRefresh() {
+//		if (textDataFieldComposite != null)
+//			textDataFieldComposite.refresh();
+//	}
 
 }
