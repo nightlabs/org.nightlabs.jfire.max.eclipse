@@ -4,13 +4,15 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.jfire.base.ui.edit.IEntryEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
 import org.nightlabs.jfire.department.prop.DepartmentDataField;
 import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.util.Util;
 
-public class DepartmentDataFieldEditor extends AbstractDataFieldEditor<DepartmentDataField>
+public class DepartmentDataFieldEditor
+extends AbstractDataFieldEditor<DepartmentDataField>
 {
 	public DepartmentDataFieldEditor(IStruct struct, DepartmentDataField data) {
 		super(struct, data);
@@ -48,4 +50,8 @@ public class DepartmentDataFieldEditor extends AbstractDataFieldEditor<Departmen
 		getDataField().setDepartment(departmentComboComposite.getSelectedDepartment());
 	}
 
+	@Override
+	protected IEntryEditor getEntryViewer() {
+		return departmentComboComposite;
+	}
 }

@@ -26,13 +26,14 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.edit.IEntryEditor;
 import org.nightlabs.jfire.department.Department;
 import org.nightlabs.jfire.department.dao.DepartmentDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 
-public class DepartmentComboComposite 
+public class DepartmentComboComposite
 extends XComposite
-implements ISelectionProvider
+implements ISelectionProvider, IEntryEditor
 {
 	public DepartmentComboComposite(Composite parent)
 	{
@@ -64,7 +65,7 @@ implements ISelectionProvider
 	}
 
 	private static String[] FETCH_GROUP_DEPARTMENT = new String[] {
-		FetchPlan.DEFAULT, 
+		FetchPlan.DEFAULT,
 		Department.FETCH_GROUP_NAME};
 
 	private List<Department> departmentList = new ArrayList<Department>();
@@ -94,7 +95,7 @@ implements ISelectionProvider
 							for (Department department : departments) {
 								if (department.equals(selectedDepartment))
 									selectionIdx = departmentCombo.getItemCount();
-								else 
+								else
 									selectionIdx = 0;
 								departmentCombo.add(null, department.getName().getText());
 							}
@@ -178,5 +179,21 @@ implements ISelectionProvider
 	@Override
 	public boolean setFocus() {
 		return departmentCombo.setFocus();
+	}
+
+	@Override
+	public void setEnabledState(boolean enabled, String tooltip) {
+		departmentCombo.setEnabled(enabled);
+		
+		if (!enabled) {
+			setToolTipText(tooltip);
+		} else {
+			setToolTipText(null);
+		}
+	}
+
+	@Override
+	public void setTitle(String title) {
+		// TODO Dunno where to set a title here.
 	}
 }
