@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.util.reflect.ReflectUtil;
 
 /**
  * This registry processes the extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory</code>.
@@ -114,25 +115,15 @@ public class ArticleContainerEditorPageFactoryRegistry extends AbstractEPProcess
 	 */
 	public Set<EntityEditorPageSettings> getPageSettings(String editorID, Class<?> articleContainerClass) {
 		checkProcessing();
-		Class<?> acClass = articleContainerClass; 
 		Set<EntityEditorPageSettings> result = null;
 		Map<String, Map<String, EntityEditorPageSettings>> editorRegistrations = pageSettings.get(editorID);
+		List<Class<?>> classTypeHierarchy = ReflectUtil.collectTypeHierarchy(articleContainerClass);
 		for (String pageId : editorRegistrations.keySet()) {
-			Class<?> searchClass = acClass;
 			EntityEditorPageSettings settings = null;
-			searchClassLoop: while (searchClass != null) {
-				settings = getEntityEditorPageSettings(editorID, pageId, searchClass.getName());
+			for (Class<?> typeInHierarchy : classTypeHierarchy) {
+				settings = getEntityEditorPageSettings(editorID, pageId, typeInHierarchy.getName());
 				if (settings != null)
 					break;
-
-				Class<?>[] interfaces = searchClass.getInterfaces();
-				for (int i = 0; i < interfaces.length; i++) {
-					settings = getEntityEditorPageSettings(editorID, pageId, interfaces[i].getName());
-					if (settings != null)
-						break searchClassLoop;
-				}
-				
-				searchClass = searchClass.getSuperclass();
 			}
 			if (settings != null) {
 				if (result == null)

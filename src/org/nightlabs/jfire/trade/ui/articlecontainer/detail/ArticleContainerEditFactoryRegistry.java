@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -9,6 +10,7 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.util.reflect.ReflectUtil;
 
 /**
  * This registry processes the extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditFactory</code>
@@ -83,19 +85,11 @@ extends AbstractEPProcessor
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Could not resolve ArticleContainer class: " + articleContainerClass, e); //$NON-NLS-1$
 		}
-		while (searchClass != null) {
-			ArticleContainerEditFactory factory = (ArticleContainerEditFactory) articleContainerEditoFactories.get(searchClass.getName());
+		List<Class<?>> typeHierarchy = ReflectUtil.collectTypeHierarchy(searchClass);
+		for (Class<?> classInHierarchy : typeHierarchy) {
+			ArticleContainerEditFactory factory = (ArticleContainerEditFactory) articleContainerEditoFactories.get(classInHierarchy.getName());
 			if (factory != null)
 				return factory;
-
-			Class<?>[] interfaces = searchClass.getInterfaces();
-			for (int i = 0; i < interfaces.length; i++) {
-				factory = (ArticleContainerEditFactory) articleContainerEditoFactories.get(interfaces[i].getName());
-				if (factory != null)
-					return factory;
-			}
-
-			searchClass = searchClass.getSuperclass();
 		}
 		return null;
 	}
