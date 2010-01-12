@@ -90,7 +90,7 @@ implements
 					ScriptEditorInput input = new ScriptEditorInput(objectID);
 					RCPUtil.openEditor( input, ScriptEditor.ID_EDITOR);
 				} catch (PartInitException e) {
-					new PartInitException("Invalid Input: Must be an instance of ScriptEditorInput");
+					throw new RuntimeException(e);
 				}
 			}
 		}};
