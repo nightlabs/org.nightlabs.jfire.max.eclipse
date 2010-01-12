@@ -20,6 +20,7 @@ import org.nightlabs.eclipse.ui.fckeditor.FCKEditorInput;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditor;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditorInput;
 import org.nightlabs.htmlcontent.IFCKEditorContent;
+import org.nightlabs.jfire.base.ui.edit.IEntryEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorLayoutData;
 import org.nightlabs.jfire.prop.IStruct;
@@ -28,8 +29,9 @@ import org.nightlabs.language.LanguageCf;
 
 /**
  * @author Marc Klinger - marc[at]nightlabs[dot]de
+ * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
-public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
+public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField> implements IEntryEditor
 {
 	private Composite control;
 	private LanguageChooserCombo languageChooser;
@@ -42,9 +44,6 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		super(struct, data);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public Control createControl(Composite parent)
 	{
@@ -108,9 +107,6 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		editorWrapper.layout();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#getLayoutData()
-	 */
 	@Override
 	public DataFieldEditorLayoutData getLayoutData()
 	{
@@ -119,9 +115,6 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		return ld;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#doRefresh()
-	 */
 	@Override
 	public void doRefresh()
 	{
@@ -138,9 +131,6 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 //		contentLabel.getParent().layout(true, true);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor#getControl()
-	 */
 	@Override
 	public Control getControl()
 	{
@@ -158,9 +148,6 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor#updatePropertySet()
-	 */
 	@Override
 	public void updatePropertySet()
 	{
@@ -195,5 +182,28 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 				// commit done.
 			}
 		}
+	}
+
+	@Override
+	protected IEntryEditor getEntryViewer() {
+		return this;
+	}
+
+	@Override
+	public void setEnabledState(boolean enabled, String tooltip) {
+		for (Control child : editorWrapper.getChildren()) {
+			child.setEnabled(enabled);
+		}
+		
+		if (!enabled) {
+			editorWrapper.setToolTipText(tooltip);
+		} else {
+			editorWrapper.setToolTipText(null);
+		}
+	}
+
+	@Override
+	public void setTitle(String title) {
+		// TODO Dunno where to set a title here.
 	}
 }
