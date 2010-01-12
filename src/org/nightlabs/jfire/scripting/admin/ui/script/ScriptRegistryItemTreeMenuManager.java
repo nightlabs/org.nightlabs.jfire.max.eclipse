@@ -46,10 +46,11 @@ import org.nightlabs.jfire.scripting.admin.ui.script.action.IScriptRegistryItemA
 import org.nightlabs.jfire.scripting.admin.ui.script.action.ScriptRegistryItemActionRegistry;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
-import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemTree;
+import org.nightlabs.jfire.scripting.ui.tree.ScriptRegistryItemTree;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Fitas Amine - fitas [at] nightlabs [dot] de
  *
  */
 public class ScriptRegistryItemTreeMenuManager extends MenuManager {
@@ -144,7 +145,4 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 			}
 		}
 	}
-
-
-
 }

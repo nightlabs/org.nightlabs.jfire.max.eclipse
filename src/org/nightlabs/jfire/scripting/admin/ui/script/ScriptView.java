@@ -26,37 +26,23 @@
 
 package org.nightlabs.jfire.scripting.admin.ui.script;
 
-import java.util.Collection;
-import java.util.Set;
-
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
-import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.base.ui.part.PartVisibilityListener;
 import org.nightlabs.base.ui.part.PartVisibilityTracker;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.scripting.Script;
@@ -64,21 +50,16 @@ import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin;
 import org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditor;
 import org.nightlabs.jfire.scripting.admin.ui.editor.ScriptEditorInput;
-import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
-import org.nightlabs.jfire.scripting.dao.ScriptRegistryItemDAO;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
-import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemNode;
-import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
-import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemTree;
-import org.nightlabs.jfire.scripting.ui.ScriptRegistryListener;
-import org.nightlabs.notification.NotificationEvent;
-import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.jfire.scripting.ui.tree.ScriptRegistryItemTree;
 
 /**
  * A View of all scripts and categories of the local organisation
  * and providing actions for manipulating them.
  *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Fitas Amine - fitas [at] nightlabs [dot] de
+ *
  *
  */
 public class ScriptView
@@ -99,44 +80,10 @@ implements
 	private XComposite wrapper;
 	private ScriptRegistryItemTree registryItemTree;
 	private ScriptRegistryItemTreeMenuManager contextMenuManager;
-
-	private Job fetchTreeNodesJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.fetchTreeNodesJob.name")){ //$NON-NLS-1$
-
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			final Collection<ScriptRegistryItemNode> nodes = ScriptRegistryItemProvider.sharedInstance().getTopLevelNodes();
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					registryItemTree.setInput(nodes);
-					registryItemTree.refresh(nodes, true);
-				}
-			});
-			return Status.OK_STATUS;
-		}
-
-	};
-
-	private Job refreshTreeNodesJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.refreshTreeNodesJob.name")){ //$NON-NLS-1$
-
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			final Collection<ScriptRegistryItemNode> nodes = ScriptRegistryItemProvider.sharedInstance().getTopLevelNodes();
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					registryItemTree.refresh(nodes, true);
-				}
-			});
-			return Status.OK_STATUS;
-		}
-
-	};
-
+	
 	private IDoubleClickListener treeDoubleClickListener = new IDoubleClickListener () {
-
-		public void doubleClick(DoubleClickEvent event) {
-//			contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedRegistryItems(), true, true);
-			ScriptRegistryItem item = registryItemTree.getSelectedRegistryItem();
-			
+		public void doubleClick(DoubleClickEvent event) {			
+			ScriptRegistryItem item = registryItemTree.getFirstSelectedElement();
 			if (item instanceof Script) {
 				try {
 					ScriptRegistryItemID objectID = (ScriptRegistryItemID)JDOHelper.getObjectId(item);
@@ -146,11 +93,10 @@ implements
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//				editScriptAction.run(registryItemTree.getSelectedRegistryItems());
 			}
-		}
-	};
+		}};
 
+	
 	/**
 	 *
 	 */
@@ -177,50 +123,17 @@ implements
 
 	public void createPartContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
-		registryItemTree = new ScriptRegistryItemTree(wrapper, SWT.NONE, true, false, ScriptingAdminPlugin.ZONE_ADMIN, true);
-		fetchTreeNodesJob.schedule();
-		registryItemTree.setInput(ScriptRegistryItemNode.STATUS_FETCHING_NODE);
-//		registryItemTree.setInput(ReportRegistryItemProvider.sharedInstance().getTopLevelNodes());
-		contextMenuManager = new ScriptRegistryItemTreeMenuManager(registryItemTree, this);
+		registryItemTree =new ScriptRegistryItemTree(wrapper, true, ScriptingAdminPlugin.ZONE_ADMIN);
 		registryItemTree.getTreeViewer().addDoubleClickListener(treeDoubleClickListener);
-		SelectionManager.sharedInstance().addNotificationListener(ScriptingAdminPlugin.ZONE_ADMIN, ScriptRegistryItem.class, selectionListener);
-		JDOLifecycleManager.sharedInstance().addNotificationListener(ScriptRegistryItemID.class, changeListener);
-		ScriptRegistryItemProvider.sharedInstance().addScriptRegistryListener(registryListener);
-
-		wrapper.addDisposeListener( new DisposeListener() {
-
-			public void widgetDisposed(DisposeEvent e) {
-				SelectionManager.sharedInstance().removeNotificationListener(ScriptingAdminPlugin.ZONE_ADMIN, ScriptRegistryItem.class, selectionListener);
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(ScriptRegistryItemID.class, changeListener);
-				ScriptRegistryItemProvider.sharedInstance().removeScriptRegistryListener(registryListener);
+		contextMenuManager = new ScriptRegistryItemTreeMenuManager(registryItemTree, this);		
+		registryItemTree.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedElements(), true, true);
 			}
-
-		} );
+		});
+		registryItemTree.getTreeViewer().expandToLevel(2);
 	}
 
-	private NotificationListener selectionListener = new NotificationAdapterSWTThreadSync() {
-
-		public void notify(NotificationEvent evt) {
-			Set<ScriptRegistryItemID> subjects = evt.getSubjects();
-			contextMenuManager.setSelectedRegistryItemIDs(subjects, true, true);
-//			if (subjects.isEmpty())
-
-		}
-
-	};
-
-	private NotificationListener changeListener = new NotificationAdapterSWTThreadSync() {
-		public void notify(NotificationEvent evt) {
-			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
-			registryItemTree.refresh(true);
-		}
-	};
-
-	private ScriptRegistryListener registryListener = new ScriptRegistryListener() {
-		public void scriptRegistryChanged() {
-			refreshTreeNodesJob.schedule();
-		}
-	};
 
 	public boolean canDisplayPart() {
 		return Login.isLoggedIn();
