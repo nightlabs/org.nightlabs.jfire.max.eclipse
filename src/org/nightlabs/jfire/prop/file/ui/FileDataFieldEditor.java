@@ -33,6 +33,7 @@ import org.nightlabs.base.ui.io.FileEditorInput;
 import org.nightlabs.base.ui.part.PartAdapter;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.ui.edit.IEntryEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor;
@@ -52,6 +53,7 @@ import org.nightlabs.util.NLLocale;
  */
 public class FileDataFieldEditor
 extends AbstractDataFieldEditor<FileDataField>
+implements IEntryEditor
 {
 	/**
 	 * Use this before extension.
@@ -356,16 +358,17 @@ extends AbstractDataFieldEditor<FileDataField>
 		determineSaveToDiskButtonEnabled();
 	}
 
-	protected void handleManagedBy(String managedBy)
-	{
-		for (Control child : group.getChildren()) {
-			child.setEnabled(managedBy == null);
-		}
-		if (managedBy != null)
-			group.setToolTipText(String.format(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.managedByMessage"), managedBy)); //$NON-NLS-1$
-		else
-			group.setToolTipText(null);
-	}
+//	@Override
+//	protected void handleManagedBy(String managedBy)
+//	{
+//		for (Control child : group.getChildren()) {
+//			child.setEnabled(managedBy == null);
+//		}
+//		if (managedBy != null)
+//			group.setToolTipText(String.format(Messages.getString("org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor.managedByMessage"), managedBy)); //$NON-NLS-1$
+//		else
+//			group.setToolTipText(null);
+//	}
 
 	/**
 	 * Open the file file browse dialog.
@@ -486,6 +489,28 @@ extends AbstractDataFieldEditor<FileDataField>
 		setChanged(true);
 		determineOpenButtonEnabled();
 		determineSaveToDiskButtonEnabled();
+	}
+
+	@Override
+	protected IEntryEditor getEntryViewer() {
+		return this;
+	}
+
+	@Override
+	public void setEnabledState(boolean enabled, String tooltip) {
+		for (Control child : group.getChildren()) {
+			child.setEnabled(enabled);
+		}
+
+		if (!enabled)
+			group.setToolTipText(tooltip);
+		else
+			group.setToolTipText(null);
+	}
+
+	@Override
+	public void setTitle(String title) {
+		group.setText(title);
 	}
 }
 
