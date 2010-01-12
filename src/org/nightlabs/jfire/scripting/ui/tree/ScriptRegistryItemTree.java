@@ -31,15 +31,10 @@ import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 
 
 /**
- * 
- * 
- * 
- * 
  * @author Fitas Amine - fitas [at] nightlabs [dot] de
  */
 public class ScriptRegistryItemTree extends ActiveJDOObjectTreeComposite<ScriptRegistryItemID, ScriptRegistryItem, ScriptRegistryItemNode>
 {
-	
 	
 	/**
 	 * This proxy delegates to the {@link NotificationManager}.
@@ -129,7 +124,6 @@ public class ScriptRegistryItemTree extends ActiveJDOObjectTreeComposite<ScriptR
 			protected void onJDOObjectsChanged(JDOTreeNodesChangedEvent<ScriptRegistryItemID, ScriptRegistryItemNode> changedEvent)
 			{
 				JDOTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
-				refresh(true);
 			}
 			
 		};

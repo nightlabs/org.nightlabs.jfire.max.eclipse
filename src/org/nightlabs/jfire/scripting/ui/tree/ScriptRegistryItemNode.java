@@ -12,10 +12,4 @@ public class ScriptRegistryItemNode
 extends JDOObjectTreeNode<ScriptRegistryItemID, ScriptRegistryItem, ActiveScriptRegistryItemTreeController>
 {
 
-	/**
-	 * 
-	 */
-	public ScriptRegistryItemNode() {
-	}
-
 }

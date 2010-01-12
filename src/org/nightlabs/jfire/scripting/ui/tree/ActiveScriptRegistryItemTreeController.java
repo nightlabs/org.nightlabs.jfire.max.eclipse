@@ -13,6 +13,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
 import org.nightlabs.jfire.scripting.ScriptCategory;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
+import org.nightlabs.jfire.scripting.ScriptRegistryItemParentResolver;
 import org.nightlabs.jfire.scripting.dao.ScriptRegistryItemDAO;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.progress.ProgressMonitor;
@@ -23,7 +24,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ActiveScriptRegistryItemTreeController extends ActiveJDOObjectTreeController<ScriptRegistryItemID, ScriptRegistryItem, ScriptRegistryItemNode>
 {
 	
-	public static final String[] DEFAULT_FETCH_GROUPS = new String[] {
+	public static final String[] DEFAULT_SCRIPT_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		ScriptRegistryItem.FETCH_GROUP_NAME,
 		ScriptRegistryItem.FETCH_GROUP_PARAMETER_SET,
@@ -45,7 +46,6 @@ public class ActiveScriptRegistryItemTreeController extends ActiveJDOObjectTreeC
 
 	@Override
 	protected Class<? extends ScriptRegistryItem> getJDOObjectClass() {
-		// TODO Auto-generated method stub
 		return ScriptRegistryItem.class;
 	}
 
@@ -73,7 +73,7 @@ public class ActiveScriptRegistryItemTreeController extends ActiveJDOObjectTreeC
 			return Collections.emptyList();
 		}
 		return ScriptRegistryItemDAO.sharedInstance().getScriptRegistryItems(new ArrayList<ScriptRegistryItemID>(scriptItemIDs),
-				DEFAULT_FETCH_GROUPS,
+				DEFAULT_SCRIPT_FETCH_GROUPS,
 				monitor
 			);
 		
@@ -83,7 +83,7 @@ public class ActiveScriptRegistryItemTreeController extends ActiveJDOObjectTreeC
 	protected Collection<ScriptRegistryItem> retrieveJDOObjects(
 			Set<ScriptRegistryItemID> objectIDs, ProgressMonitor monitor) {		
 		return ScriptRegistryItemDAO.sharedInstance().getScriptRegistryItems(new ArrayList<ScriptRegistryItemID>(objectIDs), 
-				DEFAULT_FETCH_GROUPS, 
+				DEFAULT_SCRIPT_FETCH_GROUPS, 
 				monitor);
 	}
 
