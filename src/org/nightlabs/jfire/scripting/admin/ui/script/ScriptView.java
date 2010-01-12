@@ -95,10 +95,6 @@ implements
 			}
 		}};
 
-	
-	/**
-	 *
-	 */
 	public ScriptView() {
 		super();
 		LSDPartController.sharedInstance().registerPart(this);

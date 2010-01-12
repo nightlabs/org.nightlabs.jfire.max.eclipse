@@ -100,9 +100,6 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
-		// Other plug-ins can contribute their actions here
-//		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-
 		drillDownAdapter.addNavigationActions(manager);
 	}
 
