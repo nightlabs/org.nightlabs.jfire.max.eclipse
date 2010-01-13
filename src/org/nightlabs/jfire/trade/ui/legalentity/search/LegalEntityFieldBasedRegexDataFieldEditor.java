@@ -7,7 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.base.ui.edit.TextEditComposite;
@@ -25,15 +24,14 @@ public class LegalEntityFieldBasedRegexDataFieldEditor extends RegexDataFieldEdi
 		super(struct, data);
 	}
 
-	private TextEditComposite textEditComposite;
 
 	@Override
-	public Control createControl(Composite parent) {
+	public TextEditComposite createComposite(Composite parent) {
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, gl);
 		gl.numColumns = 2;
 
-		textEditComposite = new TextEditComposite(parent, SWT.NONE, 1) {
+		TextEditComposite textEditComposite = new TextEditComposite(parent, SWT.NONE, 1) {
 			@Override
 			protected int getTextBorderStyle() {
 				return SWT.READ_ONLY;
@@ -47,13 +45,6 @@ public class LegalEntityFieldBasedRegexDataFieldEditor extends RegexDataFieldEdi
 
 		};
 		
-//		textEditComposite.refresh();
 		return textEditComposite;
 	}
-
-//	@Override
-//	public void doRefresh() {
-//		if (textEditComposite != null)
-//			textEditComposite.refresh();
-//	}
 }
