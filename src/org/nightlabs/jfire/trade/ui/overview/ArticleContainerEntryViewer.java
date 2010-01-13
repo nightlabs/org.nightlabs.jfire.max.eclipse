@@ -98,7 +98,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 						public void run() {
 							Label selectionLabel = new Label(footer, SWT.RIGHT);
 							selectionLabel.setText("Selection: ");
-							selectionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+							selectionLabel.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 							footerTextSelection = new StyledText(footer, SWT.WRAP | SWT.MULTI);
 							footerTextSelection.setAlignment(SWT.RIGHT);
@@ -109,7 +109,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 
 							Label totalLabel = new Label(footer, SWT.RIGHT);
 							totalLabel.setText("Total: ");
-							totalLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+							totalLabel.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 							footerTextTotal = new StyledText(footer, SWT.WRAP | SWT.MULTI);
 							footerTextTotal.setAlignment(SWT.RIGHT);
@@ -164,31 +164,29 @@ extends JDOQuerySearchEntryViewer<R, Q>
 		}
 	}
 
+	private Map<PriceFragmentType, Long> priceFragmentType2ValueMap = new HashMap<PriceFragmentType, Long>();
 	private void displayTotals(Collection<R> articleContainers, StyledText styledText) {
 		List<PriceFragmentType> summedPriceFragmentTypes = summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList();
-
-		Map<PriceFragmentType, Long> priceFragmentType2ValueMap = new HashMap<PriceFragmentType, Long>();
 		Currency currency = null;
+		
+		for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) {
+			priceFragmentType2ValueMap.put(summedPriceFragmentType, new Long(0));
+		}
+		
 		for (R articleContainer : articleContainers) {
 			PricedArticleContainer pricedArticleContainer = (PricedArticleContainer) articleContainer;
 			Price price = pricedArticleContainer.getPrice();
 			if (price != null) {
-				long totalSum = 0;
+				
 				for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) {
 					PriceFragment priceFragment = price.getPriceFragment(summedPriceFragmentType.getPrimaryKey(), false);
-					if (priceFragmentType2ValueMap.get(summedPriceFragmentType) != null)
-						totalSum = priceFragmentType2ValueMap.get(summedPriceFragmentType) + priceFragment.getAmount();
-
-					priceFragmentType2ValueMap.put(summedPriceFragmentType, totalSum);
+					Long amount = priceFragmentType2ValueMap.get(summedPriceFragmentType);
+					if (amount != null) {
+						amount = amount + (priceFragment == null ? 0:priceFragment.getAmount());
+						priceFragmentType2ValueMap.put(summedPriceFragmentType, amount);
+					}
 				}
-				totalSum += price.getAmount();
 				currency = price.getCurrency();
-			}
-		}
-
-		if (articleContainers.size() == 0) {
-			for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) {
-				priceFragmentType2ValueMap.put(summedPriceFragmentType, new Long(0));
 			}
 		}
 
@@ -198,10 +196,12 @@ extends JDOQuerySearchEntryViewer<R, Q>
 			sumString.append(" = ");
 			if (currency == null)
 				sumString.append(0);
-			else
-				sumString.append(Double.toString(currency.toDouble(priceFragmentType2ValueMap.get(priceFragmentType))) + " " + currency.getCurrencySymbol());
+			else {
+				Long value = priceFragmentType2ValueMap.get(priceFragmentType);
+				double doubleValue = value == null?0:currency.toDouble(value);
+				sumString.append(Double.toString(doubleValue) + " " + currency.getCurrencySymbol());
+			}
 
-			//			if (priceFragmentType != summedPriceFragmentTypes.get(summedPriceFragmentTypes.size() - 1))
 			sumString.append("\n ");
 		}
 
