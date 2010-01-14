@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -148,6 +149,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 					
 					footer.getGridData().heightHint = lineHeight;
 					footer.getParent().layout();
+					((SashForm)getComposite()).setWeights(calculateSashWeights(null));
 				}
 			});
 			
