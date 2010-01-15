@@ -74,10 +74,26 @@
             icon="icons/layout/ReportLayoutView.16x16.png"
             id="org.nightlabs.jfire.reporting.ui.layout.ReportLayoutView"
             name="Report Layouts"/>
+      <view
+            category="org.nightlabs.jfire.reporting.ui.viewCategory"
+            class="org.nightlabs.jfire.reporting.ui.layout.scheduled.ScheduledReportsView"
+            icon="icons/layout/ReportLayoutView.16x16.png"
+            id="org.nightlabs.jfire.reporting.ui.layout.scheduled.ScheduledReportsView"
+            name="Scheduled Reports">
+      </view>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.ui.reportRegistryItemAction">
       <separator name="reporting"/>
+      <reportRegistryItemAction
+            class="org.nightlabs.jfire.reporting.ui.layout.action.schedule.ScheduleReportAction"
+            contextmenuPath="reporting"
+            icon="icons/layout/action/view/ViewReportLayoutAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.ui.layout.action.scheduled.ScheduleReportAction"
+            name="%reportRegistryItemAction.scheduleReport.name"
+            toolbarPath="reporting"
+            tooltip="%reportRegistryItemAction.scheduleReport.tooltip">
+      </reportRegistryItemAction>
       <reportRegistryItemAction
             class="org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutAction"
             contextmenuPath="reporting"
@@ -93,7 +109,8 @@
             id="org.nightlabs.jfire.reporting.ui.layout.action.view.ViewReportLayoutAction"
             name="%reportRegistryItemAction.viewReportLayout.name"
             toolbarPath="reporting"
-            tooltip="%reportRegistryItemAction.viewReportLayout.tooltip"/>
+            tooltip="%reportRegistryItemAction.viewReportLayout.tooltip">
+      </reportRegistryItemAction>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.ui.reportViewer">
