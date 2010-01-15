@@ -49,6 +49,7 @@ import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.birt.BirtReportingConstants;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
@@ -91,7 +92,9 @@ public class AddReportLayoutWizard extends DynamicPathWizard {
 		final ReportLayout layout = new ReportLayout(
 				(ReportCategory)reportRegistryItem,
 				SecurityReflector.getUserDescriptor().getOrganisationID(),
-				reportRegistryItemType, wizardPage.getRegistryItemID()
+				reportRegistryItemType, wizardPage.getRegistryItemID(),
+				// TODO Engine-type is hardcoded here, but should be part of the wizard
+				BirtReportingConstants.ENGINE_TYPE_BIRT
 			);
 		layout.getName().copyFrom(wizardPage.getI18nText());
 		if (wizardPage.isCreateFromFile()) {

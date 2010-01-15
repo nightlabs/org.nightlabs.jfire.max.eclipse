@@ -14,7 +14,7 @@
       <odaDataSourceUI id="org.nightlabs.jfire.reporting.oda.jdojs.JDOJSDriver">
          <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
       </odaDataSourceUI>
-      <odaDataSetUI id="org.nightlabs.jfire.reporting.oda.jdojs.JDOJSDataSet">
+      <odaDataSetUI id="org.nightlabs.jfire.reporting.birt.oda.jdojs.JDOJSDataSet">
          <dataSetEditorPage
                class="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.PrepareScriptEditorPage"
                displayName="prepare script"
