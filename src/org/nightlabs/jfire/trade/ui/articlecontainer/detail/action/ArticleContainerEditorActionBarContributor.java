@@ -28,9 +28,18 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
+import javax.security.auth.login.LoginException;
+
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuListener;
@@ -41,6 +50,7 @@ import org.eclipse.jface.action.SubContributionManager;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars2;
 import org.eclipse.ui.IEditorPart;
@@ -51,21 +61,31 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.internal.ActionSetContributionItem;
 import org.eclipse.ui.part.EditorActionBarContributor;
 import org.nightlabs.base.ui.action.IXContributionItem;
 import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.link.ArticleContainerLink;
+import org.nightlabs.jfire.trade.link.ArticleContainerLinkType;
+import org.nightlabs.jfire.trade.link.dao.ArticleContainerLinkDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
@@ -78,6 +98,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditArticleSelectionEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditArticleSelectionListener;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class ArticleContainerEditorActionBarContributor
 extends EditorActionBarContributor
@@ -87,6 +108,9 @@ implements IArticleContainerEditActionContributor
 
 	public static final String SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS = "betweenArticleContainerActionsAndArticleEditActions"; //$NON-NLS-1$
 	public static final String EDIT_MENU_ID = ArticleContainerEditorActionBarContributor.class.getPackage().getName();
+
+//	public static final String SEPARATOR_ARTICLE_CONTAINER_LINKS = "separateArticleContainerLinks"; //$NON-NLS-1$
+	public static final String ARTICLE_CONTAINER_LINKS_MENU_ID = ArticleContainerLink.class.getName();
 
 	private IArticleContainerEditor activeArticleContainerEditor = null;
 	private ArticleContainerEdit activeArticleContainerEdit = null;
@@ -491,6 +515,10 @@ implements IArticleContainerEditActionContributor
 		localPulldownMenuManager.add(new Separator(SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS));
 		articleEditActionRegistry.contributeToMenuBar(localPulldownMenuManager);
 
+
+		populateMenuManagerWithArticleContainerLinks(localPulldownMenuManager);
+
+
 		// contribute to the coolbar
 		articleContainerActionRegistry.contributeToCoolBar(coolBarManager);
 		articleEditActionRegistry.contributeToCoolBar(coolBarManager);
@@ -502,6 +530,192 @@ implements IArticleContainerEditActionContributor
 
 		getActionBars().updateActionBars();
 	}
+
+
+	private void populateMenuManagerWithArticleContainerLinks(IMenuManager containerMenuManager)
+	{
+		final Display display = Display.getCurrent();
+		if (display == null)
+			throw new IllegalStateException("Thread mismatch! Must call this method on the SWT UI thread!!!");
+
+		if (activeArticleContainerEdit == null)
+			return;
+
+		ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+		if (articleContainer == null)
+			return;
+
+		// If the 'Open related' sub-menu exists (i.e. openRelatedSubMenuExists becomes true), we add our new
+		// sub-menu as a sibling directly below it - otherwise, we add it to the end.
+		String openRelatedSubMenuID = "org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu";
+		boolean openRelatedSubMenuExists = false;
+
+		// menuManager will be our sub-menu (within containerMenuManager).
+		IMenuManager menuManager = null;
+
+		// Search for an old sub-menu (in case it was registered in a previous run).
+		for (IContributionItem item : containerMenuManager.getItems()) {
+			if (openRelatedSubMenuID.equals(item.getId()))
+				openRelatedSubMenuExists = true;
+
+			if (ARTICLE_CONTAINER_LINKS_MENU_ID.equals(item.getId()) && item instanceof IMenuManager)
+					menuManager = (IMenuManager) item;
+		}
+
+		// Delete it, if it exists.
+		if (menuManager != null) {
+			containerMenuManager.remove(menuManager);
+			menuManager = null;
+		}
+
+		// Create the new menu.
+		menuManager = new MenuManager("Linked article containers", ARTICLE_CONTAINER_LINKS_MENU_ID);
+		if (openRelatedSubMenuExists)
+			containerMenuManager.insertAfter(openRelatedSubMenuID, menuManager);
+		else
+			containerMenuManager.add(menuManager);
+
+		// Populate our new sub-menu.
+		final ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
+		if (articleContainerID == null)
+			throw new IllegalStateException("JDOHelper.getObjectId(articleContainer) returned null!!!");
+
+
+		List<ArticleContainerLink> currentArticleContainerLinks = null;
+		synchronized (articleContainerLinksRetrieveMutex) {
+			if (articleContainerID.equals(articleContainerLinksBelongingToArticleContainerID) && articleContainerLinks != null)
+				currentArticleContainerLinks = articleContainerLinks;
+		}
+
+		if (currentArticleContainerLinks != null) {
+			internalPopulateMenuManagerWithArticleContainerLinks(menuManager, currentArticleContainerLinks);
+		}
+		else {
+			final IMenuManager mm = menuManager;
+
+			final String loadingID = ArticleContainerLink.class.getName() + "/loading";
+			mm.add(new Action() {
+				{
+					setId(loadingID);
+					setText("Loading...");
+				}
+			});
+
+			Job job = new Job("Loading article container links") {
+				@Override
+				protected IStatus run(ProgressMonitor monitor) throws Exception
+				{
+					List<ArticleContainerLink> currentArticleContainerLinks = null;
+					synchronized (articleContainerLinksRetrieveMutex) {
+						if (articleContainerID.equals(articleContainerLinksBelongingToArticleContainerID) && articleContainerLinks != null)
+							currentArticleContainerLinks = articleContainerLinks;
+					}
+
+					if (currentArticleContainerLinks == null) {
+						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + "...");
+
+						Thread.sleep(5000);
+
+						currentArticleContainerLinks = ArticleContainerLinkDAO.sharedInstance().getArticleContainerLinks(
+								articleContainerID,
+								null,
+								new String[] {
+										FetchPlan.DEFAULT,
+										ArticleContainerLink.FETCH_GROUP_ARTICLE_CONTAINER_LINK_TYPE,
+										ArticleContainerLinkType.FETCH_GROUP_NAME,
+										ArticleContainerLink.FETCH_GROUP_TO
+								},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								monitor
+						);
+
+						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + " DONE!");
+					}
+					else
+						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + " not necessary, because they were already loaded in the meantime.");
+
+					final List<ArticleContainerLink> links = currentArticleContainerLinks;
+
+					display.asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							synchronized (articleContainerLinksRetrieveMutex) {
+								articleContainerLinks = links;
+								articleContainerLinksBelongingToArticleContainerID = articleContainerID;
+							}
+
+							mm.remove(loadingID);
+							internalPopulateMenuManagerWithArticleContainerLinks(mm, links);
+							mm.updateAll(true);
+						}
+					});
+
+					return Status.OK_STATUS;
+				}
+			};
+			job.setPriority(Job.SHORT);
+			job.setRule(articleContainerLinksRetrieveSchedulingRule);
+			job.schedule();
+		}
+	}
+
+	private static void internalPopulateMenuManagerWithArticleContainerLinks(IMenuManager menuManager, Collection<? extends ArticleContainerLink> articleContainerLinks)
+	{
+		String localOrganisationID;
+		try {
+			localOrganisationID = Login.getLogin().getOrganisationID();
+		} catch (LoginException e) {
+			throw new RuntimeException(e); // should never happen, since we should never come here when not logged in.
+		}
+
+		for (final ArticleContainerLink articleContainerLink : articleContainerLinks) {
+			final String linkedArticleContainerTypeName = articleContainerLink.getTo().getClass().getSimpleName(); // TODO improve this!!!
+			final String linkedArticleContainerID =
+				(localOrganisationID.equals(articleContainerLink.getTo().getOrganisationID()) ? "" : (articleContainerLink.getTo().getOrganisationID() + "/")) +
+				articleContainerLink.getTo().getArticleContainerIDPrefix() + '/' +
+				articleContainerLink.getTo().getArticleContainerIDAsString();
+
+			menuManager.add(new Action() {
+				{
+					setId(ArticleContainerLink.class.getName() + '/' + articleContainerLink.getOrganisationID() + '/' + articleContainerLink.getArticleContainerLinkID());
+					setText(
+							String.format(
+									"%s %s %s",
+									articleContainerLink.getArticleContainerLinkType().getName().getText(),
+									linkedArticleContainerTypeName,
+									linkedArticleContainerID
+							)
+					);
+				}
+
+				@Override
+				public void run() {
+					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainerLink.getTo());
+					ArticleContainerEditorInput input = new ArticleContainerEditorInput(articleContainerID);
+					try {
+						RCPUtil.openEditor(input, ArticleContainerEditor.ID_EDITOR);
+					} catch (PartInitException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			});
+		}
+	}
+
+	private Object articleContainerLinksRetrieveMutex = new Object();
+	private List<ArticleContainerLink> articleContainerLinks;
+	private ArticleContainerID articleContainerLinksBelongingToArticleContainerID;
+	private ISchedulingRule articleContainerLinksRetrieveSchedulingRule = new ISchedulingRule() {
+		@Override
+		public boolean isConflicting(ISchedulingRule rule) {
+			return this == rule;
+		}
+		@Override
+		public boolean contains(ISchedulingRule rule) {
+			return this == rule;
+		}
+	};
+
 
 	/**
 	 * This is the manager for the local (article container/edit actions) pulldown menu.
@@ -535,6 +749,7 @@ implements IArticleContainerEditActionContributor
 				}
 				articleContainerActionRegistry.setActiveArticleContainerEditorActionBarContributor(ArticleContainerEditorActionBarContributor.this);
 				articleContainerActionRegistry.contributeToContextMenu(manager);
+				populateMenuManagerWithArticleContainerLinks(manager);
 			}
 		});
 
@@ -577,6 +792,7 @@ implements IArticleContainerEditActionContributor
 					manager.add(new Separator(SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS));
 					articleEditActionRegistry.contributeToContextMenu(manager);
 				}
+				populateMenuManagerWithArticleContainerLinks(manager);
 			}
 		});
 

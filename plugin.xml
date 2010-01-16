@@ -618,37 +618,45 @@
     <extension point="org.nightlabs.jfire.trade.ui.articleEditAction">
         <separator name="org.nightlabs.jfire.trade.ui.articleEditAction"/>
         <articleEditAction
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
-            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
-            disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
-            hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
-            icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
-            name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.name" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.tooltip"/>
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
+              hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
+              icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.tooltip"/>
         <articleEditAction
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
-            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
-            disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
-            hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
-            icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
-            name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction.name" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction.tooltip"/>
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
+              hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
+              icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction.tooltip"/>
         <articleEditAction
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
-            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
-            disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
-            hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
-            icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
-            name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction.name" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction.tooltip"/>
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
+              hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
+              icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction.tooltip"/>
         <articleEditAction
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
-            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
-            disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
-            hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
-            icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
-            name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.name" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.tooltip"/>
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
+              hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
+              icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.tooltip"/>
         <menu
             id="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu"
             label="%articleEditAction.openRelated.label" path="org.nightlabs.jfire.trade.ui.articleEditAction">
