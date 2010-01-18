@@ -79,6 +79,7 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.link.ArticleContainerLink;
 import org.nightlabs.jfire.trade.link.ArticleContainerLinkType;
 import org.nightlabs.jfire.trade.link.dao.ArticleContainerLinkDAO;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
@@ -536,7 +537,7 @@ implements IArticleContainerEditActionContributor
 	{
 		final Display display = Display.getCurrent();
 		if (display == null)
-			throw new IllegalStateException("Thread mismatch! Must call this method on the SWT UI thread!!!");
+			throw new IllegalStateException("Thread mismatch! Must call this method on the SWT UI thread!!!"); //$NON-NLS-1$
 
 		if (activeArticleContainerEdit == null)
 			return;
@@ -547,7 +548,7 @@ implements IArticleContainerEditActionContributor
 
 		// If the 'Open related' sub-menu exists (i.e. openRelatedSubMenuExists becomes true), we add our new
 		// sub-menu as a sibling directly below it - otherwise, we add it to the end.
-		String openRelatedSubMenuID = "org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu";
+		String openRelatedSubMenuID = "org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu"; //$NON-NLS-1$
 		boolean openRelatedSubMenuExists = false;
 
 		// menuManager will be our sub-menu (within containerMenuManager).
@@ -569,7 +570,7 @@ implements IArticleContainerEditActionContributor
 		}
 
 		// Create the new menu.
-		menuManager = new MenuManager("Linked article containers", ARTICLE_CONTAINER_LINKS_MENU_ID);
+		menuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.articleContainerLinksMenu.text"), ARTICLE_CONTAINER_LINKS_MENU_ID); //$NON-NLS-1$
 		if (openRelatedSubMenuExists)
 			containerMenuManager.insertAfter(openRelatedSubMenuID, menuManager);
 		else
@@ -578,7 +579,7 @@ implements IArticleContainerEditActionContributor
 		// Populate our new sub-menu.
 		final ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
 		if (articleContainerID == null)
-			throw new IllegalStateException("JDOHelper.getObjectId(articleContainer) returned null!!!");
+			throw new IllegalStateException("JDOHelper.getObjectId(articleContainer) returned null!!!"); //$NON-NLS-1$
 
 
 		List<ArticleContainerLink> currentArticleContainerLinks = null;
@@ -593,15 +594,15 @@ implements IArticleContainerEditActionContributor
 		else {
 			final IMenuManager mm = menuManager;
 
-			final String loadingID = ArticleContainerLink.class.getName() + "/loading";
+			final String loadingID = ArticleContainerLink.class.getName() + "/loading"; //$NON-NLS-1$
 			mm.add(new Action() {
 				{
 					setId(loadingID);
-					setText("Loading...");
+					setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.loadArticleContainerLinksDummyAction.text")); //$NON-NLS-1$
 				}
 			});
 
-			Job job = new Job("Loading article container links") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.loadArticleContainerLinksJob.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception
 				{
@@ -612,9 +613,7 @@ implements IArticleContainerEditActionContributor
 					}
 
 					if (currentArticleContainerLinks == null) {
-						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + "...");
-
-						Thread.sleep(5000);
+						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + "..."); //$NON-NLS-1$ //$NON-NLS-2$
 
 						currentArticleContainerLinks = ArticleContainerLinkDAO.sharedInstance().getArticleContainerLinks(
 								articleContainerID,
@@ -629,10 +628,10 @@ implements IArticleContainerEditActionContributor
 								monitor
 						);
 
-						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + " DONE!");
+						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + " DONE!"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					else
-						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + " not necessary, because they were already loaded in the meantime.");
+						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + " not necessary, because they were already loaded in the meantime."); //$NON-NLS-1$ //$NON-NLS-2$
 
 					final List<ArticleContainerLink> links = currentArticleContainerLinks;
 
@@ -661,7 +660,7 @@ implements IArticleContainerEditActionContributor
 
 	private static void internalPopulateMenuManagerWithArticleContainerLinks(IMenuManager menuManager, Collection<? extends ArticleContainerLink> articleContainerLinks)
 	{
-		String localOrganisationID;
+		final String localOrganisationID;
 		try {
 			localOrganisationID = Login.getLogin().getOrganisationID();
 		} catch (LoginException e) {
@@ -669,23 +668,24 @@ implements IArticleContainerEditActionContributor
 		}
 
 		for (final ArticleContainerLink articleContainerLink : articleContainerLinks) {
-			final String linkedArticleContainerTypeName = articleContainerLink.getTo().getClass().getSimpleName(); // TODO improve this!!!
-			final String linkedArticleContainerID =
-				(localOrganisationID.equals(articleContainerLink.getTo().getOrganisationID()) ? "" : (articleContainerLink.getTo().getOrganisationID() + "/")) +
-				articleContainerLink.getTo().getArticleContainerIDPrefix() + '/' +
-				articleContainerLink.getTo().getArticleContainerIDAsString();
-
 			menuManager.add(new Action() {
 				{
+					final String linkedArticleContainerTypeName = TradePlugin.getArticleContainerTypeString(articleContainerLink.getTo().getClass(), false);
+					final String linkedArticleContainerID =
+						(localOrganisationID.equals(articleContainerLink.getTo().getOrganisationID()) ? "" : (articleContainerLink.getTo().getOrganisationID() + "/")) + //$NON-NLS-1$ //$NON-NLS-2$
+						articleContainerLink.getTo().getArticleContainerIDPrefix() + '/' +
+						articleContainerLink.getTo().getArticleContainerIDAsString();
+
 					setId(ArticleContainerLink.class.getName() + '/' + articleContainerLink.getOrganisationID() + '/' + articleContainerLink.getArticleContainerLinkID());
 					setText(
 							String.format(
-									"%s %s %s",
+									Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.articleContainerLinkAction.text"), //$NON-NLS-1$
 									articleContainerLink.getArticleContainerLinkType().getName().getText(),
 									linkedArticleContainerTypeName,
 									linkedArticleContainerID
 							)
 					);
+					setImageDescriptor(TradePlugin.getArticleContainerImageDescriptor(articleContainerLink.getTo().getClass()));
 				}
 
 				@Override
