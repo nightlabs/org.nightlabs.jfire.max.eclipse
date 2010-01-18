@@ -43,7 +43,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	 */
 	public LegalEntitySearchComposite(Composite parent, int style,
 			String quickSearchText) {
-		super(parent, style, quickSearchText, false);
+		super(parent, style, quickSearchText, false, PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH);
 		createSearchButton(getButtonBar());
 	}
 
