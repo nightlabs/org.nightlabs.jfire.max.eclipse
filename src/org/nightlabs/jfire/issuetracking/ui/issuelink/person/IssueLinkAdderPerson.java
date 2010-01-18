@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
+import org.nightlabs.jfire.base.ui.person.search.PersonSearchUseCaseConstants;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
@@ -42,7 +43,7 @@ extends AbstractIssueLinkAdder
 
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
-		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, ""); //$NON-NLS-1$
+		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT); //$NON-NLS-1$
 		personSearchComposite.getResultTable().addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent evt) {
