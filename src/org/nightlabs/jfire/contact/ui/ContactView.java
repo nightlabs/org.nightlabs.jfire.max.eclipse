@@ -100,7 +100,7 @@ extends LSDViewPart
 		// 4. To modify: PersonSearchComposite.createResultTable(Composite parent)
 		//               >> returns: PropertySetTable<Person> <-- new PersonResultTable(parent, SWT.NONE)
 		// -- [Overrode]:
-		searchComposite = new PersonSearchComposite(parent, SWT.NONE, "") { //$NON-NLS-1$
+		searchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_CONTACT_SEARCH) { //$NON-NLS-1$
 			@Override
 			protected PropertySetTable<Person> createResultTable(Composite parent) {
 				return new PersonResultTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
