@@ -5,25 +5,24 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.viewers.AbstractTreeViewer;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkHandlerFactoryTreeComposite;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangeListener;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkObjectChooserComposite;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -34,8 +33,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 {
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeLinkedObjectRelated.class);
 
-	private CheckboxTreeViewer checkboxTreeViewer;
-	private volatile Set<Class> selectedLinkedObjectClasses = new HashSet<Class>();
+	private Set<IssueLink> issueLinks = new HashSet<IssueLink>();
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -78,7 +76,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		return IssueQuery.class;
 	}
 
-	private SelectIssueLinkHandlerFactoryTreeComposite linkedObjectTreeComposite;
+	private IssueLinkObjectChooserComposite issueLinkObjectChooserComposite;
 	@Override
 	protected void createComposite()
 	{
@@ -88,110 +86,61 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 2;
 
-
-		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeLinkedObjectRelated.linkedObjectLabel")); //$NON-NLS-1$
-		linkedObjectTreeComposite = new SelectIssueLinkHandlerFactoryTreeComposite(mainComposite, SWT.CHECK, null);
-
-		checkboxTreeViewer = new CheckboxTreeViewer(linkedObjectTreeComposite.getTree());
-		checkboxTreeViewer.setContentProvider(linkedObjectTreeComposite.getTreeViewer().getContentProvider());
-		checkboxTreeViewer.setInput(linkedObjectTreeComposite.getTreeViewer().getInput());
-
-		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				selectedLinkedObjectClasses.clear();
-
-				final boolean isChecked = event.getChecked();
-				Object checkedNode = event.getElement();
-
-				if (checkedNode instanceof IssueLinkHandlerFactory) {
-					IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) checkedNode;
-
-					for (TreeItem treeItem : checkboxTreeViewer.getTree().getItems()) {
-						if (treeItem.getData() instanceof IssueLinkHandlerCategory) {
-							IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
-							if (category.getCategoryId().equals(factory.getCategoryId())) {
-								//check for all children
-								boolean allChecked = true;
-								for (IssueLinkHandlerFactory f : category.getChildFactories()) {
-									allChecked &= checkboxTreeViewer.getChecked(f);
-								}
-								checkboxTreeViewer.setChecked(category, allChecked);
-							}
-
-						}
-					}
+		new Label(mainComposite, SWT.NONE).setText("Linked Object: ");
+		issueLinkObjectChooserComposite = new IssueLinkObjectChooserComposite(mainComposite, SWT.NONE);
+		issueLinkObjectChooserComposite.getIssueLinkTable().addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener() {
+			@Override
+			public void issueLinkItemChanged(IssueLinkItemChangeEvent itemChangedEvent) {
+				issueLinks.clear();
+				for (IssueLinkTableItem item : issueLinkObjectChooserComposite.getIssueLinkTable().getIssueLinkTableItems()) {
+					issueLinks.add(item.getIssueLink());
 				}
-				else if (checkedNode instanceof IssueLinkHandlerCategory) {
-					checkboxTreeViewer.setSubtreeChecked(checkedNode, isChecked);
-					if (isChecked)
-						linkedObjectTreeComposite.getTreeViewer().expandToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
-					else
-						linkedObjectTreeComposite.getTreeViewer().collapseToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
-				}
-
-				for (Object checkElement : checkboxTreeViewer.getCheckedElements()) {
-					if (checkElement instanceof IssueLinkHandlerFactory) {
-						IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) checkElement;
-						selectedLinkedObjectClasses.add(factory.getLinkedObjectClass());
-					}
-				}
-
-				getQuery().setLinkedObjectClasses(selectedLinkedObjectClasses);
-				boolean enable = !selectedLinkedObjectClasses.isEmpty();
-				getQuery().setFieldEnabled(IssueQuery.FieldName.linkedObjectClasses, enable);
+				getQuery().setIssueLinks(issueLinks);
+				boolean enable = !issueLinks.isEmpty();
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinks, enable);
 			}
 		});
 	}
 
-	@SuppressWarnings("unchecked")
+	private Set<IssueLinkTableItem> issueLinkTableItems;
+	private IssueLinkTable issueLinkTable;
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
-			if (IssueQuery.FieldName.linkedObjectClasses.equals(changedField.getPropertyName()))
+			if (IssueQuery.FieldName.issueLinks.equals(changedField.getPropertyName()))
 			{
-				Set<Class> newClasses = (Set<Class>) changedField.getNewValue();
-				if (newClasses == null)
+				Set<IssueLink> tmpIssueLinks = (Set<IssueLink>) changedField.getNewValue();
+				if (tmpIssueLinks == null)
 				{
-					checkboxTreeViewer.expandAll();
-					TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
-					for (TreeItem treeItem : treeItems) {
-						IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
-						for (IssueLinkHandlerFactory childFactory : category.getChildFactories()) {
-							checkboxTreeViewer.setChecked(childFactory, false);
-						}
-						treeItem.setChecked(false);
-					}
 				}
 				else
 				{
-					checkboxTreeViewer.expandAll();
-					for (Class newClass : newClasses) {
-						TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
-						for (TreeItem treeItem : treeItems) {
-							if (treeItem.getData() instanceof IssueLinkHandlerCategory) {
-								IssueLinkHandlerCategory category = (IssueLinkHandlerCategory) treeItem.getData();
-								boolean isCheckAll = true;
-								for (IssueLinkHandlerFactory childFactory : category.getChildFactories()) {
-									if (childFactory.getLinkedObjectClass().equals(newClass))
-										checkboxTreeViewer.setChecked(childFactory, true);
-									isCheckAll &= checkboxTreeViewer.getChecked(childFactory);
-								}
-								checkboxTreeViewer.setChecked(category, isCheckAll);
-							}
-						}
+					issueLinkTable = issueLinkObjectChooserComposite.getIssueLinkTable();
+					issueLinkTable.getIssueLinkTableItems().clear();
+					
+					issueLinkTableItems = new HashSet<IssueLinkTableItem>();
+					for (IssueLink issueLink : tmpIssueLinks) {
+						IssueLinkTableItem linkedTableItem = new IssueLinkTableItem(issueLink.getLinkedObjectID(), issueLink.getIssueLinkType());
+						issueLinkTableItems.add(linkedTableItem);
 					}
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							issueLinkTable.addIssueLinkTableItems(issueLinkTableItems);
+						}
+					});
 				}
 			}
-			else if (getEnableFieldName(IssueQuery.FieldName.linkedObjectClasses).equals(
+			else if (getEnableFieldName(IssueQuery.FieldName.issueLinks).equals(
 					changedField.getPropertyName()))
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
 				if (!active) {
-					checkboxTreeViewer.setAllChecked(false);
-					getQuery().getProjectIDs().clear();
+					getQuery().getIssueLinks().clear();
 				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
@@ -201,7 +150,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	static
 	{
 		fieldNames = new HashSet<String>(1);
-		fieldNames.add(IssueQuery.FieldName.linkedObjectClasses);
+		fieldNames.add(IssueQuery.FieldName.issueLinks);
 	}
 
 	@Override

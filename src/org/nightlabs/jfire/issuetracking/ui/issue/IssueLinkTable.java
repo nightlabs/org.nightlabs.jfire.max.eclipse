@@ -409,7 +409,6 @@ extends AbstractTableComposite<IssueLinkTableItem>
 						}
 
 						refresh();
-
 						notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.add, items);
 					}
 				});
@@ -439,11 +438,15 @@ extends AbstractTableComposite<IssueLinkTableItem>
 			}
 		}
 
-		this.refresh();
-		notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.remove, removedItems);
+		refresh();
+		notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.remove, items);
 	}
 
 	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
 		return issueLinkTableItems;
+	}
+	
+	public Issue getIssue() {
+		return issue;
 	}
 }
