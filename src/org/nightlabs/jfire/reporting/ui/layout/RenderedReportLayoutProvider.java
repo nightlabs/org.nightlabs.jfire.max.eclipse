@@ -30,15 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
-import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandlerRegistry;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
@@ -212,7 +213,7 @@ public class RenderedReportLayoutProvider {
 			ProgressMonitor monitor
 		)
 	{
-		ReportManagerRemote rm = ReportingPlugin.getReportManager();
+		ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, SecurityReflector.getInitialContextProperties());
 		try {
 			return rm.renderReportLayout(renderRequest);
 		} catch (Exception e) {

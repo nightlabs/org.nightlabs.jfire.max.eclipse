@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
@@ -84,8 +85,8 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * has no acquisition setup assigned.
 	 */
 	public static class Dialog extends DynamicPathWizardDialog {
-		public Dialog(DynamicPathWizard wizard) {
-			super(wizard);
+		public Dialog(Shell parentShell, DynamicPathWizard wizard) {
+			super(parentShell, wizard);
 		}
 		/**
 		 */
@@ -197,7 +198,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
 	 * @return The {@link WizardResult} of the parameter acquisition process.
 	 */
-	public static WizardResult openResult(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
+	public static WizardResult openResult(final Shell parentShell, ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		if (reportLayoutID == null)
 			throw new IllegalArgumentException("reportLayoutID must not be null!"); //$NON-NLS-1$
 
@@ -205,7 +206,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		final WizardResult dialogResult = new WizardResult();
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				Dialog dlg = new Dialog(wiz);
+				Dialog dlg = new Dialog(parentShell, wiz);
 				dialogResult.setAcquisitionFinished(dlg.open() == Window.OK);
 			}
 		});
@@ -229,8 +230,8 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
 	 * @return The acquired parameters or <code>null</code>.
 	 */
-	public static Map<String, Object> open(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
-		WizardResult result = openResult(reportLayoutID, isScheduledReport);
+	public static Map<String, Object> open(Shell parentShell, ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
+		WizardResult result = openResult(parentShell, reportLayoutID, isScheduledReport);
 		return result.getParameters();
 	}
 

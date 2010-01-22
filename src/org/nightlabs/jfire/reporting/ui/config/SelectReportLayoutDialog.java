@@ -55,7 +55,7 @@ import org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemTable;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
- * A dialog that lets the use choose a {@link ReportLayout}
+ * A dialog that lets the user choose a {@link ReportLayout}
  * from a Table of {@link ReportRegistryItem}s.
  * The dialog can be instantiated with a list of items the user
  * should choose from and one default item that will be pre-selected.

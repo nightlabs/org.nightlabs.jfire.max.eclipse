@@ -20,9 +20,6 @@ public class ScheduledReportActionRegistry extends AbstractActionRegistry {
 	
 	private static final String ACTION_ELEMENT_NAME = "scheduledReportAction";
 	
-	/**
-	 * @param actionVisibilityDecider
-	 */
 	public ScheduledReportActionRegistry(ActionVisibilityDecider actionVisibilityDecider) {
 		super(actionVisibilityDecider);
 	}

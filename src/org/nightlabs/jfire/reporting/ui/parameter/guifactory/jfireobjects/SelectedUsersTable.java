@@ -6,11 +6,11 @@ package org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.security.User;
 
@@ -61,7 +61,7 @@ public class SelectedUsersTable extends AbstractTableComposite<User> {
 	 */
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.setInput(users);
 	}

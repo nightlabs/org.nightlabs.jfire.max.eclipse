@@ -6,6 +6,7 @@
    <extension-point id="reportUseCase" name="ReportUseCase Extensioin-Poin" schema="schema/reportUseCase.exsd"/>
    <extension-point id="reportViewer" name="ReportViewer Extension-Point" schema="schema/reportViewer.exsd"/>
    <extension-point id="valueProviderGUIFactory" name="ValueProvider GUI Factory Extension Point" schema="schema/valueProviderGUIFactory.exsd"/>
+   <extension-point id="scheduledReportAction" name="Extension Point for actions on ScheduledReports" schema="schema/scheduledReportAction.exsd"/>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -37,6 +38,13 @@
             icon="icons/layout/ReportRegistryItemTree-layout.16x16.png"
             id="org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerEditor"
             name="ReportViewer"/>
+      <editor
+            class="org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportEditor"
+            default="false"
+            icon="icons/layout/ReportRegistryItemTree-layout.16x16.png"
+            id="org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportEditor"
+            name="Scheduled Report Editor">
+      </editor>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.ui.renderedReportHandler">
@@ -191,6 +199,27 @@
             elementPath="category"
             extensionPointID="org.eclipse.ui.newWizards">
       </removeExtension>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.entityEditor">
+      <pageFactory
+            class="org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportEditorPage$Factory"
+            editorID="org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportEditor"
+            indexHint="0">
+      </pageFactory>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.ui.scheduledReportAction">
+      <separator
+            name="scheduledReports">
+      </separator>
+      <scheduledReportAction
+            class="org.nightlabs.jfire.reporting.ui.layout.scheduled.action.DeleteScheduledReportAction"
+            contextmenuPath="scheduledReports"
+            id="org.nightlabs.jfire.reporting.ui.layout.scheduled.action.DeleteScheduledReportAction"
+            name="Delete"
+            tooltip="Delete scheduled report">
+      </scheduledReportAction>
    </extension>
    
 </plugin>

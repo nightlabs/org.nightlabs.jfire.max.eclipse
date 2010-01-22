@@ -38,7 +38,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.jfire.reporting.scheduled.ScheduledReport;
-import org.nightlabs.jfire.reporting.ui.layout.action.IReportRegistryItemAction;
 import org.nightlabs.jfire.reporting.ui.layout.scheduled.ScheduledReportsTable;
 
 /**
@@ -54,8 +53,8 @@ public class ScheduledReportActionMenuManager extends MenuManager {
 	/**
 	 * @param text
 	 */
-	public ScheduledReportActionMenuManager(ScheduledReportsTable scheduledReportsTable, String scope) {
-		super("#ReportRegistryItemActionPopup_"+scope); //$NON-NLS-1$
+	public ScheduledReportActionMenuManager(ScheduledReportsTable scheduledReportsTable) {
+		super("#ReportRegistryItemActionPopup"); //$NON-NLS-1$
 		this.scheduledReportsTable = scheduledReportsTable;
 		setRemoveAllWhenShown(true);
 		addMenuListener(new IMenuListener() {
@@ -75,8 +74,8 @@ public class ScheduledReportActionMenuManager extends MenuManager {
 		});
 	}
 	
-	public ScheduledReportActionMenuManager(ScheduledReportsTable registryItemTree, String scope, IViewPart viewPart) {
-		this(registryItemTree, scope);
+	public ScheduledReportActionMenuManager(ScheduledReportsTable registryItemTree, IViewPart viewPart) {
+		this(registryItemTree);
 		viewPart.getSite().registerContextMenu(this, registryItemTree.getTableViewer());
 		fillToolBar(viewPart);
 	}
@@ -105,7 +104,7 @@ public class ScheduledReportActionMenuManager extends MenuManager {
 		Collection<ActionDescriptor> actionDescriptors = actionRegistry.getActionDescriptors();
 		
 		for (ActionDescriptor actionDescriptor : actionDescriptors) {
-			if (actionDescriptor.getAction() instanceof IReportRegistryItemAction) {
+			if (actionDescriptor.getAction() instanceof IScheduledReportAction) {
 				IScheduledReportAction itemAction = (IScheduledReportAction)actionDescriptor.getAction();
 				itemAction.setScheduledReports(scheduledReports);
 				if (calculateEnabled)

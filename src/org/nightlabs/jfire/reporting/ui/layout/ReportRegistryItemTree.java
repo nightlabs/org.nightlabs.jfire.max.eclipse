@@ -96,9 +96,6 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	private String selectionZone;
 	private boolean addSelectionProxy;
 	
-	// TODO: ignoreinheritance ?
-	private static final boolean IGNORE_INHERITANCE = false;
-	
 	private ActiveReportRegistryItemTreeController activeReportRegistryItemTreeController;
 
 	/**
@@ -153,6 +150,9 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 			}
 		});
 	}
+	
+	/** Defines whether the selection proxy (if created) should ignore inheritance, value is <code>false</code> */
+	private static final boolean IGNORE_INHERITANCE = false;
 	
 	@Override
 	public void init() {

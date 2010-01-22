@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
@@ -22,8 +23,8 @@ import org.nightlabs.jfire.reporting.parameter.dao.ValueProviderCategoryDAO;
 import org.nightlabs.jfire.reporting.parameter.dao.ValueProviderDAO;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderCategoryID;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
-import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -90,9 +91,11 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Collection<Object> retrieveChildren(ObjectID parentID, Object parent, ProgressMonitor monitor) {
+		ReportParameterManagerRemote reportParameterManager = JFireEjb3Factory.getRemoteBean(
+				ReportParameterManagerRemote.class, SecurityReflector.getInitialContextProperties());
 		if (parentID == null) {
 			try {
-				Set<ValueProviderCategoryID> topCategories = ReportingPlugin.getReportParameterManager().getValueProviderCategoryIDsForParent(null);
+				Set<ValueProviderCategoryID> topCategories = reportParameterManager.getValueProviderCategoryIDsForParent(null);
 				return (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(topCategories, CATEGORY_FETCH_GROUPS, monitor);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -101,11 +104,10 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 		if (parentID instanceof ValueProviderCategoryID) {
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ValueProviderController.task.loadValueProviders"), 100); //$NON-NLS-1$
 			try {
-				ReportParameterManagerRemote rpm = ReportingPlugin.getReportParameterManager();
 				Set<ValueProviderCategoryID> categoryIDs;
-				categoryIDs = rpm.getValueProviderCategoryIDsForParent((ValueProviderCategoryID) parentID);
+				categoryIDs = reportParameterManager.getValueProviderCategoryIDsForParent((ValueProviderCategoryID) parentID);
 				Collection<Object> categories = (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(categoryIDs, CATEGORY_FETCH_GROUPS, new SubProgressMonitor(monitor, 50));
-				Set<ValueProviderID> providerIDs = rpm.getValueProviderIDsForParent((ValueProviderCategoryID) parentID);
+				Set<ValueProviderID> providerIDs = reportParameterManager.getValueProviderIDsForParent((ValueProviderCategoryID) parentID);
 				Collection<Object> providers = (Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, new SubProgressMonitor(monitor, 50));
 				categories.addAll(providers);
 				return categories;

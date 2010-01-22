@@ -63,8 +63,11 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.util.NLLocale;
 
 /**
+ * ReportRegistryItem-Tree used for the {@link ReportLayoutConfigPreferencePage}. It has 'available'
+ * and 'default' cell-editors that modify the values in an {@link ReportLayoutConfigModule}.
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * 
  */
 public class ReportLayoutTree
 extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
@@ -135,17 +138,11 @@ implements ICellModifier
 
 	private ReportLayoutConfigPreferencePage preferencePage;
 
-	/**
-	 * @param parent
-	 */
 	public ReportLayoutTree(Composite parent, ReportLayoutConfigPreferencePage preferencePage) {
 		super(parent, DEFAULT_STYLE_SINGLE | SWT.FULL_SELECTION, true, true, true);
 		this.preferencePage = preferencePage;
 	}
 
-	/**
-	 * @param parent
-	 */
 	public ReportLayoutTree(Composite parent, ReportLayoutConfigPreferencePage preferencePage, int treeStyle) {
 		super(parent, treeStyle, true, true, true);
 		this.preferencePage = preferencePage;
@@ -303,12 +300,8 @@ implements ICellModifier
 			getTreeViewer().setExpandedElements(expandedElements);
 	}
 
-
-
 	@Override
 	protected ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> getJDOObjectTreeController() {
 		return itemTreeController;
 	}
-
-
 }

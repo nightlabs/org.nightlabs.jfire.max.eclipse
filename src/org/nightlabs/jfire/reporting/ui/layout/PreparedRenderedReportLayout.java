@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.nightlabs.jfire.reporting.ui.layout;
 
 import java.io.File;
