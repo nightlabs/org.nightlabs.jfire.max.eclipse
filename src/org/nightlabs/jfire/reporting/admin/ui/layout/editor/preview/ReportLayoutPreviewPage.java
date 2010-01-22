@@ -150,7 +150,7 @@ implements IReportEditorPage
 			}
 			public void widgetSelected(SelectionEvent arg0) {
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
-				Map<String, Object> params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID(), false);
+				Map<String, Object> params = ReportParameterWizard.open(parameterButton.getShell(), jfireInput.getReportRegistryItemID(), false);
 				if (params == null)
 					return;
 				setReportParameters(params);
@@ -187,7 +187,7 @@ implements IReportEditorPage
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
 				Map<String, Object> params = getReportParameters();
 				if (params == null) {
-					WizardResult wizardResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
+					WizardResult wizardResult = ReportParameterWizard.openResult(parameterButton.getShell(), jfireInput.getReportRegistryItemID(), false);
 					if (wizardResult.isAcquisitionFinished()) {
 						params = wizardResult.getParameters();
 					}
@@ -207,7 +207,7 @@ implements IReportEditorPage
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
 				Map<String, Object> params = getReportParameters();
 				if (params == null) {
-					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID(), false);
+					params = ReportParameterWizard.open(parameterButton.getShell(), jfireInput.getReportRegistryItemID(), false);
 					if (params == null)
 						return;
 				}
@@ -282,7 +282,7 @@ implements IReportEditorPage
 		if (input instanceof IJFireRemoteReportEditorInput) {
 			IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) input;
 			if (!isParameterAquisitionDone()) {
-				WizardResult paramResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
+				WizardResult paramResult = ReportParameterWizard.openResult(parameterButton.getShell(), jfireInput.getReportRegistryItemID(), false);
 				Map<String, Object> params = paramResult.getParameters();
 				if (paramResult.isAcquisitionFinished()) {
 					setParameterAquisitionDone(true);
