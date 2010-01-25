@@ -12,5 +12,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.query"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.query.jdo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.clientui.ui"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -32,4 +32,13 @@
         <registry
             editorID="org.nightlabs.jfire.contact.ui.ContactEditor" perspectiveID="org.nightlabs.jfire.contact.ui.ContactPerspective"/>
     </extension>
+    <extension
+          point="org.eclipse.ui.preferencePages">
+       <page
+             category="org.nightlabs.jfire.base.ui.preferences.PersonSearchPreferencePage"
+             class="org.nightlabs.jfire.contact.ui.preferences.ContactSearchEditLayoutPreferencePage"
+             id="org.nightlabs.jfire.contact.ui.preferences.ContactSearchEditLayoutPreferencePage"
+             name="Contact Search">
+       </page>
+    </extension>
 </plugin>
