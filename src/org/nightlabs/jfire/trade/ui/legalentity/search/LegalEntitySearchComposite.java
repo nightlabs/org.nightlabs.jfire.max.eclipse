@@ -11,7 +11,7 @@ import org.nightlabs.jdo.query.ui.search.SearchFilterProvider;
 import org.nightlabs.jdo.query.ui.search.SearchResultFetcher;
 import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.base.ui.person.search.DynamicPersonSearchFilterProvider;
-import org.nightlabs.jfire.base.ui.person.search.StaticPersonSearchFilterProvider;
+import org.nightlabs.jfire.base.ui.person.search.PersonSearchEditLayoutFilterProvider;
 import org.nightlabs.jfire.base.ui.prop.DefaultPropertySetTableConfig;
 import org.nightlabs.jfire.base.ui.prop.IPropertySetTableConfig;
 import org.nightlabs.jfire.base.ui.prop.PropertySetSearchComposite;
@@ -55,7 +55,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	 */
 	@Override
 	protected SearchFilterProvider createStaticSearchFilterProvider(SearchResultFetcher resultFetcher) {
-		SearchFilterProvider provider = new StaticPersonSearchFilterProvider(resultFetcher, false) {
+		SearchFilterProvider provider = new PersonSearchEditLayoutFilterProvider(resultFetcher, false, PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH, getSearchText()) {
 			@Override
 			protected PropSearchFilter createSearchFilter() {
 				return new LegalEntitySearchFilter(SearchFilter.CONJUNCTION_DEFAULT);

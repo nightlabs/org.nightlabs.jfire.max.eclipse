@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.legalentity.view;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -11,7 +12,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -32,10 +32,22 @@ import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
+import org.nightlabs.jfire.base.ui.person.search.PersonSearchUseCaseConstants;
+import org.nightlabs.jfire.base.ui.prop.search.ISearchTriggerListener;
+import org.nightlabs.jfire.base.ui.prop.search.IStructFieldSearchFilterItemEditor;
+import org.nightlabs.jfire.base.ui.prop.search.StructFieldSearchFilterEditorRegistry;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
+import org.nightlabs.jfire.layout.AbstractEditLayoutConfigModule;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.person.PersonSearchConfigModule;
+import org.nightlabs.jfire.prop.DataField;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
+import org.nightlabs.jfire.prop.StructField;
+import org.nightlabs.jfire.prop.config.PropertySetFieldBasedEditLayoutEntry2;
+import org.nightlabs.jfire.prop.search.config.StructFieldSearchEditLayoutEntry;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -49,7 +61,9 @@ import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.notification.SubjectCarrier;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.Util;
 
 /**
@@ -96,62 +110,43 @@ extends XComposite
 	private Text quickSearchText;
 	private Button quickSearchButton;
 	private Section editorSection;
+	
+	private Job loadSearchCfModJob;
+	private PersonSearchConfigModule searchCfMod;
 
-	/**
-	 * @param parent
-	 * @param style
-	 */
-	public LegalEntitySelectionComposite(Composite parent, int style) {
-		super(parent, style);
-		initGUI();
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 */
-	public LegalEntitySelectionComposite(Composite parent, int style,
-			LayoutMode layoutMode) {
-		super(parent, style, layoutMode);
-		initGUI();
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutDataMode
-	 */
-	public LegalEntitySelectionComposite(Composite parent, int style,
-			LayoutDataMode layoutDataMode) {
-		super(parent, style, layoutDataMode);
-		initGUI();
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 */
-	public LegalEntitySelectionComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
-		super(parent, style, layoutMode, layoutDataMode);
-		initGUI();
-	}
-
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 * @param cols
-	 */
+	private IStructFieldSearchFilterItemEditor quickSearchFilterItemEditor;
+	
 	public LegalEntitySelectionComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode, int cols) {
 		super(parent, style, layoutMode, layoutDataMode, cols);
+		
+		loadSearchCfModJob = new Job("Loading search configuration") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				final String[] fetchGroups = new String[] {
+						PersonSearchConfigModule.FETCH_GROUP_QUICK_SEARCH_ENTRY,
+						PropertySetFieldBasedEditLayoutEntry2.FETCH_GROUP_STRUCT_FIELDS,
+						StructField.FETCH_GROUP_NAME,
+						IStruct.FETCH_GROUP_ISTRUCT_FULL_DATA,
+						FetchPlan.DEFAULT
+				};
+				
+				final String cfModID = AbstractEditLayoutConfigModule.getCfModID(AbstractEditLayoutConfigModule.CLIENT_TYPE_RCP, PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT);
+				searchCfMod = ConfigUtil.getUserCfMod(PersonSearchConfigModule.class, cfModID, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				
+				return Status.OK_STATUS;
+			}
+		};
+		loadSearchCfModJob.schedule();
+		
 		initGUI();
 	}
+	
+	public LegalEntitySelectionComposite(Composite parent, int style,
+			LayoutMode layoutMode) {
+		this(parent, style, layoutMode, LayoutDataMode.GRID_DATA, 1);
+	}
+
 
 	private void initGUI() {
 		FormToolkit toolkit = new FormToolkit(Display.getDefault());
@@ -180,17 +175,36 @@ extends XComposite
 		gl.numColumns = 2;
 		gl.makeColumnsEqualWidth = false;
 		quickSearchGroup.setLayout(gl);
-
-		quickSearchText = new Text(quickSearchGroup, getBorderStyle());
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.grabExcessHorizontalSpace = true;
-		quickSearchText.setLayoutData(gd);
-		quickSearchText.addSelectionListener(new SelectionAdapter() {
+		
+		try {
+			loadSearchCfModJob.join();
+		} catch (InterruptedException e1) {
+			throw new RuntimeException(e1);
+		}
+		
+		StructFieldSearchEditLayoutEntry quickSearchEntry = searchCfMod.getQuickSearchEntry();
+		final Set<StructField> structFields = quickSearchEntry.getStructFields();
+		Set<StructField<DataField>> fieldSet = CollectionUtil.castSet(structFields);
+		quickSearchFilterItemEditor = StructFieldSearchFilterEditorRegistry.sharedInstance().createSearchFilterItemEditor(fieldSet, quickSearchEntry.getMatchType());
+		Control createControl = quickSearchFilterItemEditor.createControl(quickSearchGroup, true);
+		quickSearchFilterItemEditor.addSearchTriggerListener(new ISearchTriggerListener() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				searchListener.widgetSelected(e);
+			public void searchTriggered() {
+				searchListener.widgetSelected(null);
 			}
 		});
+
+//		quickSearchText = new Text(quickSearchGroup, getBorderStyle());
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.grabExcessHorizontalSpace = true;
+//		quickSearchText.setLayoutData(gd);
+		createControl.setLayoutData(gd);
+//		quickSearchText.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetDefaultSelected(SelectionEvent e) {
+//				searchListener.widgetSelected(e);
+//			}
+//		});
 
 		quickSearchButton = new Button(quickSearchGroup, SWT.PUSH);
 		quickSearchButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchButton.text")); //$NON-NLS-1$
@@ -409,8 +423,7 @@ extends XComposite
 	}
 
 	public String getQuickSearchText() {
-		//		return quickSearchText.getTextControl().getText();
-		return quickSearchText.getText();
+		return quickSearchFilterItemEditor.getInput();
 	}
 
 	private NotificationListener notificationListener = new NotificationAdapterJob() {
@@ -434,4 +447,6 @@ extends XComposite
 			}
 		}
 	};
+
+
 }

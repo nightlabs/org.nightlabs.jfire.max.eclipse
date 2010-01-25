@@ -306,13 +306,17 @@
         <page
               class="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               id="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
-              name="%org.nightlabs.jfire.trade.ui.preference.TradePreferencePage.name">
-        </page>
+              name="%org.nightlabs.jfire.trade.ui.preference.TradePreferencePage.name" />
         <page
         	  category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               class="org.nightlabs.jfire.trade.ui.articlecontainer.config.SummedPriceFragmentTypeConfigPreferencePage"
               id="org.nightlabs.jfire.trade.ui.articlecontainer.config.SummedPriceFragmentTypeConfigPreferencePage"
               name="Summed Price Fragment Settings"/>
+        <page
+              category="org.nightlabs.jfire.base.ui.preferences.PersonSearchPreferencePage"
+              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchEditLayoutPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchEditLayoutPreferencePage"
+              name="Legal Entity Search" />
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory
