@@ -26,12 +26,24 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
@@ -39,8 +51,8 @@ import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
-import org.nightlabs.jfire.reporting.layout.ReportRegistryItemName;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.util.IOUtil;
 
 /**
  * @author  Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -51,48 +63,93 @@ extends ResizableTrayDialog
 {
 	private XComposite wrapper;
 	private FileSelectionComposite fileSelectionComposite;
-//	private I18nTextEditor nameEditor;
+	private I18nTextEditor nameEditor;
 	
 	private ReportRegistryItemID reportCategoryID;
 
 	/**
 	 * @param parentShell
 	 */
-	public ImportReportLayoutDialog(Shell parentShell, ReportRegistryItemID reportCategoryID) {
+	public ImportReportLayoutDialog(Shell parentShell, ReportRegistryItemID reportCategoryID) 
+	{
 		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.reportCategoryID = reportCategoryID;
 	}
 
 	@Override
-	protected void configureShell(Shell newShell) {
+	protected void configureShell(Shell newShell) 
+	{
 		super.configureShell(newShell);
-		newShell.setText("Title");
+		newShell.setText("Import Report Layout");
 		newShell.setSize(400, 400);
 	}
 
+	private Button autogenerateIDCheckbox;
+	private Text reportRegistryItemIDText;
+	private Text reportRegistryItemTypeText;
+	private Combo reportRegistryItemTypeCombo;
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(Composite parent) 
+	{
 		wrapper = new XComposite(parent, SWT.NONE);
+		
+		autogenerateIDCheckbox = new Button(wrapper, SWT.CHECK);
+		autogenerateIDCheckbox.setText("Auto generate ReportRegistryItemID: ");
+		autogenerateIDCheckbox.setSelection(true);
+		autogenerateIDCheckbox.addSelectionListener(new SelectionAdapter() 
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				reportRegistryItemIDText.setEnabled(!autogenerateIDCheckbox.getSelection());
+			}
+		});
+		
+		new Label(wrapper, SWT.NONE).setText("Report Registry Item ID: ");
+		reportRegistryItemIDText = new Text(wrapper, SWT.BORDER);
+		reportRegistryItemIDText.setEnabled(false);
+		reportRegistryItemIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		new Label(wrapper, SWT.NONE).setText("Report layout name: ");
+		nameEditor = new I18nTextEditor(wrapper);
+		nameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		nameEditor.addModifyListener(new ModifyListener() 
+		{
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				if (autogenerateIDCheckbox.getSelection()) {
+					reportRegistryItemIDText.setText(nameEditor.getEditText());
+				}
+			}
+		});
+		
+		
 		fileSelectionComposite = new FileSelectionComposite(
 				wrapper,
 				SWT.NONE, FileSelectionComposite.OPEN_FILE,
-				"Name",	"Caption");
+				"File: ",	"Caption");
 		
-//		nameEditor = new I18nTextEditor(wrapper);
 		return wrapper;
 	}
 
 	@Override
-	protected void okPressed() {
+	protected void okPressed() 
+	{
+		try {
+			File tmpFolder = IOUtil.createUserTempDir("jfire_report.imported.", null);
+			File tmpDescriptorFile = File.createTempFile("content.xml", null, tmpFolder);
+			tmpDescriptorFile.deleteOnExit();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
 		ReportManagerRemote rm;
 		try {
 			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			rm.importReportLayoutZipFile(fileSelectionComposite.getFile(), reportCategoryID, null);
+			rm.importReportLayoutZipFile(fileSelectionComposite.getFile(), reportCategoryID, nameEditor.getI18nText());
 		} catch (LoginException e) {
 			throw new RuntimeException(e);
 		}
 		super.okPressed();
 	}
-
 }
