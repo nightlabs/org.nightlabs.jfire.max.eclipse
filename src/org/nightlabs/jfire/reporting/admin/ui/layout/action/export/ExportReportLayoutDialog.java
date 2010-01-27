@@ -235,7 +235,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				report.setAttribute("file", exportFile.getName());
 				report.setAttribute("id", layoutID.reportRegistryItemID);
 				report.setAttribute("engineType", "BIRT");
-				report.setAttribute("overwriteOnInit", "false");
+				report.setAttribute("overwriteOnInit", "true"); //Has to overwrite the old file
 				reportCategory.appendChild(report);
 
 				//Report-names

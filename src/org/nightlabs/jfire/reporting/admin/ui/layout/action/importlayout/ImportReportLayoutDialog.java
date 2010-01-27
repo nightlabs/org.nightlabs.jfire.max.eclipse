@@ -85,43 +85,43 @@ extends ResizableTrayDialog
 		newShell.setSize(400, 400);
 	}
 
-	private Button autogenerateIDCheckbox;
-	private Text reportRegistryItemIDText;
-	private Text reportRegistryItemTypeText;
-	private Combo reportRegistryItemTypeCombo;
+//	private Button autogenerateIDCheckbox;
+//	private Text reportRegistryItemIDText;
+//	private Text reportRegistryItemTypeText;
+//	private Combo reportRegistryItemTypeCombo;
 	@Override
 	protected Control createDialogArea(Composite parent) 
 	{
 		wrapper = new XComposite(parent, SWT.NONE);
 		
-		autogenerateIDCheckbox = new Button(wrapper, SWT.CHECK);
-		autogenerateIDCheckbox.setText("Auto generate ReportRegistryItemID: ");
-		autogenerateIDCheckbox.setSelection(true);
-		autogenerateIDCheckbox.addSelectionListener(new SelectionAdapter() 
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				reportRegistryItemIDText.setEnabled(!autogenerateIDCheckbox.getSelection());
-			}
-		});
-		
-		new Label(wrapper, SWT.NONE).setText("Report Registry Item ID: ");
-		reportRegistryItemIDText = new Text(wrapper, SWT.BORDER);
-		reportRegistryItemIDText.setEnabled(false);
-		reportRegistryItemIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		new Label(wrapper, SWT.NONE).setText("Report layout name: ");
-		nameEditor = new I18nTextEditor(wrapper);
-		nameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		nameEditor.addModifyListener(new ModifyListener() 
-		{
-			@Override
-			public void modifyText(ModifyEvent arg0) {
-				if (autogenerateIDCheckbox.getSelection()) {
-					reportRegistryItemIDText.setText(nameEditor.getEditText());
-				}
-			}
-		});
+//		autogenerateIDCheckbox = new Button(wrapper, SWT.CHECK);
+//		autogenerateIDCheckbox.setText("Auto generate ReportRegistryItemID: ");
+//		autogenerateIDCheckbox.setSelection(true);
+//		autogenerateIDCheckbox.addSelectionListener(new SelectionAdapter() 
+//		{
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				reportRegistryItemIDText.setEnabled(!autogenerateIDCheckbox.getSelection());
+//			}
+//		});
+//		
+//		new Label(wrapper, SWT.NONE).setText("Report Registry Item ID: ");
+//		reportRegistryItemIDText = new Text(wrapper, SWT.BORDER);
+//		reportRegistryItemIDText.setEnabled(false);
+//		reportRegistryItemIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		
+//		new Label(wrapper, SWT.NONE).setText("Report layout name: ");
+//		nameEditor = new I18nTextEditor(wrapper);
+//		nameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		nameEditor.addModifyListener(new ModifyListener() 
+//		{
+//			@Override
+//			public void modifyText(ModifyEvent arg0) {
+//				if (autogenerateIDCheckbox.getSelection()) {
+//					reportRegistryItemIDText.setText(nameEditor.getEditText());
+//				}
+//			}
+//		});
 		
 		
 		fileSelectionComposite = new FileSelectionComposite(
@@ -136,9 +136,8 @@ extends ResizableTrayDialog
 	protected void okPressed() 
 	{
 		try {
-			File tmpFolder = IOUtil.createUserTempDir("jfire_report.imported.", null);
-			File tmpDescriptorFile = File.createTempFile("content.xml", null, tmpFolder);
-			tmpDescriptorFile.deleteOnExit();
+			File tmpFolder = IOUtil.createUserTempDir("jfire_report.imported.", "report");
+			tmpFolder.deleteOnExit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -146,7 +145,7 @@ extends ResizableTrayDialog
 		ReportManagerRemote rm;
 		try {
 			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			rm.importReportLayoutZipFile(fileSelectionComposite.getFile(), reportCategoryID, nameEditor.getI18nText());
+			rm.importReportLayoutZipFile(fileSelectionComposite.getFile());
 		} catch (LoginException e) {
 			throw new RuntimeException(e);
 		}
