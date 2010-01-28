@@ -185,6 +185,12 @@
              index="1000"
              name="%org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTypeCategoryFactory.name">
        </category>
+       <category
+             class="org.nightlabs.jfire.trade.admin.ui.overview.UnitCategoryFactory"
+             icon="icons/overview/UnitCategoryFactory.16x16.png"
+             index="2000"
+             name="%org.nightlabs.jfire.trade.admin.ui.overview.UnitCategoryFactory.name">
+       </category>
     </extension>
     <extension
           point="org.eclipse.ui.editors">
@@ -195,6 +201,13 @@
              id="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor"
              name="%org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor.name">
        </editor>
+       <editor
+             class="org.nightlabs.jfire.trade.admin.ui.editor.UnitEditor"
+             default="false"
+             icon="icons/editor/UnitEditor.16x16.png"
+             id="org.nightlabs.jfire.trade.admin.ui.editor.UnitEditor"
+             name="%org.nightlabs.jfire.trade.admin.ui.editor.UnitEditor.name">
+       </editor>
     </extension>
     <extension
           point="org.nightlabs.base.ui.entityEditor">
@@ -202,6 +215,11 @@
              class="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditorMetaPage$Factory"
              editorID="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor"
              indexHint="100">
+       </pageFactory>
+        <pageFactory
+             class="org.nightlabs.jfire.trade.admin.ui.editor.UnitEditorPage$Factory"
+             editorID="org.nightlabs.jfire.trade.admin.ui.editor.UnitEditor"
+             indexHint="200">
        </pageFactory>
     </extension>
 </plugin>
