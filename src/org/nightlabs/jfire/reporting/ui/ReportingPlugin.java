@@ -45,6 +45,8 @@ public class ReportingPlugin extends AbstractUIPlugin {
 
 	//The shared instance.
 	private static ReportingPlugin plugin;
+	
+	public static final String PLUGIN_ID = ReportingPlugin.class.getPackage().getName();
 
 	public static final String SCOPE_REPORTING = "reporting"; //$NON-NLS-1$
 

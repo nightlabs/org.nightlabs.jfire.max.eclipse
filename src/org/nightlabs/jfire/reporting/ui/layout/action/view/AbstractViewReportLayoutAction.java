@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
@@ -63,9 +64,11 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
- * Abstract Action that can be used as basis for actions that show reports in a {@link ReportViewer}.
- * The parameter acquisition and printing is implemented completely, subclasses
- * may override the {@link ReportUseCase} and {@link Locale} used for the printing.
+ * Abstract Action that can be used as basis for actions that show reports in a {@link ReportViewer}
+ * . The parameter acquisition and printing is implemented completely, subclasses may override the
+ * {@link ReportUseCase} and {@link Locale} used for the printing (See
+ * {@link #getReportUseCaseID(ReportRegistryItemID, Map, ProgressMonitor)} and
+ * {@link #getRenderRequestLocale(ReportRegistryItemID, Map, ProgressMonitor)}).
  * 
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
  */
@@ -130,11 +133,9 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	 * id that should be used to print the given report. The default implementation
 	 * returns <code>null</code> to indicate that the {@link ReportUseCase} should be 
 	 * looked up in the configuration or queried from the user.
-	 * @param reportID TODO
 	 * @param reportID The id of the report to print.
-	 * @param params TODO
 	 * @param params The parameter the report should be printed with.
-	 * @param monitor TODO
+	 * @param monitor The monitor to report progress to.
 	 * @return The id of the {@link ReportUseCase} to use, or <code>null</code> to indicate that 
 	 * 		the {@link ReportUseCase} appropriate for the given report.
 	 */
@@ -150,9 +151,15 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 		runWithRegistryItemIDs(extractReportLayouts(reportRegistryItems));
 	}
 	
+	/** The parameters to use for the next run, set to <code>null</code> after each run. */
 	private Map<String, Object> nextRunParams = null;
 	
+	/**
+	 * 
+	 * @param reportRegistryItems
+	 */
 	public void runWithRegistryItemIDs(final Collection<ReportRegistryItemID> reportRegistryItems) {
+		final Shell activeShell = RCPUtil.getActiveShell();
 		Job viewJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction.printJob.name")) { //$NON-NLS-1$
 
 			@Override
@@ -170,7 +177,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 				for (ReportRegistryItemID itemID : reportRegistryItems) {
 					if (params == null && !paramsSet) {
 						// if no parameters set by now, get them from the user
-						WizardResult dialogResult = ReportParameterWizard.openResult(RCPUtil.getActiveShell(), itemID, false);
+						WizardResult dialogResult = ReportParameterWizard.openResult(activeShell, itemID, false);
 						if (!dialogResult.isAcquisitionFinished())
 							return Status.OK_STATUS;
 						params = dialogResult.getParameters();
@@ -233,10 +240,20 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 		viewJob.schedule();
 	}
 	
+	/**
+	 * Adds an error to the given list of messages separated by a linebreak.
+	 * 
+	 * @param errorMessages The list of messages where to add the next one.
+	 * @param addition The addition to add to the list.
+	 * @return The new list with the added message.
+	 */
 	private String addErrMessage(String errorMessages, String addition) {
-		if (!"".equals(errorMessages)) //$NON-NLS-1$
+		if (errorMessages == null)
+			errorMessages = "";
+		if (errorMessages.isEmpty())
 			errorMessages = errorMessages + "\n"; //$NON-NLS-1$
-		errorMessages = errorMessages + addition;
+		if (addition != null && !addition.isEmpty())
+			errorMessages = errorMessages + addition;
 		return errorMessages;
 	}
 	
@@ -247,7 +264,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	 * 
 	 * @param reportID The id of the report to render.
 	 * @param params The parameters of the report.
-	 * @param monitor TODO
+	 * @param monitor Montior to report progress to.
 	 * @return The locale the given report should be rendered for, or <code>null</code> to indicate 
 	 * 		that the default locale should be used.
 	 */

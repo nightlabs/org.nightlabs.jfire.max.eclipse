@@ -5,8 +5,6 @@ package org.nightlabs.jfire.reporting.ui.parameter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.Map.Entry;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -22,7 +20,6 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionUseCase;
 import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
-import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
@@ -71,7 +68,6 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 	}
 	
 	protected void init(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
-		setWizardHop(new ReportParameterWizardHop(this));
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(ReportingPlugin.getDefault(), ReportParameterAcquisitionUseCaseWizardPage.class, null, ImageDimension._75x70));
 		this.reportLayoutID = reportLayoutID;
 		this.isScheduledReportConfiguration = isScheduledReport;
@@ -106,7 +102,7 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (useCaseTable.getFirstSelectedElement() == null)
 					return;
-				populateValueProviderSetupPages(
+				ReportParameterWizardHop.populateValueProviderSetupPages(
 						setup.getValueAcquisitionSetups().get(useCaseTable.getFirstSelectedElement()),
 						getReportParameterWizardHop(),
 						isScheduledReportConfiguration,
@@ -119,37 +115,6 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 		return useCaseTable;
 	}
 	
-	public static void populateValueProviderSetupPages(
-			ValueAcquisitionSetup valueAcquisitionSetup, ReportParameterWizardHop wizardHop,
-			boolean isScheduledReport, boolean populateAlsoEntryPage
-		)
-	{
-		wizardHop.removeAllHopPages();
-		if (valueAcquisitionSetup == null)
-			return;
-		SortedMap<Integer, SortedMap<Integer, SortedSet<ValueProviderConfig>>> sortedConfigs = valueAcquisitionSetup.getSortedValueProviderConfigs();
-		
-		
-		int i = 0;
-		for (SortedMap<Integer, SortedSet<ValueProviderConfig>> providerPageConfigs : sortedConfigs.values()) {
-			ReportParameterValueProviderWizardPage page = new ReportParameterValueProviderWizardPage(
-					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.eportParameterAcquisitionUseCaseWizardPage.pagePrefix")+(++i),  //$NON-NLS-1$
-					valueAcquisitionSetup,
-					providerPageConfigs,
-					wizardHop, 
-					isScheduledReport
-				);
-			if (populateAlsoEntryPage) {
-				if (wizardHop.getEntryPage() == null)
-					wizardHop.setEntryPage(page);
-				else
-					wizardHop.addHopPage(page);
-			}
-			else
-				wizardHop.addHopPage(page);
-		}
-	}
-
 	protected ReportParameterWizardHop getReportParameterWizardHop() {
 		return (ReportParameterWizardHop) getWizardHop();
 	}

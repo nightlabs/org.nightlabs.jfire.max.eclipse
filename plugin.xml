@@ -7,6 +7,7 @@
    <extension-point id="reportViewer" name="ReportViewer Extension-Point" schema="schema/reportViewer.exsd"/>
    <extension-point id="valueProviderGUIFactory" name="ValueProvider GUI Factory Extension Point" schema="schema/valueProviderGUIFactory.exsd"/>
    <extension-point id="scheduledReportAction" name="Extension Point for actions on ScheduledReports" schema="schema/scheduledReportAction.exsd"/>
+   <extension-point id="scheduledReportDeliveryDelegateEdit" name="Extension Point for the ui of the configuration of IScheduledReportDeliveryDelegates" schema="schema/scheduledReportDeliveryDelegateEdit.exsd"/>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -220,6 +221,14 @@
             name="Delete"
             tooltip="Delete scheduled report">
       </scheduledReportAction>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.ui.scheduledReportDeliveryDelegateEdit">
+      <scheduledReportDeliveryDelegateEditFactory
+            class="org.nightlabs.jfire.reporting.ui.layout.scheduled.delivery.email.DeliveryDelegateEditFactoryEmail"
+            id="org.nightlabs.jfire.reporting.scheduled.ScheduledReportDeliveryDelegateEMail"
+            name="Delivery by email">
+      </scheduledReportDeliveryDelegateEditFactory>
    </extension>
    
 </plugin>

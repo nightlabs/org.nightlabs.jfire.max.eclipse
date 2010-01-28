@@ -34,6 +34,7 @@ public class ScheduledReportEditorPage extends EntityEditorPageWithProgress {
 	private ScheduledReportNameSection nameSection;
 	private ScheduledReportTaskSection taskSection;
 	private ScheduledReportSection reportSection;
+	private ScheduledReportDeliveryDelegateSection deliveryDelegateSection;
 	
 	/**
 	 * @param editor
@@ -57,6 +58,10 @@ public class ScheduledReportEditorPage extends EntityEditorPageWithProgress {
 		
 		reportSection = new ScheduledReportSection(this, parent);
 		getManagedForm().addPart(reportSection);
+		
+		deliveryDelegateSection = new ScheduledReportDeliveryDelegateSection(this, parent);
+		getManagedForm().addPart(deliveryDelegateSection);
+		
 	}
 
 	/* (non-Javadoc)
@@ -65,5 +70,13 @@ public class ScheduledReportEditorPage extends EntityEditorPageWithProgress {
 	@Override
 	protected String getPageFormTitle() {
 		return "Scheduled Report";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean includeFixForVerticalScrolling() {
+		return false;
 	}
 }

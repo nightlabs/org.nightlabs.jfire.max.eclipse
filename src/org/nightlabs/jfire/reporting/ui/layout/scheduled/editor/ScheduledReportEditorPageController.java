@@ -46,6 +46,8 @@ public class ScheduledReportEditorPageController extends ActiveEntityEditorPageC
 			ScheduledReport.FETCH_GROUP_RENDER_REPORT_REQUEST,
 			ScheduledReport.FETCH_GROUP_TASK,
 			ScheduledReport.FETCH_GROUP_REPORTLAYOUT_ID,
+			ScheduledReport.FETCH_GROUP_DELIVERY_DELEGATE,
+			ScheduledReport.FETCH_GROUP_DELIVERY_DELEGATE_FULL_DATA,
 			Task.FETCH_GROUP_TIME_PATTERN_SET,
 			TimePatternSetJDOImpl.FETCH_GROUP_TIME_PATTERNS
 		};

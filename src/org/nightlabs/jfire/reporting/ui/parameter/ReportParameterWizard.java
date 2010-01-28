@@ -14,10 +14,6 @@ import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
-import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
-import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
-import org.nightlabs.jfire.reporting.ui.resource.Messages;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * A wizard that presents the UI for the {@link ValueProvider}s registered for
@@ -94,7 +90,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		public int open() {
 			if (getWizard() instanceof ReportParameterWizard) {
 				ReportParameterWizard wiz  = (ReportParameterWizard) getWizard();
-				if (wiz.wizardHop != null && wiz.wizardHop.getEntryPage() != null) {
+				if (wiz.wizardHop != null && wiz.wizardHop.hasAcquisitionSetup()) {
 					// if the report layout has an acquisition setup assigned
 					// and the workflow provides at least one use-case and ValueProvider
 					return super.open();
@@ -117,32 +113,10 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 */
 	public ReportParameterWizard(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		this.reportLayoutID = reportLayoutID;
-		ReportParameterAcquisitionSetup setup = null;
-		try {
-			setup = ReportParameterAcquisitionSetupDAO.sharedInstance().getSetupForReportLayout(
-					reportLayoutID, ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS,
-					new NullProgressMonitor()
-				);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		if (setup == null)
-			return;
-		if (setup.getValueAcquisitionSetups().size() > 1) {
-			ReportParameterAcquisitionUseCaseWizardPage wizardPage = new ReportParameterAcquisitionUseCaseWizardPage(
-					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.wizardPage.pageName"), //$NON-NLS-1$ 
-					reportLayoutID, isScheduledReport); 
-			wizardHop = wizardPage.getReportParameterWizardHop();
-		}
-		else if (setup.getValueAcquisitionSetups().size() == 1){
-			ValueAcquisitionSetup acquisitionSetup = setup.getValueAcquisitionSetups().values().iterator().next();
-			wizardHop = new ReportParameterWizardHop();
-			ReportParameterAcquisitionUseCaseWizardPage.populateValueProviderSetupPages(acquisitionSetup, wizardHop, isScheduledReport, true);
-		}
-		if (wizardHop != null && wizardHop.getEntryPage() == null)
-			wizardHop = null;
-		if (wizardHop != null)
+		wizardHop = new ReportParameterWizardHop(reportLayoutID, isScheduledReport);
+		if (wizardHop != null && wizardHop.hasAcquisitionSetup() && wizardHop.getEntryPage() != null) {
 			addPage(wizardHop.getEntryPage());
+		}
 	}
 
 
