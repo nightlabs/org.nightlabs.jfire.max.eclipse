@@ -23,7 +23,6 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -32,7 +31,7 @@ extends DynamicPathWizard
 {
 	private ProductTypeID parentProductTypeID;
 	private ChooseDynamicTradePriceConfigPage selectPriceConfigPage;
-	private OwnerVendorPage ownerVendorPage;
+//	private OwnerVendorPage ownerVendorPage;
 
 	private static String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
@@ -60,9 +59,8 @@ extends DynamicPathWizard
 		selectPriceConfigPage = new ChooseDynamicTradePriceConfigPage(parentProductTypeID);
 		addPage(selectPriceConfigPage);
 
-		ownerVendorPage = new OwnerVendorPage(parentProductTypeID);
-		addPage(ownerVendorPage);
-
+//		ownerVendorPage = new OwnerVendorPage(parentProductTypeID);
+//		addPage(ownerVendorPage);
 	}
 
 	@Override
@@ -82,8 +80,8 @@ extends DynamicPathWizard
 
 		selectPriceConfigPage.configureProductType(dynamicProductType);
 
-		if(ownerVendorPage.isPageComplete())
-			ownerVendorPage.configureProductType(dynamicProductType);
+//		if(ownerVendorPage.isPageComplete())
+//			ownerVendorPage.configureProductType(dynamicProductType);
 
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeWizard.createDynamicProductTypeJob.name")) { //$NON-NLS-1$
