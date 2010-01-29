@@ -266,11 +266,10 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 					Element valueProviderConfigs = doc.createElement(ReportingConstants.VALUE_PROVIDER_CONFIGS_ELEMENT);
 					useCase.appendChild(valueProviderConfigs);
 
-					idx = 0;
 					for (ValueProviderConfig valueProviderConfig : setup.getValue().getValueProviderConfigs()) {
 						Element providerConfig = doc.createElement(ReportingConstants.PROVIDER_CONFIG_ELEMENT);
 						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_ID, Integer.toString(idx++));
-						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_ORGANISATION_ID, valueProviderConfig.getOrganisationID());
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_ORGANISATION_ID, "dev.jfire.org");
 						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_CATEGORY_ID, valueProviderConfig.getValueProviderCategoryID());
 						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_VALUE_PROVIDER_ID, valueProviderConfig.getValueProviderID());
 						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_PAGE_INDEX, Integer.toString(valueProviderConfig.getPageIndex()));
