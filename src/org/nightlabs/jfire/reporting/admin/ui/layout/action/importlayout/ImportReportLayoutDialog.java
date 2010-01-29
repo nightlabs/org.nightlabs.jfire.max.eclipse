@@ -196,9 +196,18 @@ extends ResizableTrayDialog
 		//Modify the Report Descriptor File based on the changes
 		//Report Category Node
 		Node reportCategoryNode = NLDOMUtil.findElementNode(ReportingConstants.REPORT_CATEGORY_ELEMENT, reportDescriptorDocument.getDocumentElement());
+		
 		NamedNodeMap nodeMap = reportCategoryNode.getAttributes();
 		nodeMap.getNamedItem(ReportingConstants.REPORT_CATEGORY_ELEMENT_ATTRIBUTE_ID).setNodeValue(reportCategory.getReportRegistryItemID());
 		nodeMap.getNamedItem(ReportingConstants.REPORT_CATEGORY_ELEMENT_ATTRIBUTE_TYPE).setNodeValue(reportCategory.getReportRegistryItemType());
+		
+		//Report Cateogory Names
+		Collection<Node> reportCategoryChildNameNodes = NLDOMUtil.findNodeList(reportCategoryNode, ReportingConstants.REPORT_CATEGORY_ELEMENT_NAME);
+		for (Node nameNode : reportCategoryChildNameNodes) {
+			String language = nameNode.getAttributes().getNamedItem("language").getNodeValue();
+			String newText = reportCategory.getName().getText(language);
+			nameNode.setTextContent(newText);
+		}
 		
 		//Report Node
 		Node reportNode = 
@@ -237,7 +246,7 @@ extends ResizableTrayDialog
 		
 		//Zip 
 		File outputFile = new File(IOUtil.getUserTempDir(
-				TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), reportLayoutFileSelectionComposite.getFile().getName() + ".zip");
+				TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), reportLayoutFileSelectionComposite.getFile().getName());
 		try {
 			IOUtil.zipFolder(outputFile, IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX));
 		} catch (IOException e) {
@@ -303,6 +312,8 @@ extends ResizableTrayDialog
 				}
 				reportRegistryItemDescriptionEditor.refresh();
 			}
+			
+			tmpFolder.delete();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
