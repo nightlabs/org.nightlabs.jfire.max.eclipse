@@ -18,7 +18,6 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
 import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditorInput;
@@ -31,7 +30,7 @@ public class CreateVoucherTypeWizard
 extends DynamicPathWizard
 {
 	private ProductTypeID parentVoucherTypeID;
-	private OwnerVendorPage ownerVendorPage;
+//	private OwnerVendorPage ownerVendorPage;
 
 	public CreateVoucherTypeWizard(ProductTypeID parentVoucherTypeID)
 	{
@@ -56,8 +55,8 @@ extends DynamicPathWizard
 		selectLocalAccountantDelegatePage = new SelectLocalAccountantDelegatePage(parentVoucherTypeID);
 		addPage(selectLocalAccountantDelegatePage);
 
-		ownerVendorPage = new OwnerVendorPage(parentVoucherTypeID);
-		addPage(ownerVendorPage);
+//		ownerVendorPage = new OwnerVendorPage(parentVoucherTypeID);
+//		addPage(ownerVendorPage);
 	}
 
 	private static String[] FETCH_GROUPS_PARENT_VOUCHER_TYPE = {
@@ -102,8 +101,8 @@ extends DynamicPathWizard
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}
 
-		if(ownerVendorPage.isPageComplete())
-			ownerVendorPage.configureProductType(voucherType);
+//		if(ownerVendorPage.isPageComplete())
+//			ownerVendorPage.configureProductType(voucherType);
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
