@@ -28,20 +28,11 @@ package org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout;
 
 import java.util.Collection;
 
-import javax.jdo.FetchPlan;
-import javax.jdo.JDODetachedFieldAccessException;
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutDialog;
-import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
-import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
-import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author  Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -95,10 +86,9 @@ extends ReportRegistryItemAction
 	public void run(Collection<ReportRegistryItem> reportRegistryItems) {		
 		if (reportRegistryItems.size() != 1)
 			return;
-		ReportRegistryItem item = reportRegistryItems.iterator().next();
+		ReportRegistryItem reportCategoryItem = reportRegistryItems.iterator().next();
 		
-		ImportReportLayoutDialog ilg = new ImportReportLayoutDialog(Display.getDefault().getActiveShell(), (ReportRegistryItemID) JDOHelper.getObjectId(item));
+		ImportReportLayoutDialog ilg = new ImportReportLayoutDialog(Display.getDefault().getActiveShell(), reportCategoryItem);
 		ilg.open();
 	}
-
 }

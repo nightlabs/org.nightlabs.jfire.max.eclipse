@@ -34,6 +34,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
+import org.nightlabs.jfire.reporting.ReportingConstants;
 import org.nightlabs.jfire.reporting.ReportingInitialiser;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil.PreparedLayoutL10nData;
@@ -79,15 +80,6 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.layoutID = layoutID;
-
-//		Job job = new Job("Loading Report Registry Item...") {
-//			@Override
-//			protected IStatus run(ProgressMonitor monitor) throws Exception {
-//				
-//				return Status.OK_STATUS;
-//			}
-//		};
-//		job.schedule();
 
 		Job job = new Job("Loading Data...") {
 			@Override
@@ -143,18 +135,6 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 		needZipButton = new Button(wrapper, SWT.CHECK);
 		needZipButton.setText("Export in Zip file");
 		needZipButton.setSelection(true);
-
-		//		needZipButton.addSelectionListener(new SelectionAdapter() {
-		//			@Override
-		//			public void widgetSelected(SelectionEvent e) {
-		//				if (needZipButton.getSelection() == true) {
-		//					layoutFileName.setText(layoutID.reportRegistryItemID + ZIP_SUFFIX);
-		//				}
-		//				else {
-		//					layoutFileName.setText(layoutID.reportRegistryItemID + REPORT_LAYOUT_SUFFIX);
-		//				}
-		//			}
-		//		});
 
 		return wrapper;
 	}
@@ -212,7 +192,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 			}
 
 			//Generates descriptor file(content.xml)
-			File descriptorFile = new File(parentName, "content.xml");
+			File descriptorFile = new File(parentName, ReportingConstants.DESCRIPTOR_FILE);
 			try {
 				descriptorFile.createNewFile();
 
@@ -222,42 +202,42 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				Document doc = docBuilder.newDocument();
 
 				/*****ReportCategory-node*****/
-				Element reportCategory = doc.createElement("report-category");
-				reportCategory.setAttribute("id", reportRegistryItem.getParentCategoryID().reportRegistryItemID);
-				reportCategory.setAttribute("type", layoutID.reportRegistryItemType);
+				Element reportCategory = doc.createElement(ReportingConstants.REPORT_CATEGORY_ELEMENT);
+				reportCategory.setAttribute(ReportingConstants.REPORT_CATEGORY_ELEMENT_ATTRIBUTE_ID, reportRegistryItem.getParentCategoryID().reportRegistryItemID);
+				reportCategory.setAttribute(ReportingConstants.REPORT_CATEGORY_ELEMENT_ATTRIBUTE_TYPE, layoutID.reportRegistryItemType);
 				doc.appendChild(reportCategory);
 
 				//Category-names
-				generateI18nElements(doc, reportCategory, "name", reportRegistryItem.getParentCategory().getName());
+				generateI18nElements(doc, reportCategory, ReportingConstants.REPORT_CATEGORY_ELEMENT_NAME, reportRegistryItem.getParentCategory().getName());
 
 				//Report
-				Element report = doc.createElement("report");
-				report.setAttribute("file", exportFile.getName());
-				report.setAttribute("id", layoutID.reportRegistryItemID);
-				report.setAttribute("engineType", "BIRT");
-				report.setAttribute("overwriteOnInit", "true"); //Has to overwrite the old file
+				Element report = doc.createElement(ReportingConstants.REPORT_ELEMENT);
+				report.setAttribute(ReportingConstants.REPORT_ELEMENT_ATTRIBUTE_FILE, exportFile.getName());
+				report.setAttribute(ReportingConstants.REPORT_ELEMENT_ATTRIBUTE_ID, layoutID.reportRegistryItemID);
+				report.setAttribute(ReportingConstants.REPORT_ELEMENT_ATTRIBUTE_ENGINE_TYPE, "BIRT");
+				report.setAttribute(ReportingConstants.REPORT_ELEMENT_ATTRIBUTE_OVERWRITE_ON_INIT, "true"); //Has to overwrite the old file
 				reportCategory.appendChild(report);
 
 				//Report-names
-				generateI18nElements(doc, report, "name", reportRegistryItem.getName());
+				generateI18nElements(doc, report, ReportingConstants.REPORT_ELEMENT_NAME, reportRegistryItem.getName());
 
 				//Report-descriptions
-				generateI18nElements(doc, report, "description", reportRegistryItem.getDescription());
+				generateI18nElements(doc, report, ReportingConstants.REPORT_ELEMENT_DESCRIPTION, reportRegistryItem.getDescription());
 
 				//Parameter-acquisition
-				Element parameterAcquisition = doc.createElement("parameter-acquisition");
+				Element parameterAcquisition = doc.createElement(ReportingConstants.PARAMETER_ACQUISITION_ELEMENT);
 				report.appendChild(parameterAcquisition);
 
 				//Use-case
 				Map<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> valueAcquisitionSetups = 
 					parameterSetup.getValueAcquisitionSetups();
 				for (Entry<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> setup : valueAcquisitionSetups.entrySet()) {
-					Element useCase = doc.createElement("use-case");
-					useCase.setAttribute("id", setup.getKey().getReportParameterAcquisitionUseCaseID());
-					useCase.setAttribute("default", "true");
+					Element useCase = doc.createElement(ReportingConstants.USE_CASE_ELEMENT);
+					useCase.setAttribute(ReportingConstants.USE_CASE_ATTRIBUTE_ID, setup.getKey().getReportParameterAcquisitionUseCaseID());
+					useCase.setAttribute(ReportingConstants.USE_CASE_ATTRIBUTE_DEFAULT, "true");
 
-					generateI18nElements(doc, useCase, "name", setup.getKey().getName());
-					generateI18nElements(doc, useCase, "description", setup.getKey().getDescription());
+					generateI18nElements(doc, useCase, ReportingConstants.USE_CASE_ELEMENT_NAME, setup.getKey().getName());
+					generateI18nElements(doc, useCase, ReportingConstants.USE_CASE_ELEMENT_DESCRIPTION, setup.getKey().getDescription());
 
 					//Parameters
 					Element parameters = doc.createElement("parameters");
@@ -265,56 +245,56 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 
 					int idx = 0;
 					for (AcquisitionParameterConfig parameterConfig : setup.getValue().getParameterConfigs()) {
-						Element parameter = doc.createElement("parameter");
-						parameter.setAttribute("id", Integer.toString(idx++));
-						parameter.setAttribute("name", parameterConfig.getParameterID());
-						parameter.setAttribute("type", parameterConfig.getParameterType());
-						parameter.setAttribute("x", Integer.toString(parameterConfig.getX()));
-						parameter.setAttribute("y", Integer.toString(parameterConfig.getY()));
+						Element parameter = doc.createElement(ReportingConstants.PARAMETER_ELEMENT);
+						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_ID, Integer.toString(idx++));
+						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_NAME, parameterConfig.getParameterID()); //TODO!!! WATCHME!!! Name == ID ;-)
+						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_TYPE, parameterConfig.getParameterType());
+						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_X, Integer.toString(parameterConfig.getX()));
+						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_Y, Integer.toString(parameterConfig.getY()));
 						
 						parameters.appendChild(parameter);
 					}
 
 					//Value-provider-configs
-					Element valueProviderConfigs = doc.createElement("value-provider-configs");
+					Element valueProviderConfigs = doc.createElement(ReportingConstants.VALUE_PROVIDER_CONFIGS_ELEMENT);
 					useCase.appendChild(valueProviderConfigs);
 
 					idx = 0;
 					for (ValueProviderConfig valueProviderConfig : setup.getValue().getValueProviderConfigs()) {
-						Element providerConfig = doc.createElement("provider-config");
-						providerConfig.setAttribute("id", Integer.toString(idx++));
-						providerConfig.setAttribute("organisationID", valueProviderConfig.getOrganisationID());
-						providerConfig.setAttribute("categoryID", valueProviderConfig.getValueProviderCategoryID());
-						providerConfig.setAttribute("valueProviderID", valueProviderConfig.getValueProviderID());
-						providerConfig.setAttribute("pageIndex", Integer.toString(valueProviderConfig.getPageIndex()));
-						providerConfig.setAttribute("pageRow", Integer.toString(valueProviderConfig.getPageRow()));
-						providerConfig.setAttribute("pageColumn", Integer.toString(valueProviderConfig.getPageColumn()));
-						providerConfig.setAttribute("allowNullOutputValue", Boolean.toString(valueProviderConfig.isAllowNullOutputValue()));
-						providerConfig.setAttribute("showMessageInHeader", Boolean.toString(valueProviderConfig.isShowMessageInHeader()));
-						providerConfig.setAttribute("growVertically", Boolean.toString(valueProviderConfig.isGrowVertically()));
-						providerConfig.setAttribute("x", Integer.toString(valueProviderConfig.getX()));
-						providerConfig.setAttribute("y", Integer.toString(valueProviderConfig.getY()));
+						Element providerConfig = doc.createElement(ReportingConstants.PROVIDER_CONFIG_ELEMENT);
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_ID, Integer.toString(idx++));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_ORGANISATION_ID, valueProviderConfig.getOrganisationID());
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_CATEGORY_ID, valueProviderConfig.getValueProviderCategoryID());
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_VALUE_PROVIDER_ID, valueProviderConfig.getValueProviderID());
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_PAGE_INDEX, Integer.toString(valueProviderConfig.getPageIndex()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_PAGE_ROW, Integer.toString(valueProviderConfig.getPageRow()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_PAGE_COLUMN, Integer.toString(valueProviderConfig.getPageColumn()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_ALLOW_NULL_OUTPUT_VALUE, Boolean.toString(valueProviderConfig.isAllowNullOutputValue()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_SHOW_MESSAGE_IN_HEADER, Boolean.toString(valueProviderConfig.isShowMessageInHeader()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_GROW_VERTICALLY, Boolean.toString(valueProviderConfig.isGrowVertically()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_X, Integer.toString(valueProviderConfig.getX()));
+						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_Y, Integer.toString(valueProviderConfig.getY()));
 						
-						generateI18nElements(doc, providerConfig, "message", valueProviderConfig.getMessage());
+						generateI18nElements(doc, providerConfig, ReportingConstants.PROVIDER_CONFIG_ELEMENT_MESSAGE, valueProviderConfig.getMessage());
 						
 						valueProviderConfigs.appendChild(providerConfig);
 					}
 					
 					//Value-consumer-bindings
-					Element valueConsumerBindings = doc.createElement("value-consumer-bindings");
+					Element valueConsumerBindings = doc.createElement(ReportingConstants.VALUE_CONSUMER_BINDINGS_ELEMENT);
 					useCase.appendChild(valueConsumerBindings);
 
 					for (ValueConsumerBinding valueConsumerBinding : setup.getValue().getValueConsumerBindings()) {
-						Element consumerBinding = doc.createElement("value-consumer-binding");
+						Element consumerBinding = doc.createElement(ReportingConstants.VALUE_CONSUMER_BINDING_ELEMENT);
 						
-						Element bindingProvider = doc.createElement("binding-provider"); //FIXME
+						Element bindingProvider = doc.createElement(ReportingConstants.BINDING_PROVIDER_ELEMENT); //FIXME - Where does the value come from? Can't find it. (From Chairat)
 						bindingProvider.setAttribute("id", Long.toString(valueConsumerBinding.getProvider().getValueProviderConfigID()));
 						
-						Element bindingParameter = doc.createElement("binding-parameter");
-						bindingParameter.setAttribute("name", valueConsumerBinding.getParameterID());
+						Element bindingParameter = doc.createElement(ReportingConstants.BINDING_PARAMETER_ELEMENT);
+						bindingParameter.setAttribute(ReportingConstants.BINDING_PARAMETER_ELEMENT_ATTRIBUTE_NAME, valueConsumerBinding.getParameterID());
 						
-						Element bindingConsumer = doc.createElement("binding-consumer"); //FIXME
-						bindingConsumer.setAttribute("id", Long.toString(valueConsumerBinding.getValueConsumerBindingID()));
+						Element bindingConsumer = doc.createElement(ReportingConstants.BINDING_CONSUMER_ELEMENT); //FIXME - Where does the value come from? Can't find it. (From Chairat)
+						bindingConsumer.setAttribute(ReportingConstants.BINDING_CONSUMER_ELEMENT_ATTRIBUTE_ID, Long.toString(valueConsumerBinding.getValueConsumerBindingID()));
 						
 						consumerBinding.appendChild(bindingProvider);
 						consumerBinding.appendChild(bindingParameter);
@@ -328,9 +308,9 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 
 				Transformer transformer = TransformerFactory.newInstance().newTransformer();
 				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-				transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "http://www.nightlabs.de/dtd/reporting-initialiser-content_0_5.dtd");
-				transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,"-//NightLabs//Reporting Initialiser DTD V 0.5//EN"); 
+				transformer.setOutputProperty(OutputKeys.ENCODING, ReportingConstants.DESCRIPTOR_FILE_ENCODING);
+				transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, ReportingConstants.DESCRIPTOR_FILE_DOCTYPE_SYSTEM);
+				transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, ReportingConstants.DESCRIPTOR_FILE_DOCTYPE_PUBLIC); 
 
 				//Write the XML document to a file
 				//initialize StreamResult with File object to save to file
