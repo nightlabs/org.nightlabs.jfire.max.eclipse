@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -228,10 +229,13 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				Element parameterAcquisition = doc.createElement(ReportingConstants.PARAMETER_ACQUISITION_ELEMENT);
 				report.appendChild(parameterAcquisition);
 
+				int idNo = 0;
+				Map<Object, Integer> object2IdNo = new HashMap<Object, Integer>();
+				
 				//Use-case
 				Map<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> valueAcquisitionSetups = 
 					parameterSetup.getValueAcquisitionSetups();
-				for (Entry<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> setup : valueAcquisitionSetups.entrySet()) {
+				for (Map.Entry<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> setup : valueAcquisitionSetups.entrySet()) {
 					Element useCase = doc.createElement(ReportingConstants.USE_CASE_ELEMENT);
 					useCase.setAttribute(ReportingConstants.USE_CASE_ATTRIBUTE_ID, setup.getKey().getReportParameterAcquisitionUseCaseID());
 					useCase.setAttribute(ReportingConstants.USE_CASE_ATTRIBUTE_DEFAULT, "true");
@@ -247,10 +251,13 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 					for (AcquisitionParameterConfig parameterConfig : setup.getValue().getParameterConfigs()) {
 						Element parameter = doc.createElement(ReportingConstants.PARAMETER_ELEMENT);
 						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_ID, Integer.toString(idx++));
-						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_NAME, parameterConfig.getParameterID()); //TODO!!! WATCHME!!! Name == ID ;-)
+						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_NAME, parameterConfig.getParameterID()); //TODO!!! WATCHME!!! Name == PARAMETER_ID ;-)
 						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_TYPE, parameterConfig.getParameterType());
 						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_X, Integer.toString(parameterConfig.getX()));
 						parameter.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_Y, Integer.toString(parameterConfig.getY()));
+						
+						object2IdNo.put(parameterConfig, idNo);
+						idNo++;
 						
 						parameters.appendChild(parameter);
 					}
@@ -275,6 +282,9 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_X, Integer.toString(valueProviderConfig.getX()));
 						providerConfig.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_Y, Integer.toString(valueProviderConfig.getY()));
 						
+						object2IdNo.put(valueProviderConfig, idNo);
+						idNo++;
+						
 						generateI18nElements(doc, providerConfig, ReportingConstants.PROVIDER_CONFIG_ELEMENT_MESSAGE, valueProviderConfig.getMessage());
 						
 						valueProviderConfigs.appendChild(providerConfig);
@@ -287,18 +297,21 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 					for (ValueConsumerBinding valueConsumerBinding : setup.getValue().getValueConsumerBindings()) {
 						Element consumerBinding = doc.createElement(ReportingConstants.VALUE_CONSUMER_BINDING_ELEMENT);
 						
-						Element bindingProvider = doc.createElement(ReportingConstants.BINDING_PROVIDER_ELEMENT); //FIXME - Where does the value come from? Can't find it. (From Chairat)
-						bindingProvider.setAttribute("id", Long.toString(valueConsumerBinding.getProvider().getValueProviderConfigID()));
+						Element bindingProvider = doc.createElement(ReportingConstants.BINDING_PROVIDER_ELEMENT);
+						bindingProvider.setAttribute(ReportingConstants.BINDING_PROVIDER_ELEMENT_ATTRIBUTE_ID, String.valueOf(object2IdNo.get(valueConsumerBinding.getProvider())));
 						
 						Element bindingParameter = doc.createElement(ReportingConstants.BINDING_PARAMETER_ELEMENT);
 						bindingParameter.setAttribute(ReportingConstants.BINDING_PARAMETER_ELEMENT_ATTRIBUTE_NAME, valueConsumerBinding.getParameterID());
 						
-						Element bindingConsumer = doc.createElement(ReportingConstants.BINDING_CONSUMER_ELEMENT); //FIXME - Where does the value come from? Can't find it. (From Chairat)
-						bindingConsumer.setAttribute(ReportingConstants.BINDING_CONSUMER_ELEMENT_ATTRIBUTE_ID, Long.toString(valueConsumerBinding.getValueConsumerBindingID()));
+						Element bindingConsumer = doc.createElement(ReportingConstants.BINDING_CONSUMER_ELEMENT); 
+						bindingConsumer.setAttribute(ReportingConstants.BINDING_CONSUMER_ELEMENT_ATTRIBUTE_ID, String.valueOf(object2IdNo.get(valueConsumerBinding.getConsumer())));
 						
 						consumerBinding.appendChild(bindingProvider);
 						consumerBinding.appendChild(bindingParameter);
 						consumerBinding.appendChild(bindingConsumer);
+						
+						object2IdNo.put(valueConsumerBinding, idNo);
+						idNo++;
 						
 						valueConsumerBindings.appendChild(consumerBinding);
 					}

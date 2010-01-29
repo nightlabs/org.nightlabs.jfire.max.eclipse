@@ -230,7 +230,7 @@ extends ResizableTrayDialog
 		
 		//Overwrite the old descriptor file
 		try {
-			NLDOMUtil.writeDocument(reportDescriptorDocument, new FileOutputStream(contentFile), "utf-8");
+			NLDOMUtil.writeDocument(reportDescriptorDocument, new FileOutputStream(contentFile), ReportingConstants.DESCRIPTOR_FILE_ENCODING);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
