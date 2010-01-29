@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.language.LanguageChooserCombo.Mode;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.base.ui.timer.TaskDetailEditComposite;
+import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.ui.config.BirtOutputCombo;
 
@@ -77,6 +78,7 @@ public class CreateScheduledReportWizardPage extends WizardHopPage {
 		GridData outputGD = new GridData();
 		outputGD.widthHint = 100;
 		outputCombo.setLayoutData(outputGD);
+		outputCombo.setSelection(OutputFormat.pdf);
 		
 		return wrapper;
 	}

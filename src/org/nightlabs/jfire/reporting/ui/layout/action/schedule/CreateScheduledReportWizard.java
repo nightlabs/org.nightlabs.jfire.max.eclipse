@@ -27,10 +27,11 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class CreateScheduledReportWizard extends DynamicPathWizard {
 
-	private CreateScheduledReportWizardPage timePatternWizardPage;
+	private CreateScheduledReportWizardPage createScheduledReportPage;
 	private ReportLayout reportLayout;
 	private ScheduledReport scheduledReport;
 	private ReportParameterWizardHop parameterWizardHop;
+	private ScheduledReportDeliveryWizardPage deliveryWizardPage;
 	
 	/**
 	 * 
@@ -51,8 +52,13 @@ public class CreateScheduledReportWizard extends DynamicPathWizard {
 		ReportRegistryItemID reportLayoutID = (ReportRegistryItemID) JDOHelper.getObjectId(reportLayout);
 		
 		scheduledReport.setReportLayout(getReportLayout());
-		timePatternWizardPage = new CreateScheduledReportWizardPage(this);
-		addPage(timePatternWizardPage);
+		scheduledReport.getTask().setEnabled(true);
+		
+		createScheduledReportPage = new CreateScheduledReportWizardPage(this);
+		addPage(createScheduledReportPage);
+		
+		deliveryWizardPage = new ScheduledReportDeliveryWizardPage(this);
+		addPage(deliveryWizardPage);
 		
 		parameterWizardHop = new ReportParameterWizardHop(reportLayoutID, true);
 		if (parameterWizardHop.hasAcquisitionSetup()) {
@@ -73,7 +79,8 @@ public class CreateScheduledReportWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		timePatternWizardPage.commitProperties();
+		createScheduledReportPage.commitProperties();
+		deliveryWizardPage.commitProperties();
 		RenderReportRequest renderReportRequest = scheduledReport.getRenderReportRequest();
 		if (renderReportRequest == null) {
 			renderReportRequest = new RenderReportRequest();
