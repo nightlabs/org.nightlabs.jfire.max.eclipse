@@ -263,7 +263,7 @@ extends ResizableTrayDialog
 		super.okPressed();
 	}
 	
-	private static final String TMP_FOLDER_PREFIX = "jfire_report.imported.";
+	private static final String TMP_FOLDER_PREFIX = "jfire_report.client.imported.";
 	private static final String TMP_FOLDER_SUFFIX = ".report";
 	
 	private Document reportDescriptorDocument;
