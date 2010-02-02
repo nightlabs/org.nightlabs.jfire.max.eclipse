@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -256,8 +257,8 @@ extends ResizableTrayDialog
 		ReportManagerRemote rm;
 		try {
 			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			rm.importReportLayoutZipFile(outputFile, (ReportRegistryItemID)JDOHelper.getObjectId(reportCategory));
-		} catch (LoginException e) {
+			rm.importReportLayoutZipFile(IOUtil.getBytesFromFile(outputFile), (ReportRegistryItemID)JDOHelper.getObjectId(reportCategory));
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		super.okPressed();
