@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 
 public class UnitSection 
 extends ToolBarSectionPart
@@ -52,7 +53,7 @@ extends ToolBarSectionPart
 		
 		new Label(client, SWT.NONE).setText("Name: ");
 		nameText = new I18nTextEditor(client);
-		nameText.setI18nText(controller.getControllerObject().getName());
+		nameText.setI18nText(controller.getControllerObject().getName(), EditMode.DIRECT);
 		nameText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent m) {
@@ -62,7 +63,7 @@ extends ToolBarSectionPart
 		
 		new Label(client, SWT.NONE).setText("Symbol: ");
 		symbolText = new I18nTextEditor(client);
-		symbolText.setI18nText(controller.getControllerObject().getSymbol());
+		symbolText.setI18nText(controller.getControllerObject().getSymbol(), EditMode.DIRECT);
 		symbolText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent m) {
@@ -76,6 +77,7 @@ extends ToolBarSectionPart
 		decimalDegitSpinner.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				getController().getControllerObject().setDecimalDigitCount(decimalDegitSpinner.getSelection());
 				markDirty();
 			}
 		});
