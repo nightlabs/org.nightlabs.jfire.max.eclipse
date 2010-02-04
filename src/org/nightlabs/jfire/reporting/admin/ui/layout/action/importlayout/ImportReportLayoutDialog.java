@@ -27,14 +27,12 @@
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
 import javax.jdo.JDOHelper;
-import javax.security.auth.login.LoginException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -107,6 +105,8 @@ extends ResizableTrayDialog
 	
 	private I18nTextEditor reportRegistryItemDescriptionEditor;
 	
+	private boolean needRenamingPropertyFiles = false;
+	
 	@Override
 	protected Control createDialogArea(Composite parent) 
 	{
@@ -158,7 +158,7 @@ extends ResizableTrayDialog
 		reportRegistryItemIDText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				//
+				needRenamingPropertyFiles = true;
 			}
 		});
 		
@@ -213,6 +213,7 @@ extends ResizableTrayDialog
 		//Report Node
 		Node reportNode = 
 			NLDOMUtil.findElementNode(ReportingConstants.REPORT_ELEMENT, reportDescriptorDocument.getDocumentElement());
+		
 		//ID
 		Node reportIDNode = reportNode.getAttributes().getNamedItem(ReportingConstants.REPORT_ELEMENT_ATTRIBUTE_ID);
 		if (autogenerateIDCheckbox.getSelection() != true) {
@@ -246,10 +247,30 @@ extends ResizableTrayDialog
 		}
 		
 		//Zip 
-		File outputFile = new File(IOUtil.getUserTempDir(
+		File outputZipFile = new File(IOUtil.getUserTempDir(
 				TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), reportLayoutFileSelectionComposite.getFile().getName());
+		
+		if (needRenamingPropertyFiles) {
+			File resourceFolder = new File(IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), 
+					RESOURCE_FOLDER_NAME);
+			for (File resourceFile : resourceFolder.listFiles()) {
+				String newResourceFileName = resourceFile.getName().replaceAll(IOUtil.getFileNameWithoutExtension(reportLayoutZipFile.getName()), reportRegistryItemIDText.getText());
+				resourceFile.renameTo(new File(resourceFolder, newResourceFileName));
+			}
+			
+			File textPartConfigurationFile = 
+				new File(
+						IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), 
+						IOUtil.getFileNameWithoutExtension(reportLayoutZipFile.getName()) + ReportingConstants.TEXT_PART_CONFIGURATION_FILE_SUFFIX
+						);
+			String newReportTextPartConfurationName = 
+				textPartConfigurationFile.getName().replaceAll(IOUtil.getFileNameWithoutExtension(reportLayoutZipFile.getName()), reportRegistryItemIDText.getText());
+			textPartConfigurationFile.renameTo(new File(IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), newReportTextPartConfurationName));
+		}
+		
+		
 		try {
-			IOUtil.zipFolder(outputFile, IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX));
+			IOUtil.zipFolder(outputZipFile, IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -257,7 +278,7 @@ extends ResizableTrayDialog
 		ReportManagerRemote rm;
 		try {
 			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			rm.importReportLayoutZipFile(IOUtil.getBytesFromFile(outputFile), (ReportRegistryItemID)JDOHelper.getObjectId(reportCategory));
+			rm.importReportLayoutZipFile(IOUtil.getBytesFromFile(outputZipFile), (ReportRegistryItemID)JDOHelper.getObjectId(reportCategory));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -267,14 +288,21 @@ extends ResizableTrayDialog
 	private static final String TMP_FOLDER_PREFIX = "jfire_report.client.imported.";
 	private static final String TMP_FOLDER_SUFFIX = ".report";
 	
+	private static final String RESOURCE_FOLDER_NAME = "resource";
+	
 	private Document reportDescriptorDocument;
 	private File contentFile;
+	
+	private String reportRegistryItemID;
+	private File reportLayoutZipFile;
+	
 	private void loadDescriptorFile(File reportLayoutZipFile) {
+		this.reportLayoutZipFile = reportLayoutZipFile;
 		try {
 			//Delete old stuff
 			File existingTmpFolder = IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX);
-			if (existingTmpFolder != null) {
-				existingTmpFolder.delete();
+			if (existingTmpFolder.exists()) {
+				IOUtil.deleteDirectoryRecursively(existingTmpFolder);
 			}
 
 			//Unzip to the temp folder
@@ -289,7 +317,8 @@ extends ResizableTrayDialog
 			
 				//Report Element
 				Node reportNode = NLDOMUtil.findElementNode(ReportingConstants.REPORT_ELEMENT, reportDescriptorDocument.getDocumentElement());
-				reportRegistryItemIDText.setText(NLDOMUtil.getAttributeValue(reportNode, "id"));
+				reportRegistryItemID = NLDOMUtil.getAttributeValue(reportNode, "id");
+				reportRegistryItemIDText.setText(reportRegistryItemID);
 				
 				//Report Names
 				Collection<Node> reportChildNameNodes = 
@@ -345,5 +374,9 @@ extends ResizableTrayDialog
 	
 	public void setOKButtonEnabled(boolean enabled) {
 		getButton(OK).setEnabled(enabled);
+	}
+	
+	public boolean isNeedRenamingPropertyFiles() {
+		return needRenamingPropertyFiles;
 	}
 }
