@@ -14,4 +14,5 @@ import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 public interface IReportParameterController {
 	void setParameterValue(String parameterID, Object value);
 	Map<ValueProviderID, Object> getProviderValues();
+	Object getInitialValue(String parameterID);
 }

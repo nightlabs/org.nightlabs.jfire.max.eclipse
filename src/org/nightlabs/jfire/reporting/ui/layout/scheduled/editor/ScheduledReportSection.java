@@ -115,7 +115,7 @@ public class ScheduledReportSection extends ToolBarSectionPart {
 			public void widgetSelected(SelectionEvent e) {
 				ReportRegistryItemID layoutID = reportLayoutComposite.getReportLayoutID();
 				if (layoutID != null) {
-					WizardResult wizardResult = ReportParameterWizard.openResult(parameterText.getShell(), layoutID, true);
+					WizardResult wizardResult = ReportParameterWizard.openResult(parameterText.getShell(), layoutID, true, reportParameters);
 					if (wizardResult != null && wizardResult.isAcquisitionFinished()) {
 						reportParameters = wizardResult.getParameters();
 						updateParameterText();

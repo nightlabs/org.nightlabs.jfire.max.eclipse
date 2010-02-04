@@ -69,6 +69,13 @@ public class ValueProviderGUIBoolean extends AbstractValueProviderGUI<Boolean> {
 		return checkBox;
 	}
 
+	@Override
+	public void setInitialValue(Boolean initalValue) {
+		if (checkBox != null) {
+			checkBox.setSelection(initalValue);
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */

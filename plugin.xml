@@ -139,7 +139,7 @@
    <extension
          point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIBigDecimal$Factory"/>
-      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIDate$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIDateFactory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIDouble$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIInteger$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIBoolean$Factory"/>

@@ -124,9 +124,21 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 					continue;
 				}
 
-				final IValueProviderGUI<?> gui = factory.createValueProviderGUI(config, isScheduledReport);
+				final IValueProviderGUI<Object> gui = (IValueProviderGUI<Object>) factory.createValueProviderGUI(config, isScheduledReport);
 				valueProviderGUIs.put(providerID, gui);
 				Control guiControl = gui.createGUI(rowWrapper);
+				
+				// Search for and set the initial value for this config
+				Set<ValueConsumerBinding> bindings = valueAcquisitionSetup.getValueConsumerBindingsForProvider(config);
+				if (bindings.size() > 0) {
+					ValueConsumerBinding binding = bindings.iterator().next();
+					Object initialValue = parameterController.getInitialValue(binding.getParameterID());
+					if (initialValue != null) {
+						gui.setInitialValue(initialValue);
+					}
+				}
+				
+				// Create the listener that sets the value to the parameter controller and update the buttons
 				final IValueProviderGUIListener listener = new IValueProviderGUIListener() {
 					public void providerOutputValueChanged() {
 						if (gui.isAcquisitionComplete()) {

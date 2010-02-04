@@ -13,7 +13,7 @@ import org.nightlabs.jfire.reporting.parameter.ValueProvider;
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public interface IValueProviderGUI<OutputType> {
+public interface IValueProviderGUI<ValueType> {
 	
 	/**
 	 * Create the UI for this {@link IValueProviderGUI}.
@@ -22,6 +22,13 @@ public interface IValueProviderGUI<OutputType> {
 	 * @return The newly created {@link Control}.
 	 */
 	Control createGUI(Composite parent);
+	
+	/**
+	 * Set the initial value of for this object after its UI has been created.
+	 *  
+	 * @param initalValue The initial value to display.
+	 */
+	void setInitialValue(ValueType initalValue);
 	
 	/**
 	 * Whether the acquisition of the value(s) that this provider GUI queries from 
@@ -46,7 +53,7 @@ public interface IValueProviderGUI<OutputType> {
 	 * This is only valid if {@link #isAcquisitionComplete()} is <code>true</code>.
 	 * @return The value of this {@link IValueProviderGUI}.
 	 */
-	OutputType getOutputValue();
+	ValueType getOutputValue();
 	
 	void addValueProviderGUIListener(IValueProviderGUIListener listener);
 	void removeValueProviderGUIListener(IValueProviderGUIListener listener);

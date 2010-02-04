@@ -51,4 +51,7 @@ public abstract class AbstractValueProviderGUI<OutputType> implements IValueProv
 	public void setValueProviderConfig(ValueProviderConfig valueProviderConfig) {
 		this.valueProviderConfig = valueProviderConfig;
 	}
+	
+	public void setInitialValue(OutputType initalValue) {
+	};
 }

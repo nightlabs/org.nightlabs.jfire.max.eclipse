@@ -6,7 +6,7 @@ package org.nightlabs.jfire.reporting.ui.viewer;
 import org.eclipse.core.runtime.IExecutableExtension;
 
 /**
- * Factory used by {@link ReportViewerRegistry} in order to create new
+ * ValueProviderGUIDateFactory used by {@link ReportViewerRegistry} in order to create new
  * {@link ReportViewer}s. This is actually registered by the extension point
  * "reportViewer".
  *

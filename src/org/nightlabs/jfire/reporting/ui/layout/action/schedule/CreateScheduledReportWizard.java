@@ -60,7 +60,7 @@ public class CreateScheduledReportWizard extends DynamicPathWizard {
 		deliveryWizardPage = new ScheduledReportDeliveryWizardPage(this);
 		addPage(deliveryWizardPage);
 		
-		parameterWizardHop = new ReportParameterWizardHop(reportLayoutID, true);
+		parameterWizardHop = new ReportParameterWizardHop(reportLayoutID, true, null);
 		if (parameterWizardHop.hasAcquisitionSetup()) {
 			addPage(parameterWizardHop.getEntryPage());
 		}

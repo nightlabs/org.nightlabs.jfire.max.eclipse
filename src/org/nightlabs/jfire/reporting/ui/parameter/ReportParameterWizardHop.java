@@ -26,9 +26,11 @@ public class ReportParameterWizardHop extends WizardHop implements IReportParame
 
 	private Map<String, Object> parameters = new HashMap<String, Object>();
 	private Map<ValueProviderID, Object> providerValues = new HashMap<ValueProviderID, Object>();
+	private Map<String, Object> initialValues;
 	
-	public ReportParameterWizardHop(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
+	public ReportParameterWizardHop(ReportRegistryItemID reportLayoutID, boolean isScheduledReport, Map<String, Object> initialValues) {
 		ReportParameterAcquisitionSetup setup = null;
+		this.initialValues = initialValues;
 		try {
 			setup = ReportParameterAcquisitionSetupDAO.sharedInstance().getSetupForReportLayout(
 					reportLayoutID, ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS,
@@ -97,5 +99,12 @@ public class ReportParameterWizardHop extends WizardHop implements IReportParame
 
 	public boolean hasAcquisitionSetup() {
 		return getEntryPage() != null;
+	}
+
+	@Override
+	public Object getInitialValue(String parameterID) {
+		if (initialValues != null)
+			return initialValues.get(parameterID);
+		return null;	
 	}
 }

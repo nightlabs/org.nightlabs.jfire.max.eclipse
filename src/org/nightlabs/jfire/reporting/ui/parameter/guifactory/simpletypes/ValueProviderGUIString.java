@@ -63,6 +63,13 @@ public class ValueProviderGUIString extends AbstractValueProviderGUI<String> {
 		}
 		return labeledText;
 	}
+	
+	@Override
+	public void setInitialValue(String initalValue) {
+		if (labeledText != null) {
+			labeledText.setText(initalValue);
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
