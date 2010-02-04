@@ -65,11 +65,8 @@ implements INewWizard
 		return newCurrency;
 	}
 
-
-
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// nothing to do
 	}
-
 }

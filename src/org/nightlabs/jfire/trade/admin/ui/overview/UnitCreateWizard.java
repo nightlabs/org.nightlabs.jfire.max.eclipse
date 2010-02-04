@@ -33,7 +33,7 @@ implements INewWizard
 	private Unit newUnit;
 	@Override
 	public boolean performFinish() {
-		newUnit = new Unit(IDGenerator.getOrganisationID(), IDGenerator.nextIDString(Unit.class), unitCreateWizardPage.getDecimalDigits());
+		newUnit = new Unit(unitCreateWizardPage.getUnitID(), IDGenerator.nextIDString(Unit.class), unitCreateWizardPage.getDecimalDigits());
 		newUnit.getSymbol().copyFrom(unitCreateWizardPage.getUnitSymbolTextEditor().getI18nText());
 		newUnit.getName().copyFrom(unitCreateWizardPage.getUnitNameTextEditor().getI18nText());
 		

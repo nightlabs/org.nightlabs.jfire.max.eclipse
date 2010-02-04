@@ -3,20 +3,30 @@ package org.nightlabs.jfire.trade.admin.ui.overview;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.i18n.unit.Unit;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 
 public class UnitCreateWizardPage
 extends WizardHopPage
 {
 	//GUI
+	private Button autogenerateIDCheckbox; 
+	private Text unitIDText;
+	
 	private I18nTextEditor unitSymbolTextEditor;
 	private I18nTextEditor unitNameTextEditor;
 	
@@ -31,6 +41,28 @@ extends WizardHopPage
 	public Control createPageContents(Composite parent) {
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 
+		autogenerateIDCheckbox = new Button(mainComposite, SWT.CHECK);
+		autogenerateIDCheckbox.setText("Auto generate ID: ");
+		autogenerateIDCheckbox.setSelection(true);
+		autogenerateIDCheckbox.addSelectionListener(new SelectionAdapter() 
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				unitIDText.setEnabled(!autogenerateIDCheckbox.getSelection());
+			}
+		});
+		
+		new Label(mainComposite, SWT.NONE).setText("Unit ID: ");
+		unitIDText = new Text(mainComposite, SWT.BORDER);
+		unitIDText.setEnabled(false);
+		unitIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		unitIDText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+			}
+		});
+		
+		
 		new Label(mainComposite, SWT.NONE).setText("Unit Symbol: ");
 		unitSymbolTextEditor = new I18nTextEditor(mainComposite);
 		unitSymbolTextEditor.addModifyListener(new ModifyListener() {
@@ -52,7 +84,9 @@ extends WizardHopPage
 		new Label(mainComposite, SWT.NONE).setText("Decimal Digit Count: ");
 		decimalDigitSpinner = new Spinner(mainComposite, SWT.BORDER);
 		decimalDigitSpinner.setDigits(0);
-		decimalDigitSpinner.setMaximum(100);
+		decimalDigitSpinner.setMaximum(Integer.MAX_VALUE);
+		
+		new Label(mainComposite, SWT.NONE).setText("Note: Once the decimal digit count has been stored. You won't be able to change it again.");
 		
 		return mainComposite;
 	}
@@ -60,6 +94,8 @@ extends WizardHopPage
 	
 	@Override
 	public void onShow() {
+		getShell().pack(true);
+		getShell().update();
 		unitSymbolTextEditor.setFocus();
 	}
 
@@ -99,5 +135,12 @@ extends WizardHopPage
 	
 	public int getDecimalDigits() {
 		return decimalDigitSpinner.getDigits();
+	}
+	
+	public String getUnitID() {
+		if (autogenerateIDCheckbox.getSelection()) {
+			return IDGenerator.nextIDString(Unit.class);
+		}
+		return unitIDText.getText();
 	}
 }

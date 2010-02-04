@@ -21,18 +21,15 @@ import org.nightlabs.jfire.accounting.Currency;
  *
  */
 
-public class CurrencyCreateWizardPage extends WizardHopPage {
-
-
+public class CurrencyCreateWizardPage 
+extends WizardHopPage 
+{
 	private Label currencyIdLabel;
 	private Label currencySymbolLabel;
 	private Label digitalDigitCountLabel;
 	private Text currencyIdText;
 	private Text currencySymbolText;
 	private Spinner decimalDigitCountSpinner;
-
-
-
 
 	public CurrencyCreateWizardPage() {
 		super(CurrencyCreateWizardPage.class.getName(), "Create new currency");
@@ -68,9 +65,10 @@ public class CurrencyCreateWizardPage extends WizardHopPage {
 		decimalDigitCountSpinner.setMinimum(0);
 		decimalDigitCountSpinner.setMaximum(Integer.MAX_VALUE);
 		decimalDigitCountSpinner.setSelection(2); // most currencies in the world have 2 decimal digits, thus using this as default.
-		decimalDigitCountSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		decimalDigitCountSpinner.addModifyListener(modifyListenerCheckInput);
 
+		new Label(page, SWT.NONE).setText("Note: Once the decimal digit count has been stored. You won't be able to change it again.");
+		
 		setPageComplete(false);
 
 		return page;
@@ -124,8 +122,7 @@ public class CurrencyCreateWizardPage extends WizardHopPage {
 		}
 	}
 
-	public Currency createCurrency()
-	{
+	public Currency createCurrency() {
 		return new Currency(currencyIdText.getText(), currencySymbolText.getText(), decimalDigitCountSpinner.getSelection());
 	}
 }

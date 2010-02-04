@@ -14,10 +14,9 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
  *
  */
 
-public class CurrencyEditorMetaPage extends EntityEditorPageWithProgress {
-
-
-
+public class CurrencyEditorMetaPage 
+extends EntityEditorPageWithProgress 
+{
 	public static class Factory implements IEntityEditorPageFactory{
 		@Override
 		public IFormPage createPage(FormEditor formEditor) {
@@ -29,7 +28,6 @@ public class CurrencyEditorMetaPage extends EntityEditorPageWithProgress {
 				EntityEditor editor) {
 			return new CurrencyEditorPageController(editor);
 		}
-
 	}
 
 	public CurrencyEditorMetaPage(FormEditor editor){
@@ -38,14 +36,9 @@ public class CurrencyEditorMetaPage extends EntityEditorPageWithProgress {
 
 	@Override
 	protected void addSections(Composite parent) {
-
-
 		CurrencyEditorPageController controller = (CurrencyEditorPageController)getPageController();
         CurrencySection currencySection = new CurrencySection(this, parent, controller);
         getManagedForm().addPart(currencySection);
-
-
-
 	}
 
 	@Override
@@ -53,7 +46,4 @@ public class CurrencyEditorMetaPage extends EntityEditorPageWithProgress {
 
 		return "Currency data";
 	}
-
-
-
 }

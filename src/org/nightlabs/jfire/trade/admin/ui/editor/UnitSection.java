@@ -3,12 +3,9 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -26,7 +23,6 @@ extends ToolBarSectionPart
 	private Text idText;
 	private I18nTextEditor nameText;
 	private I18nTextEditor symbolText;
-	private Spinner decimalDegitSpinner;
 	
 	private UnitEditorPageController controller;
 	
@@ -67,17 +63,6 @@ extends ToolBarSectionPart
 		symbolText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent m) {
-				markDirty();
-			}
-		});
-		
-		new Label(client, SWT.NONE).setText("Decimal Degits: ");
-		decimalDegitSpinner = new Spinner(client, SWT.BORDER);
-		decimalDegitSpinner.setSelection(controller.getControllerObject().getDecimalDigitCount());
-		decimalDegitSpinner.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				getController().getControllerObject().setDecimalDigitCount(decimalDegitSpinner.getSelection());
 				markDirty();
 			}
 		});
