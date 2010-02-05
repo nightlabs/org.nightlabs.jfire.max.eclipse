@@ -144,7 +144,7 @@
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIInteger$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIBoolean$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUIString$Factory"/>
-      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriodFactory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUser$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUICurrentUser$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUsers$Factory"/>

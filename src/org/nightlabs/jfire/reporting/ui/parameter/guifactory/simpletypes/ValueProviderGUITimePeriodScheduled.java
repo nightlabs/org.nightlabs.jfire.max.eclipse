@@ -3,8 +3,6 @@
  */
 package org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes;
 
-import java.util.Calendar;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -13,31 +11,29 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.timepattern.input.InputTimePatternEditComposite;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.ValueProviderConfigUtil;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
-import org.nightlabs.util.CalendarUtil;
-import org.nightlabs.util.TimePeriod;
+import org.nightlabs.timepattern.InputTimePatternPeriod;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePeriod> {
+public class ValueProviderGUITimePeriodScheduled extends AbstractValueProviderGUI<InputTimePatternPeriod> {
 	
 	private XComposite wrapper;
-	private DateTimeEdit fromEdit;
-	private DateTimeEdit toEdit;
+	private InputTimePatternEditComposite fromEdit;
+	private InputTimePatternEditComposite toEdit;
 
 	/**
 	 * 
 	 */
-	public ValueProviderGUITimePeriod(ValueProviderConfig valueProviderConfig) {
+	public ValueProviderGUITimePeriodScheduled(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
 
@@ -53,9 +49,8 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 			group.setLayout(new GridLayout(2, true));
 			group.setLayoutData(new GridData(GridData.FILL_BOTH));
 			group.setText(ValueProviderConfigUtil.getValueProviderMessage(getValueProviderConfig()));
-			Calendar cal = Calendar.getInstance();
-			fromEdit = new DateTimeEdit(
-					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
+			fromEdit = new InputTimePatternEditComposite(
+					group, SWT.NONE | InputTimePatternEditComposite.STYLE_SHOW_ACTIVE_CHECKBOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.fromDateTimeEdit.caption")); //$NON-NLS-1$
 			fromEdit.addModifyListener(new ModifyListener() {
 				@Override
@@ -63,10 +58,8 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 					notifyOutputChanged();
 				}
 			});			
-			CalendarUtil.setToMinTimeOfDay(cal);
-			fromEdit.setDate(cal.getTime());
-			toEdit = new DateTimeEdit(
-					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
+			toEdit = new InputTimePatternEditComposite(
+					group, SWT.NONE | InputTimePatternEditComposite.STYLE_SHOW_ACTIVE_CHECKBOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.toDateTimeEdit.caption")); //$NON-NLS-1$
 			toEdit.addModifyListener(new ModifyListener() {
 				@Override
@@ -74,8 +67,6 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 					notifyOutputChanged();
 				}
 			});
-			CalendarUtil.setToMaxTimeOfDay(cal);
-			toEdit.setDate(cal.getTime());
 		}
 		return wrapper;
 	}
@@ -83,20 +74,29 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
-	public TimePeriod getOutputValue() {
-		TimePeriod period = new TimePeriod();
+	public InputTimePatternPeriod getOutputValue() {
+		InputTimePatternPeriod period = new InputTimePatternPeriod();
 		if (fromEdit.isActive())
-			period.setFrom(fromEdit.getDate());
+			period.setFrom(fromEdit.getInputTimePattern());
 		else
 			period.setFrom(null);
 		if (toEdit.isActive())
-			period.setTo(toEdit.getDate());
+			period.setTo(toEdit.getInputTimePattern());
 		else
 			period.setTo(null);
 		if (period.isConfining())
 			return period;
 		else
 			return null;
+	}
+	
+	@Override
+	public void setInitialValue(InputTimePatternPeriod initalValue) {
+		fromEdit.setInputTimePattern(initalValue.getFrom());
+		fromEdit.setActive(initalValue.isFromSet());
+		toEdit.setInputTimePattern(initalValue.getTo());
+		toEdit.setActive(initalValue.isToSet());
+		super.setInitialValue(initalValue);
 	}
 
 	/* (non-Javadoc)
