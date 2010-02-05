@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.jdo.JDOHelper;
 
@@ -123,8 +124,17 @@ extends ResizableTrayDialog
 		reportLayoutFileSelectionComposite = new FileSelectionComposite(
 				wrapper,
 				SWT.NONE, FileSelectionComposite.OPEN_FILE,
-				"File: ",	"Caption");
-		reportLayoutFileSelectionComposite.getFileTextControl().setEditable(false);
+				"File: ",	"Caption"){
+			@Override
+			protected String doSetUpFileDialog(
+					List<String> filterNames,
+					List<String> filterExtensions) {
+				filterNames.add("Zip files");
+				filterExtensions.add("*.zip");
+				return super.doSetUpFileDialog(filterNames, filterExtensions);
+			};
+		};
+		reportLayoutFileSelectionComposite.getFileTextControl().setEditable(false); 
 		reportLayoutFileSelectionComposite.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent m) {
