@@ -26,11 +26,10 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- *
  * @author vince
- *
  */
-public class CurrencyTable extends ActiveJDOObjectTableComposite<CurrencyID, Currency>
+public class CurrencyTable 
+extends ActiveJDOObjectTableComposite<CurrencyID, Currency>
 {
 	/**
 	 * The fetch groups of issue data.
@@ -38,7 +37,6 @@ public class CurrencyTable extends ActiveJDOObjectTableComposite<CurrencyID, Cur
 	public static final String[] FETCH_GROUPS = new String[] { FetchPlan.DEFAULT};
 
 	private class CurrencyController extends ActiveJDOObjectController<CurrencyID, Currency> {
-
 		@Override
 		protected Class<? extends Currency> getJDOObjectClass() {
 			return Currency.class;
@@ -73,20 +71,16 @@ public class CurrencyTable extends ActiveJDOObjectTableComposite<CurrencyID, Cur
 	public CurrencyTable(Composite parent, int style) {
 		super(parent, style);
 		load();
-
 	}
+	
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		TableColumn tcurrencyId;
-		TableColumn tcurrencySymbol;
-		tcurrencyId = new TableColumn(table, SWT.LEFT);
-		tcurrencySymbol = new TableColumn(table, SWT.LEFT);
-		tcurrencyId.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTable.tablecolumn.currencyId.text")); //$NON-NLS-1$
-		tcurrencySymbol.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTable.tablecolumn.currencySymbol.text"));
-		table.setLayout(new WeightedTableLayout(new int[]{1,1}));
-		table.setHeaderVisible(false);
-		table.setLinesVisible(false);
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTable.tablecolumn.currencyId.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTable.tablecolumn.currencySymbol.text")); //$NON-NLS-1$
 
+		table.setLayout(new WeightedTableLayout(new int[]{1,1}));
+		table.setHeaderVisible(true);
+		table.setLinesVisible(false);
 	}
 
 	class CurrencyTypeLabelProvider
@@ -99,10 +93,8 @@ public class CurrencyTable extends ActiveJDOObjectTableComposite<CurrencyID, Cur
 				switch (columnIndex)
 				{
 				case(0):
-
 					return currencyType.getCurrencyID();
 				case(1):
-
 					return currencyType.getCurrencySymbol();
 				default:
 					return ""; //$NON-NLS-1$
@@ -111,8 +103,6 @@ public class CurrencyTable extends ActiveJDOObjectTableComposite<CurrencyID, Cur
 			return null;
 		}
 	}
-
-
 
 	@Override
 	protected ActiveJDOObjectController<CurrencyID, Currency> createActiveJDOObjectController() {
@@ -123,5 +113,4 @@ public class CurrencyTable extends ActiveJDOObjectTableComposite<CurrencyID, Cur
 	protected ITableLabelProvider createLabelProvider() {
 		return new CurrencyTypeLabelProvider();
 	}
-
 }
