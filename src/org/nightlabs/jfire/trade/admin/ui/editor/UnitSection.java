@@ -16,6 +16,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.jfire.store.Unit;
 
 public class UnitSection 
 extends ToolBarSectionPart
@@ -23,6 +24,8 @@ extends ToolBarSectionPart
 	private Text idText;
 	private I18nTextEditor nameText;
 	private I18nTextEditor symbolText;
+	
+	private boolean ignoreModifyEvents = false;
 	
 	private UnitEditorPageController controller;
 	
@@ -41,36 +44,58 @@ extends ToolBarSectionPart
 		client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;
 		
+		ModifyListener markDirtyModifyListener = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (!ignoreModifyEvents)
+					markDirty();
+			}
+		};
+		
 		new Label(client, SWT.NONE).setText("Unit ID: ");
-		idText = new Text(client, SWT.BORDER);
+		idText = new Text(client, SWT.NONE);
 		idText.setEditable(false);
 		idText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		idText.setText(controller.getControllerObject().getUnitID());
+		idText.addModifyListener(markDirtyModifyListener);
 		
 		new Label(client, SWT.NONE).setText("Name: ");
 		nameText = new I18nTextEditor(client);
-		nameText.setI18nText(controller.getControllerObject().getName(), EditMode.DIRECT);
-		nameText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent m) {
-				markDirty();
-			}
-		});
+		nameText.addModifyListener(markDirtyModifyListener);
 		
 		new Label(client, SWT.NONE).setText("Symbol: ");
 		symbolText = new I18nTextEditor(client);
-		symbolText.setI18nText(controller.getControllerObject().getSymbol(), EditMode.DIRECT);
-		symbolText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent m) {
-				markDirty();
-			}
-		});
+		symbolText.addModifyListener(markDirtyModifyListener);
 		
 		getSection().setClient(client);
 	}
 	
 	public UnitEditorPageController getController() {
 		return controller;
+	}
+	
+	private Unit unit;
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+	
+	@Override
+	public boolean setFormInput(Object input) {
+		this.unit = (Unit) input;
+		return super.setFormInput(input);
+	}
+
+	@Override
+	public void refresh() {
+		ignoreModifyEvents = true;
+		try {
+			if (unit != null) {
+				idText.setText(unit.getUnitID());
+				nameText.setI18nText(unit.getName(), EditMode.DIRECT);
+				symbolText.setI18nText(unit.getSymbol(), EditMode.DIRECT);
+			}
+			super.refresh();
+		} finally {
+			ignoreModifyEvents = false;
+		}
 	}
 }
