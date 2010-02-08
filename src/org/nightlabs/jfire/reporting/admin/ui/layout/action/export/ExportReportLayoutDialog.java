@@ -120,7 +120,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 								ReportRegistryItem.FETCH_GROUP_DESCRIPTION, 
 								ReportRegistryItem.FETCH_GROUP_PARENT_CATEGORY}, 
 								monitor);
-				
+
 				ReportParameterAcquisitionSetupDAO parameterSetupDAO = ReportParameterAcquisitionSetupDAO.sharedInstance();
 				parameterSetup = parameterSetupDAO.getSetupForReportLayout(
 						ExportReportLayoutDialog.this.layoutID, 
@@ -136,7 +136,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 								ValueConsumerBinding.FETCH_GROUP_CONSUMER,
 								ValueConsumerBinding.FETCH_GROUP_PROVIDER}, 
 								monitor);
-				
+
 				ReportTextPartConfigurationDAO reportTextPartConfigurationDAO = ReportTextPartConfigurationDAO.sharedInstance();
 				reportTextPartConfiguration =  reportTextPartConfigurationDAO.getReportTextPartConfiguration(
 						ExportReportLayoutDialog.this.layoutID,
@@ -145,9 +145,9 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 								ReportTextPartConfiguration.FETCH_GROUP_REPORT_TEXT_PARTS,
 								ReportTextPart.FETCH_GROUP_CONTENT,
 								ReportTextPart.FETCH_GROUP_NAME }, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						monitor);
-				
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -156,19 +156,19 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 						layoutFileName.setText(layoutFileNameStr);
 					}
 				});
-				
+
 				return Status.OK_STATUS;
 			}
 		};
 		job.schedule();
-		
+
 		return wrapper;
 	}
 
 	private ReportRegistryItem reportRegistryItem;
 	private ReportParameterAcquisitionSetup parameterSetup;
 	private ReportTextPartConfiguration reportTextPartConfiguration;
-	
+
 	@Override
 	protected void okPressed() {
 		ReportLayoutExportInput editorInput = new ReportLayoutExportInput(layoutID);
@@ -237,8 +237,8 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				doc.appendChild(reportCategoryNode);
 
 				//The ReportInitialiser will take care of them.
-//				//Category-names 
-//				generateI18nElements(doc, reportCategory, ReportingConstants.REPORT_CATEGORY_ELEMENT_NAME, reportRegistryItem.getParentCategory().getName());
+				//				//Category-names 
+				//				generateI18nElements(doc, reportCategory, ReportingConstants.REPORT_CATEGORY_ELEMENT_NAME, reportRegistryItem.getParentCategory().getName());
 
 				//Report
 				Element reportNode = doc.createElement(ReportingConstants.REPORT_ELEMENT);
@@ -260,7 +260,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 
 				int idNo = 0;
 				Map<Object, Integer> object2IdNo = new HashMap<Object, Integer>();
-				
+
 				//Use-case
 				Map<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> valueAcquisitionSetups = 
 					parameterSetup.getValueAcquisitionSetups();
@@ -284,10 +284,10 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 						parameterNode.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_TYPE, parameterConfig.getParameterType());
 						parameterNode.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_X, Integer.toString(parameterConfig.getX()));
 						parameterNode.setAttribute(ReportingConstants.PARAMETER_ELEMENT_ATTRIBUTE_Y, Integer.toString(parameterConfig.getY()));
-						
+
 						object2IdNo.put(parameterConfig, idNo);
 						idNo++;
-						
+
 						parametersNode.appendChild(parameterNode);
 					}
 
@@ -309,38 +309,38 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 						providerConfigNode.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_GROW_VERTICALLY, Boolean.toString(valueProviderConfig.isGrowVertically()));
 						providerConfigNode.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_X, Integer.toString(valueProviderConfig.getX()));
 						providerConfigNode.setAttribute(ReportingConstants.PROVIDER_CONFIG_ELEMENT_ATTRIBUTE_Y, Integer.toString(valueProviderConfig.getY()));
-						
+
 						object2IdNo.put(valueProviderConfig, idNo);
 						idNo++;
-						
+
 						generateI18nElements(doc, providerConfigNode, ReportingConstants.PROVIDER_CONFIG_ELEMENT_MESSAGE, valueProviderConfig.getMessage());
-						
+
 						valueProviderConfigsNode.appendChild(providerConfigNode);
 					}
-					
+
 					//Value-consumer-bindings
 					Element valueConsumerBindingsNode = doc.createElement(ReportingConstants.VALUE_CONSUMER_BINDINGS_ELEMENT);
 					useCaseNode.appendChild(valueConsumerBindingsNode);
 
 					for (ValueConsumerBinding valueConsumerBinding : setup.getValue().getValueConsumerBindings()) {
 						Element consumerBindingNode = doc.createElement(ReportingConstants.VALUE_CONSUMER_BINDING_ELEMENT);
-						
+
 						Element bindingProvider = doc.createElement(ReportingConstants.BINDING_PROVIDER_ELEMENT);
 						bindingProvider.setAttribute(ReportingConstants.BINDING_PROVIDER_ELEMENT_ATTRIBUTE_ID, String.valueOf(object2IdNo.get(valueConsumerBinding.getProvider())));
-						
+
 						Element bindingParameter = doc.createElement(ReportingConstants.BINDING_PARAMETER_ELEMENT);
 						bindingParameter.setAttribute(ReportingConstants.BINDING_PARAMETER_ELEMENT_ATTRIBUTE_NAME, valueConsumerBinding.getParameterID());
-						
+
 						Element bindingConsumer = doc.createElement(ReportingConstants.BINDING_CONSUMER_ELEMENT); 
 						bindingConsumer.setAttribute(ReportingConstants.BINDING_CONSUMER_ELEMENT_ATTRIBUTE_ID, String.valueOf(object2IdNo.get(valueConsumerBinding.getConsumer())));
-						
+
 						consumerBindingNode.appendChild(bindingProvider);
 						consumerBindingNode.appendChild(bindingParameter);
 						consumerBindingNode.appendChild(bindingConsumer);
-						
+
 						object2IdNo.put(valueConsumerBinding, idNo);
 						idNo++;
-						
+
 						valueConsumerBindingsNode.appendChild(consumerBindingNode);
 					}
 
@@ -366,55 +366,57 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				throw new RuntimeException(e);
 			}
 			//----------End------------------
-			
-			//Generate report text part configuration file (<reportID>.ReportTextPartConfiguration.xml)
-			File textPartConfigurationFile = new File(parentName, layoutFileName.getText() + ReportingConstants.TEXT_PART_CONFIGURATION_FILE_SUFFIX);
-			try {
-				textPartConfigurationFile.createNewFile();
 
-				//Create document
-				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-				Document reportTextPartDoc = docBuilder.newDocument();
+			if (reportTextPartConfiguration != null) {
+				//Generate report text part configuration file (<reportID>.ReportTextPartConfiguration.xml)
+				File textPartConfigurationFile = new File(parentName, layoutFileName.getText() + ReportingConstants.TEXT_PART_CONFIGURATION_FILE_SUFFIX);
+				try {
+					textPartConfigurationFile.createNewFile();
 
-				/*****reportTextPartConfiguration-node*****/
-				Element reportTextPartConfigurationNode = reportTextPartDoc.createElement(ReportingConstants.REPORT_TEXT_PART_CONFIGURATION_ELEMENT);
-				reportTextPartDoc.appendChild(reportTextPartConfigurationNode);
+					//Create document
+					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+					Document reportTextPartDoc = docBuilder.newDocument();
 
-				for (ReportTextPart reportTextPart : reportTextPartConfiguration.getReportTextParts()) {
-					//reportTextPart
-					Element reportTextPartNode = reportTextPartDoc.createElement(ReportingConstants.REPORT_TEXT_PART_ELEMENT);
-					reportTextPartNode.setAttribute(ReportingConstants.REPORT_TEXT_PART_ELEMENT_ATTRIBUTE_ID, reportTextPart.getReportTextPartID());
-					reportTextPartNode.setAttribute(ReportingConstants.REPORT_TEXT_PART_ELEMENT_ATTRIBUTE_TYPE, reportTextPart.getType().toString());
-					reportTextPartConfigurationNode.appendChild(reportTextPartNode);
+					/*****reportTextPartConfiguration-node*****/
+					Element reportTextPartConfigurationNode = reportTextPartDoc.createElement(ReportingConstants.REPORT_TEXT_PART_CONFIGURATION_ELEMENT);
+					reportTextPartDoc.appendChild(reportTextPartConfigurationNode);
 
-					//name
-					generateI18nElements(reportTextPartDoc, reportTextPartNode, ReportingConstants.REPORT_TEXT_PART_NAME_ELEMENT, reportTextPart.getName());
+					for (ReportTextPart reportTextPart : reportTextPartConfiguration.getReportTextParts()) {
+						//reportTextPart
+						Element reportTextPartNode = reportTextPartDoc.createElement(ReportingConstants.REPORT_TEXT_PART_ELEMENT);
+						reportTextPartNode.setAttribute(ReportingConstants.REPORT_TEXT_PART_ELEMENT_ATTRIBUTE_ID, reportTextPart.getReportTextPartID());
+						reportTextPartNode.setAttribute(ReportingConstants.REPORT_TEXT_PART_ELEMENT_ATTRIBUTE_TYPE, reportTextPart.getType().toString());
+						reportTextPartConfigurationNode.appendChild(reportTextPartNode);
 
-					//content
-					generateI18nElements(reportTextPartDoc, reportTextPartNode, ReportingConstants.REPORT_TEXT_PART_CONTENT_ELEMENT, reportTextPart.getContent());
+						//name
+						generateI18nElements(reportTextPartDoc, reportTextPartNode, ReportingConstants.REPORT_TEXT_PART_NAME_ELEMENT, reportTextPart.getName());
+
+						//content
+						generateI18nElements(reportTextPartDoc, reportTextPartNode, ReportingConstants.REPORT_TEXT_PART_CONTENT_ELEMENT, reportTextPart.getContent());
+					}
+
+					Transformer transformer = TransformerFactory.newInstance().newTransformer();
+					transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+					transformer.setOutputProperty(OutputKeys.ENCODING, ReportingConstants.DESCRIPTOR_FILE_ENCODING);
+					transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, ReportingConstants.DESCRIPTOR_FILE_DOCTYPE_SYSTEM);
+					transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, ReportingConstants.DESCRIPTOR_FILE_DOCTYPE_PUBLIC); 
+
+					//Write the XML document to a file
+					//initialize StreamResult with File object to save to file
+					StreamResult result = new StreamResult(new StringWriter());
+					DOMSource source = new DOMSource(reportTextPartDoc);
+					transformer.transform(source, result);
+
+					String xmlString = result.getWriter().toString();
+
+					IOUtil.writeTextFile(textPartConfigurationFile, xmlString);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
 				}
-				
-				Transformer transformer = TransformerFactory.newInstance().newTransformer();
-				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				transformer.setOutputProperty(OutputKeys.ENCODING, ReportingConstants.DESCRIPTOR_FILE_ENCODING);
-				transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, ReportingConstants.DESCRIPTOR_FILE_DOCTYPE_SYSTEM);
-				transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, ReportingConstants.DESCRIPTOR_FILE_DOCTYPE_PUBLIC); 
-
-				//Write the XML document to a file
-				//initialize StreamResult with File object to save to file
-				StreamResult result = new StreamResult(new StringWriter());
-				DOMSource source = new DOMSource(reportTextPartDoc);
-				transformer.transform(source, result);
-
-				String xmlString = result.getWriter().toString();
-
-				IOUtil.writeTextFile(textPartConfigurationFile, xmlString);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
 			}
 			//----------End------------------
-			
+
 			if (needZipButton.getSelection() == true) {
 				File outputFilePath = new File(folderComposite.getFile(), layoutFileName.getText() + ZIP_SUFFIX);
 				try {
