@@ -86,7 +86,7 @@ extends ReportRegistryItemAction
 	public void run(Collection<ReportRegistryItem> reportRegistryItems) {		
 		if (reportRegistryItems.size() != 1)
 			return;
-		ReportRegistryItem reportCategoryItem = reportRegistryItems.iterator().next();
+		ReportCategory reportCategoryItem = (ReportCategory)reportRegistryItems.iterator().next();
 		
 		ImportReportLayoutDialog ilg = new ImportReportLayoutDialog(Display.getDefault().getActiveShell(), reportCategoryItem);
 		ilg.open();
