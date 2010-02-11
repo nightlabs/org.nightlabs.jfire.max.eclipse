@@ -10,6 +10,8 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -17,10 +19,10 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -66,7 +68,8 @@ extends JDOQuerySearchEntryViewer<R, Q>
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (PricedArticleContainer.class.isAssignableFrom(getTargetType()))
-					displayTotals(tableComposite.getSelectedElements(), footerTextSelection);
+					if (footerTextSelection != null && !footerTextSelection.isDisposed())
+						displayTotals(tableComposite.getSelectedElements(), footerTextSelection);
 			}
 		});
 	}
@@ -75,31 +78,93 @@ extends JDOQuerySearchEntryViewer<R, Q>
 	private XComposite footer;
 	private Label selectionLabel;
 	private Label totalLabel;
-	private boolean hasContent;
-	
+
 	@Override
-	public Composite createFooterComposite(Composite parent) {
+	public Composite createFooterComposite(final Composite parent) {
 		//Checks if the target type is PricedArticleContainer or not...
 		if (PricedArticleContainer.class.isAssignableFrom(getTargetType())) {
-			footer = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
-			footer.getGridLayout().numColumns = 4;
+			footer = new XComposite(parent, SWT.NONE, XComposite.LayoutDataMode.GRID_DATA_HORIZONTAL);
+			footer.getGridLayout().numColumns = 6;
 			
-			hasContent = false;
-			
-			updateSummaryJob.setPriority(Job.SHORT);
-			updateSummaryJob.schedule();
-			
+			loadConfigModuleJob.setPriority(Job.SHORT);
+			loadConfigModuleJob.addJobChangeListener(new JobChangeAdapter() {
+				@Override
+				public void done(IJobChangeEvent event) {
+					//Creates UIs
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							if (!summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().isEmpty()) {
+								for (Control child : footer.getChildren())
+									child.dispose();
+
+								int lineHeight = 0;
+								IToolkit toolkit = XComposite.retrieveToolkit(footer);
+								toolkit.adapt(footer);
+								
+								selectionLabel = toolkit.createLabel(footer, "Selection: ", SWT.RIGHT);
+								GridData gridData = new GridData(GridData.FILL_BOTH);
+								gridData.horizontalSpan = 1;
+								selectionLabel.setLayoutData(gridData);
+
+								footerTextSelection = new StyledText(footer, SWT.WRAP | SWT.MULTI);
+								footerTextSelection.setAlignment(SWT.RIGHT);
+								footerTextSelection.setEditable(false);
+								gridData = new GridData(GridData.FILL_BOTH);
+								gridData.horizontalSpan = 2;
+								footerTextSelection.setLayoutData(gridData);
+
+								totalLabel = toolkit.createLabel(footer, "Total: ", SWT.RIGHT);
+								gridData = new GridData(GridData.FILL_BOTH);
+								gridData.horizontalSpan = 1;
+								totalLabel.setLayoutData(gridData);
+
+								footerTextTotal = new StyledText(footer, SWT.WRAP | SWT.MULTI);
+								footerTextTotal.setAlignment(SWT.RIGHT);
+								footerTextTotal.setEditable(false);
+								gridData = new GridData(GridData.FILL_BOTH);
+								gridData.horizontalSpan = 2;
+								footerTextTotal.setLayoutData(gridData);
+
+								if (getListComposite().getElements().isEmpty()) {
+									displayTotals((Collection<R>) Collections.emptySet(), footerTextSelection);
+									displayTotals((Collection<R>) Collections.emptySet(), footerTextTotal);
+								}
+								else {
+									displayTotals(getListComposite().getSelectedElements(), footerTextSelection);
+									displayTotals(getListComposite().getElements(), footerTextTotal);
+								}
+
+								lineHeight = 20 * summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().size() + 10;		
+
+								footer.getGridData().heightHint = lineHeight;
+								footer.getParent().layout();
+								((SashForm)getComposite()).setWeights(calculateSashWeights(null));
+							}
+							else {
+								if (footer != null) {
+									for (Control child : footer.getChildren())
+										child.dispose();
+									footer.dispose();
+								}
+							}
+						}
+					});
+				}
+			});
+
+			loadConfigModuleJob.schedule();
+
 			return footer;
 		}
 
 		return null;
 	}
 
-	private Job updateSummaryJob = new Job("Loading config module") {
+	private Job loadConfigModuleJob = new Job("Loading config module") {
 		@Override
 		protected IStatus run(ProgressMonitor monitor) throws Exception {
 			monitor.beginTask("Loading config module....", 100);
-
 			//Loads config module 
 			summedPriceFragmentTypeConfigModule = ConfigUtil.getUserCfMod(
 					SummedPriceFragmentTypeConfigModule.class,
@@ -114,87 +179,32 @@ extends JDOQuerySearchEntryViewer<R, Q>
 
 			JDOLifecycleManager.sharedInstance().addNotificationListener(SummedPriceFragmentTypeConfigModule.class, configModuleChangeListener);
 
-			//Creates UIs
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					int lineHeight = 0;
-					if (!hasContent) {
-						IToolkit toolkit = XComposite.retrieveToolkit(footer);
-						
-						selectionLabel = toolkit.createLabel(footer, "", SWT.RIGHT);
-						selectionLabel.setText("Selection: ");
-						selectionLabel.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-						footerTextSelection = new StyledText(footer, SWT.WRAP | SWT.MULTI);
-						footerTextSelection.setAlignment(SWT.RIGHT);
-						GridData gridData = new GridData(GridData.FILL_BOTH);
-						footerTextSelection.setLayoutData(gridData);
-						
-						totalLabel = toolkit.createLabel(footer, "", SWT.RIGHT);
-						totalLabel.setText("Total: ");
-						totalLabel.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-						footerTextTotal = new StyledText(footer, SWT.WRAP | SWT.MULTI);
-						footerTextTotal.setAlignment(SWT.RIGHT);
-						gridData = new GridData(GridData.FILL_BOTH);
-						footerTextTotal.setLayoutData(gridData);
-
-						displayTotals((Collection<R>) Collections.emptySet(), footerTextSelection);
-						displayTotals((Collection<R>) Collections.emptySet(), footerTextTotal);
-						
-						lineHeight = 20 * summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().size() + 10;		
-						
-						footer.getGridData().heightHint = lineHeight;
-						footer.getParent().layout();
-						((SashForm)getComposite()).setWeights(calculateSashWeights(null));
-						
-						hasContent = true;
-					}
-					else {
-						displayTotals(getListComposite().getSelectedElements(), footerTextSelection);
-						displayTotals(getListComposite().getElements(), footerTextTotal);
-					}
-				}
-			});
-			
 			return Status.OK_STATUS;
 		}
 	};
-	
+
 	private NotificationListener configModuleChangeListener = new NotificationAdapterJob() {
 		@Override
 		public void notify(final NotificationEvent event) {
-			updateSummaryJob.setPriority(Job.SHORT);
-			updateSummaryJob.schedule();
+			loadConfigModuleJob.setPriority(Job.SHORT);
+			loadConfigModuleJob.schedule();
 		}
 	};
-	
+
 	@Override
 	protected void displaySearchResult(Object result) {
 		super.displaySearchResult(result);
-		if (footerTextTotal != null) {
+		if (footerTextTotal != null && !footerTextTotal.isDisposed()) {
 			Collection<R> elements = getListComposite().getElements();
 			displayTotals(elements, footerTextTotal);
 		}
 	}
 
 	private Map<Currency, Map<PriceFragmentType, Long>> currency2SummedPriceMap = new HashMap<Currency, Map<PriceFragmentType,Long>>();
-//	private Map<PriceFragmentType, Long> priceFragmentType2ValueMap = new HashMap<PriceFragmentType, Long>();
-	private void displayTotals(Collection<R> articleContainers, StyledText styledText) 
+	private void displayTotals(Collection<R> articleContainers, StyledText text) 
 	{
-		//Configured price fragment types that need to be calculated
 		List<PriceFragmentType> summedPriceFragmentTypes = summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList();
-		
-//		//Initialises the values in the map
-//		for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) {
-//			priceFragmentType2ValueMap.put(summedPriceFragmentType, new Long(0));
-//		}
 
-//		for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) {
-//			priceFragmentType2ValueMap.put(summedPriceFragmentType, new Long(0));
-//		}
-		
 		//For each article containers
 		for (R articleContainer : articleContainers) {
 			PricedArticleContainer pricedArticleContainer = (PricedArticleContainer) articleContainer;
@@ -213,7 +223,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 					Map<PriceFragmentType, Long> priceFragmentType2ValueMap = currency2SummedPriceMap.get(currency);
 					priceFragmentType2ValueMap.clear();
 				}
-				
+
 				//For each price fragment types
 				for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) 
 				{
@@ -234,7 +244,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 			for (PriceFragmentType priceFragmentType : summedPriceFragmentTypes) {
 				sumString.append(priceFragmentType.getName().getText()); 
 				sumString.append(" = ");
-				
+
 				Long value = priceFragmentType2ValueMap.get(priceFragmentType);;
 				long longValue = (value == null?0:value);
 				sumString.append(NumberFormatter.formatCurrency(longValue, currency));
@@ -242,9 +252,9 @@ extends JDOQuerySearchEntryViewer<R, Q>
 				sumString.append("\n ");
 			}	
 		}
-		
 
-		styledText.setText(sumString.toString());
+
+		text.setText(sumString.toString());
 	}
 
 	//	/**
