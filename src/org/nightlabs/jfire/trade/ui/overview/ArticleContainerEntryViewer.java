@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -83,9 +84,6 @@ extends JDOQuerySearchEntryViewer<R, Q>
 	public Composite createFooterComposite(final Composite parent) {
 		//Checks if the target type is PricedArticleContainer or not...
 		if (PricedArticleContainer.class.isAssignableFrom(getTargetType())) {
-			footer = new XComposite(parent, SWT.NONE, XComposite.LayoutDataMode.GRID_DATA_HORIZONTAL);
-			footer.getGridLayout().numColumns = 6;
-			
 			loadConfigModuleJob.setPriority(Job.SHORT);
 			loadConfigModuleJob.addJobChangeListener(new JobChangeAdapter() {
 				@Override
@@ -94,10 +92,17 @@ extends JDOQuerySearchEntryViewer<R, Q>
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							if (!summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().isEmpty()) {
+							if (footer != null && !footer.isDisposed()) {
 								for (Control child : footer.getChildren())
 									child.dispose();
-
+								footer.dispose();
+								footer = null;
+							}
+							
+							if (!summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().isEmpty()) {
+								footer = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
+								footer.getGridLayout().numColumns = 6;
+								
 								int lineHeight = 0;
 								IToolkit toolkit = XComposite.retrieveToolkit(footer);
 								toolkit.adapt(footer);
@@ -140,13 +145,6 @@ extends JDOQuerySearchEntryViewer<R, Q>
 								footer.getGridData().heightHint = lineHeight;
 								footer.getParent().layout();
 								((SashForm)getComposite()).setWeights(calculateSashWeights(null));
-							}
-							else {
-								if (footer != null) {
-									for (Control child : footer.getChildren())
-										child.dispose();
-									footer.dispose();
-								}
 							}
 						}
 					});
@@ -200,11 +198,15 @@ extends JDOQuerySearchEntryViewer<R, Q>
 		}
 	}
 
-	private Map<Currency, Map<PriceFragmentType, Long>> currency2SummedPriceMap = new HashMap<Currency, Map<PriceFragmentType,Long>>();
+	private Map<Currency, Map<PriceFragmentType, Long>> currency2PriceFragmentTypeSumMap = new HashMap<Currency, Map<PriceFragmentType,Long>>();
 	private void displayTotals(Collection<R> articleContainers, StyledText text) 
 	{
 		List<PriceFragmentType> summedPriceFragmentTypes = summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList();
 
+		for (Map<PriceFragmentType, Long> priceFragmentTypeSumMap : currency2PriceFragmentTypeSumMap.values()) {
+			priceFragmentTypeSumMap.clear();
+		}
+		
 		//For each article containers
 		for (R articleContainer : articleContainers) {
 			PricedArticleContainer pricedArticleContainer = (PricedArticleContainer) articleContainer;
@@ -212,42 +214,47 @@ extends JDOQuerySearchEntryViewer<R, Q>
 			if (price != null) 
 			{
 				Currency currency = price.getCurrency();
-				if (currency2SummedPriceMap.get(currency) == null) 
+				if (currency2PriceFragmentTypeSumMap.get(currency) == null) 
 				{
 					//Initialises the map
-					currency2SummedPriceMap.put(currency, new HashMap<PriceFragmentType, Long>());
+					currency2PriceFragmentTypeSumMap.put(currency, new HashMap<PriceFragmentType, Long>());
 				}
-				else
-				{
-					//Clears the data
-					Map<PriceFragmentType, Long> priceFragmentType2ValueMap = currency2SummedPriceMap.get(currency);
-					priceFragmentType2ValueMap.clear();
-				}
+//				else
+//				{
+//					//Clears the data
+//					Map<PriceFragmentType, Long> priceFragmentTypeSumMap = currency2PriceFragmentTypeSumMap.get(currency);
+//					priceFragmentTypeSumMap.clear();
+//				}
 
-				//For each price fragment types
+				//For each summed price fragment types
 				for (PriceFragmentType summedPriceFragmentType : summedPriceFragmentTypes) 
 				{
-					Map<PriceFragmentType, Long> priceFragmentType2ValueMap = currency2SummedPriceMap.get(currency);
 					PriceFragment priceFragment = price.getPriceFragment(summedPriceFragmentType.getPrimaryKey(), false);
-					Long amount = priceFragmentType2ValueMap.get(summedPriceFragmentType);
-					if (amount != null) {
-						amount = amount + (priceFragment == null ? 0:priceFragment.getAmount());
-						priceFragmentType2ValueMap.put(summedPriceFragmentType, amount);
+					long amount = priceFragment == null ? 0 : priceFragment.getAmount();
+					
+					Map<PriceFragmentType, Long> priceFragmentTypeSumMap = currency2PriceFragmentTypeSumMap.get(currency);
+					Long totalAmount = priceFragmentTypeSumMap.get(summedPriceFragmentType);
+					
+					if (totalAmount == null) {
+						totalAmount = 0L;
 					}
+					
+					totalAmount += amount;
+					priceFragmentTypeSumMap.put(summedPriceFragmentType, totalAmount);
 				}
 			}
 		}
 
 		StringBuilder sumString = new StringBuilder("");
-		for (Currency currency : currency2SummedPriceMap.keySet()) {
-			Map<PriceFragmentType, Long> priceFragmentType2ValueMap = currency2SummedPriceMap.get(currency);
+		for (Currency currency : currency2PriceFragmentTypeSumMap.keySet()) {
+			Map<PriceFragmentType, Long> priceFragmentTypeSumMap = currency2PriceFragmentTypeSumMap.get(currency);
 			for (PriceFragmentType priceFragmentType : summedPriceFragmentTypes) {
 				sumString.append(priceFragmentType.getName().getText()); 
 				sumString.append(" = ");
 
-				Long value = priceFragmentType2ValueMap.get(priceFragmentType);;
-				long longValue = (value == null?0:value);
-				sumString.append(NumberFormatter.formatCurrency(longValue, currency));
+				Long sum = priceFragmentTypeSumMap.get(priceFragmentType);;
+				long longSum = (sum == null?0:sum);
+				sumString.append(NumberFormatter.formatCurrency(longSum, currency));
 
 				sumString.append("\n ");
 			}	
