@@ -80,8 +80,6 @@ extends LSDViewPart
 	private Map<Integer, Deque<ObjectID>> pathsToExpand_PRID;
 	private Map<Integer, Deque<ObjectID>> expandedPaths_PRID;
 
-	// TODO 2. Remove the FARK-MARKs.
-
 	private PersonRelationTree personRelationTree;
 	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
 
@@ -452,7 +450,7 @@ extends LSDViewPart
 	 */
 	private Set<PropertySetID> initRelatablePathsToRoots() {
 		List<Deque<ObjectID>> pathsToRoot_PSID = relatablePathsToRoots.get(PropertySetID.class);    // <-- PropertySetID only.
-		List<Deque<ObjectID>> pathsToRoot_PRID = relatablePathsToRoots.get(PersonRelationID.class);    // <-- PropertySetID only.
+		List<Deque<ObjectID>> pathsToRoot_PRID = relatablePathsToRoots.get(PersonRelationID.class); // <-- PropertySetID + PersonRelationID.
 
 		// Initialise the path-expansion trackers.
 		pathsToExpand_PRID = new HashMap<Integer, Deque<ObjectID>>(pathsToRoot_PRID.size());
