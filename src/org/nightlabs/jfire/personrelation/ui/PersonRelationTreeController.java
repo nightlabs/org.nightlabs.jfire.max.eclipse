@@ -19,6 +19,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
+import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
@@ -47,6 +48,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		PersonRelation.FETCH_GROUP_FROM_ID,
 		PersonRelation.FETCH_GROUP_TO,
 		PersonRelation.FETCH_GROUP_FROM_PERSON_RELATION_IDS,
+		Person.FETCH_GROUP_DATA_FIELDS,	// FIXME Make this into one of the delegates.
 	};
 
 	private volatile Collection<PropertySetID> rootPersonIDs;
@@ -505,6 +507,26 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		}
 	}
 
+
+//	// FIXME
+//	@SuppressWarnings("unchecked")
+//	private Collection<ObjectID> resChildIDs;
+//	public Collection<ObjectID> retrieveChildObjectIDs(final PersonRelationTreeNode node) {
+//		Job job = new Job("Retrieving children...") {
+//			@Override
+//			protected IStatus run(ProgressMonitor monitor) throws Exception {
+//				Collection<ObjectID> childObjectIDs = retrieveChildObjectIDs((List<ObjectID>)node.getObjectIDsToRoot(), monitor);
+//				resChildIDs = new ArrayList<ObjectID>(childObjectIDs);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//
+//		job.setPriority(Job.SHORT);
+//		job.schedule();
+//
+//		return resChildIDs;
+//	}
+
 //	// For debugging...
 //	private void showObjectIDs(String preamble, Collection<? extends ObjectID> objectIDs) {
 //		System.err.print("++ " + preamble + " :: [" + objectIDs.size() + "] {");
@@ -520,7 +542,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 //
 //		System.err.print("}\n");
 //	}
-	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
 
+
+	// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
 
 }

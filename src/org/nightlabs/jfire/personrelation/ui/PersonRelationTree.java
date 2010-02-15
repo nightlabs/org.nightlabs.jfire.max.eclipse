@@ -80,6 +80,13 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
 			if (jdoObject == null) {
+				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+				if (delegate != null) {
+					String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+					if (result != null)
+						return result;
+				}
+
 				if (jdoObjectID instanceof PropertySetID) {
 					PropertySetID personID = (PropertySetID) jdoObjectID;
 
@@ -101,10 +108,6 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 					}
 				}
 				else {
-					PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
-					if (delegate != null)
-						return delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
-
 					switch (spanColIndex) {
 						case 0:
 							return String.valueOf(jdoObjectID);
@@ -114,6 +117,14 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				}
 			}
 			else {
+				// We check for the delegate first in order to allow overriding the defaults following below. Marco.
+				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+				if (delegate != null) {
+					String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+					if (result != null)
+						return result;
+				}
+
 				if (jdoObject instanceof Person) {
 					Person person = (Person) jdoObject;
 
@@ -137,9 +148,9 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 					}
 				}
 				else {
-					PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
-					if (delegate != null)
-						return delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
+//					PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+//					if (delegate != null)
+//						return delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
 
 					switch (spanColIndex) {
 						case 0:
@@ -156,7 +167,8 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		@Override
 		protected int[][] getColumnSpan(Object element) {
 			if (!(element instanceof PersonRelationTreeNode))
-				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+				return null; // null means each real column assigned to one visible column
+//				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
 
 			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
 			ObjectID jdoObjectID = node.getJdoObjectID();
@@ -172,22 +184,24 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				return new int[][] { {0, 1} };
 			}
 			else {
-				if (jdoObject instanceof Person)
-					return new int[][] { {0, 1} };
-
-				if (jdoObject instanceof PersonRelation)
-					return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
-
 				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
 				if (delegate != null) {
 					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
 					if (result != null)
 						return result;
-					else
-						return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+//					else
+//						return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
 				}
 
-				return new int[][] { {0, 1} };
+				if (jdoObject instanceof Person)
+					return new int[][] { {0, 1} };
+
+				if (jdoObject instanceof PersonRelation)
+					return null; // null means each real column assigned to one visible column
+//					return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
+
+//				return new int[][] { {0, 1} };
+				return null; // null means each real column assigned to one visible column
 			}
 		}
 
@@ -232,23 +246,38 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			return getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
 		}
 
-		protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
-			if ((jdoObject instanceof PersonRelation) || (jdoObject instanceof Person)) {
-				if (spanColIndex == 0)
-					return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, jdoObject.getClass().getSimpleName());
-				else
-					return null;
-			}
-
+		protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex)
+		{
 			if (jdoObject == null) {
 				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
-				if (delegate != null)
-					return delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+				if (delegate != null) {
+					Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+					if (result != null)
+						return result;
+				}
 			}
 			else {
 				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
-				if (delegate != null)
-					return delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+				if (delegate != null) {
+					Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
+					if (result != null)
+						return result;
+				}
+			}
+
+			if (jdoObject instanceof Person) {
+				return spanColIndex == 0
+						? SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, jdoObject.getClass().getSimpleName())
+						: null;
+			}
+
+			if (jdoObject instanceof PersonRelation) {
+				if (spanColIndex == 0) {
+					String suffix = jdoObject.getClass().getSimpleName();
+					return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, suffix);
+				}
+				else
+					return null;
 			}
 
 			return null;
