@@ -4,11 +4,13 @@
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView"
             icon="icons/PersonRelationIssueTreeView.16x16.png"
-            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView" name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.name"/>
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView" 
+            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.name"/>
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView"
             icon="icons/PersonRelationIssueTreeView.16x16.png"
-            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView" name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView.name"/>
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView" 
+            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView.name"/>            
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
@@ -16,7 +18,7 @@
                 id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView"
                 relationship="stack" relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"/>
         </perspectiveExtension>
-    </extension>
+	</extension>            
     <extension point="org.eclipse.ui.viewActions">
         <viewContribution
             id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeViewContribution" targetID="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView">

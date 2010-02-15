@@ -29,7 +29,7 @@ import org.nightlabs.notification.NotificationListener;
 /**
  * @author khaireel <!-- khaireel [AT] nightlabs [DOT] de -->
  */
-public class PersonRelationDetailsView extends LSDViewPart 
+public class PersonRelationDetailsView extends LSDViewPart
 {
 	public static final String VIEW_ID = PersonRelationDetailsView.class.getName();
 
@@ -110,8 +110,6 @@ public class PersonRelationDetailsView extends LSDViewPart
 	private Wrapper wrapper;
 
 	private class Wrapper {
-
-		// -------------------------------------------------------------------------->> FARK-MARK
 		private Control leEditorControl;
 		private LegalEntityPersonEditor leEditor;
 		private AnonymousLegalEntityComposite anonymousLegalEntityComposite;
