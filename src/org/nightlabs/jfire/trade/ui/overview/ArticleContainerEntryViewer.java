@@ -16,12 +16,12 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.job.Job;
@@ -54,8 +54,8 @@ import org.nightlabs.progress.SubProgressMonitor;
 public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q extends AbstractArticleContainerQuery>
 extends JDOQuerySearchEntryViewer<R, Q>
 {
-	private StyledText footerTextTotal;
-	private StyledText footerTextSelection;
+	private Text footerTextTotal;
+	private Text footerTextSelection;
 
 	public ArticleContainerEntryViewer(Entry entry) {
 		super(entry);
@@ -101,34 +101,30 @@ extends JDOQuerySearchEntryViewer<R, Q>
 							
 							if (!summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().isEmpty()) {
 								footer = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
-								footer.getGridLayout().numColumns = 6;
+								footer.getGridLayout().numColumns = 4;
 								
 								int lineHeight = 0;
 								IToolkit toolkit = XComposite.retrieveToolkit(footer);
 								toolkit.adapt(footer);
 								
 								selectionLabel = toolkit.createLabel(footer, "Selection: ", SWT.RIGHT);
-								GridData gridData = new GridData(GridData.FILL_BOTH);
-								gridData.horizontalSpan = 1;
+								GridData gridData = new GridData(GridData.FILL_VERTICAL);
+								gridData.widthHint = 150;
 								selectionLabel.setLayoutData(gridData);
 
-								footerTextSelection = new StyledText(footer, SWT.WRAP | SWT.MULTI);
-								footerTextSelection.setAlignment(SWT.RIGHT);
+								footerTextSelection = new Text(footer, SWT.RIGHT | SWT.MULTI);
 								footerTextSelection.setEditable(false);
 								gridData = new GridData(GridData.FILL_BOTH);
-								gridData.horizontalSpan = 2;
 								footerTextSelection.setLayoutData(gridData);
 
 								totalLabel = toolkit.createLabel(footer, "Total: ", SWT.RIGHT);
-								gridData = new GridData(GridData.FILL_BOTH);
-								gridData.horizontalSpan = 1;
+								gridData = new GridData(GridData.FILL_VERTICAL);
+								gridData.widthHint = 150;
 								totalLabel.setLayoutData(gridData);
 
-								footerTextTotal = new StyledText(footer, SWT.WRAP | SWT.MULTI);
-								footerTextTotal.setAlignment(SWT.RIGHT);
+								footerTextTotal = new Text(footer, SWT.RIGHT | SWT.MULTI);
 								footerTextTotal.setEditable(false);
 								gridData = new GridData(GridData.FILL_BOTH);
-								gridData.horizontalSpan = 2;
 								footerTextTotal.setLayoutData(gridData);
 
 								if (getListComposite().getElements().isEmpty()) {
@@ -143,9 +139,11 @@ extends JDOQuerySearchEntryViewer<R, Q>
 								lineHeight = 20 * summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().size() + 10;		
 
 								footer.getGridData().heightHint = lineHeight;
-								footer.getParent().layout();
-								((SashForm)getComposite()).setWeights(calculateSashWeights(null));
+								XComposite.retrieveToolkit(parent).adapt(footer);
 							}
+							
+							parent.layout();
+							((SashForm)getComposite()).setWeights(calculateSashWeights(null));
 						}
 					});
 				}
@@ -199,7 +197,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 	}
 
 	private Map<Currency, Map<PriceFragmentType, Long>> currency2PriceFragmentTypeSumMap = new HashMap<Currency, Map<PriceFragmentType,Long>>();
-	private void displayTotals(Collection<R> articleContainers, StyledText text) 
+	private void displayTotals(Collection<R> articleContainers, Text text) 
 	{
 		List<PriceFragmentType> summedPriceFragmentTypes = summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList();
 
