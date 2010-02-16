@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Trade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.trade.ui;singleton:=true
-Bundle-Version: 1.1.25
+Bundle-Version: 1.1.26
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.ui.TradePlugin
 Bundle-Vendor: NightLabs.org

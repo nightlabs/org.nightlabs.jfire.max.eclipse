@@ -24,10 +24,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.toolkit.IToolkit;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.Price;
@@ -100,10 +102,9 @@ extends JDOQuerySearchEntryViewer<R, Q>
 							}
 							
 							if (!summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().isEmpty()) {
-								footer = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
+								footer = new XComposite(parent, SWT.NONE, LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 								footer.getGridLayout().numColumns = 4;
 								
-								int lineHeight = 0;
 								IToolkit toolkit = XComposite.retrieveToolkit(footer);
 								toolkit.adapt(footer);
 								
@@ -115,6 +116,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 								footerTextSelection = new Text(footer, SWT.RIGHT | SWT.MULTI);
 								footerTextSelection.setEditable(false);
 								gridData = new GridData(GridData.FILL_BOTH);
+								gridData.widthHint = 450;
 								footerTextSelection.setLayoutData(gridData);
 
 								totalLabel = toolkit.createLabel(footer, "Total: ", SWT.RIGHT);
@@ -125,6 +127,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 								footerTextTotal = new Text(footer, SWT.RIGHT | SWT.MULTI);
 								footerTextTotal.setEditable(false);
 								gridData = new GridData(GridData.FILL_BOTH);
+								gridData.widthHint = 450;
 								footerTextTotal.setLayoutData(gridData);
 
 								if (getListComposite().getElements().isEmpty()) {
@@ -136,25 +139,20 @@ extends JDOQuerySearchEntryViewer<R, Q>
 									displayTotals(getListComposite().getElements(), footerTextTotal);
 								}
 
-								lineHeight = 20 * summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().size() + 10;		
-
-								footer.getGridData().heightHint = lineHeight;
 								XComposite.retrieveToolkit(parent).adapt(footer);
-							}
+							}//if (!summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().isEmpty())
 							
-							parent.layout();
-							((SashForm)getComposite()).setWeights(calculateSashWeights(null));
+							setFooter(footer);
+							relayoutFooter();
 						}
-					});
-				}
+					}); //Display.getDefault().asyncExec...
+				}//done(IJobChangeEvent event)
 			});
 
 			loadConfigModuleJob.schedule();
-
-			return footer;
 		}
-
-		return null;
+		
+		return footer;
 	}
 
 	private Job loadConfigModuleJob = new Job("Loading config module") {
@@ -194,13 +192,26 @@ extends JDOQuerySearchEntryViewer<R, Q>
 			Collection<R> elements = getListComposite().getElements();
 			displayTotals(elements, footerTextTotal);
 		}
+		
+		relayoutFooter();
 	}
 
+	private void relayoutFooter() {
+		int numCurrency = currency2PriceFragmentTypeSumMap.keySet().size();
+		int numPriceFragmentType = summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList().size();
+		
+		if (footer != null)
+			footer.getGridData().heightHint = (RCPUtil.getFontHeight(footerTextSelection) * numPriceFragmentType * numCurrency);
+		
+		getComposite().getParent().layout();
+		((SashForm)getComposite()).setWeights(calculateSashWeights(null));
+	}
+	
 	private Map<Currency, Map<PriceFragmentType, Long>> currency2PriceFragmentTypeSumMap = new HashMap<Currency, Map<PriceFragmentType,Long>>();
 	private void displayTotals(Collection<R> articleContainers, Text text) 
 	{
 		List<PriceFragmentType> summedPriceFragmentTypes = summedPriceFragmentTypeConfigModule.getSummedPriceFragmentTypeList();
-
+		
 		for (Map<PriceFragmentType, Long> priceFragmentTypeSumMap : currency2PriceFragmentTypeSumMap.values()) {
 			priceFragmentTypeSumMap.clear();
 		}
@@ -257,7 +268,6 @@ extends JDOQuerySearchEntryViewer<R, Q>
 				sumString.append("\n ");
 			}	
 		}
-
 
 		text.setText(sumString.toString());
 	}
