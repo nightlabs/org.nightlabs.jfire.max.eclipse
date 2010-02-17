@@ -317,6 +317,11 @@
               class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchEditLayoutPreferencePage"
               id="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchEditLayoutPreferencePage"
               name="Legal Entity Search" />
+        <page
+        	  category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              class="org.nightlabs.jfire.trade.ui.currency.config.CurrencyConfigPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.currency.config.CurrencyConfigPreferencePage"
+              name="Currency Settings"/>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory
