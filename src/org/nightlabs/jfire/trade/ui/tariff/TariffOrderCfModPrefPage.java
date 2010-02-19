@@ -72,10 +72,11 @@ public class TariffOrderCfModPrefPage extends AbstractUserConfigModulePreference
 		}
 	}
 
-	@Override
-	protected void setEditable(boolean editable) {
-		if (!tariffOrderCfModComposite.isDisposed()) {
-			tariffOrderCfModComposite.setEditable(editable);
-		}
-	}
+	//Removed by Chairat 19/02/2010
+//	@Override
+//	protected void setEditable(boolean editable) {
+//		if (!tariffOrderCfModComposite.isDisposed()) {
+//			tariffOrderCfModComposite.setEditable(editable);
+//		}
+//	}
 }
