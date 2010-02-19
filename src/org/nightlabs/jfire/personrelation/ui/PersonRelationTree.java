@@ -3,10 +3,18 @@ package org.nightlabs.jfire.personrelation.ui;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -18,8 +26,11 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
@@ -148,10 +159,6 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 					}
 				}
 				else {
-//					PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
-//					if (delegate != null)
-//						return delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
-
 					switch (spanColIndex) {
 						case 0:
 							return String.valueOf(jdoObject);
@@ -189,8 +196,6 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
 					if (result != null)
 						return result;
-//					else
-//						return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
 				}
 
 				if (jdoObject instanceof Person)
@@ -198,10 +203,8 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 				if (jdoObject instanceof PersonRelation)
 					return null; // null means each real column assigned to one visible column
-//					return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
 
-//				return new int[][] { {0, 1} };
-				return null; // null means each real column assigned to one visible column
+				return null;
 			}
 		}
 
@@ -383,6 +386,11 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		});
 
 		super.setInput(personRelationTreeController);
+
+		// --[Context-menu setup]--------------------------------------------------------->>>
+		drillDownAdapter = new DrillDownAdapter( getTreeViewer() );
+		hookContextMenu();
+		// ------------------------------------------------------------------------------->>>
 	}
 
 	public PersonRelationTreeController getPersonRelationTreeController() {
@@ -491,4 +499,55 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	public void setInput(Object input) {
 		super.setInput(input);
 	}
+
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	//  Context-menu preps.
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	private DrillDownAdapter drillDownAdapter;
+	private List<Object> contextMenuContributions;
+
+	private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager();
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) { PersonRelationTree.this.fillContextMenu(manager); }
+		});
+
+		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
+		getTreeViewer().getControl().setMenu(menu);
+	}
+
+	public void addContextMenuContribution(IContributionItem contributionItem) {
+		if (contextMenuContributions == null)
+			contextMenuContributions = new LinkedList<Object>();
+
+		contextMenuContributions.add(contributionItem);
+	}
+
+	public void addContextMenuContribution(IAction action) {
+		if (contextMenuContributions == null)
+			contextMenuContributions = new LinkedList<Object>();
+
+		contextMenuContributions.add(action);
+	}
+
+	private void fillContextMenu(IMenuManager manager) {
+		if (contextMenuContributions != null) {
+			for (Object contextMenuContribution : contextMenuContributions) {
+				if (contextMenuContribution instanceof IContributionItem)
+					manager.add((IContributionItem)contextMenuContribution);
+				else if (contextMenuContribution instanceof IAction)
+					manager.add((IAction)contextMenuContribution);
+			}
+		}
+
+		// ... dont quite like to have this 'navigation' items in the tree-context menu.
+		//drillDownAdapter.addNavigationActions(manager);
+
+		// Other plug-ins can contribute their actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
+
 }
