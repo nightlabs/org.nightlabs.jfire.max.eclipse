@@ -804,7 +804,7 @@ implements ArticleContainerEdit
 			calculateScrollContentSize(singleSegmentSegmentEdit);
 	}
 
-	private void calculateScrollContentSize(SegmentEdit segmentEdit)
+	protected void calculateScrollContentSize(SegmentEdit segmentEdit)
 	{
 		Composite segmentEditComposite = segmentEdit.getComposite();
 		ScrolledComposite segmentCompositeScrollContainer = (ScrolledComposite) segmentEditComposite
