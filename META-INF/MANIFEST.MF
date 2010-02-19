@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Trade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.trade.ui;singleton:=true
-Bundle-Version: 1.1.29
+Bundle-Version: 1.1.30
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.ui.TradePlugin
 Bundle-Vendor: NightLabs.org
@@ -13,11 +13,14 @@ Export-Package: org.nightlabs.jfire.trade.ui,
  org.nightlabs.jfire.trade.ui.account.transfer.manual,
  org.nightlabs.jfire.trade.ui.accounting,
  org.nightlabs.jfire.trade.ui.articlecontainer,
+ org.nightlabs.jfire.trade.ui.articlecontainer.config,
+ org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer,
+ org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assignendcustomer,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated,
@@ -35,6 +38,7 @@ Export-Package: org.nightlabs.jfire.trade.ui,
  org.nightlabs.jfire.trade.ui.articlecontainer.header,
  org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring,
  org.nightlabs.jfire.trade.ui.currency,
+ org.nightlabs.jfire.trade.ui.currency.config,
  org.nightlabs.jfire.trade.ui.customergroup,
  org.nightlabs.jfire.trade.ui.detail,
  org.nightlabs.jfire.trade.ui.exceptionhandler,

@@ -147,11 +147,6 @@
             icon="icons/generalOrderOfferInvoiceDeliveryEditor16.gif"
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor.name"/>
         <editor
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor"
-            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor"
-            default="false" icon="icons/QuickSalePerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor.name"/>
-        <editor
             class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
@@ -234,10 +229,6 @@
             class="org.nightlabs.jfire.trade.ui.TradePerspective"
             icon="icons/TradePerspective.16x16.png"
             id="org.nightlabs.jfire.trade.ui.TradePerspective" name="%Trade.perspective.name"/>
-        <perspective
-            class="org.nightlabs.jfire.trade.ui.QuickSalePerspective"
-            fixed="false" icon="icons/QuickSalePerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.QuickSalePerspective" name="%QuickSalePerspective.perspective.name"/>
         <perspective
             class="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective"
             fixed="false"
@@ -902,9 +893,6 @@
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
             <contributionItemSetID id="org.nightlabs.base.ui.search.SearchContributionItem"/>
         </perspectiveExtension>
-        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
-            <contributionItemSetID id="org.nightlabs.base.ui.search.SearchContributionItem"/>
-        </perspectiveExtension>
     </extension>
     <extension point="org.nightlabs.base.ui.searchResultProvider">
         <searchResultProviderFactory
@@ -1142,8 +1130,6 @@
         <registry
             editorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor" perspectiveID="org.nightlabs.jfire.base.ui.overview.OverviewPerspective"/>
         <registry
-            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor" perspectiveID="org.nightlabs.jfire.trade.ui.QuickSalePerspective"/>
-        <registry
               editorID="org.nightlabs.jfire.trade.ui.reserve.ReservationEditor"
               perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
         </registry>
@@ -1151,9 +1137,6 @@
               editorID="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
               perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
         </registry>
-    </extension>
-    <extension point="org.nightlabs.base.ui.workbenchListener">
-        <workbenchListener class="org.nightlabs.jfire.trade.ui.QuickSaleWorkbenchListener"/>
     </extension>
     <!--
    <extension
@@ -1175,7 +1158,7 @@
 
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
+      <perspectiveExtension targetID="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective">
          <actionSet id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"/>
       </perspectiveExtension>
    </extension>
@@ -1252,7 +1235,6 @@
             name="NotAvailableExceptionHandler" targetType="org.nightlabs.jfire.store.NotAvailableException"/>
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
-        <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForQuickSalePerspective"/>
         <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForProductTypeSelection"/>
         <loginStateListener
               class="org.nightlabs.jfire.trade.ui.LoginStateListenerForCurrentBusinessPartner">
@@ -1371,7 +1353,7 @@
           </actionSet>
        </perspectiveExtension>
        <perspectiveExtension
-             targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
+             targetID="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective">
           <actionSet
                 id="org.nightlabs.jfire.trade.ui.search">
           </actionSet>
@@ -1414,19 +1396,6 @@
            </action>
         </actionSet>
     </extension>
-    <extension point="org.eclipse.ui.perspectiveExtensions">
-        <!--
-        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
-            <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
-        </perspectiveExtension>
--->
-        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
-            <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
-            <actionSet
-                  id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate">
-            </actionSet>
-        </perspectiveExtension>
-    </extension>
     <extension
           point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
        <articleContainerEditorPageFactory
@@ -1434,13 +1403,6 @@
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorPage"
              articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
              editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
-             indexHint="0">
-       </articleContainerEditorPageFactory>
-       <articleContainerEditorPageFactory
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage$Factory"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage"
-             articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
-             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor"
              indexHint="0">
        </articleContainerEditorPageFactory>
        <articleContainerEditorPageFactory
