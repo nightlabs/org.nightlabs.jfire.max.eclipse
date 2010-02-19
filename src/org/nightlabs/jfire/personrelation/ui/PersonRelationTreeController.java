@@ -266,8 +266,14 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		}
 	}
 
+
 	@Override
 	protected Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor) {
+		return null;
+	}
+
+	@Override
+	protected Map<ObjectID, Long> retrieveChildCount(Set<PersonRelationTreeNode> parentNodes, Set<ObjectID> parentIDs, ProgressMonitor monitor) {
 		Collection<PropertySetID> rootPersonIDs = this.rootPersonIDs;
 		if (rootPersonIDs == null)
 			return Collections.emptyMap();
@@ -338,29 +344,54 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				// we need to retrieve a bit more for our comparisons. Needs a bit more fine-tuning.
 				for (PersonRelation personRelation : personRelations) {
 					PersonRelationID personRelationID = (PersonRelationID) JDOHelper.getObjectId(personRelation);
-					List<PropertySetID> propertySetIDsToRoot = getTreeNodeList(personRelationID).get(0).getPropertySetIDsToRoot();
-					Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
-							null, personRelation.getToID(), null,
-							new SubProgressMonitor(monitor, 80)
-					);
-
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
-					List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
-							childPersonRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
-					);
-
-					Iterator<PersonRelation> cReln_iter = cRelns.iterator();
 					long personRelationCount = 0;
-					while (cReln_iter.hasNext()) {
-						PropertySetID cReln_propID = cReln_iter.next().getToID();
-						if (!propertySetIDsToRoot.contains(cReln_propID))
-							personRelationCount++;
-					}
 
-					result.put(personRelationID, personRelationCount);
-					subMonitor.worked(1);
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
+					// Revised version. We now check our reference to the Set of parentNodes, to make sure we have the correct Node.
+					PersonRelationTreeNode node = null;
+					List<PersonRelationTreeNode> treeNodes = getTreeNodeList(personRelationID);
+					if (treeNodes == null) {
+						// Guard. Revert to the original methods.
+						// But this SHOULD NEVER HAPPEN.
+						personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
+								null, personRelation.getToID(), null, new NullProgressMonitor()
+						);
+						result.put(personRelationID, personRelationCount);
+						subMonitor.worked(1);
+					}
+					else {
+						if (treeNodes.size() == 1)
+							node = treeNodes.get(0);
+						else {
+							for (PersonRelationTreeNode treeNode : treeNodes)
+								if (parentNodes.contains(treeNode)) {
+									node = treeNode;
+									break;
+								}
+						}
+
+						List<PropertySetID> propertySetIDsToRoot = node.getPropertySetIDsToRoot();
+						Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+								null, personRelation.getToID(), null,
+								new SubProgressMonitor(monitor, 80)
+						);
+
+						// -------------------------------------------------------------------------------------------------- ++ ------>>
+						List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
+								childPersonRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+						);
+
+						Iterator<PersonRelation> cReln_iter = cRelns.iterator();
+						while (cReln_iter.hasNext()) {
+							PropertySetID cReln_propID = cReln_iter.next().getToID();
+							if (!propertySetIDsToRoot.contains(cReln_propID))
+								personRelationCount++;
+						}
+
+						result.put(personRelationID, personRelationCount);
+						subMonitor.worked(1);
+						// -------------------------------------------------------------------------------------------------- ++ ------>>
+					}
 				}
 
 //				for (PersonRelation personRelation : personRelations) {
@@ -378,7 +409,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 			for (PersonRelationTreeControllerDelegate delegate : delegates) {
-				Map<ObjectID, Long> delegateChildCountMap = delegate.retrieveChildCount(parentIDs, new NullProgressMonitor()); // TODO monitor!
+				Map<ObjectID, Long> delegateChildCountMap = delegate.retrieveChildCount(parentIDs, new SubProgressMonitor(monitor, 50));
 				for (Map.Entry<ObjectID, Long> me : delegateChildCountMap.entrySet()) {
 					ObjectID parentID = me.getKey();
 					Long childCount = me.getValue();
@@ -405,13 +436,14 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	@Override
-	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) {
-		// New edition: Dont add children if its ID is already listed in the path to the root.
+	protected Collection<ObjectID> retrieveChildObjectIDs(PersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+		// The filter: Don't add child if its ID is already listed in the parentNode's path to the root.
 		Collection<PropertySetID> rootPersonIDs = this.rootPersonIDs;
 		if (rootPersonIDs == null)
 			return Collections.emptyList();
 
 		Collection<ObjectID> result = new ArrayList<ObjectID>();
+		ObjectID parentID = parentNode.getJdoObjectID();
 
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100); //$NON-NLS-1$
 		try {
@@ -427,11 +459,9 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				result.addAll(childPersonRelationIDs);
 			}
 			else if (parentID instanceof PersonRelationID) {
-				List<PersonRelationTreeNode> treeNodeList = getTreeNodeList(parentID);                    // FIXME? I'm always assuming that the map is correct, and has been properly maintained. Kai.
-				List<PropertySetID> propertySetIDsToRoot = treeNodeList.get(0).getPropertySetIDsToRoot(); // This is safer, and faster.
+				List<PropertySetID> propertySetIDsToRoot = parentNode.getPropertySetIDsToRoot(); // This is safer, and faster. And we know we are dealing with the correct node. Kai.
 
 				Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
-
 				List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
 						personRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID, PersonRelation.FETCH_GROUP_FROM_ID },
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
@@ -475,6 +505,14 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		} finally {
 			monitor.done();
 		}
+	}
+
+
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) {
+		// The filter: Don't add child if its ID is already listed in the parentNode's path to the root.
+		// Taken care directly from the other method: retrieveChildObjectIDs(parentNode, monitor).
+		return null;
 	}
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 
