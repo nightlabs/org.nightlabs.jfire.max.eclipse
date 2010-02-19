@@ -18,23 +18,29 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.selection.SelectionProviderProxy;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
@@ -42,6 +48,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedListener;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueDescriptionID;
@@ -56,8 +63,10 @@ import org.nightlabs.jfire.personrelation.dao.PersonRelationTypeDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
+import org.nightlabs.jfire.personrelation.ui.CompanyPersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.createrelation.CreatePersonRelationWizard;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
@@ -67,6 +76,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class PersonRelationIssueTreeView
 extends LSDViewPart
@@ -96,9 +106,11 @@ extends LSDViewPart
 		personRelationTree.getPersonRelationTreeController().addPersonRelationTreeControllerDelegate(
 				new IssuePersonRelationTreeControllerDelegate()
 		);
+
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueLinkPersonRelationTreeLabelProviderDelegate());
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueDescriptionPersonRelationTreeLabelProviderDelegate());
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueCommentPersonRelationTreeLabelProviderDelegate());
+		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new CompanyPersonRelationTreeLabelProviderDelegate()); // Company-specific relations: companyGroup/subsidiary.
 
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE,
@@ -114,6 +126,70 @@ extends LSDViewPart
 				);
 			}
 		});
+
+
+
+
+		// --->> Context-menu setup.
+		// FIXME How do I use CreatePersonRelationAction (and 4 others) that are IViewActionDelegate (rather than IAction
+		//       or IContributionItem) that are already established extensions in the plugin.xml. Kai.
+		// Or is this even possible??
+		cPersReln_Action = new CreatePersonRelation_Action();
+		dPersReln_Action = new DeletePersonRelation_Action();
+		cIssue_Action = new CreateIssue_Action();
+		cIssueComment_Action = new CreateIssueComment_Action();
+
+		personRelationTree.addContextMenuContribution(cPersReln_Action);
+		personRelationTree.addContextMenuContribution(dPersReln_Action);
+		personRelationTree.addContextMenuContribution(cIssue_Action);
+		personRelationTree.addContextMenuContribution(cIssueComment_Action);
+
+//		// ------------- FARK-MARK tests ---------------------------------------------------------->>
+//		String createIssueAction_ID = "org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction";
+//		IExtensionPoint exPt = Platform.getExtensionRegistry().getExtensionPoint("org.eclipse.ui.viewActions");
+//		if (exPt != null) {
+//			IExtension[] extensions = exPt.getExtensions();
+//
+//			if (logger.isInfoEnabled()) {
+//				String packageName = this.getClass().getPackage().getName();
+//				logger.info("------------------------------------[" + packageName + "]");
+//				for (IExtension extension : extensions) {
+//					logger.info("~~ Simple: " + extension.getSimpleIdentifier() + ", Namespace: " + extension.getNamespaceIdentifier());
+//
+//					if (extension.getNamespaceIdentifier().equals(packageName)) {
+//						IConfigurationElement[] confElems = extension.getConfigurationElements();
+//						for (IConfigurationElement confElem : confElems) {
+//							IConfigurationElement[] confChildren = confElem.getChildren();
+//							logger.info("   ~~ confElem: " + confElem.getName() + " [" + confChildren.length + "]");
+//
+//							for (IConfigurationElement confChild : confChildren) {
+//								if (confChild.isValid()) {
+//									IConfigurationElement[] confChildChildren = confChild.getChildren();
+//									logger.info("      --> confChild: " + confChild.getName() + "[" + confChildChildren.length + "], " + confChild.getNamespaceIdentifier());
+//									logger.info("          (Class: " + confChild.getClass().getName() + "), " + confChild.getValue());
+//
+//									String[] attributeNames = confElem.getAttributeNames();
+//									for (String attName : attributeNames) {
+//										logger.info("          @" + attName + ": " + confChild.getAttribute(attName));
+//									}
+//
+//
+//									// Look for the id.
+//									if (confChild.getAttribute("id").equals(createIssueAction_ID)) {
+//										// So what?? I will get an IActionDelegate, not an IAction... how do I integrate this into the context menu
+//									}
+//								}
+//							}
+//						}
+//					}
+//
+//				}
+//			}
+//		}
+//		// ------------- FARK-MARK tests ---------------------------------------------------------->>
+
+
+
 		personRelationTree.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
@@ -122,27 +198,25 @@ extends LSDViewPart
 					return;
 
 				PersonRelationTreeNode treeNode = selectedTreeNodes.iterator().next();
-				ObjectID objectID = treeNode.getJdoObjectID();
 				Object object = treeNode.getJdoObject();
 
 				// Handles Person-related stuffs (entry-point)------------------------------------------------------->>
-				// See notes for description, look under "Specifications for Behr" ---------------------------------->>
+				currentPersonID = null;
 				if (object != null && object instanceof PersonRelation) {
-					final PropertySetID personID = getPropertySetID(objectID, object);
-					if (personID != null) {
+//					final PropertySetID personID = treeNode.getPropertySetID();
+					currentPersonID = treeNode.getPropertySetID();
+					if (currentPersonID != null) {
 						// Join this with the entry-point-listener of this View, since the behaviour is exactly the same.
-						// But we should be able to use the general one too?
-						// ... So that we can trigger other views listening for the same event too. Main thing here is that I want to
-						//     trigger the 'notificationListenerCustomerSelected' in LegalEntitySelectionComposite.
 						try {
 							TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
-							LegalEntity le = tm.getLegalEntityForPerson(personID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+							LegalEntity le = tm.getLegalEntityForPerson(currentPersonID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 							if (le != null) {
 								AnchorID anchorID = (AnchorID) JDOHelper.getObjectId(le);
 								SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class));
 							}
 							else
-								notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, LegalEntity.class));
+								notificationListenerLegalEntitySelected.notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, currentPersonID, LegalEntity.class));
+
 						} catch (LoginException e) {
 							throw new RuntimeException(e);
 						}
@@ -151,6 +225,7 @@ extends LSDViewPart
 
 				// Handles Issue stuffs ----------------------------------------------------------------------------->>
 				else {
+					ObjectID objectID = treeNode.getJdoObjectID();
 					IssueID issueID = null;
 					if (object instanceof IssueLink) {
 						IssueLink issueLink = (IssueLink) object;
@@ -348,37 +423,72 @@ extends LSDViewPart
 		});
 
 
-		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
 		// See Rev. 16511 for other (FARK-MARKed) notes on manupulating the nodes and their contents. Kai.
 		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event)
-			{
-				Object selectedElement = personRelationTree.getFirstSelectedElement();
-				if (selectedElement instanceof PersonRelationTreeNode) {
-					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
-					if (node != null) {
-						// Kai: It is possible that the selected treeNode does not contain a Person-related object (e.g. Issue, IssueComment, etc.).
-						// But we may be interested of the Person-related object to which the selected treeNode belongs to.
-						// --> Thus, in this case, we traverse up the parent until we get to a node representing a Person-related object.
-						// --> This iterative traversal always have a base case, since the root node(s) in the PersonRelationTree is always a Person-related object.
-						node = traverseUpUntilPerson(node);
+			public void selectionChanged(SelectionChangedEvent event) {
+				currentPersonID = null;
+				selectedPersonRelation = null;
+				selectedIssueID = null;
 
-						ObjectID jdoObjectID = node.getJdoObjectID();
-						Object jdoObject = node.getJdoObject();
+				ISelection selection = event.getSelection();
+				if (selection.isEmpty())
+					return;
 
-						PropertySetID personID = getPropertySetID(jdoObjectID, jdoObject);
-						if (personID != null)
-							SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
+				PersonRelationTreeNode selectedNode = (PersonRelationTreeNode) ((TreeSelection) selection).getFirstElement();
+				if (selectedNode != null) {
+					// The general case: Person-related.
+					currentPersonID = selectedNode.getPropertySetID();
+					Object jdoObject = selectedNode.getJdoObject();
+					if (jdoObject instanceof PersonRelation)
+						selectedPersonRelation = (PersonRelation) jdoObject;
+
+					// The general case: Issue-related.
+					if (currentPersonID == null && selectedPersonRelation == null) {
+						if (jdoObject instanceof IssueLink) {
+							Issue issue = ((IssueLink) jdoObject).getIssue();
+							selectedIssueID = (IssueID) JDOHelper.getObjectId(issue);
+						}
+						else if (jdoObject instanceof IssueComment) {
+							selectedIssueID = ((IssueComment) jdoObject).getIssueID();
+						}
+						else if (selectedNode.getJdoObjectID() instanceof IssueDescriptionID) {
+							IssueDescriptionID issueDescID = (IssueDescriptionID) selectedNode.getJdoObjectID();
+							selectedIssueID = IssueID.create(issueDescID.organisationID, issueDescID.issueID);
+						}
 					}
+
+
+					// Reaction. Part I.
+					// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
+					// It is possible that the selected treeNode does not contain a Person-related object (e.g. Issue, IssueComment, etc.).
+					// But we may be interested of the Person-related object to which the selected treeNode belongs to.
+					// --> Thus, in this case, we traverse up the parent until we get to a node representing a Person-related object.
+					// --> This iterative traversal always have a base case, since the root node(s) in the PersonRelationTree is always a Person-related object.
+					selectedNode = traverseUpUntilPerson(selectedNode);
+					PropertySetID personID = selectedNode.getPropertySetID();
+					if (personID != null)
+						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
+
+
+					// Debug.
+//					if (logger.isInfoEnabled()) {
+//						logger.info(showObjectIDs("objectIDsToRoot", selectedNode.getJDOObjectIDsToRoot(), 5));
+//						logger.info(showObjectIDs("propertySetIDsToRoot", selectedNode.getPropertySetIDsToRoot(), 5));
+//						logger.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+//					}
 				}
+
+				// Reaction. Part II.
+				cPersReln_Action.setEnabled(currentPersonID != null);
+				dPersReln_Action.setEnabled(selectedPersonRelation != null);
+				cIssue_Action.setEnabled(currentPersonID != null);
+				cIssueComment_Action.setEnabled(selectedIssueID != null);
 			}
 		});
 
 		selectionProviderProxy.addRealSelectionProvider(personRelationTree);
 	}
-
-
 
 	// -------------------- [Helpers: Auto-expansion behaviour of the Lazy-tree] ---------------------------------------------->>
 	/**
@@ -505,21 +615,143 @@ extends LSDViewPart
 		return node;
 	}
 
-	/**
-	 * Given the jdoObjectID and/or the jdoObject, return the PropertySetID if either inputs are of the Person-related object.
-	 * @return null if neither parameters are related to a Person object.
-	 */
-	private PropertySetID getPropertySetID(ObjectID jdoObjectID, Object jdoObject) {
-		if (jdoObjectID != null && jdoObjectID instanceof PropertySetID)
-			return (PropertySetID)jdoObjectID;
 
-		if (jdoObject != null && jdoObject instanceof PersonRelation)
-			return ((PersonRelation)jdoObject).getToID();
 
-		return null;
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// ---[ Actions ]---------------------------------------------------------------------------------------------------------------------|
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// FIXME How do I make references to the already established IViewActionDelegate-extensions in the plugin.xml?
+	//       Preexistings: [1] CreatePersonRelationAction
+	//                     [2] DeletePersonRelationAction
+	//                     [3] CreateIssueAction
+	//                     [4] CreateIssueCommentAction
+	private CreatePersonRelation_Action cPersReln_Action;
+	private DeletePersonRelation_Action dPersReln_Action;
+	private CreateIssue_Action cIssue_Action;
+	private CreateIssueComment_Action cIssueComment_Action;
+
+	// <-- Preexisting [1]
+	private class CreatePersonRelation_Action extends Action {
+		public CreatePersonRelation_Action() {
+			setId(CreatePersonRelation_Action.class.getName());
+			setImageDescriptor(SharedImages.ADD_16x16);
+			setToolTipText("Create new person relation");
+			setText("Create new person relation");
+		}
+
+		@Override
+		public void run() {
+			if (currentPersonID != null) {
+				CreatePersonRelationWizard wizard = new CreatePersonRelationWizard(currentPersonID);
+				new DynamicPathWizardDialog(wizard).open();
+			}
+		}
 	}
 
-	private PropertySetID currentPersonID = null;
+	// <-- Preexisting [2]
+	private class DeletePersonRelation_Action extends Action {
+		public DeletePersonRelation_Action() {
+			setId(DeletePersonRelation_Action.class.getName());
+			setImageDescriptor(SharedImages.DELETE_16x16);
+			setToolTipText("Delete person relation");
+			setText("Delete person relation");
+		}
+
+		@Override
+		public void run() {
+			if (selectedPersonRelation != null) {
+				final PersonRelation personRelation = selectedPersonRelation;
+				Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.DeletePersonRelationAction.job.deletingPersonRelation.name")) { //$NON-NLS-1$
+					@Override
+					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						PersonRelationTypeID personRelationTypeID = (PersonRelationTypeID) JDOHelper.getObjectId(personRelation.getPersonRelationType());
+						if (personRelationTypeID == null)
+							throw new IllegalStateException("JDOHelper.getObjectId(personRelation.getPersonRelationType()) returned null! personRelation=" + personRelation + " personRelationType=" + personRelation.getPersonRelationType()); //$NON-NLS-1$ //$NON-NLS-2$
+
+						PersonRelationDAO.sharedInstance().deletePersonRelation(
+								personRelationTypeID,
+								personRelation.getFromID(),
+								personRelation.getToID(),
+								monitor
+						);
+
+						return Status.OK_STATUS;
+					}
+				};
+
+				job.setUser(true);
+				job.setPriority(Job.INTERACTIVE);
+				job.schedule();
+			}
+		}
+	}
+
+	// <-- Preexisting [3]
+	private class CreateIssue_Action extends Action {
+		public CreateIssue_Action() {
+			setId(CreateIssue_Action.class.getName());
+			setToolTipText("Create new issue");
+			setText("Create new issue");
+		}
+
+		@Override
+		public void run() {
+			if (currentPersonID != null) {
+				final PropertySetID selectedPersonID = currentPersonID;
+				final Shell shell = getSite().getShell();
+				final Display display = shell.getDisplay();
+
+				Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
+					@Override
+					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction.task.openingWizard.name"), 100); //$NON-NLS-1$
+						try {
+							final CreateIssueWizard wizard = new CreateIssueWizard(selectedPersonID, new SubProgressMonitor(monitor, 100));
+
+							display.asyncExec(new Runnable() {
+								public void run() {
+									DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(shell, wizard);
+									dialog.open();
+								}
+							});
+
+							return Status.OK_STATUS;
+						} finally {
+							monitor.done();
+						}
+					}
+				};
+
+				job.setUser(true);
+				job.setPriority(Job.INTERACTIVE);
+				job.schedule();
+			}
+		}
+	}
+
+	// <-- Preexisting [4]
+	private class CreateIssueComment_Action extends Action {
+		public CreateIssueComment_Action() {
+			setId(CreateIssueComment_Action.class.getName());
+			setToolTipText("Create new issue comment");
+			setText("Create new issue commment");
+		}
+
+		@Override
+		public void run() {
+			if (selectedIssueID != null) {
+				new CreateIssueCommentDialog(getSite().getShell(), selectedIssueID).open();
+			}
+		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	// ---[ Entry notification ]----------------------------------------------------------------------------------------------------------|
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	private PropertySetID currentPersonID = null;          // Local control.
+	private PropertySetID currentBusinessPartnerID = null; // Global control.
+	private PersonRelation selectedPersonRelation = null;
+	private IssueID selectedIssueID = null;
 	private NotificationListener notificationListenerLegalEntitySelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 	{
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
@@ -556,10 +788,11 @@ extends LSDViewPart
 				personID = (PropertySetID) subject;
 
 
+			// Don't quite know why, but this NotificationListener is always called twice (in a row)!
 			// Ensures that we dont unnecessarily retrieve the relationRootNodes (expensive).
-			if (personID != null && (currentPersonID == null || currentPersonID != personID)) {
+			if (personID != null && (currentBusinessPartnerID == null || currentBusinessPartnerID != personID)) {
 				if (logger.isInfoEnabled()) {
-					logger.info("personID:" + showObjectID(personID) + ",  currentPersonID:" + showObjectID(currentPersonID));
+					logger.info("personID:" + showObjectID(personID) + ",  currentBusinessPartnerID:" + showObjectID(currentBusinessPartnerID));
 				}
 
 				// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
@@ -582,11 +815,19 @@ extends LSDViewPart
 				final Set<PropertySetID> rootIDs = initRelatablePathsToRoots();
 
 				// Done and ready. Update the tree.
-				currentPersonID = personID;
+				currentBusinessPartnerID = personID;
 				personRelationTree.getDisplay().asyncExec(new Runnable() {
 					public void run() {
-						if (!personRelationTree.isDisposed())
+						if (!personRelationTree.isDisposed()) {
 							personRelationTree.setInputPersonIDs(rootIDs);
+
+							// On observation (Kai):
+							//   Once the new roots have been duly loaded, the Action buttons in this view fails to be
+							//   (selectively) activated. This could be due to the fact that the SelectionChangedListener has
+							//   not been triggered? (Really?) Or that it processed the SelectionChangedListener first?
+							//
+							//   But if we click again on the same selected item, the buttons become active as per normal behaviour.
+						}
 					}
 				});
 			}
