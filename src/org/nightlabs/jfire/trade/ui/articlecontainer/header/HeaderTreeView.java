@@ -54,12 +54,17 @@ extends LSDViewPart
 	public void createPartContents(Composite parent)
 	{
 		try {
-			headerTreeComposite = new HeaderTreeComposite(parent, SWT.NONE, getSite());
+			headerTreeComposite = createHeaderTreeComposite(parent);
 			headerTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 			selectionProviderProxy.addRealSelectionProvider(headerTreeComposite);
 		} catch (Exception x) {
 			ExceptionHandlerRegistry.asyncHandleException(x);
 		}
+	}
+
+	protected HeaderTreeComposite createHeaderTreeComposite(Composite parent)
+	{
+		return new HeaderTreeComposite(parent, SWT.NONE, getSite());
 	}
 
 	/**

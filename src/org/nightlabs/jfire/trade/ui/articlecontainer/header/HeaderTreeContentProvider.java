@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
@@ -47,24 +46,20 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Marco Schulze - marco at nightlabs dot de
  */
 public class HeaderTreeContentProvider
-implements ITreeContentProvider
+implements IHeaderTreeContentProvider
 {
 	private static final Logger logger = Logger.getLogger(HeaderTreeContentProvider.class);
 
-	private SaleRootTreeNode saleRootTreeNode;
-	private EndCustomerRootTreeNode endCustomerRootTreeNode;
-	private PurchaseRootTreeNode purchaseRootTreeNode;
-	private RecurringRootTreeNode recurringRootTreeNode;
 	private HeaderTreeNode.RootNode[] rootNodes;
 	private HeaderTreeComposite headerTreeComposite;
 
 	public HeaderTreeContentProvider(HeaderTreeComposite headerTreeComposite)
 	{
 		this.headerTreeComposite = headerTreeComposite;
-		saleRootTreeNode = new SaleRootTreeNode(headerTreeComposite);
-		endCustomerRootTreeNode = new EndCustomerRootTreeNode(headerTreeComposite);
-		purchaseRootTreeNode = new PurchaseRootTreeNode(headerTreeComposite);
-		recurringRootTreeNode = new RecurringRootTreeNode(headerTreeComposite);
+		SaleRootTreeNode saleRootTreeNode = new SaleRootTreeNode(headerTreeComposite);
+		EndCustomerRootTreeNode endCustomerRootTreeNode = new EndCustomerRootTreeNode(headerTreeComposite);
+		PurchaseRootTreeNode purchaseRootTreeNode = new PurchaseRootTreeNode(headerTreeComposite);
+		RecurringRootTreeNode recurringRootTreeNode = new RecurringRootTreeNode(headerTreeComposite);
 
 		rootNodes = new HeaderTreeNode.RootNode[] {
 			saleRootTreeNode,
@@ -73,6 +68,13 @@ implements ITreeContentProvider
 			recurringRootTreeNode
 		};
 
+		unregisterAndRegisterListeners(true);
+	}
+
+	public HeaderTreeContentProvider(HeaderTreeComposite headerTreeComposite, HeaderTreeNode.RootNode[] rootNodes)
+	{
+		this.headerTreeComposite = headerTreeComposite;
+		this.rootNodes = rootNodes;
 		unregisterAndRegisterListeners(true);
 	}
 

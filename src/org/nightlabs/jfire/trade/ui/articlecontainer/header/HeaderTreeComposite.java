@@ -38,6 +38,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -65,7 +66,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
@@ -100,8 +100,10 @@ implements ISelectionProvider
 	private IWorkbenchPartSite site;
 
 	private TreeViewer headerTreeViewer;
-	private HeaderTreeContentProvider headerTreeContentProvider;
-	private HeaderTreeLabelProvider headerTreeLabelProvider;
+//	private HeaderTreeContentProvider headerTreeContentProvider;
+//	private HeaderTreeLabelProvider headerTreeLabelProvider;
+	private IHeaderTreeContentProvider headerTreeContentProvider;
+	private ILabelProvider headerTreeLabelProvider;
 
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -111,7 +113,6 @@ implements ISelectionProvider
 	private CreateOrderAction createOrderAction;
 	private CreateOfferAction createOfferAction;
 
-
 	private HeaderTreeNode selectedNode = null;
 
 	/**
@@ -120,7 +121,7 @@ implements ISelectionProvider
 	 * @param setLayoutData
 	 */
 	public HeaderTreeComposite(Composite parent, int style, IWorkbenchPartSite site)
-	throws ModuleException
+//	throws ModuleException
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		this.site = site;
@@ -155,13 +156,13 @@ implements ISelectionProvider
 		headerTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		headerTreeViewer.getTree().setLayout(new WeightedTableLayout(new int[] {1}));
 
-		headerTreeContentProvider = new HeaderTreeContentProvider(this);
+		headerTreeContentProvider = createContentProvider();
 		headerTreeViewer.setContentProvider(headerTreeContentProvider);
 
-		headerTreeLabelProvider = new HeaderTreeLabelProvider();
+		headerTreeLabelProvider = createLabelProvider();
 		headerTreeViewer.setLabelProvider(headerTreeLabelProvider);
 
-		TreeColumn col = new TreeColumn(headerTreeViewer.getTree(), SWT.LEFT);
+		createTreeColumns(headerTreeViewer);
 //		col.setText("Test");
 
 		createOrderAction = new CreateOrderAction(this);
@@ -208,7 +209,7 @@ implements ISelectionProvider
 					HeaderTreeNode.ArticleContainerNode node = (HeaderTreeNode.ArticleContainerNode) selection;
 					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(node.getArticleContainer());
 					if (articleContainerID == null)
-						throw new IllegalStateException("JDOHelper.getObjectId(node.getArticleContainer()) returned null for node.getArticleContainer()=" + node.getArticleContainer());
+						throw new IllegalStateException("JDOHelper.getObjectId(node.getArticleContainer()) returned null for node.getArticleContainer()=" + node.getArticleContainer()); //$NON-NLS-1$
 
 					editorInput = new ArticleContainerEditorInput(articleContainerID);
 				}
@@ -252,6 +253,21 @@ implements ISelectionProvider
 				imageVendorRootTreeNode.dispose(); imageVendorRootTreeNode = null;
 			}
 		});
+	}
+
+	protected IHeaderTreeContentProvider createContentProvider()
+	{
+		return new HeaderTreeContentProvider(this);
+	}
+
+	protected ILabelProvider createLabelProvider()
+	{
+		return new HeaderTreeLabelProvider();
+	}
+
+	protected void createTreeColumns(TreeViewer treeViewer)
+	{
+		TreeColumn col = new TreeColumn(treeViewer.getTree(), SWT.LEFT);
 	}
 
 	protected Image imageOrderRootTreeNode = null;
@@ -384,7 +400,7 @@ implements ISelectionProvider
 		}
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
+	protected void fillContextMenu(IMenuManager manager) {
 		//	manager.add(action1);
 		//	manager.add(action2);
 		//	manager.add(new Separator());
@@ -397,7 +413,7 @@ implements ISelectionProvider
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
-	private void hookContextMenu() {
+	protected void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
@@ -445,7 +461,7 @@ implements ISelectionProvider
 	/**
 	 * @return Returns the headerTreeContentProvider.
 	 */
-	public HeaderTreeContentProvider getHeaderTreeContentProvider()
+	public IHeaderTreeContentProvider getHeaderTreeContentProvider()
 	{
 		return headerTreeContentProvider;
 	}
