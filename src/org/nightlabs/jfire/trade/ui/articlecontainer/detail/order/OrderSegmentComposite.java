@@ -56,7 +56,7 @@ public class OrderSegmentComposite extends XComposite
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.orderSegmentEdit = _orderSegmentEdit;
 
-		articleAdderArea = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		articleAdderArea = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		articleAdderArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		articleAdderPlaceholderLabel = new Label(articleAdderArea, SWT.NONE);
 		articleAdderPlaceholderLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderSegmentComposite.articleAdderPlaceholderLabel.text")); //$NON-NLS-1$

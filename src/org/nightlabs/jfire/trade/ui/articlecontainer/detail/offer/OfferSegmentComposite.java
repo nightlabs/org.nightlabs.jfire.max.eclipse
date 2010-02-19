@@ -43,7 +43,6 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 public class OfferSegmentComposite extends XComposite
 {
 	protected OfferSegmentEdit offerSegmentEdit;
-
 	protected XComposite articleAdderArea;
 	protected Label articleAdderPlaceholderLabel;
 	protected XComposite articleEditArea;
@@ -54,10 +53,10 @@ public class OfferSegmentComposite extends XComposite
 	 */
 	public OfferSegmentComposite(Composite parent, OfferSegmentEdit _orderSegmentEdit)
 	{
-		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		this.offerSegmentEdit = _orderSegmentEdit;
 
-		articleAdderArea = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		articleAdderArea = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		articleAdderArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		articleAdderPlaceholderLabel = new Label(articleAdderArea, SWT.NONE);
 		articleAdderPlaceholderLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferSegmentComposite.articleAdderPlaceholderLabel.text")); //$NON-NLS-1$

@@ -40,9 +40,6 @@ import org.nightlabs.base.ui.toolkit.IToolkit;
 public class InvoiceSegmentComposite extends XComposite
 {
 	private InvoiceSegmentEdit invoiceSegmentEdit;
-
-//	protected XComposite articleAdderArea;
-//	protected Label articleAdderPlaceholderLabel;
 	protected XComposite articleEditArea;
 
 	/**
@@ -52,15 +49,10 @@ public class InvoiceSegmentComposite extends XComposite
 	 */
 	public InvoiceSegmentComposite(Composite parent, InvoiceSegmentEdit _invoiceSegmentEdit)
 	{
-		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		this.invoiceSegmentEdit = _invoiceSegmentEdit;
 
-//		articleAdderArea = new XComposite(this, SWT.NONE, XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
-//		articleAdderArea.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		articleAdderPlaceholderLabel = new Label(articleAdderArea, SWT.NONE);
-//		articleAdderPlaceholderLabel.setText("Please select a product type to add a new article.");
-
-		articleEditArea = new XComposite(this, getBorderStyle(), LayoutMode.TIGHT_WRAPPER);
+		articleEditArea = new XComposite(this, getBorderStyle(), LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		articleEditArea.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		articleEditArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		addDisposeListener(new DisposeListener(){
