@@ -471,7 +471,7 @@ extends LSDViewPart
 						SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
 
 
-					// Debug.
+//					// Debug.
 //					if (logger.isInfoEnabled()) {
 //						logger.info(showObjectIDs("objectIDsToRoot", selectedNode.getJDOObjectIDsToRoot(), 5));
 //						logger.info(showObjectIDs("propertySetIDsToRoot", selectedNode.getPropertySetIDsToRoot(), 5));
@@ -571,7 +571,7 @@ extends LSDViewPart
 		Iterator<Deque<ObjectID>> iterPaths_PRID = pathsToRoot_PRID.iterator();
 		int index = 0;
 		if (logger.isInfoEnabled())
-			logger.info("*** *** *** initRelatablePathsToRoots() :: [PSid:" + pathsToRoot_PSID.size() + "][PRid:" + pathsToRoot_PRID.size() + "] *** *** ***");
+			logger.info("*** *** *** initRelatablePathsToRoots() :: [PSid.size:" + pathsToRoot_PSID.size() + "][PRid.size:" + pathsToRoot_PRID.size() + "] *** *** ***");
 
 		while (iterPaths_PSID.hasNext()) {
 			Deque<ObjectID> path_PSID = iterPaths_PSID.next();
@@ -582,7 +582,7 @@ extends LSDViewPart
 			if (logger.isInfoEnabled()) {
 				logger.info("@index:" + index + " " + showDequePaths("PSID", path_PSID, true));
 				logger.info("@index:" + index + " " + showDequePaths("PRID", path_PRID, true));
-				logger.info("--------------------");
+				logger.info("-------------------- ?%&$# -------->>>");
 			}
 
 			rootIDs.add((PropertySetID) path_PSID.peekFirst());
