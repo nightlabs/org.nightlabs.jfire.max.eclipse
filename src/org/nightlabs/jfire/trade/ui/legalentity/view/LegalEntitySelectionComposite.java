@@ -33,7 +33,6 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
-import org.nightlabs.jfire.base.ui.person.search.PersonSearchUseCaseConstants;
 import org.nightlabs.jfire.base.ui.prop.search.ISearchTriggerListener;
 import org.nightlabs.jfire.base.ui.prop.search.IStructFieldSearchFilterItemEditor;
 import org.nightlabs.jfire.base.ui.prop.search.StructFieldSearchFilterEditorRegistry;
@@ -54,6 +53,7 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
+import org.nightlabs.jfire.trade.ui.legalentity.search.PersonSearchUseCaseConstants;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -131,7 +131,7 @@ extends XComposite
 						FetchPlan.DEFAULT
 				};
 				
-				final String cfModID = AbstractEditLayoutConfigModule.getCfModID(AbstractEditLayoutConfigModule.CLIENT_TYPE_RCP, PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT);
+				final String cfModID = AbstractEditLayoutConfigModule.getCfModID(AbstractEditLayoutConfigModule.CLIENT_TYPE_RCP, PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH);
 				searchCfMod = ConfigUtil.getUserCfMod(PersonSearchConfigModule.class, cfModID, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				
 				return Status.OK_STATUS;

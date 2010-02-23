@@ -55,7 +55,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	 */
 	@Override
 	protected SearchFilterProvider createStaticSearchFilterProvider(SearchResultFetcher resultFetcher) {
-		SearchFilterProvider provider = new PersonSearchEditLayoutFilterProvider(resultFetcher, false, PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH, getSearchText()) {
+		SearchFilterProvider provider = new PersonSearchEditLayoutFilterProvider(resultFetcher, false, getUseCase(), getSearchText()) {
 			@Override
 			protected PropSearchFilter createSearchFilter() {
 				return new LegalEntitySearchFilter(SearchFilter.CONJUNCTION_DEFAULT);

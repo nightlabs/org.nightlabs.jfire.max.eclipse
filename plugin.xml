@@ -304,10 +304,11 @@
               id="org.nightlabs.jfire.trade.ui.articlecontainer.config.SummedPriceFragmentTypeConfigPreferencePage"
               name="Summed Price Fragment Settings"/>
         <page
-              category="org.nightlabs.jfire.base.ui.preferences.PersonSearchPreferencePage"
-              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchEditLayoutPreferencePage"
-              id="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchEditLayoutPreferencePage"
-              name="Legal Entity Search" />
+             category="org.nightlabs.jfire.base.ui.preferences.PersonSearchPreferencePage"
+             class="org.nightlabs.jfire.trade.ui.legalentity.search.config.LegalEntitySearchPreferencePage"
+             id="org.nightlabs.jfire.trade.ui.legalentity.search.config.LegalEntitySearchPreferencePage"
+             name="Legal Entity Search">
+       </page>
         <page
         	  category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               class="org.nightlabs.jfire.trade.ui.currency.config.CurrencyConfigPreferencePage"
