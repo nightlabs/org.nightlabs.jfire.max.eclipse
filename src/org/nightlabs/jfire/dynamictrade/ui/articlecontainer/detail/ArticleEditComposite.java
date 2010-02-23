@@ -86,9 +86,9 @@ public class ArticleEditComposite extends XComposite
 		articleTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event)
 			{
-				// prevents the dialog from opening if it has been finalized 
-				if(articleEdit.isNonOrderArticleContainerFinalized())
-					return;
+//				// prevents the dialog from opening if it has been finalized 
+//				if(articleEdit.isNonOrderArticleContainerFinalized())
+//					return;
 
 				Collection<Article> c = articleTable.getSelectedElements();
 				if (c.isEmpty())
