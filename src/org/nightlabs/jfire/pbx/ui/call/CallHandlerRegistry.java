@@ -96,7 +96,14 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.pbx.ui.call.CallHandlerRegistry.callJob.name"), 100); //$NON-NLS-1$
 		try {
-			PhoneSystem phoneSystem = PhoneSystemDAO.sharedInstance().getPhoneSystem((WorkstationID)null, new String[] {FetchPlan.DEFAULT, PhoneSystem.FETCH_GROUP_CALLABLE_STRUCT_FIELDS}, 1, new SubProgressMonitor(monitor, 50));
+			final PhoneSystem phoneSystem = PhoneSystemDAO.sharedInstance().getPhoneSystem(
+					(WorkstationID)null,
+					new String[] {
+							FetchPlan.DEFAULT, PhoneSystem.FETCH_GROUP_NAME, PhoneSystem.FETCH_GROUP_CALLABLE_STRUCT_FIELDS
+					},
+					1,
+					new SubProgressMonitor(monitor, 50)
+			);
 			if (phoneSystem == null) {
 				WorkstationID workstationID = null;
 
@@ -112,7 +119,24 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 
 				throw new NoPhoneSystemAssignedException(workstationID);
 			}
-			
+
+			if (phoneSystem.getCallableStructFields().isEmpty()) {
+				Display.getDefault().syncExec(new Runnable() { // important to use syncExec because otherwise the shell might be closed before the dialog is opened.
+					@Override
+					public void run() {
+						MessageDialog.openError(
+								RCPUtil.getActiveShell(),
+								Messages.getString("org.nightlabs.jfire.pbx.ui.call.CallHandlerRegistry.errorDialog[phoneSystemLacksCallableNumber].title"), //$NON-NLS-1$
+								String.format(
+										Messages.getString("org.nightlabs.jfire.pbx.ui.call.CallHandlerRegistry.errorDialog[phoneSystemLacksCallableNumber].text"), //$NON-NLS-1$
+										phoneSystem.getName().getText()
+								)
+						);
+					}
+				});
+				return;
+			}
+
 			// load person, collect phone numbers and (if more than one) ask the user which one to call.
 			final PropertySet p = PropertySetDAO.sharedInstance().getPropertySet(
 					personID, new String[] { FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -206,7 +230,7 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 
 					throw new NoPhoneSystemAssignedException(workstationID);
 				}
-				
+
 				call(phoneSystem, call, monitor);
 				return Status.OK_STATUS;
 			}
