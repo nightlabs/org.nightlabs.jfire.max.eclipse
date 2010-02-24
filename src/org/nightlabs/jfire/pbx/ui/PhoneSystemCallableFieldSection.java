@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.pbx.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,13 +31,13 @@ import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.pbx.PhoneSystem;
 import org.nightlabs.jfire.pbx.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.person.PersonStruct;
-import org.nightlabs.jfire.prop.DataField;
 import org.nightlabs.jfire.prop.Struct;
+import org.nightlabs.jfire.prop.StructBlock;
 import org.nightlabs.jfire.prop.StructField;
-import org.nightlabs.jfire.prop.dao.StructDAO;
-import org.nightlabs.jfire.prop.exception.StructBlockNotFoundException;
-import org.nightlabs.jfire.prop.id.StructID;
+import org.nightlabs.jfire.prop.StructLocal;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
+import org.nightlabs.jfire.prop.id.StructLocalID;
+import org.nightlabs.jfire.prop.structfield.PhoneNumberStructField;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -49,10 +50,10 @@ extends ToolBarSectionPart
 	private Button removeButton;
 	private Button addAllButton;
 	private Button removeAllButton;
-	
+
 	private StructFieldTable availableStructFieldTable;
 	private StructFieldTable callableStructFieldTable;
-	
+
 	public PhoneSystemCallableFieldSection(FormPage page, Composite parent) {
 		super(
 				page, parent,
@@ -64,11 +65,11 @@ extends ToolBarSectionPart
 	private void createClient(Section section, FormToolkit toolkit) {
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		section.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemCallableFieldSection.sectionText")); //$NON-NLS-1$
-		
+
 		Composite container = getContainer();//EntityEditorUtil.createCompositeClient(toolkit, section, 1);
 		GridLayout gridLayout = new GridLayout(3, false);
 		container.setLayout(gridLayout);
-		
+
 		availableStructFieldTable = new StructFieldTable(container, SWT.NONE);
 		availableStructFieldTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 		availableStructFieldTable.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -77,7 +78,7 @@ extends ToolBarSectionPart
 				updateButtonStates();
 			}
 		});
-		
+
 		XComposite buttonComposite = new XComposite(container, SWT.NONE);
 		buttonComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		addButton = new Button(buttonComposite, SWT.NONE);
@@ -92,7 +93,7 @@ extends ToolBarSectionPart
 				markDirty();
 			}
 		});
-		
+
 		removeButton = new Button(buttonComposite, SWT.NONE);
 		removeButton.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemCallableFieldSection.removeText")); //$NON-NLS-1$
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -105,7 +106,7 @@ extends ToolBarSectionPart
 				markDirty();
 			}
 		});
-		
+
 		addAllButton = new Button(buttonComposite, SWT.NONE);
 		addAllButton.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemCallableFieldSection.addAllText")); //$NON-NLS-1$
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -118,7 +119,7 @@ extends ToolBarSectionPart
 				markDirty();
 			}
 		});
-		
+
 		removeAllButton = new Button(buttonComposite, SWT.NONE);
 		removeAllButton.setText(Messages.getString("org.nightlabs.jfire.pbx.ui.PhoneSystemCallableFieldSection.removeAllText")); //$NON-NLS-1$
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -131,7 +132,7 @@ extends ToolBarSectionPart
 				markDirty();
 			}
 		});
-		
+
 		callableStructFieldTable = new StructFieldTable(container, SWT.NONE);
 		callableStructFieldTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 		callableStructFieldTable.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -151,61 +152,67 @@ extends ToolBarSectionPart
 
 	private void createInput(final PhoneSystem phoneSystem) {
 		/*****Load data*****/
-		StructID personStructID = 
-			StructID.create(Organisation.DEV_ORGANISATION_ID, Person.class, Struct.DEFAULT_SCOPE);
-		final Struct personStruct = 
-			StructDAO.sharedInstance().getStruct(personStructID, new NullProgressMonitor());
-		
+		StructLocalID personStructID =
+			StructLocalID.create(Organisation.DEV_ORGANISATION_ID, Person.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE);
+		final StructLocal personStruct =
+			StructLocalDAO.sharedInstance().getStructLocal(personStructID, new NullProgressMonitor()); // TODO this should be done on a Job thread!!! It is blocking the UI!!!!!
+
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					List<StructField<? extends DataField>> availableFields = personStruct.getStructBlock(PersonStruct.PHONE).getStructFields();
-					availableFields.removeAll(phoneSystem.getCallableStructFields());
-					
-					availableStructFieldTable.setInput(availableFields);
-					callableStructFieldTable.setInput(phoneSystem.getCallableStructFields());
-					
-					updateButtonStates();
-				} catch (StructBlockNotFoundException e) {
-					throw new RuntimeException(e);
+				// @Chairat: This is nonsense. The whole point of the configuration is the not use any constant and thus be able to use *every*
+				// PhoneNumberDataField - not only the predefined ones.
+				//					List<StructField<? extends DataField>> availableFields = personStruct.getStructBlock(PersonStruct.PHONE).getStructFields();
+				List<PhoneNumberStructField> availableFields = new ArrayList<PhoneNumberStructField>();
+				for (StructBlock structBlock : personStruct.getStructBlocks()) {
+					for (StructField<?> structField : structBlock.getStructFields()) {
+						if (structField instanceof PhoneNumberStructField)
+							availableFields.add((PhoneNumberStructField) structField);
+					}
 				}
+
+				availableFields.removeAll(phoneSystem.getCallableStructFields());
+
+				availableStructFieldTable.setInput(availableFields);
+				callableStructFieldTable.setInput(phoneSystem.getCallableStructFields());
+
+				updateButtonStates();
 			}
 		});
 	}
-	
+
 	private void addCallableField(boolean isAll) {
 		Collection<StructField> callableFields = callableStructFieldTable.getElements();
 		if (isAll) {
 			callableFields.addAll(availableStructFieldTable.getElements());
 		}
 		else {
-			callableFields.addAll((Collection<? extends StructField<? extends DataField>>) availableStructFieldTable.getSelectedElements());
+			callableFields.addAll(availableStructFieldTable.getSelectedElements());
 		}
-		
+
 		Collection<StructField> availFields = availableStructFieldTable.getElements();
 		availFields.removeAll(callableFields);
-		
+
 		availableStructFieldTable.setInput(availFields);
-		callableStructFieldTable.setInput(callableFields);	
+		callableStructFieldTable.setInput(callableFields);
 	}
-	
+
 	private void removeCallableField(boolean isAll) {
 		Collection<StructField> availFields = availableStructFieldTable.getElements();
 		if (isAll) {
 			availFields.addAll(callableStructFieldTable.getElements());
 		}
 		else {
-			availFields.addAll((Collection<? extends StructField<? extends DataField>>) callableStructFieldTable.getSelectedElements());
+			availFields.addAll(callableStructFieldTable.getSelectedElements());
 		}
-		
+
 		Collection<StructField> callableFields = callableStructFieldTable.getElements();
 		callableFields.removeAll(availFields);
-		
+
 		availableStructFieldTable.setInput(availFields);
-		callableStructFieldTable.setInput(callableFields);	
+		callableStructFieldTable.setInput(callableFields);
 	}
-	
+
 	private void updateButtonStates() {
 		addButton.setEnabled(!availableStructFieldTable.getSelectedElements().isEmpty());
 		addAllButton.setEnabled(!availableStructFieldTable.getElements().isEmpty());
@@ -213,7 +220,7 @@ extends ToolBarSectionPart
 		removeButton.setEnabled(!callableStructFieldTable.getSelectedElements().isEmpty());
 		removeAllButton.setEnabled(!callableStructFieldTable.getElements().isEmpty());
 	}
-	
+
 	@Override
 	public void refresh() {
 		super.refresh();
@@ -229,7 +236,7 @@ extends ToolBarSectionPart
 	}
 
 	private PhoneSystem phoneSystem;
-	
+
 	public Collection<StructField> getCallableStructFields() {
 		return callableStructFieldTable.getSelectedElements();
 	}
