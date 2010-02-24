@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -25,6 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.organisation.Organisation;
@@ -38,7 +41,7 @@ import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.prop.structfield.PhoneNumberStructField;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -145,41 +148,44 @@ extends ToolBarSectionPart
 
 	@Override
 	public boolean setFormInput(Object input) {
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("Thread mismatch! This method must always be called on the SWT UI thread!!!");
+
 		this.phoneSystem = (PhoneSystem) input;
-		createInput(phoneSystem);
+//		createInput(phoneSystem); // WRONG here - must be in refresh!
 		return super.setFormInput(input);
 	}
 
-	private void createInput(final PhoneSystem phoneSystem) {
-		/*****Load data*****/
-		StructLocalID personStructID =
-			StructLocalID.create(Organisation.DEV_ORGANISATION_ID, Person.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE);
-		final StructLocal personStruct =
-			StructLocalDAO.sharedInstance().getStructLocal(personStructID, new NullProgressMonitor()); // TODO this should be done on a Job thread!!! It is blocking the UI!!!!!
-
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				// @Chairat: This is nonsense. The whole point of the configuration is the not use any constant and thus be able to use *every*
-				// PhoneNumberDataField - not only the predefined ones.
-				//					List<StructField<? extends DataField>> availableFields = personStruct.getStructBlock(PersonStruct.PHONE).getStructFields();
-				List<PhoneNumberStructField> availableFields = new ArrayList<PhoneNumberStructField>();
-				for (StructBlock structBlock : personStruct.getStructBlocks()) {
-					for (StructField<?> structField : structBlock.getStructFields()) {
-						if (structField instanceof PhoneNumberStructField)
-							availableFields.add((PhoneNumberStructField) structField);
-					}
-				}
-
-				availableFields.removeAll(phoneSystem.getCallableStructFields());
-
-				availableStructFieldTable.setInput(availableFields);
-				callableStructFieldTable.setInput(phoneSystem.getCallableStructFields());
-
-				updateButtonStates();
-			}
-		});
-	}
+//	private void createInput(final PhoneSystem phoneSystem) {
+//		/*****Load data*****/
+//		StructLocalID personStructID =
+//			StructLocalID.create(Organisation.DEV_ORGANISATION_ID, Person.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE);
+//		final StructLocal personStruct =
+//			StructLocalDAO.sharedInstance().getStructLocal(personStructID, new NullProgressMonitor()); // TODO this should be done on a Job thread!!! It is blocking the UI!!!!!
+//
+//		Display.getDefault().asyncExec(new Runnable() {
+//			@Override
+//			public void run() {
+//				// @Chairat: This is nonsense. The whole point of the configuration is the not use any constant and thus be able to use *every*
+//				// PhoneNumberDataField - not only the predefined ones.
+//				//					List<StructField<? extends DataField>> availableFields = personStruct.getStructBlock(PersonStruct.PHONE).getStructFields();
+//				List<PhoneNumberStructField> availableFields = new ArrayList<PhoneNumberStructField>();
+//				for (StructBlock structBlock : personStruct.getStructBlocks()) {
+//					for (StructField<?> structField : structBlock.getStructFields()) {
+//						if (structField instanceof PhoneNumberStructField)
+//							availableFields.add((PhoneNumberStructField) structField);
+//					}
+//				}
+//
+//				availableFields.removeAll(phoneSystem.getCallableStructFields());
+//
+//				availableStructFieldTable.setInput(availableFields);
+//				callableStructFieldTable.setInput(phoneSystem.getCallableStructFields());
+//
+//				updateButtonStates();
+//			}
+//		});
+//	}
 
 	private void addCallableField(boolean isAll) {
 		Collection<StructField> callableFields = callableStructFieldTable.getElements();
@@ -221,8 +227,70 @@ extends ToolBarSectionPart
 		removeAllButton.setEnabled(!callableStructFieldTable.getElements().isEmpty());
 	}
 
+	private Job loadPersonStructJob;
+
 	@Override
 	public void refresh() {
+		final Section section = getSection();
+		final Display display = section.getDisplay();
+		if (Display.getCurrent() != display)
+			throw new IllegalStateException("Thread mismatch! This method must always be called on the SWT UI thread!!!");
+
+		availableStructFieldTable.setLoadingMessage("Loading...");
+		callableStructFieldTable.setLoadingMessage("Loading...");
+
+		Job job = new Job("Loading person structure") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				StructLocalID personStructID = StructLocalID.create(
+						Organisation.DEV_ORGANISATION_ID, Person.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE
+				);
+				final StructLocal personStruct = StructLocalDAO.sharedInstance().getStructLocal(personStructID, monitor);
+
+				// @Chairat: This is nonsense. The whole point of the configuration is the not use any constant and thus be able to use *every*
+				// PhoneNumberDataField - not only the predefined ones.
+				//					List<StructField<? extends DataField>> availableFields = personStruct.getStructBlock(PersonStruct.PHONE).getStructFields();
+				final List<PhoneNumberStructField> availableFields = new ArrayList<PhoneNumberStructField>();
+				for (StructBlock structBlock : personStruct.getStructBlocks()) {
+					for (StructField<?> structField : structBlock.getStructFields()) {
+						if (structField instanceof PhoneNumberStructField)
+							availableFields.add((PhoneNumberStructField) structField);
+					}
+				}
+
+				final Job thisJob = this;
+				display.asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (thisJob != loadPersonStructJob)
+							return;
+
+						if (phoneSystem == null) {
+							availableStructFieldTable.setInput(null);
+							callableStructFieldTable.setInput(null);
+							return;
+						}
+
+						section.setEnabled(true);
+
+						availableFields.removeAll(phoneSystem.getCallableStructFields());
+
+						availableStructFieldTable.setInput(availableFields);
+						callableStructFieldTable.setInput(phoneSystem.getCallableStructFields());
+
+						updateButtonStates();
+					}
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.INTERACTIVE);
+		loadPersonStructJob = job;
+
+		section.setEnabled(false);
+		job.schedule();
+
 		super.refresh();
 	}
 
