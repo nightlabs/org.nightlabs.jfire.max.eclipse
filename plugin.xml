@@ -394,7 +394,7 @@
         <expressionProviderEntry
               categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
               id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.getLogger"
-              insertText="JFireReporingHelper.getLogger()"
+              insertText="JFireReportingHelper.getLogger()"
               name="Logger to write messages to the log"
               tooltip="Logger to write messages to the log">
         </expressionProviderEntry>
