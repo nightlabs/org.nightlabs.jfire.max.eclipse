@@ -125,16 +125,17 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 			Collections.sort(res, new Comparator<Offer>() {
 				public int compare(Offer o0, Offer o1)
 				{
-					long id0 = o0.getOfferID();
-					long id1 = o1.getOfferID();
-
-					if (id0 == id1)
-						return 0;
-
-					if (id0 > id1)
-						return 1;
-					else
-						return -1;
+					return o1.getCreateDT().compareTo(o0.getCreateDT()); // is this correct, i.e. newest first?
+//					long id0 = o0.getOfferID();
+//					long id1 = o1.getOfferID();
+//
+//					if (id0 == id1)
+//						return 0;
+//
+//					if (id0 > id1)
+//						return 1;
+//					else
+//						return -1;
 				}
 			});
 
@@ -168,12 +169,12 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 	{
 		if (children != null) {
 			Map<Object, DirtyObjectID> objectID2DirtyObjectIDMap = new HashMap<Object, DirtyObjectID>(dirtyObjectIDs.size());
-	
+
 			Set<OfferID> offerIDsToLoad = new HashSet<OfferID>();
 			for (Iterator<DirtyObjectID> itD = dirtyObjectIDs.iterator(); itD.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = itD.next();
 				objectID2DirtyObjectIDMap.put(dirtyObjectID.getObjectID(), dirtyObjectID);
-				
+
 				if (dirtyObjectID.getObjectID() instanceof OfferID) {
 					OfferID offerID = (OfferID) dirtyObjectID.getObjectID();
 					itD.remove();
@@ -181,17 +182,17 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 						if (!offerIDsLoaded.contains(offerID))
 							offerIDsToLoad.add(offerID);
 					}
-				
-				
+
+
 				}
 			}
-	
+
 			if (!offerIDsToLoad.isEmpty()) {
 				final List<Offer> offers = new OfferDAO().getOffers(offerIDsToLoad, FETCH_GROUPS_OFFER,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-	
+
 				OrderID orderID = (OrderID) JDOHelper.getObjectId(getArticleContainer());
-	
+
 				for (Iterator<Offer> it = offers.iterator(); it.hasNext(); ) {
 					Offer offer = it.next();
 					if (!orderID.equals(JDOHelper.getObjectId(offer.getOrder()))) {
@@ -199,17 +200,17 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 						dirtyObjectIDs.add(objectID2DirtyObjectIDMap.get(JDOHelper.getObjectId(offer)));
 					}
 				}
-	
+
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					public void run()
 					{
 						if (children == null)
 							return;
-	
+
 						for (Offer offer : offers) {
 							OfferID offerID = (OfferID) JDOHelper.getObjectId(offer);
-	
+
 							synchronized (offerIDsLoaded) {
 								if (!offerIDsLoaded.contains(offerID)) {
 									offerIDsLoaded.add(offerID);
