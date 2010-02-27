@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -105,6 +107,11 @@ public class PersonRelationDetailsView extends LSDViewPart
 				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE, Person.class, personSelectionListener);
 			}
 		});
+	}
+
+	public PropertySetID getPersonID()
+	{
+		return (PropertySetID) JDOHelper.getObjectId(personRelationDetailsComposite.getPerson());
 	}
 
 	private Wrapper wrapper;
