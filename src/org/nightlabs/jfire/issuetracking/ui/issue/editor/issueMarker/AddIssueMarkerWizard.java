@@ -25,8 +25,8 @@ import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueManagerRemote;
-import org.nightlabs.jfire.issue.id.IssueMarkerID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issue.issuemarker.id.IssueMarkerID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 

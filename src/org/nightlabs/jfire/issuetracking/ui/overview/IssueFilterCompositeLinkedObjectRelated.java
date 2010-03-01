@@ -15,7 +15,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;

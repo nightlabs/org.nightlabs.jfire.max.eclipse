@@ -4,7 +4,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 public class ProjectEditorData{

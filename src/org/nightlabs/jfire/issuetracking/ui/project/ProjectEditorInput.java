@@ -26,7 +26,6 @@ package org.nightlabs.jfire.issuetracking.ui.project;
 
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * Editor input for {@link ProjectEditor}s.

@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.overview.search;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntryFactory;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntry;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class IssueSubjectCommentQuickSearchEntryFactory 
 	extends AbstractQuickSearchEntryFactory<IssueQuery>

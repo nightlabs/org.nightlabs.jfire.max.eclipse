@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**

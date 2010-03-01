@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.overview.search;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author chairat

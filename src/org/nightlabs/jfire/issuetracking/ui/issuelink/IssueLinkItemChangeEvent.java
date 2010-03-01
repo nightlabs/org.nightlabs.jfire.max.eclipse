@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.EventObject;
 
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * 

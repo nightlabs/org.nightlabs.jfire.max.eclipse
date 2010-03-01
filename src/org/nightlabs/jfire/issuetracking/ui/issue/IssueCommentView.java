@@ -34,7 +34,6 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
@@ -60,7 +59,6 @@ import org.nightlabs.jfire.security.User;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**

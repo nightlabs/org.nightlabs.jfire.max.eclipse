@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
