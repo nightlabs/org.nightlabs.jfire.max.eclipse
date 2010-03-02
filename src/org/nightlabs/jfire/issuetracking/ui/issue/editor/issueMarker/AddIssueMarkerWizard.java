@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
 
 import java.util.Collection;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -21,12 +20,9 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueManagerRemote;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
-import org.nightlabs.jfire.issue.issuemarker.id.IssueMarkerID;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarkerDAO;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -34,6 +30,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * A simple wizard to interface with the user in helping to create a new IssueMarker for a related Issue.
  *
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
+ * @author Marco หงุ่ยตระกูล-Schulze - marco at nightlabs dot de
  */
 public class AddIssueMarkerWizard extends DynamicPathWizard {
 	private Issue issue;
@@ -75,7 +72,12 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 		return true;
 	}
 
-
+	private static final String[] FETCH_GROUPS_ISSUE_MARKER = {
+		FetchPlan.DEFAULT,
+		IssueMarker.FETCH_GROUP_NAME,
+		IssueMarker.FETCH_GROUP_DESCRIPTION,
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA
+	};
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 	/**
@@ -116,17 +118,22 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard.job.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
-					IssueManagerRemote imr = null;
-					try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
-					catch (Exception e) { throw new RuntimeException(e); }
+//					IssueManagerRemote imr = null;
+//					try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
+//					catch (Exception e) { throw new RuntimeException(e); }
+//
+//					Set<IssueMarkerID> issueMarkerIDs = imr.getIssueMarkerIDs();
+//					final Collection<IssueMarker> issueMarkers = imr.getIssueMarkers(
+//							issueMarkerIDs,
+//							new String[] {FetchPlan.DEFAULT, IssueMarker.FETCH_GROUP_NAME, IssueMarker.FETCH_GROUP_DESCRIPTION, IssueMarker.FETCH_GROUP_ICON_16X16_DATA},
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+//					);
 
-					Set<IssueMarkerID> issueMarkerIDs = imr.getIssueMarkerIDs();
-					final Collection<IssueMarker> issueMarkers = imr.getIssueMarkers(
-							issueMarkerIDs,
-							new String[] {FetchPlan.DEFAULT, IssueMarker.FETCH_GROUP_NAME, IssueMarker.FETCH_GROUP_DESCRIPTION, IssueMarker.FETCH_GROUP_ICON_16X16_DATA},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+					final Collection<IssueMarker> issueMarkers = IssueMarkerDAO.sharedInstance().getIssueMarkers(
+							FETCH_GROUPS_ISSUE_MARKER,
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							monitor
 					);
-
 
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override

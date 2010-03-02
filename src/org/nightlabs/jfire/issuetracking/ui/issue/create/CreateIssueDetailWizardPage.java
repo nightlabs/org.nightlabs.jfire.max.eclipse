@@ -37,6 +37,7 @@ import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
+import org.nightlabs.jfire.issuetracking.ui.issuemarker.IssueMarkerToggleButtonBar;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
@@ -47,11 +48,16 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
+ * @author Marco หงุ่ยตระกูล-Schulze - marco at nightlabs dot de
  */
 public class CreateIssueDetailWizardPage
 extends WizardHopPage
 {
+	private static final boolean VERTICAL_MARKERS = true;
+
 	//GUI
+	private IssueMarkerToggleButtonBar issueMarkerToggleButtonBar;
+
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
 
@@ -99,6 +105,20 @@ extends WizardHopPage
 	public Control createPageContents(Composite parent) {
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 6;
+		if (VERTICAL_MARKERS)
+			mainComposite.getGridLayout().numColumns += 1;
+
+		issueMarkerToggleButtonBar = new IssueMarkerToggleButtonBar(mainComposite, VERTICAL_MARKERS ? SWT.V_SCROLL : SWT.H_SCROLL);
+		issueMarkerToggleButtonBar.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				issueMarkerToggleButtonBar.commitToIssue(issue);
+			}
+		});
+		if (VERTICAL_MARKERS)
+			((GridData)issueMarkerToggleButtonBar.getLayoutData()).verticalSpan = 5;
+		else
+			((GridData)issueMarkerToggleButtonBar.getLayoutData()).horizontalSpan = mainComposite.getGridLayout().numColumns;
 
 		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.project.text")); //$NON-NLS-1$
 		projectComboComposite = new ProjectComboComposite(mainComposite, SWT.NONE);
