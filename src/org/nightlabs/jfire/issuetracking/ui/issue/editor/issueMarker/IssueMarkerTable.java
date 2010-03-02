@@ -1,4 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
+// TODO this package should be called issuemarker (small "m")!!!
+// TODO this class should be in the package org.nightlabs.jfire.issuetracking.ui.issuemarker, because it has IMHO nothing to do with an editor.
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
