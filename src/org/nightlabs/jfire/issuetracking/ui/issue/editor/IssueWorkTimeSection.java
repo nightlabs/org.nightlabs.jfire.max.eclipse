@@ -15,6 +15,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -24,6 +26,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.CalendarDateTimeEditLookupDialog;
+import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -35,6 +38,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.l10n.DateFormatProvider;
+import org.nightlabs.l10n.DateFormatter;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -50,7 +54,8 @@ extends AbstractIssueEditorGeneralSection
 
 	private Label startTimeLabel;
 	private Label endTimeLabel;
-
+	private DateTimeControl deadlineDateTimeEdit;
+	
 	private WorkTimeListAction workTimeListAction;
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
@@ -162,6 +167,23 @@ extends AbstractIssueEditorGeneralSection
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		endTimeLabel.setLayoutData(gd);
+		
+		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_LONG;
+		
+		new Label(getClient(), SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.deadlineTime.text")); //$NON-NLS-1$
+		deadlineDateTimeEdit =new DateTimeControl(getClient(), false, SWT.NONE, DateFormatter.FLAGS_DATE_LONG);
+		deadlineDateTimeEdit.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				controller.getIssue().setDeadlineTimestamp(deadlineDateTimeEdit.getDate());
+				markDirty();
+				deadlineDateTimeEdit.pack(true);
+			}
+		});
+		
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		deadlineDateTimeEdit.setLayoutData(gd);
 
 		workTimeListAction = new WorkTimeListAction();
 
@@ -176,7 +198,6 @@ extends AbstractIssueEditorGeneralSection
 
 		if (issue.isStarted()) {
 			startStopButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.startStopButton.stop.text")); //$NON-NLS-1$
-
 
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.job.checkUser.text")) { //$NON-NLS-1$
 				@Override
@@ -209,16 +230,25 @@ extends AbstractIssueEditorGeneralSection
 		else 
 			startStopButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.startStopButton.start.text")); //$NON-NLS-1$
 
+		if (issue.getDeadlineTimestamp() != null) {
+			deadlineDateTimeEdit.setDate(issue.getDeadlineTimestamp());
+			deadlineDateTimeEdit.pack(true);
+		}
+		else {
+			deadlineDateTimeEdit.clearDate();
+		}
+		
 		IssueWorkTimeRange workTime = issue.getLastIssueWorkTimeRange();
 		if (workTime != null) {
 			statusLabel.setText(issue.isStarted() ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.working.text") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.stopped.text")); //$NON-NLS-1$ //$NON-NLS-2$
 			startTimeLabel.setText(workTime.getFrom() == null ? "" : dateTimeFormat.format(workTime.getFrom())); //$NON-NLS-1$
 			endTimeLabel.setText(workTime.getTo() == null ? "" : dateTimeFormat.format(workTime.getTo())); //$NON-NLS-1$
-
+			
 			statusLabel.pack(true);
 			startStopButton.pack(true);
 			startTimeLabel.pack(true);
 			endTimeLabel.pack(true);
+			
 			getClient().pack();
 		}
 	}

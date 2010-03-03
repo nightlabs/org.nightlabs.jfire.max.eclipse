@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.text.DecimalFormat;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -20,7 +22,9 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
  *
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
-public class IssueFileAttachmentTable extends AbstractTableComposite<IssueFileAttachment> {
+public class IssueFileAttachmentTable 
+extends AbstractTableComposite<IssueFileAttachment> 
+{
 	/**
 	 * Creates a new instance of an IssueFileAttachmentTable.
 	 */
@@ -71,13 +75,26 @@ public class IssueFileAttachmentTable extends AbstractTableComposite<IssueFileAt
 			// Note: @colunmIndex 0 -- Filename.
 			//       @colunmIndex 1 -- Filesize.
 			if (element != null && element instanceof IssueFileAttachment) {
-				IssueFileAttachment iFA = (IssueFileAttachment)element;
+				IssueFileAttachment issueFileAttachment = (IssueFileAttachment)element;
 
-				if (columnIndex == 0) return iFA.getFileName();
-				if (columnIndex == 1) return iFA.getFileSize() + " bytes"; //$NON-NLS-1$
+				if (columnIndex == 0) return issueFileAttachment.getFileName();
+				if (columnIndex == 1) return getFileSizeString(issueFileAttachment); //$NON-NLS-1$
 			}
 
 			return ""; //$NON-NLS-1$
 		}
+	}
+	
+	private String getFileSizeString(IssueFileAttachment issueFileAttachment) {
+		DecimalFormat df = new DecimalFormat("#.##");
+		if (issueFileAttachment.getFileSize() < 1024) {
+			return df.format((double)issueFileAttachment.getFileSize()) + " bytes";
+		}
+		
+		else if (issueFileAttachment.getFileSize() < 1024 * 1024) {
+			return df.format((double)issueFileAttachment.getFileSize() / (double)1024) + " KB";
+		}
+		else
+			return df.format((double)issueFileAttachment.getFileSize() / (double)(1024 * 1024)) + " MB";
 	}
 }

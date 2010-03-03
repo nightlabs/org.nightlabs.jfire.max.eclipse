@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
@@ -137,8 +138,16 @@ extends WizardHopPage
 		return mainComposite;
 	}
 
+	private WizardHopPage reminderPage;
+	
 	@Override
 	public boolean isPageComplete() {
+		if (reminderPage == null) {
+			new WizardHop(this);
+			reminderPage = new CreateIssueReminderWizardPage(issue);
+			getWizardHop().addHopPage(reminderPage);
+		}
+		
 		return getErrorMessage() == null;
 	}
 	

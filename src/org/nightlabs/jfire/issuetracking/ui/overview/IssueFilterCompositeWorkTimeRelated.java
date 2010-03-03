@@ -6,13 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.timelength.TimeLengthComposite;
+import org.nightlabs.base.ui.timelength.TimeUnit;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
@@ -30,7 +35,11 @@ public class IssueFilterCompositeWorkTimeRelated
 {
 	private DateTimeEdit startTimeEdit;
 	private DateTimeEdit endTimeEdit;
-
+	
+	private TimeLengthComposite withinTimeLengthComposite; 
+//	private DateTimeEdit deadlineDateAfter;
+//	private DateTimeEdit deadlineDateBefore;
+	
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -141,8 +150,82 @@ public class IssueFilterCompositeWorkTimeRelated
 				getQuery().setFieldEnabled(IssueQuery.FieldName.issueWorkTimeRangeTo, active);
 			}
 		});
+		
+		Group deadlineGroup = new Group(this, SWT.NONE);
+		deadlineGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeWorkTimeRelated.deadlineGroup.text"));
+		deadlineGroup.setLayout(new GridLayout(2, true));
+		
+		new Label(deadlineGroup, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeWorkTimeRelated.withinLabel.text"));
+		withinTimeLengthComposite = new TimeLengthComposite(deadlineGroup);
+		withinTimeLengthComposite.setTimeUnits(new TimeUnit[] {TimeUnit.month, TimeUnit.day, TimeUnit.hour});
+		withinTimeLengthComposite.setTimeLength(0);
+		withinTimeLengthComposite.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				changeDeadlineDuration(withinTimeLengthComposite.getTimeLength());
+			}
+		});
+		
+		//////////////////
+//		Group deadlineGroup = new Group(this, SWT.NONE);
+//		deadlineGroup.setText("Deadline");
+//		deadlineGroup.setLayout(new GridLayout(2, true));
+//		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
+//		deadlineDateAfter = new DateTimeEdit(deadlineGroup, dateTimeEditStyle, "After");
+//		deadlineDateAfter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		deadlineDateAfter.setActive(false);
+//		deadlineDateAfter.addModifyListener(new ModifyListener()
+//		{
+//			@Override
+//			public void modifyText(ModifyEvent e)
+//			{
+//				getQuery().setDeadlineAfterTimestamp(deadlineDateAfter.getDate());
+//			}
+//		});
+//		deadlineDateAfter.addActiveChangeListener(new ButtonSelectionListener()
+//		{
+//			@Override
+//			protected void handleSelection(boolean active)
+//			{
+//				if (getQuery().getDeadlineAfterTimestamp() == null) {
+//					getQuery().setDeadlineAfterTimestamp(deadlineDateAfter.getDate());
+//				}
+//				getQuery().setFieldEnabled(IssueQuery.FieldName.deadlineAfterTimestamp, active);
+//			}
+//		});
+//		
+//		deadlineDateBefore = new DateTimeEdit(deadlineGroup, dateTimeEditStyle, "Before");
+//		deadlineDateBefore.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		deadlineDateBefore.setActive(false);
+//		deadlineDateBefore.addModifyListener(new ModifyListener()
+//		{
+//			@Override
+//			public void modifyText(ModifyEvent e)
+//			{
+//				getQuery().setDeadlineBeforeTimestamp(deadlineDateBefore.getDate());
+//			}
+//		});
+//		deadlineDateBefore.addActiveChangeListener(new ButtonSelectionListener()
+//		{
+//			@Override
+//			protected void handleSelection(boolean active)
+//			{
+//				if (getQuery().getDeadlineBeforeTimestamp() == null) {
+//					getQuery().setDeadlineBeforeTimestamp(deadlineDateBefore.getDate());
+//				}
+//				getQuery().setFieldEnabled(IssueQuery.FieldName.deadlineBeforeTimestamp, active);
+//			}
+//		});
+//		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+//		gd.horizontalSpan = 2;
+//		deadlineGroup.setLayoutData(gd);
 	}
 
+	private void changeDeadlineDuration(long duration) {
+		getQuery().setDeadlineTimePeriod(duration);
+		getQuery().setFieldEnabled(IssueQuery.FieldName.deadlineTimePeriod, ! (duration == 0));
+	}
+	
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
@@ -150,13 +233,8 @@ public class IssueFilterCompositeWorkTimeRelated
 		{
 			if (IssueQuery.FieldName.issueWorkTimeRangeFrom.equals(changedField.getPropertyName()))
 			{
-				final Date newFromDate = (Date) changedField.getNewValue();
-				if (newFromDate == null) {
-					startTimeEdit.setActive(false);
-				}
-				else {
-					startTimeEdit.setDate(newFromDate);
-				}
+				final Date tmpCreateDate = (Date) changedField.getNewValue();
+				startTimeEdit.setDate(tmpCreateDate);
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeFrom).equals(changedField.getPropertyName()))
 			{
@@ -164,18 +242,13 @@ public class IssueFilterCompositeWorkTimeRelated
 				if (startTimeEdit.isActive() != active)
 				{
 					startTimeEdit.setActive(active);
+					setSearchSectionActive(active);
 				}
-				setSearchSectionActive(active);
 			}
 			else if (IssueQuery.FieldName.issueWorkTimeRangeTo.equals(changedField.getPropertyName()))
 			{
-				final Date newToDate = (Date) changedField.getNewValue();
-				if (newToDate == null) {
-					endTimeEdit.setActive(false);
-				}
-				else {
-					endTimeEdit.setDate(newToDate);
-				}
+				final Date tmpUpdateDate = (Date) changedField.getNewValue();
+				endTimeEdit.setDate(tmpUpdateDate);
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeTo).equals(changedField.getPropertyName()))
 			{
@@ -183,9 +256,59 @@ public class IssueFilterCompositeWorkTimeRelated
 				if (endTimeEdit.isActive() != active)
 				{
 					endTimeEdit.setActive(active);
+					setSearchSectionActive(active);
 				}
-				setSearchSectionActive(active);
 			}
+			else if (IssueQuery.FieldName.deadlineTimePeriod.equals(changedField.getPropertyName()))
+			{
+				Long newValue = (Long)changedField.getNewValue();
+				if (newValue == null)
+				{
+//					durationComposite.setTimeLength(0);
+				}
+				else
+				{
+					withinTimeLengthComposite.setTimeLength(newValue);
+				}
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.deadlineTimePeriod).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				setSearchSectionActive(active);
+				if (!active) {
+					getQuery().setDeadlineTimePeriod(null);
+					withinTimeLengthComposite.setTimeLength(0);
+				}
+			}
+//			else if (IssueQuery.FieldName.deadlineAfterTimestamp.equals(changedField.getPropertyName()))
+//			{
+//				final Date tmpDeadlineDate = (Date) changedField.getNewValue();
+//				deadlineDateAfter.setDate(tmpDeadlineDate);
+//			}
+//			else if (getEnableFieldName(IssueQuery.FieldName.deadlineAfterTimestamp).equals(changedField.getPropertyName()))
+//			{
+//				final boolean active = (Boolean) changedField.getNewValue();
+//				if (deadlineDateAfter.isActive() != active)
+//				{
+//					deadlineDateAfter.setActive(active);
+//					setSearchSectionActive(active);
+//				}
+//			}
+//			else if (IssueQuery.FieldName.deadlineBeforeTimestamp.equals(changedField.getPropertyName()))
+//			{
+//				final Date tmpDeadlineDate = (Date) changedField.getNewValue();
+//				deadlineDateBefore.setDate(tmpDeadlineDate);
+//			}
+//			else if (getEnableFieldName(IssueQuery.FieldName.deadlineBeforeTimestamp).equals(changedField.getPropertyName()))
+//			{
+//				final boolean active = (Boolean) changedField.getNewValue();
+//				if (deadlineDateBefore.isActive() != active)
+//				{
+//					deadlineDateBefore.setActive(active);
+//					setSearchSectionActive(active);
+//				}
+//			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
 
@@ -195,6 +318,9 @@ public class IssueFilterCompositeWorkTimeRelated
 		fieldNames = new HashSet<String>(2);
 		fieldNames.add(IssueQuery.FieldName.issueWorkTimeRangeFrom);
 		fieldNames.add(IssueQuery.FieldName.issueWorkTimeRangeTo);
+		fieldNames.add(IssueQuery.FieldName.deadlineTimePeriod);
+//		fieldNames.add(IssueQuery.FieldName.deadlineAfterTimestamp);
+//		fieldNames.add(IssueQuery.FieldName.deadlineBeforeTimestamp);
 	}
 
 	@Override
