@@ -252,7 +252,6 @@ extends XComposite
 		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
 
 		Calendar startDateTimeCalendar = Calendar.getInstance(NLLocale.getDefault());
-		startDateTimeCalendar.setTime(startDateControl.getDate());
 
 		Date startTime = startTimeControl.getDate();
 		if (startTime == null) {
@@ -261,6 +260,7 @@ extends XComposite
 			startDateTimeCalendar.set(Calendar.SECOND, 0);
 		}
 		else {
+			startDateTimeCalendar.setTime(startDateControl.getDate());
 			startDateTimeCalendar.setTime(startTime);
 		}
 
@@ -284,7 +284,7 @@ extends XComposite
 		}
 
 		startDateControl.setDate(previousStartDateTime.getTime());
-		startTimeControl.clearDate();
+		startTimeControl.setDate(null);
 		durationText.setTimeLength(0);
 
 		subjectText.setI18nText(new I18nTextBuffer());
