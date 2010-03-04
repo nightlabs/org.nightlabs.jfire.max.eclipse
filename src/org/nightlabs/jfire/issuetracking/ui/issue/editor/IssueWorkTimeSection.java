@@ -168,8 +168,6 @@ extends AbstractIssueEditorGeneralSection
 		gd.horizontalSpan = 2;
 		endTimeLabel.setLayoutData(gd);
 		
-		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_LONG;
-		
 		new Label(getClient(), SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.deadlineTime.text")); //$NON-NLS-1$
 		deadlineDateTimeEdit =new DateTimeControl(getClient(), false, SWT.NONE, DateFormatter.FLAGS_DATE_LONG);
 		deadlineDateTimeEdit.addSelectionListener(new SelectionAdapter() {
@@ -178,6 +176,13 @@ extends AbstractIssueEditorGeneralSection
 				controller.getIssue().setDeadlineTimestamp(deadlineDateTimeEdit.getDate());
 				markDirty();
 				deadlineDateTimeEdit.pack(true);
+			}
+		});
+		deadlineDateTimeEdit.addClearSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				controller.getIssue().setDeadlineTimestamp(deadlineDateTimeEdit.getDate());
+				markDirty();
 			}
 		});
 		
@@ -230,13 +235,8 @@ extends AbstractIssueEditorGeneralSection
 		else 
 			startStopButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.startStopButton.start.text")); //$NON-NLS-1$
 
-		if (issue.getDeadlineTimestamp() != null) {
-			deadlineDateTimeEdit.setDate(issue.getDeadlineTimestamp());
-			deadlineDateTimeEdit.pack(true);
-		}
-		else {
-			deadlineDateTimeEdit.clearDate();
-		}
+		deadlineDateTimeEdit.setDate(issue.getDeadlineTimestamp());
+		deadlineDateTimeEdit.pack(true);
 		
 		IssueWorkTimeRange workTime = issue.getLastIssueWorkTimeRange();
 		if (workTime != null) {

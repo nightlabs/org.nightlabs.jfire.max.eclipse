@@ -44,7 +44,6 @@ extends WizardHopPage
 		deadlineLabel.setText("Finished Date: ");
 		
 		deadlineDateTimeEdit =new DateTimeControl(mainComposite, false, SWT.NONE, DateFormatter.FLAGS_DATE_LONG);
-		deadlineDateTimeEdit.clearDate();
 		deadlineDateTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		deadlineDateTimeEdit.addSelectionListener(new SelectionAdapter() {
 			@Override
