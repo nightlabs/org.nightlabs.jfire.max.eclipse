@@ -42,7 +42,7 @@ extends XComposite
 
 		Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		dateTimeControl = new DateTimeControl(wrapper, true, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT);
-		dateTimeControl.clearDate();
+		dateTimeControl.setDate(null);
 		dateTimeControl.setButtonText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateComposite.button.setDeliveryDate.text")); //$NON-NLS-1$
 		dateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		dateTimeControl.addSelectionListener(new SelectionAdapter(){
