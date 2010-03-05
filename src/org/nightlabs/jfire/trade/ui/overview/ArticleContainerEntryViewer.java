@@ -207,9 +207,8 @@ extends JDOQuerySearchEntryViewer<R, Q>
 		if (footerTextTotal != null && !footerTextTotal.isDisposed()) {
 			Collection<R> elements = getListComposite().getElements();
 			displayTotals(elements, footerTextTotal);
+			relayoutFooter();
 		}
-		
-		relayoutFooter();
 	}
 
 	private Map<Currency, Map<PriceFragmentType, Long>> currency2PriceFragmentTypeSumMap = new HashMap<Currency, Map<PriceFragmentType,Long>>();
