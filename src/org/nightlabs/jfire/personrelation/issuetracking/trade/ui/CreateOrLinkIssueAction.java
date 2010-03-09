@@ -4,7 +4,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewActionDelegate;
@@ -13,7 +12,6 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
 import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
@@ -77,41 +75,51 @@ public class CreateOrLinkIssueAction implements IViewActionDelegate
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		selectedPersonID = null;
-
-		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+		PersonRelationTreeNode node = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(selection);
+		if (node == null) {
 			action.setEnabled(false);
 			return;
 		}
 
-		IStructuredSelection sel = (IStructuredSelection) selection;
-		if (sel.size() != 1 || sel.getFirstElement() == null) {
-			action.setEnabled(false);
-			return;
-		}
-
-		Object object = sel.getFirstElement();
-		if (!(object instanceof PersonRelationTreeNode)) {
-			action.setEnabled(false);
-			return;
-		}
-
-		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
-		while (selectedPersonID == null && node != null) {
-			if (node.getJdoObjectID() instanceof PropertySetID) {
-				selectedPersonID = (PropertySetID) node.getJdoObjectID();
-				break;
-			}
-			else if (node.getJdoObject() instanceof PersonRelation) {
-				PersonRelation pr = (PersonRelation) node.getJdoObject();
-				selectedPersonID = pr.getToID();
-				break;
-			}
-//			else if (node.getJdoObjectID() instanceof IssueLinkID) {
-//				node = (PersonRelationTreeNode) node.getParent();
-//			}
-			else
-				break;
-		}
+		selectedPersonID = node.getPropertySetID();
 		action.setEnabled(selectedPersonID != null);
+
+//		selectedPersonID = null;
+//
+//		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+//			action.setEnabled(false);
+//			return;
+//		}
+//
+//		IStructuredSelection sel = (IStructuredSelection) selection;
+//		if (sel.size() != 1 || sel.getFirstElement() == null) {
+//			action.setEnabled(false);
+//			return;
+//		}
+//
+//		Object object = sel.getFirstElement();
+//		if (!(object instanceof PersonRelationTreeNode)) {
+//			action.setEnabled(false);
+//			return;
+//		}
+//
+//		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
+//		while (selectedPersonID == null && node != null) {
+//			if (node.getJdoObjectID() instanceof PropertySetID) {
+//				selectedPersonID = (PropertySetID) node.getJdoObjectID();
+//				break;
+//			}
+//			else if (node.getJdoObject() instanceof PersonRelation) {
+//				PersonRelation pr = (PersonRelation) node.getJdoObject();
+//				selectedPersonID = pr.getToID();
+//				break;
+//			}
+////			else if (node.getJdoObjectID() instanceof IssueLinkID) {
+////				node = (PersonRelationTreeNode) node.getParent();
+////			}
+//			else
+//				break;
+//		}
+//		action.setEnabled(selectedPersonID != null);
 	}
 }

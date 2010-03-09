@@ -6,7 +6,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.job.Job;
@@ -55,25 +54,32 @@ public class DeletePersonRelationAction implements IViewActionDelegate
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		selectedPersonRelation = null;
-
-		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+		PersonRelationTreeNode node = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(selection);
+		if (node == null) {
 			action.setEnabled(false);
 			return;
 		}
 
-		IStructuredSelection sel = (IStructuredSelection) selection;
-		if (sel.size() != 1 || sel.getFirstElement() == null) {
-			action.setEnabled(false);
-			return;
-		}
+//
+//		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+//			action.setEnabled(false);
+//			return;
+//		}
+//
+//		IStructuredSelection sel = (IStructuredSelection) selection;
+//		if (sel.size() != 1 || sel.getFirstElement() == null) {
+//			action.setEnabled(false);
+//			return;
+//		}
+//
+//		Object object = sel.getFirstElement();
+//		if (!(object instanceof PersonRelationTreeNode)) {
+//			action.setEnabled(false);
+//			return;
+//		}
+//
+//		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
 
-		Object object = sel.getFirstElement();
-		if (!(object instanceof PersonRelationTreeNode)) {
-			action.setEnabled(false);
-			return;
-		}
-
-		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
 		if (node.getJdoObject() instanceof PersonRelation) {
 			PersonRelation pr = (PersonRelation) node.getJdoObject();
 			selectedPersonRelation = pr;

@@ -2,19 +2,21 @@ package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
 import org.nightlabs.jfire.personrelation.ui.createrelation.CreatePersonRelationWizard;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 
 public class CreatePersonRelationAction implements IViewActionDelegate
 {
+	private IViewPart view;
+
 	@Override
-	public void init(IViewPart view) { }
+	public void init(IViewPart view) {
+		this.view = view;
+	}
 
 	@Override
 	public void run(IAction action) {
@@ -23,7 +25,10 @@ public class CreatePersonRelationAction implements IViewActionDelegate
 			return;
 
 		CreatePersonRelationWizard wizard = new CreatePersonRelationWizard(personID);
-		new DynamicPathWizardDialog(wizard).open();
+		if (view != null)
+			new DynamicPathWizardDialog(view.getSite().getShell(), wizard).open(); // The safer way to instantiate the Wizard?
+		else
+			new DynamicPathWizardDialog(wizard).open();
 	}
 
 	private PropertySetID selectedPersonID = null;
@@ -31,31 +36,13 @@ public class CreatePersonRelationAction implements IViewActionDelegate
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		selectedPersonID = null;
-
-		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+		PersonRelationTreeNode node = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(selection);
+		if (node == null) {
 			action.setEnabled(false);
 			return;
 		}
 
-		IStructuredSelection sel = (IStructuredSelection) selection;
-		if (sel.size() != 1 || sel.getFirstElement() == null) {
-			action.setEnabled(false);
-			return;
-		}
-
-		Object object = sel.getFirstElement();
-		if (!(object instanceof PersonRelationTreeNode)) {
-			action.setEnabled(false);
-			return;
-		}
-
-		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
-		if (node.getJdoObjectID() instanceof PropertySetID)
-			selectedPersonID = (PropertySetID) node.getJdoObjectID();
-		else if (node.getJdoObject() instanceof PersonRelation) {
-			PersonRelation pr = (PersonRelation) node.getJdoObject();
-			selectedPersonID = pr.getToID();
-		}
+		selectedPersonID = node.getPropertySetID();
 		action.setEnabled(selectedPersonID != null);
 	}
 }
