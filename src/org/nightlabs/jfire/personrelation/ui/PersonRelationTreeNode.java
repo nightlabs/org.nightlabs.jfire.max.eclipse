@@ -10,6 +10,10 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeNode;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 
+/**
+ * @author Marco Schulze
+ * @author khaireel (at) nightlabs (dot) de
+ */
 public class PersonRelationTreeNode
 extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController> {
 	// Attempt #1: To stop the unending iteration. At least for use with Behr's descriptions. See notes.

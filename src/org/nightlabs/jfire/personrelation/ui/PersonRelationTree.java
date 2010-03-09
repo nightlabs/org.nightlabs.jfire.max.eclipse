@@ -3,13 +3,19 @@ package org.nightlabs.jfire.personrelation.ui;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -20,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IViewActionDelegate;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
@@ -34,7 +41,10 @@ import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.util.NLLocale;
 
-
+/**
+ * @author Marco Schulze
+ * @author khaireel (at) nightlabs (dot) de
+ */
 public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTreeNode>
 {
 	private static final Logger logger = Logger.getLogger(PersonRelationTree.class);
@@ -277,69 +287,6 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 	}
 
-//	protected static class PersonRelationTreeLabelProvider extends JDOObjectLazyTreeLabelProvider<ObjectID, Object, PersonRelationTreeNode>
-//	{
-//		private String languageID = NLLocale.getDefault().getLanguage();
-//
-//		@Override
-//		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int columnIndex) {
-//			if (jdoObject == null) {
-//				if (jdoObjectID instanceof PropertySetID) {
-//					PropertySetID personID = (PropertySetID) jdoObjectID;
-//
-//					switch (columnIndex) {
-//						case 0:
-//							return personID.organisationID + '/' + personID.propertySetID;
-//						default:
-//							break;
-//					}
-//				}
-//				else if (jdoObjectID instanceof PersonRelationID) {
-//					PersonRelationID personRelationID = (PersonRelationID) jdoObjectID;
-//
-//					switch (columnIndex) {
-//						case 0:
-//							return personRelationID.organisationID + '/' + personRelationID.personRelationID;
-//						default:
-//							break;
-//					}
-//				}
-//			}
-//			else {
-//				if (jdoObject instanceof Person) {
-//					Person person = (Person) jdoObject;
-//
-//					switch (columnIndex) {
-//						case 0:
-//							return null;
-//						case 1:
-//							return person.getDisplayName();
-//						default:
-//							break;
-//					}
-//				}
-//				else if (jdoObject instanceof PersonRelation) {
-//					PersonRelation personRelation = (PersonRelation) jdoObject;
-//
-//					switch (columnIndex) {
-//						case 0:
-//							return personRelation.getPersonRelationType().getName().getText(languageID);
-//						case 1:
-//							return personRelation.getTo().getDisplayName();
-//						default:
-//							break;
-//					}
-//				}
-//				else {
-//					// TODO delegate
-//				}
-//			}
-//
-//			return null;
-//		}
-//
-//	}
-
 	private void assertSWTThread()
 	{
 		if (Display.getCurrent() == null)
@@ -353,16 +300,24 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 	private PersonRelationTreeController personRelationTreeController;
 
-	public PersonRelationTree(Composite parent) {
-		super(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
 
-		personRelationTreeController = new PersonRelationTreeController() {
-			@Override
-			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent)
-			{
-				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
-			}
-		};
+	// ------ [Constructors: With options for more control parameters; for collapse-state and for context-menus] --------->>
+	public PersonRelationTree(Composite parent) {
+		this(parent, true);
+	}
+
+	public PersonRelationTree(Composite parent, boolean isRestoreCollapseState) {
+		this(parent, isRestoreCollapseState, true, true);
+	}
+
+	public PersonRelationTree(Composite parent, boolean isRestoreCollapseState, boolean isCreateContextMenu, boolean isMenuWithDrillDownAdapter) {
+		// We have to ensure that we dont trigger the Abstract-tree's init() method before setting
+		// the restoring the collapse state of the tree. That is, we trigger init() only after setting the state.
+		super(parent, SWT.VIRTUAL | SWT.FULL_SELECTION, true, false, true);
+		setRestoreCollapseState(isRestoreCollapseState);
+		init();
+
+		personRelationTreeController = createPersonRelationTreeController();
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
@@ -374,9 +329,69 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			}
 		});
 
-		createContextMenu(true);
+		if (isCreateContextMenu)
+			createContextMenu(isMenuWithDrillDownAdapter);
 
 		super.setInput(personRelationTreeController);
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------->>
+	/**
+	 * Initialises the set of priorityOrderedContextMenuContributions by blending them into tree's SelectionChangeListener;
+	 * i.e. mainly, this controls the UI's enabled (or disabled) state for which ever (context) item has been selected.
+	 * Call this once, only when we are ready with all the menu items we want. For now, we handle only those {@link IViewActionDelegate},
+	 * for they have the method to handle 'selectionchanged()'.
+	 *
+	 * This also sets up the double-click behaviour, where in this setup, we assume that the (menu) items registered in the
+	 * {@link AbstractTreeComposite} has been ordered in accordance to 'first-available-default' priority, this in turn will
+	 * make them to be automatically used in this double-click context. See notes 2010.03.08. Kai.
+	 *
+	 * See first independent application usage in PersonRelationIssueTreeView.
+	 */
+	public void integratePriorityOrderedContextMenu() {
+		List<Object> orderedContextMenuContributions = getPriorityOrderedContextMenuContributions();
+		if (orderedContextMenuContributions == null || orderedContextMenuContributions.isEmpty())
+			return;
+
+		// On selection changes.
+		addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ISelection selection = event.getSelection();
+				for (Object menuItem : getPriorityOrderedContextMenuContributions()) {
+					if (menuItem instanceof IViewActionDelegate)
+						((IViewActionDelegate) menuItem).selectionChanged((IAction) menuItem, selection);
+				}
+			}
+		});
+
+		// On double-click: 'first-available-default' priority execution.
+		addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				for (Object menuItem : getPriorityOrderedContextMenuContributions())
+					if (menuItem instanceof IAction) {
+						IAction menuAction = (IAction) menuItem;
+						if (menuAction.isEnabled()) {
+							menuAction.run();
+							return;
+						}
+					}
+			}
+		});
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------->>
+
+
+
+	protected PersonRelationTreeController createPersonRelationTreeController() {
+		return new PersonRelationTreeController() {
+			@Override
+			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent) {
+				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
+			}
+		};
 	}
 
 	public PersonRelationTreeController getPersonRelationTreeController() {
@@ -389,11 +404,13 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
 		column.setText(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTree.tree.column.relation.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnPixelData(120));
+		tableLayout.addColumnData(new ColumnWeightData(2));
+//		tableLayout.addColumnData(new ColumnPixelData(120));
 
 		column = new TreeColumn(tree, SWT.LEFT);
 		column.setText(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTree.tree.column.person.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(70));
+		tableLayout.addColumnData(new ColumnWeightData(3));
+//		tableLayout.addColumnData(new ColumnWeightData(70));
 
 		tree.setLayout(tableLayout);
 
@@ -418,44 +435,6 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		personRelationTreeController.setRootPersonIDs(personIDs);
 		super.setInput(personRelationTreeController);
-
-		// if source is set -> select it in the tree.
-//		if (source != null)
-//		{
-//			Set<PersonRelationTreeNode> currentLevel = new HashSet<PersonRelationTreeNode>();
-//			Set<PersonRelationTreeNode> nextLevel = new HashSet<PersonRelationTreeNode>();
-//
-//			for (int i=0; i < personIDs.size(); i++)
-//			{
-				// FIXME: We never know when the elements we need is fetched by the backround jobs, unless using the listener.
-				//        But synchronising the listener to these calls is not really nice.
-				//        We need some method that retrieves the shallow objects (only ObjectID) immediately. (marius)
-//				PersonRelationTreeNode node = personRelationTreeController.getNode(null, i);
-//			}
-//
-//			PersonRelationTreeNode dummyNode = personRelationTreeController.createNode();
-//			dummyNode.setJdoObjectID(source);
-//			do
-//			{
-//				if (currentLevel.contains(dummyNode))
-//				{
-//					setSelection(dummyNode);
-//					break;
-//				}
-//				currentLevel = nextLevel;
-//				nextLevel = new HashSet<PersonRelationTreeNode>();
-//
-//				for (PersonRelationTreeNode personRelationTreeNode : currentLevel)
-//				{
-//					int childCount = (int) personRelationTreeController.getNodeCount(personRelationTreeNode);
-//					for (int i=0; i < childCount; i++)
-//					{
-//						nextLevel.add( personRelationTreeController.getNode(personRelationTreeNode, i) );
-//					}
-//				}
-//
-//			} while (true);
-//		}
 	}
 
 	public void setInputPersonIDs(Collection<PropertySetID> personIDs)
@@ -467,14 +446,6 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		return personIDs;
 	}
 
-//	public PropertySetID getSelectedInputPersonID() {
-//		Collection<PropertySetID> inputPersonIDs = getInputPersonIDs();
-//		if (inputPersonIDs == null || inputPersonIDs.isEmpty())
-//			return null;
-//
-//		PropertySetID personID = inputPersonIDs.iterator().next();
-//		return personID;
-//	}
 
 	/**
 	 * @deprecated Do not call this method! It's only inherited and used
