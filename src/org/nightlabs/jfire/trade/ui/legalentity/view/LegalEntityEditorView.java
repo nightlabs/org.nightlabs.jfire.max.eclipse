@@ -87,14 +87,14 @@ extends LSDViewPart
 			}
 		});
 
-		setSelectedLegalEntityID(null);
+		setSelectedLegalEntityID(null, true);
 	}
 
 	private NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
 		@Override
 		public void notify(NotificationEvent notificationEvent) {
 			AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
-			setSelectedLegalEntityID(legalEntityID);
+			setSelectedLegalEntityID(legalEntityID, false);
 		}
 	};
 
@@ -106,12 +106,12 @@ extends LSDViewPart
 		return selectionComposite.getSelectedLegalEntity();
 	}
 
-	public void setSelectedLegalEntityID(final AnchorID legalEntityID)
+	public void setSelectedLegalEntityID(final AnchorID legalEntityID, boolean isPropagateNotification)
 	{
 		if (selectionComposite == null || selectionComposite.isDisposed())
 			return;
 
-		selectionComposite.setSelectedLegalEntityID(legalEntityID);
+		selectionComposite.setSelectedLegalEntityID(legalEntityID, isPropagateNotification);
 		editLegalEntityAction.setEnabled(legalEntityID != null);
 		if (legalEntityID != null) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView.job.checkLegalEntity")) { //$NON-NLS-1$

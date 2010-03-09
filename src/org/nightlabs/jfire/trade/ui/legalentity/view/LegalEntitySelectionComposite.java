@@ -60,7 +60,6 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.notification.SubjectCarrier;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
@@ -97,7 +96,7 @@ extends XComposite
 				LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(getQuickSearchText(), true);
 				if (legalEntity != null) {
 					setSelectedLegalEntityID(
-							(AnchorID) JDOHelper.getObjectId(legalEntity)
+							(AnchorID) JDOHelper.getObjectId(legalEntity), true
 					);
 				}
 			}
@@ -110,16 +109,16 @@ extends XComposite
 	private Text quickSearchText;
 	private Button quickSearchButton;
 	private Section editorSection;
-	
+
 	private Job loadSearchCfModJob;
 	private PersonSearchConfigModule searchCfMod;
 
 	private IStructFieldSearchFilterItemEditor quickSearchFilterItemEditor;
-	
+
 	public LegalEntitySelectionComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode, int cols) {
 		super(parent, style, layoutMode, layoutDataMode, cols);
-		
+
 		loadSearchCfModJob = new Job("Loading search configuration") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -130,18 +129,18 @@ extends XComposite
 						IStruct.FETCH_GROUP_ISTRUCT_FULL_DATA,
 						FetchPlan.DEFAULT
 				};
-				
+
 				final String cfModID = AbstractEditLayoutConfigModule.getCfModID(AbstractEditLayoutConfigModule.CLIENT_TYPE_RCP, PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH);
 				searchCfMod = ConfigUtil.getUserCfMod(PersonSearchConfigModule.class, cfModID, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				
+
 				return Status.OK_STATUS;
 			}
 		};
 		loadSearchCfModJob.schedule();
-		
+
 		initGUI();
 	}
-	
+
 	public LegalEntitySelectionComposite(Composite parent, int style,
 			LayoutMode layoutMode) {
 		this(parent, style, layoutMode, LayoutDataMode.GRID_DATA, 1);
@@ -175,13 +174,13 @@ extends XComposite
 		gl.numColumns = 2;
 		gl.makeColumnsEqualWidth = false;
 		quickSearchGroup.setLayout(gl);
-		
+
 		try {
 			loadSearchCfModJob.join();
 		} catch (InterruptedException e1) {
 			throw new RuntimeException(e1);
 		}
-		
+
 		StructFieldSearchEditLayoutEntry quickSearchEntry = searchCfMod.getQuickSearchEntry();
 		final Set<StructField> structFields = quickSearchEntry.getStructFields();
 		Set<StructField<DataField>> fieldSet = CollectionUtil.castSet(structFields);
@@ -234,13 +233,13 @@ extends XComposite
 		// Because the SelectionManager triggers the last notification immediately on registration of a new listener, this will only be null,
 		// if there was no event. In this case, we select the anonymous customer.
 		if (selectedLegalEntityID == null)
-			setSelectedLegalEntityID(null); // this will translate null to the AnchorID of the anonymous legal entity
+			setSelectedLegalEntityID(null, true); // this will translate null to the AnchorID of the anonymous legal entity
 
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent arg0)
 			{
-				setSelectedLegalEntity(null);
+				setSelectedLegalEntity(null, true);
 
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(
 						LegalEntityViewConfigModule.class, notificationListener);
@@ -300,7 +299,7 @@ extends XComposite
 		redraw();
 	}
 
-	private void setSelectedLegalEntity(LegalEntity legalEntity)
+	private void setSelectedLegalEntity(LegalEntity legalEntity, boolean isPropagateNotification) // This should provide more control in coordinating NotificationEvents on the SelectionManager. Kai.
 	{
 		//		if (legalEntity == null)
 		//			throw new IllegalArgumentException("legalEntity must not be null!"); //$NON-NLS-1$
@@ -335,12 +334,14 @@ extends XComposite
 			}
 		}
 
-		AnchorID anchorID = (AnchorID) (selectedLegalEntity == null ? null : JDOHelper.getObjectId(selectedLegalEntity));
-		NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class);
-		SelectionManager.sharedInstance().notify(event);
+		if (isPropagateNotification) {
+			AnchorID anchorID = (AnchorID) (selectedLegalEntity == null ? null : JDOHelper.getObjectId(selectedLegalEntity));
+			NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class);
+			SelectionManager.sharedInstance().notify(event);
+		}
 	}
 
-	public void setSelectedLegalEntityID(AnchorID selectedLegalEntityID) {
+	public void setSelectedLegalEntityID(AnchorID selectedLegalEntityID, final boolean isPropagateNotification) {
 		if (editorSection == null || editorSection.isDisposed())
 			return;
 
@@ -378,7 +379,7 @@ extends XComposite
 						if (!Util.equals(leID, LegalEntitySelectionComposite.this.selectedLegalEntityID))
 							return;
 
-						setSelectedLegalEntity(entity);
+						setSelectedLegalEntity(entity, isPropagateNotification);
 					}
 				});
 				return Status.OK_STATUS;
@@ -395,26 +396,13 @@ extends XComposite
 	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterCallerThread() {
 
 		public void notify(final NotificationEvent event) {
-			// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
-			// ... still waiting for PropertySetID to come in through this event -- which should have been triggered from the
-			//     PersonRelationIssueTreeView on the double-click listener.
-			System.err.println("[@notificationListenerCustomerSelected] event.source.class: " + event.getSource().getClass().getSimpleName());
-			if (event.getSubjectCarriers() != null) {
-				for (SubjectCarrier sCarrier : event.getSubjectCarriers()) {
-					Object subject = sCarrier.getSubject();
-					if (subject != null)
-						System.err.println(" ~~ sCarrier.subject[" + subject.getClass().getSimpleName() + "]: " + subject.toString());
-				}
-			}
-			// -------------------------------------------------------------------------------------------------- FARK-MARK ------>>
-
 			if (LegalEntitySelectionComposite.this.equals(event.getSource()))
 				return;
 
 			if (event.getSubjects().isEmpty())
-				setSelectedLegalEntityID(null);
+				setSelectedLegalEntityID(null, false);
 			else
-				setSelectedLegalEntityID((AnchorID) event.getFirstSubject());
+				setSelectedLegalEntityID((AnchorID) event.getFirstSubject(), false);
 		}
 	};
 

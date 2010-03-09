@@ -55,7 +55,7 @@ public class EditLegalEntityViewAction extends Action {
 	public void run() {
 		LegalEntity legalEntity = LegalEntityEditorWizard.open(view.getSelectedLegalEntity());
 		if (legalEntity != null) {
-			view.setSelectedLegalEntityID((AnchorID) JDOHelper.getObjectId(legalEntity));
+			view.setSelectedLegalEntityID((AnchorID) JDOHelper.getObjectId(legalEntity), true);
 		}
 	}
 

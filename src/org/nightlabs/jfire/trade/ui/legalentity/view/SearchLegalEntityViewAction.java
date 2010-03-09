@@ -63,7 +63,7 @@ public class SearchLegalEntityViewAction extends Action {
 		LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(view.getQuickSearchText(), true, true);
 		if (legalEntity != null) {
 			view.setSelectedLegalEntityID(
-				(AnchorID) JDOHelper.getObjectId(legalEntity)
+				(AnchorID) JDOHelper.getObjectId(legalEntity), true
 			);
 		}
 	}

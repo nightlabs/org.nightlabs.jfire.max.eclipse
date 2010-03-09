@@ -39,7 +39,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 public class SelectAnonymousViewAction extends Action {
 
 	/**
-	 * 
+	 *
 	 */
 	public SelectAnonymousViewAction() {
 		super();
@@ -56,20 +56,21 @@ public class SelectAnonymousViewAction extends Action {
 	/**
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
+	@Override
 	public void run() {
-		view.setSelectedLegalEntityID(null);
+		view.setSelectedLegalEntityID(null, true);
 	}
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), this.getClass());
 	}
-	
+
 	@Override
 	public String getText() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction.text"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	public String getToolTipText() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction.tooltip"); //$NON-NLS-1$

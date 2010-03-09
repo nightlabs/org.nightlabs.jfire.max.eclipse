@@ -44,7 +44,7 @@ public class AssignCustomerWizard
 			ArticleContainerEditorInput input = new ArticleContainerEditorInput(orderID);
 			RCPUtil.closeEditor(input, true);
 			RCPUtil.openEditor(input, ArticleContainerEditor.ID_EDITOR);
-			view.setSelectedLegalEntityID((AnchorID) JDOHelper.getObjectId(legalEntity));
+			view.setSelectedLegalEntityID((AnchorID) JDOHelper.getObjectId(legalEntity), true);
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
