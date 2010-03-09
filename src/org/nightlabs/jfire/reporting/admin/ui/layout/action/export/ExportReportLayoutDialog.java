@@ -3,24 +3,15 @@
  */
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.export;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.jdo.FetchPlan;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -36,29 +27,15 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.reporting.ReportingConstants;
-import org.nightlabs.jfire.reporting.ReportingInitialiser;
-import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil;
-import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil.PreparedLayoutL10nData;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
-import org.nightlabs.jfire.reporting.layout.ReportLayoutLocalisationData;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
-import org.nightlabs.jfire.reporting.parameter.config.AcquisitionParameterConfig;
-import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
-import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionUseCase;
-import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
-import org.nightlabs.jfire.reporting.parameter.config.ValueConsumerBinding;
-import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
-import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
-import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
-import org.nightlabs.jfire.reporting.textpart.dao.ReportTextPartConfigurationDAO;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.IOUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -122,31 +99,31 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 								monitor);
 
 				ReportParameterAcquisitionSetupDAO parameterSetupDAO = ReportParameterAcquisitionSetupDAO.sharedInstance();
-				parameterSetup = parameterSetupDAO.getSetupForReportLayout(
-						ExportReportLayoutDialog.this.layoutID, 
-						new String[] {FetchPlan.DEFAULT, 
-								ReportParameterAcquisitionSetup.FETCH_GROUP_VALUE_ACQUISITION_SETUPS,
-								ReportParameterAcquisitionSetup.FETCH_GROUP_DEFAULT_USE_CASE,
-								ReportParameterAcquisitionUseCase.FETCH_GROUP_NAME,
-								ReportParameterAcquisitionUseCase.FETCH_GROUP_DESCRIPTION,
-								ValueAcquisitionSetup.FETCH_GROUP_VALUE_CONSUMER_BINDINGS,
-								ValueAcquisitionSetup.FETCH_GROUP_VALUE_PROVIDER_CONFIGS,
-								ValueAcquisitionSetup.FETCH_GROUP_PARAMETER_CONFIGS,
-								ValueProviderConfig.FETCH_GROUP_MESSAGE,
-								ValueConsumerBinding.FETCH_GROUP_CONSUMER,
-								ValueConsumerBinding.FETCH_GROUP_PROVIDER}, 
-								monitor);
-
-				ReportTextPartConfigurationDAO reportTextPartConfigurationDAO = ReportTextPartConfigurationDAO.sharedInstance();
-				reportTextPartConfiguration =  reportTextPartConfigurationDAO.getReportTextPartConfiguration(
-						ExportReportLayoutDialog.this.layoutID,
-						false, 
-						new String[] { FetchPlan.DEFAULT, 
-								ReportTextPartConfiguration.FETCH_GROUP_REPORT_TEXT_PARTS,
-								ReportTextPart.FETCH_GROUP_CONTENT,
-								ReportTextPart.FETCH_GROUP_NAME }, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
+//				parameterSetup = parameterSetupDAO.getSetupForReportLayout(
+//						ExportReportLayoutDialog.this.layoutID, 
+//						new String[] {FetchPlan.DEFAULT, 
+//								ReportParameterAcquisitionSetup.FETCH_GROUP_VALUE_ACQUISITION_SETUPS,
+//								ReportParameterAcquisitionSetup.FETCH_GROUP_DEFAULT_USE_CASE,
+//								ReportParameterAcquisitionUseCase.FETCH_GROUP_NAME,
+//								ReportParameterAcquisitionUseCase.FETCH_GROUP_DESCRIPTION,
+//								ValueAcquisitionSetup.FETCH_GROUP_VALUE_CONSUMER_BINDINGS,
+//								ValueAcquisitionSetup.FETCH_GROUP_VALUE_PROVIDER_CONFIGS,
+//								ValueAcquisitionSetup.FETCH_GROUP_PARAMETER_CONFIGS,
+//								ValueProviderConfig.FETCH_GROUP_MESSAGE,
+//								ValueConsumerBinding.FETCH_GROUP_CONSUMER,
+//								ValueConsumerBinding.FETCH_GROUP_PROVIDER}, 
+//								monitor);
+//
+//				ReportTextPartConfigurationDAO reportTextPartConfigurationDAO = ReportTextPartConfigurationDAO.sharedInstance();
+//				reportTextPartConfiguration =  reportTextPartConfigurationDAO.getReportTextPartConfiguration(
+//						ExportReportLayoutDialog.this.layoutID,
+//						false, 
+//						new String[] { FetchPlan.DEFAULT, 
+//								ReportTextPartConfiguration.FETCH_GROUP_REPORT_TEXT_PARTS,
+//								ReportTextPart.FETCH_GROUP_CONTENT,
+//								ReportTextPart.FETCH_GROUP_NAME }, 
+//								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//								monitor);
 
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
@@ -166,12 +143,38 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 	}
 
 	private ReportRegistryItem reportRegistryItem;
-	private ReportParameterAcquisitionSetup parameterSetup;
-	private ReportTextPartConfiguration reportTextPartConfiguration;
+//	private ReportParameterAcquisitionSetup parameterSetup;
+//	private ReportTextPartConfiguration reportTextPartConfiguration;
 
+	/**
+	 * Saves a file indicated by fileName to the given {@link InputStream}.
+	 */
+	public void saveFile(InputStream io, String fileName) throws IOException {
+		// Should this method be here?
+		ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(fileName));
+		byte[] buf = new byte[256];
+		int read = 0;
+		while ((read = io.read(buf)) > 0) {
+			fos.write(buf, 0, read);
+		}
+	}
+	
 	@Override
 	protected void okPressed() {
-		ReportLayoutExportInput editorInput = new ReportLayoutExportInput(layoutID);
+		ReportManagerRemote rmr = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, SecurityReflector.getInitialContextProperties());
+		byte[] fileBytes = rmr.exportReportLayout(layoutFileName.getText(), layoutID);
+		InputStream inputStream = new InflaterInputStream(new ByteArrayInputStream(fileBytes));
+		if (inputStream != null) {
+			try {
+				if (folderComposite.getFile() != null) {
+					saveFile(inputStream, folderComposite.getFile().getAbsolutePath() + layoutFileName.getText() + ".zip");
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		} 
+		
+/*		ReportLayoutExportInput editorInput = new ReportLayoutExportInput(layoutID);
 
 		String parentName = folderComposite.getFileText();
 		if (needZipButton.getSelection() == true) {
@@ -230,7 +233,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 				Document doc = docBuilder.newDocument();
 
-				/*****ReportCategory-node*****/
+				*//*****ReportCategory-node*****//*
 				Element reportCategoryNode = doc.createElement(ReportingConstants.REPORT_CATEGORY_ELEMENT);
 				reportCategoryNode.setAttribute(ReportingConstants.REPORT_CATEGORY_ELEMENT_ATTRIBUTE_ID, reportRegistryItem.getParentCategoryID().reportRegistryItemID);
 				reportCategoryNode.setAttribute(ReportingConstants.REPORT_CATEGORY_ELEMENT_ATTRIBUTE_TYPE, layoutID.reportRegistryItemType);
@@ -378,7 +381,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 					DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 					Document reportTextPartDoc = docBuilder.newDocument();
 
-					/*****reportTextPartConfiguration-node*****/
+					*//*****reportTextPartConfiguration-node*****//*
 					Element reportTextPartConfigurationNode = reportTextPartDoc.createElement(ReportingConstants.REPORT_TEXT_PART_CONFIGURATION_ELEMENT);
 					reportTextPartDoc.appendChild(reportTextPartConfigurationNode);
 
@@ -425,11 +428,11 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 					throw new RuntimeException(e);
 				}
 			}
-		}
+		}*/
 		super.okPressed();
 	}
 
-	private void generateI18nElements(Document document, Element parentElement, String elementName, I18nText i18nText) {
+	/*private void generateI18nElements(Document document, Element parentElement, String elementName, I18nText i18nText) {
 		for (Entry<String, String> entry : i18nText.getTexts()) {
 			Element element = document.createElement(elementName);
 			element.setAttribute("language", entry.getKey());
@@ -437,5 +440,5 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 
 			parentElement.appendChild(element);
 		}
-	}
+	}*/
 }
