@@ -1,14 +1,20 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
+import java.util.List;
+
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -17,6 +23,7 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This composite lists all {@link IssueType}s of an issue type in a table.
@@ -35,7 +42,21 @@ extends AbstractTableComposite<IssueType>
 	public IssueTypeTable(Composite parent, int style)
 	{
 		super(parent, style);
-		setInput(IssueTypeDAO.sharedInstance().getAllIssueTypes(IssueTypeTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeTable.job.loadIssueTypes.text")) { //$NON-NLS-1$
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				final List<IssueType> issueTypes = IssueTypeDAO.sharedInstance().getAllIssueTypes(IssueTypeTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						setInput(issueTypes);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+		
 	}
 
 //	@Override
