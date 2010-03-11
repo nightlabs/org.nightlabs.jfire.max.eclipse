@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.export;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -151,7 +152,8 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 	 */
 	public void saveFile(InputStream io, String fileName) throws IOException {
 		// Should this method be here?
-		ZipOutputStream fos = new ZipOutputStream(new FileOutputStream(fileName));
+		File saveFile = new File(fileName);
+		FileOutputStream fos = new FileOutputStream(saveFile);
 		byte[] buf = new byte[256];
 		int read = 0;
 		while ((read = io.read(buf)) > 0) {
@@ -162,12 +164,11 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 	@Override
 	protected void okPressed() {
 		ReportManagerRemote rmr = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, SecurityReflector.getInitialContextProperties());
-		byte[] fileBytes = rmr.exportReportLayout(layoutFileName.getText(), layoutID);
-		InputStream inputStream = new InflaterInputStream(new ByteArrayInputStream(fileBytes));
+		InputStream inputStream = new ByteArrayInputStream(rmr.exportReportLayout(layoutFileName.getText(), layoutID));
 		if (inputStream != null) {
 			try {
 				if (folderComposite.getFile() != null) {
-					saveFile(inputStream, folderComposite.getFile().getAbsolutePath() + layoutFileName.getText() + ".zip");
+					saveFile(inputStream, folderComposite.getFile().getAbsolutePath() + File.separator + layoutFileName.getText() + ".zip");
 				}
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
