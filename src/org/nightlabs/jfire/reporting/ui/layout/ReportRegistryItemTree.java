@@ -132,7 +132,7 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	{
 		super(parent, DEFAULT_STYLE_SINGLE, true, true, false);
 		this.addSelectionProxy = addSelectionProxy;
-		activeReportRegistryItemTreeController = new ActiveReportRegistryItemTreeController(filterRoleID) {
+		activeReportRegistryItemTreeController = new ActiveReportRegistryItemTreeController(filterRoleID, getTopLevelItemIDs()) {
 			
 			@Override
 			protected void onJDOObjectsChanged(JDOTreeNodesChangedEvent<ReportRegistryItemID, ReportRegistryItemNode> changedEvent)
@@ -214,5 +214,20 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	@Override
 	protected ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> getJDOObjectTreeController() {
 		return activeReportRegistryItemTreeController;
+	}
+
+	/**
+	 * Returns the {@link ReportRegistryItemID}s that should be displayed at top
+	 * level of the tree. The default implementation returns <code>null</code>,
+	 * indicating that those categories should be displayed at top-level, that
+	 * are top-level in the datastore, too. Override this method to define a
+	 * different set of top-level ids.
+	 * 
+	 * @return Those {@link ReportRegistryItemID}s that should be displayed at
+	 *         top level in this tree, or <code>null</code> to use the top-level
+	 *         items in the datastore.
+	 */
+	protected ReportRegistryItemID[] getTopLevelItemIDs() {
+		return null;
 	}
 }

@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.reporting.ui.layout;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -56,6 +57,7 @@ public abstract class ActiveReportRegistryItemTreeController
 extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
 	private RoleID filterRoleID;
+	private ReportRegistryItemID[] topLevelItemIDs;
 
 	public static final String[] DEFAULT_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
@@ -65,11 +67,39 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 	};
 
 	/**
-	 *
+	 * Create a new {@link ActiveReportRegistryItemTreeController} retrieving
+	 * all items (starting from the top level categories).
+	 * 
+	 * @param filterRoleID
+	 *            An optional filter. If this is not <code>null</code> the
+	 *            current user has to have the given role assigned in the
+	 *            authority of every item returned.
 	 */
 	public ActiveReportRegistryItemTreeController(RoleID filterRoleID) {
 		this.filterRoleID = filterRoleID;
 	}
+
+	/**
+	 * Create a new {@link ActiveReportRegistryItemTreeController} that will
+	 * start with the given {@link ReportRegistryItemID}s as
+	 * top-level-categories in the tree.
+	 * 
+	 * @param filterRoleID
+	 *            An optional filter. If this is not <code>null</code> the
+	 *            current user has to have the given role assigned in the
+	 *            authority of every item returned.
+	 * @param topLevelItemIDs
+	 *            The {@link ReportRegistryItemID}s that will be the
+	 *            top-level-categories of the tree.
+	 */
+	public ActiveReportRegistryItemTreeController(RoleID filterRoleID,
+			ReportRegistryItemID... topLevelItemIDs) {
+		super();
+		this.filterRoleID = filterRoleID;
+		this.topLevelItemIDs = topLevelItemIDs;
+	}
+
+
 
 	@Override
 	protected ReportRegistryItemNode createNode() {
@@ -89,9 +119,11 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 	@Override
 	protected Collection<ReportRegistryItem> retrieveChildren(ReportRegistryItemID parentID, ReportRegistryItem parent, ProgressMonitor monitor) {
 		Collection<ReportRegistryItemID> itemIDs = null;
-		ReportManagerRemote reportManager = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, SecurityReflector
-				.getInitialContextProperties());
-		if (parentID == null) {
+		ReportManagerRemote reportManager = JFireEjb3Factory.getRemoteBean(
+				ReportManagerRemote.class, SecurityReflector
+						.getInitialContextProperties());
+		if (parentID == null && topLevelItemIDs == null) {
+			// Top-Level items requested and no top-level item-ids set.
 			try {
 				if (filterRoleID == null)
 					itemIDs = reportManager.getTopLevelReportRegistryItemIDs();
@@ -101,7 +133,11 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 				throw new RuntimeException(e);
 			}
 		}
-		else {
+		else if (parentID == null && topLevelItemIDs != null){
+			// Top-Level items requested and top-level explicitly set.
+			itemIDs = Arrays.asList(topLevelItemIDs);
+		} else {
+			// child items of a certain node requested, get their ids from the server
 			try {
 				if (ReportCategory.class.equals(JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(parentID))) {
 					if (filterRoleID == null)
