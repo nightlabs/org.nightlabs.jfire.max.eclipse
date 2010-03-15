@@ -6,11 +6,11 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueLinkID;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.util.NLLocale;
 
-public class IssueLinkPersonRelationTreeLabelProviderDelegate extends PersonRelationTreeLabelProviderDelegate
+public class IssueLinkPersonRelationTreeLabelProviderDelegate extends AbstractPersonRelationTreeLabelProviderDelegate
 {
 	private String languageID = NLLocale.getDefault().getLanguage();
 	private String localOrganisationID = SecurityReflector.getUserDescriptor().getOrganisationID();

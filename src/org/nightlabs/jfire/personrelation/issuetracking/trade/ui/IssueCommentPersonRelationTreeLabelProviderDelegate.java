@@ -5,9 +5,9 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.id.IssueCommentID;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeLabelProviderDelegate;
 
-public class IssueCommentPersonRelationTreeLabelProviderDelegate extends PersonRelationTreeLabelProviderDelegate
+public class IssueCommentPersonRelationTreeLabelProviderDelegate extends AbstractPersonRelationTreeLabelProviderDelegate
 {
 	@Override
 	public Class<?> getJDOObjectClass() {

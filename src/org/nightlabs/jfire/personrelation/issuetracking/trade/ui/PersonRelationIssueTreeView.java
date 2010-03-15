@@ -236,6 +236,9 @@ extends LSDViewPart
 		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
+				if (event.getSelection().isEmpty())
+					return;
+
 				Object selectedElement = personRelationTree.getFirstSelectedElement();
 				if (selectedElement instanceof PersonRelationTreeNode) {
 					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
