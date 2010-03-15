@@ -15,6 +15,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -49,7 +50,10 @@ import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
+import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController;
+import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.PropertySetTreeLabelProviderDelegate;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
@@ -87,11 +91,15 @@ extends LSDViewPart
 	 * Override this method for preparing other domain-specific PersonRelationTree.
 	 */
 	protected PersonRelationTree createPersonRelationTree(Composite parent) {
-		return new PersonRelationTree(parent,
+		PersonRelationTree personRelationTree = new PersonRelationTree(parent,
 				false, // without restoring the tree's collapse state
 				true,  // with context menu(s)
 				false  // without the drill-down adapter.
 			);
+
+		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_DATA_FIELDS} );
+		personRelationTree.getPersonRelationTreeController().setPersonRelationFetchGroups((String[]) fetchGroupPersonRelation);
+		return personRelationTree;
 	}
 
 	/**
@@ -188,14 +196,19 @@ extends LSDViewPart
 	@Override
 	public void createPartContents(Composite parent) {
 		personRelationTree = createPersonRelationTree(parent);
-		personRelationTree.setRestoreCollapseState(false);
-		personRelationTree.getPersonRelationTreeController().addPersonRelationTreeControllerDelegate(
-				new IssuePersonRelationTreeControllerDelegate()
-		);
+		PersonRelationTreeController personRelationTreeController = personRelationTree.getPersonRelationTreeController();
+
+		// Delegate label-provider(s) for handling "specialised" PersonRelations and PropertySets.
+		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PersonRelationTreeLabelProviderDelegate());
+		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PropertySetTreeLabelProviderDelegate(personRelationTreeController));
+
+		// Delegate controller and label-providers for handling Issues in the PersonRelationTree.
+		personRelationTreeController.addPersonRelationTreeControllerDelegate(new IssuePersonRelationTreeControllerDelegate());
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueLinkPersonRelationTreeLabelProviderDelegate());
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueDescriptionPersonRelationTreeLabelProviderDelegate());
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueCommentPersonRelationTreeLabelProviderDelegate());
 
+		// Notifier registration.
 		notificationListenerLegalEntitySelected = createNotificationListenerLegalEntitySelected();
 		if (notificationListenerLegalEntitySelected != null) {
 			SelectionManager.sharedInstance().addNotificationListener(
@@ -224,7 +237,6 @@ extends LSDViewPart
 		personRelationTree.addContextMenuContribution(this, new CreateIssueCommentAction(), null, "Create new issue comment", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateIssueCommentAction.class));
 
 		personRelationTree.integratePriorityOrderedContextMenu(); // <-- Voila! THAT's IT!
-
 
 
 		// Initialise a system of listeners for the personRelationTree that will expand it accordingly. See notes.
