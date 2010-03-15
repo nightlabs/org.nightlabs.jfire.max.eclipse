@@ -13,7 +13,6 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
@@ -56,10 +55,10 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	{
 	}
 
-	private Map<Class<?>, PersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, PersonRelationTreeLabelProviderDelegate>();
-	private Map<Class<?>, PersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, PersonRelationTreeLabelProviderDelegate>();
+	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
+	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 
-	public void addPersonRelationTreeLabelProviderDelegate(PersonRelationTreeLabelProviderDelegate delegate)
+	public void addPersonRelationTreeLabelProviderDelegate(IPersonRelationTreeLabelProviderDelegate delegate)
 	{
 		Class<? extends ObjectID> objectIDClass = delegate.getJDOObjectIDClass();
 		Class<?> objectClass = delegate.getJDOObjectClass();
@@ -70,9 +69,9 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			logger.trace("addPersonRelationTreeLabelProviderDelegate: added " + delegate + " for objectClass " + (objectClass == null ? null : objectClass.getName()) + " and objectIDClass " + (objectIDClass == null ? null : objectIDClass.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
-	protected Set<PersonRelationTreeLabelProviderDelegate> getAllPersonRelationTreeLabelProviderDelegates()
+	protected Set<IPersonRelationTreeLabelProviderDelegate> getAllPersonRelationTreeLabelProviderDelegates()
 	{
-		Set<PersonRelationTreeLabelProviderDelegate> result = new HashSet<PersonRelationTreeLabelProviderDelegate>();
+		Set<IPersonRelationTreeLabelProviderDelegate> result = new HashSet<IPersonRelationTreeLabelProviderDelegate>();
 		result.addAll(jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.values());
 		result.addAll(jdoObjectClass2PersonRelationTreeLabelProviderDelegate.values());
 		return result;
@@ -90,7 +89,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
 			if (jdoObject == null) {
-				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
 				if (delegate != null) {
 					String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
 					if (result != null)
@@ -128,7 +127,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			}
 			else {
 				// We check for the delegate first in order to allow overriding the defaults following below. Marco.
-				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
 				if (delegate != null) {
 					String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
 					if (result != null)
@@ -180,7 +179,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
 			if (jdoObject == null) {
-				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
 				if (delegate != null) {
 					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
 					if (result != null)
@@ -190,7 +189,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				return new int[][] { {0, 1} };
 			}
 			else {
-				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
 				if (delegate != null) {
 					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
 					if (result != null)
@@ -251,7 +250,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex)
 		{
 			if (jdoObject == null) {
-				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
 				if (delegate != null) {
 					Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
 					if (result != null)
@@ -259,7 +258,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				}
 			}
 			else {
-				PersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
 				if (delegate != null) {
 					Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
 					if (result != null)
@@ -321,7 +320,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
-				for (PersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
+				for (IPersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
 					delegate.onDispose();
 
 				personRelationTreeController.close();
@@ -357,10 +356,12 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				ISelection selection = event.getSelection();
+				if (event.getSelection().isEmpty())
+					return;
+
 				for (Object menuItem : getPriorityOrderedContextMenuContributions()) {
 					if (menuItem instanceof IViewActionDelegate)
-						((IViewActionDelegate) menuItem).selectionChanged((IAction) menuItem, selection);
+						((IViewActionDelegate) menuItem).selectionChanged((IAction) menuItem, event.getSelection());
 				}
 			}
 		});
@@ -369,6 +370,9 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 		addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
+				if (event.getSelection().isEmpty())
+					return;
+
 				for (Object menuItem : getPriorityOrderedContextMenuContributions())
 					if (menuItem instanceof IAction) {
 						IAction menuAction = (IAction) menuItem;
@@ -430,7 +434,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 		super.setInput(null);
 		this.personIDs = personIDs;
-		for (PersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
+		for (IPersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
 			delegate.clear();
 
 		personRelationTreeController.setRootPersonIDs(personIDs);

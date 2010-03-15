@@ -17,7 +17,7 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  * @author marco schulze - marco at nightlabs dot de
  */
-public interface PersonRelationTreeControllerDelegate
+public interface IPersonRelationTreeControllerDelegate
 {
 	Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor);
 	Collection<?> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor);

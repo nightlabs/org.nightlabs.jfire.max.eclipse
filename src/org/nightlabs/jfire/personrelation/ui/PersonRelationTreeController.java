@@ -53,16 +53,16 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 	private volatile Collection<PropertySetID> rootPersonIDs;
 
-	private List<PersonRelationTreeControllerDelegate> personRelationTreeControllerDelegates = new ArrayList<PersonRelationTreeControllerDelegate>();
-	private List<PersonRelationTreeControllerDelegate> _personRelationTreeControllerDelegates = null;
+	private List<IPersonRelationTreeControllerDelegate> personRelationTreeControllerDelegates = new ArrayList<IPersonRelationTreeControllerDelegate>();
+	private List<IPersonRelationTreeControllerDelegate> _personRelationTreeControllerDelegates = null;
 
-	public List<PersonRelationTreeControllerDelegate> getPersonRelationTreeControllerDelegates() {
-		List<PersonRelationTreeControllerDelegate> delegates = _personRelationTreeControllerDelegates;
+	public List<IPersonRelationTreeControllerDelegate> getPersonRelationTreeControllerDelegates() {
+		List<IPersonRelationTreeControllerDelegate> delegates = _personRelationTreeControllerDelegates;
 		if (delegates == null) {
 			synchronized (personRelationTreeControllerDelegates) {
 				delegates = _personRelationTreeControllerDelegates;
 				if (delegates == null) {
-					delegates = new ArrayList<PersonRelationTreeControllerDelegate>(personRelationTreeControllerDelegates);
+					delegates = new ArrayList<IPersonRelationTreeControllerDelegate>(personRelationTreeControllerDelegates);
 					delegates = Collections.unmodifiableList(delegates);
 					_personRelationTreeControllerDelegates = delegates;
 				}
@@ -71,7 +71,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		return delegates;
 	}
 
-	public void addPersonRelationTreeControllerDelegate(PersonRelationTreeControllerDelegate delegate)
+	public void addPersonRelationTreeControllerDelegate(IPersonRelationTreeControllerDelegate delegate)
 	{
 		synchronized (personRelationTreeControllerDelegates) {
 			unregisterChangeListener();
@@ -158,10 +158,10 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			synchronized (personRelationTreeControllerDelegates) {
 				classes = jdoObjectClasses;
 				if (classes == null) {
-					List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+					List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 					classes = new HashSet<Class<? extends Object>>();
 					classes.add(PersonRelation.class);
-					for (PersonRelationTreeControllerDelegate delegate : delegates) {
+					for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 						classes.addAll(delegate.getJDOObjectClasses());
 					}
 					jdoObjectClasses = classes;
@@ -233,8 +233,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				monitor.worked(tixRelation);
 
 
-			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
-			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 				if (objectIDsLeft.isEmpty())
 					break;
 
@@ -407,8 +407,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			else
 				monitor.worked(1);
 
-			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
-			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 				Map<ObjectID, Long> delegateChildCountMap = delegate.retrieveChildCount(parentIDs, new SubProgressMonitor(monitor, 50));
 				for (Map.Entry<ObjectID, Long> me : delegateChildCountMap.entrySet()) {
 					ObjectID parentID = me.getKey();
@@ -494,8 +494,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			}
 
 
-			List<PersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
-			for (PersonRelationTreeControllerDelegate delegate : delegates) {
+			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new SubProgressMonitor(monitor, 20));
 				if (childObjectIDs != null)
 					result.addAll(childObjectIDs);

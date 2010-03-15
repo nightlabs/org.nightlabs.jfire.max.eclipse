@@ -8,11 +8,14 @@ import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 
 /**
- * Specificity: Handles special icons to display "companyGroup" and "subsidiary" relations.
+ * Specificity: Handles special icons to display "companyGroup" and "subsidiary" relations. BAD. BAD. BAD.
+ *
+ * This class will be removed by next synchronisation. In favour of the applied PersonRelationTreeLabelProviderDelegate.
  *
  * @author khaireel
  */
-public class CompanyPersonRelationTreeLabelProviderDelegate extends PersonRelationTreeLabelProviderDelegate {
+@Deprecated
+public class CompanyPersonRelationTreeLabelProviderDelegate extends AbstractPersonRelationTreeLabelProviderDelegate {
 	@Override
 	public Class<?> getJDOObjectClass() {
 		return PersonRelation.class;

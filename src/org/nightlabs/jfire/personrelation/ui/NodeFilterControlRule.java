@@ -11,6 +11,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeNode;
  *
  * @author khaireel
  */
+@Deprecated
 public interface NodeFilterControlRule <N extends JDOObjectLazyTreeNode<ObjectID, Object, ?>> {
 	/**
 	 * Determine the criteria here whether or not to load a given node's children.
