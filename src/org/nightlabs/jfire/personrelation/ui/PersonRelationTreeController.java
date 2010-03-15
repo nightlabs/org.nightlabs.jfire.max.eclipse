@@ -19,7 +19,6 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
@@ -48,7 +47,6 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		PersonRelation.FETCH_GROUP_FROM_ID,
 		PersonRelation.FETCH_GROUP_TO,
 		PersonRelation.FETCH_GROUP_FROM_PERSON_RELATION_IDS,
-		Person.FETCH_GROUP_DATA_FIELDS,	// FIXME Make this into one of the delegates.
 	};
 
 	private volatile Collection<PropertySetID> rootPersonIDs;
@@ -224,7 +222,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				result.addAll(
 						PersonRelationDAO.sharedInstance().getPersonRelations(
 								personRelationIDs,
-								FETCH_GROUPS_PERSON_RELATION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								getPersonRelationFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, tixRelation)
 						)
 				);
@@ -264,6 +262,19 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		} finally {
 			monitor.done();
 		}
+	}
+
+	/**
+	 * @return the FetchGroups to retrieve the relevant information for a {@link PersonRelation}.
+	 * Override this accordingly.
+	 */
+	protected String[] getPersonRelationFetchGroups() {
+		return fetchGroupPersonRelation; // FETCH_GROUPS_PERSON_RELATION;
+	}
+
+	private String[] fetchGroupPersonRelation = FETCH_GROUPS_PERSON_RELATION;
+	public void setPersonRelationFetchGroups(String[] fetchGroupPersonRelation) {
+		this.fetchGroupPersonRelation = fetchGroupPersonRelation;
 	}
 
 

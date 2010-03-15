@@ -16,32 +16,32 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
  */
 public class PersonRelationTreeNode
 extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController> {
-	// Attempt #1: To stop the unending iteration. At least for use with Behr's descriptions. See notes.
-	/**
-	 * Based on the PropertySetID represented by this node, check to see if the same PropertySetID
-	 * appears anywhere on the path from this node to the root.
-	 * @return true if this PropertySetID on the path to the root is unique (and thus allowing for
-	 * its children to continue to be loaded, whenever necessary). Returning false signifies that this
-	 * node is a 'repeat' element, suggesting the beginnig of the next repeated-iterative bunch of
-	 * craps, which have already been loaded and displayed.
-	 */
-	public boolean isContinueToLoadChildren() {
-		List<PropertySetID> propSetIDsToRoot = getPropertySetIDsToRoot();
-		if (propSetIDsToRoot.size() > 1) {
-			PropertySetID psID = propSetIDsToRoot.remove(0);
-			return !propSetIDsToRoot.contains(psID);
-		}
-
-		return true;
-	}
-
-	@Override
-	public long getChildNodeCount() {
-		// The related (lazy) tree-controller calls this node's method to determine how many children
-		// the node has. But if the PropertySetID represented by this node has already once appeared
-		// on the path to the root, then we force the child count to zero.
-		return isContinueToLoadChildren() ? super.getChildNodeCount() : 0L;
-	}
+//	// Attempt #1: To stop the unending iteration. At least for use with Behr's descriptions. See notes.
+//	/**
+//	 * Based on the PropertySetID represented by this node, check to see if the same PropertySetID
+//	 * appears anywhere on the path from this node to the root.
+//	 * @return true if this PropertySetID on the path to the root is unique (and thus allowing for
+//	 * its children to continue to be loaded, whenever necessary). Returning false signifies that this
+//	 * node is a 'repeat' element, suggesting the beginnig of the next repeated-iterative bunch of
+//	 * craps, which have already been loaded and displayed.
+//	 */
+//	public boolean isContinueToLoadChildren() {
+//		List<PropertySetID> propSetIDsToRoot = getPropertySetIDsToRoot();
+//		if (propSetIDsToRoot.size() > 1) {
+//			PropertySetID psID = propSetIDsToRoot.remove(0);
+//			return !propSetIDsToRoot.contains(psID);
+//		}
+//
+//		return true;
+//	}
+//
+//	@Override
+//	public long getChildNodeCount() {
+//		// The related (lazy) tree-controller calls this node's method to determine how many children
+//		// the node has. But if the PropertySetID represented by this node has already once appeared
+//		// on the path to the root, then we force the child count to zero.
+//		return isContinueToLoadChildren() ? super.getChildNodeCount() : 0L;
+//	}
 
 	@Override
 	public PersonRelationTreeNode getParent() {
