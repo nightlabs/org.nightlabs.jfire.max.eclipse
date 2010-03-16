@@ -91,15 +91,21 @@ public class PropertySetTreeLabelProviderDelegate extends AbstractPersonRelation
 				if (relationTypeToRoot == null)
 					relationTypeToRoot = personRelationType;
 				else {
-					if (!relationTypeToRoot.equals(personRelationType))
-						return null; // <-- [Case II] Stop and no need to figure out the relations anymore.
+					if (!relationTypeToRoot.equals(personRelationType)) {
+						// [Case II] Stop and no need to figure out the relations anymore. This root doesnt have a unique relationship with its children.
+						Image nodeIcon = SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProviderDelegate.class, "");
+						objectID2Image.put((PropertySetID) jdoObjectID, nodeIcon);
+						return nodeIcon;
+					}
 				}
-
-//				System.out.println("------ childObjectID: " + showObjectID(childObjectID) + ", PRTid: " + personRelationType.getPersonRelationTypeID());
 			}
 		}
 
-//		System.out.println("Yar!");
+
+		// One last check:
+		if (relationTypeToRoot == null)
+			return null;
+
 
 		// If we have survived up till here, then we have found [Case I] to be true.
 		String personRelationTypeID = relationTypeToRoot.getReversePersonRelationTypeID().personRelationTypeID;
@@ -126,35 +132,5 @@ public class PropertySetTreeLabelProviderDelegate extends AbstractPersonRelation
 				personRelationID, new String[] {FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_PERSON_RELATION_TYPE},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 	}
-
-
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
-	// I. Quick debug.
-	protected String showObjectIDs(String preamble, List<? extends ObjectID> objIDs, int modLnCnt) {
-		if (objIDs == null)
-			return "++ " + preamble + " :: NULL";
-
-		String str = "++ " + preamble + " (" + objIDs.size() + ") :: {\n     ";
-		int ctr = 0;
-		for (ObjectID objectID : objIDs) {
-			str += "(" + ctr + ")" + showObjectID(objectID) + " ";
-			ctr++;
-
-			if (ctr % modLnCnt == 0)
-				str += "\n     ";
-		}
-
-		return str + "\n   }";
-	}
-
-	// II. Quick debug.
-	protected String showObjectID(ObjectID objectID) {
-		if (objectID == null)
-			return "[null]";
-
-		String[] segID = objectID.toString().split("&");
-		return "[" + segID[1] + "]";
-	}
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
 
 }

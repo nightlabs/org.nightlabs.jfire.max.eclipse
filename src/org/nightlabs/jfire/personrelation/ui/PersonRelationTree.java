@@ -1,8 +1,10 @@
 package org.nightlabs.jfire.personrelation.ui;
 
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -139,7 +141,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 					switch (spanColIndex) {
 						case 0:
-							return person.getDisplayName();
+							return person.getDisplayName(); // I have encountered cases where the displayName is not set; eg. when the check-box to auto-generate displayName is not selected. Any forthcoming solutions? Kai
 						default:
 							break;
 					}
@@ -460,4 +462,47 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	public void setInput(Object input) {
 		super.setInput(input);
 	}
+
+
+
+	// -------------------------------------------------------------------------------------------------- ++ ------>>
+	//  Will be removed once ALL testings are completed! Kai.
+	// -------------------------------------------------------------------------------------------------- ++ ------>>
+	// I. Quick debug.
+	public static String showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
+		String str = "++ " + preamble + " :: {";
+		Iterator<? extends ObjectID> iter = isReversed ? path.descendingIterator() : path.iterator();
+		while (iter.hasNext())
+			str += showObjectID(iter.next());
+
+		return str + "}";
+	}
+
+	// II. Quick debug.
+	public static String showObjectIDs(String preamble, List<? extends ObjectID> objIDs, int modLnCnt) {
+		if (objIDs == null)
+			return "++ " + preamble + " :: NULL";
+
+		String str = "++ " + preamble + " (" + objIDs.size() + ") :: {\n     ";
+		int ctr = 0;
+		for (ObjectID objectID : objIDs) {
+			str += "(" + ctr + ")" + showObjectID(objectID) + " ";
+			ctr++;
+
+			if (ctr % modLnCnt == 0)
+				str += "\n     ";
+		}
+
+		return str + "\n   }";
+	}
+
+	// III. Quick debug.
+	public static String showObjectID(ObjectID objectID) {
+		if (objectID == null)
+			return "[null]";
+
+		String[] segID = objectID.toString().split("&");
+		return "[" + segID[1] + "]";
+	}
+	// -------------------------------------------------------------------------------------------------- ++ ------>>
 }
