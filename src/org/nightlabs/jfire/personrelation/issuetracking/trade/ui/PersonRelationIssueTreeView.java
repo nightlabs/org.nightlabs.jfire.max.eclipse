@@ -144,7 +144,7 @@ extends LSDViewPart
 				// Ensures that we don't unnecessarily retrieve the relationRootNodes for one that has already been retrieved and on display.
 				if (personID != null && (currentPersonID == null || currentPersonID != personID)) {
 					if (logger.isDebugEnabled()) {
-						logger.debug("personID:" + showObjectID(personID) + ",  currentPersonID:" + showObjectID(currentPersonID));
+						logger.debug("personID:" + PersonRelationTree.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTree.showObjectID(currentPersonID));
 					}
 
 					// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
@@ -256,7 +256,7 @@ extends LSDViewPart
 					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
 					// Debug.
 					if (logger.isInfoEnabled() && node != null) {
-						logger.info(showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
+						logger.info(PersonRelationTree.showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
 					}
 
 					if (node != null) {
@@ -321,9 +321,9 @@ extends LSDViewPart
 
 					if (!pathToExpand.isEmpty() && pathToExpand.peekFirst().equals(nodeObjectID)) {
 						if (logger.isDebugEnabled()) {
-							logger.debug("*** *** *** Checking: nodeObjectID=" + showObjectID(nodeObjectID) + " *** *** ***");
-							logger.debug("Checking: " + showDequePaths("pathToExpand", pathToExpand, true));
-							logger.debug("Checking: " + showDequePaths("expandedPath", expandedPath, true));
+							logger.debug("*** *** *** Checking: nodeObjectID=" + PersonRelationTree.showObjectID(nodeObjectID) + " *** *** ***");
+							logger.debug("Checking: " + PersonRelationTree.showDequePaths("pathToExpand", pathToExpand, true));
+							logger.debug("Checking: " + PersonRelationTree.showDequePaths("expandedPath", expandedPath, true));
 							logger.debug("---");
 						}
 
@@ -385,9 +385,9 @@ extends LSDViewPart
 					if (logger.isDebugEnabled()) {
 						logger.debug(" ----------------->>>> On addJDOLazyTreeNodesChangedListener: [Checking loaded nodes, " + loadedTreeNodes.size() + "]");
 						for (int index : pathsToExpand_PRID.keySet()) {
-							logger.debug(" --> Checking: " + showDequePaths("pathToExpand", pathsToExpand_PRID.get(index), true));
-							logger.debug(" --> Checking: " + showDequePaths("expandedPath", expandedPaths_PRID.get(index), true));
-							logger.debug(" --> Checking: " + showObjectIDs("nextObjectIDsOnPaths", nextObjectIDsOnPaths, 5));
+							logger.debug(" --> Checking: " + PersonRelationTree.showDequePaths("pathToExpand", pathsToExpand_PRID.get(index), true));
+							logger.debug(" --> Checking: " + PersonRelationTree.showDequePaths("expandedPath", expandedPaths_PRID.get(index), true));
+							logger.debug(" --> Checking: " + PersonRelationTree.showObjectIDs("nextObjectIDsOnPaths", nextObjectIDsOnPaths, 5));
 						}
 					}
 
@@ -403,7 +403,7 @@ extends LSDViewPart
 
 							if (isOnNextPath) {
 								if (logger.isDebugEnabled())
-									logger.debug(" :: @" + posIndex + ", (loaded) nodeObjID:" +  showObjectID(nodeObjID) + (isOnNextPath ? " <-- Match!" : ""));
+									logger.debug(" :: @" + posIndex + ", (loaded) nodeObjID:" +  PersonRelationTree.showObjectID(nodeObjID) + (isOnNextPath ? " <-- Match!" : ""));
 
 								personRelationTree.setSelection(node);
 								ISelection selection = personRelationTree.getTreeViewer().getSelection();
@@ -428,7 +428,7 @@ extends LSDViewPart
 						int childNodeCnt = childrenJDOObjectIDs != null ? childrenJDOObjectIDs.size() : -1;
 						if (logger.isDebugEnabled()) {
 							logger.debug(" -->> parNode.childNodeCount: " + nodeCount + ", childNodeCnt: " + childNodeCnt);
-							logger.debug(" -->> " + showObjectIDs("childrenJDOObjectIDs", childrenJDOObjectIDs, 5));
+							logger.debug(" -->> " + PersonRelationTree.showObjectIDs("childrenJDOObjectIDs", childrenJDOObjectIDs, 5));
 						}
 
 						// Locate the index of the childnode we want to force to be loaded.
@@ -436,7 +436,7 @@ extends LSDViewPart
 						for (ObjectID objectID : childrenJDOObjectIDs) {
 							if (nextObjectIDsOnPaths.contains(objectID)) {
 								if (logger.isDebugEnabled()) {
-									logger.debug(" -->>->> FOUND! @posIndex:" + posIndex + ", objectID:" + showObjectID(objectID));
+									logger.debug(" -->>->> FOUND! @posIndex:" + posIndex + ", objectID:" + PersonRelationTree.showObjectID(objectID));
 								}
 
 								// Force the child to be loaded, and duly have it selected.
@@ -545,8 +545,8 @@ extends LSDViewPart
 			expandedPaths_PRID.put(index, new LinkedList<ObjectID>());
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("@index:" + index + " " + showDequePaths("PSID", path_PSID, true));
-				logger.debug("@index:" + index + " " + showDequePaths("PRID", path_PRID, true));
+				logger.debug("@index:" + index + " " + PersonRelationTree.showDequePaths("PSID", path_PSID, true));
+				logger.debug("@index:" + index + " " + PersonRelationTree.showDequePaths("PRID", path_PRID, true));
 				logger.debug("--------------------");
 			}
 
@@ -633,6 +633,7 @@ extends LSDViewPart
 	 * person-relation graph, given an input {@link PropertySetID}.
 	 */
 	protected Set<PersonRelationTypeID> getAllowedPersonRelationTypes() {
+		// TODO Revert back to JFire's original behaviour. Or make configurable.
 		if (allowedRelationTypeIDs == null) {
 			allowedRelationTypeIDs = new HashSet<PersonRelationTypeID>();
 
@@ -690,45 +691,5 @@ extends LSDViewPart
 			throw new UnsupportedOperationException("This method should never be used."); //$NON-NLS-1$
 		}
 	}
-
-
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
-	// I. Quick debug.
-	protected String showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
-		String str = "++ " + preamble + " :: {";
-		Iterator<? extends ObjectID> iter = isReversed ? path.descendingIterator() : path.iterator();
-		while (iter.hasNext())
-			str += showObjectID(iter.next());
-
-		return str + "}";
-	}
-
-	// II. Quick debug.
-	protected String showObjectIDs(String preamble, List<? extends ObjectID> objIDs, int modLnCnt) {
-		if (objIDs == null)
-			return "++ " + preamble + " :: NULL";
-
-		String str = "++ " + preamble + " (" + objIDs.size() + ") :: {\n     ";
-		int ctr = 0;
-		for (ObjectID objectID : objIDs) {
-			str += "(" + ctr + ")" + showObjectID(objectID) + " ";
-			ctr++;
-
-			if (ctr % modLnCnt == 0)
-				str += "\n     ";
-		}
-
-		return str + "\n   }";
-	}
-
-	// III. Quick debug.
-	protected String showObjectID(ObjectID objectID) {
-		if (objectID == null)
-			return "[null]";
-
-		String[] segID = objectID.toString().split("&");
-		return "[" + segID[1] + "]";
-	}
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
 
 }
