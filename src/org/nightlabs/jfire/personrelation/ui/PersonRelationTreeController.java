@@ -3,10 +3,8 @@ package org.nightlabs.jfire.personrelation.ui;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +18,6 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
@@ -32,6 +29,7 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 public class PersonRelationTreeController
 extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNode>
@@ -345,9 +343,6 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 						new String[] {
 								FetchPlan.DEFAULT,
 								PersonRelation.FETCH_GROUP_TO_ID,
-								PersonRelation.FETCH_GROUP_PERSON_RELATION_TYPE, // ** For debug **
-								PersonRelation.FETCH_GROUP_TO,                   // ** For debug ** But may require theses for client-side sorting **
-								Person.FETCH_GROUP_FULL_DATA                     // ** For debug **
 						},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, tixRelation / 2)
@@ -356,8 +351,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixRelation / 2);
 				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personRelations.size()); //$NON-NLS-1$
 
-				// In order to count with the filter, where we ensure that none of the children has been repeated,
-				// we need to retrieve a bit more for our comparisons. Needs a bit more fine-tuning.
+				// In order to count with the filter, where we ensure that none of the unnecessary children should been repeated,
+				// we need to check the IDs for comparison. But we don't need to make the server return us all the filtered IDs. Just to count them, and get the number.
 				for (PersonRelation personRelation : personRelations) {
 					PersonRelationID personRelationID = (PersonRelationID) JDOHelper.getObjectId(personRelation);
 					long personRelationCount = 0;
@@ -366,75 +361,54 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 					PersonRelationTreeNode node = null;
 					List<PersonRelationTreeNode> treeNodes = getTreeNodeList(personRelationID);
 					if (treeNodes == null) {
-						if (logger.isDebugEnabled())
-							logger.debug("------>> treeNodes == NULL? Meaning no nodes were created for personRelationID: " + PersonRelationTree.showObjectID(personRelationID));
-
 						// Guard. Revert to the original methods.
 						// But this SHOULD NEVER HAPPEN.
 						personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
-								null, personRelation.getToID(), null, new NullProgressMonitor()
+								null, personRelation.getToID(), null, new SubProgressMonitor(monitor, 80)
 						);
 						result.put(personRelationID, personRelationCount);
 						subMonitor.worked(1);
 					}
 					else {
-						String debugStr = "";
-						if (logger.isDebugEnabled()) {
-							debugStr = "\n----[ START iteration ]----------------------------------------------------------------------->>";
-							debugStr += "\n    --> treeNodes.size()=" + treeNodes.size() + "\n    --> " + PersonRelationTree.showObjectID(personRelationID);
-						}
-
 						if (treeNodes.size() == 1)
 							node = treeNodes.get(0);
 						else {
-							// If the mapping key for personRelationID returns more than one node, then we need to find the correct one.
-							// Note: While every single node in treeNodes contains exactly the same children references, they each contain
-							//       unique paths to the root(s).
+							// If the mapping key for personRelationID returns more than one node, then we essentially need to find the correct one.
 							for (PersonRelationTreeNode treeNode : treeNodes)
 								if (parentNodes.contains(treeNode)) {
 									node = treeNode;
-
-									if (logger.isDebugEnabled())
-										debugStr += "\n    --> Found matching node.";
-
 									break;
 								}
 						}
 
-						Person person = personRelation.getTo();
-						if (person != null) {
-							debugStr += " --> person (To): " + person.getDisplayName();
-							debugStr += "\n    --> person relation type: " + personRelation.getPersonRelationType().getPersonRelationTypeID();
-						}
-
-						List<PropertySetID> propertySetIDsToRoot = node.getPropertySetIDsToRoot();
-						Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+						Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(node.getPropertySetIDsToRoot());
+						personRelationCount = PersonRelationDAO.sharedInstance().getFilteredPersonRelationCount(
 								null, personRelation.getToID(), null,
-								new SubProgressMonitor(monitor, 80)
+								null, toPropertySetIDsToExclude, new SubProgressMonitor(monitor, 80)
 						);
 
-						// -------------------------------------------------------------------------------------------------- ++ ------>>
-						List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
-								childPersonRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
-						);
-
-						Iterator<PersonRelation> cReln_iter = cRelns.iterator();
-						while (cReln_iter.hasNext()) {
-							PropertySetID cReln_propID = cReln_iter.next().getToID();
-							if (!propertySetIDsToRoot.contains(cReln_propID))
-								personRelationCount++;
-						}
+//						List<PropertySetID> propertySetIDsToRoot = node.getPropertySetIDsToRoot();
+//						Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+//								null, personRelation.getToID(), null,
+//								new SubProgressMonitor(monitor, 80)
+//						);
+//
+//						// -------------------------------------------------------------------------------------------------- ++ ------>>
+//						List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
+//								childPersonRelationIDs, new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
+//								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+//						);
+//
+//						Iterator<PersonRelation> cReln_iter = cRelns.iterator();
+//						while (cReln_iter.hasNext()) {
+//							PropertySetID cReln_propID = cReln_iter.next().getToID();
+//							if (!propertySetIDsToRoot.contains(cReln_propID))
+//								personRelationCount++;
+//						}
+//						// -------------------------------------------------------------------------------------------------- ++ ------>>
 
 						result.put(personRelationID, personRelationCount);
 						subMonitor.worked(1);
-						// -------------------------------------------------------------------------------------------------- ++ ------>>
-
-						if (logger.isDebugEnabled()) {
-							debugStr += "\n    --> No. of childnodes kept: " + personRelationCount + "(of " + cRelns.size() + ")";
-							debugStr += "\n<<--[ END ]-------------------------------------------------------------------------------------\n";
-							logger.debug(debugStr); // Looks cleaner on the console, without having to scroll too much.
-						}
 					}
 				}
 
@@ -488,6 +462,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 			return Collections.emptyList();
 
 		ObjectID parentID = parentNode.getJdoObjectID();
+		Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
 		Collection<ObjectID> result = new ArrayList<ObjectID>(); // Note: It is from the index position of this Collection that we know the position of the child-nodes.
 		                                                         //       And if we are to impose any ordering of the nodes, this should be the place to affect it. Kai.
 
@@ -497,12 +472,11 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				result.addAll(rootPersonIDs);
 			}
 			else if (parentID instanceof PropertySetID) {
-				Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+				Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
 						null, (PropertySetID)parentID, null,
-						new SubProgressMonitor(monitor, 80)
-				);
+						null, toPropertySetIDsToExclude, true, new SubProgressMonitor(monitor, 80));
 
-				result.addAll(filterAndArrangeChildObjectIDs(childPersonRelationIDs, parentNode.getPropertySetIDsToRoot(), monitor)); // TODO Make this on the server side.
+				result.addAll(filteredPersonRelationIDs);
 			}
 			else if (parentID instanceof PersonRelationID) {
 				Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
@@ -517,12 +491,11 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 				if (!personRelations.isEmpty()) {
 					PersonRelation personRelation = personRelations.iterator().next();
-					Collection<PersonRelationID> childPersonRelationIDs = PersonRelationDAO.sharedInstance().getPersonRelationIDs(
+					Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
 							null, personRelation.getToID(), null,
-							new SubProgressMonitor(monitor, 80)
-					);
+							null, toPropertySetIDsToExclude, true, new SubProgressMonitor(monitor, 80));
 
-					result.addAll(filterAndArrangeChildObjectIDs(childPersonRelationIDs, parentNode.getPropertySetIDsToRoot(), monitor)); // TODO Make this on the server side.
+					result.addAll(filteredPersonRelationIDs);
 				}
 			}
 
@@ -552,107 +525,107 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 
 	// ---[ Controlling the order of nodes positionings ]---------------------------------------------------------->> Under testing. Default behaviour is not compromised. Yet. Kai.
-	protected static String[] FETCH_GROUP_CHILD_RELATIONS_FOR_ORDERING = new String[] {
-			FetchPlan.DEFAULT,
-			PersonRelation.FETCH_GROUP_TO_ID,
-			PersonRelation.FETCH_GROUP_PERSON_RELATION_TYPE, // ** for specialised sorting **
-			PersonRelation.FETCH_GROUP_TO,                   // ** for specialised sorting **
-	};
-
-	private String[] fetchGroupChildRelationsForOrdering = FETCH_GROUP_CHILD_RELATIONS_FOR_ORDERING;
-
-
-	@SuppressWarnings("serial")
-	private Comparator<PersonRelation> personRelationComparator = new Comparator<PersonRelation>() { // <-- May upgrade this to become a Delegate for additional and more specific rules? Kai.
-		// Sort for nodes carrying PersonRelations to appear in the following order:
-		final Map<String, Integer> personRelationTypeOrder = new HashMap<String, Integer>() { {
-			put(PersonRelationType.PredefinedRelationTypes.companyGroup.personRelationTypeID, 1);
-			put(PersonRelationType.PredefinedRelationTypes.subsidiary.personRelationTypeID, 2);
-			put(PersonRelationType.PredefinedRelationTypes.employing.personRelationTypeID, 11);
-			put(PersonRelationType.PredefinedRelationTypes.employed.personRelationTypeID, 12);
-			put(PersonRelationType.PredefinedRelationTypes.parent.personRelationTypeID, 21);
-			put(PersonRelationType.PredefinedRelationTypes.child.personRelationTypeID, 22);
-			put(PersonRelationType.PredefinedRelationTypes.friend.personRelationTypeID, 500);
-		} };
-
-		@Override
-		public int compare(PersonRelation pr1, PersonRelation pr2) {
-			int compVal = personRelationTypeOrder.get(pr1.getPersonRelationType().getReversePersonRelationTypeID().personRelationTypeID)
-			       - personRelationTypeOrder.get(pr2.getPersonRelationType().getReversePersonRelationTypeID().personRelationTypeID);
-
-			if (compVal == 0) {
-				// If the PersonRelationTypes are equal, then we sort according to the displayName.
-				return pr1.getTo().getDisplayName().compareTo( pr2.getTo().getDisplayName() );
-			}
-
-			return compVal;
-		}
-	};
-
-
-
-	/**
-	 * Performs the controlled filtration of the unwanted {@link ObjectID}s of the children, and at the same time,
-	 * order the positions of the potential child nodes, if there is a well-defined personRelationComparator.
-	 */
-	protected Collection<ObjectID> filterAndArrangeChildObjectIDs
-	(Collection<PersonRelationID> childPersonRelationIDs, List<PropertySetID> propertySetIDsToRoot, ProgressMonitor monitor) {
-		Collection<ObjectID> result = new ArrayList<ObjectID>();
-		List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
-				childPersonRelationIDs,
-				fetchGroupChildRelationsForOrdering,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
-		);
-
-		// Sort potential nodes positions.
-		if (personRelationComparator != null) {
-			if (logger.isDebugEnabled()) logger.debug( showIDAndType("Before", cRelns) );
-
-			Collections.sort(cRelns, personRelationComparator);
-
-			if (logger.isDebugEnabled()) logger.debug( showIDAndType("After", cRelns) );
-		}
-
-		// Filter out unwanted nodes.
-		for (PersonRelation perReln : cRelns) {
-			PropertySetID cReln_propID = perReln.getToID();
-			if (!propertySetIDsToRoot.contains(cReln_propID))
-				result.add( (ObjectID) JDOHelper.getObjectId(perReln) );
-		}
-
-//		Iterator<PersonRelationID> cID_iter = childPersonRelationIDs.iterator();
-//		Iterator<PersonRelation> cReln_iter = cRelns.iterator();
-//		while (cID_iter.hasNext()) {
-//			PersonRelationID cID = cID_iter.next();
-//			PropertySetID cReln_propID = cReln_iter.next().getToID();
+//	protected static String[] FETCH_GROUP_CHILD_RELATIONS_FOR_ORDERING = new String[] {
+//			FetchPlan.DEFAULT,
+//			PersonRelation.FETCH_GROUP_TO_ID,
+//			PersonRelation.FETCH_GROUP_PERSON_RELATION_TYPE, // ** for specialised sorting **
+//			PersonRelation.FETCH_GROUP_TO,                   // ** for specialised sorting **
+//	};
 //
-//			if (!propertySetIDsToRoot.contains(cReln_propID))
-//				result.add(cID); // <-- This is sorted (by default) according to the order of creation time; the latest appended to the end.
-//			                     //     Will play around with this, and see if I can affect a different sorting criteria. When it's working,
-//			                     //     will then move the codes to server side.
+//	private String[] fetchGroupChildRelationsForOrdering = FETCH_GROUP_CHILD_RELATIONS_FOR_ORDERING;
+//
+//
+//	@SuppressWarnings("serial")
+//	private Comparator<PersonRelation> personRelationComparator = new Comparator<PersonRelation>() { // <-- May upgrade this to become a Delegate for additional and more specific rules? Kai.
+//		// Sort for nodes carrying PersonRelations to appear in the following order:
+//		final Map<String, Integer> personRelationTypeOrder = new HashMap<String, Integer>() { {
+//			put(PersonRelationType.PredefinedRelationTypes.companyGroup.personRelationTypeID, 1);
+//			put(PersonRelationType.PredefinedRelationTypes.subsidiary.personRelationTypeID, 2);
+//			put(PersonRelationType.PredefinedRelationTypes.employing.personRelationTypeID, 11);
+//			put(PersonRelationType.PredefinedRelationTypes.employed.personRelationTypeID, 12);
+//			put(PersonRelationType.PredefinedRelationTypes.parent.personRelationTypeID, 21);
+//			put(PersonRelationType.PredefinedRelationTypes.child.personRelationTypeID, 22);
+//			put(PersonRelationType.PredefinedRelationTypes.friend.personRelationTypeID, 500);
+//		} };
+//
+//		@Override
+//		public int compare(PersonRelation pr1, PersonRelation pr2) {
+//			int compVal = personRelationTypeOrder.get(pr1.getPersonRelationType().getReversePersonRelationTypeID().personRelationTypeID)
+//			       - personRelationTypeOrder.get(pr2.getPersonRelationType().getReversePersonRelationTypeID().personRelationTypeID);
+//
+//			if (compVal == 0) {
+//				// If the PersonRelationTypes are equal, then we sort according to the displayName.
+//				return pr1.getTo().getDisplayName().compareTo( pr2.getTo().getDisplayName() );
+//			}
+//
+//			return compVal;
 //		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug(PersonRelationTree.showObjectIDs("Kept IDs", (List<? extends ObjectID>) result, 10));
-		}
-
-		return result;
-	}
+//	};
+//
+//
+//
+//	/**
+//	 * Performs the controlled filtration of the unwanted {@link ObjectID}s of the children, and at the same time,
+//	 * order the positions of the potential child nodes, if there is a well-defined personRelationComparator.
+//	 */
+//	protected Collection<ObjectID> filterAndArrangeChildObjectIDs
+//	(Collection<PersonRelationID> childPersonRelationIDs, List<PropertySetID> propertySetIDsToRoot, ProgressMonitor monitor) {
+//		Collection<ObjectID> result = new ArrayList<ObjectID>();
+//		List<PersonRelation> cRelns = PersonRelationDAO.sharedInstance().getPersonRelations(
+//				childPersonRelationIDs,
+//				fetchGroupChildRelationsForOrdering,
+//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+//		);
+//
+////		// Sort potential nodes positions.
+////		if (personRelationComparator != null) {
+////			if (logger.isDebugEnabled()) logger.debug( showIDAndType("Before", cRelns) );
+////
+////			Collections.sort(cRelns, personRelationComparator);
+////
+////			if (logger.isDebugEnabled()) logger.debug( showIDAndType("After", cRelns) );
+////		}
+//
+//		// Filter out unwanted nodes.
+//		for (PersonRelation perReln : cRelns) {
+//			PropertySetID cReln_propID = perReln.getToID();
+//			if (!propertySetIDsToRoot.contains(cReln_propID))
+//				result.add( (ObjectID) JDOHelper.getObjectId(perReln) );
+//		}
+//
+////		Iterator<PersonRelationID> cID_iter = childPersonRelationIDs.iterator();
+////		Iterator<PersonRelation> cReln_iter = cRelns.iterator();
+////		while (cID_iter.hasNext()) {
+////			PersonRelationID cID = cID_iter.next();
+////			PropertySetID cReln_propID = cReln_iter.next().getToID();
+////
+////			if (!propertySetIDsToRoot.contains(cReln_propID))
+////				result.add(cID); // <-- This is sorted (by default) according to the order of creation time; the latest appended to the end.
+////			                     //     Will play around with this, and see if I can affect a different sorting criteria. When it's working,
+////			                     //     will then move the codes to server side.
+////		}
+//
+//		if (logger.isDebugEnabled()) {
+//			logger.debug(PersonRelationTree.showObjectIDs("Kept IDs", (List<? extends ObjectID>) result, 10));
+//		}
+//
+//		return result;
+//	}
 	// ---[ Controlling the order of nodes positionings ]---------------------------------------------------------->>
 
 
-	// ---- DEBUGssss --------------------------------------------------------------------------------------------->>
-	private String showIDAndType(String preambles, List<PersonRelation> prs) {
-		String str = "[" + preambles + "] :: \n";
-		for (PersonRelation pr : prs) {
-			str += showIDAndType(pr) + "\n";
-		}
-		return str;
-	}
-
-	private String showIDAndType(PersonRelation pr) {
-		return String.format("%s -- %s", PersonRelationTree.showObjectID((ObjectID) JDOHelper.getObjectId(pr)), pr.getPersonRelationType().getPersonRelationTypeID());
-	}
-	// ---- DEBUGssss --------------------------------------------------------------------------------------------->>
+//	// ---- DEBUGssss --------------------------------------------------------------------------------------------->>
+//	private String showIDAndType(String preambles, List<PersonRelation> prs) {
+//		String str = "[" + preambles + "] :: \n";
+//		for (PersonRelation pr : prs) {
+//			str += showIDAndType(pr) + "\n";
+//		}
+//		return str;
+//	}
+//
+//	private String showIDAndType(PersonRelation pr) {
+//		return String.format("%s -- %s", PersonRelationTree.showObjectID((ObjectID) JDOHelper.getObjectId(pr)), pr.getPersonRelationType().getPersonRelationTypeID());
+//	}
+//	// ---- DEBUGssss --------------------------------------------------------------------------------------------->>
 
 }
