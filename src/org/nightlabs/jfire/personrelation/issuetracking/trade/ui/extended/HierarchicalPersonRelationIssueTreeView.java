@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,8 +16,6 @@ import javax.jdo.JDOHelper;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -28,7 +25,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
-import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.selection.SelectionProviderProxy;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
@@ -39,16 +35,6 @@ import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.Activator;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentAction;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreatePersonRelationAction;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.DeletePersonRelationAction;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssueCommentPersonRelationTreeLabelProviderDelegate;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssueDescriptionPersonRelationTreeLabelProviderDelegate;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssueLinkPersonRelationTreeLabelProviderDelegate;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssuePersonRelationTreeControllerDelegate;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.OpenIssueEditorAction;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.PersonRelationTree;
@@ -60,7 +46,6 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePerspective;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
 /**
@@ -72,20 +57,17 @@ import org.nightlabs.notification.NotificationListener;
  *
  * @author khaireel (at) nightlabs (dot) de
  */
-public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTreeView {
-	private static final Logger logger = Logger.getLogger(ExtendedPersonRelationIssueTreeView.class);
-	public static final String ID_VIEW = ExtendedPersonRelationIssueTreeView.class.getName();
+public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssueTreeView {
+	private static final Logger logger = Logger.getLogger(HierarchicalPersonRelationIssueTreeView.class);
+	public static final String ID_VIEW = HierarchicalPersonRelationIssueTreeView.class.getName();
 
-	protected static final int DEFAULT_MAX_SEARCH_DEPTH = 10; // --> To be placed appropriately in a ConfigModule.
+	protected static final int DEFAULT_MAX_SEARCH_DEPTH = 10;
 
 	private Map<Class<? extends ObjectID>, List<Deque<ObjectID>>> relatablePathsToRoots; // The distinct paths. Check out NotificationListener below for details.
 	private Map<Integer, Deque<ObjectID>> pathsToExpand_PRID;
 	private Map<Integer, Deque<ObjectID>> expandedPaths_PRID;
 
-	private PersonRelationTree personRelationTree;
 	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
-
-	private PropertySetID currentPersonID = null;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -93,31 +75,26 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 		getSite().setSelectionProvider(selectionProviderProxy);
 	}
 
-	/**
-	 * Creates a new instance of the PersonRelationTree.
-	 * Override this method for preparing other domain-specific PersonRelationTree.
-	 */
 	@Override
-	protected PersonRelationTree createPersonRelationTree(Composite parent) {
-		PersonRelationTree personRelationTree = new PersonRelationTree(parent,
-				false, // without restoring the tree's collapse state
-				true,  // with context menu(s)
-				false  // without the drill-down adapter.
-			);
+	protected PersonRelationTree createAndInitPersonRelationTree(Composite parent) {
+		PersonRelationTree personRelationTree =  super.createAndInitPersonRelationTree(parent);
 
 		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_DATA_FIELDS} );
-		personRelationTree.getPersonRelationTreeController().setPersonRelationFetchGroups((String[]) fetchGroupPersonRelation);
+		PersonRelationTreeController personRelationTreeController = personRelationTree.getPersonRelationTreeController();
+		personRelationTreeController.setPersonRelationFetchGroups((String[]) fetchGroupPersonRelation);
+
+		// Delegate specialised label providers for this hierarchical view.
+		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PropertySetTreeLabelProviderDelegate(personRelationTreeController));
+		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PersonRelationTreeLabelProviderDelegate());
+
 		return personRelationTree;
 	}
 
-	/**
-	 * Creates a NotificationListener that defines the behaviour of this View with respect to whatever Perspective.
-	 * Override this method for preparing other domain-specific NotificationListener.
-	 */
-	private NotificationListener notificationListenerLegalEntitySelected = null;
+
+
 	@Override
-	protected NotificationListener createNotificationListenerLegalEntitySelected() {
-		return new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
+	protected NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PersonRelationTree personRelationTree) {
+		final NotificationListener notificationListener =  new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 		{
 			public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
 				// Kai. Revised behaviour and display of the PersonRelationTree (consolidated and optimised: from jfire_1.0 + BEHR).
@@ -178,112 +155,44 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 
 						// Done and ready. Update the tree.
 						currentPersonID = personID;
-						personRelationTree.getDisplay().asyncExec(new Runnable() {
+						getPersonRelationTree().getDisplay().asyncExec(new Runnable() {
 							public void run() {
-								if (!personRelationTree.isDisposed())
-									personRelationTree.setInputPersonIDs(rootIDs);
+								if (!getPersonRelationTree().isDisposed())
+									getPersonRelationTree().setInputPersonIDs(rootIDs);
 							}
 						});
 					} catch (Exception e) {
-						// Failed to retrieve path!?? Something must have been null.
-						e.printStackTrace();
-
-						currentPersonID = personID;
-						personRelationTree.getDisplay().asyncExec(new Runnable() {
-							public void run() {
-								if (!personRelationTree.isDisposed())
-									personRelationTree.setInputPersonIDs(Collections.singleton(currentPersonID));
-							}
-						});
+						e.printStackTrace(); // Failed to retrieve path!?? Something must have been null.
 					}
 				}
 			}
 		};
+
+		SelectionManager.sharedInstance().addNotificationListener(
+				TradePlugin.ZONE_SALE,
+				LegalEntity.class, notificationListener
+		);
+
+		personRelationTree.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent event) {
+				SelectionManager.sharedInstance().removeNotificationListener(
+						TradePlugin.ZONE_SALE,
+						LegalEntity.class, notificationListener
+				);
+			}
+		});
+
+		return notificationListener;
 	}
 
 
 	@Override
 	public void createPartContents(Composite parent) {
-		personRelationTree = createPersonRelationTree(parent);
-		PersonRelationTreeController personRelationTreeController = personRelationTree.getPersonRelationTreeController();
-
-		// Delegate label-provider(s) for handling "specialised" PersonRelations and PropertySets.
-		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PersonRelationTreeLabelProviderDelegate());
-		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PropertySetTreeLabelProviderDelegate(personRelationTreeController));
-
-		// Delegate controller and label-providers for handling Issues in the PersonRelationTree.
-		personRelationTreeController.addPersonRelationTreeControllerDelegate(new IssuePersonRelationTreeControllerDelegate());
-		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueLinkPersonRelationTreeLabelProviderDelegate());
-		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueDescriptionPersonRelationTreeLabelProviderDelegate());
-		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new IssueCommentPersonRelationTreeLabelProviderDelegate());
-
-		// Notifier registration.
-		notificationListenerLegalEntitySelected = createNotificationListenerLegalEntitySelected();
-		if (notificationListenerLegalEntitySelected != null) {
-			SelectionManager.sharedInstance().addNotificationListener(
-					TradePlugin.ZONE_SALE,
-					LegalEntity.class, notificationListenerLegalEntitySelected
-			);
-
-			personRelationTree.addDisposeListener(new DisposeListener() {
-				@Override
-				public void widgetDisposed(DisposeEvent event) {
-					SelectionManager.sharedInstance().removeNotificationListener(
-							TradePlugin.ZONE_SALE,
-							LegalEntity.class, notificationListenerLegalEntitySelected
-					);
-				}
-			});
-		}
-
-
-		// Set up the ORDERED context-menus ---> Qn: How do I access the texts that the plugin has access to?
-		personRelationTree.addContextMenuContribution(new SelectPersonRelationTreeItemAction());
-		personRelationTree.addContextMenuContribution(this, new CreatePersonRelationAction(), null, "Create new person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreatePersonRelationAction.class));
-		personRelationTree.addContextMenuContribution(this, new DeletePersonRelationAction(), null, "Delete person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeletePersonRelationAction.class));
-		personRelationTree.addContextMenuContribution(new OpenIssueEditorAction());
-		personRelationTree.addContextMenuContribution(this, new CreateOrLinkIssueAction(), null, "Create new or link existing issue", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateOrLinkIssueAction.class));
-		personRelationTree.addContextMenuContribution(this, new CreateIssueCommentAction(), null, "Create new issue comment", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateIssueCommentAction.class));
-
-		personRelationTree.integratePriorityOrderedContextMenu(); // <-- Voila! THAT's IT!
-
+		super.createPartContents(parent);
 
 		// Initialise a system of listeners for the personRelationTree that will expand it accordingly. See notes.
 		initAutoNodeExpansionLazyBehaviour();
-
-
-		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
-		// See Rev. 16511 for other (FARK-MARKed) notes on manupulating the nodes and their contents. Kai.
-		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection().isEmpty())
-					return;
-
-				Object selectedElement = personRelationTree.getFirstSelectedElement();
-				if (selectedElement instanceof PersonRelationTreeNode) {
-					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
-					// Debug.
-					if (logger.isInfoEnabled() && node != null) {
-						logger.info(PersonRelationTree.showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
-					}
-
-					if (node != null) {
-						// Kai: It is possible that the selected treeNode does not contain a Person-related object (e.g. Issue, IssueComment, etc.).
-						// But we may be interested of the Person-related object to which the selected treeNode belongs to.
-						// --> Thus, in this case, we traverse up the parent until we get to a node representing a Person-related object.
-						// --> This iterative traversal always have a base case, since the root node(s) in the PersonRelationTree is always a Person-related object.
-						node = traverseUpUntilPerson(node);
-
-						PropertySetID personID = node.getPropertySetID();
-						if (personID != null)
-							SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
-					}
-				}
-			}
-		});
-
-		selectionProviderProxy.addRealSelectionProvider(personRelationTree);
 	}
 
 
@@ -297,7 +206,7 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 		// This listener is expected to unravel the tree, appropriately following the pre-identified paths in pathsToBeExpanded.
 		// Each path contains a Deque of PropertySetID, and will guide the lazy-expansion events once data becomes available, and
 		// becomes necessary to be displayed.
-		personRelationTree.getTree().addListener(SWT.SetData, new Listener() {
+		getPersonRelationTree().getTree().addListener(SWT.SetData, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				// Guard #1.
@@ -355,10 +264,7 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 
 				// Reflect changes on the node, if any.
 				if (isNodeMarkedForSelection) {
-//					personRelationTree.getTree().setSelection(treeItem);
-					personRelationTree.setSelection(node);
-					ISelection selection = personRelationTree.getTreeViewer().getSelection();
-					personRelationTree.getTreeViewer().setSelection(selection, true);
+					getPersonRelationTree().getTree().setSelection(treeItem);
 				}
 				else if (isNodeMarkedForExpansion)
 					treeItem.setExpanded(true);
@@ -369,7 +275,7 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 
 		// This gives us a higher overall view of ALL nodes that have just been loaded than
 		// the "personRelationTree.getTree().addListener(SWT.SetData, new Listener() {..." method above.
-		personRelationTree.getPersonRelationTreeController().addJDOLazyTreeNodesChangedListener(new JDOLazyTreeNodesChangedListener<ObjectID, Object, PersonRelationTreeNode>() {
+		getPersonRelationTree().getPersonRelationTreeController().addJDOLazyTreeNodesChangedListener(new JDOLazyTreeNodesChangedListener<ObjectID, Object, PersonRelationTreeNode>() {
 			@Override
 			public void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent) {
 				// Guard #1.
@@ -409,9 +315,9 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 								if (logger.isDebugEnabled())
 									logger.debug(" :: @" + posIndex + ", (loaded) nodeObjID:" +  PersonRelationTree.showObjectID(nodeObjID) + (isOnNextPath ? " <-- Match!" : ""));
 
-								personRelationTree.setSelection(node);
-								ISelection selection = personRelationTree.getTreeViewer().getSelection();
-								personRelationTree.getTreeViewer().setSelection(selection, true);
+								getPersonRelationTree().setSelection(node);
+								ISelection selection = getPersonRelationTree().getTreeViewer().getSelection();
+								getPersonRelationTree().getTreeViewer().setSelection(selection, true);
 								break;
 							}
 						}
@@ -445,9 +351,9 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 
 								// Force the child to be loaded, and duly have it selected.
 								PersonRelationTreeNode node = (PersonRelationTreeNode) parNode.getChildNodes().get(posIndex);
-								personRelationTree.setSelection(node);
-								ISelection selection = personRelationTree.getTreeViewer().getSelection();
-								personRelationTree.getTreeViewer().setSelection(selection, true);
+								getPersonRelationTree().setSelection(node);
+								ISelection selection = getPersonRelationTree().getTreeViewer().getSelection();
+								getPersonRelationTree().getTreeViewer().setSelection(selection, true);
 							}
 
 							posIndex++;
@@ -581,10 +487,6 @@ public class ExtendedPersonRelationIssueTreeView extends PersonRelationIssueTree
 		}
 
 		return allowedRelationTypeIDs;
-	}
-
-	protected int getMaxSearchDepth() {
-		return DEFAULT_MAX_SEARCH_DEPTH;
 	}
 
 }
