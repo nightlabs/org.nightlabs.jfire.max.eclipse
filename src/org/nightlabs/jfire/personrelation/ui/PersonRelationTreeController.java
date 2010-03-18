@@ -19,6 +19,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeControll
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.PersonRelationComparator;
 import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
@@ -448,7 +449,9 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 				// -------------------------------------------------------------------------------------------------- ++ ------>>
 				Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
 						null, (PropertySetID)parentID, null,
-						null, toPropertySetIDsToExclude, true, new SubProgressMonitor(monitor, 80));
+						null, toPropertySetIDsToExclude,
+						getPersonRelationComparator(),
+						new SubProgressMonitor(monitor, 80));
 				// -------------------------------------------------------------------------------------------------- ++ ------>>
 
 				result.addAll(filteredPersonRelationIDs);
@@ -469,7 +472,9 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 					PersonRelation personRelation = personRelations.iterator().next();
 					Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
 							null, personRelation.getToID(), null,
-							null, toPropertySetIDsToExclude, true, new SubProgressMonitor(monitor, 80));
+							null, toPropertySetIDsToExclude,
+							getPersonRelationComparator(),
+							new SubProgressMonitor(monitor, 80));
 					// -------------------------------------------------------------------------------------------------- ++ ------>>
 
 					result.addAll(filteredPersonRelationIDs);
@@ -497,5 +502,15 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		// Taken care directly from the other method: retrieveChildObjectIDs(parentNode, monitor).
 		return null;
 	}
+
+
+	protected PersonRelationComparator personRelationComparator = null;
+	public PersonRelationComparator getPersonRelationComparator() {
+		if (personRelationComparator == null)
+			personRelationComparator = new PersonRelationComparator();	// Default.
+
+		return personRelationComparator;
+	}
+
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 }
