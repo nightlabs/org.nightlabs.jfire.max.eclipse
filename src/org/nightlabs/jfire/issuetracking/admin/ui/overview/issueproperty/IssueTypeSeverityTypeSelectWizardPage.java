@@ -96,7 +96,7 @@ extends WizardHopPage
 		issueTypeSeverityTypeTable = new IssueSeverityTypeTable(wrapper, SWT.NONE);
 		Display.getCurrent().asyncExec(new Runnable(){
 			public void run() {
-				List<IssueSeverityType> issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(null, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				List<IssueSeverityType> issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issueSeverityTypes.removeAll(issueType.getIssueSeverityTypes());
 				
 				issueTypeSeverityTypeTable.setInput(issueSeverityTypes);
