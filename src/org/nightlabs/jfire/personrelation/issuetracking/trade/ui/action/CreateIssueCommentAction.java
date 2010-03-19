@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action;
 
 import javax.jdo.JDOHelper;
 
@@ -11,6 +11,7 @@ import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueDescriptionID;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentDialog;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 
 public class CreateIssueCommentAction implements IViewActionDelegate
@@ -57,40 +58,6 @@ public class CreateIssueCommentAction implements IViewActionDelegate
 		}
 
 		action.setEnabled(selectedIssueID != null);
-
-//		selectedIssueID = null;
-//
-//		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		IStructuredSelection sel = (IStructuredSelection) selection;
-//		if (sel.size() != 1 || sel.getFirstElement() == null) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		Object object = sel.getFirstElement();
-//		if (!(object instanceof PersonRelationTreeNode)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
-//		if (node.getJdoObject() instanceof IssueLink) {
-//			Issue issue = ((IssueLink) node.getJdoObject()).getIssue();
-//			selectedIssueID = (IssueID) JDOHelper.getObjectId(issue);
-//		}
-//		else if (node.getJdoObjectID() instanceof IssueDescriptionID) {
-//			IssueDescriptionID issueDescriptionID = (IssueDescriptionID) node.getJdoObjectID();
-//			selectedIssueID = IssueID.create(issueDescriptionID.organisationID, issueDescriptionID.issueID);
-//		}
-//		else if (node.getJdoObject() instanceof IssueComment) {
-//			IssueComment issueComment = (IssueComment) node.getJdoObject();
-//			selectedIssueID = issueComment.getIssueID();
-//		}
-//		action.setEnabled(selectedIssueID != null);
 	}
 
 }

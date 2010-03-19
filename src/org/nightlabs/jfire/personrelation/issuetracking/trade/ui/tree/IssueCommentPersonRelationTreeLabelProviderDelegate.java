@@ -1,10 +1,11 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree;
 
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.id.IssueCommentID;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.Activator;
 import org.nightlabs.jfire.personrelation.ui.tree.AbstractPersonRelationTreeLabelProviderDelegate;
 
 public class IssueCommentPersonRelationTreeLabelProviderDelegate extends AbstractPersonRelationTreeLabelProviderDelegate

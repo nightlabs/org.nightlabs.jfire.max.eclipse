@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action;
 
 import javax.jdo.JDOHelper;
 
@@ -29,7 +29,7 @@ public class OpenIssueEditorAction extends Action implements IViewActionDelegate
 
 	public OpenIssueEditorAction() {
 		setId(OpenIssueEditorAction.class.getName());
-		setText(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.OpenIssueEditorAction.text")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.OpenIssueEditorAction.text")); //$NON-NLS-1$
 	}
 
 	@Override

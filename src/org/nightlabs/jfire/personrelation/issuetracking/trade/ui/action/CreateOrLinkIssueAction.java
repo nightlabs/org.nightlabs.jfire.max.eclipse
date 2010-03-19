@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -35,10 +35,10 @@ public class CreateOrLinkIssueAction implements IViewActionDelegate
 		if (selectedPersonID == null)
 			return;
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateOrLinkIssueAction.job.openingWizard.name"), 100); //$NON-NLS-1$
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction.job.openingWizard.name"), 100); //$NON-NLS-1$
 				try {
 					final Person person = (Person) PropertySetDAO.sharedInstance().getPropertySet(
 							selectedPersonID, null, 1, monitor
@@ -83,43 +83,5 @@ public class CreateOrLinkIssueAction implements IViewActionDelegate
 
 		selectedPersonID = node.getPropertySetID();
 		action.setEnabled(selectedPersonID != null);
-
-//		selectedPersonID = null;
-//
-//		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		IStructuredSelection sel = (IStructuredSelection) selection;
-//		if (sel.size() != 1 || sel.getFirstElement() == null) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		Object object = sel.getFirstElement();
-//		if (!(object instanceof PersonRelationTreeNode)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
-//		while (selectedPersonID == null && node != null) {
-//			if (node.getJdoObjectID() instanceof PropertySetID) {
-//				selectedPersonID = (PropertySetID) node.getJdoObjectID();
-//				break;
-//			}
-//			else if (node.getJdoObject() instanceof PersonRelation) {
-//				PersonRelation pr = (PersonRelation) node.getJdoObject();
-//				selectedPersonID = pr.getToID();
-//				break;
-//			}
-////			else if (node.getJdoObjectID() instanceof IssueLinkID) {
-////				node = (PersonRelationTreeNode) node.getParent();
-////			}
-//			else
-//				break;
-//		}
-//		action.setEnabled(selectedPersonID != null);
 	}
 }

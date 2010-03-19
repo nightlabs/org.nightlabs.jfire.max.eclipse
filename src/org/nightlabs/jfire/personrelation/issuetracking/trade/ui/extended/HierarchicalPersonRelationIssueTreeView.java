@@ -11,6 +11,8 @@ import javax.jdo.JDOHelper;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -27,12 +29,14 @@ import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messag
 import org.nightlabs.jfire.personrelation.ui.tree.NodalHierarchyHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePerspective;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
 /**
@@ -78,6 +82,35 @@ public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssue
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PersonRelationTreeLabelProviderDelegate());
 
 		return personRelationTree;
+	}
+
+	/**
+	 * Initialises all other listeners that the {@link TuckedPersonRelationTree} requires for its fundamental operational behaviour.
+	 */
+	@Override
+	protected void initPersonRelationTreeListeners(PersonRelationTree personRelationTree) {
+		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
+		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (event.getSelection().isEmpty())
+					return;
+
+				Object selectedElement = getPersonRelationTree().getFirstSelectedElement();
+				if (selectedElement instanceof PersonRelationTreeNode) {
+					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
+					if (logger.isInfoEnabled() && node != null) {
+						logger.info(PersonRelationTree.showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
+					}
+
+					if (node != null) {
+						PropertySetID personID = node.getPropertySetID();
+						if (personID != null)
+							SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
+					}
+				}
+			}
+		});
 	}
 
 	@Override

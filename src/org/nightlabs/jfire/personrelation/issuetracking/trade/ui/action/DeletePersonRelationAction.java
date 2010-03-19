@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action;
 
 import javax.jdo.JDOHelper;
 
@@ -27,7 +27,7 @@ public class DeletePersonRelationAction implements IViewActionDelegate
 		if (personRelation == null)
 			return;
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.DeletePersonRelationAction.job.deletingPersonRelation.name")) { //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.DeletePersonRelationAction.job.deletingPersonRelation.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				PersonRelationTypeID personRelationTypeID = (PersonRelationTypeID) JDOHelper.getObjectId(personRelation.getPersonRelationType());
@@ -59,26 +59,6 @@ public class DeletePersonRelationAction implements IViewActionDelegate
 			action.setEnabled(false);
 			return;
 		}
-
-//
-//		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		IStructuredSelection sel = (IStructuredSelection) selection;
-//		if (sel.size() != 1 || sel.getFirstElement() == null) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		Object object = sel.getFirstElement();
-//		if (!(object instanceof PersonRelationTreeNode)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
 
 		if (node.getJdoObject() instanceof PersonRelation) {
 			PersonRelation pr = (PersonRelation) node.getJdoObject();

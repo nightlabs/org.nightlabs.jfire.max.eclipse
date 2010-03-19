@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +46,6 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
 		IssueLink.FETCH_GROUP_ISSUE,
-//		IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE,
-//		IssueLinkType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_SUBJECT,
 	};
 
@@ -73,7 +71,7 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 			}
 		}
 
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssueCountsForPersons.name"), 150); //$NON-NLS-1$
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssueCountsForPersons.name"), 150); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
 			Set<PersonRelationID> personRelationIDs = null;
@@ -178,7 +176,7 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 		if (logger.isDebugEnabled())
 			logger.debug("retrieveChildObjectIDs: entered for: " + parentID); //$NON-NLS-1$
 
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssuesForPerson.name"), 100); //$NON-NLS-1$
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssuesForPerson.name"), 100); //$NON-NLS-1$
 		try {
 			PropertySetID personID = null;
 			if (parentID instanceof PropertySetID) {

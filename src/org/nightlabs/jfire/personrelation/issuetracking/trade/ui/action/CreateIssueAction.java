@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -10,6 +10,7 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueWizard;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -34,10 +35,10 @@ public class CreateIssueAction implements IViewActionDelegate
 		final Shell shell = view.getSite().getShell();
 		final Display display = shell.getDisplay();
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueAction.job.openingWizard.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueAction.task.openingWizard.name"), 100); //$NON-NLS-1$
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueAction.task.openingWizard.name"), 100); //$NON-NLS-1$
 				try {
 					final CreateIssueWizard wizard = new CreateIssueWizard(selectedPersonID, new SubProgressMonitor(monitor, 100));
 
@@ -72,43 +73,5 @@ public class CreateIssueAction implements IViewActionDelegate
 
 		selectedPersonID = node.getPropertySetID();
 		action.setEnabled(selectedPersonID != null);
-
-//		selectedPersonID = null;
-//
-//		if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		IStructuredSelection sel = (IStructuredSelection) selection;
-//		if (sel.size() != 1 || sel.getFirstElement() == null) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		Object object = sel.getFirstElement();
-//		if (!(object instanceof PersonRelationTreeNode)) {
-//			action.setEnabled(false);
-//			return;
-//		}
-//
-//		PersonRelationTreeNode node = (PersonRelationTreeNode) object;
-//		while (selectedPersonID == null && node != null) {
-//			if (node.getJdoObjectID() instanceof PropertySetID) {
-//				selectedPersonID = (PropertySetID) node.getJdoObjectID();
-//				break;
-//			}
-//			else if (node.getJdoObject() instanceof PersonRelation) {
-//				PersonRelation pr = (PersonRelation) node.getJdoObject();
-//				selectedPersonID = pr.getToID();
-//				break;
-//			}
-////			else if (node.getJdoObjectID() instanceof IssueLinkID) {
-////				node = (PersonRelationTreeNode) node.getParent();
-////			}
-//			else
-//				break;
-//		}
-//		action.setEnabled(selectedPersonID != null);
 	}
 }
