@@ -27,7 +27,7 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class IssueLinkAdderOrder
-extends AbstractIssueLinkAdder 
+extends AbstractIssueLinkAdder
 {
 	private OrderEntryViewer oViewer;
 
@@ -42,7 +42,7 @@ extends AbstractIssueLinkAdder
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
-				
+
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
 						fireSelectionChangedEvent();
@@ -50,7 +50,7 @@ extends AbstractIssueLinkAdder
 				});
 			}
 		};
-		
+		oViewer.setErrorMessageDisplayer(getErrorMessageDisplayer());
 		oViewer.createComposite(parent);
 		return oViewer.getComposite();
 	}
@@ -59,7 +59,7 @@ extends AbstractIssueLinkAdder
 	protected void doSearch() {
 		oViewer.search();
 	}
-	
+
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
 		Collection<Order> elements = oViewer.getListComposite().getSelectedElements();
@@ -75,7 +75,7 @@ extends AbstractIssueLinkAdder
 
 		return !oViewer.getListComposite().getSelectedElements().isEmpty();
 	}
-	
+
 	@Override
 	public Set<IssueLink> createIssueLinks(
 			Issue issue,

@@ -50,8 +50,8 @@ public class IssueLinkActionRemove extends WorkbenchPartAction { //Action {
 		super(activePart);
 		setId(IssueLinkActionRemove.class.getName());
 		setImageDescriptor(SharedImages.DELETE_16x16);
-		setToolTipText("Remove link to selected issue");
-		setText("Remove selected issue link(s)");
+		setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkActionRemove.tooltip")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkActionRemove.text")); //$NON-NLS-1$
 
 		this.issueTable = issueTable;
 		this.controller = controller;

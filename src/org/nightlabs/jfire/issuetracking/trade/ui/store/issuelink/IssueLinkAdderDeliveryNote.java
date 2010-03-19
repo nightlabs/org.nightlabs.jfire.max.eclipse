@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink;
 
@@ -28,8 +28,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdderDeliveryNote 
-extends AbstractIssueLinkAdder 
+public class IssueLinkAdderDeliveryNote
+extends AbstractIssueLinkAdder
 {
 	private DeliveryNoteEntryViewer dViewer;
 
@@ -44,7 +44,7 @@ extends AbstractIssueLinkAdder
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
-				
+
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
 						fireSelectionChangedEvent();
@@ -52,7 +52,7 @@ extends AbstractIssueLinkAdder
 				});
 			}
 		};
-
+		dViewer.setErrorMessageDisplayer(getErrorMessageDisplayer());
 		dViewer.createComposite(parent);
 		return dViewer.getComposite();
 	}
@@ -61,7 +61,7 @@ extends AbstractIssueLinkAdder
 	protected void doSearch() {
 		dViewer.search();
 	}
-	
+
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
 		for(Object o : dViewer.getListComposite().getSelectedElements()) {
@@ -76,7 +76,7 @@ extends AbstractIssueLinkAdder
 
 		return !dViewer.getListComposite().getSelectedElements().isEmpty();
 	}
-	
+
 	@Override
 	public Set<IssueLink> createIssueLinks(
 			Issue issue,

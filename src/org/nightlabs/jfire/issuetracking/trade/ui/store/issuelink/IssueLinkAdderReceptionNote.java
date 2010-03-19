@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink;
 
@@ -28,8 +28,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdderReceptionNote 
-extends AbstractIssueLinkAdder 
+public class IssueLinkAdderReceptionNote
+extends AbstractIssueLinkAdder
 {
 	private ReceptionNoteEntryViewer rViewer;
 
@@ -52,7 +52,7 @@ extends AbstractIssueLinkAdder
 				});
 			}
 		};
-
+		rViewer.setErrorMessageDisplayer(getErrorMessageDisplayer());
 		rViewer.createComposite(parent);
 		return rViewer.getComposite();
 	}

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
@@ -13,32 +13,37 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author chairatk
  *
  */
-public class IssueLinkHandlerOrder 
-extends AbstractIssueLinkHandler<OrderID, Order> 
+public class IssueLinkHandlerOrder
+extends AbstractIssueLinkHandler<OrderID, Order>
 {
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink, Order linkedObject) {
+	public String getLinkedObjectName(IssueLink issueLink, Order order) {
 		return String.format(
-				"Order  %s", //$NON-NLS-1$
-				linkedObject.getPrimaryKey());
+				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerOrder.order.name"), //$NON-NLS-1$
+//				linkedObject.getPrimaryKey());
+				ArticleContainerUtil.getArticleContainerID(order),
+				DateFormatter.formatDateShort(order.getCreateDT(), false));
 	}
 
 	@Override
 	public Image getLinkedObjectImage(IssueLink issueLink, Order linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
-				IssueTrackingTradePlugin.getDefault(), 
-				IssueLinkHandlerOrder.class, 
+				IssueTrackingTradePlugin.getDefault(),
+				IssueLinkHandlerOrder.class,
 				"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
@@ -46,7 +51,7 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 	public void openLinkedObject(IssueLink issueLink, OrderID linkedObjectID) {
 		EditOrderAction editAction = new EditOrderAction();
 		editAction.setArticleContainerID(linkedObjectID);
-		editAction.run();			
+		editAction.run();
 	}
 
 	@Override

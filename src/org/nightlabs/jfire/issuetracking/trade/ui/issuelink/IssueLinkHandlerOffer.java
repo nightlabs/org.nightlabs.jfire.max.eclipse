@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
@@ -13,32 +13,37 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author chairatk
  *
  */
-public class IssueLinkHandlerOffer 
+public class IssueLinkHandlerOffer
 extends AbstractIssueLinkHandler<OfferID, Offer>
 {
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink, Offer linkedObject) {
+	public String getLinkedObjectName(IssueLink issueLink, Offer offer) {
 		return String.format(
-				"Offer %s", //$NON-NLS-1$
-				linkedObject.getPrimaryKey());
+				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerOffer.offer.name"), //$NON-NLS-1$
+//				linkedObject.getPrimaryKey());
+				ArticleContainerUtil.getArticleContainerID(offer),
+				DateFormatter.formatDateShort(offer.getFinalizeDT(), false));
 	}
 
 	@Override
 	public Image getLinkedObjectImage(IssueLink issueLink, Offer linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
-				IssueTrackingTradePlugin.getDefault(), 
-				IssueLinkHandlerOffer.class, 
+				IssueTrackingTradePlugin.getDefault(),
+				IssueLinkHandlerOffer.class,
 				"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
