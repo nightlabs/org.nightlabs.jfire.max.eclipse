@@ -11,7 +11,7 @@ import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueDescriptionID;
 import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 
 public class CreateIssueCommentAction implements IViewActionDelegate
 {

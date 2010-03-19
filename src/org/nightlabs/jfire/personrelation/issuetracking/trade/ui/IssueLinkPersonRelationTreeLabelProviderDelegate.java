@@ -6,7 +6,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.id.IssueLinkID;
-import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.ui.tree.AbstractPersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.util.NLLocale;
 

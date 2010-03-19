@@ -11,7 +11,7 @@ import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;

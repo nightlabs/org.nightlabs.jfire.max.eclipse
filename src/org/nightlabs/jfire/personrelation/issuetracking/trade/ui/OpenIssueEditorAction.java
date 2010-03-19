@@ -16,7 +16,7 @@ import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 
 /**
  * Opens the Issue perspective and displays the editor to show the selected Issue.

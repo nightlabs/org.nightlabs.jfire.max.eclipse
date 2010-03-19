@@ -32,7 +32,7 @@ import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.issuetracking.PersonRelationIssueParentResolver;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
-import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeControllerDelegate;
+import org.nightlabs.jfire.personrelation.ui.tree.AbstractPersonRelationTreeControllerDelegate;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;

@@ -5,7 +5,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.id.IssueDescriptionID;
-import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.ui.tree.AbstractPersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.util.NLLocale;
 
 public class IssueDescriptionPersonRelationTreeLabelProviderDelegate extends AbstractPersonRelationTreeLabelProviderDelegate
