@@ -31,7 +31,6 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
 public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 	private static final Logger logger = Logger.getLogger(NodalHierarchyHandler.class);
 
-//	private Map<Class<? extends ObjectID>, List<Deque<ObjectID>>> relatablePathsToRoots; // The distinct paths. Check out NotificationListener below for details.
 	private Map<Integer, Deque<ObjectID>> pathsToExpand_PRID;
 	private Map<Integer, Deque<ObjectID>> expandedPaths_PRID;
 
@@ -75,6 +74,7 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 
 
 	/**
+	 * Handles the listener concerning the notification of an SWT-related event.
 	 * Plug this into getPersonRelationTree().getTree().addListener(SWT.SetData, new Listener()...
 	 */
 	public void handleSWTSetDataEvent(Event event) {
@@ -134,13 +134,23 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 		// Reflect changes on the node, if any.
 		if (isNodeMarkedForSelection) {
 			personRelationTree.getTree().setSelection(treeItem);
+			if (logger.isDebugEnabled())
+				logger.debug("----------------------------->> SELECTED!! Should no longer expand the bloody node!");
+
+			return;
 		}
-		else if (isNodeMarkedForExpansion)
-			treeItem.setExpanded(true);
+
+		if (logger.isDebugEnabled())
+			logger.debug("----------------------------->> ChEcK!!");
+
+		treeItem.setExpanded(isNodeMarkedForExpansion);
+//		if (isNodeMarkedForExpansion)
+//			treeItem.setExpanded(true);
 
 	}
 
 	/**
+	 * Handles the event upon the notification from a {@link JDOLazyTreeNodesChangedEvent}.
 	 * Plug this into getPersonRelationTree().getPersonRelationTreeController().addJDOLazyTreeNodesChangedListener(new JDOLazyTreeNodesChangedListener<ObjectID, Object, PersonRelationTreeNode>()...
 	 */
 	public void handleOnJDOObjectsChangedEvent(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent) {
@@ -228,7 +238,6 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 		}
 
 	}
-
 
 	/**
 	 * @return true if and only if the given expandedPath is a proper sub-path of the given pathToRoot.
