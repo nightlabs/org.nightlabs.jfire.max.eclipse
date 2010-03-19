@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.ui;
+package org.nightlabs.jfire.personrelation.ui.tree;
 
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;

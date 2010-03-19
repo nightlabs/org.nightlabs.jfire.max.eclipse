@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.personrelation.ui;singleton:=true
-Bundle-Version: 1.1.22
+Bundle-Version: 1.1.23
 Bundle-Activator: org.nightlabs.jfire.personrelation.ui.PersonRelationPlugin
 Bundle-Vendor: NightLabs.com
 Require-Bundle: org.eclipse.ui,
@@ -11,4 +11,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.personrelation.ui,
- org.nightlabs.jfire.personrelation.ui.createrelation
+ org.nightlabs.jfire.personrelation.ui.createrelation,
+ org.nightlabs.jfire.personrelation.ui.tree

@@ -8,6 +8,8 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.selection.SelectionProviderProxy;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -16,7 +18,9 @@ import org.nightlabs.notification.NotificationListener;
  * An abstract {@link LSDViewPart} containing the factorised elements necessary to effect a clear and concise
  * View when used in a Perspective. The factorised elements are (so far, from our experiences with the PersonRelationIssueTreeView, BEHR's-TreeView, and the HierarchicalPersonRelationIssueTreeView)
  * as follows:
- *   (i)
+ *     (i) the genericised {@link PersonRelationTree},
+ *    (ii) the contribution method for the priority-ordered context-menus,
+ *   (iii) the {@link NotificationListener},
  *
  * @author khaireel (at) nightlabs (dot) de
  */

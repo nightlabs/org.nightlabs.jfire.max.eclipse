@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.ui;
+package org.nightlabs.jfire.personrelation.ui.tree;
 
 import java.util.Collection;
 import java.util.Deque;
@@ -38,6 +38,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeContentProvide
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
+import org.nightlabs.jfire.personrelation.ui.PersonRelationPlugin;
 import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.util.NLLocale;

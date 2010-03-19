@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.ui;
+package org.nightlabs.jfire.personrelation.ui.tree;
 
 import java.util.LinkedList;
 import java.util.List;

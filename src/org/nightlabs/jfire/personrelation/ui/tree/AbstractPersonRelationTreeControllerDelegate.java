@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.ui;
+package org.nightlabs.jfire.personrelation.ui.tree;
 
 
 public abstract class AbstractPersonRelationTreeControllerDelegate
