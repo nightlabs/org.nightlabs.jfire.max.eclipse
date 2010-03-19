@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.message.IErrorMessageDisplayer;
 
 /**
  * This class should be subclassed to create a composite that can contain the UI
@@ -28,6 +29,7 @@ implements IssueLinkAdder
 {
 	private IssueLinkHandlerFactory issueLinkHandlerFactory;
 	private ListenerList selectionDoubleClickListeners = new ListenerList();
+	private IErrorMessageDisplayer errorMessageDisplayer;
 
 	/**
 	 *
@@ -153,5 +155,15 @@ implements IssueLinkAdder
 				((IssueLinkDoubleClickListener) l).issueLinkDoubleClicked(evt);
 			}
 		}
+	}
+
+	@Override
+	public void setErrorMessageDisplayer(IErrorMessageDisplayer displayer) {
+		this.errorMessageDisplayer = displayer;
+	}
+
+	@Override
+	public IErrorMessageDisplayer getErrorMessageDisplayer() {
+		return errorMessageDisplayer;
 	}
 }

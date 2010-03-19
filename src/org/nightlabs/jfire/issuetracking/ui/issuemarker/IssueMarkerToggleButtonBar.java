@@ -87,7 +87,8 @@ implements ISelectionProvider
 		group = null;
 
 		if (useGroup) {
-			group = new Group(this, SWT.NONE + SWT.BORDER); // With or without border, at least on Linux, it looks the same ;-) Marco.
+//			group = new Group(this, SWT.NONE + SWT.BORDER); // With or without border, at least on Linux, it looks the same ;-) Marco.
+			group = new Group(this, SWT.NONE); // But NOT under windows, Daniel
 			group.setLayout(new FillLayout());
 			group.setText("Markers");
 		}

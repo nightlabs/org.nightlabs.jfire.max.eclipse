@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.message.IErrorMessageDisplayer;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
@@ -15,7 +16,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * An interface for all issue link adder things.
- * 
+ *
  * <p>
  * Implementors are advised not to directly implement this interface but instead subclass {@link AbstractIssueLinkAdder}.
  * </p>
@@ -25,17 +26,17 @@ import org.nightlabs.progress.ProgressMonitor;
 public interface IssueLinkAdder extends ISelectionProvider
 {
 	/**
-	 * 
+	 *
 	 * @param handlerFactory
 	 */
 	void init(IssueLinkHandlerFactory handlerFactory);
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	IssueLinkHandlerFactory getIssueLinkHandlerFactory();
-	
+
 	/**
 	 * Create the <tt>Composite</tt> which serves the functionality to add
 	 * a {@link org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer}.
@@ -46,7 +47,7 @@ public interface IssueLinkAdder extends ISelectionProvider
 	Composite createComposite(Composite parent);
 
 	/**
-	 * 
+	 *
 	 * @return The composite of the link adder
 	 */
 	Composite getComposite();
@@ -58,13 +59,13 @@ public interface IssueLinkAdder extends ISelectionProvider
 	void onDispose();
 
 	/**
-	 * 
+	 *
 	 * @param listener
 	 */
 	void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
-	
+
 	/**
-	 * 
+	 *
 	 * @param listener
 	 */
 	void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
@@ -88,9 +89,9 @@ public interface IssueLinkAdder extends ISelectionProvider
 	 * @return the currently selected {@link ObjectID} instances.
 	 */
 	Set<ObjectID> getLinkedObjectIDs();
-	
+
 	/**
-	 * 
+	 *
 	 * @param issue
 	 * @param issueLinkType
 	 * @param monitor
@@ -100,4 +101,19 @@ public interface IssueLinkAdder extends ISelectionProvider
 			Issue issue,
 			IssueLinkType issueLinkType,
 			ProgressMonitor monitor);
+
+	/**
+	 * Sets the (optional) {@link IErrorMessageDisplayer} to be used by this {@link IssueLinkAdder}.
+	 * IMPORTANT: Implementations can use it for displaying messages or just don't do anything with it,
+	 * if its does not fit for the implementation.
+	 *
+	 * @param errorMessageDisplayer the {@link IErrorMessageDisplayer} to display messages
+	 */
+	void setErrorMessageDisplayer(IErrorMessageDisplayer errorMessageDisplayer);
+
+	/**
+	 * Returns the (optional) {@link IErrorMessageDisplayer}
+	 * @return the {@link IErrorMessageDisplayer}.
+	 */
+	IErrorMessageDisplayer getErrorMessageDisplayer();
 }
