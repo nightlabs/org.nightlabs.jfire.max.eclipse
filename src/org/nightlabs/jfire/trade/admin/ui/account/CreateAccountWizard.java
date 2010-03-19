@@ -68,6 +68,18 @@ public class CreateAccountWizard
 extends DynamicPathWizard
 implements INewWizard
 {
+	public static final String[] FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT,
+		AccountType.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_ACCOUNT_TYPE,
+		Account.FETCH_GROUP_CURRENCY,
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_OWNER,
+//		Account.FETCH_GROUP_SUMMARY_ACCOUNTS,
+		Account.FETCH_GROUP_DESCRIPTION,
+//		SummaryAccount.FETCH_GROUP_SUMMED_ACCOUNTS
+	};	
+	
 	private CreateAccountEntryWizardPage createAccountEntryWizardPage;
 
 	public CreateAccountWizard() {
@@ -136,8 +148,9 @@ implements INewWizard
 									getCreateAccountEntryWizardPage().getCurrency());
 						}
 						((I18nTextBuffer)getCreateAccountEntryWizardPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
-						newAccount = AccountDAO.sharedInstance().storeAccount(newAccount, true,
-								AbstractAccountPageController.FETCH_GROUPS,
+						newAccount = AccountDAO.sharedInstance().storeAccount(newAccount, 
+								true,
+								FETCH_GROUPS,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 150));
 						monitor.done();
