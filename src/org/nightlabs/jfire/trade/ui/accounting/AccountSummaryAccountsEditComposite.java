@@ -71,7 +71,7 @@ extends XComposite
 		if (currAccount == null)
 			return;
 
-		Collection<Account> accounts = AccountSearchDialog.searchAccounts(AccountType.ACCOUNT_TYPE_ID_SUMMARY);
+		Collection<Account> accounts = AccountSearchDialog.searchAccounts(getShell(), AccountType.ACCOUNT_TYPE_ID_SUMMARY);
 		for (Iterator<Account> iter = accounts.iterator(); iter.hasNext();) {
 			Account account = iter.next();
 			if (account instanceof SummaryAccount) {
@@ -160,7 +160,8 @@ extends XComposite
 		currAccount = account;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				summaryAccountsTable.setInput(currAccount);
+				if (!summaryAccountsTable.isDisposed())
+					summaryAccountsTable.setInput(currAccount);
 			}
 		});
 	}

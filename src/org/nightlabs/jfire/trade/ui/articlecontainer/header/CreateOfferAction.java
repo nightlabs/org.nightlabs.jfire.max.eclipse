@@ -158,10 +158,11 @@ public class CreateOfferAction extends CreateArticleContainerAction
 
 		public void selectionChanged(IAction action, ISelection selection)
 		{
-			headerTreeView.getHeaderTreeComposite().getCreateOfferAction().calculateEnabled(selection);
-			action.setEnabled(
-					headerTreeView.getHeaderTreeComposite().getCreateOfferAction().isEnabled()
-			);
+			HeaderTreeComposite headerTreeComposite = headerTreeView.getHeaderTreeComposite(); 
+			if (!headerTreeComposite.isDisposed() && headerTreeComposite.getCreateOfferAction() != null) {
+				headerTreeComposite.getCreateOfferAction().calculateEnabled(selection);
+				action.setEnabled(headerTreeComposite.getCreateOfferAction().isEnabled());				
+			}
 		}
 	}
 }

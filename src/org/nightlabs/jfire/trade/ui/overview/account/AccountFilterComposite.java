@@ -216,7 +216,7 @@ public class AccountFilterComposite
 				getQuery().setFieldEnabled(AccountQuery.FieldName.ownerID, active);
 			}
 		});
-		ownerText = new Text(ownerGroup, SWT.READ_ONLY | XComposite.getBorderStyle(ownerGroup));
+		ownerText = new Text(ownerGroup, XComposite.getBorderStyle(ownerGroup));
 		ownerText.setEnabled(false);
 		ownerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ownerBrowseButton = new Button(ownerGroup, SWT.NONE);
@@ -256,7 +256,7 @@ public class AccountFilterComposite
 			}
 		});
 		accountTypeList = new XComboComposite<AccountType>(
-				accountTypeGroup, SWT.READ_ONLY | XComposite.getBorderStyle(accountTypeGroup),
+				accountTypeGroup, XComposite.getBorderStyle(accountTypeGroup) | SWT.READ_ONLY,
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
@@ -271,23 +271,15 @@ public class AccountFilterComposite
 		AccountType dummyAccountType = new AccountType("dummy.b.c", "dummy", false); //$NON-NLS-1$ //$NON-NLS-2$
 		dummyAccountType.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.loadingAccountTypes")); //$NON-NLS-1$
 		accountTypeList.setInput(Collections.singletonList(dummyAccountType));
-//		accountTypeList.addSelectionListener(new SelectionAdapter()
-//		{
-//			@Override
-//			public void widgetSelected(SelectionEvent e)
-//			{
-//				final AccountTypeID selectedAccountTypeID = (AccountTypeID)
-//					JDOHelper.getObjectId(accountTypeList.getSelectedElement());
-//
-//				getQuery().setAccountTypeID(selectedAccountTypeID);
-//			}
-//		});
-		accountTypeList.addSelectionChangedListener(new ISelectionChangedListener() {
+		accountTypeList.addSelectionListener(new SelectionAdapter()
+		{
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				final AccountTypeID selectedAccountTypeID = (AccountTypeID)JDOHelper.getObjectId(accountTypeList.getSelectedElement());
-				getQuery().setAccountTypeID(selectedAccountTypeID);
+			public void widgetSelected(SelectionEvent e)
+			{
+				final AccountTypeID selectedAccountTypeID = (AccountTypeID)
+					JDOHelper.getObjectId(accountTypeList.getSelectedElement());
 
+				getQuery().setAccountTypeID(selectedAccountTypeID);
 			}
 		});
 
@@ -381,9 +373,8 @@ public class AccountFilterComposite
 					changedField.getPropertyName()))
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
-//				maxBalanceEntry.setActive(active);
-				setSearchSectionActive(maxBalanceEntry.getActiveButton(), active);
-//				setSearchSectionActive(active);
+				maxBalanceEntry.setActive(active);
+				setSearchSectionActive(active);
 			}
 			else if (AccountQuery.FieldName.minBalance.equals(changedField.getPropertyName()))
 			{
@@ -396,9 +387,8 @@ public class AccountFilterComposite
 					changedField.getPropertyName()))
 			{
 				boolean active = (Boolean) changedField.getNewValue();
-//				minBalanceEntry.setActive(active);
-				setSearchSectionActive(minBalanceEntry.getActiveButton(), active);
-//				setSearchSectionActive(active);
+				minBalanceEntry.setActive(active);
+				setSearchSectionActive(active);
 			}
 			else if (AccountQuery.FieldName.currencyID.equals(changedField.getPropertyName()))
 			{

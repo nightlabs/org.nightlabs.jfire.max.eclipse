@@ -28,13 +28,15 @@ package org.nightlabs.jfire.trade.ui.accounting;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import javax.jdo.JDOHelper;
+import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -42,58 +44,34 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.SummaryAccount;
+import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
 /**
  * A Table to view the Accounts a SummaryAccount summarys.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  *
  */
 public class SummaryAccountSummedAccountsTable 
 extends AbstractTableComposite<Account> 
-{
-	private static class ContentProvider extends TableContentProvider {
-		private SummaryAccount summaryAccount;
-		private Set<Account> summedAccounts;
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			if (inputElement != summaryAccount)
-				summedAccounts = null;
-
-			if (inputElement instanceof SummaryAccount) {
-				summaryAccount = (SummaryAccount)inputElement;
-				if (summedAccounts == null)
-					summedAccounts = new HashSet<Account>(summaryAccount.getSummedAccounts());
-
-				return getSummedAccounts().toArray();
-			}
-			return null;
-		}
-		
-		public void addAccount(Account account) {
-			summedAccounts.add(account);
-		}
-		
-		public void removeAccount(Account account) {
-			summedAccounts.remove(account);
-		}
-		
-		public Collection<Account> getSummedAccounts() {
-			return summedAccounts;
-		}
-	}
+{	
+	private static class ContentProvider extends ArrayContentProvider {
+	}	
 	
 	private static class LabelProvider extends TableLabelProvider {
 		
@@ -151,18 +129,84 @@ extends AbstractTableComposite<Account>
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 	
-	public void setInput(SummaryAccount summaryAccount) {
-		getTableViewer().setInput(summaryAccount);
-	}
+	private SummaryAccount summaryAccount;
 	
-	public void addAccount(Account account) {
-		((ContentProvider)getTableViewer().getContentProvider()).addAccount(account);
-	}
-	
-	public void removeAccount(Account account) {
-		((ContentProvider)getTableViewer().getContentProvider()).removeAccount(account);
+	public void setInput(SummaryAccount summaryAccount) 
+	{
+		this.summaryAccount = summaryAccount;
+		getTableViewer().setInput(summaryAccount.getSummedAccounts());
 	}
 
+	public void addAccounts(final Collection<Account> accounts) 
+	{
+		Job job = new Job("Load Accounts") 
+		{
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception 
+			{
+				Collection<AnchorID> accountIDs = NLJDOHelper.getObjectIDList(accounts);
+				Collection<Account> accounts = AccountDAO.sharedInstance().getAccounts(accountIDs, 
+						new String[] {FetchPlan.DEFAULT, Account.FETCH_GROUP_SUMMARY_ACCOUNTS, Account.FETCH_GROUP_NAME}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+				for (Account account : accounts) {
+					summaryAccount.addSummedAccount(account);	
+				}	
+				
+				getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						refresh();
+					}
+				});
+				
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.schedule();		
+	}
+	
+	public void addAccount(final Account account) 
+	{
+		addAccounts(Collections.singleton(account));
+	}
+	
+	public void removeAccounts(final Collection<Account> accounts) 
+	{
+		Job job = new Job("Load Accounts") 
+		{
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception 
+			{
+				Collection<AnchorID> accountIDs = NLJDOHelper.getObjectIDList(accounts);
+				Collection<Account> accounts = AccountDAO.sharedInstance().getAccounts(accountIDs, 
+						new String[] {FetchPlan.DEFAULT, Account.FETCH_GROUP_SUMMARY_ACCOUNTS, Account.FETCH_GROUP_NAME}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+				for (Account account : accounts) {
+					summaryAccount.removeSummedAccount(account);	
+				}	
+				
+				getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						refresh();
+					}
+				});
+				
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.schedule();		
+	}
+	
+	public void removeAccount(final Account account) 
+	{
+		removeAccounts(Collections.singleton(account));
+	}
+	
 	/**
 	 * @return The first selected summed Account or null if none selected
 	 */
@@ -189,19 +233,19 @@ extends AbstractTableComposite<Account>
 		return null;
 	}
 	
-	/**
-	 * Returns a Collection of AnchorID that can be passed to
-	 * {@link org.nightlabs.jfire.accounting.AccountingManager#setSummaryAccountSummedAccounts(org.nightlabs.jfire.transfer.id.AnchorID, java.util.Collection)}
-	 * to set the list of summed Accounts for the SummaryAccount set here with {@link #setInput(SummaryAccount)}.
-	 */
-	public Collection<AnchorID> getSummedAccounts() {
-		Collection<Account> summaryAccounts = ((ContentProvider)getTableViewer().getContentProvider()).getSummedAccounts();
-		Collection<AnchorID> result = new HashSet<AnchorID>();
-		for (Iterator<Account> iter = summaryAccounts.iterator(); iter.hasNext();) {
-			Account account = iter.next();
-			result.add((AnchorID)JDOHelper.getObjectId(account));
-		}
-		return result;
-	}
+//	/**
+//	 * Returns a Collection of AnchorID that can be passed to
+//	 * {@link org.nightlabs.jfire.accounting.AccountingManager#setSummaryAccountSummedAccounts(org.nightlabs.jfire.transfer.id.AnchorID, java.util.Collection)}
+//	 * to set the list of summed Accounts for the SummaryAccount set here with {@link #setInput(SummaryAccount)}.
+//	 */
+//	public Collection<AnchorID> getSummedAccounts() {
+//		Collection<Account> summaryAccounts = summedAccounts;
+//		Collection<AnchorID> result = new HashSet<AnchorID>();
+//		for (Iterator<Account> iter = summaryAccounts.iterator(); iter.hasNext();) {
+//			Account account = iter.next();
+//			result.add((AnchorID)JDOHelper.getObjectId(account));
+//		}
+//		return result;
+//	}
 
 }

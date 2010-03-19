@@ -1,30 +1,13 @@
-/**
- *
- */
 package org.nightlabs.jfire.trade.ui.account.editor;
 
-import javax.jdo.FetchPlan;
-
-import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
-import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
-import org.nightlabs.jfire.accounting.AccountType;
-import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
-import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.notification.NotificationEvent;
-import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * Abstract base class for creating account based Page Controllers
@@ -32,33 +15,12 @@ import org.nightlabs.util.Util;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  */
 public abstract class AbstractAccountPageController
-extends EntityEditorPageController
+extends ActiveEntityEditorPageController<Account>
 {
-	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT,
-		Account.FETCH_GROUP_THIS_ACCOUNT,
-		SummaryAccount.FETCH_GROUP_THIS_SUMMARY_ACCOUNT,
-		AccountType.FETCH_GROUP_NAME,
-		LegalEntity.FETCH_GROUP_PERSON,
-		PropertySet.FETCH_GROUP_FULL_DATA
-	};
-
-	private static final long serialVersionUID = -1651161683093714801L;
-
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final Logger logger = Logger.getLogger(AccountGeneralPageController.class);
-
 	/**
 	 * The user id.
 	 */
 	protected AnchorID anchorID;
-
-	/**
-	 * The user editor.
-	 */
-	protected EntityEditor editor;
 
 	/**
 	 * The editor model
@@ -73,30 +35,6 @@ extends EntityEditorPageController
 	{
 		super(editor);
 		this.anchorID = (AnchorID)((JDOObjectEditorInput)editor.getEditorInput()).getJDOObjectID();
-		this.editor = editor;
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Account.class, accountChangedListener);
-	}
-
-	@Override
-	public void dispose()
-	{
-		JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);
-		super.dispose();
-	}
-
-	private NotificationListener accountChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingChangedAccountJob.name")) //$NON-NLS-1$
-	{
-		public void notify(NotificationEvent notificationEvent) {
-			doLoad(getProgressMonitor());
-		}
-	};
-
-	/**
-	 * Get the editor.
-	 * @return the editor
-	 */
-	public EntityEditor getEditor() {
-		return editor;
 	}
 
 	/**
@@ -111,42 +49,60 @@ extends EntityEditorPageController
 	 * Returns the user associated with this controller
 	 */
 	public Account getAccount() {
-		return account;
+//		return account;
+		return getControllerObject();
 	}
 
-	/**
-	 * Load the user data and user groups.
-	 * @param monitor The progress monitor to use.
-	 */
-	public void doLoad(ProgressMonitor monitor)
-	{
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingAccountJob.name"), 4); //$NON-NLS-1$
-		try {
-			if (anchorID != null) {
-				// load user with person data
-				Account account = AccountDAO.sharedInstance().getAccount(
-						anchorID, getFetchGroups(),
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(monitor, 3)
-				);
-				monitor.worked(1);
-				// make a working copy to avoid changing the original
-				this.account = Util.cloneSerializable(account);
-			}
-			monitor.done();
-			fireModifyEvent(null, account);
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			monitor.done();
-		}
+	@Override
+	protected Account retrieveEntity(ProgressMonitor monitor) {
+		return AccountDAO.sharedInstance().getAccount(
+				anchorID, getEntityFetchGroups(),
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
 	}
 
-	/**
-	 * may be overriden if other fetchGroups are needed than the default ones
-	 * @return the fetchGroups to use, for obtaining the account
-	 */
-	protected String[] getFetchGroups() {
-		return FETCH_GROUPS;
+	@Override
+	protected Account storeEntity(Account account, ProgressMonitor monitor) {
+		return AccountDAO.sharedInstance().storeAccount(
+				account, true, getEntityFetchGroups(),
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
 	}
+		
+//	/**
+//	 * Load the user data and user groups.
+//	 * @param monitor The progress monitor to use.
+//	 */
+//	public void doLoad(ProgressMonitor monitor)
+//	{
+//		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingAccountJob.name"), 4); //$NON-NLS-1$
+//		try {
+//			if (anchorID != null) {
+//				// load user with person data
+//				Account account = AccountDAO.sharedInstance().getAccount(
+//						anchorID, getFetchGroups(),
+//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//						new SubProgressMonitor(monitor, 3)
+//				);
+//				monitor.worked(1);
+//				// make a working copy to avoid changing the original
+//				this.account = Util.cloneSerializable(account);
+//			}
+//			monitor.done();
+//			fireModifyEvent(null, account);
+//		} catch(Exception e) {
+//			throw new RuntimeException(e);
+//		} finally {
+//			monitor.done();
+//		}
+//	}
+
+//	/**
+//	 * may be overriden if other fetchGroups are needed than the default ones
+//	 * @return the fetchGroups to use, for obtaining the account
+//	 */
+//	protected String[] getFetchGroups() {
+//		return FETCH_GROUPS;
+//	}
+	
 }

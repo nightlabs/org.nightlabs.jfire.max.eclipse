@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.ui.accounting;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -62,18 +61,31 @@ extends XComposite
 	private IDirtyStateManager dirtyStateManager = null;
 	private boolean showButtons = true;
 	
+//	public void addAccount()
+//	{
+//		if (currSummaryAccount == null)
+//			return;
+//
+//		Collection<Account> accounts = AccountSearchDialog.searchAccounts(getShell(), null); // Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN); // TODO Account: Type?
+//		if (accounts != null && !accounts.isEmpty()) {
+//			for (Iterator<Account> iter = accounts.iterator(); iter.hasNext();) {
+//				Account account = iter.next();
+//				summedAccountsTable.addAccount(account);
+//			}
+//			summedAccountsTable.refresh();
+//			if (dirtyStateManager != null)
+//				dirtyStateManager.markDirty();
+//		}
+//	}
 	public void addAccount()
 	{
 		if (currSummaryAccount == null)
 			return;
 
-		Collection<Account> accounts = AccountSearchDialog.searchAccounts(null); // Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN); // TODO Account: Type?
-		if (accounts != null && !accounts.isEmpty()) {
-			for (Iterator<Account> iter = accounts.iterator(); iter.hasNext();) {
-				Account account = iter.next();
-				summedAccountsTable.addAccount(account);
-			}
-			summedAccountsTable.refresh();
+		Collection<Account> accounts = AccountSearchDialog.searchAccounts(getShell(), null); // Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN); // TODO Account: Type?
+		if (accounts != null && !accounts.isEmpty()) 
+		{
+			summedAccountsTable.addAccounts(accounts);
 			if (dirtyStateManager != null)
 				dirtyStateManager.markDirty();
 		}
@@ -87,14 +99,24 @@ extends XComposite
 		}
 	};
 	
+//	public void removeAccount()
+//	{
+//		if (!summedAccountsTable.getSelectedSummedAccounts().isEmpty()) {
+//			for (Iterator<Account> iter = summedAccountsTable.getSelectedSummedAccounts().iterator(); iter.hasNext();) {
+//				Account account = iter.next();
+//				summedAccountsTable.removeAccount(account);
+//			}
+//			summedAccountsTable.refresh();
+//			if (dirtyStateManager != null)
+//				dirtyStateManager.markDirty();
+//		}
+//	}
 	public void removeAccount()
 	{
-		if (!summedAccountsTable.getSelectedSummedAccounts().isEmpty()) {
-			for (Iterator<Account> iter = summedAccountsTable.getSelectedSummedAccounts().iterator(); iter.hasNext();) {
-				Account account = iter.next();
-				summedAccountsTable.removeAccount(account);
-			}
-			summedAccountsTable.refresh();
+		Collection<Account> summedAccounts = summedAccountsTable.getSelectedSummedAccounts();
+		if (!summedAccounts.isEmpty()) 
+		{
+			summedAccountsTable.removeAccounts(summedAccounts);
 			if (dirtyStateManager != null)
 				dirtyStateManager.markDirty();
 		}

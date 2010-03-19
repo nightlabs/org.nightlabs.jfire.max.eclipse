@@ -237,11 +237,13 @@ public class CreateOrderAction extends CreateArticleContainerAction
 			headerTreeView.getHeaderTreeComposite().getCreateOrderAction().run();
 		}
 
-		public void selectionChanged(IAction action, ISelection selection) {
-			headerTreeView.getHeaderTreeComposite().getCreateOrderAction().calculateEnabled(selection);
-			action.setEnabled(
-					headerTreeView.getHeaderTreeComposite().getCreateOrderAction().isEnabled()
-			);
+		public void selectionChanged(IAction action, ISelection selection) 
+		{
+			HeaderTreeComposite headerTreeComposite = headerTreeView.getHeaderTreeComposite();
+			if (!headerTreeComposite.isDisposed() && headerTreeComposite.getCreateOrderAction() != null) {
+				headerTreeComposite.getCreateOrderAction().calculateEnabled(selection);
+				action.setEnabled(headerTreeComposite.getCreateOrderAction().isEnabled());				
+			}
 		}
 	}
 }

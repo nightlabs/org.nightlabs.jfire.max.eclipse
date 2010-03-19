@@ -34,6 +34,9 @@ import java.util.List;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -41,73 +44,43 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController;
+import org.nightlabs.jfire.trade.ui.account.editor.AccountConfigurationPageController;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
-import org.nightlabs.util.Util;
 
 /**
  * A Table to view the SummaryAccounts of an Account.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  *
  */
 public class AccountSummaryAccountsTable 
 extends AbstractTableComposite<Account> 
-{
-	private class ContentProvider extends TableContentProvider {
-		private Account account;
+{	
+	private class ContentProvider extends ArrayContentProvider {
 		
 		@Override
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Account) {
-				account = (Account)inputElement;
+				Account account = (Account)inputElement;
 				return account.getSummaryAccounts().toArray();
 			}
 			return null;
 		}
-		
-		public void addSummaryAccount(SummaryAccount summaryAccount)
-		{
-			// take summaryAccount form DAO to fetch with the right fetchGroups
-			// and make copy to avoid putting of wrong summaryAccount into cache
-			summaryAccount = (SummaryAccount) AccountDAO.sharedInstance().getAccount(
-					(AnchorID)JDOHelper.getObjectId(summaryAccount),
-					AbstractAccountPageController.FETCH_GROUPS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new NullProgressMonitor());
-			summaryAccount = Util.cloneSerializable(summaryAccount);
-			account.addSummaryAccount(summaryAccount);
-		}
-		
-		public void removeSummaryAccount(SummaryAccount summaryAccount) {
-			// take summaryAccount form DAO to fetch with the right fetchGroups
-			// and make copy to avoid putting of wrong summaryAccount into cache
-			summaryAccount = (SummaryAccount) AccountDAO.sharedInstance().getAccount(
-					(AnchorID)JDOHelper.getObjectId(summaryAccount),
-					AbstractAccountPageController.FETCH_GROUPS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new NullProgressMonitor());
-			summaryAccount = Util.cloneSerializable(summaryAccount);
-			account.removeSummaryAccount(summaryAccount);
-		}
-		
-		public Collection<SummaryAccount> getSummaryAccounts() {
-			return account.getSummaryAccounts();
-		}
-	}
+	}	
 	
 	private class LabelProvider extends TableLabelProvider {
 		@Override
@@ -123,6 +96,11 @@ extends AbstractTableComposite<Account>
 			return null;
 		}
 	}
+	
+	public static final String[] FETCH_GROUPS = AccountConfigurationPageController.FETCH_GROUPS;
+	
+	private Account account;
+	
 	/**
 	 * @param parent
 	 * @param style
@@ -157,19 +135,74 @@ extends AbstractTableComposite<Account>
 	}
 	
 	public void setInput(Account account) {
+		this.account = account;
 		getTableViewer().setInput(account);
 	}
 	
-	public void addSummaryAccount(SummaryAccount summaryAccount) {
-		((ContentProvider)getTableViewer().getContentProvider()).addSummaryAccount(summaryAccount);
-		getTableViewer().refresh();
+	public void addSummaryAccount(final SummaryAccount summaryAccount) {
+		Job job = new Job("Load Summary Account") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception 
+			{
+				// take summaryAccount form DAO to fetch with the right fetchGroups
+				SummaryAccount sumAccount = (SummaryAccount) AccountDAO.sharedInstance().getAccount(
+						(AnchorID)JDOHelper.getObjectId(summaryAccount),
+						FETCH_GROUPS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor);
+				
+				// IMHO not necessary, daniel
+				// and make copy to avoid putting of wrong summaryAccount into cache
+//				summaryAccount = Util.cloneSerializable(summaryAccount);
+				account.addSummaryAccount(sumAccount);
+			
+				getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						getTableViewer().refresh();	
+					}
+				});
+				
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.schedule();
 	}
 	
-	public void removeSummaryAccount(SummaryAccount summaryAccount) {
-		((ContentProvider)getTableViewer().getContentProvider()).removeSummaryAccount(summaryAccount);
-		getTableViewer().refresh();
+	public void removeSummaryAccount(final SummaryAccount summaryAccount) {
+//		((ContentProvider)getTableViewer().getContentProvider()).removeSummaryAccount(summaryAccount);
+//		getTableViewer().refresh();
+		
+		Job job = new Job("Load Summary Account") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception 
+			{
+				// take summaryAccount form DAO to fetch with the right fetchGroups
+				SummaryAccount sumAccount = (SummaryAccount) AccountDAO.sharedInstance().getAccount(
+						(AnchorID)JDOHelper.getObjectId(summaryAccount),
+						FETCH_GROUPS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor);
+				
+				// IMHO not necessary, daniel
+//				summaryAccount = Util.cloneSerializable(summaryAccount);
+				account.removeSummaryAccount(sumAccount);
+			
+				getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						getTableViewer().refresh();	
+					}
+				});
+				
+				return Status.OK_STATUS;
+			}
+		};
+		job.setSystem(true);
+		job.schedule();
 	}
-
+	
 	/**
 	 * @return The first selected SummaryAccount or null if none selected
 	 */
@@ -201,7 +234,7 @@ extends AbstractTableComposite<Account>
 	 * to set the list of SummaryAccounts for the account set here with {@link #setInput(Account)}.
 	 */
 	public Collection<AnchorID> getSummaryAccounts() {
-		Collection<SummaryAccount> summaryAccounts = ((ContentProvider)getTableViewer().getContentProvider()).getSummaryAccounts();
+		Collection<SummaryAccount> summaryAccounts = account.getSummaryAccounts();
 		Collection<AnchorID> result = new HashSet<AnchorID>();
 		for (Iterator<SummaryAccount> iter = summaryAccounts.iterator(); iter.hasNext();) {
 			SummaryAccount summaryAccount = iter.next();

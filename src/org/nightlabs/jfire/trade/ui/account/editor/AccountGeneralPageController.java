@@ -23,13 +23,12 @@
  ******************************************************************************/
 package org.nightlabs.jfire.trade.ui.account.editor;
 
-import org.apache.log4j.Logger;
-import org.eclipse.ui.forms.editor.IFormPage;
+import javax.jdo.FetchPlan;
+
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
-import org.nightlabs.jfire.accounting.dao.AccountDAO;
-import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.jfire.accounting.AccountType;
+import org.nightlabs.jfire.trade.LegalEntity;
 
 /**
  * @author Daniel Mazurek <!-- daniel [AT] nightlabs [DOT] de -->
@@ -37,7 +36,18 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AccountGeneralPageController
 extends AbstractAccountPageController
 {
-	private static final Logger logger = Logger.getLogger(AccountGeneralPageController.class);
+//	private static final Logger logger = Logger.getLogger(AccountGeneralPageController.class);
+	
+	public static final String[] FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT,
+		AccountType.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_ACCOUNT_TYPE,
+		Account.FETCH_GROUP_CURRENCY,
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_OWNER,
+		Account.FETCH_GROUP_DESCRIPTION,
+		LegalEntity.FETCH_GROUP_PERSON,
+	};	
 	
 	/**
 	 * Create an instance of this controller for
@@ -47,24 +57,29 @@ extends AbstractAccountPageController
 		super(editor);
 	}
 
-	/**
-	 * Save the user data.
-	 * @param monitor The progress monitor to use.
-	 */
 	@Override
-	public boolean doSave(ProgressMonitor monitor)
-	{
-		for (IFormPage page : getPages()) {
-			if (page instanceof AccountGeneralPage) {
-				final AccountGeneralPage gp = (AccountGeneralPage) page;
-				Account account = gp.getAccountGeneralSection().getAccountEditorComposite().getAccount();
-				this.account = AccountDAO.sharedInstance().storeAccount(account,
-						true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						monitor);
-				doLoad(new org.nightlabs.progress.NullProgressMonitor());
-				return true;
-			}
-		}
-		return false;
+	protected String[] getEntityFetchGroups() {
+		return FETCH_GROUPS;
 	}
+	
+//	/**
+//	 * Save the user data.
+//	 * @param monitor The progress monitor to use.
+//	 */
+//	@Override
+//	public boolean doSave(ProgressMonitor monitor)
+//	{
+//		for (IFormPage page : getPages()) {
+//			if (page instanceof AccountGeneralPage) {
+//				final AccountGeneralPage gp = (AccountGeneralPage) page;
+//				Account account = gp.getAccountGeneralSection().getAccountEditorComposite().getAccount();
+//				this.account = AccountDAO.sharedInstance().storeAccount(account,
+//						true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//						monitor);
+////				doLoad(new org.nightlabs.progress.NullProgressMonitor());
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }
