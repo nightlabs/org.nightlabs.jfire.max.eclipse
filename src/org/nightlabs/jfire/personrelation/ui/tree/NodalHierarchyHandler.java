@@ -28,7 +28,7 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
  *
  * @author khaireel (at) nightlabs (dot) de
  */
-public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
+public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree extends PersonRelationTree<N>> {
 	private static final Logger logger = Logger.getLogger(NodalHierarchyHandler.class);
 
 	private Map<Integer, Deque<ObjectID>> pathsToExpand_PRID;
@@ -64,9 +64,9 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 
 		// This gives us a higher overall view of ALL nodes that have just been loaded than
 		// the "personRelationTree.getTree().addListener(SWT.SetData, new Listener() {..." method above.
-		personRelationTree.getPersonRelationTreeController().addJDOLazyTreeNodesChangedListener(new JDOLazyTreeNodesChangedListener<ObjectID, Object, PersonRelationTreeNode>() {
+		personRelationTree.getPersonRelationTreeController().addJDOLazyTreeNodesChangedListener(new JDOLazyTreeNodesChangedListener<ObjectID, Object, N>() {
 			@Override
-			public void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent) {
+			public void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, N> changedEvent) {
 				handleOnJDOObjectsChangedEvent(changedEvent);
 			}
 		});
@@ -77,6 +77,7 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 	 * Handles the listener concerning the notification of an SWT-related event.
 	 * Plug this into getPersonRelationTree().getTree().addListener(SWT.SetData, new Listener()...
 	 */
+	@SuppressWarnings("unchecked")
 	public void handleSWTSetDataEvent(Event event) {
 		// Guard #1.
 		if (arePathsToBeExpandedEmpty() || !(event.item instanceof TreeItem))
@@ -88,7 +89,7 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 			return;
 
 		// Guard #3.
-		PersonRelationTreeNode node = (PersonRelationTreeNode) treeItem.getData();
+		N node = (N) treeItem.getData();
 		if (node == null)
 			return;
 
@@ -153,7 +154,8 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 	 * Handles the event upon the notification from a {@link JDOLazyTreeNodesChangedEvent}.
 	 * Plug this into getPersonRelationTree().getPersonRelationTreeController().addJDOLazyTreeNodesChangedListener(new JDOLazyTreeNodesChangedListener<ObjectID, Object, PersonRelationTreeNode>()...
 	 */
-	public void handleOnJDOObjectsChangedEvent(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent) {
+	@SuppressWarnings("unchecked")
+	public void handleOnJDOObjectsChangedEvent(JDOLazyTreeNodesChangedEvent<ObjectID, N> changedEvent) {
 		// Guard #1.
 		if (getNumberOfEmptyPaths() >= 1 || pathsToExpand_PRID == null)
 			return;
@@ -166,7 +168,7 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 		// Current experimental setup:
 		//   A PropertySetID in one of the pathsToExpand is not within the view, and thus was not loaded.
 		//   Find out it's index (position), with respect to its parent.
-		List<PersonRelationTreeNode> loadedTreeNodes = changedEvent.getLoadedTreeNodes();
+		List<N> loadedTreeNodes = changedEvent.getLoadedTreeNodes();
 		if (loadedTreeNodes != null && !loadedTreeNodes.isEmpty()) {
 			if (logger.isDebugEnabled()) {
 				logger.debug(" ----------------->>>> On addJDOLazyTreeNodesChangedListener: [Checking loaded nodes, " + loadedTreeNodes.size() + "]");
@@ -178,11 +180,11 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 			}
 
 			int posIndex = 0;
-			PersonRelationTreeNode parNode = null;
-			for (PersonRelationTreeNode node : loadedTreeNodes) {
+			N parNode = null;
+			for (N node : loadedTreeNodes) {
 				if (node != null) {
 					if (parNode == null)
-						parNode = node.getParent();	// Save parent for later use.
+						parNode = (N) node.getParent();	// Save parent for later use.
 
 					ObjectID nodeObjID = node.getJdoObjectID();
 					boolean isOnNextPath = nextObjectIDsOnPaths.contains(nodeObjID);
@@ -226,7 +228,7 @@ public class NodalHierarchyHandler<PRTree extends PersonRelationTree> {
 						}
 
 						// Force the child to be loaded, and duly have it selected.
-						PersonRelationTreeNode node = (PersonRelationTreeNode) parNode.getChildNodes().get(posIndex);
+						N node = (N) parNode.getChildNodes().get(posIndex);
 						personRelationTree.setSelection(node);
 						ISelection selection = personRelationTree.getTreeViewer().getSelection();
 						personRelationTree.getTreeViewer().setSelection(selection, true);

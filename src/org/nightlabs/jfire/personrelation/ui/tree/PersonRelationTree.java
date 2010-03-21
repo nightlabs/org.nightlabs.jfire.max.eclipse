@@ -47,7 +47,7 @@ import org.nightlabs.util.NLLocale;
  * @author Marco Schulze
  * @author khaireel (at) nightlabs (dot) de
  */
-public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTreeNode>
+public class PersonRelationTree<N extends PersonRelationTreeNode> extends AbstractTreeComposite<N>
 {
 	private static final Logger logger = Logger.getLogger(PersonRelationTree.class);
 
@@ -172,13 +172,14 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			return null;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected int[][] getColumnSpan(Object element) {
 			if (!(element instanceof PersonRelationTreeNode))
 				return null; // null means each real column assigned to one visible column
 //				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
 
-			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
+			N node = (N) element;
 			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
 			if (jdoObject == null) {
@@ -209,6 +210,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected String getColumnText(Object element, int spanColIndex) {
 			if (element == null) {
@@ -225,7 +227,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 				return String.valueOf(element);
 			}
 
-			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
+			N node = (N) element;
 			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
 
@@ -236,6 +238,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			return result;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected Image getColumnImage(Object element, int spanColIndex) {
 			if (element == null)
@@ -244,7 +247,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			if (!(element instanceof PersonRelationTreeNode))
 				return null;
 
-			PersonRelationTreeNode node = (PersonRelationTreeNode) element;
+			N node = (N) element;
 			ObjectID jdoObjectID = node.getJdoObjectID();
 			Object jdoObject = node.getJdoObject();
 			return getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
@@ -300,7 +303,7 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 			throw new IllegalStateException("This PersonRelationTree is already disposed! " + this); //$NON-NLS-1$
 	}
 
-	private PersonRelationTreeController personRelationTreeController;
+	private PersonRelationTreeController<N> personRelationTreeController;
 
 
 	// ------ [Constructors: With options for more control parameters; for collapse-state and for context-menus] --------->>
@@ -392,16 +395,22 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 
 
 
-	protected PersonRelationTreeController createPersonRelationTreeController() {
-		return new PersonRelationTreeController() {
+	protected PersonRelationTreeController<N> createPersonRelationTreeController() {
+		return new PersonRelationTreeController<N>() {
 			@Override
-			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, PersonRelationTreeNode> changedEvent) {
+			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, N> changedEvent) {
 				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected N createNode() {
+				return (N) new PersonRelationTreeNode();
 			}
 		};
 	}
 
-	public PersonRelationTreeController getPersonRelationTreeController() {
+	public PersonRelationTreeController<N> getPersonRelationTreeController() {
 		return personRelationTreeController;
 	}
 
@@ -482,9 +491,9 @@ public class PersonRelationTree extends AbstractTreeComposite<PersonRelationTree
 	// II. Quick debug.
 	public static String showObjectIDs(String preamble, List<? extends ObjectID> objIDs, int modLnCnt) {
 		if (objIDs == null)
-			return "++ " + preamble + " :: NULL";
+			return preamble + " :: NULL";
 
-		String str = "++ " + preamble + " (" + objIDs.size() + ") :: {\n     ";
+		String str = preamble + " (" + objIDs.size() + ") :: {\n     ";
 		int ctr = 0;
 		for (ObjectID objectID : objIDs) {
 			str += "(" + ctr + ")" + showObjectID(objectID) + " ";

@@ -15,7 +15,7 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
  * @author khaireel (at) nightlabs (dot) de
  */
 public class PersonRelationTreeNode
-extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController> {
+extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<PersonRelationTreeNode>> {
 	@Override
 	public PersonRelationTreeNode getParent() {
 		return (PersonRelationTreeNode)super.getParent();
@@ -79,7 +79,8 @@ extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController> {
 	 *
 	 * @return null if the selection does not contain a {@link PersonRelationTreeNode}.
 	 */
-	public static PersonRelationTreeNode getPersonRelationTreeNodeFromSelection(ISelection selection) {
+	@SuppressWarnings("unchecked")
+	public static <N extends PersonRelationTreeNode> N getPersonRelationTreeNodeFromSelection(ISelection selection) {
 		if (selection.isEmpty() || !(selection instanceof IStructuredSelection))
 			return null;
 
@@ -91,6 +92,6 @@ extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController> {
 		if (!(selObject instanceof PersonRelationTreeNode))
 			return null;
 
-		return (PersonRelationTreeNode) selObject;
+		return (N) selObject;
 	}
 }

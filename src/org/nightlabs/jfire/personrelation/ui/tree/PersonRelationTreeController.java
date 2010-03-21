@@ -32,8 +32,8 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
-public class PersonRelationTreeController
-extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNode>
+public abstract class PersonRelationTreeController<N extends PersonRelationTreeNode>
+extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 {
 	private static final Logger logger = Logger.getLogger(PersonRelationTreeController.class);
 
@@ -113,10 +113,11 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 		clear();
 	}
 
-	@Override
-	protected PersonRelationTreeNode createNode() {
-		return new PersonRelationTreeNode();
-	}
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	protected N createNode() {
+//		return (N) new PersonRelationTreeNode();
+//	}
 
 	@Override
 	protected TreeNodeParentResolver createTreeNodeParentResolver() {
@@ -285,7 +286,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 	}
 
 	@Override
-	protected Map<ObjectID, Long> retrieveChildCount(Set<PersonRelationTreeNode> parentNodes, Set<ObjectID> parentIDs, ProgressMonitor monitor) {
+	protected Map<ObjectID, Long> retrieveChildCount(Set<N> parentNodes, Set<ObjectID> parentIDs, ProgressMonitor monitor) {
 		Collection<PropertySetID> rootPersonIDs = this.rootPersonIDs;
 		if (rootPersonIDs == null)
 			return Collections.emptyMap();
@@ -359,8 +360,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 					long personRelationCount = 0;
 
 					// Revised version. We now check our reference to the Set of parentNodes, to make sure we have the correct Node.
-					PersonRelationTreeNode node = null;
-					List<PersonRelationTreeNode> treeNodes = getTreeNodeList(personRelationID);
+					N node = null;
+					List<N> treeNodes = getTreeNodeList(personRelationID);
 					if (treeNodes == null) {
 						// Guard. Revert to the original methods.
 						// But this SHOULD NEVER HAPPEN.
@@ -375,7 +376,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 							node = treeNodes.get(0);
 						else {
 							// If the mapping key for personRelationID returns more than one node, then we essentially need to find the correct one.
-							for (PersonRelationTreeNode treeNode : treeNodes)
+							for (N treeNode : treeNodes)
 								if (parentNodes.contains(treeNode)) {
 									node = treeNode;
 									break;
@@ -429,7 +430,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	@Override
-	protected Collection<ObjectID> retrieveChildObjectIDs(PersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+	protected Collection<ObjectID> retrieveChildObjectIDs(N parentNode, ProgressMonitor monitor) {
 		// The filter: Don't add child if its ID is already listed in the parentNode's path to the root.
 		Collection<PropertySetID> rootPersonIDs = this.rootPersonIDs;
 		if (rootPersonIDs == null)
@@ -489,7 +490,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, PersonRelationTreeNo
 					result.addAll(childObjectIDs);
 			}
 
-			return result;
+			return result; 
 		} finally {
 			monitor.done();
 		}

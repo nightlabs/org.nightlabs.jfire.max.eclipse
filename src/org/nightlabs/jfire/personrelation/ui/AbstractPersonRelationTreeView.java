@@ -24,9 +24,9 @@ import org.nightlabs.notification.NotificationListener;
  *
  * @author khaireel (at) nightlabs (dot) de
  */
-public abstract class AbstractPersonRelationTreeView<PRT extends PersonRelationTree> extends LSDViewPart {
+public abstract class AbstractPersonRelationTreeView<N extends PersonRelationTreeNode, PRTree extends PersonRelationTree<N>> extends LSDViewPart {
 	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
-	private PRT personRelationTree = null;
+	private PRTree personRelationTree = null;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -38,22 +38,22 @@ public abstract class AbstractPersonRelationTreeView<PRT extends PersonRelationT
 	 * Creates a new instance of the PersonRelationTree, and initialises it as completely as possible; i.e. supply the
 	 * delegates it requires.
 	 */
-	protected abstract PRT createAndInitPersonRelationTree(Composite parent);
+	protected abstract PRTree createAndInitPersonRelationTree(Composite parent);
 
 	/**
 	 * Set up the ORDERED set of context-menus into the {@link PersonRelationTree}.
 	 */
-	protected abstract void registerContextMenuContibutions(PRT personRelationTree);
+	protected abstract void registerContextMenuContibutions(PRTree personRelationTree);
 
 	/**
 	 * Initialises all other listeners that the {@link PersonRelationTree} requires for its fundamental operational behaviour.
 	 */
-	protected abstract void initPersonRelationTreeListeners(PRT personRelationTree);
+	protected abstract void initPersonRelationTreeListeners(PRTree personRelationTree);
 
 	/**
 	 * Creates a NotificationListener that defines the behaviour of this View with respect to whatever Perspective.
 	 */
-	protected abstract NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PRT personRelationTree);
+	protected abstract NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PRTree personRelationTree);
 
 	/**
 	 * Given a set of {@link PropertySetID}s, invoke the {@link TradeManagerRemote} to retrieve the respective
@@ -84,7 +84,7 @@ public abstract class AbstractPersonRelationTreeView<PRT extends PersonRelationT
 	/**
 	 * @return the {@link PersonRelationTree} used by this View.
 	 */
-	public PRT getPersonRelationTree() {
+	public PRTree getPersonRelationTree() {
 		return personRelationTree;
 	}
 
