@@ -59,20 +59,21 @@ import org.nightlabs.notification.NotificationListener;
  * @author Marco หงุ่ยตระกูล-Schulze - marco at nightlabs dot de
  * @author khaireel (at) nightlabs (dot) de
  */
-public class PersonRelationIssueTreeView extends AbstractPersonRelationTreeView<PersonRelationTree> {
+public class PersonRelationIssueTreeView extends
+AbstractPersonRelationTreeView<PersonRelationTreeNode, PersonRelationTree<PersonRelationTreeNode>> {
 	private static final Logger logger = Logger.getLogger(PersonRelationIssueTreeView.class);
 	public static final String ID_VIEW = PersonRelationIssueTreeView.class.getName();
 
+	// The currentPersonID that has focus.
 	protected PropertySetID currentPersonID = null;
-
 
 	/**
 	 * Creates a new instance of the PersonRelationTree, and initialises it as completely as possible; i.e. supply the
 	 * delegates it requires.
 	 */
 	@Override
-	protected PersonRelationTree createAndInitPersonRelationTree(Composite parent) {
-		PersonRelationTree personRelationTree = new PersonRelationTree(parent,
+	protected PersonRelationTree<PersonRelationTreeNode> createAndInitPersonRelationTree(Composite parent) {
+		PersonRelationTree<PersonRelationTreeNode> personRelationTree = new PersonRelationTree<PersonRelationTreeNode>(parent,
 				false, // without restoring the tree's collapse state
 				true,  // with context menu(s)
 				true   // with the drill-down adapter.
@@ -91,8 +92,7 @@ public class PersonRelationIssueTreeView extends AbstractPersonRelationTreeView<
 	 * Set up the ORDERED set of context-menus into the {@link PersonRelationTree}.
 	 */
 	@Override
-	protected void registerContextMenuContibutions(PersonRelationTree personRelationTree) {
-		// Set up the ORDERED context-menus.
+	protected void registerContextMenuContibutions(PersonRelationTree<PersonRelationTreeNode> personRelationTree) {
 		personRelationTree.addContextMenuContribution(new SelectBusinessPartnerTreeItemAction("Focus trade on this business partner"));
 		personRelationTree.addContextMenuContribution(this, new CreatePersonRelationAction(), null, "Create new person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreatePersonRelationAction.class));
 		personRelationTree.addContextMenuContribution(this, new DeletePersonRelationAction(), null, "Delete person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeletePersonRelationAction.class));
@@ -105,7 +105,7 @@ public class PersonRelationIssueTreeView extends AbstractPersonRelationTreeView<
 	 * Initialises all other listeners that the {@link PersonRelationTree} requires for its fundamental operational behaviour.
 	 */
 	@Override
-	protected void initPersonRelationTreeListeners(PersonRelationTree personRelationTree) {
+	protected void initPersonRelationTreeListeners(PersonRelationTree<PersonRelationTreeNode> personRelationTree) {
 		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
 		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -149,11 +149,7 @@ public class PersonRelationIssueTreeView extends AbstractPersonRelationTreeView<
 				if (node == null)
 					return;
 
-				PropertySetID propertySetID = node.getPropertySetID();
-				if (propertySetID == null || !propertySetID.equals(currentPersonID))
-					return;
-
-				treeItem.setExpanded(true); // ... phew... bloody lazy tree nodes.....
+				treeItem.setExpanded(node.getParent() == null || node.getParent().getParent() == null); // ... phew... bloody lazy tree nodes.....
 			}
 		});
 	}
@@ -162,7 +158,7 @@ public class PersonRelationIssueTreeView extends AbstractPersonRelationTreeView<
 	 * Creates a NotificationListener that defines the behaviour of this View with respect to whatever Perspective.
 	 */
 	@Override
-	protected NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PersonRelationTree personRelationTree) {
+	protected NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PersonRelationTree<PersonRelationTreeNode> personRelationTree) {
 		final NotificationListener notificationListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 		{
 			public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {

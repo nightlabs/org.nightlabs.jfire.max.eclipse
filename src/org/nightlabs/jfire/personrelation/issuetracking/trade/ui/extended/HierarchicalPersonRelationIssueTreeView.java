@@ -11,8 +11,6 @@ import javax.jdo.JDOHelper;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -36,7 +34,6 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePerspective;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
 /**
@@ -55,7 +52,7 @@ public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssue
 
 	// This handles the system of listeners needed to engage the Lazy-Tree-nodes to perform the
 	// behaviour that automatically expands a given set of hiearchical paths, whenever available.
-	protected NodalHierarchyHandler<PersonRelationTree> nodalHierachyHandler = null;
+	protected NodalHierarchyHandler<PersonRelationTreeNode, PersonRelationTree<PersonRelationTreeNode>> nodalHierachyHandler = null;
 	protected Set<PersonRelationTypeID> allowedRelationTypeIDs;
 
 
@@ -66,15 +63,15 @@ public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssue
 
 		// Initialise a system of listeners for the personRelationTree that will expand it accordingly.
 		// This is expected to be cleaner, more efficient, extendable, and more debug-friendly.
-		nodalHierachyHandler = new NodalHierarchyHandler<PersonRelationTree>(getPersonRelationTree());
+		nodalHierachyHandler = new NodalHierarchyHandler<PersonRelationTreeNode, PersonRelationTree<PersonRelationTreeNode>>(getPersonRelationTree());
 	}
 
 	@Override
-	protected PersonRelationTree createAndInitPersonRelationTree(Composite parent) {
-		PersonRelationTree personRelationTree =  super.createAndInitPersonRelationTree(parent);
+	protected PersonRelationTree<PersonRelationTreeNode> createAndInitPersonRelationTree(Composite parent) {
+		PersonRelationTree<PersonRelationTreeNode> personRelationTree =  super.createAndInitPersonRelationTree(parent);
 
 		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_DATA_FIELDS} );
-		PersonRelationTreeController personRelationTreeController = personRelationTree.getPersonRelationTreeController();
+		PersonRelationTreeController<PersonRelationTreeNode> personRelationTreeController = personRelationTree.getPersonRelationTreeController();
 		personRelationTreeController.setPersonRelationFetchGroups((String[]) fetchGroupPersonRelation);
 
 		// Delegate specialised label providers for this hierarchical view.
@@ -84,37 +81,8 @@ public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssue
 		return personRelationTree;
 	}
 
-	/**
-	 * Initialises all other listeners that the {@link TuckedPersonRelationTree} requires for its fundamental operational behaviour.
-	 */
 	@Override
-	protected void initPersonRelationTreeListeners(PersonRelationTree personRelationTree) {
-		// Notifies other view(s) that may wish to react upon the current selection in the tree, in the TradePlugin.ZONE_SALE.
-		personRelationTree.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection().isEmpty())
-					return;
-
-				Object selectedElement = getPersonRelationTree().getFirstSelectedElement();
-				if (selectedElement instanceof PersonRelationTreeNode) {
-					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
-					if (logger.isInfoEnabled() && node != null) {
-						logger.info(PersonRelationTree.showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
-					}
-
-					if (node != null) {
-						PropertySetID personID = node.getPropertySetID();
-						if (personID != null)
-							SelectionManager.sharedInstance().notify(new NotificationEvent(this, TradePlugin.ZONE_SALE, personID, Person.class));
-					}
-				}
-			}
-		});
-	}
-
-	@Override
-	protected NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PersonRelationTree personRelationTree) {
+	protected NotificationListener createAndRegisterNotificationListenerLegalEntitySelected(PersonRelationTree<PersonRelationTreeNode> personRelationTree) {
 		final NotificationListener notificationListener =  new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.selectLegalEntityJob.title")) //$NON-NLS-1$
 		{
 			public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {

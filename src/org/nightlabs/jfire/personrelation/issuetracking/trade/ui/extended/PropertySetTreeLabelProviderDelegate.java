@@ -120,13 +120,13 @@ public class PropertySetTreeLabelProviderDelegate extends AbstractPersonRelation
 	}
 
 
-	private PersonRelationTreeController personRelationTreeController;
+	private PersonRelationTreeController<PersonRelationTreeNode> personRelationTreeController;
 	private Map<PropertySetID, Image> objectID2Image = new WeakHashMap<PropertySetID, Image>();
 
 	/**
 	 * Creates a new instance of the PropertySetTreeLabelProviderDelegate, with a reference to a valid {@link PersonRelationTreeController}.
 	 */
-	public PropertySetTreeLabelProviderDelegate(PersonRelationTreeController personRelationTreeController) {
+	public PropertySetTreeLabelProviderDelegate(PersonRelationTreeController<PersonRelationTreeNode> personRelationTreeController) {
 		this.personRelationTreeController = personRelationTreeController;
 	}
 
