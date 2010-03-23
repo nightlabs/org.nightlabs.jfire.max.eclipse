@@ -280,10 +280,13 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 	}
 
 
+	/**
+	 * This is the abstract method from the super class, which we don't use in this {@link PersonRelationTreeController}'s implementation.
+	 * Instead, we are in favour of the other method: retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor).
+	 * See comments in the superclass {@link ActiveJDOObjectLazyTreeController}.
+	 */
 	@Override
-	protected Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor) {
-		return null;
-	}
+	protected Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor) { return null; }
 
 	@Override
 	protected Map<ObjectID, Long> retrieveChildCount(Set<N> parentNodes, Set<ObjectID> parentIDs, ProgressMonitor monitor) {
@@ -291,6 +294,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 		if (rootPersonIDs == null)
 			return Collections.emptyMap();
 
+		// [Note #1]: This separates the PropertySetIDs from the PersonRelationIDs.
+		// -----------------------------------------------------------------------------------------------------------|
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), 110); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
@@ -318,89 +323,29 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 			int tixPerson = personIDs != null && !personIDs.isEmpty() ? 100 : 1;
 			int tixRelation = personRelationIDs != null && !personRelationIDs.isEmpty() ? 100 : 1;
-
 			tixPerson = 100 * 100 / Math.max(1, tixPerson + tixRelation);
 			tixRelation = 100 * 100 / Math.max(1, tixPerson + tixRelation);
 
 			monitor.worked(10);
 
-			if (personIDs != null && !personIDs.isEmpty()) {
-				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixPerson);
-				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personIDs.size()); //$NON-NLS-1$
-				for (PropertySetID personID : personIDs) {
-					long personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
-							null, personID, null, new NullProgressMonitor()
-					);
-					result.put(personID, personRelationCount);
-					subMonitor.worked(1);
-				}
-				subMonitor.done();
-			}
+
+
+			// [Note #2]: This handles each separated Set independently.
+			// -----------------------------------------------------------------------------------------------------------|
+			if (personIDs != null && !personIDs.isEmpty())
+				result = retrieveChildCountByPropertySetIDs(result, parentNodes, personIDs, monitor, tixPerson); // Modularised. Since 2010.03.23.
 			else
 				monitor.worked(1);
 
-			if (personRelationIDs != null && !personRelationIDs.isEmpty()) {
-				List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
-						personRelationIDs,
-						new String[] {
-								FetchPlan.DEFAULT,
-								PersonRelation.FETCH_GROUP_TO_ID,
-						},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(monitor, tixRelation / 2)
-				);
-
-				ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tixRelation / 2);
-				subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personRelations.size()); //$NON-NLS-1$
-
-				// In order to count with the filter, where we ensure that none of the unnecessary children should been repeated,
-				// we need to check the IDs for comparison. But we don't need to make the server return us all the filtered IDs. Just to count them, and get the number.
-				for (PersonRelation personRelation : personRelations) {
-					PersonRelationID personRelationID = (PersonRelationID) JDOHelper.getObjectId(personRelation);
-					long personRelationCount = 0;
-
-					// Revised version. We now check our reference to the Set of parentNodes, to make sure we have the correct Node.
-					N node = null;
-					List<N> treeNodes = getTreeNodeList(personRelationID);
-					if (treeNodes == null) {
-						// Guard. Revert to the original methods.
-						// But this SHOULD NEVER HAPPEN.
-						personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
-								null, personRelation.getToID(), null, new SubProgressMonitor(monitor, 80)
-						);
-						result.put(personRelationID, personRelationCount);
-						subMonitor.worked(1);
-					}
-					else {
-						if (treeNodes.size() == 1)
-							node = treeNodes.get(0);
-						else {
-							// If the mapping key for personRelationID returns more than one node, then we essentially need to find the correct one.
-							for (N treeNode : treeNodes)
-								if (parentNodes.contains(treeNode)) {
-									node = treeNode;
-									break;
-								}
-						}
-
-						// -------------------------------------------------------------------------------------------------- ++ ------>>
-						Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(node.getPropertySetIDsToRoot());
-						personRelationCount = PersonRelationDAO.sharedInstance().getFilteredPersonRelationCount(
-								null, personRelation.getToID(), null,
-								null, toPropertySetIDsToExclude, new SubProgressMonitor(monitor, 80)
-						);
-						// -------------------------------------------------------------------------------------------------- ++ ------>>
-
-						result.put(personRelationID, personRelationCount);
-						subMonitor.worked(1);
-					}
-				}
-
-				subMonitor.done();
-			}
+			if (personRelationIDs != null && !personRelationIDs.isEmpty())
+				result = retrieveChildCountByPersonRelationIDs(result, parentNodes, personRelationIDs, monitor, tixRelation); // Modularised. Since 2010.03.23.
 			else
 				monitor.worked(1);
 
+
+
+			// [Note #3]: This handles the other registered delegates.
+			// -----------------------------------------------------------------------------------------------------------|
 			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 				Map<ObjectID, Long> delegateChildCountMap = delegate.retrieveChildCount(parentIDs, new SubProgressMonitor(monitor, 50));
@@ -427,8 +372,101 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 		}
 	}
 
+	/**
+	 * Modularised for extended classes.
+	 * @see PersonRelationTreeController#retrieveChildCount(Set, ProgressMonitor)
+	 */
+	protected Map<ObjectID, Long> retrieveChildCountByPropertySetIDs(Map<ObjectID, Long> result, Set<N> parentNodes, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
+		ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tix);
+		subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personIDs.size()); //$NON-NLS-1$
+		for (PropertySetID personID : personIDs) {
+			long personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
+					null, personID, null, new NullProgressMonitor()
+			);
+			result.put(personID, personRelationCount);
+			subMonitor.worked(1);
+		}
+
+		subMonitor.done();
+		return result;
+	}
+
+	/**
+	 * Modularised for extended classes.
+	 * @see PersonRelationTreeController#retrieveChildCount(Set, ProgressMonitor)
+	 */
+	protected Map<ObjectID, Long> retrieveChildCountByPersonRelationIDs(Map<ObjectID, Long> result, Set<N> parentNodes, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
+		List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
+				personRelationIDs,
+				new String[] {
+						FetchPlan.DEFAULT,
+						PersonRelation.FETCH_GROUP_TO_ID,
+				},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new SubProgressMonitor(monitor, tix / 2)
+		);
+
+		ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tix / 2);
+		subMonitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), personRelations.size()); //$NON-NLS-1$
+
+		// In order to count with the filter, where we ensure that none of the unnecessary children should been repeated,
+		// we need to check the IDs for comparison. But we don't need to make the server return us all the filtered IDs. Just to count them, and get the number.
+		for (PersonRelation personRelation : personRelations) {
+			PersonRelationID personRelationID = (PersonRelationID) JDOHelper.getObjectId(personRelation);
+			long personRelationCount = 0;
+
+			// Revised version. We now check our reference to the Set of parentNodes, to make sure we have the correct Node.
+			N node = null;
+			List<N> treeNodes = getTreeNodeList(personRelationID);
+			if (treeNodes == null) {
+				// Guard. Revert to the original methods.
+				// But this SHOULD NEVER HAPPEN.
+				personRelationCount = PersonRelationDAO.sharedInstance().getPersonRelationCount(
+						null, personRelation.getToID(), null, new SubProgressMonitor(monitor, 80)
+				);
+				result.put(personRelationID, personRelationCount);
+				subMonitor.worked(1);
+			}
+			else {
+				if (treeNodes.size() == 1)
+					node = treeNodes.get(0);
+				else {
+					// If the mapping key for personRelationID returns more than one node, then we essentially need to find the correct one.
+					for (N treeNode : treeNodes)
+						if (parentNodes.contains(treeNode)) {
+							node = treeNode;
+							break;
+						}
+				}
+
+				// -------------------------------------------------------------------------------------------------- ++ ------>>
+				Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(node.getPropertySetIDsToRoot());
+				personRelationCount = PersonRelationDAO.sharedInstance().getFilteredPersonRelationCount(
+						null, personRelation.getToID(), null,
+						null, toPropertySetIDsToExclude, new SubProgressMonitor(monitor, 80)
+				);
+				// -------------------------------------------------------------------------------------------------- ++ ------>>
+
+				result.put(personRelationID, personRelationCount);
+				subMonitor.worked(1);
+			}
+		}
+
+		subMonitor.done();
+		return result;
+	}
+
+
 
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
+	/**
+	 * This is the abstract method from the super class, which we don't use in this {@link PersonRelationTreeController} implementation.
+	 * Instead, we are in favour of the other method: retrieveChildObjectIDs(N parentNode, ProgressMonitor monitor).
+	 * See comments in the superclass {@link ActiveJDOObjectLazyTreeController}.
+	 */
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) { return null; }
+
 	@Override
 	protected Collection<ObjectID> retrieveChildObjectIDs(N parentNode, ProgressMonitor monitor) {
 		// The filter: Don't add child if its ID is already listed in the parentNode's path to the root.
@@ -437,52 +475,23 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 			return Collections.emptyList();
 
 		ObjectID parentID = parentNode.getJdoObjectID();
-		Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
 		Collection<ObjectID> result = new ArrayList<ObjectID>(); // Note: It is from the index position of this Collection that we know the position of the child-nodes.
 		                                                         //       And if we are to impose any ordering of the nodes, this should be the place to affect it. Kai.
 
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildIDs.name"), 100); //$NON-NLS-1$
 		try {
-			if (parentID == null) {
+			// [Note #1]: This handles the retrieval by the instance of the parentID.
+			// -----------------------------------------------------------------------------------------------------------|
+			if (parentID == null)
 				result.addAll(rootPersonIDs);
-			}
-			else if (parentID instanceof PropertySetID) {
-				// -------------------------------------------------------------------------------------------------- ++ ------>>
-				Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
-						null, (PropertySetID)parentID, null,
-						null, toPropertySetIDsToExclude,
-						getPersonRelationComparator(),
-						new SubProgressMonitor(monitor, 80));
-				// -------------------------------------------------------------------------------------------------- ++ ------>>
-
-				result.addAll(filteredPersonRelationIDs);
-			}
-			else if (parentID instanceof PersonRelationID) {
-				Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
-				List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
-						personRelationIDs,
-						new String[] {
-								FetchPlan.DEFAULT,
-								PersonRelation.FETCH_GROUP_TO_ID,
-						},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
-				);
-
-				if (!personRelations.isEmpty()) {
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
-					PersonRelation personRelation = personRelations.iterator().next();
-					Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
-							null, personRelation.getToID(), null,
-							null, toPropertySetIDsToExclude,
-							getPersonRelationComparator(),
-							new SubProgressMonitor(monitor, 80));
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
-
-					result.addAll(filteredPersonRelationIDs);
-				}
-			}
+			else if (parentID instanceof PropertySetID)
+				result.addAll(retrieveChildObjectIDsByPropertySetIDs(parentNode, monitor)); // Modularised. Since 2010.03.23.
+			else if (parentID instanceof PersonRelationID)
+				result.addAll(retrieveChildObjectIDsByPersonRelationIDs(parentNode, monitor)); // Modularised. Since 2010.03.23.
 
 
+			// [Note #2]: This handles the retrievals by the other registered delegates.
+			// -----------------------------------------------------------------------------------------------------------|
 			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new SubProgressMonitor(monitor, 20));
@@ -490,18 +499,62 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 					result.addAll(childObjectIDs);
 			}
 
-			return result; 
+			return result;
 		} finally {
 			monitor.done();
 		}
 	}
 
+	/**
+	 * Modularised for extended classes.
+	 * @see PersonRelationTreeController#retrieveChildObjectIDs(PersonRelationTreeNode, ProgressMonitor)
+	 */
+	protected Collection<ObjectID> retrieveChildObjectIDsByPropertySetIDs(N parentNode, ProgressMonitor monitor) {
+		ObjectID parentID = parentNode.getJdoObjectID();
+		Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
 
-	@Override
-	protected Collection<ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) {
-		// The filter: Don't add child if its ID is already listed in the parentNode's path to the root.
-		// Taken care directly from the other method: retrieveChildObjectIDs(parentNode, monitor).
-		return null;
+		Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
+				null, (PropertySetID)parentID, null,
+				null, toPropertySetIDsToExclude,
+				getPersonRelationComparator(),
+				new SubProgressMonitor(monitor, 80));
+
+		return CollectionUtil.castCollection(filteredPersonRelationIDs);
+	}
+
+	/**
+	 * Modularised for extended classes.
+	 * @see PersonRelationTreeController#retrieveChildObjectIDs(PersonRelationTreeNode, ProgressMonitor)
+	 */
+	protected Collection<ObjectID> retrieveChildObjectIDsByPersonRelationIDs(N parentNode, ProgressMonitor monitor) {
+		Collection<ObjectID> result = new ArrayList<ObjectID>();
+		ObjectID parentID = parentNode.getJdoObjectID();
+		Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
+
+		Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
+		List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
+				personRelationIDs,
+				new String[] {
+						FetchPlan.DEFAULT,
+						PersonRelation.FETCH_GROUP_TO_ID,
+				},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+		);
+
+		if (!personRelations.isEmpty()) {
+			// -------------------------------------------------------------------------------------------------- ++ ------>>
+			PersonRelation personRelation = personRelations.iterator().next();
+			Collection<PersonRelationID> filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
+					null, personRelation.getToID(), null,
+					null, toPropertySetIDsToExclude,
+					getPersonRelationComparator(),
+					new SubProgressMonitor(monitor, 80));
+			// -------------------------------------------------------------------------------------------------- ++ ------>>
+
+			result.addAll(filteredPersonRelationIDs);
+		}
+
+		return result;
 	}
 
 
