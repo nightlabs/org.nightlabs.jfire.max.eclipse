@@ -1,9 +1,5 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
-import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;

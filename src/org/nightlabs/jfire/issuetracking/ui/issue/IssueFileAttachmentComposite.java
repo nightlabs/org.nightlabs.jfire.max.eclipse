@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentUtil;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
@@ -61,8 +62,7 @@ extends XComposite
 			public String getText(Object element) {
 				if (element instanceof IssueFileAttachment) {
 					IssueFileAttachment issueFileAttachment = (IssueFileAttachment)element;
-					return String.format("%s (%s)", issueFileAttachment.getFileName(), issueFileAttachment.getFileSize() + " bytes"); //$NON-NLS-1$ //$NON-NLS-2$
-					// return ((IssueFileAttachment)element).getFileName();
+					return String.format("%s (%s)", issueFileAttachment.getFileName(), IssueFileAttachmentUtil.getFileSizeString(issueFileAttachment)); //$NON-NLS-1$
 				}
 
 				return null;
@@ -74,10 +74,14 @@ extends XComposite
 
 		if (style == IssueFileAttachmentCompositeStyle.withAddRemoveButton) {
 			XComposite buttonComposite = new  XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-
+			GridData gd = new GridData(GridData.FILL_VERTICAL);
+//			gd.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
+			buttonComposite.setLayoutData(gd);
 			Button addButton = new Button(buttonComposite, SWT.PUSH);
 			addButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.button.addFile.text")); //$NON-NLS-1$
-			addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
+			addButton.setLayoutData(gd);
 			addButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent event)
@@ -105,7 +109,9 @@ extends XComposite
 
 			Button removeButton = new Button(buttonComposite, SWT.PUSH);
 			removeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.button.removeFile.text")); //$NON-NLS-1$
-			removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
+			removeButton.setLayoutData(gd);
 			removeButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
@@ -114,7 +120,7 @@ extends XComposite
 				}
 			});
 
-			buttonComposite.setLayoutData(new GridData());
+//			buttonComposite.setLayoutData(new GridData());
 		}
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;

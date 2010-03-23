@@ -23,7 +23,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -44,7 +43,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
-public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSection {
+public class IssueFileAttachmentSection
+extends AbstractIssueEditorGeneralSection
+{
 	private IssueFileAttachmentTable issueFileAttachmentTable;
 
 	private DownloadFileToolbarAction downloadFileToolbarAction;
@@ -56,13 +57,12 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	 */
 	public IssueFileAttachmentSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getClient().getGridLayout().numColumns = 2;
-		getClient().getGridLayout().makeColumnsEqualWidth = false;
+//		getClient().getGridLayout().numColumns = 2;
+//		getClient().getGridLayout().makeColumnsEqualWidth = false;
 		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.section.text")); //$NON-NLS-1$
 
-		Label fileLabel = new Label(getClient(), SWT.NONE);
-		fileLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.label.file.text")); //$NON-NLS-1$
-
+//		Label fileLabel = new Label(getClient(), SWT.NONE);
+//		fileLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.label.file.text")); //$NON-NLS-1$
 
 		// Top set of Action buttons.
 		downloadFileToolbarAction = new DownloadFileToolbarAction();

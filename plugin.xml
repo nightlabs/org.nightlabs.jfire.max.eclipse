@@ -58,13 +58,13 @@
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="false"
-            icon="icons/IssuePerspective.16x16.png"
+            icon="icons/overview/IssueEntryListEditor.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor.name"/>
         <editor
             class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="false"
-            icon="icons/IssuePerspective.16x16.png"
+            icon="icons/issue/editor/IssueEditor.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" name="%org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor.name"/>
         <editor
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
@@ -237,7 +237,7 @@
             categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
-            icon="icons/IssuePerspective.16x16.png"
+            icon="icons/overview/IssueEntryListFactory.16x16.png"
             index="0" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview.project"
