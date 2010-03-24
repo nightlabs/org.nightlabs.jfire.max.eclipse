@@ -34,7 +34,6 @@ import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEventHandler;
-import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeContentProvider;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
@@ -53,10 +52,10 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 	private Collection<PropertySetID> personIDs;
 
-	protected static class PersonRelationTreeContentProvider
-	extends JDOObjectLazyTreeContentProvider<ObjectID, Object, PersonRelationTreeNode>
-	{
-	}
+//	protected static class PersonRelationTreeContentProvider
+//	extends JDOObjectLazyTreeContentProvider<ObjectID, Object, PersonRelationTreeNode>
+//	{
+//	} // <-- This has been externalised because of generics; i.e. we need to use JDOObjectLazyTreeContentProvider<ObjectID, Object, N>.
 
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
@@ -435,7 +434,7 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
-		treeViewer.setContentProvider(new PersonRelationTreeContentProvider());
+		treeViewer.setContentProvider(new PersonRelationTreeContentProvider<N>());
 		treeViewer.setLabelProvider(new PersonRelationTreeLabelProvider(treeViewer));
 	}
 

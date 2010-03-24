@@ -15,7 +15,7 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
  * @author khaireel (at) nightlabs (dot) de
  */
 public class PersonRelationTreeNode
-extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<PersonRelationTreeNode>> {
+extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>> {
 	@Override
 	public PersonRelationTreeNode getParent() {
 		return (PersonRelationTreeNode)super.getParent();
