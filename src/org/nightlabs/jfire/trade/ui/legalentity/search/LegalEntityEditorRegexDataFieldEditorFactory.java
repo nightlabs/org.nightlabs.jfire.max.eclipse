@@ -6,7 +6,7 @@ import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.datafield.RegexDataField;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 
-public class LegalEntityEditorPersonRegexDataFieldEditorFactory
+public class LegalEntityEditorRegexDataFieldEditorFactory
 extends AbstractDataFieldEditorFactory<RegexDataField>
 {
 	/**
@@ -17,17 +17,13 @@ extends AbstractDataFieldEditorFactory<RegexDataField>
 		return new String[] {LegalEntityPersonEditor.EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY};
 	}
 
-//	@Override
-//	public Class getDataFieldEditorClass() {
-//		return LegalEntityFieldBasedRegexDataFieldEditor.class;
-//	}
-
 	@Override
 	public Class<RegexDataField> getPropDataFieldType() {
 		return RegexDataField.class;
 	}
+
 	@Override
 	public DataFieldEditor<RegexDataField> createPropDataFieldEditor(IStruct struct, RegexDataField data) {
-		return new LegalEntityFieldBasedRegexDataFieldEditor(struct, data);
+		return new LegalEntityEditorRegexDataFieldEditor(struct, data);
 	}
 }

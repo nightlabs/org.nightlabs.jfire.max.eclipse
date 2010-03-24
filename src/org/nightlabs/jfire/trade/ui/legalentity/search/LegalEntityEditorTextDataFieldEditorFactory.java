@@ -36,7 +36,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class LegalEntityEditorPersonDataFieldEditorFactory
+public class LegalEntityEditorTextDataFieldEditorFactory
 extends AbstractDataFieldEditorFactory<TextDataField> {
 
 	/**
@@ -47,11 +47,6 @@ extends AbstractDataFieldEditorFactory<TextDataField> {
 		return new String[] {LegalEntityPersonEditor.EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY};
 	}
 
-//	@Override
-//	public Class<? extends DataFieldEditor<TextDataField>> getDataFieldEditorClass() {
-//		return LegalEntityFieldBasedTextDataFieldEditor.class;
-//	}
-
 	@Override
 	public Class<TextDataField> getPropDataFieldType() {
 		return TextDataField.class;
@@ -59,6 +54,6 @@ extends AbstractDataFieldEditorFactory<TextDataField> {
 
 	@Override
 	public DataFieldEditor<TextDataField> createPropDataFieldEditor(IStruct struct, TextDataField data) {
-		return new LegalEntityFieldBasedTextDataFieldEditor(struct, data);
+		return new LegalEntityEditorTextDataFieldEditor(struct, data);
 	}
 }

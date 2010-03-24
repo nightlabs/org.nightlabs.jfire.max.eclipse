@@ -24,8 +24,23 @@
     <extension-point id="articleContainerEditorPageFactory" name="ArticleContainerEditorPageFactory extension-point" schema="schema/articleContainerEditorPageFactory.exsd"/>
     <extension-point id="articleContainerPrinterFactory" name="articleContainerPrinterFactory" schema="schema/articleContainerPrinterFactory.exsd"/>
     <extension point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
-        <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonDataFieldEditorFactory"/>
-        <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonRegexDataFieldEditorFactory"/>
+        <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorTextDataFieldEditorFactory"/>
+        <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorRegexDataFieldEditorFactory"/>
+		<propDataFieldEditorFactory
+              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPhoneNumberDataFieldEditorFactory">
+        </propDataFieldEditorFactory>
+        <propDataFieldEditorFactory
+              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorSelectionDataFieldEditorFactory">
+        </propDataFieldEditorFactory>
+        <propDataFieldEditorFactory
+              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorI18nTextDataFieldEditorFactory">
+        </propDataFieldEditorFactory>
+        <propDataFieldEditorFactory
+              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorNumberDataFieldEditorFactory">
+        </propDataFieldEditorFactory>
+        <propDataFieldEditorFactory
+              class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorDateDataFieldEditorFactory">
+        </propDataFieldEditorFactory>        
     </extension>
     <extension name="TradeViews" point="org.eclipse.ui.views">
         <category id="org.nightlabs.jfire.trade.ui.TradeCategory" name="%TradeCategory.name"/>

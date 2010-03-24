@@ -26,11 +26,19 @@
 
 package org.nightlabs.jfire.trade.ui.legalentity.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,6 +53,9 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
+import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorFactoryRegistry;
+import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorNotFoundException;
+import org.nightlabs.jfire.base.ui.prop.structedit.StructBlockNode;
 import org.nightlabs.jfire.base.ui.prop.structedit.StructFieldNode;
 import org.nightlabs.jfire.base.ui.prop.structedit.StructTreeComposite;
 import org.nightlabs.jfire.organisation.Organisation;
@@ -53,6 +64,7 @@ import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
+import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -127,7 +139,18 @@ extends AbstractUserConfigModulePreferencePage
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				structFieldTable.removeSelected();
+				if (structFieldTable.getSelectionCount() > 1) {
+					List<String> selectedElements = new ArrayList<String>(structFieldTable.getSelectedElements());
+					List<String> selectedElementsTmp = new ArrayList<String>();
+					for (String selectedElement : selectedElements) {
+						selectedElementsTmp.add(selectedElement);
+						structFieldTable.setSelection(selectedElementsTmp);
+						structFieldTable.removeSelected();	// Only applicable in the case one item is selected only.
+						selectedElementsTmp.clear();
+					}
+				} else {
+					structFieldTable.removeSelected();
+				}
 				structFieldTable.refresh();
 				setConfigChanged(true);
 			}
@@ -263,10 +286,53 @@ extends AbstractUserConfigModulePreferencePage
 				public void selectionChanged(SelectionChangedEvent arg0) {
 					StructFieldNode node = treeComposite.getStructFieldNode();
 					selectedStructField = node != null ? node.getField() : null;
-					setOKButtonEnabled(
-							selectedStructField != null &&
-							!(structFieldTable.getStructFields().contains(selectedStructField.getStructFieldIDObj().toString()))
-						);
+					if (selectedStructField != null) {
+						boolean alreadyContained = (structFieldTable.getStructFields().contains(selectedStructField.getStructFieldIDObj().toString()));
+						if (alreadyContained) {
+							setMessage(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.message.alreadyDisplayed"), IMessageProvider.INFORMATION); //$NON-NLS-1$
+						}
+						boolean editorAvailable = true;
+						try {
+							DataFieldEditorFactoryRegistry.sharedInstance().getEditorFactory(
+									LegalEntityPersonEditor.EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY,
+									selectedStructField.getDataFieldClass());
+						} catch (DataFieldEditorNotFoundException e) {
+							editorAvailable = false;
+							setMessage(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.message.noVisualizationAvailable"), IMessageProvider.ERROR); //$NON-NLS-1$
+						}
+						boolean enabled = !alreadyContained && editorAvailable;
+						if (enabled) {
+							setMessage(null);
+						}
+						setOKButtonEnabled(enabled);
+					}
+				}
+			});
+			treeComposite.addDoubleClickListener(new IDoubleClickListener() {
+				@Override
+				public void doubleClick(DoubleClickEvent arg0) {
+					if (treeComposite.getSelection() instanceof ITreeSelection) {
+						ITreeSelection selection = (ITreeSelection) treeComposite.getSelection();
+						if (selection.getFirstElement() instanceof StructFieldNode) {
+							StructFieldNode node = (StructFieldNode) selection.getFirstElement();
+							selectedStructField = node != null ? node.getField() : null;
+							if (selectedStructField != null && !(structFieldTable.getStructFields().contains(
+									selectedStructField.getStructFieldIDObj().toString()))) {
+								okPressed();
+							}
+						}
+						if (selection.getFirstElement() instanceof StructBlockNode) {
+							StructBlockNode node = (StructBlockNode) selection.getFirstElement();
+							if (treeComposite.getTreeViewer().getExpandedState(node)) {
+								// TODO In the case a node is already expanded when opening this dialog it collapses
+								// AND expands again when trying to collapse it. After a while of repeating this step
+								// it finally remains in collapsed state.
+								treeComposite.getTreeViewer().collapseToLevel(node, TreeViewer.ALL_LEVELS);
+							} else {
+								treeComposite.getTreeViewer().expandToLevel(node, TreeViewer.ALL_LEVELS);
+							}
+						}
+					}
 				}
 			});
 			return super.createDialogArea(parent);
