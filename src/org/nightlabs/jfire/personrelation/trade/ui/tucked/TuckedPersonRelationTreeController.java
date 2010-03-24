@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,12 +13,13 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.PersonRelationManagerRemote.TuckedQueryCount;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
-import org.nightlabs.jfire.personrelation.ui.tree.IPersonRelationTreeControllerDelegate;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -32,6 +34,8 @@ import org.nightlabs.util.CollectionUtil;
  * @author khaireel (at) nightlabs (dot) de
  */
 public class TuckedPersonRelationTreeController extends PersonRelationTreeController<TuckedPersonRelationTreeNode> {
+	private static final Logger logger = Logger.getLogger(TuckedPersonRelationTreeController.class);
+
 	// A reference to the 'tucked'-path(s) handled by this controller.
 	private List<Deque<ObjectID>>  tuckedPRIDPaths = null; // <-- mixed PropertySetID & PersonRelationID.
 	private List<Deque<ObjectID>>  tuckedPSIDPaths = null; // <-- PropertySetID only.
@@ -55,6 +59,9 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	@Override
 	protected Map<ObjectID, Long> retrieveChildCountByPropertySetIDs
 	(Map<ObjectID, Long> result, Set<TuckedPersonRelationTreeNode> parentNodes, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
+		if (logger.isDebugEnabled())
+			logger.debug("@retrieve..ChildCount..By<<PropertySetID>>s");
+
 		ProgressMonitor subMonitor = new SubProgressMonitor(monitor, tix);
 		subMonitor.beginTask("Retrieving child count...", personIDs.size());
 
@@ -77,6 +84,8 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			}
 			// -------------------------------------------------------------------------------------------------- ++ ------>>
 
+			if (logger.isDebugEnabled())
+				logger.debug("  -- --> personID: " + PersonRelationTree.showObjectID(personID) + ", personRelationCount: " + personRelationCount);
 
 			result.put(personID, personRelationCount);
 			subMonitor.worked(1);
@@ -89,12 +98,12 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	@Override
 	protected Map<ObjectID, Long> retrieveChildCountByPersonRelationIDs
 	(Map<ObjectID, Long> result, Set<TuckedPersonRelationTreeNode> parentNodes, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
+		if (logger.isDebugEnabled())
+			logger.debug("@retrieve..ChildCount..By<<PersonRelationID>>s");
+
 		List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
 				personRelationIDs,
-				new String[] {
-						FetchPlan.DEFAULT,
-						PersonRelation.FETCH_GROUP_TO_ID,
-				},
+				new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new SubProgressMonitor(monitor, tix / 2)
 		);
@@ -107,7 +116,9 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		for (PersonRelation personRelation : personRelations) {
 			long personRelationCount = 0;
 			PersonRelationID personRelationID = (PersonRelationID) JDOHelper.getObjectId(personRelation);
-			System.err.println("BLAAAHHHHHHHHHHHHHHHH: " + PersonRelationTree.showObjectID(personRelationID));
+
+			if (logger.isDebugEnabled())
+				logger.debug("  -- --> personRelationID (OUTER): " + PersonRelationTree.showObjectID(personRelationID));
 
 			// Also, based on the tucked-path of PersonRelationIDs, we determine the next node on the path.
 			PropertySetID nextIDOnPath = getNextObjectIDOnPath(personRelationID);
@@ -137,8 +148,6 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 						}
 				}
 
-				System.err.println("BLAAAHHHHHHHHHHHHHHHH: " + PersonRelationTree.showObjectID(personRelationID));
-
 				// -------------------------------------------------------------------------------------------------- ++ ------>>
 				Set<PropertySetID> toPropertySetIDsToInclude = CollectionUtil.createHashSet(nextIDOnPath);
 				personRelationCount = PersonRelationDAO.sharedInstance().getInclusiveFilteredPersonRelationCount(
@@ -152,8 +161,11 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 						null, toPropertySetIDsToExclude, new SubProgressMonitor(monitor, 80)
 				);
 
-				node.setActualChildCount(personRelationID, actualPersonRelationCount);
+//				node.setChildCountByObjectID(personRelationID, actualPersonRelationCount);
 				// -------------------------------------------------------------------------------------------------- ++ ------>>
+
+				if (logger.isDebugEnabled())
+					logger.debug("  -- --> personRelationID (INNER): " + PersonRelationTree.showObjectID(personRelationID) + ", personRelationCount: " + personRelationCount);
 
 				result.put(personRelationID, personRelationCount);
 				subMonitor.worked(1);
@@ -165,104 +177,90 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	}
 
 
+
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	@Override
-	protected Collection<ObjectID> retrieveChildObjectIDs(TuckedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
-		// If no tucked paths, this should act normally. For now. FIXME.
-		if (tuckedPRIDPaths == null || tuckedPRIDPaths.isEmpty())
-			return super.retrieveChildObjectIDs(parentNode, monitor);
-
-		// The filter: Don't add child if its ID is already listed in the parentNode's path to the root.
-		Collection<PropertySetID> rootPersonIDs = getRootPersonIDs();
-		if (rootPersonIDs == null)
-			return Collections.emptyList();
+	protected Collection<ObjectID> retrieveChildObjectIDsByPropertySetIDs(TuckedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+		if (logger.isDebugEnabled())
+			logger.debug("@retrieveChildObjectIDsBy((PropertySetID))s: " + PersonRelationTree.showObjectID(parentNode.getJdoObjectID()));
 
 		ObjectID parentID = parentNode.getJdoObjectID();
 		PropertySetID nextIDOnPath = getNextObjectIDOnPath(parentID);
+		Collection<ObjectID> result = new ArrayList<ObjectID>();
 
-		Set<PropertySetID> toPropertySetIDsToExclude = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
-		Collection<ObjectID> result = new ArrayList<ObjectID>(); // Note: It is from the index position of this Collection that we know the position of the child-nodes.
-		                                                         //       And if we are to impose any ordering of the nodes, this should be the place to affect it. Kai.
+		if (nextIDOnPath != null) {
+			Collection<PersonRelationID> filteredPersonRelationIDs = null;
+			filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getInclusiveFilteredPersonRelationIDs(
+					null, (PropertySetID)parentID, null,
+					null, CollectionUtil.createHashSet(nextIDOnPath),
+					getPersonRelationComparator(),
+					new SubProgressMonitor(monitor, 80));
 
-		monitor.beginTask("Retrieving children...", 100);
-		try {
-			if (parentID == null) {
-				result.addAll(rootPersonIDs);
-			}
-			else if (parentID instanceof PropertySetID) {
-				Collection<PersonRelationID> filteredPersonRelationIDs = null;
-				// -------------------------------------------------------------------------------------------------- ++ ------>> TODO Deal with root nodes.
-				if (nextIDOnPath == null) { // Should not happen.
-					filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
-							null, (PropertySetID)parentID, null,
-							null, toPropertySetIDsToExclude,
-							getPersonRelationComparator(),
-							new SubProgressMonitor(monitor, 80));
-				}
-				// -------------------------------------------------------------------------------------------------- ++ ------>>
-				else {
-					filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getInclusiveFilteredPersonRelationIDs(
-							null, (PropertySetID)parentID, null,
-							null, CollectionUtil.createHashSet(nextIDOnPath),
-							getPersonRelationComparator(),
-							new SubProgressMonitor(monitor, 80));
-				}
-				// -------------------------------------------------------------------------------------------------- ++ ------>>
-
+			if (filteredPersonRelationIDs != null)
 				result.addAll(filteredPersonRelationIDs);
-			}
-			else if (parentID instanceof PersonRelationID) {
-				Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
-				List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
-						personRelationIDs,
-						new String[] {
-								FetchPlan.DEFAULT,
-								PersonRelation.FETCH_GROUP_TO_ID,
-						},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
-				);
 
-				if (!personRelations.isEmpty()) {
-					Collection<PersonRelationID> filteredPersonRelationIDs = null;
-					PersonRelation personRelation = personRelations.iterator().next();
+			// TODO Consider: This gets the tucked-node and actual-node counts. Should we do this elsewhere instead?
+			Set<PropertySetID> propertySetIDsToRoot = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
+			TuckedQueryCount tqCount = PersonRelationDAO.sharedInstance().getTuckedPersonRelationCount(
+					null,(PropertySetID) parentID, propertySetIDsToRoot, CollectionUtil.createHashSet(nextIDOnPath),
+					new SubProgressMonitor(monitor, 20));
 
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
-					if (nextIDOnPath == null) { // <-- This should not happen!
-						filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getFilteredPersonRelationIDs(
-								null, personRelation.getToID(), null,
-								null, toPropertySetIDsToExclude,
-								getPersonRelationComparator(),
-								new SubProgressMonitor(monitor, 80));
-					}
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
-					else {
-						filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getInclusiveFilteredPersonRelationIDs(
-								null, personRelation.getToID(), null,
-								null, CollectionUtil.createHashSet(nextIDOnPath),
-								getPersonRelationComparator(),
-								new SubProgressMonitor(monitor, 80));
-					}
-					// -------------------------------------------------------------------------------------------------- ++ ------>>
-
-					result.addAll(filteredPersonRelationIDs);
-				}
-			}
-
-
-			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
-			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
-				Collection<? extends ObjectID> childObjectIDs = delegate.retrieveChildObjectIDs(parentID, new SubProgressMonitor(monitor, 20));
-				if (childObjectIDs != null)
-					result.addAll(childObjectIDs);
-			}
-
-			return result;
-		} finally {
-			monitor.done();
+			parentNode.setActualChildCountByObjectID(parentID, tqCount.actualChildCount);
+			parentNode.setTuckedChildCountByObjectID(parentID, tqCount.tuckedChildCount);
+			if (logger.isDebugEnabled())
+				logger.debug(parentNode.toDebugString());
 		}
+
+		return result;
 	}
 
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
+
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDsByPersonRelationIDs(TuckedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+		if (logger.isDebugEnabled())
+			logger.debug("@retrieveChildObjectIDsBy((PersonRelationID))s: " + PersonRelationTree.showObjectID(parentNode.getJdoObjectID()));
+
+		ObjectID parentID = parentNode.getJdoObjectID();
+		PropertySetID nextIDOnPath = getNextObjectIDOnPath(parentID);
+		Collection<PersonRelationID> personRelationIDs = Collections.singleton((PersonRelationID)parentID);
+		Collection<ObjectID> result = new ArrayList<ObjectID>();
+
+		List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
+				personRelationIDs,
+				new String[] { FetchPlan.DEFAULT, PersonRelation.FETCH_GROUP_TO_ID },
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20)
+		);
+
+		if (!personRelations.isEmpty()) {
+			Collection<PersonRelationID> filteredPersonRelationIDs = null;
+			PersonRelation personRelation = personRelations.iterator().next();
+
+			if (nextIDOnPath != null) {
+				filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getInclusiveFilteredPersonRelationIDs(
+						null, personRelation.getToID(), null,
+						null, CollectionUtil.createHashSet(nextIDOnPath),
+						getPersonRelationComparator(),
+						new SubProgressMonitor(monitor, 80));
+
+
+				// TODO Consider: This gets the tucked-node and actual-node counts. Should we do this elsewhere instead?
+				Set<PropertySetID> propertySetIDsToRoot = CollectionUtil.createHashSetFromCollection(parentNode.getPropertySetIDsToRoot());
+				TuckedQueryCount tqCount = PersonRelationDAO.sharedInstance().getTuckedPersonRelationCount(
+						null, parentNode.getPropertySetID(), propertySetIDsToRoot, CollectionUtil.createHashSet(nextIDOnPath),
+						new SubProgressMonitor(monitor, 80));
+
+				parentNode.setActualChildCountByObjectID(parentID, tqCount.actualChildCount);
+				parentNode.setTuckedChildCountByObjectID(parentID, tqCount.tuckedChildCount);
+				if (logger.isDebugEnabled())
+					logger.debug(parentNode.toDebugString());
+			}
+
+			if (filteredPersonRelationIDs != null)
+				result.addAll(filteredPersonRelationIDs);
+		}
+
+		return result;
+	}
 
 
 
@@ -281,6 +279,23 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			iterPSID.next();
 			if (iterPRID.next().equals(currentPRID))
 				return (PropertySetID) (iterPSID.hasNext() ? iterPSID.next() : null);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @return the sub-path of the tuckedPRIDpath, up to and inclusive of the given currentID.
+	 * Returns null if the given currentID is not found in any of the known tuckedPRIDpaths.
+	 */
+	protected Deque<ObjectID> getSubPathUpUntilCurrentID(ObjectID currentID) {
+		Deque<ObjectID> tuckedPRIDPath = tuckedPRIDPaths.get(0); // } <-- From assumption 1. TODO Lift assumption 1 for all cases.
+
+		Deque<ObjectID> subPath = new LinkedList<ObjectID>();
+		for (ObjectID objectID : tuckedPRIDPath) {
+			subPath.add(objectID);
+			if (objectID.equals(currentID))
+				return subPath;
 		}
 
 		return null;
