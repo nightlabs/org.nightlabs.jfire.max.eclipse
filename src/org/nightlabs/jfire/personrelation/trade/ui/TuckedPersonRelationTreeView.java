@@ -86,7 +86,7 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 	protected TuckedPersonRelationTree createAndInitPersonRelationTree(Composite parent) {
 		TuckedPersonRelationTree personRelationTree = new TuckedPersonRelationTree(parent,
 				false, // without restoring the tree's collapse state
-				true,  // with context menu(s)
+				false, // without default context menu(s)
 				false  // without the drill-down adapter.
 			);
 

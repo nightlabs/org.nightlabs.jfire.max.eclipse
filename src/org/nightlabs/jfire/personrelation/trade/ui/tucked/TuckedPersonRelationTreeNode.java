@@ -4,7 +4,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
@@ -20,8 +19,6 @@ import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
  * @author khaireel (at) nightlabs (dot) de
  */
 public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
-	private static final Logger logger = Logger.getLogger(TuckedPersonRelationTreeNode.class);
-
 	// The tuckedPath of ObjectIDs represented by this tuckedNode.
 	private Deque<ObjectID> tuckedPath = null; // <-- mixed PropertySetID & PersonRelationID.
 
@@ -69,6 +66,8 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 	}
 
 
+	private boolean isTuckedDetachedStatus = false;
+	protected void setTuckedDetachedStatus(boolean isTuckedDetachedStatus) { this.isTuckedDetachedStatus = isTuckedDetachedStatus; }
 
 	/**
 	 * Sets the actual child-count for the tuckedNode representing the given objectID.
@@ -105,6 +104,14 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		objectID2tuckedStatus.put(objectID, tuckStatus);
 		return true;
 	}
+	
+	/**
+	 * Each (collective) TuckedNode is governed by the last element in the tucked-path. More...
+	 * @return the tucked status of the entire node.
+	 */
+	public boolean isNodeTucked() {
+		return objectID2tuckedStatus.get(getJdoObjectID());
+	}
 
 	/**
 	 * Shows the childCounts and statuses to each element in the tuckedPath represented by this node.
@@ -114,6 +121,7 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		String str = "\n" + this.getClass().getSimpleName() + "@" + PersonRelationTree.showObjectID(getJdoObjectID());
 //		for (ObjectID objectID : tuckedPath) {
 		ObjectID objectID = getJdoObjectID();
+		if (objectID2tuckedChildCount.get(objectID) == null) return str;
 			str += "\n  " + PersonRelationTree.showObjectID(objectID) + ": [" + objectID2tuckedChildCount.get(objectID) + " (of ";
 			str += objectID2actualChildCount.get(objectID) + ")], [status: \"" + (objectID2tuckedStatus.get(objectID) ? "tucked" : "UN-tucked") + "\"]";
 //		}
@@ -123,7 +131,27 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 
 
 
-
+	/**
+	 * @return the "tucked" information status of this node, used for display with an appropriate label provider.
+	 */
+	public String getTuckedInfoStatus(ObjectID objectID) {
+		// This TuckedNode should behave like a normal PersonRelationTreeNode if it has been "tucked-detached".
+		if (isTuckedDetachedStatus)
+			return "";
+		
+		Boolean tuckStatus = objectID2tuckedStatus.get(objectID);
+		if (tuckStatus == null)
+			return "";
+		
+		if (tuckStatus) {
+			long actualChildCount = objectID2actualChildCount.get(objectID);
+			if (actualChildCount != -1)
+				return String.format("... (+ %s tucked element(s))", actualChildCount-objectID2tuckedChildCount.get(objectID));
+		}
+		
+		return "";
+	}
+	
 
 	// ------- FARK-Tests ---------------------------------------------------------------------------------------||----->>
 	protected String tuckedPathOfDisplayNames = null;

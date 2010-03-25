@@ -40,6 +40,31 @@ public class TuckedPropertySetTreeLabelProviderDelegate extends AbstractPersonRe
 
 	@Override
 	public String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
+		if (jdoObject != null && spanColIndex == 0) {
+			// 1. Display the usual content of the node represented by the given jdoObjectID.
+			// 2. Also display the "tucked" information of this node, whenever the information becomes available.
+			
+			// From 1.
+			String defaultText = ((Person) jdoObject).getDisplayName();
+			
+			// From 2.
+			// Cautiously work to access the data of the LAZY tree.
+			// See notes on progress-steps.
+			// Lazy-progress: Step 1.
+			List<TuckedPersonRelationTreeNode> treeNodeList = personRelationTreeController.getTreeNodeList(jdoObjectID);
+			if (treeNodeList == null || treeNodeList.isEmpty())
+				return defaultText;
+			
+			// Lazy progress: Step 2.
+			TuckedPersonRelationTreeNode tuckedNode = treeNodeList.get(0);
+			if (tuckedNode == null)
+				return defaultText;
+			
+			// Now we can append the "tucked" information of the node. 
+			// TODO Figure out some sort of standard.
+			return String.format("%s %s", defaultText, tuckedNode.getTuckedInfoStatus(jdoObjectID));
+		}
+		
 		return null; // Let the default LabelProvider in the PersonRelationTree handle this.
 	}
 

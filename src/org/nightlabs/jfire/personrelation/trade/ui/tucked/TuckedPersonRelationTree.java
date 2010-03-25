@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.jdo.ObjectID;
@@ -27,6 +28,14 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 	 */
 	public TuckedPersonRelationTree(Composite parent, boolean isRestoreCollapseState, boolean isCreateContextMenu, boolean isMenuWithDrillDownAdapter) {
 		super(parent, isRestoreCollapseState, isCreateContextMenu, isMenuWithDrillDownAdapter);
+	}
+	
+	
+	// TESTs... for dynamic context-menus.
+	// Contents in the menu is directly dependent on the node.
+	// Should take control away from the super-class's menu-manager.
+	protected void setDynamicContextMenu() {
+		Control control = getTreeViewer().getControl();
 	}
 
 	@Override

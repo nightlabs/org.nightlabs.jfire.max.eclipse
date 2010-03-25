@@ -7,6 +7,7 @@ import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
@@ -49,47 +50,49 @@ public class TuckedPersonRelationTreeLabelProviderDelegate extends AbstractPerso
 
 	@Override
 	public String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
-		// ------- FARK-Tests ---------------------------------------------------------------------------------------||----->>
-		// Goal: Show the 'tucked' path.
-		//       1. Start with current TuckedNode. Display the internal path from root to the current child.
+		if (jdoObject != null && spanColIndex == 0) {
+			// 1. Display the usual content of the node represented by the given jdoObjectID.
+			// 2. Also display the "tucked" information of this node, whenever the information becomes available.
+			
+			// From 1.
+			String defaultText = getDefaultJDOObjectText((PersonRelation) jdoObject);
+			
+			// From 2.
+			// Cautiously work to access the data of the LAZY tree.
+			// See notes on progress-steps.
+			// Lazy-progress: Step 1.
+			List<TuckedPersonRelationTreeNode> treeNodeList = personRelationTreeController.getTreeNodeList(jdoObjectID);
+			if (treeNodeList == null || treeNodeList.isEmpty())
+				return defaultText;
+			
+			// Lazy progress: Step 2.
+			TuckedPersonRelationTreeNode tuckedNode = treeNodeList.get(0);
+			if (tuckedNode == null)
+				return defaultText;
+			
+			// Now we can append the "tucked" information of the node. 
+			// TODO Figure out some sort of standard.
+			return String.format("%s %s", defaultText, tuckedNode.getTuckedInfoStatus(jdoObjectID));
+		}
 
-		// Cautiously work to access the data of the LAZY tree.
-		// See notes on progress-steps.
-		// Lazy-progress: Step 1.
-		List<TuckedPersonRelationTreeNode> treeNodeList = personRelationTreeController.getTreeNodeList(jdoObjectID);
-		if (treeNodeList == null || treeNodeList.isEmpty())
-			return null;
+		return null; // Let the default LabelProvider in the PersonRelationTree handle this.
+	}
+	
+	private String getDefaultJDOObjectText(PersonRelation personRelation) {
+		String personRelationTypeID = personRelation.getPersonRelationType().getPersonRelationTypeID();
 
-		// Lazy progress: Step 2.
-		TuckedPersonRelationTreeNode tuckedNode = treeNodeList.get(0);
-		if (tuckedNode == null)
-			return null;
+		// Display the city field for companyGroup and subsidiary relations, if available.
+		Person person = personRelation.getTo();
+		if (personRelationTypeID.equals(PersonRelationType.PredefinedRelationTypes.companyGroup.personRelationTypeID)
+				|| personRelationTypeID.equals(PersonRelationType.PredefinedRelationTypes.subsidiary.personRelationTypeID)) {
 
-		// Ok. Work it!
-		return tuckedNode.getTuckedPathOfDisplayNames();
-		// ------- FARK-Tests ---------------------------------------------------------------------------------------||----->>
+			String cityField = getFieldInfo(person, PersonStruct.POSTADDRESS_CITY);
+			if (cityField != null && !cityField.isEmpty()) cityField = String.format(", (%s)", cityField);
 
+			return String.format("%s%s", person.getDisplayName(), cityField);
+		}
 
-
-//		if (jdoObject != null && spanColIndex == 0) {
-//			PersonRelation personRelation = (PersonRelation) jdoObject;
-//			String personRelationTypeID = personRelation.getPersonRelationType().getPersonRelationTypeID();
-//
-//			// Display the city field for companyGroup and subsidiary relations, if available.
-//			Person person = personRelation.getTo();
-//			if (personRelationTypeID.equals(PersonRelationType.PredefinedRelationTypes.companyGroup.personRelationTypeID)
-//					|| personRelationTypeID.equals(PersonRelationType.PredefinedRelationTypes.subsidiary.personRelationTypeID)) {
-//
-//				String cityField = getFieldInfo(person, PersonStruct.POSTADDRESS_CITY);
-//				if (cityField != null && !cityField.isEmpty()) cityField = String.format(", (%s)", cityField);
-//
-//				return String.format("%s%s", person.getDisplayName(), cityField);
-//			}
-//
-//			return person.getDisplayName();
-//		}
-//
-//		return null; // Let the default LabelProvider in the PersonRelationTree handle this.
+		return person.getDisplayName();
 	}
 
 	@Override
