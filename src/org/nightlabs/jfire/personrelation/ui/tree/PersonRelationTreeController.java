@@ -302,7 +302,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 			Set<PersonRelationID> personRelationIDs = null;
 
 			Map<ObjectID, Long> result = new HashMap<ObjectID, Long>(parentIDs.size());
-
+			
 			for (ObjectID objectID : parentIDs) {
 				if (objectID == null) {
 					result.put(objectID, new Long(rootPersonIDs.size()));
@@ -395,7 +395,11 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 	 * Modularised for extended classes.
 	 * @see PersonRelationTreeController#retrieveChildCount(Set, ProgressMonitor)
 	 */
-	protected Map<ObjectID, Long> retrieveChildCountByPersonRelationIDs(Map<ObjectID, Long> result, Set<N> parentNodes, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
+	protected Map<ObjectID, Long> retrieveChildCountByPersonRelationIDs
+	(Map<ObjectID, Long> result, Set<N> parentNodes, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
+		// Note: The set of personRelationIDs should be enough to process whatever information is required, but if further node-related information
+		//       is required, based on the personRelationIDs, then the reference to that node should already be available in the given set of parentNodes.
+		//       Though it must be noted that the order of appearances in the two Sets may not necessarily be in sync.
 		List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
 				personRelationIDs,
 				new String[] {
