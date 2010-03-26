@@ -31,6 +31,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 
 /**
  * Abstract implementation of an Editor that can be used as
@@ -43,7 +44,7 @@ import org.eclipse.ui.part.EditorPart;
  */
 public abstract class AbstractReportViewerEditor
 extends EditorPart
-implements ReportViewerEditor
+implements ReportViewerEditor, ICloseOnLogoutEditorPart
 {
 	
 	private ReportViewerEditorInput viewerInput;
