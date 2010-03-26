@@ -78,6 +78,9 @@ public class TuckedPersonRelationTreeLabelProviderDelegate extends AbstractPerso
 		return null; // Let the default LabelProvider in the PersonRelationTree handle this.
 	}
 	
+	/**
+	 * The default text to appear in the node, when the node is not tucked.
+	 */
 	private String getDefaultJDOObjectText(PersonRelation personRelation) {
 		String personRelationTypeID = personRelation.getPersonRelationType().getPersonRelationTypeID();
 
@@ -91,10 +94,30 @@ public class TuckedPersonRelationTreeLabelProviderDelegate extends AbstractPerso
 
 			return String.format("%s%s", person.getDisplayName(), cityField);
 		}
+		else if (personRelationTypeID.equals(PersonRelationType.PredefinedRelationTypes.employed.personRelationTypeID)
+				|| personRelationTypeID.equals(PersonRelationType.PredefinedRelationTypes.employing.personRelationTypeID)) {
+
+				// Display this person-customer field as: <Title> <Salutation> Vorname, Name (Role)
+				// Fetch info.
+				String firstNameField = getFieldInfo(person, PersonStruct.PERSONALDATA_FIRSTNAME);
+				String nameField = getFieldInfo(person, PersonStruct.PERSONALDATA_NAME);
+				String titleField = getFieldInfo(person, PersonStruct.PERSONALDATA_TITLE);
+				String salutationField = getFieldInfo(person, PersonStruct.PERSONALDATA_SALUTATION);
+				String companyField = getFieldInfo(person, PersonStruct.PERSONALDATA_COMPANY);
+
+				// Process info.
+				String personNameField = String.format("%s %s", firstNameField, nameField); //$NON-NLS-1$
+				if (!titleField.isEmpty())      personNameField = String.format("%2$s %1$s", personNameField, titleField); //$NON-NLS-1$
+				if (!salutationField.isEmpty()) personNameField = String.format("%2$s %1$s", personNameField, salutationField); //$NON-NLS-1$
+				if (!companyField.isEmpty())    personNameField = String.format("%s: %s", companyField, personNameField); //$NON-NLS-1$
+
+				return personNameField;
+			}
 
 		return person.getDisplayName();
 	}
-
+	
+	
 	@Override
 	public Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
 		if (jdoObject != null && spanColIndex == 0) {

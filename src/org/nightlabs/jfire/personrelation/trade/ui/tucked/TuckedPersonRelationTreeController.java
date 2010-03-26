@@ -55,6 +55,13 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	}
 
 
+	@Override
+	public long getNodeCount(TuckedPersonRelationTreeNode parent) {
+		if (parent != null && parent.isNodeSet())
+			return parent.getChildNodeCount();
+		
+		return super.getNodeCount(parent);
+	}
 	
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	// Retrieving ObjectIDs of the children of a given parentNode. 
@@ -135,13 +142,13 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 
 			tuckedNode.setActualChildCountByObjectID(personRelationID, tqCount.actualChildCount);
 			tuckedNode.setTuckedChildCountByObjectID(personRelationID, tqCount.tuckedChildCount);
-			tuckedNode.setTuckedDetachedStatus(nextIDOnPath == null);
+			tuckedNode.setTuckedNodeStatus(nextIDOnPath == null ? TuckedNodeStatus.UNTUCKED : TuckedNodeStatus.TUCKED);
 			if (logger.isDebugEnabled())
 				logger.debug("*** " + tuckedNode.toDebugString());
 			
 			
 			// See notes on setting the childCount for a TuckedNode.
-			long childCount = nextIDOnPath == null || !tuckedNode.isNodeTucked() ? tqCount.actualChildCount-tqCount.tuckedChildCount : tqCount.tuckedChildCount;
+			long childCount = nextIDOnPath == null || tuckedNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED) ? tqCount.tuckedChildCount : tqCount.actualChildCount-tqCount.tuckedChildCount;
 
 			result.put(personRelationID, childCount);
 			subMonitor.worked(1);
@@ -195,6 +202,8 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 
 			parentNode.setActualChildCountByObjectID(parentID, tqCount.actualChildCount);
 			parentNode.setTuckedChildCountByObjectID(parentID, tqCount.tuckedChildCount);
+			parentNode.setTuckedNodeStatus(nextIDOnPath == null ? TuckedNodeStatus.UNTUCKED : TuckedNodeStatus.TUCKED);
+			
 			if (logger.isDebugEnabled())
 				logger.debug(parentNode.toDebugString());
 		}
@@ -243,7 +252,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 
 				parentNode.setActualChildCountByObjectID(parentID, tqCount.actualChildCount);
 				parentNode.setTuckedChildCountByObjectID(parentID, tqCount.tuckedChildCount);
-				parentNode.setTuckedDetachedStatus(nextIDOnPath == null);
+				parentNode.setTuckedNodeStatus(nextIDOnPath == null ? TuckedNodeStatus.UNTUCKED : TuckedNodeStatus.TUCKED);
 				
 				if (logger.isDebugEnabled())
 					logger.debug(parentNode.toDebugString());

@@ -86,12 +86,11 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 	protected TuckedPersonRelationTree createAndInitPersonRelationTree(Composite parent) {
 		TuckedPersonRelationTree personRelationTree = new TuckedPersonRelationTree(parent,
 				false, // without restoring the tree's collapse state
-				false, // without default context menu(s)
 				false  // without the drill-down adapter.
 			);
 
 		// Require additional fetch group(s) when dealing with the label providers related to the tree.
-		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_DATA_FIELDS} );
+		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_FULL_DATA} );
 		PersonRelationTreeController<TuckedPersonRelationTreeNode> personRelationTreeController = personRelationTree.getPersonRelationTreeController();
 		personRelationTreeController.setPersonRelationFetchGroups((String[]) fetchGroupPersonRelation);
 
