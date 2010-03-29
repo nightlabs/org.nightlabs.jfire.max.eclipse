@@ -2,16 +2,12 @@ package org.nightlabs.jfire.personrelation.ui.tree;
 
 import java.util.Collection;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -22,25 +18,17 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IViewActionDelegate;
-import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
-import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEventHandler;
-import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.personrelation.PersonRelation;
-import org.nightlabs.jfire.personrelation.id.PersonRelationID;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationPlugin;
 import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.id.PropertySetID;
-import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze
@@ -52,244 +40,29 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 	private Collection<PropertySetID> personIDs;
 
-//	protected static class PersonRelationTreeContentProvider
-//	extends JDOObjectLazyTreeContentProvider<ObjectID, Object, PersonRelationTreeNode>
-//	{
-//	} // <-- This has been externalised because of generics; i.e. we need to use JDOObjectLazyTreeContentProvider<ObjectID, Object, N>.
-
-	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
-	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
-
+	// Note: (since 2010.03.28)
+	// The entire PersonRelationTreeLabelProvider has been upgraded to a become fully qualified class, along with its delegates.
+	// This should allow us to extend the class further in order to give more control in manipulating the Graphics Control found in 
+	// the super class ColumnSpanLabelProvider.
+	private PersonRelationTreeLabelProvider<N> personRelationTreeLabelProvider = null;
+	protected PersonRelationTreeLabelProvider<N> createPersonRelationTreeLabelProvider(TreeViewer treeViewer) {
+		// We supply the default PersonRelationTreeProvider here. Override it for more specificity.
+		return new PersonRelationTreeLabelProvider<N>(treeViewer);
+	}
+	
 	public void addPersonRelationTreeLabelProviderDelegate(IPersonRelationTreeLabelProviderDelegate delegate)
 	{
-		Class<? extends ObjectID> objectIDClass = delegate.getJDOObjectIDClass();
-		Class<?> objectClass = delegate.getJDOObjectClass();
-		jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.put(objectIDClass, delegate);
-		jdoObjectClass2PersonRelationTreeLabelProviderDelegate.put(objectClass, delegate);
-
-		if (logger.isTraceEnabled())
-			logger.trace("addPersonRelationTreeLabelProviderDelegate: added " + delegate + " for objectClass " + (objectClass == null ? null : objectClass.getName()) + " and objectIDClass " + (objectIDClass == null ? null : objectIDClass.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if (personRelationTreeLabelProvider != null)
+			personRelationTreeLabelProvider.addPersonRelationTreeLabelProviderDelegate(delegate);
+		
+		// else we should throw something...?
 	}
 
 	protected Set<IPersonRelationTreeLabelProviderDelegate> getAllPersonRelationTreeLabelProviderDelegates()
 	{
-		Set<IPersonRelationTreeLabelProviderDelegate> result = new HashSet<IPersonRelationTreeLabelProviderDelegate>();
-		result.addAll(jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.values());
-		result.addAll(jdoObjectClass2PersonRelationTreeLabelProviderDelegate.values());
-		return result;
+		return personRelationTreeLabelProvider == null ? null : personRelationTreeLabelProvider.getAllPersonRelationTreeLabelProviderDelegates();
 	}
 
-	protected class PersonRelationTreeLabelProvider extends ColumnSpanLabelProvider
-	{
-		private final Logger logger = Logger.getLogger(PersonRelationTreeLabelProvider.class);
-
-		public PersonRelationTreeLabelProvider(ColumnViewer columnViewer) {
-			super(columnViewer);
-		}
-
-		private String languageID = NLLocale.getDefault().getLanguage();
-
-		protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
-			if (jdoObject == null) {
-				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
-				if (delegate != null) {
-					String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
-					if (result != null)
-						return result;
-				}
-
-				if (jdoObjectID instanceof PropertySetID) {
-					PropertySetID personID = (PropertySetID) jdoObjectID;
-
-					switch (spanColIndex) {
-						case 0:
-							return personID.organisationID + '/' + personID.propertySetID;
-						default:
-							break;
-					}
-				}
-				else if (jdoObjectID instanceof PersonRelationID) {
-					PersonRelationID personRelationID = (PersonRelationID) jdoObjectID;
-
-					switch (spanColIndex) {
-						case 0:
-							return personRelationID.organisationID + '/' + personRelationID.personRelationID;
-						default:
-							break;
-					}
-				}
-				else {
-					switch (spanColIndex) {
-						case 0:
-							return String.valueOf(jdoObjectID);
-						default:
-							break;
-					}
-				}
-			}
-			else {
-				// We check for the delegate first in order to allow overriding the defaults following below. Marco.
-				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
-				if (delegate != null) {
-					String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
-					if (result != null)
-						return result;
-				}
-
-				if (jdoObject instanceof Person) {
-					Person person = (Person) jdoObject;
-
-					switch (spanColIndex) {
-						case 0:
-							return person.getDisplayName(); // I have encountered cases where the displayName is not set; eg. when the check-box to auto-generate displayName is not selected. Any forthcoming solutions? Kai
-						default:
-							break;
-					}
-				}
-				else if (jdoObject instanceof PersonRelation) {
-					PersonRelation personRelation = (PersonRelation) jdoObject;
-
-					switch (spanColIndex) {
-						case 0:
-							return personRelation.getPersonRelationType().getName().getText(languageID);
-						case 1:
-							return personRelation.getTo().getDisplayName();
-						default:
-							break;
-					}
-				}
-				else {
-					switch (spanColIndex) {
-						case 0:
-							return String.valueOf(jdoObject);
-						default:
-							break;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		protected int[][] getColumnSpan(Object element) {
-			if (!(element instanceof PersonRelationTreeNode))
-				return null; // null means each real column assigned to one visible column
-//				return new int[][] { {0}, {1}, {2}, {3}, {4}, {5} };
-
-			N node = (N) element;
-			ObjectID jdoObjectID = node.getJdoObjectID();
-			Object jdoObject = node.getJdoObject();
-			if (jdoObject == null) {
-				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
-				if (delegate != null) {
-					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
-					if (result != null)
-						return result;
-				}
-
-				return new int[][] { {0, 1} };
-			}
-			else {
-				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
-				if (delegate != null) {
-					int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
-					if (result != null)
-						return result;
-				}
-
-				if (jdoObject instanceof Person)
-					return new int[][] { {0, 1} };
-
-				if (jdoObject instanceof PersonRelation)
-					return null; // null means each real column assigned to one visible column
-
-				return null; // null means each real column assigned to one visible column
-			}
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		protected String getColumnText(Object element, int spanColIndex) {
-			if (element == null) {
-				if (logger.isDebugEnabled())
-					logger.debug("getColumnText: element is null => returning null."); //$NON-NLS-1$
-
-				return null;
-			}
-
-			if (!(element instanceof PersonRelationTreeNode)) {
-				if (logger.isDebugEnabled())
-					logger.debug("getColumnText: element is not a PersonRelationTreeNode (but a " + element.getClass().getName() + ") => returning element.toString()."); //$NON-NLS-1$ //$NON-NLS-2$
-
-				return String.valueOf(element);
-			}
-
-			N node = (N) element;
-			ObjectID jdoObjectID = node.getJdoObjectID();
-			Object jdoObject = node.getJdoObject();
-
-			String result = getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
-			if (logger.isDebugEnabled())
-				logger.debug("getColumnText: oid=" + jdoObjectID + " o=" +jdoObject+ " => returning: " + result); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-			return result;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		protected Image getColumnImage(Object element, int spanColIndex) {
-			if (element == null)
-				return null;
-
-			if (!(element instanceof PersonRelationTreeNode))
-				return null;
-
-			N node = (N) element;
-			ObjectID jdoObjectID = node.getJdoObjectID();
-			Object jdoObject = node.getJdoObject();
-			return getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
-		}
-
-		protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex)
-		{
-			if (jdoObject == null) {
-				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
-				if (delegate != null) {
-					Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
-					if (result != null)
-						return result;
-				}
-			}
-			else {
-				IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
-				if (delegate != null) {
-					Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
-					if (result != null)
-						return result;
-				}
-			}
-
-			if (jdoObject instanceof Person) {
-				return spanColIndex == 0
-						? SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, jdoObject.getClass().getSimpleName())
-						: null;
-			}
-
-			if (jdoObject instanceof PersonRelation) {
-				if (spanColIndex == 0) {
-					String suffix = jdoObject.getClass().getSimpleName();
-					return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, suffix);
-				}
-				else
-					return null;
-			}
-
-			return null;
-		}
-
-	}
 
 	private void assertSWTThread()
 	{
@@ -434,8 +207,10 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
+		personRelationTreeLabelProvider = createPersonRelationTreeLabelProvider(treeViewer);
+		
 		treeViewer.setContentProvider(new PersonRelationTreeContentProvider<N>());
-		treeViewer.setLabelProvider(new PersonRelationTreeLabelProvider(treeViewer));
+		treeViewer.setLabelProvider(personRelationTreeLabelProvider);
 	}
 
 	public void setInputPersonIDs(Collection<PropertySetID> personIDs, PropertySetID source)
