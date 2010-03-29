@@ -36,7 +36,6 @@ import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeView;
 import org.nightlabs.jfire.personrelation.ui.tree.NodalHierarchyHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
-import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
@@ -122,9 +121,11 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 					return;
 
 				Object selectedElement = getPersonRelationTree().getFirstSelectedElement();
-				if (selectedElement instanceof PersonRelationTreeNode) {
-					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
+				if (selectedElement instanceof TuckedPersonRelationTreeNode) {
+					TuckedPersonRelationTreeNode node = (TuckedPersonRelationTreeNode) selectedElement;
 					if (logger.isInfoEnabled() && node != null) {
+						logger.debug(":: Click: " + node.toDebugString());
+						
 						String str = "\n" + PersonRelationTree.showObjectIDs("PS-IDs to root", node.getPropertySetIDsToRoot(), 10);
 						str += "\n" + PersonRelationTree.showObjectIDs("PR-IDs to root", node.getJDOObjectIDsToRoot(), 10);
 						logger.info(str);

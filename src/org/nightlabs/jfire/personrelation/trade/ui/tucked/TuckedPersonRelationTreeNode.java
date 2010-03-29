@@ -2,10 +2,14 @@ package org.nightlabs.jfire.personrelation.trade.ui.tucked;
 
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeNode;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 
 /**
@@ -28,7 +32,11 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 
 	// Keeps track of the tuckStatus for each of the ObjectID in the tuckedPath.
 	private Map<ObjectID, TuckedNodeStatus> objectID2tuckedStatus = new HashMap<ObjectID, TuckedNodeStatus>();
-
+	
+	
+	private boolean isPartOfTuckedPath = false;
+	public boolean isNodePartOfTuckedPath() { return isPartOfTuckedPath; }
+	
 
 	@Override
 	public void setJdoObjectID(ObjectID jdoObjectID) {
@@ -46,6 +54,53 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		return objectID2tuckedStatus.get(getJdoObjectID()).equals(TuckedNodeStatus.TUCKED) ? objectID2tuckedChildCount.get(getJdoObjectID()) : objectID2actualChildCount.get(getJdoObjectID());
 	}
 	
+	
+	// When we UNTUCK a node, we load the rest of its children. Then if we decide to TUCK it back, we dont want to have
+	// to delete them away, since we may UNTUCK them at a later time. So, in that case, we keep them here in loadedTuckedChildren. Like an internal-nodal-cache.
+	private Deque<TuckedPersonRelationTreeNode> loadedTuckedChildren = null; //new LinkedList<TuckedPersonRelationTreeNode>();
+	protected Deque<TuckedPersonRelationTreeNode> getLoadedTuckedChildren() { return loadedTuckedChildren; }
+	
+	/**
+	 * @return true if we have successfully kept the loaded-tucked-child.
+	 */
+	protected boolean storeLoadedTuckChild(TuckedPersonRelationTreeNode loadedChildNode) {
+		if (loadedTuckedChildren == null)
+			loadedTuckedChildren = new LinkedList<TuckedPersonRelationTreeNode>();
+		
+		if (loadedTuckedChildren.contains(loadedChildNode))
+			return false;
+		
+		
+		return loadedTuckedChildren.add(loadedChildNode);
+	}
+
+	@Override
+	public synchronized boolean addChildNode(JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>> childNode) {
+		boolean isAddSucceeded = super.addChildNode(childNode);
+		storeLoadedTuckChild((TuckedPersonRelationTreeNode) childNode);
+		
+		return isAddSucceeded;
+	}
+	
+	@Override
+	public synchronized void setChildNodes(List<JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>>> childNodes) {
+		super.setChildNodes(childNodes);
+		
+		for (JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>> childNode : childNodes)
+			storeLoadedTuckChild((TuckedPersonRelationTreeNode) childNode);
+	}
+	
+	
+	
+	// ------- FARK-Tests ---------------------------------------------------------------------------------------||----->>
+	// We refer to this variable during node-status transitions; this way, we can coordinate the operational changes
+	// in the nodes through the system of listeners already handled by the controller.
+	private TuckedNodeStatus statusToChangeTo = TuckedNodeStatus.UNSET;
+	protected void setStatusToChangeTo(TuckedNodeStatus statusToChangeTo) { this.statusToChangeTo = statusToChangeTo; }
+	protected TuckedNodeStatus getStatusToChangeTo() { return statusToChangeTo; }
+	// ------- FARK-Tests ---------------------------------------------------------------------------------------||----->>
+	
+	
 	/**
 	 * Sets the tuckedPath of {@link ObjectID}s represented by this tuckedNode.
 	 * This will also initialise the internal childCount and tuckedStatus mappings.
@@ -57,7 +112,8 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 			return;
 
 		this.tuckedPath = tuckedPath;
-
+		statusToChangeTo = TuckedNodeStatus.UNSET;
+		
 //		// Will revert to these once I've managed to fix some bugs :/
 //		for (ObjectID objectID : this.tuckedPath) {
 //			objectID2actualChildCount.put(objectID, -1L);
@@ -69,6 +125,8 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		objectID2actualChildCount.put(getJdoObjectID(), -1L);
 		objectID2tuckedChildCount.put(getJdoObjectID(), -1L);
 		objectID2tuckedStatus.put(getJdoObjectID(), TuckedNodeStatus.NORMAL);
+		
+		isPartOfTuckedPath = tuckedPath.contains(getJdoObjectID());
 	}
 
 
@@ -135,12 +193,14 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 	 * @return a debug-string representation for this {@link TuckedPersonRelationTreeNode}.
 	 */
 	public String toDebugString() {
-		String str = "\n" + this.getClass().getSimpleName() + "@" + PersonRelationTree.showObjectID(getJdoObjectID());
+		String str = this.getClass().getSimpleName() + "@" + PersonRelationTree.showObjectID(getJdoObjectID());
 //		for (ObjectID objectID : tuckedPath) {
 		ObjectID objectID = getJdoObjectID();
 		if (objectID2tuckedChildCount.get(objectID) == null) return str;
 			str += "\n  " + PersonRelationTree.showObjectID(objectID) + ": [" + objectID2tuckedChildCount.get(objectID) + " (of ";
 			str += objectID2actualChildCount.get(objectID) + ")], [status: \"" + objectID2tuckedStatus.get(objectID) + "\"]";
+			str += ", [getChildNodeCount(): " + getChildNodeCount() + "]";
+			str += ", [loadedTuckedChildren.size(): " + (loadedTuckedChildren == null ? "null" : loadedTuckedChildren.size()) + "]";
 //		}
 
 		return str;

@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -18,7 +19,10 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEventHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeLabelProvider;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * The {@link PersonRelationTree} with compressed (or 'tucked') nodes.
@@ -40,6 +44,10 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 		setupDynamicContextMenu();
 	}
 	
+	@Override
+	protected PersonRelationTreeLabelProvider<TuckedPersonRelationTreeNode> createPersonRelationTreeLabelProvider(TreeViewer treeViewer) {
+		return new TuckedPersonRelationTreeLabelProvider(treeViewer, getDisplay());
+	}
 	
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	// TESTs... for dynamic context-menus.
@@ -63,7 +71,7 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 		
 		Control control = getTreeViewer().getControl();
 		Menu menu = menuMgr.createContextMenu(control);
-		control.setMenu(menu);
+		control.setMenu(menu);		
 	}
 	
 	/**
@@ -75,56 +83,39 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 		if (logger.isDebugEnabled())
 			logger.debug(":: selectedNode: " + (selectedNode == null ? "null" : selectedNode.toDebugString()));
 
-		if (selectedNode != null && selectedNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED))
-			manager.add(new NodeUntuckAction(PersonRelationTree.showObjectID(selectedNode.getPropertySetID())));
+		if (selectedNode != null) {
+			if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED))
+				manager.add(new NodeTuckUntuckAction("Untuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.UNTUCKED));
+			
+			else if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.UNTUCKED))
+				manager.add(new NodeTuckUntuckAction("Tuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.TUCKED));
+		}
 		
 		// TODO The reverse: When we have the node UNTUCKED and the node is not NORMAL, we should allow it back to be TUCKED.
-		
-//		// For testing: See if I can display a dynamic number of nodes. Hurraaahhhh..... this works!
-//		if (selectedNode != null && selectedNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED)) {
-//			for (PropertySetID propertySetID : selectedNode.getPropertySetIDsToRoot())
-//				manager.add(new NodeUntuckAction(PersonRelationTree.showObjectID(propertySetID)));
-//		}
 	}
 	
 	// Two main menu behaviours:
 	//   [1] Untuck; [2] Tuck
-	protected class NodeUntuckAction extends Action {
-		public NodeUntuckAction(String appenderText) {
-			setId(NodeUntuckAction.class.getName());
-			setText("Untuck node " + appenderText); // TODO Display the actual node to untuck. Because in approach #3, we can have more than one tucked entry in one node!
+	protected class NodeTuckUntuckAction extends Action {
+		private TuckedNodeStatus tuckUntuckAction = null;
+		
+		public NodeTuckUntuckAction(String menuText, TuckedNodeStatus tuckUntuckAction) {
+			setId(NodeTuckUntuckAction.class.getName());
+			setText(menuText);
+			
+			this.tuckUntuckAction = tuckUntuckAction;
 		}
 		
 		@Override
 		public void run() {
-			if (logger.isDebugEnabled())
-				logger.debug("Untucking tucking node...");
-			
-			TuckedPersonRelationTreeNode selectedNode = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(getSelection());
+			final TuckedPersonRelationTreeNode selectedNode = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(getSelection());
 			if (selectedNode != null) {
-				selectedNode.setTuckedNodeStatus(TuckedNodeStatus.UNTUCKED);
-				long childNodeCount = selectedNode.getChildNodeCount();
+				selectedNode.setStatusToChangeTo(tuckUntuckAction); //TuckedNodeStatus.UNTUCKED);
 				
-				if (logger.isDebugEnabled())
-					logger.debug("++ childNodeCount: " + childNodeCount);
+				((TuckedPersonRelationTreeController) getPersonRelationTreeController()).fireTuckChangedEvent(
+						new JDOLazyTreeNodesChangedEvent<ObjectID, TuckedPersonRelationTreeNode>(this, CollectionUtil.createHashSet(selectedNode)), new NullProgressMonitor()); // FIXME ... the bloody monitor!
 			}
 			
-//			ISelection selection = getSelection();
-//			
-//			refresh(selectedNode);
-		}
-	}
-	
-	protected class NodeTuckAction extends Action {
-		public NodeTuckAction() {
-			setId(NodeTuckAction.class.getName());
-			setText("Tuck node"); // TODO Display the actual node to tuck. See above notes.
-		}
-		
-		@Override
-		public void run() {
-			if (logger.isDebugEnabled())
-				logger.debug("Tucking node...");
 		}
 	}
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
@@ -136,9 +127,6 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 			@Override
 			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, TuckedPersonRelationTreeNode> changedEvent) {
 				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
-				
-				if (logger.isDebugEnabled())
-					logger.debug(" +++++++++++++++++++++++++++++++++++++++++++++++ AHAHAHAHAHAHAHHAAAAAAAAAAAAAAAAA!!!!");
 			}
 		};
 	}
