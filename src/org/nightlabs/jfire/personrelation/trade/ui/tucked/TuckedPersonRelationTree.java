@@ -90,8 +90,6 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 			else if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.UNTUCKED))
 				manager.add(new NodeTuckUntuckAction("Tuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.TUCKED));
 		}
-		
-		// TODO The reverse: When we have the node UNTUCKED and the node is not NORMAL, we should allow it back to be TUCKED.
 	}
 	
 	// Two main menu behaviours:
@@ -112,6 +110,20 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 			if (selectedNode != null) {
 				selectedNode.setStatusToChangeTo(tuckUntuckAction); //TuckedNodeStatus.UNTUCKED);
 				
+//				Job tuckUntuckJob = new Job("Processing tucked node...") {
+//					@Override
+//					protected IStatus run(ProgressMonitor monitor) throws Exception {
+//						((TuckedPersonRelationTreeController) getPersonRelationTreeController()).fireTuckChangedEvent(
+//								new JDOLazyTreeNodesChangedEvent<ObjectID, TuckedPersonRelationTreeNode>(this, CollectionUtil.createHashSet(selectedNode)), monitor);
+//						
+//						monitor.done();
+//						return Status.OK_STATUS;
+//					}
+//				};
+//				
+//				tuckUntuckJob.setPriority(Job.SHORT);
+//				tuckUntuckJob.schedule();
+				
 				((TuckedPersonRelationTreeController) getPersonRelationTreeController()).fireTuckChangedEvent(
 						new JDOLazyTreeNodesChangedEvent<ObjectID, TuckedPersonRelationTreeNode>(this, CollectionUtil.createHashSet(selectedNode)), new NullProgressMonitor()); // FIXME ... the bloody monitor!
 			}
@@ -126,6 +138,7 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 		return new TuckedPersonRelationTreeController() {
 			@Override
 			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, TuckedPersonRelationTreeNode> changedEvent) {
+				super.onJDOObjectsChanged(changedEvent);
 				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
 			}
 		};
