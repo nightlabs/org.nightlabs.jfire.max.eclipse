@@ -29,6 +29,7 @@ package org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.EditorPart;
-import org.nightlabs.base.ui.composite.ComboComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.reporting.Birt;
@@ -100,7 +101,7 @@ implements IReportEditorPage
 	/**
 	 * Logger used by this class.
 	 */
-	private static final Logger logger = Logger.getLogger(ReportLayoutPreviewPage.class);
+	private static final Logger LOGGER = Logger.getLogger(ReportLayoutPreviewPage.class);
 
 	public static final String ID_PAGE = ReportLayoutPreviewPage.class.getName();
 
@@ -115,7 +116,7 @@ implements IReportEditorPage
 	private Button refreshButton;
 
 	private BirtOutputCombo outputCombo;
-	private ComboComposite<Locale> localeCombo;
+	private XComboComposite<Locale> localeCombo;
 
 	private ReportViewer reportViewer;
 
@@ -135,7 +136,8 @@ implements IReportEditorPage
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		logger.debug("create part Control"); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("create part Control"); //$NON-NLS-1$
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		topWrapper = new XComposite(wrapper, SWT.NONE);
 		topWrapper.getGridLayout().numColumns = 6;
@@ -201,7 +203,7 @@ implements IReportEditorPage
 
 		Label label2 = new Label(topWrapper, SWT.NONE);
 		label2.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage.localeLabel.text")); //$NON-NLS-1$
-		localeCombo = new ComboComposite<Locale>(topWrapper, SWT.READ_ONLY);
+		localeCombo = new XComboComposite<Locale>(topWrapper, SWT.READ_ONLY);
 		localeCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
@@ -219,7 +221,7 @@ implements IReportEditorPage
 
 		Control[] children = parent.getChildren( );
 		if (children.length < 1)
-			throw new IllegalStateException("Can not create "+this.getClass().getSimpleName()+", super iplementation did not create the part control!"); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new IllegalStateException("Can not create "+this.getClass().getSimpleName()+", super implementation did not create the part control!"); //$NON-NLS-1$ //$NON-NLS-2$
 		control = children[children.length - 1];
 //		viewerWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 	}
@@ -229,7 +231,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getPartControl()
 	 */
 	public Control getPartControl() {
-		logger.debug("getPartControl returning "+control); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getPartControl returning "+control); //$NON-NLS-1$
 		return control;
 	}
 
@@ -238,7 +241,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#initialize(org.eclipse.ui.forms.editor.FormEditor)
 	 */
 	public void initialize(FormEditor editor) {
-		logger.debug("initialize "+editor); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("initialize "+editor); //$NON-NLS-1$
 		this.editor = editor;
 	}
 
@@ -248,9 +252,11 @@ implements IReportEditorPage
 	 * @see org.eclipse.birt.report.designer.ui.editors.IReportEditorPage#onBroughtToTop(org.eclipse.birt.report.designer.ui.editors.IReportEditorPage)
 	 */
 	public boolean onBroughtToTop(IReportEditorPage prePage) {
-		logger.debug("On brought to top "); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("On brought to top "); //$NON-NLS-1$
 		if (isDirtyModel()) {
-			logger.debug("Have dirty model, save first"); //$NON-NLS-1$
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Have dirty model, save first"); //$NON-NLS-1$
 			if (editor != null) {
 				editor.doSave(new NullProgressMonitor());
 				editor.editorDirtyStateChanged();
@@ -271,6 +277,22 @@ implements IReportEditorPage
 				if (!locales.contains(NLLocale.getDefault()))
 					locales.add(NLLocale.getDefault());
 
+				if (LOGGER.isDebugEnabled()) {
+					for (Iterator<Locale> it = locales.iterator(); it.hasNext();) {
+						final Locale locale = it.next();
+						if (locale != null) {
+							LOGGER.debug("***************************************************");				// e.g.
+							LOGGER.debug("Locale country code: " + locale.getCountry());						// CH
+							LOGGER.debug("Locale country code (display): " + locale.getDisplayCountry());		// Schweiz
+							LOGGER.debug("Locale language code: " + locale.getLanguage());						// de
+							LOGGER.debug("Locale language code (display): " + locale.getDisplayLanguage());		// Deutsch
+							LOGGER.debug("Locale name (display): " + locale.getDisplayName());					// Deutsch (Schweiz)
+							LOGGER.debug("Locale ISO3 country: " + locale.getISO3Country());					// CHE
+							LOGGER.debug("Locale IOS3 language: " + locale.getISO3Language());					// deu
+							LOGGER.debug("***************************************************");
+						}
+					}
+				}
 				localeCombo.addElements(locales);
 				if (selLocale == null)
 					selLocale = NLLocale.getDefault();
@@ -305,7 +327,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#canLeaveThePage()
 	 */
 	public boolean canLeaveThePage() {
-		logger.debug("Can leave page"); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Can leave page"); //$NON-NLS-1$
 		return true;
 	}
 
@@ -314,7 +337,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getEditor()
 	 */
 	public FormEditor getEditor() {
-		logger.debug("getEditor returning "+editor); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getEditor returning "+editor); //$NON-NLS-1$
 		return editor;
 	}
 
@@ -323,7 +347,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.birt.report.designer.ui.editors.IReportEditorPage#getStaleType()
 	 */
 	public int getStaleType() {
-		logger.debug("getStaleType returning "+staleType); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getStaleType returning "+staleType); //$NON-NLS-1$
 		return staleType;
 	}
 
@@ -332,7 +357,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.birt.report.designer.ui.editors.IReportEditorPage#markPageStale(int)
 	 */
 	public void markPageStale(int type) {
-		logger.debug("setStaleType to "+type); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("setStaleType to "+type); //$NON-NLS-1$
 		staleType = type;
 	}
 
@@ -341,7 +367,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getId()
 	 */
 	public String getId() {
-		logger.debug("getId returning "+ID_PAGE); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getId returning "+ID_PAGE); //$NON-NLS-1$
 		return ID_PAGE;
 	}
 
@@ -350,7 +377,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getIndex()
 	 */
 	public int getIndex() {
-		logger.debug("getIndex returning "+index); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getIndex returning "+index); //$NON-NLS-1$
 		return index;
 	}
 
@@ -360,7 +388,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getManagedForm()
 	 */
 	public IManagedForm getManagedForm() {
-		logger.debug("getManagedForm returning "+null); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getManagedForm returning "+null); //$NON-NLS-1$
 		return null;
 	}
 
@@ -369,7 +398,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#isActive()
 	 */
 	public boolean isActive() {
-		logger.debug("isActive returning "+false); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("isActive returning "+false); //$NON-NLS-1$
 		return false;
 	}
 
@@ -378,7 +408,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#isEditor()
 	 */
 	public boolean isEditor() {
-		logger.debug("isEditor returning "+false); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("isEditor returning "+false); //$NON-NLS-1$
 		return false;
 	}
 
@@ -387,7 +418,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#selectReveal(java.lang.Object)
 	 */
 	public boolean selectReveal(Object object) {
-		logger.debug("selectReveal returning "+false); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("selectReveal returning "+false); //$NON-NLS-1$
 		return false;
 	}
 
@@ -396,7 +428,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#setActive(boolean)
 	 */
 	public void setActive(boolean active) {
-		logger.debug("setActive "+active); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("setActive "+active); //$NON-NLS-1$
 	}
 
 	/*
@@ -404,7 +437,8 @@ implements IReportEditorPage
 	 * @see org.eclipse.ui.forms.editor.IFormPage#setIndex(int)
 	 */
 	public void setIndex(int index) {
-		logger.debug("setIndex "+index); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("setIndex "+index); //$NON-NLS-1$
 		this.index = index;
 	}
 
@@ -414,7 +448,8 @@ implements IReportEditorPage
 	 */
 	@Override
 	public void setInput(IEditorInput input) {
-		logger.debug("setInput "+input); //$NON-NLS-1$
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("setInput "+input); //$NON-NLS-1$
 		super.setInput(input);
 	}
 
