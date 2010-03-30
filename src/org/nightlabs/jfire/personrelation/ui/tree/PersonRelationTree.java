@@ -263,11 +263,11 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 	}
 
 	// II. Quick debug.
-	public static String showObjectIDs(String preamble, List<? extends ObjectID> objIDs, int modLnCnt) {
+	public static String showObjectIDs(String preamble, Collection<? extends ObjectID> objIDs, int modLnCnt) {
 		if (objIDs == null)
 			return preamble + " :: NULL";
 
-		String str = preamble + " (" + objIDs.size() + ") :: {\n     ";
+		String str = preamble + " (size: " + objIDs.size() + ") :: {\n     ";
 		int ctr = 0;
 		for (ObjectID objectID : objIDs) {
 			str += "(" + ctr + ")" + showObjectID(objectID) + " ";
@@ -287,6 +287,27 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 		String[] segID = objectID.toString().split("&");
 		return "[" + segID[1] + "]";
+	}
+
+	// IV. Quick debug.
+	public static String showNodeObjectIDs(String preamble, Collection<? extends PersonRelationTreeNode> nodes, int modLnCnt, boolean isShowPropertySetID) {
+		if (nodes == null)
+			return preamble + " :: NULL";
+
+		String str = preamble + " (size: " + nodes.size() + ") :: {\n     ";
+		int ctr = 0;
+		for (PersonRelationTreeNode node : nodes) {
+//			str += "(" + ctr + ")" + showObjectID(isShowPropertySetID ? node.getPropertySetID() : node.getJdoObjectID()) + " ";
+			str += "(" + ctr + ")";
+			if (node == null) str += "[Node:null] ";
+			else              str += showObjectID(isShowPropertySetID ? node.getPropertySetID() : node.getJdoObjectID()) + " ";
+			
+			ctr++;
+			if (ctr % modLnCnt == 0)
+				str += "\n     ";
+		}
+
+		return str + "\n   }";
 	}
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 }
