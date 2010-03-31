@@ -181,9 +181,8 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 
 				// Ensures that we don't unnecessarily retrieve the relationRootNodes for one that has already been retrieved and on display.
 				if (personID != null && (currentPersonID == null || currentPersonID != personID)) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("personID:" + PersonRelationTree.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTree.showObjectID(currentPersonID));
-					}
+					if (logger.isDebugEnabled())
+						logger.debug("---> personID:" + PersonRelationTree.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTree.showObjectID(currentPersonID));
 
 					// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
 					// relationship up through the hierachy of organisations, and terminates under one of the following
@@ -206,6 +205,9 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 						((TuckedPersonRelationTreeController)getPersonRelationTree().getPersonRelationTreeController()).setTuckedPaths(relatablePathsToRoots);
 						final Set<PropertySetID> rootIDs = nodalHierachyHandler.initRelatablePathsToRoots(relatablePathsToRoots);
 
+						if (logger.isDebugEnabled())
+							logger.debug(PersonRelationTree.showObjectIDs("---> rootIDs:", rootIDs, 10));
+						
 						// Done and ready. Update the tree.
 						currentPersonID = personID;
 						getPersonRelationTree().getDisplay().asyncExec(new Runnable() {

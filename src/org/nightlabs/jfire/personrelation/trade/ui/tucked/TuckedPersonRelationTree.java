@@ -42,6 +42,10 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 	public TuckedPersonRelationTree(Composite parent, boolean isRestoreCollapseState, boolean isMenuWithDrillDownAdapter) {
 		super(parent, isRestoreCollapseState, false, isMenuWithDrillDownAdapter); // By default, we shall have to by-pass the superclass's context menu management.
 		setupDynamicContextMenu();
+		
+		// Operational-coordination: To ensure that expanded children of a collapsed node are restored,
+		// when the collapsed node is re-expanded. This is not the same as 'restoring collapsed state' which has been addressed by the super class.
+		getTree().addTreeListener(new TuckedNodeTreeListener());
 	}
 	
 	@Override
@@ -49,8 +53,9 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 		return new TuckedPersonRelationTreeLabelProvider(treeViewer, getDisplay());
 	}
 	
+	
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
-	// TESTs... for dynamic context-menus.
+	// Dynamic context-menus that allows for tucking and untucking.
 	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	private MenuManager menuMgr = null;
 	
@@ -76,7 +81,6 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 	
 	/**
 	 * We decide what menu-items to be display here, depending on the currently selected Node.
-	 * TODO Consider what to do when the currently selected node is not a TuckedNode.
 	 */
 	protected void handleContextMenuPopulation(IMenuManager manager) {
 		TuckedPersonRelationTreeNode selectedNode = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(getSelection());

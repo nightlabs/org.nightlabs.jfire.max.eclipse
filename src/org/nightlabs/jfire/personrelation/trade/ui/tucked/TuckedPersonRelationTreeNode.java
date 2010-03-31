@@ -4,11 +4,13 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeNode;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.jfire.prop.id.PropertySetID;
 
 /**
  * [NEW concept] The {@link TuckedPersonRelationTreeNode} is initialised upon calling the super class's method setJdoObjectID(), where
@@ -29,6 +31,8 @@ import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
  * @author khaireel (at) nightlabs (dot) de
  */
 public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
+	private final static Logger logger = Logger.getLogger(TuckedPersonRelationTreeNode.class);
+	
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 	// [Section I] Handling the TUCKED and UNTUCKED statuses, with respect to the node's childCount.
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
@@ -50,7 +54,9 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		super.setJdoObjectID(jdoObjectID);
 
 		TuckedPersonRelationTreeController tprtController = (TuckedPersonRelationTreeController) getActiveJDOObjectLazyTreeController();
-		initTuckedNode(tprtController.getSubPathUpUntilCurrentID(jdoObjectID));
+		Deque<ObjectID> subPath = tprtController.getSubPathUpUntilCurrentID(this);
+		
+		initTuckedNode(subPath);
 	}
 
 	/**
@@ -61,10 +67,22 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		tuckedChildCount = -1L;
 		tuckedStatus = TuckedNodeStatus.NORMAL;
 		
-		statusToChangeTo = TuckedNodeStatus.UNSET; // Used in operational transition. See notes, and see Section III.
-		
+		// Used in operational transition. See notes, and see Section III.
+		statusToChangeTo = TuckedNodeStatus.UNSET;
+
+		// Tucked-node-operational variables.
+		ObjectID objectID = getJdoObjectID();
 		if (tuckedPath != null)
-			isPartOfTuckedPath = tuckedPath.contains(getJdoObjectID());
+			isPartOfTuckedPath = tuckedPath.contains(objectID);
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("---->> objectID: " + PersonRelationTree.showObjectID(objectID));
+			logger.debug(PersonRelationTree.showObjectIDs("---->> Deque.tuckedPath", tuckedPath, 10));
+		}
+		
+		// On initialisation, a tuckedNode is 'expanded' (i.e. '!isCollapsed') if it is part of the tuckedPath BUT NOT the last item on the tuckedPath.
+		// In other words, the node isCollapsed if it is NOT part of the tuckedPath OR if it is the last item on the tuckedPath.
+		isExpanded = objectID instanceof PropertySetID || isPartOfTuckedPath && !tuckedPath.getFirst().equals(objectID); // The Deque is reversed: The root is the last element in the Deque.
 	}
 
 
@@ -134,7 +152,7 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 	/**
 	 * @return true if we have successfully kept the loaded-tucked-child.
 	 */
-	protected boolean storeLoadedTuckChild(TuckedPersonRelationTreeNode loadedChildNode) {
+	protected boolean storeLoadedTuckedChild(TuckedPersonRelationTreeNode loadedChildNode) {
 		if (loadedTuckedChildren == null)
 			loadedTuckedChildren = new LinkedList<TuckedPersonRelationTreeNode>();
 		
@@ -144,11 +162,21 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		
 		return loadedTuckedChildren.add(loadedChildNode);
 	}
+	
+	/**
+	 * @return true if we have successfully removed the loaded-tucked-child.
+	 */
+	protected boolean removeLoadedTuckedChild(TuckedPersonRelationTreeNode loadedChildNode) {
+		if (loadedTuckedChildren != null && !loadedTuckedChildren.isEmpty())
+			return loadedTuckedChildren.remove(loadedChildNode);		
+		
+		return false;
+	}
 
 	@Override
 	public synchronized boolean addChildNode(JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>> childNode) {
 		boolean isAddSucceeded = super.addChildNode(childNode);
-		storeLoadedTuckChild((TuckedPersonRelationTreeNode) childNode);
+		storeLoadedTuckedChild((TuckedPersonRelationTreeNode) childNode);
 		
 		return isAddSucceeded;
 	}
@@ -158,9 +186,16 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		super.setChildNodes(childNodes);
 		
 		for (JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>> childNode : childNodes)
-			storeLoadedTuckChild((TuckedPersonRelationTreeNode) childNode);
+			storeLoadedTuckedChild((TuckedPersonRelationTreeNode) childNode);
 	}
 	
+	@Override
+	public synchronized boolean removeChildNode(JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? extends PersonRelationTreeNode>> childNode) {
+		boolean isRemoveSucceeded = super.removeChildNode(childNode);
+		removeLoadedTuckedChild((TuckedPersonRelationTreeNode) childNode);
+		
+		return isRemoveSucceeded;
+	}
 	
 	
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
@@ -185,6 +220,15 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 	
 	
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+	// [Section IV] Maintaining operational collapse states.
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+	private boolean isExpanded = false;
+	public boolean isNodeExpanded() { return isExpanded; }
+	public void toggleNodeExpandedState() { isExpanded = !isExpanded; }
+	
+	
+	
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 	// [Section ??] Miscellaneous and debuggings.
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 	/**
@@ -204,11 +248,11 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 		if (!isNodeSet())
 			return str + " --------->> [UN-set]";
 		
-		ObjectID objectID = getJdoObjectID();
-		str += "\n  " + PersonRelationTree.showObjectID(objectID) + ": [# tucked: " + tuckedChildCount + "]";
+		str += "\n  " + PersonRelationTree.showObjectID(getPropertySetID()) + ": [# tucked: " + tuckedChildCount + "]";
 		str += ", [# actual: " + actualChildCount + "], [status: \"" + tuckedStatus + "\"]";
 		str += ", [getChildNodeCount(): " + getChildNodeCount() + "]";
 		str += ", [loadedTuckedChildren.size(): " + (loadedTuckedChildren == null ? "null" : loadedTuckedChildren.size()) + "]";
+		str += ", [isExpanded: " + (isExpanded ? "True" : "False") + "]";
 
 		return str;
 	}
