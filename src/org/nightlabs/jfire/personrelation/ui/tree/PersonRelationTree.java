@@ -267,26 +267,39 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 		if (objIDs == null)
 			return preamble + " :: NULL";
 
-		String str = preamble + " (size: " + objIDs.size() + ") :: {\n     ";
+		int len = objIDs.size();
+		String str = preamble + " (size: " + len + ") :: {" + (len > modLnCnt ? "\n     " : " ");
 		int ctr = 0;
 		for (ObjectID objectID : objIDs) {
-			str += "(" + ctr + ")" + showObjectID(objectID) + " ";
+			str += "(" + ctr + ")" + showObjectID(objectID, true) + " ";
 			ctr++;
 
 			if (ctr % modLnCnt == 0)
 				str += "\n     ";
 		}
 
-		return str + "\n   }";
+		return str + (len > modLnCnt ? "\n   }" : "}");
 	}
 
 	// III. Quick debug.
 	public static String showObjectID(ObjectID objectID) {
+		return showObjectID(objectID, false);
+	}
+
+	// III.a Quick debug.
+	public static String showObjectID(ObjectID objectID, boolean isShortened) {
 		if (objectID == null)
 			return "[null]";
 
 		String[] segID = objectID.toString().split("&");
-		return "[" + segID[1] + "]";
+		String str = segID[1];
+		
+		if (isShortened) {
+			str = str.replaceFirst("propertySetID", "pSid");
+			str = str.replaceFirst("personRelationID", "pRid");
+		}			
+		
+		return "[" + str + "]";
 	}
 
 	// IV. Quick debug.
