@@ -40,10 +40,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	private Map<Integer, Deque<ObjectID>> tuckedPRIDPathMaps = null; // <-- mixed PropertySetID & PersonRelationID.
 	private Map<Integer, Deque<ObjectID>> tuckedPSIDPathMaps = null; // <-- PropertySetID only.
 	
-//	// [TO BE DEPRECATED] A reference to the 'tucked'-path(s) handled by this controller.
-//	private List<Deque<ObjectID>> tuckedPRIDPaths = null; // <-- mixed PropertySetID & PersonRelationID.
-//	private List<Deque<ObjectID>> tuckedPSIDPaths = null; // <-- PropertySetID only.
-	
+
 	/**
 	 * Set the controller's internal information manipulator for the original tuckedPaths.
 	 * @see PersonRelationDAO.getRelationRootNodes().
@@ -64,12 +61,22 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			tuckedPSIDPathMaps.put(index, iterPaths_PSID.next());
 			index++;
 		}
-	
 		
-		
-//		// [TO BE DEPRECATED]
-//		tuckedPRIDPaths = tuckedPaths.get(PersonRelationID.class);
-//		tuckedPSIDPaths = tuckedPaths.get(PropertySetID.class);
+		if (logger.isDebugEnabled()) {
+			logger.debug("******--******--******--******--******--******--******--******--******--******--******--******");
+			logger.debug(" @setTuckedPaths :: paths received = " + index);
+			logger.debug("******--******--******--******--******--******--******--******--******--******--******--******");
+			
+			for(int i=0; i<index; i++)
+				logger.debug(PersonRelationTree.showObjectIDs("PSID-path @ref=" + i, tuckedPSIDPathMaps.get(i), 10));
+			
+			logger.debug("..............................................................................................");
+
+			for(int i=0; i<index; i++)
+				logger.debug(PersonRelationTree.showObjectIDs("PRID-path @ref=" + i, tuckedPRIDPathMaps.get(i), 10));
+
+			logger.debug("******--******--******--******--******--******--******--******--******--******--******--******");
+		}
 	}
 
 	@Override
@@ -94,11 +101,10 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 				//  1. Retrieve the children.
 				//  2. Create (a new node) + add only those children that are not already loaded.
 				Collection<ObjectID> childObjectIDs = retrieveChildObjectIDs(parentNode, new SubProgressMonitor(monitor, 80));
-//				ObjectID nextObjectIDOnPath = getNextObjectIDOnPath(parentNode); // (parentNode.getJdoObjectID()); // <-- The node representing this ObjectID is ALWAYS loaded, whether the node is TUCKED or UNTUCKED.
-				Set<ObjectID> nextObjectIDsOnPath = getNextObjectIDOnPath(parentNode);
+				Set<ObjectID> nextObjectIDsOnPath = getNextObjectIDOnPath(parentNode); // <-- The node representing this ObjectID is ALWAYS loaded, whether the node is TUCKED or UNTUCKED.
 				
 				for (ObjectID objectID : childObjectIDs)
-					if (!nextObjectIDsOnPath.contains(objectID)) // (!objectID.equals(nextObjectIDOnPath))
+					if (!nextObjectIDsOnPath.contains(objectID))
 						parentNode.addChildNode(createOrRetrieveChildNodeByObjectID(parentNode, objectID));
 				
 				parentNode.setTuckedStatus(TuckedNodeStatus.UNTUCKED);
@@ -252,7 +258,6 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	 * @return true if the given tuckedNode has had both its childCounts updated.
 	 */
 	protected boolean updateTuckedNodeChildCounts(TuckedPersonRelationTreeNode tuckedNode, ProgressMonitor monitor) {
-//		PropertySetID nextIDOnPath = getNextRelatedPropertySetIDOnPath(tuckedNode); // (objectID);
 		Set<PropertySetID> nextIDsOnPath = getNextRelatedPropertySetIDOnPath(tuckedNode);
 		
 		// [Note. A.] When our tuckedPath ends, we should get nextIDOnPath == null. In this case, the personIDs we come across should not be affect 
@@ -261,10 +266,9 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			return false;
 		
 		Set<PropertySetID> propertySetIDsToRoot = CollectionUtil.createHashSetFromCollection(tuckedNode.getPropertySetIDsToRoot());
-//		Set<PropertySetID> nextIDsOnPath = nextIDOnPath == null ? null : CollectionUtil.createHashSet(nextIDOnPath);
 		PropertySetID nodePropertySetID = tuckedNode.getPropertySetID();
 		if (nodePropertySetID == null) // <-- It is possible that parentNode.getPropertySetID() returns null. But at this point, we know that the next element on the tuckedPath exists!
-			nodePropertySetID = getCorrespondingPSID(tuckedNode); // (objectID);
+			nodePropertySetID = getCorrespondingPSID(tuckedNode);
 		
 		TuckedQueryCount tqCount = PersonRelationDAO.sharedInstance().getTuckedPersonRelationCount(
 				null, nodePropertySetID, propertySetIDsToRoot, nextIDsOnPath,
@@ -314,9 +318,8 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		// carries two meanings: 1. we have reached the end of the line, or 2. ALL child nodes need to be fetched, since they don't belong to the tuckedPath.
 		Collection<ObjectID> result = new ArrayList<ObjectID>();
 		ObjectID parentID = parentNode.getJdoObjectID(); // <-- This parentID is a 'PersonRelationID'.
-//		PropertySetID nextIDOnPath = getNextRelatedPropertySetIDOnPath(parentNode); //(parentID);
 		Set<PropertySetID> nextIDsOnPath = getNextRelatedPropertySetIDOnPath(parentNode);
-		PropertySetID correspondingPSID = getCorrespondingPSID(parentNode); // (parentID); // <-- This is the same as the original getToID(). And, only if the parentNode has been instantiated, then this is the same as parentNode.getPropertySetID().
+		PropertySetID correspondingPSID = getCorrespondingPSID(parentNode); // <-- This is the same as the original getToID(). And, only if the parentNode has been instantiated, then this is the same as parentNode.getPropertySetID().
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug("~~ CHECK I: correspondingPSID = " + PersonRelationTree.showObjectID(correspondingPSID));
@@ -353,8 +356,8 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		Collection<PersonRelationID> filteredPersonRelationIDs = null;
 		
 		// These two conditions are NOT mutually exclusive.
-		boolean isHandleTuckedRetrieval = parentPSID == null || statusToChangeTo.equals(TuckedNodeStatus.TUCKED); // || statusToChangeTo.equals(TuckedNodeStatus.TOREFRESH) && parentNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED);
-		boolean isHandleUnTuckedRetrieval = statusToChangeTo.equals(TuckedNodeStatus.UNTUCKED); // || statusToChangeTo.equals(TuckedNodeStatus.TOREFRESH) && parentNode.getTuckedStatus().equals(TuckedNodeStatus.UNTUCKED);
+		boolean isHandleTuckedRetrieval = parentPSID == null || statusToChangeTo.equals(TuckedNodeStatus.TUCKED);
+		boolean isHandleUnTuckedRetrieval = statusToChangeTo.equals(TuckedNodeStatus.UNTUCKED);
 		
 		// Now we handle [Case 1] and [Case 3].
 		if (isHandleTuckedRetrieval) {
@@ -363,7 +366,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			
 			filteredPersonRelationIDs = PersonRelationDAO.sharedInstance().getInclusiveFilteredPersonRelationIDs(
 					null, correspondingPSID, null,
-					null, nextIDsOnPath, // CollectionUtil.createHashSet(nextIDOnPath),
+					null, nextIDsOnPath,
 					getPersonRelationComparator(),
 					new SubProgressMonitor(monitor, 80));
 			
@@ -401,7 +404,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 	@Override
 	protected Collection<ObjectID> retrieveChildObjectIDsByPropertySetIDs(TuckedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
 		// Similar to the method retrieveChildObjectIDsByPersonRelationIDs, we need some kind of coordination.
-		// And theoretically, we can handle them collectively!
+		// And theoretically, we can handle them collectively! ... and so far, the theory is holding :)
 		if (!parentNode.isNodeSet())
 			parentNode.setStatusToChangeTo(TuckedNodeStatus.TUCKED); // <-- We just need to ensure that the node is TUCKED upon initialisation.
 		
@@ -438,18 +441,18 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		LinkedList<ObjectID> objectIDsToRoot = (LinkedList<ObjectID>) tuckedNode.getJDOObjectIDsToRoot(); // The root reference is at the beginning of this List.
 		
 		for (int index = 0; index < tuckedPRIDPathMaps.size(); index++) {
-			Deque<ObjectID> tuckedPRIDPath = tuckedPRIDPathMaps.get(index);  // The root reference is at the END of this Deque. Yeah, I know, how stupidly annoying... Kai :/
-			Iterator<ObjectID> iterPRIDPath = tuckedPRIDPath.iterator(); //.descendingIterator();
+			Deque<ObjectID> tuckedPRIDPath = tuckedPRIDPathMaps.get(index);  // [Note. B.] The root reference is at the END of this Deque. Yeah, I know, how stupidly annoying... Kai :/
+			Iterator<ObjectID> iterPRIDPath = tuckedPRIDPath.iterator();
 			
 			// This loop terminates on three conditions:
 			//   1. CLEANLY. When both paths we are comparing are the same length, and have exactly the same elements.
-			//   2. CLEANLY. When objectIDsToRoot is exactly a subPath of iterPRIDPath. --> In which case, we simply return the index where we stopped.
+			//   2. CLEANLY. When objectIDsToRoot is exactly a subPath of iterPRIDPath. --> In which case, we simply keep the index value at where we stopped.
 			//   3. When we find disequality between elements.
 			boolean isSubPath = true;
-			for(Iterator<ObjectID> iterObjectID = objectIDsToRoot.descendingIterator(); iterObjectID.hasNext(); ) {
+			for(Iterator<ObjectID> iterObjectID = objectIDsToRoot.descendingIterator(); iterObjectID.hasNext(); ) { // See reason in [Note. B.] above.
 				ObjectID objectID = iterObjectID.next();
-				if (!iterPRIDPath.hasNext()) // [Case 2.] If we survive up till here, which means we have exhausted the elements in objectIDsToRoot, then we have found the correct index reference.
-					break; // return index;
+				if (!iterPRIDPath.hasNext()) // [Case 2.] If we survive up till here, which means we have exhausted the elements in objectIDsToRoot, which means we have found the correct index reference.
+					break;
 				
 				if (!iterPRIDPath.next().equals(objectID)) { // [Case 3.]
 					isSubPath = false;
@@ -483,7 +486,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			while (iterPRID.hasNext()) {
 				iterPSID.next();
 				if (iterPRID.next().equals(tuckedNode.getJdoObjectID()) && iterPSID.hasNext()) {
-					// return (PropertySetID) (iterPSID.hasNext() ? iterPSID.next() : null);
+					// return (PropertySetID) (iterPSID.hasNext() ? iterPSID.next() : null); // <-- Original: Handles the singular form.
 					if (propertySetIDs == null)
 						propertySetIDs = new HashSet<PropertySetID>();
 					
@@ -511,7 +514,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			Iterator<ObjectID> iterPRID = tuckedPRIDPath.iterator();
 			while (iterPRID.hasNext()) {
 				if (iterPRID.next().equals(tuckedNode.getJdoObjectID()) && iterPRID.hasNext()) {
-//					return iterPRID.hasNext() ? iterPRID.next() : null;
+					// return iterPRID.hasNext() ? iterPRID.next() : null; // <-- Original: Handles the 'singular' form.
 					if (objectIDs == null)
 						objectIDs = new HashSet<ObjectID>();
 					
