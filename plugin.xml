@@ -8,12 +8,12 @@
             name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView.name"/>
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView"
-            icon="icons/PersonRelationIssueTreeView.16x16.png"
+            icon="icons/PersonRelationDetailsView.16x16.png"
             id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView" 
             name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsView.name"/>            
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.HierarchicalPersonRelationIssueTreeView"
-            icon="icons/PersonRelationIssueTreeView.16x16.png"
+            icon="icons/HierarchicalPersonRelationIssueTreeView.16x16.png"
             id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.HierarchicalPersonRelationIssueTreeView" 
             name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.HierarchicalPersonRelationIssueTreeView.name"/>
     </extension>
