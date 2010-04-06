@@ -1,23 +1,16 @@
 package org.nightlabs.jfire.trade.ui.store;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
@@ -91,8 +84,9 @@ extends ActiveJDOObjectTreeComposite<ProductTypeID, ProductType, ProductTypeTree
 			}
 		});
 
-		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
-		hookContextMenu();
+//		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
+//		hookContextMenu();
+		createContextMenu(true);
 	}
 
 	public ProductTypeTree(Composite parent)
@@ -100,51 +94,58 @@ extends ActiveJDOObjectTreeComposite<ProductTypeID, ProductType, ProductTypeTree
 		this(parent, DEFAULT_STYLE_SINGLE_BORDER);
 	}
 
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				ProductTypeTree.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
-		getTreeViewer().getControl().setMenu(menu);
-	}
-
-	public void addContextMenuContribution(IContributionItem contributionItem)
-	{
-		if (contextMenuContributions == null)
-			contextMenuContributions = new LinkedList<Object>();
-
-		contextMenuContributions.add(contributionItem);
-	}
-
-	public void addContextMenuContribution(IAction action)
-	{
-		if (contextMenuContributions == null)
-			contextMenuContributions = new LinkedList<Object>();
-
-		contextMenuContributions.add(action);
-	}
-
-	private void fillContextMenu(IMenuManager manager) {
-		if (contextMenuContributions != null) {
-			for (Object contextMenuContribution : contextMenuContributions) {
-				if (contextMenuContribution instanceof IContributionItem)
-					manager.add((IContributionItem)contextMenuContribution);
-				else if (contextMenuContribution instanceof IAction)
-					manager.add((IAction)contextMenuContribution);
-				else
-					throw new IllegalStateException("How the hell got an instance of " + (contextMenuContribution == null ? "null" : contextMenuContribution.getClass()) + " in the contextMenuContributions list?!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
-		}
-
-		drillDownAdapter.addNavigationActions(manager);
-
-		// Other plug-ins can contribute their actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+	// Note: @Kai
+	// Since 2010.02.27, we now have the super class (AbstractTreeComposite) to efficiently manage (priority-ordered) context-menus,
+	// which has been streamlined to handle 3 types of contextMenuContributions: 
+	//   (i) IContributionItem, (ii) IAction, and (iii) IViewActionDelegate.
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+//	private void hookContextMenu() {
+//		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+//		menuMgr.setRemoveAllWhenShown(true);
+//		menuMgr.addMenuListener(new IMenuListener() {
+//			public void menuAboutToShow(IMenuManager manager) {
+//				ProductTypeTree.this.fillContextMenu(manager);
+//			}
+//		});
+//		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
+//		getTreeViewer().getControl().setMenu(menu);
+//	}
+//
+//	public void addContextMenuContribution(IContributionItem contributionItem)
+//	{
+//		if (contextMenuContributions == null)
+//			contextMenuContributions = new LinkedList<Object>();
+//
+//		contextMenuContributions.add(contributionItem);
+//	}
+//
+//	public void addContextMenuContribution(IAction action)
+//	{
+//		if (contextMenuContributions == null)
+//			contextMenuContributions = new LinkedList<Object>();
+//
+//		contextMenuContributions.add(action);
+//	}
+//
+//	private void fillContextMenu(IMenuManager manager) {
+//		if (contextMenuContributions != null) {
+//			for (Object contextMenuContribution : contextMenuContributions) {
+//				if (contextMenuContribution instanceof IContributionItem)
+//					manager.add((IContributionItem)contextMenuContribution);
+//				else if (contextMenuContribution instanceof IAction)
+//					manager.add((IAction)contextMenuContribution);
+//				else
+//					throw new IllegalStateException("How the hell got an instance of " + (contextMenuContribution == null ? "null" : contextMenuContribution.getClass()) + " in the contextMenuContributions list?!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+//			}
+//		}
+//
+//		drillDownAdapter.addNavigationActions(manager);
+//
+//		// Other plug-ins can contribute their actions here
+//		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+//	}
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 
 	@Override
 	public void createTreeColumns(Tree tree)
