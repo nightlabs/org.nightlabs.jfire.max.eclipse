@@ -13,4 +13,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.personrelation.trade.ui,
+ org.nightlabs.jfire.personrelation.trade.ui.compact,
  org.nightlabs.jfire.personrelation.trade.ui.tucked

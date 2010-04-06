@@ -6,6 +6,11 @@
             icon="icons/TuckedPersonRelationTreeView.16x16.png"
             id="org.nightlabs.jfire.personrelation.trade.ui.TuckedPersonRelationTreeView" 
             name="%org.nightlabs.jfire.personrelation.trade.ui.TuckedPersonRelationTreeView.name"/>
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.trade.ui.CompactedPersonRelationTreeView"
+            icon="icons/CompactedPersonRelationTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.trade.ui.CompactedPersonRelationTreeView" 
+            name="%org.nightlabs.jfire.personrelation.trade.ui.CompactedPersonRelationTreeView.name"/>
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">

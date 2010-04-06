@@ -13,20 +13,9 @@ import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 
 /**
- * [NEW concept] The {@link TuckedPersonRelationTreeNode} is initialised upon calling the super class's method setJdoObjectID(), where
+ * The {@link TuckedPersonRelationTreeNode} is initialised upon calling the super class's method setJdoObjectID(), where
  * we shall assume that up till that stage, any other references needed by the node are readily available and can be queried directly
  * from the related controller; i.e. in our case, the {@link TuckedPersonRelationTreeController}.
- * 
- * [OLD concept] An extended version of the original {@link PersonRelationTreeNode}. This 'tucked' node contains an ordered path of {@link PersonRelationTreeNode}s,
- * collectively displaying the 'tucked path' in place of expanded path children.
- *
- * See notes on "Search by Association".
- * 
- * Remarks on tidying up:
- *  [A] Seems like we don't need a reference of the tuckedPath in the tuckedNode.
- *  [B] Only a single reference is needed for actualChildCount.
- *  [C] Only a single reference is needed for tuckedChildCount.
- *  [D] Only a single reference is needed for tuckedStatus.
  *
  * @author khaireel (at) nightlabs (dot) de
  */
