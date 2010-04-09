@@ -13,7 +13,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditorSection;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
@@ -43,7 +42,8 @@ extends EntityEditorPageWithProgress
 	}
 
 	private SimpleProductTypeStructLocalScopeSection structLocalScopeSection = null;
-	private BlockBasedEditorSection blockBasedEditorSection = null;
+//	private BlockBasedEditorSection propertiesSection = null;
+	private SimpleProductTypePropertiesSection propertiesSection = null;
 
 
 	/**
@@ -55,8 +55,12 @@ extends EntityEditorPageWithProgress
 		super(editor, SimpleProductTypePropertySetPage.class.getName(), Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.title"));  //$NON-NLS-1$
 	}
 
-	public BlockBasedEditorSection getBlockBasedEditorSection() {
-		return blockBasedEditorSection;
+//	public BlockBasedEditorSection getBlockBasedEditorSection() {
+//		return propertiesSection;
+//	}
+
+	public SimpleProductTypePropertiesSection getPropertiesSection() {
+		return propertiesSection;
 	}
 
 	private int sectionStyle = ExpandableComposite.TITLE_BAR;
@@ -67,8 +71,9 @@ extends EntityEditorPageWithProgress
 		structLocalScopeSection = new SimpleProductTypeStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
 
-		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.blockBasedEditorSection.title"));  //$NON-NLS-1$
-		getManagedForm().addPart(blockBasedEditorSection);
+//		propertiesSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.blockBasedEditorSection.title"));  //$NON-NLS-1$
+		propertiesSection = new SimpleProductTypePropertiesSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.propertiesSection.title"));  //$NON-NLS-1$
+		getManagedForm().addPart(propertiesSection);
 	}
 
 	@Override
@@ -91,7 +96,8 @@ extends EntityEditorPageWithProgress
 						if (isDisposed())
 							return; // Do nothing if UI is disposed
 						structLocalScopeSection.setSimpleProductType(simpleProductType);
-						blockBasedEditorSection.setPropertySet(propertySet);
+						propertiesSection.setSimpleProductType(simpleProductType);
+						propertiesSection.setPropertySet(propertySet);
 						switchToContent();
 					}
 				});
