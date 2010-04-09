@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.jboss.logging.Logger;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
@@ -23,41 +24,47 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart {
 
-//	private SimpleProductType productType;
+	private static final Logger LOGGER = Logger.getLogger(SimpleProductTypeStructLocalScopeSection.class);
+
+	private SimpleProductType simpleProductType;
 //	private boolean doInheritStructLocalScope;
 //	private String structScope;
 //	private String structLocalScope;
 	private Text structLocalScopeText;
+	private InheritanceAction inheritanceAction;
 
 	/**
 	 * @param page
 	 * @param parent
 	 * @param style
-	 * @param title
 	 */
 	public SimpleProductTypeStructLocalScopeSection(IFormPage page, Composite parent, int style)
 	{
 		super(page, parent, style, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeStructLocalScopeSection.title")); //$NON-NLS-1$
-		getToolBarManager().add(new InheritanceAction() {
+		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
-				// TODO: implement
-//				setSelection(!isSelection());
+				inheritPressed();
 			}
-		});
+		};
+		inheritanceAction.setEnabled(false);
+		getToolBarManager().add(inheritanceAction);
 		updateToolBarManager();
 		structLocalScopeText = new Text(getContainer(), XComposite.getBorderStyle(getContainer()) | SWT.SINGLE | SWT.READ_ONLY);
 		structLocalScopeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	public void setSimpleProductType(SimpleProductType productType) {
-//		structScope = productType.getPropertySet().getStructScope();
-		String structLocalScope = productType.getPropertySet().getStructLocalScope();
+	private void inheritPressed() {
+		// TODO implement
+	}
+
+	public void setSimpleProductType(SimpleProductType simpleProductType) {
+		this.simpleProductType = simpleProductType;
+		String structLocalScope = this.simpleProductType.getPropertySet().getStructLocalScope();
 		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(
-				productType.getPropertySet().getStructLocalObjectID(),
-//				SimpleProductType.class, structScope, structLocalScope,
-				new NullProgressMonitor()
+			this.simpleProductType.getPropertySet().getStructLocalObjectID(),
+			new NullProgressMonitor()
 		);
 		if (sl != null && sl.getName() != null) {
 			structLocalScopeText.setText(sl.getName().getText());
@@ -65,5 +72,4 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 			structLocalScopeText.setText(structLocalScope);
 		}
 	}
-
 }
