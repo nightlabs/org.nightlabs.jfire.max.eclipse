@@ -8,6 +8,7 @@ import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.progress.ProgressMonitor;
@@ -20,7 +21,10 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class SimpleProductTypePropertySetPageController
 extends AbstractProductTypePageController<SimpleProductType>
 {
-	private static final String[] FETCH_GROUPS = new String[] {FetchPlan.DEFAULT, SimpleProductType.FETCH_GROUP_PROPERTY_SET, PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA};
+	private static final String[] FETCH_GROUPS = new String[] {FetchPlan.DEFAULT,
+		SimpleProductType.FETCH_GROUP_PROPERTY_SET, PropertySet.FETCH_GROUP_DATA_FIELDS,
+		PropertySet.FETCH_GROUP_FULL_DATA, ProductType.FETCH_GROUP_FIELD_METADATA_MAP};
+
 	/**
 	 * @param editor
 	 */
