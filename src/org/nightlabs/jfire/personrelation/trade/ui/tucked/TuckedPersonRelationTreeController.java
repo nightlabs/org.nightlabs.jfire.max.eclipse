@@ -18,9 +18,9 @@ import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeNode;
 import org.nightlabs.jfire.personrelation.PersonRelationManagerRemote.TuckedQueryCount;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
-import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -68,12 +68,12 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 			logger.debug("******--******--******--******--******--******--******--******--******--******--******--******");
 			
 			for(int i=0; i<index; i++)
-				logger.debug(PersonRelationTree.showObjectIDs("PSID-path @ref=" + i, tuckedPSIDPathMaps.get(i), 10));
+				logger.debug(PersonRelationTreeUtil.showObjectIDs("PSID-path @ref=" + i, tuckedPSIDPathMaps.get(i), 10));
 			
 			logger.debug("..............................................................................................");
 
 			for(int i=0; i<index; i++)
-				logger.debug(PersonRelationTree.showObjectIDs("PRID-path @ref=" + i, tuckedPRIDPathMaps.get(i), 10));
+				logger.debug(PersonRelationTreeUtil.showObjectIDs("PRID-path @ref=" + i, tuckedPRIDPathMaps.get(i), 10));
 
 			logger.debug("******--******--******--******--******--******--******--******--******--******--******--******");
 		}
@@ -265,7 +265,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		if (nextIDsOnPath == null) 
 			return false;
 		
-		Set<PropertySetID> propertySetIDsToRoot = CollectionUtil.createHashSetFromCollection(tuckedNode.getPropertySetIDsToRoot());
+		Set<PropertySetID> propertySetIDsToRoot = CollectionUtil.createHashSetFromCollection(tuckedNode.getPropertySetIDsToRoot()); // FIXME This is dangerous! Kai.
 		PropertySetID nodePropertySetID = tuckedNode.getPropertySetID();
 		if (nodePropertySetID == null) // <-- It is possible that parentNode.getPropertySetID() returns null. But at this point, we know that the next element on the tuckedPath exists!
 			nodePropertySetID = getCorrespondingPSID(tuckedNode);
@@ -307,7 +307,7 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		// This depends on the information we can gather from the parentNode: check the status indicated by getStatusToChangeTo().
 		if (logger.isDebugEnabled()) {
 			logger.debug("~~~~~~~~~~~~~~ I'm here: @retrieveChild--((ObjectID))--sByPersonRelationIDs");
-			logger.debug(" ::: parentNode: " + PersonRelationTree.showObjectID(parentNode.getPropertySetID()) + ",  statusToChangeTo: " + parentNode.getStatusToChangeTo());
+			logger.debug(" ::: parentNode: " + PersonRelationTreeUtil.showObjectID(parentNode.getPropertySetID()) + ",  statusToChangeTo: " + parentNode.getStatusToChangeTo());
 		}
 		
 		
@@ -322,8 +322,8 @@ public class TuckedPersonRelationTreeController extends PersonRelationTreeContro
 		PropertySetID correspondingPSID = getCorrespondingPSID(parentNode); // <-- This is the same as the original getToID(). And, only if the parentNode has been instantiated, then this is the same as parentNode.getPropertySetID().
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("~~ CHECK I: correspondingPSID = " + PersonRelationTree.showObjectID(correspondingPSID));
-			logger.debug(PersonRelationTree.showObjectIDs("            nextIDsOnPath ", nextIDsOnPath, 10));
+			logger.debug("~~ CHECK I: correspondingPSID = " + PersonRelationTreeUtil.showObjectID(correspondingPSID));
+			logger.debug(PersonRelationTreeUtil.showObjectIDs("            nextIDsOnPath ", nextIDsOnPath, 10));
 		}
 		
 		

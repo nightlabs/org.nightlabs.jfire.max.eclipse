@@ -7,9 +7,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOObjectLazyTreeNode;
-import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 
 /**
@@ -65,8 +65,8 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 			isPartOfTuckedPath = tuckedPath.contains(objectID);
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("---->> objectID: " + PersonRelationTree.showObjectID(objectID));
-			logger.debug(PersonRelationTree.showObjectIDs("---->> Deque.tuckedPath", tuckedPath, 10));
+			logger.debug("---->> objectID: " + PersonRelationTreeUtil.showObjectID(objectID));
+			logger.debug(PersonRelationTreeUtil.showObjectIDs("---->> Deque.tuckedPath", tuckedPath, 10));
 		}
 		
 		// On initialisation, a tuckedNode is 'expanded' (i.e. '!isCollapsed') if it is part of the tuckedPath BUT NOT the last item on the tuckedPath.
@@ -233,11 +233,11 @@ public class TuckedPersonRelationTreeNode extends PersonRelationTreeNode {
 	 * Shows the childCounts and statuses and other shits, pertaining to this {@link TuckedPersonRelationTreeNode}.
 	 */
 	public String toDebugString() {
-		String str = this.getClass().getSimpleName() + "@" + PersonRelationTree.showObjectID(getJdoObjectID());
+		String str = this.getClass().getSimpleName() + "@" + PersonRelationTreeUtil.showObjectID(getJdoObjectID());
 		if (!isNodeSet())
 			return str + " --------->> [UN-set]";
 		
-		str += "\n  " + PersonRelationTree.showObjectID(getPropertySetID()) + ": [# tucked: " + tuckedChildCount + "]";
+		str += "\n  " + PersonRelationTreeUtil.showObjectID(getPropertySetID()) + ": [# tucked: " + tuckedChildCount + "]";
 		str += ", [# actual: " + actualChildCount + "], [status: \"" + tuckedStatus + "\"]";
 		str += ", [getChildNodeCount(): " + getChildNodeCount() + "]";
 		str += ", [loadedTuckedChildren.size(): " + (loadedTuckedChildren == null ? "null" : loadedTuckedChildren.size()) + "]";

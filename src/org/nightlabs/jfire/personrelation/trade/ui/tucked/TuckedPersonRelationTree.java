@@ -3,6 +3,7 @@ package org.nightlabs.jfire.personrelation.trade.ui.tucked;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -17,6 +18,7 @@ import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeLabelProvider;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
@@ -62,57 +64,23 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 		if (logger.isDebugEnabled())
 			logger.debug(":: selectedNode: " + (selectedNode == null ? "null" : selectedNode.toDebugString()));
 
+		// Fill the top part of the context-menu with TUCK/UNTUCK operations, but only when necessary.
 		if (selectedNode != null) {
 			if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED))
-				manager.add(new NodeTuckUntuckAction("Untuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.UNTUCKED));
+				manager.add(new NodeTuckUntuckAction("Untuck node " + PersonRelationTreeUtil.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.UNTUCKED));
 			
 			else if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.UNTUCKED))
-				manager.add(new NodeTuckUntuckAction("Tuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.TUCKED));
+				manager.add(new NodeTuckUntuckAction("Tuck node " + PersonRelationTreeUtil.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.TUCKED));
+			
+			
+			// Put a separator, to indicate a difference from the default items.
+			manager.add(new Separator());
 		}
 		
 		// Then fill up the rest of the menu-items with whatever has been registered in the super class.
 		super.fillContextMenu(manager);
 	}
 	
-	
-//	private MenuManager menuMgr = null;
-//	
-//	// Contents in the menu is directly dependent on the node.
-//	// Should take control away from the super-class's menu-manager.
-//	protected void setupDynamicContextMenu() {
-//		// We need to know about the currently selected item in the Tree, so as to adjust the menu contents.
-//		// But in this second approach, the only two possible menu items are: "Untuck" and "Tuck".
-//		// Initialise our own context-menu, for dynamic manipulations.
-//		menuMgr = new MenuManager();
-//		menuMgr.setRemoveAllWhenShown(true);
-//		menuMgr.addMenuListener(new IMenuListener() {
-//			@Override
-//			public void menuAboutToShow(IMenuManager manager) {
-//				handleContextMenuPopulation(manager);
-//			}
-//		});
-//		
-//		Control control = getTreeViewer().getControl();
-//		Menu menu = menuMgr.createContextMenu(control);
-//		control.setMenu(menu);		
-//	}
-//	
-//	/**
-//	 * We decide what menu-items to be display here, depending on the currently selected Node.
-//	 */
-//	protected void handleContextMenuPopulation(IMenuManager manager) {
-//		TuckedPersonRelationTreeNode selectedNode = PersonRelationTreeNode.getPersonRelationTreeNodeFromSelection(getSelection());
-//		if (logger.isDebugEnabled())
-//			logger.debug(":: selectedNode: " + (selectedNode == null ? "null" : selectedNode.toDebugString()));
-//
-//		if (selectedNode != null) {
-//			if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.TUCKED))
-//				manager.add(new NodeTuckUntuckAction("Untuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.UNTUCKED));
-//			
-//			else if (selectedNode.getTuckedStatus().equals(TuckedNodeStatus.UNTUCKED))
-//				manager.add(new NodeTuckUntuckAction("Tuck node " + PersonRelationTree.showObjectID(selectedNode.getPropertySetID()), TuckedNodeStatus.TUCKED));
-//		}
-//	}
 	
 	// Two main menu behaviours:
 	//   [1] Untuck; [2] Tuck

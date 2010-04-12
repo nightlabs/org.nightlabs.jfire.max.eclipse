@@ -36,6 +36,7 @@ import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeView;
 import org.nightlabs.jfire.personrelation.ui.tree.NodalHierarchyHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
@@ -57,7 +58,7 @@ public class TuckedPersonRelationTreeView extends
 AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelationTree> {
 	public static final String ID_VIEW = TuckedPersonRelationTreeView.class.getName();
 	private static final Logger logger = Logger.getLogger(TuckedPersonRelationTreeView.class);
-	private static final int DEFAULT_MAX_SEARCH_DEPTH = 10;
+	private static final int DEFAULT_MAX_SEARCH_DEPTH = 100;
 
 	// This handles the system of listeners needed to engage the Lazy-Tree-nodes to perform the
 	// behaviour that automatically expands a given set of hiearchical paths, whenever available.
@@ -126,8 +127,8 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 					if (logger.isInfoEnabled() && node != null) {
 						logger.debug(":: Click: " + node.toDebugString());
 						
-						String str = "\n" + PersonRelationTree.showObjectIDs("PS-IDs to root", node.getPropertySetIDsToRoot(), 10);
-						str += "\n" + PersonRelationTree.showObjectIDs("PR-IDs to root", node.getJDOObjectIDsToRoot(), 10);
+						String str = "\n" + PersonRelationTreeUtil.showObjectIDs("PS-IDs to root", node.getPropertySetIDsToRoot(), 10);
+						str += "\n" + PersonRelationTreeUtil.showObjectIDs("PR-IDs to root", node.getJDOObjectIDsToRoot(), 10);
 						logger.info(str);
 					}
 
@@ -182,7 +183,7 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 				// Ensures that we don't unnecessarily retrieve the relationRootNodes for one that has already been retrieved and on display.
 				if (personID != null && (currentPersonID == null || currentPersonID != personID)) {
 					if (logger.isDebugEnabled())
-						logger.debug("---> personID:" + PersonRelationTree.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTree.showObjectID(currentPersonID));
+						logger.debug("---> personID:" + PersonRelationTreeUtil.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTreeUtil.showObjectID(currentPersonID));
 
 					// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
 					// relationship up through the hierachy of organisations, and terminates under one of the following
@@ -206,7 +207,7 @@ AbstractPersonRelationTreeView<TuckedPersonRelationTreeNode, TuckedPersonRelatio
 						final Set<PropertySetID> rootIDs = nodalHierachyHandler.initRelatablePathsToRoots(relatablePathsToRoots);
 
 						if (logger.isDebugEnabled())
-							logger.debug(PersonRelationTree.showObjectIDs("---> rootIDs:", rootIDs, 10));
+							logger.debug(PersonRelationTreeUtil.showObjectIDs("---> rootIDs:", rootIDs, 10));
 						
 						// Done and ready. Update the tree.
 						currentPersonID = personID;
