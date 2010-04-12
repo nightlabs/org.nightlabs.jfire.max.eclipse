@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: PersonRelation/IssueTracking/Trade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.personrelation.issuetracking.trade.ui;singleton:=true
-Bundle-Version: 1.1.30
+Bundle-Version: 1.1.31
 Bundle-Activator: org.nightlabs.jfire.personrelation.issuetracking.trade.ui.Activator
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.ui,

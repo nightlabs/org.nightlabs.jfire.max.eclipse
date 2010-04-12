@@ -39,6 +39,7 @@ import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssuePerso
 import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeView;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
@@ -117,7 +118,7 @@ AbstractPersonRelationTreeView<PersonRelationTreeNode, PersonRelationTree<Person
 				if (selectedElement instanceof PersonRelationTreeNode) {
 					PersonRelationTreeNode node = (PersonRelationTreeNode) selectedElement;
 					if (logger.isInfoEnabled() && node != null) {
-						logger.info(PersonRelationTree.showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
+						logger.info(PersonRelationTreeUtil.showObjectIDs("propertySetIDsToRoot", node.getPropertySetIDsToRoot(), 5)); //$NON-NLS-1$
 					}
 
 					if (node != null) {

@@ -28,6 +28,7 @@ import org.nightlabs.jfire.personrelation.ui.tree.NodalHierarchyHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -119,7 +120,7 @@ public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssue
 				// Ensures that we don't unnecessarily retrieve the relationRootNodes for one that has already been retrieved and on display.
 				if (personID != null && (currentPersonID == null || currentPersonID != personID)) {
 					if (logger.isDebugEnabled()) {
-						logger.debug("personID:" + PersonRelationTree.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTree.showObjectID(currentPersonID));
+						logger.debug("personID:" + PersonRelationTreeUtil.showObjectID(personID) + ",  currentPersonID:" + PersonRelationTreeUtil.showObjectID(currentPersonID));
 					}
 
 					// Starting with the personID, we retrieve outgoing paths from it. Each path traces the personID's
