@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated;
 
@@ -7,13 +7,11 @@ import java.util.Set;
 
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
@@ -25,18 +23,19 @@ public class OpenRelatedOrderAction extends OpenRelatedAction {
 	@Override
 	protected boolean calculateEnabledWithArticles(Set<Article> articles) {
 		ArticleContainerEdit edit = getArticleEditActionRegistry().getActiveArticleContainerEdit();
-		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.action.text.disabled")); //$NON-NLS-1$
+//		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.action.text.disabled")); //$NON-NLS-1$
 		OrderID orderID = getCommonOrderID(articles);
-		if (orderID != null) {
-			setText(
-					String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.action.text.enabled"), //$NON-NLS-1$
-					orderID.orderIDPrefix, ObjectIDUtil.longObjectIDFieldToString(orderID.orderID)
-				)
-			);
-		}
+		setText(getText(orderID));
+//		if (orderID != null) {
+//			setText(
+//					String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction.action.text.enabled"), //$NON-NLS-1$
+//					orderID.orderIDPrefix, ObjectIDUtil.longObjectIDFieldToString(orderID.orderID)
+//				)
+//			);
+//		}
 		return orderID != null && !(edit.getArticleContainerID() instanceof OrderID);
 	}
-	
+
 	/**
 	 * Extracts the OrderID common to all given articles or <code>null</code>.
 	 * @param articles The articles to check.
@@ -55,7 +54,7 @@ public class OpenRelatedOrderAction extends OpenRelatedAction {
 		}
 		return orderID;
 	}
-	
+
 	@Override
 	public void run() {
 		OrderID orderID = getCommonOrderID(getArticles());
@@ -67,5 +66,5 @@ public class OpenRelatedOrderAction extends OpenRelatedAction {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

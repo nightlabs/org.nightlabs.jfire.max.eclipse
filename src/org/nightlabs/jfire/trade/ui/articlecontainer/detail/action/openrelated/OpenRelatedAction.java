@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated;
 
@@ -8,13 +8,16 @@ import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditActionRegistry;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 
 /**
  * Base Action for all 'Open related' actions.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -40,17 +43,35 @@ public abstract class OpenRelatedAction extends Action implements IArticleEditAc
 	public boolean calculateVisible() {
 		return true;
 	}
-	
+
 	public Set<Article> getArticles() {
 		return articles;
 	}
-	
+
 	public ArticleEditActionRegistry getArticleEditActionRegistry() {
 		return articleEditActionRegistry;
 	}
 
 	public void init(ArticleEditActionRegistry articleEditActionRegistry) {
 		this.articleEditActionRegistry = articleEditActionRegistry;
+	}
+
+	protected String getText(ArticleContainerID articleContainerID)
+	{
+//		String type = getTextForArticleContainerType();
+		String type = getTextForArticleContainerType(articleContainerID);
+		if (articleContainerID == null) {
+			return type;
+		}
+		else {
+			return String.format(type + " " + "(%s)", ArticleContainerUtil.getArticleContainerID(articleContainerID));
+		}
+	}
+
+//	protected abstract String getTextForArticleContainerType();
+
+	protected String getTextForArticleContainerType(ArticleContainerID articleContainerID) {
+		return TradePlugin.getArticleContainerTypeString(articleContainerID);
 	}
 
 //	public IEditorInput getActiveArticleContainerEditorInput() {

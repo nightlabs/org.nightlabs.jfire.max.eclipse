@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Trade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.trade.ui;singleton:=true
-Bundle-Version: 1.1.38.qualifier
+Bundle-Version: 1.1.39.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.ui.TradePlugin
 Bundle-Vendor: NightLabs.org
@@ -31,6 +31,7 @@ Export-Package: org.nightlabs.jfire.trade.ui,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote,
+ org.nightlabs.jfire.trade.ui.articlecontainer.detail.info,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer,
  org.nightlabs.jfire.trade.ui.articlecontainer.detail.order,

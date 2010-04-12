@@ -35,8 +35,14 @@ import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.ArticleContainerInfoDelegate;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.ArticleContainerInfoDelegateFactory;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.ArticleContainerInfoDelegateRegistry;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -236,11 +242,13 @@ extends AbstractUIPlugin
 	 * @param articleContainerClass The class of {@link ArticleContainer} to get the type string for.
 	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
 	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
+	 *
+	 * @deprecated use {@link #getArticleContainerTypeString(ArticleContainerID)} instead.
 	 */
+	@Deprecated
 	public static String getArticleContainerTypeString(Class<?> articleContainerClass, boolean capitalize) {
-//		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainerTypeString.";
-		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainer.l10n.";
-		String suffix = ".typeString";
+		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainer.l10n."; //$NON-NLS-1$
+		String suffix = ".typeString"; //$NON-NLS-1$
 		Class<?> acClass = articleContainerClass;
 		String acTypeString = getMessageKey(prefix + acClass.getSimpleName() + suffix);
 		while (acTypeString == null && !(acClass == Object.class)) {
@@ -266,10 +274,13 @@ extends AbstractUIPlugin
 	 * @param articleContainerClass The class of {@link ArticleContainer} to get the type string for.
 	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
 	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
+	 *
+	 * @deprecated use {@link #getArticleContainerImageDesciptor(ArticleContainerID)} instead.
 	 */
+	@Deprecated
 	public static ImageDescriptor getArticleContainerImageDescriptor(Class<?> articleContainerClass) {
-		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainer.l10n.";
-		String suffix = ".icon";
+		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainer.l10n."; //$NON-NLS-1$
+		String suffix = ".icon"; //$NON-NLS-1$
 		Class<?> acClass = articleContainerClass;
 		String iconPath = getMessageKey(prefix + acClass.getSimpleName() + suffix);
 		while (iconPath == null && !(acClass == Object.class)) {
@@ -317,4 +328,29 @@ extends AbstractUIPlugin
 			throw new RuntimeException(e);
 		}
 	}
+
+	public static String getArticleContainerTypeString(ArticleContainerID articleContainerID) {
+		Class<? extends ArticleContainer> acClass = ArticleContainerUtil.getArticleContainerClassByID(articleContainerID);
+		ArticleContainerInfoDelegateFactory factory = ArticleContainerInfoDelegateRegistry.sharedInstance().getArticleContainerInfoDelegateFactory(acClass);
+		if (factory != null) {
+			ArticleContainerInfoDelegate delegate = factory.createArticleContainerInfoDelegate();
+			if (delegate != null) {
+				return delegate.getText(articleContainerID, new NullProgressMonitor());
+			}
+		}
+		return "";
+	}
+
+	public static ImageDescriptor getArticleContainerImageDescriptor(ArticleContainerID articleContainerID) {
+		Class<? extends ArticleContainer> acClass = ArticleContainerUtil.getArticleContainerClassByID(articleContainerID);
+		ArticleContainerInfoDelegateFactory factory = ArticleContainerInfoDelegateRegistry.sharedInstance().getArticleContainerInfoDelegateFactory(acClass);
+		if (factory != null) {
+			ArticleContainerInfoDelegate delegate = factory.createArticleContainerInfoDelegate();
+			if (delegate != null) {
+				return delegate.getImageDescriptor(articleContainerID, new NullProgressMonitor());
+			}
+		}
+		return null;
+	}
+
 }

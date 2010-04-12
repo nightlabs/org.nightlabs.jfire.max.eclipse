@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated;
 
@@ -7,13 +7,11 @@ import java.util.Set;
 
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
@@ -25,18 +23,19 @@ public class OpenRelatedDeliveryNoteAction extends OpenRelatedAction {
 	@Override
 	protected boolean calculateEnabledWithArticles(Set<Article> articles) {
 		ArticleContainerEdit edit = getArticleEditActionRegistry().getActiveArticleContainerEdit();
-		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.action.text.disabled")); //$NON-NLS-1$
+//		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.action.text.disabled")); //$NON-NLS-1$
 		DeliveryNoteID deliveryNoteID = getCommonDeliveryNoteID(articles);
-		if (deliveryNoteID != null) {
-			setText(
-					String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.action.text.enabled"), //$NON-NLS-1$
-					deliveryNoteID.deliveryNoteIDPrefix, ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)
-				)
-			);
-		}
+		setText(getText(deliveryNoteID));
+//		if (deliveryNoteID != null) {
+//			setText(
+//					String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction.action.text.enabled"), //$NON-NLS-1$
+//					deliveryNoteID.deliveryNoteIDPrefix, ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)
+//				)
+//			);
+//		}
 		return deliveryNoteID != null && !(edit.getArticleContainerID() instanceof DeliveryNoteID);
 	}
-	
+
 	/**
 	 * Extracts the DeliveryNoteID common to all given articles or <code>null</code>.
 	 * @param articles The articles to check.
@@ -55,7 +54,7 @@ public class OpenRelatedDeliveryNoteAction extends OpenRelatedAction {
 		}
 		return deliveryNoteID;
 	}
-	
+
 	@Override
 	public void run() {
 		DeliveryNoteID deliveryNoteID = getCommonDeliveryNoteID(getArticles());
@@ -67,5 +66,5 @@ public class OpenRelatedDeliveryNoteAction extends OpenRelatedAction {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

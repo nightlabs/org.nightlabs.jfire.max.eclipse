@@ -199,32 +199,7 @@ implements ISelectionProvider
 		headerTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event)
 			{
-				IStructuredSelection structuredSelection = (IStructuredSelection)getSelection();
-				Object selection = null;
-				if (!structuredSelection.isEmpty())
-					selection = structuredSelection.getFirstElement();
-
-				ArticleContainerEditorInput editorInput = null;
-				if (selection instanceof HeaderTreeNode.ArticleContainerNode) {
-					HeaderTreeNode.ArticleContainerNode node = (HeaderTreeNode.ArticleContainerNode) selection;
-					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(node.getArticleContainer());
-					if (articleContainerID == null)
-						throw new IllegalStateException("JDOHelper.getObjectId(node.getArticleContainer()) returned null for node.getArticleContainer()=" + node.getArticleContainer()); //$NON-NLS-1$
-
-					editorInput = new ArticleContainerEditorInput(articleContainerID);
-				}
-				else {
-					// expand/collapse currently selected node... and that's all.
-					if (selectedNode != null && selectedNode.hasChildren()) {
-						if (selectedNode.isExpanded())
-							selectedNode.collapseToLevel(1);
-						else
-							selectedNode.expandToLevel(1);
-					}
-				}
-				// throw new IllegalStateException("selection \"" + (selection == null ? "null" : selection.getClass().getName()) + "\" type unknown!");
-				if (editorInput != null)
-					openEditor(editorInput);
+				doubleClicked();
 			}
 		});
 
@@ -253,6 +228,41 @@ implements ISelectionProvider
 				imageVendorRootTreeNode.dispose(); imageVendorRootTreeNode = null;
 			}
 		});
+	}
+
+	protected void doubleClicked()
+	{
+		IStructuredSelection structuredSelection = (IStructuredSelection)getSelection();
+		Object selection = null;
+		if (!structuredSelection.isEmpty())
+			selection = structuredSelection.getFirstElement();
+
+		ArticleContainerEditorInput editorInput = null;
+		if (selection instanceof HeaderTreeNode.ArticleContainerNode) {
+			HeaderTreeNode.ArticleContainerNode node = (HeaderTreeNode.ArticleContainerNode) selection;
+			editorInput = createArticleContainerEditorInput(node);
+		}
+		else {
+			// expand/collapse currently selected node... and that's all.
+			if (selectedNode != null && selectedNode.hasChildren()) {
+				if (selectedNode.isExpanded())
+					selectedNode.collapseToLevel(1);
+				else
+					selectedNode.expandToLevel(1);
+			}
+		}
+		// throw new IllegalStateException("selection \"" + (selection == null ? "null" : selection.getClass().getName()) + "\" type unknown!");
+		if (editorInput != null)
+			openEditor(editorInput);
+	}
+
+	protected ArticleContainerEditorInput createArticleContainerEditorInput(HeaderTreeNode.ArticleContainerNode node)
+	{
+		ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(node.getArticleContainer());
+		if (articleContainerID == null)
+			throw new IllegalStateException("JDOHelper.getObjectId(node.getArticleContainer()) returned null for node.getArticleContainer()=" + node.getArticleContainer()); //$NON-NLS-1$
+
+		return new ArticleContainerEditorInput(articleContainerID);
 	}
 
 	protected IHeaderTreeContentProvider createContentProvider()

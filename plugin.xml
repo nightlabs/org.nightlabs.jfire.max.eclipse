@@ -23,6 +23,7 @@
     <extension-point id="articleContainerEditFactory" name="ArticleContainerEditFactory extension-point" schema="schema/articleContainerEditFactory.exsd"/>
     <extension-point id="articleContainerEditorPageFactory" name="ArticleContainerEditorPageFactory extension-point" schema="schema/articleContainerEditorPageFactory.exsd"/>
     <extension-point id="articleContainerPrinterFactory" name="articleContainerPrinterFactory" schema="schema/articleContainerPrinterFactory.exsd"/>
+    <extension-point id="articleContainerInfoDelegateFactory" name="articleContainerInfoDelegateFactory" schema="schema/articleContainerInfoDelegateFactory.exsd"/>
     <extension point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
         <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorTextDataFieldEditorFactory"/>
         <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorRegexDataFieldEditorFactory"/>
@@ -1468,6 +1469,12 @@
              scopeClass="org.nightlabs.jfire.trade.ProductType"
              factoryClass="org.nightlabs.jfire.trade.ui.articlecontainer.ArticleTableProviderFactory">
        </tableprovider>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.trade.ui.articleContainerInfoDelegateFactory">
+          <articleContainerInfoDelegateFactory
+          	class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.DefaultArticleContainerInfoDelegateFactory"
+          	indexHint="100"/>
     </extension>
     
 </plugin>

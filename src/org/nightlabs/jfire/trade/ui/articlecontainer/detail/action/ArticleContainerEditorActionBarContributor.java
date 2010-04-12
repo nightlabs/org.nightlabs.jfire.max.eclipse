@@ -33,7 +33,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
-import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
@@ -71,9 +70,9 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.link.ArticleContainerLink;
@@ -616,13 +615,13 @@ implements IArticleContainerEditActionContributor
 						logger.debug("Loading ArticleContainerLinks for " + articleContainerID + "..."); //$NON-NLS-1$ //$NON-NLS-2$
 
 						currentArticleContainerLinks = ArticleContainerLinkDAO.sharedInstance().getArticleContainerLinks(
-								articleContainerID,
 								null,
+								articleContainerID,
 								new String[] {
 										FetchPlan.DEFAULT,
 										ArticleContainerLink.FETCH_GROUP_ARTICLE_CONTAINER_LINK_TYPE,
 										ArticleContainerLinkType.FETCH_GROUP_NAME,
-										ArticleContainerLink.FETCH_GROUP_TO
+										ArticleContainerLink.FETCH_GROUP_FROM
 								},
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								monitor
@@ -660,37 +659,43 @@ implements IArticleContainerEditActionContributor
 
 	private static void internalPopulateMenuManagerWithArticleContainerLinks(IMenuManager menuManager, Collection<? extends ArticleContainerLink> articleContainerLinks)
 	{
-		final String localOrganisationID;
-		try {
-			localOrganisationID = Login.getLogin().getOrganisationID();
-		} catch (LoginException e) {
-			throw new RuntimeException(e); // should never happen, since we should never come here when not logged in.
-		}
+//		final String localOrganisationID;
+//		try {
+//			localOrganisationID = Login.getLogin().getOrganisationID();
+//		} catch (LoginException e) {
+//			throw new RuntimeException(e); // should never happen, since we should never come here when not logged in.
+//		}
 
 		for (final ArticleContainerLink articleContainerLink : articleContainerLinks) {
 			menuManager.add(new Action() {
+				private final ArticleContainer linkedArticleContainer = articleContainerLink.getFrom();
+
 				{
-					final String linkedArticleContainerTypeName = TradePlugin.getArticleContainerTypeString(articleContainerLink.getTo().getClass(), false);
-					final String linkedArticleContainerID =
-						(localOrganisationID.equals(articleContainerLink.getTo().getOrganisationID()) ? "" : (articleContainerLink.getTo().getOrganisationID() + "/")) + //$NON-NLS-1$ //$NON-NLS-2$
-						articleContainerLink.getTo().getArticleContainerIDPrefix() + '/' +
-						articleContainerLink.getTo().getArticleContainerIDAsString();
+//					final String linkedArticleContainerTypeName = TradePlugin.getArticleContainerTypeString(linkedArticleContainer.getClass(), false);
+//					final String linkedArticleContainerID =
+//						(localOrganisationID.equals(linkedArticleContainer.getOrganisationID()) ? "" : (linkedArticleContainer.getOrganisationID() + "/")) + //$NON-NLS-1$ //$NON-NLS-2$
+//						linkedArticleContainer.getArticleContainerIDPrefix() + '/' +
+//						linkedArticleContainer.getArticleContainerIDAsString();
+					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(linkedArticleContainer);
+					final String linkedArticleContainerTypeName = TradePlugin.getArticleContainerTypeString(articleContainerID);
+					final String linkedArticleContainerID = ArticleContainerUtil.getArticleContainerID(linkedArticleContainer);
 
 					setId(ArticleContainerLink.class.getName() + '/' + articleContainerLink.getOrganisationID() + '/' + articleContainerLink.getArticleContainerLinkID());
 					setText(
 							String.format(
 									Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.articleContainerLinkAction.text"), //$NON-NLS-1$
-									articleContainerLink.getArticleContainerLinkType().getName().getText(),
 									linkedArticleContainerTypeName,
-									linkedArticleContainerID
+									linkedArticleContainerID,
+									articleContainerLink.getArticleContainerLinkType().getName().getText()
 							)
 					);
-					setImageDescriptor(TradePlugin.getArticleContainerImageDescriptor(articleContainerLink.getTo().getClass()));
+//					setImageDescriptor(TradePlugin.getArticleContainerImageDescriptor(linkedArticleContainer.getClass()));
+					setImageDescriptor(TradePlugin.getArticleContainerImageDescriptor(articleContainerID));
 				}
 
 				@Override
 				public void run() {
-					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainerLink.getTo());
+					ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(linkedArticleContainer);
 					ArticleContainerEditorInput input = new ArticleContainerEditorInput(articleContainerID);
 					try {
 						RCPUtil.openEditor(input, ArticleContainerEditor.ID_EDITOR);

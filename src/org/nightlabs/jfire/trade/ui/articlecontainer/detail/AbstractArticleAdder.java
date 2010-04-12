@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -39,6 +41,7 @@ import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -160,9 +163,11 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 
 		if (isNonOrderArticleContainerFinilized()) {
 			ArticleContainer ac = getSegmentEdit().getArticleContainer();
+			ArticleContainerID acID = (ArticleContainerID) JDOHelper.getObjectId(ac);
 			String message = String.format(
 					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.articleContainerFinalized"), //$NON-NLS-1$
-					TradePlugin.getArticleContainerTypeString(ac.getClass(), false), TradePlugin.getArticleContainerTypeString(ac.getClass(), true),
+//					TradePlugin.getArticleContainerTypeString(ac.getClass(), false), TradePlugin.getArticleContainerTypeString(ac.getClass(), true),
+					TradePlugin.getArticleContainerTypeString(acID), TradePlugin.getArticleContainerTypeString(acID),
 					ArticleContainerUtil.getArticleContainerID(ac)
 					);
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.INFORMATION);

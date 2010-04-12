@@ -100,8 +100,11 @@ implements IEditorInput
 	@Override
 	public String getName()
 	{
+//		return
+//			TradePlugin.getArticleContainerTypeString(getArticleContainerClass(), true) + " " +  //$NON-NLS-1$
+//			ArticleContainerUtil.getArticleContainerID(getArticleContainerID());
 		return
-			TradePlugin.getArticleContainerTypeString(getArticleContainerClass(), true) + " " +  //$NON-NLS-1$
+			TradePlugin.getArticleContainerTypeString(getArticleContainerID()) + " " +  //$NON-NLS-1$
 			ArticleContainerUtil.getArticleContainerID(getArticleContainerID());
 	}
 
@@ -111,7 +114,8 @@ implements IEditorInput
 	@Override
 	public ImageDescriptor getImageDescriptor()
 	{
-		return TradePlugin.getArticleContainerImageDescriptor(getArticleContainerClass());
+//		return TradePlugin.getArticleContainerImageDescriptor(getArticleContainerClass());
+		return TradePlugin.getArticleContainerImageDescriptor(getArticleContainerID());
 	}
 
 	@Override
