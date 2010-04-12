@@ -172,8 +172,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 	}
 
 	@Override
-	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor)
-	{
+	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingObjects.name"), 110); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
@@ -181,7 +180,9 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 			Set<ObjectID> objectIDsLeft = new HashSet<ObjectID>(objectIDs);
 
-			for (ObjectID objectID : objectIDs) {
+			// [Note #1]: This separates the PropertySetIDs from the PersonRelationIDs.
+			// -----------------------------------------------------------------------------------------------------------|
+			for (ObjectID objectID : objectIDs)
 				if (objectID instanceof PropertySetID) {
 					if (personIDs == null)
 						personIDs = new HashSet<PropertySetID>();
@@ -196,7 +197,6 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 					personRelationIDs.add((PersonRelationID) objectID);
 					objectIDsLeft.remove(objectID);
 				}
-			}
 
 			Collection<Object> result = new ArrayList<Object>(objectIDs.size());
 
@@ -208,31 +208,25 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 			monitor.worked(10);
 
-			if (personIDs != null && !personIDs.isEmpty()) {
-				result.addAll(
-						PropertySetDAO.sharedInstance().getPropertySets(
-								personIDs,
-								FETCH_GROUPS_PERSON, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-								new SubProgressMonitor(monitor, tixPerson)
-						)
-				);
-			}
+
+
+			// [Note #2]: This handles each separated Set independently.
+			// -----------------------------------------------------------------------------------------------------------|
+			if (personIDs != null && !personIDs.isEmpty())
+				result = retrieveJDOObjectsByPropertySetIDs(result, personIDs, monitor, tixPerson); // Modularised. Since 2010.04.10.				
 			else
 				monitor.worked(tixPerson);
 
-			if (personRelationIDs != null && !personRelationIDs.isEmpty()) {
-				result.addAll(
-						PersonRelationDAO.sharedInstance().getPersonRelations(
-								personRelationIDs,
-								getPersonRelationFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-								new SubProgressMonitor(monitor, tixRelation)
-						)
-				);
-			}
+			if (personRelationIDs != null && !personRelationIDs.isEmpty())
+				result = retrieveJDOObjectsByPersonRelationIDs(result, personRelationIDs, monitor, tixRelation); // Modularised. Since 2010.04.10.
 			else
 				monitor.worked(tixRelation);
 
 
+
+			
+			// [Note #3]: This handles the other registered delegates.
+			// -----------------------------------------------------------------------------------------------------------|
 			List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
 			for (IPersonRelationTreeControllerDelegate delegate : delegates) {
 				if (objectIDsLeft.isEmpty())
@@ -265,13 +259,51 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 			monitor.done();
 		}
 	}
+	
+	
+	/**
+	 * Modularised for extended classes.
+	 * @see PersonRelationTreeController#retrieveJDOObjects(Set, ProgressMonitor)
+	 */
+	protected Collection<Object> retrieveJDOObjectsByPropertySetIDs(Collection<Object> result, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
+		result.addAll(PropertySetDAO.sharedInstance().getPropertySets(
+				personIDs,
+				FETCH_GROUPS_PERSON, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new SubProgressMonitor(monitor, tix)
+		));
+		
+		return result;
+	}
+	
+	/**
+	 * Modularised for extended classes.
+	 * @see PersonRelationTreeController#retrieveJDOObjects(Set, ProgressMonitor)
+	 */
+	protected Collection<Object> retrieveJDOObjectsByPersonRelationIDs(Collection<Object> result, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
+		result.addAll(PersonRelationDAO.sharedInstance().getPersonRelations(
+				personRelationIDs,
+				getPersonRelationFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new SubProgressMonitor(monitor, tix)
+		));
+		
+		return result;
+	}
+	
+//	/**
+//	 * This is the abstract method from the super class, which we don't use in this {@link PersonRelationTreeController}'s implementation.
+//	 * Instead, we are in favour of the other method: retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor).
+//	 * See comments in the superclass {@link ActiveJDOObjectLazyTreeController}.
+//	 */
+//	@Override
+//	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor) { return null; }
+	
 
 	/**
 	 * @return the FetchGroups to retrieve the relevant information for a {@link PersonRelation}.
 	 * Override this accordingly.
 	 */
 	protected String[] getPersonRelationFetchGroups() {
-		return fetchGroupPersonRelation; // FETCH_GROUPS_PERSON_RELATION;
+		return fetchGroupPersonRelation;
 	}
 
 	private String[] fetchGroupPersonRelation = FETCH_GROUPS_PERSON_RELATION;
@@ -294,8 +326,6 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 		if (rootPersonIDs == null)
 			return Collections.emptyMap();
 
-		// [Note #1]: This separates the PropertySetIDs from the PersonRelationIDs.
-		// -----------------------------------------------------------------------------------------------------------|
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.PersonRelationTreeController.task.retrievingChildCounts.name"), 110); //$NON-NLS-1$
 		try {
 			Set<PropertySetID> personIDs = null;
@@ -303,6 +333,8 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 			Map<ObjectID, Long> result = new HashMap<ObjectID, Long>(parentIDs.size());
 			
+			// [Note #1]: This separates the PropertySetIDs from the PersonRelationIDs.
+			// -----------------------------------------------------------------------------------------------------------|
 			for (ObjectID objectID : parentIDs) {
 				if (objectID == null) {
 					result.put(objectID, new Long(rootPersonIDs.size()));
@@ -374,6 +406,10 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 	/**
 	 * Modularised for extended classes.
+	 * Attention: The given parentNodes are not in a one-to-one correspondence with the given personIDs. In fact, one must assume that there are more nodes than
+	 *            there are personIDs, and if a related node containing a particular personID is required, then one must write codes to search for the
+	 *            correct node.
+	 *            
 	 * @see PersonRelationTreeController#retrieveChildCount(Set, ProgressMonitor)
 	 */
 	protected Map<ObjectID, Long> retrieveChildCountByPropertySetIDs(Map<ObjectID, Long> result, Set<N> parentNodes, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
@@ -393,6 +429,10 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 	/**
 	 * Modularised for extended classes.
+	 * Attention: The given parentNodes are not in a one-to-one correspondence with the given personIDs. In fact, one must assume that there are more nodes than
+	 *            there are personIDs, and if a related node containing a particular personID is required, then one must write codes to search for the
+	 *            correct node.
+	 *            
 	 * @see PersonRelationTreeController#retrieveChildCount(Set, ProgressMonitor)
 	 */
 	protected Map<ObjectID, Long> retrieveChildCountByPersonRelationIDs

@@ -1,8 +1,6 @@
 package org.nightlabs.jfire.personrelation.ui.tree;
 
 import java.util.Collection;
-import java.util.Deque;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -249,78 +247,4 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 
 
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
-	//  Will be removed once ALL testings are completed! Kai.
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
-	// I. Quick debug.
-	public static String showDequePaths(String preamble, Deque<? extends ObjectID> path, boolean isReversed) {
-		String str = "++ " + preamble + " :: {";
-		Iterator<? extends ObjectID> iter = isReversed ? path.descendingIterator() : path.iterator();
-		while (iter.hasNext())
-			str += showObjectID(iter.next());
-
-		return str + "}";
-	}
-
-	// II. Quick debug.
-	public static String showObjectIDs(String preamble, Collection<? extends ObjectID> objIDs, int modLnCnt) {
-		if (objIDs == null)
-			return preamble + " :: NULL";
-
-		int len = objIDs.size();
-		String str = preamble + " (size: " + len + ") :: {" + (len > modLnCnt ? "\n     " : " ");
-		int ctr = 0;
-		for (ObjectID objectID : objIDs) {
-			str += "(" + ctr + ")" + showObjectID(objectID, true) + " ";
-			ctr++;
-
-			if (ctr % modLnCnt == 0)
-				str += "\n     ";
-		}
-
-		return str + (len > modLnCnt ? "\n   }" : "}");
-	}
-
-	// III. Quick debug.
-	public static String showObjectID(ObjectID objectID) {
-		return showObjectID(objectID, false);
-	}
-
-	// III.a Quick debug.
-	public static String showObjectID(ObjectID objectID, boolean isShortened) {
-		if (objectID == null)
-			return "[null]";
-
-		String[] segID = objectID.toString().split("&");
-		String str = segID[1];
-		
-		if (isShortened) {
-			str = str.replaceFirst("propertySetID", "pSid");
-			str = str.replaceFirst("personRelationID", "pRid");
-		}			
-		
-		return "[" + str + "]";
-	}
-
-	// IV. Quick debug.
-	public static String showNodeObjectIDs(String preamble, Collection<? extends PersonRelationTreeNode> nodes, int modLnCnt, boolean isShowPropertySetID) {
-		if (nodes == null)
-			return preamble + " :: NULL";
-
-		String str = preamble + " (size: " + nodes.size() + ") :: {\n     ";
-		int ctr = 0;
-		for (PersonRelationTreeNode node : nodes) {
-//			str += "(" + ctr + ")" + showObjectID(isShowPropertySetID ? node.getPropertySetID() : node.getJdoObjectID()) + " ";
-			str += "(" + ctr + ")";
-			if (node == null) str += "[Node:null] ";
-			else              str += showObjectID(isShowPropertySetID ? node.getPropertySetID() : node.getJdoObjectID()) + " ";
-			
-			ctr++;
-			if (ctr % modLnCnt == 0)
-				str += "\n     ";
-		}
-
-		return str + "\n   }";
-	}
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
 }

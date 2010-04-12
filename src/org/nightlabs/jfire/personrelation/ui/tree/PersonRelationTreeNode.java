@@ -21,23 +21,36 @@ extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? e
 		return (PersonRelationTreeNode)super.getParent();
 	}
 
+	// A quick reference to this node's own PropertySetID. Because there is always a chance we can set it whenever
+	// we are in possession of the tucked-path information.
+	private PropertySetID propertySetID = null;
+
+	/**
+	 * Sets the {@link PropertySetID} for this node.
+	 */
+	public void setPropertySetID(PropertySetID propertySetID) {
+		this.propertySetID = propertySetID;
+	}
+	
 	/**
 	 * @return the PropertySetID represented by this node. Returns null if node does not present a Person-related object.
 	 */
 	public PropertySetID getPropertySetID() {
-		ObjectID jdoObjectID = getJdoObjectID();
-		if (jdoObjectID instanceof PropertySetID)
-			return (PropertySetID) jdoObjectID;
-
-		else {
-			Object jdoObject = getJdoObject();
-			if (jdoObject instanceof PersonRelation)
-				return ((PersonRelation)jdoObject).getToID();
+		if (propertySetID == null) {
+			ObjectID jdoObjectID = getJdoObjectID();
+			if (jdoObjectID instanceof PropertySetID)
+				propertySetID = (PropertySetID) jdoObjectID;
+			
+			else {
+				Object jdoObject = getJdoObject();
+				if (jdoObject instanceof PersonRelation)
+					propertySetID = ((PersonRelation)jdoObject).getToID();
+			}
 		}
 
-		return null;
+		return propertySetID;
 	}
-
+	
 	/**
 	 * @return a List of PropertySetIDs ordered from this node all the way up to the root.
 	 */
@@ -51,15 +64,7 @@ extends JDOObjectLazyTreeNode<ObjectID, Object, PersonRelationTreeController<? e
 			return propSetIDs;
 
 		// Iterative case.
-		ObjectID jdoObjectID = node.getJdoObjectID();
-		if (jdoObjectID instanceof PropertySetID)
-			propSetIDs.add((PropertySetID)jdoObjectID);
-		else {
-			Object jdoObject = node.getJdoObject();
-			if (jdoObject instanceof PersonRelation)
-				propSetIDs.add(((PersonRelation)jdoObject).getToID());
-		}
-
+		propSetIDs.add(node.getPropertySetID());
 		return getPropertySetIDsToRoot(node.getParent(), propSetIDs);
 	}
 

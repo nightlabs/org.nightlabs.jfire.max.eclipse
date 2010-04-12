@@ -109,9 +109,9 @@ public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree exte
 
 			if (!pathToExpand.isEmpty() && pathToExpand.peekFirst().equals(nodeObjectID)) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("*** *** *** Checking: nodeObjectID=" + PersonRelationTree.showObjectID(nodeObjectID) + " *** *** ***");
-					logger.debug("Checking: " + PersonRelationTree.showDequePaths("pathToExpand", pathToExpand, true));
-					logger.debug("Checking: " + PersonRelationTree.showDequePaths("expandedPath", expandedPath, true));
+					logger.debug("*** *** *** Checking: nodeObjectID=" + PersonRelationTreeUtil.showObjectID(nodeObjectID) + " *** *** ***");
+					logger.debug("Checking: " + PersonRelationTreeUtil.showDequePaths("pathToExpand", pathToExpand, true));
+					logger.debug("Checking: " + PersonRelationTreeUtil.showDequePaths("expandedPath", expandedPath, true));
 					logger.debug("---");
 				}
 
@@ -173,9 +173,9 @@ public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree exte
 			if (logger.isDebugEnabled()) {
 				logger.debug(" ----------------->>>> On addJDOLazyTreeNodesChangedListener: [Checking loaded nodes, " + loadedTreeNodes.size() + "]");
 				for (int index : pathsToExpand_PRID.keySet()) {
-					logger.debug(" --> Checking: " + PersonRelationTree.showDequePaths("pathToExpand", pathsToExpand_PRID.get(index), true));
-					logger.debug(" --> Checking: " + PersonRelationTree.showDequePaths("expandedPath", expandedPaths_PRID.get(index), true));
-					logger.debug(" --> Checking: " + PersonRelationTree.showObjectIDs("nextObjectIDsOnPaths", nextObjectIDsOnPaths, 5));
+					logger.debug(" --> Checking: " + PersonRelationTreeUtil.showDequePaths("pathToExpand", pathsToExpand_PRID.get(index), true));
+					logger.debug(" --> Checking: " + PersonRelationTreeUtil.showDequePaths("expandedPath", expandedPaths_PRID.get(index), true));
+					logger.debug(" --> Checking: " + PersonRelationTreeUtil.showObjectIDs("nextObjectIDsOnPaths", nextObjectIDsOnPaths, 5));
 				}
 			}
 
@@ -191,7 +191,7 @@ public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree exte
 
 					if (isOnNextPath) {
 						if (logger.isDebugEnabled())
-							logger.debug(" :: @" + posIndex + ", (loaded) nodeObjID:" +  PersonRelationTree.showObjectID(nodeObjID) + (isOnNextPath ? " <-- Match!" : ""));
+							logger.debug(" :: @" + posIndex + ", (loaded) nodeObjID:" +  PersonRelationTreeUtil.showObjectID(nodeObjID) + (isOnNextPath ? " <-- Match!" : ""));
 
 						personRelationTree.setSelection(node);
 						ISelection selection = personRelationTree.getTreeViewer().getSelection();
@@ -216,7 +216,7 @@ public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree exte
 				int childNodeCnt = childrenJDOObjectIDs != null ? childrenJDOObjectIDs.size() : -1;
 				if (logger.isDebugEnabled()) {
 					logger.debug(" -->> parNode.childNodeCount: " + nodeCount + ", childNodeCnt: " + childNodeCnt);
-					logger.debug(" -->> " + PersonRelationTree.showObjectIDs("childrenJDOObjectIDs", childrenJDOObjectIDs, 5));
+					logger.debug(" -->> " + PersonRelationTreeUtil.showObjectIDs("childrenJDOObjectIDs", childrenJDOObjectIDs, 5));
 				}
 
 				// Locate the index of the childnode we want to force to be loaded.
@@ -224,7 +224,7 @@ public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree exte
 				for (ObjectID objectID : childrenJDOObjectIDs) {
 					if (nextObjectIDsOnPaths.contains(objectID)) {
 						if (logger.isDebugEnabled()) {
-							logger.debug(" -->>->> FOUND! @posIndex:" + posIndex + ", objectID:" + PersonRelationTree.showObjectID(objectID));
+							logger.debug(" -->>->> FOUND! @posIndex:" + posIndex + ", objectID:" + PersonRelationTreeUtil.showObjectID(objectID));
 						}
 
 						// Force the child to be loaded, and duly have it selected.
@@ -330,8 +330,8 @@ public class NodalHierarchyHandler<N extends PersonRelationTreeNode, PRTree exte
 			expandedPaths_PRID.put(index, new LinkedList<ObjectID>());
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("@index:" + index + " " + PersonRelationTree.showDequePaths("PSID", path_PSID, true));
-				logger.debug("@index:" + index + " " + PersonRelationTree.showDequePaths("PRID", path_PRID, true));
+				logger.debug("@index:" + index + " " + PersonRelationTreeUtil.showDequePaths("PSID", path_PSID, true));
+				logger.debug("@index:" + index + " " + PersonRelationTreeUtil.showDequePaths("PRID", path_PRID, true));
 				logger.debug("--------------------");
 			}
 
