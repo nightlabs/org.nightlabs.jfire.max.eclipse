@@ -2,6 +2,7 @@ package org.nightlabs.jfire.personrelation.ui;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewActionDelegate;
@@ -71,7 +72,8 @@ public abstract class AbstractPersonRelationTreeView<N extends PersonRelationTre
 
 		// Register PRIORITY-ORDERED context-menus.
 		registerContextMenuContibutions(personRelationTree);
-		personRelationTree.integratePriorityOrderedContextMenu();
+		IDoubleClickListener doubleClickListener = personRelationTree.integratePriorityOrderedContextMenu(personRelationTree);
+		personRelationTree.addDoubleClickListener(doubleClickListener);
 
 		// Initialise all other operational listeners for the PersonRelationTree.
 		initPersonRelationTreeListeners(personRelationTree);

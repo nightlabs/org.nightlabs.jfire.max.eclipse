@@ -1,16 +1,10 @@
 package org.nightlabs.jfire.personrelation.ui.tree;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -20,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IViewActionDelegate;
+import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.JDOLazyTreeNodesChangedEvent;
@@ -104,64 +98,66 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 			}
 		});
 
-		if (isCreateContextMenu)
-			createContextMenu(isMenuWithDrillDownAdapter);
+		if (isCreateContextMenu) {
+			TreeViewer treeViewer = getTreeViewer();
+			createContextMenu(isMenuWithDrillDownAdapter ? new DrillDownAdapter(treeViewer) : null, treeViewer.getControl());
+		}
 
 		super.setInput(personRelationTreeController);
 	}
 
-	// ------------------------------------------------------------------------------------------------------------------->>
-	/**
-	 * Initialises the set of priorityOrderedContextMenuContributions by blending them into tree's SelectionChangeListener;
-	 * i.e. mainly, this controls the UI's enabled (or disabled) state for which ever (context) item has been selected.
-	 * Call this once, only when we are ready with all the menu items we want. For now, we handle only those {@link IViewActionDelegate},
-	 * for they have the method to handle 'selectionchanged()'.
-	 *
-	 * This also sets up the double-click behaviour, where in this setup, we assume that the (menu) items registered in the
-	 * {@link AbstractTreeComposite} has been ordered in accordance to 'first-available-default' priority, this in turn will
-	 * make them to be automatically used in this double-click context. See notes 2010.03.08. Kai.
-	 *
-	 * See first independent application usage in PersonRelationIssueTreeView.
-	 */
-	public void integratePriorityOrderedContextMenu() {
-		List<Object> orderedContextMenuContributions = getPriorityOrderedContextMenuContributions();
-		if (orderedContextMenuContributions == null || orderedContextMenuContributions.isEmpty())
-			return;
-
-		// On selection changes.
-		addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection().isEmpty())
-					return;
-
-				for (Object menuItem : getPriorityOrderedContextMenuContributions()) {
-					if (menuItem instanceof IViewActionDelegate)
-						((IViewActionDelegate) menuItem).selectionChanged((IAction) menuItem, event.getSelection());
-				}
-			}
-		});
-
-		// On double-click: 'first-available-default' priority execution.
-		addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				if (event.getSelection().isEmpty())
-					return;
-
-				for (Object menuItem : getPriorityOrderedContextMenuContributions())
-					if (menuItem instanceof IAction) {
-						IAction menuAction = (IAction) menuItem;
-						if (menuAction.isEnabled()) {
-							menuAction.run();
-							return;
-						}
-					}
-			}
-		});
-	}
-
-	// ------------------------------------------------------------------------------------------------------------------->>
+//	// ------------------------------------------------------------------------------------------------------------------->>
+//	/**
+//	 * Initialises the set of priorityOrderedContextMenuContributions by blending them into tree's SelectionChangeListener;
+//	 * i.e. mainly, this controls the UI's enabled (or disabled) state for which ever (context) item has been selected.
+//	 * Call this once, only when we are ready with all the menu items we want. For now, we handle only those {@link IViewActionDelegate},
+//	 * for they have the method to handle 'selectionchanged()'.
+//	 *
+//	 * This also sets up the double-click behaviour, where in this setup, we assume that the (menu) items registered in the
+//	 * {@link AbstractTreeComposite} has been ordered in accordance to 'first-available-default' priority, this in turn will
+//	 * make them to be automatically used in this double-click context. See notes 2010.03.08. Kai.
+//	 *
+//	 * See first independent application usage in PersonRelationIssueTreeView.
+//	 */
+//	public void integratePriorityOrderedContextMenu() {
+//		List<Object> orderedContextMenuContributions = getPriorityOrderedContextMenuContributions();
+//		if (orderedContextMenuContributions == null || orderedContextMenuContributions.isEmpty())
+//			return;
+//
+//		// On selection changes.
+//		addSelectionChangedListener(new ISelectionChangedListener() {
+//			@Override
+//			public void selectionChanged(SelectionChangedEvent event) {
+//				if (event.getSelection().isEmpty())
+//					return;
+//
+//				for (Object menuItem : getPriorityOrderedContextMenuContributions()) {
+//					if (menuItem instanceof IViewActionDelegate)
+//						((IViewActionDelegate) menuItem).selectionChanged((IAction) menuItem, event.getSelection());
+//				}
+//			}
+//		});
+//
+//		// On double-click: 'first-available-default' priority execution.
+//		addDoubleClickListener(new IDoubleClickListener() {
+//			@Override
+//			public void doubleClick(DoubleClickEvent event) {
+//				if (event.getSelection().isEmpty())
+//					return;
+//
+//				for (Object menuItem : getPriorityOrderedContextMenuContributions())
+//					if (menuItem instanceof IAction) {
+//						IAction menuAction = (IAction) menuItem;
+//						if (menuAction.isEnabled()) {
+//							menuAction.run();
+//							return;
+//						}
+//					}
+//			}
+//		});
+//	}
+//
+//	// ------------------------------------------------------------------------------------------------------------------->>
 
 
 
