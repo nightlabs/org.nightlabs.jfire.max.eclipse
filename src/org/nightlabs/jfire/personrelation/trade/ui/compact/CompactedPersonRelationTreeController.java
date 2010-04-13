@@ -330,16 +330,36 @@ public class CompactedPersonRelationTreeController extends PersonRelationTreeCon
 	@Override
 	protected Map<ObjectID, Long> retrieveChildCountByPropertySetIDs
 	(Map<ObjectID, Long> result, Set<CompactedPersonRelationTreeNode> parentNodes, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
-		if (logger.isDebugEnabled()) {
-//			logger.debug(":::::");
+		if (logger.isDebugEnabled()) 
 			logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @retrieveChildCountByPropertySetIDs()");
-//			logger.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ||");
-//			logger.debug(PersonRelationTreeUtil.showObjectIDs("personIDs", personIDs, 10));
-//			logger.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ||");
-//			logger.debug(":::::");
+		
+		Map<ObjectID, Long>  results = super.retrieveChildCountByPropertySetIDs(result, parentNodes, personIDs, monitor, tix);
+		for (ObjectID objectID : results.keySet()) {
+			if (logger.isDebugEnabled()) 
+				logger.debug(" !!! !!! " + PersonRelationTreeUtil.showObjectID(objectID) + ": child-counted = " + result.get(objectID));
+			
+			// Check to see if the node is actually a COLLECTIVE node; i.e. specifically with PropertySetID, we would get more than one entry.
+			// If it is, then check to see if its internal nodes corresponding to the tucked-path has been updated.
+			List<CompactedPersonRelationTreeNode> treeNodeList = getTreeNodeList(objectID);
+			if (treeNodeList != null && treeNodeList.size() > 1) {
+				// Find the COLLECTIVE node.
+				CompactedPersonRelationTreeNode collectiveNode = null;
+				for (CompactedPersonRelationTreeNode node : treeNodeList)
+					if (node.tuckedPathDosier != null) {
+						collectiveNode = node;
+						break;
+					}
+				
+				if (collectiveNode != null && collectiveNode.isNodeSet()) {
+					if (logger.isDebugEnabled())
+						logger.debug(" !!! !!! ------------ Found it. An abnormality!");
+					
+					// If and only if this COLLECTIVE node has been set, then we have to make sure the correct node gets the correct information.
+				}				
+			}
 		}
 		
-		return super.retrieveChildCountByPropertySetIDs(result, parentNodes, personIDs, monitor, tix);
+		return results;
 	}
 	
 	@Override
