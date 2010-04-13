@@ -6,6 +6,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeContentProvider;
@@ -53,7 +54,9 @@ extends AbstractTreeComposite<DynamicProductType>
 
 //		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 //		hookContextMenu();
-		createContextMenu(true);
+		
+		TreeViewer treeViewer = getTreeViewer();
+		createContextMenu(new DrillDownAdapter(treeViewer), treeViewer.getControl());
 	}
 
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
