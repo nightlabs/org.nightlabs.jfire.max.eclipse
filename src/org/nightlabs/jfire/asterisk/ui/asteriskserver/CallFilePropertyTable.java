@@ -1,17 +1,9 @@
 package org.nightlabs.jfire.asterisk.ui.asteriskserver;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -22,11 +14,9 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -59,59 +49,68 @@ extends AbstractTableComposite<Map.Entry<String, String>>
 		super(parent, style, true, viewerStyle);
 		getTable().setHeaderVisible(true);
 		getTableViewer().setSorter(new ViewerSorter());
-		hookContextMenu();
+//		hookContextMenu();
+		createContextMenu(getTableViewer().getControl());
 	}
 
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				CallFilePropertyTable.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(getTableViewer().getControl());
-		getTableViewer().getControl().setMenu(menu);
-//		if (getSite() != null)
-//			getSite().registerContextMenu(menuMgr, getTableViewer());
-	}
-
-	/**
-	 * Contains instances of both, {@link IContributionItem} and {@link IAction}
-	 */
-	private List<Object> contextMenuContributions;
-
-	public void addContextMenuContribution(IContributionItem contributionItem)
-	{
-		if (contextMenuContributions == null)
-			contextMenuContributions = new LinkedList<Object>();
-
-		contextMenuContributions.add(contributionItem);
-	}
-
-	public void addContextMenuContribution(IAction action)
-	{
-		if (contextMenuContributions == null)
-			contextMenuContributions = new LinkedList<Object>();
-
-		contextMenuContributions.add(action);
-	}
-
-	private void fillContextMenu(IMenuManager manager) {
-		if (contextMenuContributions != null) {
-			for (Object contextMenuContribution : contextMenuContributions) {
-				if (contextMenuContribution instanceof IContributionItem)
-					manager.add((IContributionItem)contextMenuContribution);
-				else if (contextMenuContribution instanceof IAction)
-					manager.add((IAction)contextMenuContribution);
-				else
-					throw new IllegalStateException("How the hell got an instance of " + (contextMenuContribution == null ? "null" : contextMenuContribution.getClass()) + " in the contextMenuContributions list?!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}
-		}
-
-		// Other plug-ins can contribute their actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+	// Note: @Kai
+	// Since 2010.04.13, we now have the super class ContextMenuReadyXComposite (which the AbstractTableComposite now extends) 
+	// to efficiently manage (priority-ordered) context-menus when needed (thru the method integratePriorityOrderedContextMenu()),
+	// which has been streamlined to handle 3 types of contextMenuContributions: 
+	//   (i) IContributionItem, (ii) IAction, and (iii) IViewActionDelegate.
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+//	private void hookContextMenu() {
+//		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+//		menuMgr.setRemoveAllWhenShown(true);
+//		menuMgr.addMenuListener(new IMenuListener() {
+//			public void menuAboutToShow(IMenuManager manager) {
+//				CallFilePropertyTable.this.fillContextMenu(manager);
+//			}
+//		});
+//		Menu menu = menuMgr.createContextMenu(getTableViewer().getControl());
+//		getTableViewer().getControl().setMenu(menu);
+////		if (getSite() != null)
+////			getSite().registerContextMenu(menuMgr, getTableViewer());
+//	}
+//
+//	/**
+//	 * Contains instances of both, {@link IContributionItem} and {@link IAction}
+//	 */
+//	private List<Object> contextMenuContributions;
+//
+//	public void addContextMenuContribution(IContributionItem contributionItem)
+//	{
+//		if (contextMenuContributions == null)
+//			contextMenuContributions = new LinkedList<Object>();
+//
+//		contextMenuContributions.add(contributionItem);
+//	}
+//
+//	public void addContextMenuContribution(IAction action)
+//	{
+//		if (contextMenuContributions == null)
+//			contextMenuContributions = new LinkedList<Object>();
+//
+//		contextMenuContributions.add(action);
+//	}
+//
+//	private void fillContextMenu(IMenuManager manager) {
+//		if (contextMenuContributions != null) {
+//			for (Object contextMenuContribution : contextMenuContributions) {
+//				if (contextMenuContribution instanceof IContributionItem)
+//					manager.add((IContributionItem)contextMenuContribution);
+//				else if (contextMenuContribution instanceof IAction)
+//					manager.add((IAction)contextMenuContribution);
+//				else
+//					throw new IllegalStateException("How the hell got an instance of " + (contextMenuContribution == null ? "null" : contextMenuContribution.getClass()) + " in the contextMenuContributions list?!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+//			}
+//		}
+//
+//		// Other plug-ins can contribute their actions here
+//		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+//	}
+	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
