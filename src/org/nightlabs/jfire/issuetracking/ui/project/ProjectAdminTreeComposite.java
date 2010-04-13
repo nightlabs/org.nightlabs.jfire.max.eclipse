@@ -8,6 +8,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
@@ -76,7 +77,9 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 
 //		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 //		hookContextMenu();
-		createContextMenu(true);
+		
+		TreeViewer treeViewer = getTreeViewer();
+		createContextMenu(new DrillDownAdapter(treeViewer), treeViewer.getControl());
 	}
 
 	public ProjectAdminTreeComposite(Composite parent, boolean needActions)
