@@ -86,7 +86,9 @@ extends ActiveJDOObjectTreeComposite<ProductTypeID, ProductType, ProductTypeTree
 
 //		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 //		hookContextMenu();
-		createContextMenu(true);
+		
+		TreeViewer treeViewer = getTreeViewer();
+		createContextMenu(new DrillDownAdapter(treeViewer), treeViewer.getControl());
 	}
 
 	public ProductTypeTree(Composite parent)
