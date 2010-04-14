@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view;
 
 import java.util.Collections;
 
@@ -25,12 +25,12 @@ import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.Activator;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueCommentAction;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreatePersonRelationAction;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.DeletePersonRelationAction;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.OpenIssueEditorAction;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.HierarchicalPersonRelationIssueTreeView;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssueCommentPersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssueDescriptionPersonRelationTreeLabelProviderDelegate;
@@ -95,11 +95,11 @@ AbstractPersonRelationTreeView<PersonRelationTreeNode, PersonRelationTree<Person
 	@Override
 	protected void registerContextMenuContibutions(PersonRelationTree<PersonRelationTreeNode> personRelationTree) {
 		personRelationTree.addContextMenuContribution(new SelectBusinessPartnerTreeItemAction("Focus trade on this business partner"));
-		personRelationTree.addContextMenuContribution(this, new CreatePersonRelationAction(), null, "Create new person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreatePersonRelationAction.class));
-		personRelationTree.addContextMenuContribution(this, new DeletePersonRelationAction(), null, "Delete person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeletePersonRelationAction.class));
+		personRelationTree.addContextMenuContribution(this, new CreatePersonRelationAction(), "Create new person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreatePersonRelationAction.class));
+		personRelationTree.addContextMenuContribution(this, new DeletePersonRelationAction(), "Delete person relation", SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeletePersonRelationAction.class));
 		personRelationTree.addContextMenuContribution(new OpenIssueEditorAction());
-		personRelationTree.addContextMenuContribution(this, new CreateOrLinkIssueAction(), null, "Create new or link existing issue", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateOrLinkIssueAction.class));
-		personRelationTree.addContextMenuContribution(this, new CreateIssueCommentAction(), null, "Create new issue comment", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateIssueCommentAction.class));
+		personRelationTree.addContextMenuContribution(this, new CreateOrLinkIssueAction(), "Create new or link existing issue", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateOrLinkIssueAction.class));
+		personRelationTree.addContextMenuContribution(this, new CreateIssueCommentAction(), "Create new issue comment", SharedImages.getSharedImageDescriptor(Activator.getDefault(), CreateIssueCommentAction.class));
 	}
 
 	/**

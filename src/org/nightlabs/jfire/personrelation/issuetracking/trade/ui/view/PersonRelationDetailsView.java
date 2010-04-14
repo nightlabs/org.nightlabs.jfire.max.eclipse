@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view;
 
 import javax.jdo.JDOHelper;
 
@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsComposite;
 import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.TradePlugin;

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended;
+package org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view;
 
 import java.util.Deque;
 import java.util.HashSet;
@@ -22,7 +22,8 @@ import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
-import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.PersonRelationTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.PropertySetTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.personrelation.ui.tree.NodalHierarchyHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
