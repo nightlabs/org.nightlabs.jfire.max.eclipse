@@ -44,6 +44,8 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
  * @author khaireel at nightlabs dot de
  */
 public class CompactedPersonRelationTreeNode extends PersonRelationTreeNode {
+	public static int NODE_ID_CTR = 0;
+	
 	// :::::::::::: :::::::::::: :::::::::::: The Collective Information :: When this node is part of a known tucked-path :::::::::::: :::::::::::: :::::::::::: >>
 	// The tucked path represented by this CompactedTuckedNode.
 	protected TuckedPathDosier tuckedPathDosier = null;                           // ::[Defn. 3]:: <-- mixed PropertySetID & PersonRelationID. Ordered left-to-right: From root (this node) to end-child.
@@ -251,16 +253,34 @@ public class CompactedPersonRelationTreeNode extends PersonRelationTreeNode {
 		return posRef != -1 ? tuckedPathNodesActualChildCount[posRef] - tuckedPathNodesTuckedChildCount[posRef] : actualChildCount - tuckedChildCount;
 	}
 	
+	/**
+	 * @return the node-representative of this COLLECTIVE node, but only if this node is of the COLLECTIVE type.
+	 * Returns null otherwise.
+	 */
+	public CompactedPersonRelationTreeNode getNodeRepresentative() {
+		if (tuckedPathDosier != null) {
+			// The node-representative is the node-element at the end of the tucked-path.
+			return tuckedPathNodes[pathLen-1];
+		}
+		
+		return null;
+	}
+	
 	
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 	// [Section] Miscellaneous and debuggings.
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
+	protected int meNodeID = -1;
+	public CompactedPersonRelationTreeNode() { meNodeID = CompactedPersonRelationTreeNode.NODE_ID_CTR++; }
+	
 	public String toDebugString() {
 		String str = this.getClass().getSimpleName() + " :: (@JDOObjectID:" + PersonRelationTreeUtil.showObjectID(getJdoObjectID(), true) + "), (@PropertySetID:";
 		str += PersonRelationTreeUtil.showObjectID(getPropertySetID(), true) + "), [" + getNodeStatus() + "]";
 		
 		if (!isNodeSet())
 			str += " --------->> [UN-set]";
+		
+		str += "\n  ~~ meNodeID: " + meNodeID;
 		
 		if (tuckedPathDosier != null) {
 			// Display the COLLECTIVE information.
@@ -281,12 +301,11 @@ public class CompactedPersonRelationTreeNode extends PersonRelationTreeNode {
 			
 			str += PersonRelationTreeUtil.showNodeObjectIDs("\n  ++ tuckedPathNodes-PRid", tuckedPathNodes, 10, false);
 			str += PersonRelationTreeUtil.showNodeObjectIDs("\n  ++ tuckedPathNodes-PSid", tuckedPathNodes, 10, true);
-			
-			
-			// Now the SELF-information.
-			str += "\n  +~ nodeStatus: " + nodeStatus;
-			str += "\n  +~ childNodeCount: " + getChildNodeCount();
 		}
+		
+		// Now the SELF-information.
+		str += "\n  +~ nodeStatus: " + nodeStatus;
+		str += "\n  +~ childNodeCount: " + getChildNodeCount();
 		
 		return str;
 	}

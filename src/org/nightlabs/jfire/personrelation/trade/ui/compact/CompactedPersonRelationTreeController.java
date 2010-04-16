@@ -277,8 +277,11 @@ public class CompactedPersonRelationTreeController extends PersonRelationTreeCon
 	// ------------------------------------------------------------------------------------- ++ ------------------------------->>
 	@Override
 	protected CompactedPersonRelationTreeNode createNode() {
-		logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @createNode()");
-		return new CompactedPersonRelationTreeNode();
+		CompactedPersonRelationTreeNode node = new CompactedPersonRelationTreeNode();
+		logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @createNode() :: meNodeID = " + node.meNodeID);		
+		return node;
+		
+//		return new CompactedPersonRelationTreeNode();
 	}
 	
 
@@ -314,7 +317,7 @@ public class CompactedPersonRelationTreeController extends PersonRelationTreeCon
 			// In our implementation, this would mean that the compactedTuckedNode in the parameter is a NORMAL node.
 			// So we simply take the value of the actualChildCount, and take that as the node's official childCount.
 			if (logger.isDebugEnabled()) {
-				logger.debug(" !!! ~~~ @updateTuckedNodeChildCounts, where nextIDsOnPath == null: " + PersonRelationTreeUtil.showQuickNodeInfo(compactedTuckedNode));
+				logger.debug(" !!! ~~~ @updateTuckedNodeChildCounts, where nextIDsOnPath == null: " + PersonRelationTreeUtil.showQuickNodeInfo(compactedTuckedNode) + ", meNodeID=" + compactedTuckedNode.meNodeID);
 				logger.debug(PersonRelationTreeUtil.showObjectIDs(" !!! ~~~ propertySetIDsToRoot", propertySetIDsToRoot, 10));
 				logger.debug(" !!! ~~~ actualChildCount: " + tqCount.actualChildCount + ", tuckedChildCount: " + tqCount.tuckedChildCount);
 			}
@@ -326,62 +329,37 @@ public class CompactedPersonRelationTreeController extends PersonRelationTreeCon
 		return true;
 	}
 	
-	
 	@Override
-	protected Map<ObjectID, Long> retrieveChildCountByPropertySetIDs
-	(Map<ObjectID, Long> result, Set<CompactedPersonRelationTreeNode> parentNodes, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
-		if (logger.isDebugEnabled()) 
-			logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @retrieveChildCountByPropertySetIDs()");
+	protected Set<CompactedPersonRelationTreeNode> fillUpNodeCounts
+	(Map<ObjectID, Long> parentObjectID2NodeCount, Map<ObjectID, List<CompactedPersonRelationTreeNode>> parentObjectID2ParentTreeNodeList, ProgressMonitor monitor) {
+		// Note: This method should return those nodes that needs to be refreshed.
+		// When filling up the node's childCount, we have to be careful whenever we encounter COLLECTIVE nodes.
+		if (logger.isDebugEnabled()) {
+			logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @fillUpNodeCounts() ### ******* " + PersonRelationTreeUtil.showObjectIDs("NodeOIDs", parentObjectID2NodeCount.keySet(), 10));
+		}
 		
-		Map<ObjectID, Long>  results = super.retrieveChildCountByPropertySetIDs(result, parentNodes, personIDs, monitor, tix);
-		for (ObjectID objectID : results.keySet()) {
-			if (logger.isDebugEnabled()) 
-				logger.debug(" !!! !!! " + PersonRelationTreeUtil.showObjectID(objectID) + ": child-counted = " + result.get(objectID));
-			
-			// Check to see if the node is actually a COLLECTIVE node; i.e. specifically with PropertySetID, we would get more than one entry.
-			// If it is, then check to see if its internal nodes corresponding to the tucked-path has been updated.
-			List<CompactedPersonRelationTreeNode> treeNodeList = getTreeNodeList(objectID);
-			if (treeNodeList != null && treeNodeList.size() > 1) {
-				// Find the COLLECTIVE node.
-				CompactedPersonRelationTreeNode collectiveNode = null;
-				for (CompactedPersonRelationTreeNode node : treeNodeList)
-					if (node.tuckedPathDosier != null) {
-						collectiveNode = node;
-						break;
-					}
+		Set<CompactedPersonRelationTreeNode> nodesToBeRefreshed = super.fillUpNodeCounts(parentObjectID2NodeCount, parentObjectID2ParentTreeNodeList, monitor);
+		for (CompactedPersonRelationTreeNode treeNode : nodesToBeRefreshed) {
+			// Check to see if the treeNode is a COLLECTIVE node. If so, we amend its childCounts appropriately through the data
+			// that should already be available in its node-representative.
+			CompactedPersonRelationTreeNode nodeRepresentative = treeNode.getNodeRepresentative();
+			if (nodeRepresentative != null) {
+				treeNode.setChildNodeCount(nodeRepresentative.getChildNodeCount());
+				treeNode.setNodeStatus(nodeRepresentative.getNodeStatus());
 				
-				if (collectiveNode != null && collectiveNode.isNodeSet()) {
-					if (logger.isDebugEnabled())
-						logger.debug(" !!! !!! ------------ Found it. An abnormality!");
-					
-					// If and only if this COLLECTIVE node has been set, then we have to make sure the correct node gets the correct information.
-				}				
+				if (logger.isDebugEnabled())
+					logger.debug(" ### ##### FOUND a COLLECTIVE node while updating child-counts. Node identified as COLLECTIVE: meNodeID = " + treeNode.meNodeID + ", nodeRepresentative.meNodeID = " + nodeRepresentative.meNodeID);
 			}
 		}
 		
-		return results;
-	}
-	
-	@Override
-	protected Map<ObjectID, Long> retrieveChildCountByPersonRelationIDs
-	(Map<ObjectID, Long> result, Set<CompactedPersonRelationTreeNode> parentNodes, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
-		return super.retrieveChildCountByPersonRelationIDs(result, parentNodes, personRelationIDs, monitor, tix);
-	}
-	
-	@Override
-	protected Collection<ObjectID> retrieveChildObjectIDs(CompactedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
-		if (logger.isDebugEnabled()) {
-			logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @retrieveChildObjectIDs()");
-		}
-		
-		return super.retrieveChildObjectIDs(parentNode, monitor);
+		return nodesToBeRefreshed;
 	}
 	
 	@Override
 	protected Collection<Object> retrieveJDOObjectsByPropertySetIDs(Collection<Object> result, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
 		if (logger.isDebugEnabled()) {
 			logger.debug(" ~~~ sequenceCtr: " + (sequenceCtr++) + " ~~~ ********* @retrieveJDOObjectsByPropertySetIDs() -- [I]");
-			logger.debug(" ###                                          ######################## Called! ###");
+			logger.debug(" ###                                          ######################## Called! ### :: retrieveJDOObjectsByPropertySetIDs()");
 			logger.debug(PersonRelationTreeUtil.showObjectIDs(" ### @retrieveJDOObjectsByPropertySetIDs: personIDs", personIDs, 10));
 		}
 		
@@ -444,7 +422,8 @@ public class CompactedPersonRelationTreeController extends PersonRelationTreeCon
 						logger.debug("!!! Node counting reverted for NORMAL node. " + PersonRelationTreeUtil.showObjectID(tuckedNodeInPath.getPropertySetID()));
 
 						// H. Set the COLLECTIVE shell-node's own sync-ed information.
-						// TODO Still up for discussion, not exactly sure of the status of the COLLECTIVE node when multiple nodes in tucked-path exists.
+						//    This tuckedNodeInPath now corresponds to the last element in the tucked-path of the collective node, and thus this node
+						//    is the "node-representative" of the rootShellNode.
 						rootShellNode.setChildNodeCount(tuckedNodeInPath.getChildNodeCount());
 						rootShellNode.setNodeStatus(tuckedNodeInPath.getNodeStatus());
 					}
@@ -473,10 +452,37 @@ public class CompactedPersonRelationTreeController extends PersonRelationTreeCon
 					logger.debug(" ### After init: " + rootShellNode.toDebugString());
 				}
 			}
-		}
-		
+		}		
 		
 		return results;
+	}
+	
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDsByPropertySetIDs(CompactedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+		CompactedPersonRelationTreeNode nodeRepresentative = parentNode.getNodeRepresentative();
+		if (nodeRepresentative != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug(" ### ##### FOUND a COLLECTIVE node while retrieveChildObjectIDsByPropertySetIDs() !!! +++++++++ <Poss. 1>");
+				logger.debug(" ### ##### Node identified as COLLECTIVE: meNodeID = " + parentNode.meNodeID + ", nodeRepresentative.meNodeID = " + nodeRepresentative.meNodeID);
+			}
+			
+			return super.retrieveChildObjectIDsByPersonRelationIDs(nodeRepresentative, monitor);
+		}
+		
+		return super.retrieveChildObjectIDsByPropertySetIDs(parentNode, monitor);
+	}
+	
+	@Override
+	protected Collection<ObjectID> retrieveChildObjectIDsByPersonRelationIDs(CompactedPersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+		if (logger.isDebugEnabled()) {
+			CompactedPersonRelationTreeNode nodeRepresentative = parentNode.getNodeRepresentative();
+			if (nodeRepresentative != null) {
+				logger.debug(" ### ##### FOUND a COLLECTIVE node while retrieveChildObjectIDsByPersonRelationIDs() !!! +++++++++ <Poss. 2>");
+				logger.debug(" ### ##### Node identified as COLLECTIVE: meNodeID = " + parentNode.meNodeID + ", nodeRepresentative.meNodeID = " + nodeRepresentative.meNodeID);
+			}
+		}
+		
+		return super.retrieveChildObjectIDsByPersonRelationIDs(parentNode, monitor);
 	}
 	
 }

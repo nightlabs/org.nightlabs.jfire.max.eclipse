@@ -31,6 +31,7 @@ import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTree;
 import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTreeController;
+import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTreeNode;
 import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPropertySetTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeView;
@@ -77,6 +78,7 @@ public class CompactedPersonRelationTreeView extends AbstractPersonRelationTreeV
 		// Special delegate(s).
 		CompactedPersonRelationTreeController cprtController = (CompactedPersonRelationTreeController) personRelationTreeController;
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new CompactedPropertySetTreeLabelProviderDelegate(cprtController));
+		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new CompactedPersonRelationTreeLabelProviderDelegate());
 		
 		return personRelationTree;
 	}
