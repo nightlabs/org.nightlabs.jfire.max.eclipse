@@ -9,8 +9,8 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.AbstractEPProcessor;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 
 /**

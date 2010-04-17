@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.ui.action.registry.ActionVisibilityDecider;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 
 /**
