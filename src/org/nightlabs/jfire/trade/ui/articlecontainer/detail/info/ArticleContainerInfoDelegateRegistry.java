@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
+import org.nightlabs.eclipse.extension.AbstractEPProcessor;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.util.reflect.ReflectUtil;

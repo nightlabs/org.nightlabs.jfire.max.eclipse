@@ -36,7 +36,7 @@ import org.eclipse.jface.action.IAction;
 import org.nightlabs.base.ui.action.IXContributionItem;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.ui.action.registry.ActionDescriptor;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 

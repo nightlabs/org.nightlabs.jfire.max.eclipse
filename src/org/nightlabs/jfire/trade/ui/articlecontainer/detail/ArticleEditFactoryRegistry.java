@@ -27,7 +27,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.SegmentType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate;
