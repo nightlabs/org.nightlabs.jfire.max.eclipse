@@ -13,8 +13,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.AbstractEPProcessor;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
