@@ -12,8 +12,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.eclipse.extension.AbstractEPProcessor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
