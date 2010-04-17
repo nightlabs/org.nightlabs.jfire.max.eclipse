@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.action.IAction;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

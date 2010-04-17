@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.action.registry.ActionDescriptor;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.eclipse.extension.EPProcessorException;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.admin.ui.parameter.action.ScriptParameterSetActionRegistry;
 import org.nightlabs.jfire.scripting.admin.ui.script.action.IScriptRegistryItemAction;
