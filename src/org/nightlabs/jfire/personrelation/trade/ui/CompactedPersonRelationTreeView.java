@@ -29,11 +29,11 @@ import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
-import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTree;
-import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTreeController;
-import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTreeLabelProviderDelegate;
-import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPersonRelationTreeNode;
-import org.nightlabs.jfire.personrelation.trade.ui.compact.CompactedPropertySetTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.trade.ui.tucked.compact.CompactedPersonRelationTree;
+import org.nightlabs.jfire.personrelation.trade.ui.tucked.compact.CompactedPersonRelationTreeController;
+import org.nightlabs.jfire.personrelation.trade.ui.tucked.compact.CompactedPersonRelationTreeLabelProviderDelegate;
+import org.nightlabs.jfire.personrelation.trade.ui.tucked.compact.CompactedPersonRelationTreeNode;
+import org.nightlabs.jfire.personrelation.trade.ui.tucked.compact.CompactedPropertySetTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.ui.AbstractPersonRelationTreeView;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeUtil;
@@ -65,10 +65,7 @@ public class CompactedPersonRelationTreeView extends AbstractPersonRelationTreeV
 	 */
 	@Override
 	protected CompactedPersonRelationTree createAndInitPersonRelationTree(Composite parent) {
-		CompactedPersonRelationTree personRelationTree = new CompactedPersonRelationTree(parent,
-				false, // without restoring the tree's collapse state
-				false  // without the drill-down adapter.
-			);
+		CompactedPersonRelationTree personRelationTree = new CompactedPersonRelationTree(parent, false); // Without the drill-down adapter.
 		
 		// Require additional fetch group(s) when dealing with the label providers related to the tree.
 		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_FULL_DATA} );

@@ -37,15 +37,13 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 	/**
 	 * Creates a new instance of the TuckedPersonRelationTree.
 	 */
-	public TuckedPersonRelationTree(Composite parent, boolean isRestoreCollapseState, boolean isMenuWithDrillDownAdapter) {
-		super(parent, isRestoreCollapseState, true, isMenuWithDrillDownAdapter); // By default, we shall have to by-pass the superclass's context menu management.
+	public TuckedPersonRelationTree(Composite parent, boolean isMenuWithDrillDownAdapter) {
+		// By default, (i) we shall NOT restore the tree's collapsed state, but (ii) use the convenient context-menu management framework offered in the super class.
+		super(parent, false, true, isMenuWithDrillDownAdapter); 
 		
-//		super(parent, isRestoreCollapseState, false, isMenuWithDrillDownAdapter); // By default, we shall have to by-pass the superclass's context menu management.
-//		setupDynamicContextMenu();
-		
-		// Operational-coordination: To ensure that expanded children of a collapsed node are restored,
+		// Operational-coordination: We need to ensure that expanded children of a collapsed node are properly restored,
 		// when the collapsed node is re-expanded. This is not the same as 'restoring collapsed state' which has been addressed by the super class.
-		getTree().addTreeListener(new TuckedNodeTreeListener());
+		getTree().addTreeListener(new TuckedNodeTreeListener()); // <-- A bit weird on Linux, sometimes it works, sometimes it doesnt.
 	}
 	
 	@Override
@@ -54,9 +52,10 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 	}
 	
 	
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
-	// Dynamic context-menus that allows for tucking and untucking.
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
+	
+	// ----------------------------------------------------------------------------------- || -------------------------------------------->>
+	// [Section] Dynamic context-menus that allows for tucking and untucking.
+	// ----------------------------------------------------------------------------------- || -------------------------------------------->>
 	@Override
 	protected void fillContextMenu(IMenuManager manager) {
 		// We decide what menu-items to be display here, depending on the currently selected Node.
@@ -83,7 +82,7 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 	
 	
 	// Two main menu behaviours:
-	//   [1] Untuck; [2] Tuck
+	//   [1] Untuck; [2] Tuck (duhh...)
 	protected class NodeTuckUntuckAction extends Action {
 		private TuckedNodeStatus tuckUntuckAction = null;
 		
@@ -120,9 +119,12 @@ public class TuckedPersonRelationTree extends PersonRelationTree<TuckedPersonRel
 			
 		}
 	}
-	// -------------------------------------------------------------------------------------------------- ++ ------>>
 	
-
+	
+	
+	// ----------------------------------------------------------------------------------- || -------------------------------------------->>
+	// [Section] Other related initialisers.
+	// ----------------------------------------------------------------------------------- || -------------------------------------------->>
 	@Override
 	protected PersonRelationTreeController<TuckedPersonRelationTreeNode> createPersonRelationTreeController() {
 		return new TuckedPersonRelationTreeController() {
