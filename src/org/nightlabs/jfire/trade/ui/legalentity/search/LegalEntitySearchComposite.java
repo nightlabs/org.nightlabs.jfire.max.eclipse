@@ -3,38 +3,30 @@
  */
 package org.nightlabs.jfire.trade.ui.legalentity.search;
 
-import javax.jdo.FetchPlan;
-
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.ui.search.SearchFilterProvider;
 import org.nightlabs.jdo.query.ui.search.SearchResultFetcher;
 import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.base.ui.person.search.DynamicPersonSearchFilterProvider;
-import org.nightlabs.jfire.base.ui.person.search.PersonSearchEditLayoutFilterProvider;
-import org.nightlabs.jfire.base.ui.prop.DefaultPropertySetTableConfig;
-import org.nightlabs.jfire.base.ui.prop.IPropertySetTableConfig;
-import org.nightlabs.jfire.base.ui.prop.PropertySetSearchComposite;
-import org.nightlabs.jfire.base.ui.prop.PropertySetTable;
+import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchComposite;
 import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchFilterItemListMutator;
-import org.nightlabs.jfire.organisation.Organisation;
+import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchFilterProvider;
 import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.person.PersonStruct;
-import org.nightlabs.jfire.prop.IStruct;
-import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.prop.dao.StructLocalDAO;
-import org.nightlabs.jfire.prop.id.StructFieldID;
+import org.nightlabs.jfire.prop.Struct;
+import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.prop.search.PropSearchFilter;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.LegalEntitySearchFilter;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.jfire.trade.config.LegalEntitySearchConfigModule;
+import org.nightlabs.jfire.trade.query.LegalEntitySearchFilter;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class LegalEntitySearchComposite extends PropertySetSearchComposite<LegalEntity> {
+public class LegalEntitySearchComposite extends PropertySetSearchComposite<AnchorID, LegalEntity> {
 
 	/**
 	 * @param parent
@@ -43,7 +35,8 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	 */
 	public LegalEntitySearchComposite(Composite parent, int style,
 			String quickSearchText) {
-		super(parent, style, quickSearchText, false, PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH);
+		super(parent, style, quickSearchText, LegalEntitySearchConfigModule.class,
+				PersonSearchUseCaseConstants.USE_CASE_ID_LEGALENTITY_SEARCH);
 		createSearchButton(getButtonBar());
 	}
 
@@ -55,7 +48,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	 */
 	@Override
 	protected SearchFilterProvider createStaticSearchFilterProvider(SearchResultFetcher resultFetcher) {
-		SearchFilterProvider provider = new PersonSearchEditLayoutFilterProvider(resultFetcher, false, getUseCase(), getSearchText()) {
+		SearchFilterProvider provider = new PropertySetSearchFilterProvider(resultFetcher, false, LegalEntitySearchConfigModule.class, getPropertySetSearchUseCase(), getSearchText()) {
 			@Override
 			protected PropSearchFilter createSearchFilter() {
 				return new LegalEntitySearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
@@ -73,7 +66,8 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	@Override
 	protected SearchFilterProvider createDynamicSearchFilterProvider(
 			SearchResultFetcher resultFetcher) {
-		SearchFilterProvider provider = new DynamicPersonSearchFilterProvider(new PropertySetSearchFilterItemListMutator(), resultFetcher) {
+		SearchFilterProvider provider = new DynamicPersonSearchFilterProvider(new PropertySetSearchFilterItemListMutator(
+				createPersonStructLocalID()), resultFetcher) {
 			@Override
 			protected PropSearchFilter createSearchFilter() {
 				return new LegalEntitySearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
@@ -81,56 +75,14 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 		};
 		return provider;
 	}
-
+	
 	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Overrides to create Table to list LegalEntity Persons.
-	 * </p>
+	 * @return the {@link StructLocalID} that will be used to get the list of StructFields that will
+	 *         be presented for search in the dynamic filter-provider.
 	 */
-	@Override
-	protected PropertySetTable<LegalEntity> createResultTable(Composite parent) {
-		PropertySetTable<LegalEntity> resultTable = new PropertySetTable<LegalEntity>(
-				parent, SWT.NONE
-		) {
-			@Override
-			protected PropertySet getPropertySetFromElement(Object element) {
-				if (element instanceof LegalEntity)
-					return ((LegalEntity) element).getPerson();
-				return super.getPropertySetFromElement(element);
-			}
-
-			@Override
-			protected IPropertySetTableConfig getPropertySetTableConfig() {
-
-				return new LegalEntityTableConfig();
-			}
-
-			class LegalEntityTableConfig extends DefaultPropertySetTableConfig {
-				@Override
-				public IStruct getIStruct() {
-					return StructLocalDAO.sharedInstance().getStructLocal(
-							StructLocalID.create(
-									Organisation.DEV_ORGANISATION_ID,
-									Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE
-							), new NullProgressMonitor()
-					);
-				}
-
-				@Override
-				public StructFieldID[] getStructFieldIDs() {
-					return new StructFieldID[] {
-							PersonStruct.PERSONALDATA_COMPANY, PersonStruct.PERSONALDATA_NAME, PersonStruct.PERSONALDATA_FIRSTNAME,
-							PersonStruct.POSTADDRESS_CITY, PersonStruct.POSTADDRESS_ADDRESS
-						};
-				}
-			}
-		};
-		return resultTable;
+	protected static StructLocalID createPersonStructLocalID() {
+		return StructLocalID.create(SecurityReflector.getUserDescriptor().getOrganisationID(), Person.class, Struct.DEFAULT_SCOPE,
+				StructLocal.DEFAULT_SCOPE);
 	}
-
-	@Override
-	protected String[] getFetchGroups() {
-		return new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA};
-	}
+	
 }

@@ -45,7 +45,7 @@ import org.nightlabs.jfire.prop.DataField;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructField;
-import org.nightlabs.jfire.prop.config.PropertySetFieldBasedEditLayoutEntry2;
+import org.nightlabs.jfire.prop.config.PropertySetEditLayoutEntry;
 import org.nightlabs.jfire.prop.search.config.StructFieldSearchEditLayoutEntry;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
@@ -124,7 +124,7 @@ extends XComposite
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final String[] fetchGroups = new String[] {
 						PersonSearchConfigModule.FETCH_GROUP_QUICK_SEARCH_ENTRY,
-						PropertySetFieldBasedEditLayoutEntry2.FETCH_GROUP_STRUCT_FIELDS,
+						PropertySetEditLayoutEntry.FETCH_GROUP_STRUCT_FIELDS,
 						StructField.FETCH_GROUP_NAME,
 						IStruct.FETCH_GROUP_ISTRUCT_FULL_DATA,
 						FetchPlan.DEFAULT

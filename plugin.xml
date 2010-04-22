@@ -323,8 +323,12 @@
              category="org.nightlabs.jfire.base.ui.preferences.PersonSearchPreferencePage"
              class="org.nightlabs.jfire.trade.ui.legalentity.search.config.LegalEntitySearchPreferencePage"
              id="org.nightlabs.jfire.trade.ui.legalentity.search.config.LegalEntitySearchPreferencePage"
-             name="Legal Entity Search">
-       </page>
+             name="Legal Entity Search"/>
+        <page
+             category="org.nightlabs.jfire.base.ui.preferences.PersonSearchPreferencePage"
+             class="org.nightlabs.jfire.base.ui.person.search.config.DefaultPersonSearchPreferencePage"
+             id="org.nightlabs.jfire.base.ui.person.search.config.DefaultPersonSearchPreferencePage"
+             name="Default Person Search"/>
         <page
         	  category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               class="org.nightlabs.jfire.trade.ui.currency.config.CurrencyConfigPreferencePage"
@@ -1475,6 +1479,13 @@
           <articleContainerInfoDelegateFactory
           	class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.DefaultArticleContainerInfoDelegateFactory"
           	indexHint="100"/>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.base.ui.propertySetViewer">
+       <propertySetViewer
+             identifier="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityTableViewer"
+             viewerFactory="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityTableViewerFactory">
+       </propertySetViewer>
     </extension>
     
 </plugin>
