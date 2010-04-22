@@ -44,7 +44,7 @@ public class LegalEntityTableViewer
 extends AbstractPropertySetTableViewer<LegalEntityPersonMappingBean, LegalEntityTableViewer.TableInputBean, LegalEntity, PropertySetTableViewerConfiguration>
 implements SearchResultFetcher {
 
-	private static class TableInputBean {
+	public static class TableInputBean {
 		public LegalEntity legalEntity;
 		public Person person;
 	}
