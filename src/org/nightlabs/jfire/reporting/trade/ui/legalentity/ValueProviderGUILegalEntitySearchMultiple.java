@@ -3,10 +3,7 @@
  */
 package org.nightlabs.jfire.reporting.trade.ui.legalentity;
 
-import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -21,7 +18,6 @@ import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
-import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchComposite;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
@@ -68,7 +64,7 @@ public class ValueProviderGUILegalEntitySearchMultiple extends AbstractValueProv
 	 */
 	public Control createGUI(Composite wrapper) {
 		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, ""); //$NON-NLS-1$
-		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
+		searchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent arg0) {
 				notifyOutputChanged();
 			}
@@ -80,21 +76,22 @@ public class ValueProviderGUILegalEntitySearchMultiple extends AbstractValueProv
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public Collection<AnchorID> getOutputValue() {
-		Collection<LegalEntity> selectedLEs = searchComposite.getResultTable().getSelectedElements();
-		if (selectedLEs.size() < 1)
-			return null;
-		Collection<AnchorID> result = new ArrayList<AnchorID>(selectedLEs.size());
-		for (LegalEntity legalEntity : selectedLEs) {
-			result.add((AnchorID) JDOHelper.getObjectId(legalEntity));
-		}
-		return result;
+//		Collection<LegalEntity> selectedLEs = searchComposite.getResultViewer().getSelectedElements();
+//		if (selectedLEs.size() < 1)
+//			return null;
+//		Collection<AnchorID> result = new ArrayList<AnchorID>(selectedLEs.size());
+//		for (LegalEntity legalEntity : selectedLEs) {
+//			result.add((AnchorID) JDOHelper.getObjectId(legalEntity));
+//		}
+//		return result;
+		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
 	public boolean isAcquisitionComplete() {
-		return searchComposite.getResultTable().getFirstSelectedElement() != null || getValueProviderConfig().isAllowNullOutputValue();
+		return searchComposite.getResultViewer().getFirstSelectedElement() != null || getValueProviderConfig().isAllowNullOutputValue();
 	}
 
 	/* (non-Javadoc)

@@ -64,7 +64,7 @@ public class ValueProviderGUILegalEntitySearch extends AbstractValueProviderGUI<
 	 */
 	public Control createGUI(Composite wrapper) {
 		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, ""); //$NON-NLS-1$
-		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
+		searchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent arg0) {
 				notifyOutputChanged();
 			}
@@ -76,14 +76,14 @@ public class ValueProviderGUILegalEntitySearch extends AbstractValueProviderGUI<
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public AnchorID getOutputValue() {
-		return (AnchorID) JDOHelper.getObjectId(searchComposite.getResultTable().getFirstSelectedElement());
+		return (AnchorID) JDOHelper.getObjectId(searchComposite.getResultViewer().getFirstSelectedElement());
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
 	public boolean isAcquisitionComplete() {
-		return searchComposite.getResultTable().getFirstSelectedElement() != null || getValueProviderConfig().isAllowNullOutputValue();
+		return searchComposite.getResultViewer().getFirstSelectedElement() != null || getValueProviderConfig().isAllowNullOutputValue();
 	}
 
 	/* (non-Javadoc)
