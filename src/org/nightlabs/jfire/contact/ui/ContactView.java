@@ -7,9 +7,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -32,14 +32,11 @@ import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.person.create.CreatePersonWizard;
-import org.nightlabs.jfire.base.ui.person.search.PersonResultTable;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
-import org.nightlabs.jfire.base.ui.prop.PropertySetTable;
 import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -100,12 +97,7 @@ extends LSDViewPart
 		// 4. To modify: PersonSearchComposite.createResultTable(Composite parent)
 		//               >> returns: PropertySetTable<Person> <-- new PersonResultTable(parent, SWT.NONE)
 		// -- [Overrode]:
-		searchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_CONTACT_SEARCH) { //$NON-NLS-1$
-			@Override
-			protected PropertySetTable<Person> createResultTable(Composite parent) {
-				return new PersonResultTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
-			}
-		};
+		searchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_CONTACT_SEARCH);
 
 		Composite buttonBar = searchComposite.getButtonBar();
 		final Display display = searchComposite.getDisplay();
@@ -134,10 +126,10 @@ extends LSDViewPart
 		// Kai: [12 Nov 2009]
 		contributeToActionBars();
 
-		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
+		searchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				Person person = searchComposite.getResultTable().getFirstSelectedElement();
+				Person person = searchComposite.getResultViewer().getFirstSelectedElement();
 
 				PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(person);
 				SelectionManager.sharedInstance().notify(
@@ -145,10 +137,10 @@ extends LSDViewPart
 				);
 			}
 		});
-		searchComposite.getResultTable().addDoubleClickListener(new IDoubleClickListener() {
+		searchComposite.getResultViewer().addOpenListener(new IOpenListener() {
 			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				Person person = searchComposite.getResultTable().getFirstSelectedElement();
+			public void open(OpenEvent arg0) {
+				Person person = searchComposite.getResultViewer().getFirstSelectedElement();
 				PropertySetID personID = (PropertySetID)JDOHelper.getObjectId(person);
 				try {
 					RCPUtil.openEditor(
