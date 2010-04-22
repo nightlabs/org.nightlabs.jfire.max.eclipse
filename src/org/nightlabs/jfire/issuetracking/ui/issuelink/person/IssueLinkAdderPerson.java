@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,6 +24,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -44,13 +45,13 @@ extends AbstractIssueLinkAdder
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT); //$NON-NLS-1$
-		personSearchComposite.getResultTable().addDoubleClickListener(new IDoubleClickListener() {
+		personSearchComposite.getResultViewer().addOpenListener(new IOpenListener() {
 			@Override
-			public void doubleClick(DoubleClickEvent evt) {
+			public void open(OpenEvent arg0) {
 				notifyIssueLinkDoubleClickListeners();
 			}
 		});
-		personSearchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
+		personSearchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent e) {
 				fireSelectionChangedEvent();
 			}
@@ -82,7 +83,7 @@ extends AbstractIssueLinkAdder
 	 *
 	 */
 	public Set<ObjectID> getLinkedObjectIDs() {
-		Collection<Person> elements = personSearchComposite.getResultTable().getSelectedElements();
+		Collection<Person> elements = (Collection<Person>) personSearchComposite.getResultViewer().getSelectedElements();
 		return NLJDOHelper.getObjectIDSet(elements);
 	}
 
@@ -93,7 +94,7 @@ extends AbstractIssueLinkAdder
 	public boolean isComplete() {
 		if (personSearchComposite == null)
 			return false;
-		return !personSearchComposite.getResultTable().getSelectedElements().isEmpty();
+		return !personSearchComposite.getResultViewer().getSelectedElements().isEmpty();
 	}
 
 	@Override
@@ -103,7 +104,7 @@ extends AbstractIssueLinkAdder
 			ProgressMonitor monitor)
 	{
 		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
-		for (Person linkedPerson : personSearchComposite.getResultTable().getSelectedElements()) {
+		for (PropertySet linkedPerson : personSearchComposite.getResultViewer().getSelectedElements()) {
 			issueLinks.add(
 					issue.createIssueLink(issueLinkType, linkedPerson));
 		}
