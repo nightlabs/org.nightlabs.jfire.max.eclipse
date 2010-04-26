@@ -30,6 +30,7 @@ public class CreateIssueTypeWizard extends DynamicPathWizard
 	public CreateIssueTypeWizard() {
 		super();
 		setWindowTitle("Create Issue Type");
+		setForcePreviousAndNextButtons(false);
 	}
 
 	@Override
