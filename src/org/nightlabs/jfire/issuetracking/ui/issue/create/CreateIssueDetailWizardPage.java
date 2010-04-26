@@ -345,11 +345,11 @@ extends WizardHopPage
 		return result;
 	}
 
-	public I18nTextEditorMultiLine getDescriptionText() {
-		return descriptionText;
-	}
-
-	public I18nTextEditor getSubjectText() {
-		return subjectText;
-	}
+//	public I18nTextEditorMultiLine getDescriptionText() {
+//		return descriptionText;
+//	}
+//
+//	public I18nTextEditor getSubjectText() {
+//		return subjectText;
+//	}
 }

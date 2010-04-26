@@ -286,4 +286,15 @@
                title="Same issue link already existing">
          </simpleExceptionHandler>
       </extension>
+      <extension
+            point="org.nightlabs.base.ui.wizardDelegateFactory">
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard">
+         </wizardDelegateFactory>
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard">
+         </wizardDelegateFactory>
+      </extension>
 </plugin>

@@ -120,13 +120,19 @@ extends AbstractIssueEditorGeneralSection
 	/**
 	 * Saves a file indicated by fileName to the given {@link InputStream}.
 	 */
-	public void saveFile(InputStream io, String fileName) throws IOException {
+	public void saveFile(InputStream io, String fileName) throws IOException
+	{
 		// Should this method be here?
 		FileOutputStream fos = new FileOutputStream(fileName);
-		byte[] buf = new byte[256];
-		int read = 0;
-		while ((read = io.read(buf)) > 0) {
-			fos.write(buf, 0, read);
+		try {
+			byte[] buf = new byte[256];
+			int read = 0;
+			while ((read = io.read(buf)) > 0) {
+				fos.write(buf, 0, read);
+			}
+		}
+		finally {
+			fos.close();
 		}
 	}
 
