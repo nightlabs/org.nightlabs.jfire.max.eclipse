@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,6 +43,8 @@ public class IssueFilterCompositePeopleRelated
 //	private User selectedAssignee;
 //	private UserID selectedAssigneeID;
 
+	private static final Logger LOGGER = Logger.getLogger(IssueFilterCompositePeopleRelated.class);
+
 	private Text reporterText;
 	private Text assigneeText;
 
@@ -49,6 +52,9 @@ public class IssueFilterCompositePeopleRelated
 	private Button reporterButton;
 	private Button allAssigneeButton;
 	private Button assigneeButton;
+
+	boolean isAllReporterButtonActive = true;
+	boolean isAllAssigneeButtonActive = true;
 
 	/**
 	 * @param parent
@@ -180,59 +186,105 @@ public class IssueFilterCompositePeopleRelated
 	}
 
 	@Override
-	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
+	protected void updateUI(final QueryEvent event, final List<FieldChangeCarrier> changedFields)
 	{
-		for (FieldChangeCarrier changedField : changedFields)
+		for (final FieldChangeCarrier changedField : changedFields)
 		{
 			if (IssueQuery.FieldName.assigneeID.equals(changedField.getPropertyName()))
 			{
-				UserID newAssigneeID = (UserID) changedField.getNewValue();
-				if (newAssigneeID == null)
-				{
-					assigneeText.setText(""); //$NON-NLS-1$
-					assigneeButton.setEnabled(true);
-					assigneeText.setEnabled(false);
-					allAssigneeButton.setSelection(true);
-				}
-				else
-				{
-					final User newAssignee = UserDAO.sharedInstance().getUser(newAssigneeID,
-							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor());
+				// old
+//				final UserID newAssigneeID = (UserID) changedField.getNewValue();
+//				if (newAssigneeID == null)
+//				{
+//					assigneeText.setText(""); //$NON-NLS-1$
+//					assigneeButton.setEnabled(true);
+//					assigneeText.setEnabled(false);
+//					allAssigneeButton.setSelection(true);
+//				}
+//				else
+//				{
+//					final User newAssignee = UserDAO.sharedInstance().getUser(newAssigneeID,
+//							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//							new NullProgressMonitor());
+//
+//					assigneeText.setText(newAssignee.getName());
+//				}
 
-					assigneeText.setText(newAssignee.getName());
+				// begin new
+				final UserID tmpAssigneeID = (UserID) changedField.getNewValue();
+				if (tmpAssigneeID != null)
+				{
+					final User selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
+						new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor());
+					if (selectedAssignee != null) {
+						assigneeText.setText(selectedAssignee.getName());
+						setSearchSectionActiveBySelection(true);
+					}
 				}
+				// end new
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.assigneeID).equals(changedField.getPropertyName()))
 			{
-				boolean isActive = (Boolean) changedField.getNewValue();
-				assigneeButton.setEnabled(isActive);
-				assigneeText.setEnabled(isActive);
-				allAssigneeButton.setSelection(!isActive);
-				setSearchSectionActive(isActive);
-				if (!isActive) {
-					assigneeText.setText(""); //$NON-NLS-1$
-					getQuery().setAssigneeID(null);
+				boolean active = (Boolean) changedField.getNewValue();
+				assigneeButton.setEnabled(active);
+				assigneeText.setEnabled(active);
+				allAssigneeButton.setSelection(!active);
+
+				// old
+//				setSearchSectionActive(isActive);
+//				if (!isActive) {
+//					assigneeText.setText(""); //$NON-NLS-1$
+//					getQuery().setAssigneeID(null);
+//				}
+
+				// begin new
+				isAllAssigneeButtonActive = !active;
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Selection state of allAssigneeButton is " + isAllAssigneeButtonActive); //$NON-NLS-1$
+					LOGGER.debug("Selection state of allReporterButton is " + isAllReporterButtonActive); //$NON-NLS-1$
 				}
+				if (isAllAssigneeButtonActive && isAllReporterButtonActive)
+					setSearchSectionActiveBySelection(false);
+				else
+					setSearchSectionActiveBySelection(true);
+				if (!active)
+					getQuery().setAssigneeID(null);
+				// end new
 			}
 			else if (IssueQuery.FieldName.reporterID.equals(changedField.getPropertyName()))
 			{
-				UserID tmpReporterID = (UserID) changedField.getNewValue();
-				if (tmpReporterID == null)
-				{
-					reporterText.setText(""); //$NON-NLS-1$
-					reporterButton.setEnabled(true);
-					reporterText.setEnabled(false);
-					allReporterButton.setSelection(true);
-				}
-				else
+				final UserID tmpReporterID = (UserID) changedField.getNewValue();
+
+				// old
+//				if (tmpReporterID == null)
+//				{
+//					reporterText.setText(""); //$NON-NLS-1$
+//					reporterButton.setEnabled(true);
+//					reporterText.setEnabled(false);
+//					allReporterButton.setSelection(true);
+//				}
+//				else
+//				{
+//					final User selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
+//							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//							new NullProgressMonitor());
+//
+//					reporterText.setText(selectedReporter.getName());
+//				}
+
+				// begin new
+				if (tmpReporterID != null)
 				{
 					final User selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
-							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor());
-
-					reporterText.setText(selectedReporter.getName());
+						new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor());
+					if (selectedReporter != null) {
+						reporterText.setText(selectedReporter.getName());
+						setSearchSectionActiveBySelection(true);
+					}
 				}
+				// end new
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.reporterID).equals(changedField.getPropertyName()))
 			{
@@ -240,13 +292,30 @@ public class IssueFilterCompositePeopleRelated
 				reporterText.setEnabled(active);
 				reporterButton.setEnabled(active);
 				allReporterButton.setSelection(!active);
-				setSearchSectionActive(active);
-				if (!active) {
-					reporterText.setText(""); //$NON-NLS-1$
-					getQuery().setReporterID(null);
+
+				// old
+//				setSearchSectionActive(active);
+//				if (!active) {
+//					reporterText.setText(""); //$NON-NLS-1$
+//					getQuery().setReporterID(null);
+//				}
+
+				// begin new
+				isAllReporterButtonActive = !active;
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Selection state of allAssigneeButton is " + isAllAssigneeButtonActive); //$NON-NLS-1$
+					LOGGER.debug("Selection state of allReporterButton is " + isAllReporterButtonActive); //$NON-NLS-1$
 				}
+				if (isAllAssigneeButtonActive && isAllReporterButtonActive)
+					setSearchSectionActiveBySelection(false);
+				else
+					setSearchSectionActiveBySelection(true);
+				if (!active)
+					getQuery().setReporterID(null);
+				// end new
+
 			}
-		} // for (FieldChangeCarrier changedField : event.getChangedFields())
+		}
 	}
 
 	private static final Set<String> fieldNames;
