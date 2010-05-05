@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.Product;
 import org.nightlabs.jfire.store.ProductType;
@@ -30,6 +31,8 @@ import org.nightlabs.tableprovider.ui.TableProvider;
 public class ArticleTableProvider
 implements TableProvider<ArticleID, Article>
 {
+	private static final long serialVersionUID = -5822175403112176013L;
+
 	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName"; //$NON-NLS-1$
 	public static final String TYPE_VOUCHER_KEY = "Key"; //$NON-NLS-1$
 	public static final String TYPE_VOUCHER_VALIDTITY = "Validity"; //$NON-NLS-1$
@@ -151,5 +154,11 @@ implements TableProvider<ArticleID, Article>
 	@Override
 	public boolean isGeneric() {
 		return false;
+	}
+
+	@Override
+	public Image getColumnImage(Set<String> types, Article element, String scope) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
