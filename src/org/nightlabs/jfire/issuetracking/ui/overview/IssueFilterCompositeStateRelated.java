@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -56,11 +55,9 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueFilterCompositeStateRelated
 extends AbstractQueryFilterComposite<IssueQuery>
 {
-	private static final Logger logger = Logger.getLogger(IssueFilterCompositeStateRelated.class);
-
 	private String baseName = "org.nightlabs.jfire.issuetracking.ui.resource.messages"; //$NON-NLS-1$
 	private ClassLoader loader = IssueFilterCompositeStateRelated.class.getClassLoader();
-	
+
 	private XComboComposite<ProcessDefinition> processDefinitionsCombo;
 	private ILabelProvider processDefinitionLabelProvider = new LabelProvider() {
 		@Override
@@ -74,7 +71,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				ProcessDefinition processDefinition = (ProcessDefinition) element;
 				return processDefinition.getProcessDefinitionID();
 			}
-			
+
 			return super.getText(element);
 		}
 	};
@@ -105,7 +102,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		public String getProcessDefinitionID() {
 			return "All"; //$NON-NLS-1$
 		}
-		
+
 		public DummyProcessDefinitionName getName() {
 			return name;
 		}
@@ -136,7 +133,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			StateDefinitionName stateDefinitionName = new StateDefinitionName(this);
 			stateDefinitionName.readFromProperties(baseName, loader,
 			"org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeStateRelated.stateDefinition.all"); //$NON-NLS-1$
-			
+
 			return stateDefinitionName;
 		}
 	}

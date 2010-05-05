@@ -10,7 +10,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -39,6 +38,8 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -47,7 +48,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueFilterCompositeIssueLinkRelated
 	extends AbstractQueryFilterComposite<IssueQuery>
 {
-	private static final Logger logger = Logger.getLogger(IssueFilterCompositeIssueLinkRelated.class);
+	private static final Logger logger = LoggerFactory.getLogger(IssueFilterCompositeIssueLinkRelated.class);
 
 	private XComboComposite<IssueLinkType> issueLinkTypeCombo;
 

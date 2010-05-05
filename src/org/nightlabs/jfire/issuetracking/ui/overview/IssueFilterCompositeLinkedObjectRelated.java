@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
@@ -22,9 +21,7 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
-import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
 import org.nightlabs.jfire.issue.query.IssueLinkQueryElement;
@@ -35,6 +32,8 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangeListen
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkObjectChooserComposite;
 import org.nightlabs.progress.ProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -43,7 +42,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueFilterCompositeLinkedObjectRelated
 extends AbstractQueryFilterComposite<IssueQuery>
 {
-	private static final Logger logger = Logger.getLogger(IssueFilterCompositeLinkedObjectRelated.class);
+	private static final Logger logger = LoggerFactory.getLogger(IssueFilterCompositeLinkedObjectRelated.class);
 
 	private Set<IssueLinkQueryElement> issueLinkQueryElements = new HashSet<IssueLinkQueryElement>();
 	/**
@@ -110,13 +109,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 					queryElement.setLinkedObjectID(item.getLinkedObjectID());
 					issueLinkQueryElements.add(queryElement);
 				}
-				
+
 				getQuery().setIssueLinkQueryElements(issueLinkQueryElements);
 				boolean enable = !issueLinkQueryElements.isEmpty();
 				getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkQueryElements, enable);
 			}
 		});
-		
+
 		issueLinkTable = issueLinkObjectChooserComposite.getIssueLinkTable();
 	}
 
@@ -140,20 +139,20 @@ extends AbstractQueryFilterComposite<IssueQuery>
 					} else {
 						issueLinkTableItems.clear();
 					}
-					
+
 					Job job = new Job("Loading Data....") {
 						@Override
-						protected IStatus run(ProgressMonitor monitor) throws Exception 
+						protected IStatus run(ProgressMonitor monitor) throws Exception
 						{
 							String[] FETCH_GROUP = new String[]{ FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME};
-							
+
 							for (IssueLinkQueryElement issueLinkQueryElement : tmpIssueLinkQueryElements) {
 								IssueLinkTypeID issueLinkTypeID = issueLinkQueryElement.getIssueLinkTypeID();
-								IssueLinkType issueLinkType = 
+								IssueLinkType issueLinkType =
 									IssueLinkTypeDAO.sharedInstance().getIssueLinkType(issueLinkTypeID, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 								issueLinkTableItems.add(new IssueLinkTableItem(issueLinkQueryElement.getLinkedObjectID(), issueLinkType));
 							}
-					
+
 							Display.getDefault().asyncExec(new Runnable() {
 								@Override
 								public void run() {

@@ -11,7 +11,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
@@ -53,8 +52,6 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class IssueLinkTable
 extends AbstractTableComposite<IssueLinkTableItem>
 {
-	private static final Logger logger = Logger.getLogger(IssueLinkTable.class);
-
 	private class LabelProvider extends TableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -445,7 +442,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
 		return issueLinkTableItems;
 	}
-	
+
 	public Issue getIssue() {
 		return issue;
 	}

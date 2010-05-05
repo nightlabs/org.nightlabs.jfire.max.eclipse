@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -37,8 +36,6 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 public class IssueFilterCompositeProjectRelated
 extends AbstractQueryFilterComposite<IssueQuery>
 {
-	private static final Logger logger = Logger.getLogger(IssueFilterCompositeProjectRelated.class);
-
 	private ProjectAdminTreeComposite projectTreeComposite;
 	private CheckboxTreeViewer checkboxTreeViewer;
 

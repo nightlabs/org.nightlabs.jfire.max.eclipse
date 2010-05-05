@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -30,6 +29,8 @@ import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -43,7 +44,7 @@ public class IssueFilterCompositePeopleRelated
 //	private User selectedAssignee;
 //	private UserID selectedAssigneeID;
 
-	private static final Logger LOGGER = Logger.getLogger(IssueFilterCompositePeopleRelated.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(IssueFilterCompositePeopleRelated.class);
 
 	private Text reporterText;
 	private Text assigneeText;
