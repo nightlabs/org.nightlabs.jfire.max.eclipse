@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
@@ -30,6 +31,8 @@ import org.nightlabs.tableprovider.ui.TableProvider;
 public class ArticleTableProvider
 implements TableProvider<ArticleID, Article>
 {
+	private static final long serialVersionUID = -1825797435506268786L;
+
 	public static final String TYPE_PRODUCT_TYPE_NAME = "ProductTypeName"; //$NON-NLS-1$
 	public static final String TYPE_DYNAMIC_PRODUCT_TYPE_NAME = "ProductName"; //$NON-NLS-1$
 	public static final String TYPE_QUANTITY = "Quantity"; //$NON-NLS-1$
@@ -157,5 +160,11 @@ implements TableProvider<ArticleID, Article>
 	@Override
 	public boolean isGeneric() {
 		return false;
+	}
+
+	@Override
+	public Image getColumnImage(Set<String> types, Article element, String scope) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
