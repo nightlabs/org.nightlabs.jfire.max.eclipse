@@ -38,7 +38,7 @@ import org.nightlabs.util.NLLocale;
 public class TariffList
 extends AbstractTableComposite<Tariff>
 {
-	public static Comparator<Tariff> tariffComparator = new Comparator<Tariff>() {
+	public static final Comparator<Tariff> tariffComparator = new Comparator<Tariff>() {
 		public int compare(Tariff o1, Tariff o2) {
 			String s1 = o1.getName().getText(NLLocale.getDefault().getLanguage());
 			String s2 = o2.getName().getText(NLLocale.getDefault().getLanguage());

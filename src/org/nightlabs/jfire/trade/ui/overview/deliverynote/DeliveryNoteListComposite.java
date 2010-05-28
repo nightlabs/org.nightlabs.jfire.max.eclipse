@@ -20,7 +20,7 @@ import org.nightlabs.util.BaseComparator;
 public class DeliveryNoteListComposite
 	extends AbstractArticleContainerListComposite<DeliveryNote>
 {
-	public static Comparator<DeliveryNote> DELIVERY_NOTE_FINALZE_DT_COMPARATOR = new Comparator<DeliveryNote>(){
+	public static final Comparator<DeliveryNote> DELIVERY_NOTE_FINALZE_DT_COMPARATOR = new Comparator<DeliveryNote>(){
 		@Override
 		public int compare(DeliveryNote o1, DeliveryNote o2)
 		{

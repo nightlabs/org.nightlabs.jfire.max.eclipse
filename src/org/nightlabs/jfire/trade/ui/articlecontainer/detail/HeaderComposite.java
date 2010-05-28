@@ -46,14 +46,9 @@ public class HeaderComposite extends XComposite
 	public HeaderComposite(Composite parent, ArticleContainerEditComposite articleContainerEditComposite, ArticleContainer articleContainer)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//	    setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 
 		this.articleContainerEditComposite = articleContainerEditComposite;
 		this.articleContainer = articleContainer;
-
-//		setBackground(DEFAULT_BG_COLOR);
-//		setFont(DEFAULT_FONT);
-//		label = new Label(this, SWT.NONE);
 	}
 
 	public static final Color DEFAULT_BG_COLOR = new Color(null, 255, 255, 255);
@@ -62,21 +57,13 @@ public class HeaderComposite extends XComposite
 		bgColor = c;
 	}
 
-	public static Font DEFAULT_FONT = new Font(null, "Arial", 8, SWT.BOLD); //$NON-NLS-1$ // TODO shouldn't these font infos be read from somewhere (e.g. other composites or a config?)
+	public static final Font DEFAULT_FONT = new Font(null, "Arial", 8, SWT.BOLD); //$NON-NLS-1$ // TODO shouldn't these font infos be read from somewhere (e.g. other composites or a config?)
 	protected Font font = DEFAULT_FONT;
 
 	@Override
 	public void setFont(Font f) {
 		font = f;
 	}
-
-//	protected Label label;
-//	public void setHeaderText(String text)
-//	{
-//		label.setText(" "+text);
-//		label.setFont(font);
-//		label.setBackground(bgColor);
-//	}
 
 	/**
 	 * @return Returns the articleContainer.
@@ -128,6 +115,5 @@ public class HeaderComposite extends XComposite
 	 */
 	public void refresh()
 	{
-
 	}
 }

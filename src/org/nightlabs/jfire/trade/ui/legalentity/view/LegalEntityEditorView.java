@@ -56,7 +56,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class LegalEntityEditorView
 extends LSDViewPart
 {
-	public static String ID_VIEW = LegalEntityEditorView.class.getName();
+	public static final String ID_VIEW = LegalEntityEditorView.class.getName();
 
 	private LegalEntitySelectionComposite selectionComposite;
 	private SelectAnonymousViewAction selectAnonymousAction = new SelectAnonymousViewAction();

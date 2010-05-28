@@ -55,7 +55,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 {
 	private static final Logger logger = Logger.getLogger(ArticleContainerRootTreeNode.class);
 
-	protected static int rangeLength = 3; // TODO This should come from a JDO-ConfigModule
+	protected static final int rangeLength = 3; // TODO This should come from a JDO-ConfigModule
 
 	private boolean purchaseMode;
 	private boolean endCustomerMode;
