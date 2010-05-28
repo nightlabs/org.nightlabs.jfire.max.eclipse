@@ -13,7 +13,7 @@ import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 public class TradeAdminView
 extends LSDViewPart
 {
-	public static String VIEW_ID = TradeAdminView.class.getName();
+	public static final String VIEW_ID = TradeAdminView.class.getName();
 	
 	private TradeAdminComposite tradeAdminComposite = null;
 	public void createPartContents(Composite parent)

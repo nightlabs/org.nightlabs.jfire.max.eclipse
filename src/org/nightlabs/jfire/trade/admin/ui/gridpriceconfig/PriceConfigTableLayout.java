@@ -37,8 +37,8 @@ import org.eclipse.swt.widgets.TableColumn;
  */
 public class PriceConfigTableLayout extends TableLayout
 {
-	public static int MIN_COL_WIDTH = 80;
-	
+	public static final int MIN_COL_WIDTH = 80;
+
 	@Override
 	public void layout(Composite c, boolean flush)
 	{
@@ -50,9 +50,9 @@ public class PriceConfigTableLayout extends TableLayout
 			width -= sb.getSize().x;
 
 		for(int i = 0; i < columnCount; i++)
-    {
-      TableColumn tc = table.getColumn(i);
-      tc.setWidth(Math.max(MIN_COL_WIDTH, width / columnCount));
-    }
-  }
+		{
+			TableColumn tc = table.getColumn(i);
+			tc.setWidth(Math.max(MIN_COL_WIDTH, width / columnCount));
+		}
+	}
 }
