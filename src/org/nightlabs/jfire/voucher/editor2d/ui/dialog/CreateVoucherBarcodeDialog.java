@@ -3,6 +3,9 @@ package org.nightlabs.jfire.voucher.editor2d.ui.dialog;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.AbstractListComposite;
@@ -14,16 +17,10 @@ import org.nightlabs.jfire.voucher.scripting.VoucherScriptingConstants;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class CreateVoucherBarcodeDialog
 extends org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog
 {
-
-	/**
-	 * @param parentShell
-	 * @param request
-	 */
 	public CreateVoucherBarcodeDialog(Shell parentShell, BarcodeCreateRequest request) {
 		super(parentShell, request);
 	}
@@ -49,4 +46,21 @@ extends org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog
 		return (String) VoucherScriptResultProvider.sharedInstance().
 			getScriptResult(scriptRegistryItemID);
 	}
+	
+	private static final ILabelProvider scriptRegistryLabelProvider = new LabelProvider()
+	{
+		@Override
+		public String getText(Object element)
+		{
+			if (element instanceof ScriptRegistryItemID) {
+				ScriptRegistryItemID scriptRegistryItemID = (ScriptRegistryItemID) element;
+				return scriptRegistryItemID.scriptRegistryItemID;
+			}
+			return null;
+		}
+		@Override
+		public Image getImage(Object element) {
+			return null;
+		}
+	};	
 }
