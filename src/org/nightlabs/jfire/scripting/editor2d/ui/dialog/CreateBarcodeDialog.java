@@ -27,7 +27,6 @@ package org.nightlabs.jfire.scripting.editor2d.ui.dialog;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -60,12 +59,10 @@ import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public abstract class CreateBarcodeDialog
 extends ResizableTitleAreaDialog
 {
-	public static final Logger LOGGER = Logger.getLogger(CreateBarcodeDialog.class);
 	public static final double DEFAULT_BARCODE_HEIGHT = 15; // mm
 	
 	public CreateBarcodeDialog(Shell parentShell, BarcodeCreateRequest request)
@@ -178,7 +175,7 @@ extends ResizableTitleAreaDialog
 		barcodeTypeCombo.setInput(types);
 	}
 		
-	public static ILabelProvider barcodeTypeLabelProvider = new LabelProvider()
+	private static final ILabelProvider barcodeTypeLabelProvider = new LabelProvider()
 	{
 		@Override
 		public String getText(Object element)
@@ -210,7 +207,7 @@ extends ResizableTitleAreaDialog
 		widthScaleCombo.setInput(types);
 	}
 	
-	public static ILabelProvider widthScaleLabelProvider = new LabelProvider()
+	private static final ILabelProvider widthScaleLabelProvider = new LabelProvider()
 	{
 		@Override
 		public String getText(Object element)
@@ -246,7 +243,7 @@ extends ResizableTitleAreaDialog
 		orientationCombo.setInput(types);
 	}
 		
-	public static ILabelProvider orientationLabelProvider = new LabelProvider()
+	private static final ILabelProvider orientationLabelProvider = new LabelProvider()
 	{
 		@Override
 		public String getText(Object element)
@@ -256,24 +253,7 @@ extends ResizableTitleAreaDialog
 				if (orientation == Orientation.HORIZONTAL)
 					return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.horizontal"); //$NON-NLS-1$
 				if (orientation == Orientation.VERTICAL)
-					return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.vertical");					 //$NON-NLS-1$
-			}
-			return null;
-		}
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-	};
-	
-	public static ILabelProvider scriptRegistryLabelProvider = new LabelProvider()
-	{
-		@Override
-		public String getText(Object element)
-		{
-			if (element instanceof ScriptRegistryItemID) {
-				ScriptRegistryItemID scriptRegistryItemID = (ScriptRegistryItemID) element;
-				return scriptRegistryItemID.scriptRegistryItemID;
+					return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.vertical");	//$NON-NLS-1$
 			}
 			return null;
 		}
