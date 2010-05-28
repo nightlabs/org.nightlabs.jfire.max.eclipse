@@ -11,14 +11,12 @@ import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class NodeBorder
 extends AbstractBorder
 {
-	protected static Insets insets = new Insets(8,6,8,6);
-	protected static PointList connector = new PointList();
-	protected static PointList bottomConnector = new PointList();
+	protected static final PointList connector = new PointList();
+	protected static final PointList bottomConnector = new PointList();
 	
 	static {
 		connector.addPoint(-2, 0);
@@ -37,7 +35,6 @@ extends AbstractBorder
 	}
 	
 	public Insets getInsets(IFigure figure) {
-//		return null;
 		return new Insets(0,0,0,0);
 	}
 
