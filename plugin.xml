@@ -66,10 +66,19 @@
       </editorActionBarContributionRegistry>
    </extension-->
     <extension point="org.eclipse.ui.views">
+<!--    
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
             icon="icons/issuelink/person/LegalEntityPersonIssueLinkTreeView.16x16.png"
             id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView" name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView.name"/>
+-->
+        <view
+              category="org.nightlabs.jfire.trade.ui.TradeCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTableView"
+              icon="icons/issuelink/person/LegalEntityIssueLinkView.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTableView"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTableView.name">
+        </view>
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
