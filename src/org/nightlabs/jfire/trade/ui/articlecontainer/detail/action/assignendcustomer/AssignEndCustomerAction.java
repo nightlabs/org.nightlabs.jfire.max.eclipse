@@ -23,7 +23,7 @@ public class AssignEndCustomerAction extends GenericArticleEditAction
 	@Override
 	public void run() {
 		Set<ArticleID> articleIDs = NLJDOHelper.getObjectIDSet(getArticles());
-		AssignEndCustomerWizard wizard = new AssignEndCustomerWizard(articleIDs);
+		AssignEndCustomerWizard wizard = new AssignEndCustomerWizard(articleIDs); // <-- This is now in the Wizard-Delegate framework...
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.open();
 	}

@@ -22,31 +22,31 @@ extends ArticleContainerAction
 
 		if (edit == null || edit.getArticleContainer() == null)
 			return false;
-		
-		
+
+
 		ArticleContainerID articleContainerID = edit.getArticleContainerID();
 		if (!(articleContainerID instanceof OrderID))
 			return false;
-		
+
 		AnchorID localOrgID = AnchorID.create(
-				SecurityReflector.getUserDescriptor().getOrganisationID(), 
-				OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, 
+				SecurityReflector.getUserDescriptor().getOrganisationID(),
+				OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY,
 				OrganisationLegalEntity.class.getName());
-		
-		if (!localOrgID.equals(edit.getArticleContainer().getVendorID())) 
+
+		if (!localOrgID.equals(edit.getArticleContainer().getVendorID()))
 			return false;
-		
-		
+
+
 		return true;
 	}
 
 	/**
-	 * Returns <code>true</code> if all {@link Offer}s of the {@link Order} are not finalized and <code>false</code> otherwise. 
+	 * Returns <code>true</code> if all {@link Offer}s of the {@link Order} are not finalized and <code>false</code> otherwise.
 	 * @return <code>true</code> if all {@link Offer}s of the {@link Order} are not finalized and <code>false</code> otherwise.
 	 */
 	@Override
 	public boolean calculateEnabled()
-	{		
+	{
 		ArticleContainer articleContainer = getArticleContainer();
 		if (articleContainer instanceof Order) {
 			Order order = (Order) articleContainer;
@@ -68,7 +68,7 @@ extends ArticleContainerAction
 
 		OrderID orderID = (OrderID) articleContainerID;
 
-		AssignCustomerWizard wizard = new AssignCustomerWizard(orderID);
+		AssignCustomerWizard wizard = new AssignCustomerWizard(orderID); // <-- This is now in the Wizard-Delegate framework...
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.setPageSize(600, 500);
 		dialog.open();

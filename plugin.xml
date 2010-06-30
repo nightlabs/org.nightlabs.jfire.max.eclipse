@@ -1487,5 +1487,19 @@
              viewerFactory="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityTableViewerFactory">
        </propertySetViewer>
     </extension>
-    
+    <extension
+            point="org.nightlabs.base.ui.wizardDelegateFactory">
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard">
+         </wizardDelegateFactory>
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerWizard">
+         </wizardDelegateFactory>
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assignendcustomer.AssignEndCustomerWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assignendcustomer.AssignEndCustomerWizard">
+         </wizardDelegateFactory>            
+    </extension>
 </plugin>
