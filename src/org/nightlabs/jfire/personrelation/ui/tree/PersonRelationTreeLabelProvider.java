@@ -184,7 +184,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected String getColumnText(Object element, int spanColIndex) {
+	public String getColumnText(Object element, int spanColIndex) {
 		if (element == null) {
 			if (logger.isDebugEnabled())
 				logger.debug("getColumnText: element is null => returning null."); //$NON-NLS-1$
@@ -212,7 +212,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Image getColumnImage(Object element, int spanColIndex) {
+	public Image getColumnImage(Object element, int spanColIndex) {
 		if (element == null)
 			return null;
 
