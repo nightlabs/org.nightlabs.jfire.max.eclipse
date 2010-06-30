@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jbpm UI Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.jbpm.ui
-Bundle-Version: 1.0.5.qualifier
+Bundle-Version: 1.0.6.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin
 Bundle-Vendor: NightLabs.org
@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.jbpm.ui,
+ org.nightlabs.jfire.jbpm.ui.query,
  org.nightlabs.jfire.jbpm.ui.state,
  org.nightlabs.jfire.jbpm.ui.transition.next
