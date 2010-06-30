@@ -12,7 +12,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
@@ -50,11 +49,11 @@ extends EntityEditorPageController
 		IssueLink.FETCH_GROUP_ISSUE,
 		Issue.FETCH_GROUP_ISSUE_TYPE,
 		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
+		Issue.FETCH_GROUP_ISSUE_REPORTER,
 		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
 		Statable.FETCH_GROUP_STATE,
 		Issue.FETCH_GROUP_ISSUE_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE,
@@ -62,7 +61,6 @@ extends EntityEditorPageController
 		IssueType.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
-		IssueResolution.FETCH_GROUP_NAME,
 		StateDefinition.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_MARKERS,          // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_NAME,             // <-- Since 14.05.2009
@@ -125,7 +123,7 @@ extends EntityEditorPageController
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePageController.monitor.loadIssues.text"), 10); //$NON-NLS-1$
 
 		this.articleContainer =
-			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
 				null, // This must be the local organisationID! The backend now chooses this automatically, when passing null. Marco.
