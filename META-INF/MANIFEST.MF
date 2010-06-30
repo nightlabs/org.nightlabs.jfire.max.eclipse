@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Issue Tracking Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.ui;singleton:=true
-Bundle-Version: 1.1.28.qualifier
+Bundle-Version: 1.1.29.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin
 Bundle-Localization: plugin
@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench.texteditor,
  org.nightlabs.jfire.querystore.ui;visibility:=reexport,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
- org.nightlabs.jfire.jbpm.ui;visibility:=reexport
+ org.nightlabs.jfire.jbpm.ui;visibility:=reexport,
+ org.nightlabs.tableprovider.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.ui,
  org.nightlabs.jfire.issuetracking.ui.issue,

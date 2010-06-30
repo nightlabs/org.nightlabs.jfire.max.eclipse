@@ -178,7 +178,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 		return IssueDAO.sharedInstance().getIssuesForQueries(
 				queryMap,
-				IssueTable.FETCH_GROUPS_ISSUE,
+				issueResultTable.getIssueTableFetchGroups(), // IssueTable.FETCH_GROUPS_ISSUE,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 	}
