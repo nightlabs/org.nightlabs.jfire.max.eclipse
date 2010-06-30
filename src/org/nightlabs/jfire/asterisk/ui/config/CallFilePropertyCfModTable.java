@@ -332,7 +332,7 @@ extends AbstractTableComposite<String>
 		 * http://tom-eclipse-dev.blogspot.com/2007/01/tableviewers-and-nativelooking.html
 		 */
 		@Override
-		protected Image getColumnImage(Object element, int spanColIndex) {
+		public Image getColumnImage(Object element, int spanColIndex) {
 			String key = (String)element;
 			if (spanColIndex == 2) {
 // @Yo: First, you should not use GIF files, but only PNG, because PNGs have a real alpha channel and look better.
