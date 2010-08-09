@@ -86,6 +86,7 @@ import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.script.JSHTMLExecuter;
 import org.nightlabs.util.NLLocale;
 import org.nightlabs.util.Util;
 
@@ -235,10 +236,20 @@ extends FadeableComposite
 		productNameDialogButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
-			{
-				if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,isScriptable()).open())) {
-					updateProductNameUI();
-					productNameModified = true;
+			{								
+				ProductNameDialogType productNameDialogType = ProductNameDialogType.TEXT_EDIT;				
+				if(isScriptable())
+				{
+					// if the User has entered a valid script then a preview is shown
+					JSHTMLExecuter script = new JSHTMLExecuter();	
+					if(script.containsValidScript(productNameText.getText()) > 0)
+						productNameDialogType = ProductNameDialogType.SCRIPT_PREVIEW;
+					else					
+						productNameDialogType = ProductNameDialogType.SCRIPT_EDIT;	
+					if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,productNameDialogType).open())) {
+						updateProductNameUI();
+						productNameModified = true;
+					}
 				}
 			}
 		});
