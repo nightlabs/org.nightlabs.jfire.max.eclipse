@@ -25,6 +25,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
@@ -54,11 +55,11 @@ extends HeaderComposite{
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
 	private XComposite infoStatuesContainerComp;
-	private XComposite infodateContainerComp;
 	private Label lastTaskDateLabel;
 	private Label nextTaskDateLabel;
 	private Label recurredOfferCount;
 	private MessageComposite statusMsg;
+	private MessageComposite recurrenceStatusMsgComposite;
 
 	private volatile RecurringOffer recurringOffer;
 
@@ -84,6 +85,7 @@ extends HeaderComposite{
 		currentStateComposite.setStatable(recurringOffer);
 		currentStateComposite.setLayoutData(null);
 
+		
 		nextTransitionComposite = new NextTransitionComposite(infoStatuesContainerComp ,SWT.WRAP | SWT.NONE);
 		nextTransitionComposite.setStatable(recurringOffer);
 		nextTransitionComposite.setLayoutData(null);
@@ -100,6 +102,9 @@ extends HeaderComposite{
 		recurredOfferCount = new Label(ordinaryWrapper, SWT.WRAP |SWT.NONE);
 		recurredOfferCount.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.recurredOffers") + String.valueOf(recurringOffer.getRecurredOfferCount())); //$NON-NLS-1$
 
+		recurrenceStatusMsgComposite = new MessageComposite(this, SWT.NONE, "", MessageType.INFORMATION); //$NON-NLS-1$
+		recurrenceStatusMsgComposite.setLayoutData(new GridData());
+		
 		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING); //$NON-NLS-1$
 		statusMsg.setLayoutData(new GridData());
 
@@ -109,7 +114,6 @@ extends HeaderComposite{
 		rowLayout.pack = false;
 		rowLayout.marginLeft = 0;
 		infodateContainerComp.setLayout(rowLayout);
-
 
 		lastTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP|SWT.NONE);
 		lastTaskDateLabel.setLayoutData(new RowData());
@@ -148,7 +152,29 @@ extends HeaderComposite{
 	private void updateState()
 	{
 		MessageType iconType = MessageType.INFORMATION;
-
+    	String recurrenceStatusMessage = ""; //$NON-NLS-1$
+    	// shows the status of the recurring Offer whether it s started or stopped.
+		if(recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getTimePatternSet().getTimePatterns().size() > 0)
+		{
+			Statable _statable = recurringOffer;
+			String nodeName = _statable.getStatableLocal().getState().getStateDefinition().getJbpmNodeName();
+        	if(nodeName.equals(JbpmConstantsRecurringOffer.Vendor.NODE_NAME_RECURRENCE_STARTED)) 
+        		recurrenceStatusMessage = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.recurrenceStarted"); //$NON-NLS-1$
+        	// dev.jfire.org:recurrenceStopped
+        	if(nodeName.equals(JbpmConstantsRecurringOffer.Vendor.NODE_NAME_RECURRENCE_STOPED))  
+        		recurrenceStatusMessage = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.recurrenceStopped"); //$NON-NLS-1$
+        	if(nodeName.equals(JbpmConstantsRecurringOffer.Vendor.NODE_NAME_RECURRENCE_ACCEPTED) )  
+        		recurrenceStatusMessage = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.recurrencePaused"); //$NON-NLS-1$
+		}
+		else
+			recurrenceStatusMessage = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.recurrenceNotConfigured"); //$NON-NLS-1$
+		// shows the recurrence status !!!!
+		if(recurrenceStatusMessage.isEmpty())
+			recurrenceStatusMsgComposite.setMessage(recurrenceStatusMessage,  MessageType.NONE);		
+		else
+			recurrenceStatusMsgComposite.setMessage(recurrenceStatusMessage, iconType);
+	
+		
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE))
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),true);
 		else
@@ -214,6 +240,8 @@ extends HeaderComposite{
 						return;
 					updateState();
 					getShell().layout(true, true);
+					
+					//recurringOffer.getRecurringOfferConfiguration().
 				}
 			});
 		} finally {

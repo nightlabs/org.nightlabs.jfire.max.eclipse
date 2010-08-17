@@ -12,6 +12,8 @@ import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.OfferLocal;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.Segment;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.SegmentType;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
@@ -42,7 +44,8 @@ public class RecurringArticleContainerEditComposite extends ArticleContainerEdit
 		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK,
 		Task.FETCH_GROUP_TIME_PATTERN_SET,
 		TimePatternSetJDOImpl.FETCH_GROUP_TIME_PATTERNS,
-		StatableLocal.FETCH_GROUP_STATE
+		StatableLocal.FETCH_GROUP_STATE,
+		State.FETCH_GROUP_STATE_DEFINITION,
 	};
 
 	public static final String[] FETCH_GROUPS_RECURRING_ORDER_WITH_ARTICLES = {
@@ -59,7 +62,9 @@ public class RecurringArticleContainerEditComposite extends ArticleContainerEdit
 		Task.FETCH_GROUP_TIME_PATTERN_SET,
 		TimePatternSetJDOImpl.FETCH_GROUP_TIME_PATTERNS,
 		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
-		StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
+		StatableLocal.FETCH_GROUP_STATE, 
+		State.FETCH_GROUP_STATE_DEFINITION,
+		Order.FETCH_GROUP_CUSTOMER_GROUP,
 		Segment.FETCH_GROUP_THIS_SEGMENT,
 		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
