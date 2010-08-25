@@ -14,6 +14,7 @@ import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchWizardPage;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
 
@@ -58,9 +59,22 @@ public class LegalEntitySearchCreateWizardDelegate extends AbstractWizardPagePro
 		Person selectedPerson = personSearchWizardPage.getSelectedPerson();
 		try {
 			TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+			
+			IStruct struct = null;
+			boolean wasInflated = selectedPerson.isInflated();
+			if (wasInflated) {
+				// Need to deflate the person before storing.
+				struct = selectedPerson.getStructure();
+				selectedPerson.deflate();
+			}
 			LegalEntity legalEntity = tradeManager.storePersonAsLegalEntity(selectedPerson, true, LegalEntityPersonEditor.FETCH_GROUPS_FULL_LE_DATA,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
+			
+			if (wasInflated) {
+				// re-inflate after retrieval
+				legalEntity.getPerson().inflate(struct);
+			}
+				
 			((ILegalEntitySearchWizard) getWizard()).setLegalEntity(legalEntity);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
