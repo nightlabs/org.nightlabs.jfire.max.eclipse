@@ -18,10 +18,11 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.inheritance.FieldMetaData;
 import org.nightlabs.jfire.base.ui.prop.ValidationUtil;
 import org.nightlabs.jfire.base.ui.prop.edit.ValidationResultHandler;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.AbstractDataBlockRemovalListener;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedEvent;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorChangedListener;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockGroupEditorChangedEvent;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.IDataBlockGroupEditorChangedListener;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.validation.ValidationResult;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
@@ -143,9 +144,10 @@ public class SimpleProductTypePropertiesSection extends ToolBarSectionPart {
 				markDirty();
 			}
 		});
-		blockBasedEditor.addDataBlockRemovalListener(new AbstractDataBlockRemovalListener() {
+		blockBasedEditor.addBlockGroupChangeListener(new IDataBlockGroupEditorChangedListener() {
 			@Override
-			public void removedDataBlock() {
+			public void dataBlockGroupEditorChanged(
+					DataBlockGroupEditorChangedEvent dataBlockEditorGroupChangedEvent) {
 				markDirty();
 			}
 		});
