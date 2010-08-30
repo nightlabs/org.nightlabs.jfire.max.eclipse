@@ -41,6 +41,7 @@ import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.message.MessageType;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -208,8 +209,9 @@ extends FadeableComposite
 		comp2.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		XComposite comp3 = new XComposite(comp2, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		comp3.getGridLayout().numColumns = 2;
+		comp3.getGridLayout().numColumns = 3;
 
+		
 		XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		compName.setLayout(new GridLayout(1,false));
 
@@ -228,32 +230,53 @@ extends FadeableComposite
 			}
 		});
 
+		
+	
+		
+		XComposite buttonComp = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		buttonComp.getGridLayout().numColumns = 1;
 //		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		((GridData)productNameText.getLayoutData()).heightHint = productTypeNameLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 3;
-		productNameDialogButton = new Button(comp3, SWT.PUSH);
+		productNameDialogButton = new Button(buttonComp, SWT.PUSH);
 		productNameDialogButton.setText("..."); //$NON-NLS-1$
 		productNameDialogButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		productNameDialogButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
-			{								
-				ProductNameDialogType productNameDialogType = ProductNameDialogType.TEXT_EDIT;				
-				if(isScriptable())
-				{
+			{											
+				if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,ProductNameDialogType.TEXT_EDIT).open())) {
+					updateProductNameUI();
+					productNameModified = true;
+				}
+			}
+		});
+		// if the page supports scripting adds the scripting preview button
+		if(isScriptable())
+		{
+			Button previewScriptButton = new Button(buttonComp, SWT.PUSH);
+			previewScriptButton.setImage(SharedImages.PREVIEW_16x16.createImage());
+			previewScriptButton.setToolTipText("Preview Script");
+			previewScriptButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+			previewScriptButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent arg0)
+				{								
+					ProductNameDialogType productNameDialogType;				
 					// if the User has entered a valid script then a preview is shown
 					JSHTMLExecuter script = new JSHTMLExecuter();	
 					if(script.containsValidScript(productNameText.getText()) > 0)
 						productNameDialogType = ProductNameDialogType.SCRIPT_PREVIEW;
 					else					
-						productNameDialogType = ProductNameDialogType.SCRIPT_EDIT;	
+						productNameDialogType = ProductNameDialogType.SCRIPT_EDIT;
+
 					if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,productNameDialogType).open())) {
 						updateProductNameUI();
 						productNameModified = true;
 					}
 				}
-			}
-		});
-
+			});
+		}
+		
 		inputPriceFragmentTypeTable = new InputPriceFragmentTypeTable(comp2) {
 			@Override
 			protected void inputPriceFragmentTypeModified(InputPriceFragmentType inputPriceFragmentType)
