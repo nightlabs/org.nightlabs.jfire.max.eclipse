@@ -31,6 +31,7 @@ import org.eclipse.datatools.connectivity.oda.design.OdaDesignSession;
 import org.eclipse.datatools.connectivity.oda.design.internal.ui.DataSetWizardPageCore;
 import org.eclipse.datatools.connectivity.oda.design.ui.manifest.DataSetUIElement;
 import org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizard;
+import org.eclipse.datatools.connectivity.oda.jfire.JFireOdaException;
 
 /**
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
@@ -54,7 +55,6 @@ public class JFSDataSetWizard extends DataSetWizard {
 	 */
 	@Override
 	protected DataSetWizardPageCore createWizardPage(String arg0, String arg1, String arg2) throws OdaException {
-		// TODO Auto-generated method stub
 		return super.createWizardPage(arg0, arg1, arg2);
 	}
 
@@ -63,7 +63,6 @@ public class JFSDataSetWizard extends DataSetWizard {
 	 */
 	@Override
 	public void initialize(OdaDesignSession arg0, DataSetUIElement arg1) throws OdaException {
-		// TODO Auto-generated method stub
 		super.initialize(arg0, arg1);
 	}
 	

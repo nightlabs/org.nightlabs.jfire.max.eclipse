@@ -46,6 +46,7 @@ import org.eclipse.datatools.connectivity.oda.design.InputParameterAttributes;
 import org.eclipse.datatools.connectivity.oda.design.ParameterDefinition;
 import org.eclipse.datatools.connectivity.oda.design.ui.designsession.DesignSessionUtil;
 import org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizardPage;
+import org.eclipse.datatools.connectivity.oda.jfire.JFireOdaException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
@@ -70,6 +71,7 @@ import org.nightlabs.jfire.reporting.oda.ParameterMetaData;
 import org.nightlabs.jfire.reporting.oda.ParameterMetaData.ParameterDescriptor;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryUtil;
+import org.nightlabs.jfire.reporting.oda.wrapper.ParameterMetaDataWrapper;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.dao.ScriptParameterSetForScriptRegistryItemIDDAO;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
@@ -144,7 +146,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 						result.add(metaData.getDescriptor(i));
 					}
 					return result.toArray();
-				} catch (OdaException e) {
+				} catch (JFireOdaException e) {
 					throw new RuntimeException(e);
 				}
 			}
@@ -304,7 +306,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 	@Override
 	protected DataSetDesign collectDataSetDesign(DataSetDesign design) {
 		DataSetDesign superResult = super.collectDataSetDesign(design);
-		IParameterMetaData metaData = getParameterMetaData(superResult);
+		IParameterMetaData metaData = new ParameterMetaDataWrapper(getParameterMetaData(superResult));
 		DataSetParameters params = null;
 		try {
 			params = createDataSetParameters(metaData);

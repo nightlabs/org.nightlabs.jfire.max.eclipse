@@ -243,4 +243,8 @@ implements IJFireRemoteReportEditorInput
 		}
 	}
 	
+	@Override
+	public int hashCode() {
+		return getLocalInput().getFile().hashCode();
+	}
 }

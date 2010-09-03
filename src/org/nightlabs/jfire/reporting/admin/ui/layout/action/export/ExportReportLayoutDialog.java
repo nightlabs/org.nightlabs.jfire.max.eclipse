@@ -108,10 +108,14 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 		// Should this method be here?
 		File saveFile = new File(fileName);
 		FileOutputStream fos = new FileOutputStream(saveFile);
-		byte[] buf = new byte[256];
-		int read = 0;
-		while ((read = io.read(buf)) > 0) {
-			fos.write(buf, 0, read);
+		try {
+			byte[] buf = new byte[256];
+			int read = 0;
+			while ((read = io.read(buf)) > 0) {
+				fos.write(buf, 0, read);
+			}			
+		} finally {
+			fos.close();
 		}
 	}
 	
@@ -126,6 +130,8 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				}
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
+			} finally {
+				
 			}
 		} 
 		super.okPressed();

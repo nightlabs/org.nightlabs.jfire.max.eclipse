@@ -495,4 +495,19 @@
               extensionPointID="org.eclipse.ui.newWizards">
         </removeExtension>
      </extension>
+     <extension
+           point="org.nightlabs.base.ui.editor2perspective">
+        <registry
+              editorID="org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor"
+              perspectiveID="org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryEditor"
+              perspectiveID="org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLEditor"
+              perspectiveID="org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPerspective">
+        </registry>
+     </extension>
 </plugin>

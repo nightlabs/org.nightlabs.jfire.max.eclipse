@@ -47,6 +47,7 @@ import org.eclipse.datatools.connectivity.oda.design.ResultSetDefinition;
 import org.eclipse.datatools.connectivity.oda.design.ui.designsession.DesignSessionUtil;
 import org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizardPage;
 import org.eclipse.datatools.connectivity.oda.design.util.DesignUtil;
+import org.eclipse.datatools.connectivity.oda.jfire.JFireOdaException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -64,6 +65,7 @@ import org.nightlabs.jfire.reporting.oda.client.jfs.ClientJFSDriver;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSParameterUtil;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryUtil;
+import org.nightlabs.jfire.reporting.oda.wrapper.DriverWrapper;
 
 /**
  * DataSet WizardPage that lets the user pick a JFireScript that
@@ -201,14 +203,14 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 			design.setQueryText(queryText);
 
 			// obtain query's current runtime metadata, and maps it to the dataSetDesign
-			IConnection customConn = null;
+			org.eclipse.datatools.connectivity.oda.IConnection customConn = null;
 			try
 			{
 				// instantiate your custom ODA runtime driver class
 				/* Note: You may need to manually update your ODA runtime extension's
 				 * plug-in manifest to export its package for visibility here.
 				 */
-				IDriver customDriver = new ClientJFSDriver();
+				IDriver customDriver = new DriverWrapper(new ClientJFSDriver());
 
 				// obtain and open a live connection
 				customConn = customDriver.getConnection( null );
@@ -278,7 +280,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 	 * specified runtime metadata.
 	 * @param md    runtime result set metadata instance
 	 * @param dataSetDesign     data set design instance to update
-	 * @throws OdaException
+	 * @throws JFireOdaException
 	 */
 	private void updateResultSetDesign( IResultSetMetaData md,
 			DataSetDesign dataSetDesign )
@@ -301,7 +303,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 	 * specified runtime metadata.
 	 * @param paramMd The runtime parameter metadata instance.
 	 * @param dataSetDesign The data set design instance to update.
-	 * @throws OdaException
+	 * @throws JFireOdaException
 	 */
 	private void updateParameterDesign( IParameterMetaData paramMd,
 			DataSetDesign dataSetDesign )

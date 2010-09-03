@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reporting admin plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.reporting.admin.ui;singleton:=true
-Bundle-Version: 1.1.9.qualifier
+Bundle-Version: 1.1.10.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin
 Bundle-Vendor: NightLabs.org
@@ -50,14 +50,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.birt.chart.ui.extension,
  org.eclipse.birt.chart.reportitem,
  org.eclipse.birt.chart.reportitem.ui,
- org.eclipse.birt.chart.runtime,
  org.eclipse.birt.chart.examples,
  org.eclipse.birt.report.engine.emitter.html,
  org.eclipse.birt.report.engine.emitter.pdf,
  org.eclipse.ui.ide,
  org.eclipse.birt.report.engine,
  com.essiembre.eclipse.i18n.resourcebundle,
- org.eclipse.birt.resources
+ org.eclipse.birt.resources,
+ org.nightlabs.jfire.reporting.oda.wrapper;bundle-version="1.1.0"
 Eclipse-LazyStart: true
 Eclipse-RegisterBuddy: org.nightlabs.jfire.reporting.ui,
  org.nightlabs.jfire.base.j2ee
