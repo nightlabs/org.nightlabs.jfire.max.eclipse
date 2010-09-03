@@ -277,6 +277,18 @@
                editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
                perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
          </registry>
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
       </extension>
       <extension
             point="org.nightlabs.base.ui.simpleExceptionHandler">
