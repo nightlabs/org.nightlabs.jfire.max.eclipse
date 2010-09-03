@@ -39,4 +39,11 @@
             class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntryFactory"
             index="0" name="%org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntry.name"/>
     </extension>
+    <extension
+          point="org.nightlabs.base.ui.editor2perspective">
+       <registry
+             editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
+             perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+       </registry>
+    </extension>
 </plugin>
