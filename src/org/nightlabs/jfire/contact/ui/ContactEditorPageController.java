@@ -3,9 +3,11 @@ package org.nightlabs.jfire.contact.ui;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.contact.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
 import org.nightlabs.progress.ProgressMonitor;
@@ -18,7 +20,7 @@ public class ContactEditorPageController
 extends ActiveEntityEditorPageController<Person>
 {
 	private static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_FULL_DATA
+		FetchPlan.DEFAULT, PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA
 	};
 
 	public ContactEditorPageController(EntityEditor editor)
@@ -43,12 +45,13 @@ extends ActiveEntityEditorPageController<Person>
 			ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.contact.ui.ContactEditorPageController.storeEntity.monitor.task.name"), 100); //$NON-NLS-1$
 		try {
+			IStruct structure = controllerObject.getStructure();
 			controllerObject.deflate();
 			controllerObject = (Person) PropertySetDAO.sharedInstance().storeJDOObject(
-					controllerObject, true, FETCH_GROUPS, 1,
+					controllerObject, true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new SubProgressMonitor(monitor, 100)
 			);
-			controllerObject.deflate();
+			controllerObject.inflate(structure);
 		} finally {
 			monitor.done();
 		}
