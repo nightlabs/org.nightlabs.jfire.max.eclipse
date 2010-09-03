@@ -38,4 +38,11 @@
                 style="push" toolbarPath="additions" tooltip="Create new Department"/>
         </viewContribution>
     </extension>
+   <extension
+         point="org.nightlabs.base.ui.editor2perspective">
+      <registry
+            editorID="org.nightlabs.jfire.department.admin.ui.editor.DepartmentEditor"
+            perspectiveID="org.nightlabs.jfire.base.admin.ui.BaseAdminPerspective">
+      </registry>
+   </extension>
 </plugin>
