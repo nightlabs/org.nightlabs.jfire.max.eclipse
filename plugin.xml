@@ -1158,6 +1158,34 @@
               editorID="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
               perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
         </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
     </extension>
     <!--
    <extension

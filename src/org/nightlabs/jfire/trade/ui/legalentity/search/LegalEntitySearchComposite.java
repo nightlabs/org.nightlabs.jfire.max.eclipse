@@ -11,6 +11,7 @@ import org.nightlabs.jfire.base.ui.person.search.DynamicPersonSearchFilterProvid
 import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchComposite;
 import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchFilterItemListMutator;
 import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchFilterProvider;
+import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.Struct;
 import org.nightlabs.jfire.prop.StructLocal;
@@ -81,7 +82,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Ancho
 	 *         be presented for search in the dynamic filter-provider.
 	 */
 	protected static StructLocalID createPersonStructLocalID() {
-		return StructLocalID.create(SecurityReflector.getUserDescriptor().getOrganisationID(), Person.class, Struct.DEFAULT_SCOPE,
+		return StructLocalID.create(Organisation.DEV_ORGANISATION_ID, Person.class, Struct.DEFAULT_SCOPE,
 				StructLocal.DEFAULT_SCOPE);
 	}
 	

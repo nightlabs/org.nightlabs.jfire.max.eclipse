@@ -185,7 +185,7 @@ extends ResizableTitleAreaDialog
 		return Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message"); //$NON-NLS-1$
 	}
 
-	protected String getMessage() 
+	public String getMessage() 
 	{
 		String message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title"); //$NON-NLS-1$
 		if (paymentDatas != null && deliveryDatas != null) {
