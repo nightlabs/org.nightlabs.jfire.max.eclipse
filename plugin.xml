@@ -230,5 +230,16 @@
             name="Delivery by email">
       </scheduledReportDeliveryDelegateEditFactory>
    </extension>
+   <extension
+         point="org.nightlabs.base.ui.editor2perspective">
+      <registry
+            editorID="org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerEditor"
+            perspectiveID="org.nightlabs.jfire.reporting.ui.ReportingPerspective">
+      </registry>
+      <registry
+            editorID="org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportEditor"
+            perspectiveID="org.nightlabs.jfire.reporting.ui.ReportingPerspective">
+      </registry>
+   </extension>
    
 </plugin>
