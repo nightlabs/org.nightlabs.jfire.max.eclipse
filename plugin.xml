@@ -222,4 +222,15 @@
              indexHint="200">
        </pageFactory>
     </extension>
+    <extension
+          point="org.nightlabs.base.ui.editor2perspective">
+       <registry
+             editorID="org.nightlabs.jfire.trade.admin.ui.editor.CurrencyEditor"
+             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective">
+       </registry>
+       <registry
+             editorID="org.nightlabs.jfire.trade.admin.ui.editor.UnitEditor"
+             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective">
+       </registry>
+    </extension>
 </plugin>
