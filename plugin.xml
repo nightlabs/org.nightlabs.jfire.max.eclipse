@@ -957,6 +957,13 @@
                 id="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction"
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
+             <editorActionBarContribution
+            	class="org.nightlabs.jfire.trade.ui.overview.invoice.action.PayInvoiceAction"
+            	contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+            	icon="icons/articlecontainer/detail/action/transfer/PayAction.16x16.png"
+            	id="org.nightlabs.jfire.trade.ui.overview.invoice.action.PayInvoiceAction"
+           		toolbarPath="org.nightlabs.jfire.trade.ui.overview"
+            	name="%articleEditAction.pay.label" tooltip="%articleEditAction.pay.tooltip"/>         
             <editorActionBarContribution
                 class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
@@ -995,6 +1002,13 @@
                 id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction"
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
+            <editorActionBarContribution
+            	class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.DeliverAction"
+            	contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+            	icon="icons/articlecontainer/detail/action/transfer/DeliverAllAction.16x16.png"
+            	id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.DeliverAction"
+           		toolbarPath="org.nightlabs.jfire.trade.ui.overview"
+           		name="%articleContainerAction.deliverAll.label" tooltip="%articleContainerAction.deliverAll.tooltip"/>
             <editorActionBarContribution
                 class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
