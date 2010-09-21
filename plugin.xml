@@ -1459,6 +1459,14 @@
            </action>
         </actionSet>
     </extension>
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+    	<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+			<actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
+		</perspectiveExtension>
+ 		<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+			<actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
+ 		</perspectiveExtension> 	
+    </extension>
     <extension
           point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
        <articleContainerEditorPageFactory
