@@ -66,7 +66,7 @@ public class ReverseAllAction extends ArticleContainerAction
 		if (article.isReversed() || article.isReversing())
 			return true;
 
-		if (!ArticleUtil.isOfferFinalized(article, new NullProgressMonitor())) // TODO real progress monitor
+		if (!ArticleUtil.isOfferAccepted(article, new NullProgressMonitor())) // TODO real progress monitor
 			return true;
 
 		return false;
