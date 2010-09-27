@@ -34,7 +34,9 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.message.MessageType;
+import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -45,11 +47,13 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
  */
 public abstract class AbstractArticleAdder implements ArticleAdder
 {
@@ -76,7 +80,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	 * {@link #dispose()} the <tt>Composite</tt> if it is existing.
 	 */
 	private Composite composite = null;
-
+	
 	/**
 	 * Important: Do NOT overwrite/extend this method, but implement {@link #_createComposite(Composite)} instead!
 	 *
@@ -86,15 +90,17 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	{
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
-
+		
 		composite = createRequirementsNotFulfilledComposite(parent);
 		if (composite == null) {
 			composite = _createComposite(parent);
 		}
-
+		
+		JDOLifecycleManager.sharedInstance().addNotificationListener(ArticleContainer.class, articleChangedListener);
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(ArticleContainer.class, articleChangedListener);
 				((Composite)e.getSource()).removeDisposeListener(this);
 				onDispose();
 			}
@@ -118,7 +124,6 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	protected abstract Composite _createComposite(Composite parent);
 
 
-
 	public void onDispose()
 	{
 		composite = null;
@@ -129,6 +134,22 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		if (composite != null)
 			composite.dispose();
 	}
+	
+	
+	private NotificationAdapterSWTThreadAsync articleChangedListener = new NotificationAdapterSWTThreadAsync() { //$NON-NLS-1$
+		public void notify(NotificationEvent notificationEvent)
+		{
+			if(isNonOrderArticleContainerFinalized())
+			{
+				if (composite != null)
+				{
+					Composite parent = composite.getParent();
+					composite.dispose();
+					createComposite(parent);
+				}
+			}
+		}
+	};	
 
 	/**
 	 * This method is invoked to check if the requirements
@@ -161,7 +182,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
 
-		if (isNonOrderArticleContainerFinilized()) {
+		if (isNonOrderArticleContainerFinalized()) {
 			ArticleContainer ac = getSegmentEdit().getArticleContainer();
 			ArticleContainerID acID = (ArticleContainerID) JDOHelper.getObjectId(ac);
 			String message = String.format(
@@ -180,7 +201,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	 *         something else than an {@link Order} and is finalized and <code>false</code>
 	 *         otherwise.
 	 */
-	protected boolean isNonOrderArticleContainerFinilized() {
+	protected boolean isNonOrderArticleContainerFinalized() {
 		ArticleContainer ac = getSegmentEdit().getArticleContainer();
 		if (ac instanceof Offer) {
 			return ((Offer) ac).isFinalized();
