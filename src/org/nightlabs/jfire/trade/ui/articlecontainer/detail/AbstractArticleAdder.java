@@ -221,7 +221,9 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		} // TODO: Handle ReceptionNotes
 		return false;
 	}
-
+	
+	/** @return <code>true</code> if the current {@link Offer} is aborted
+	 */
 	protected boolean isNonOrderArticleContainerAborted() {
 		ArticleContainer ac = getSegmentEdit().getArticleContainer();
 		if (ac instanceof Offer) {
