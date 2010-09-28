@@ -139,7 +139,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	private NotificationAdapterSWTThreadAsync articleChangedListener = new NotificationAdapterSWTThreadAsync() { //$NON-NLS-1$
 		public void notify(NotificationEvent notificationEvent)
 		{
-			if(isNonOrderArticleContainerFinalized())
+			if(doesNonOrderArticleContainerMeetCriteria() != null)
 			{
 				if (composite != null)
 				{
@@ -181,12 +181,12 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 					getProductType().getName().getText(NLLocale.getDefault()));
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
-
-		if (isNonOrderArticleContainerFinalized()) {
+		String errorMessage;
+		if ((errorMessage = doesNonOrderArticleContainerMeetCriteria()) != null) {
 			ArticleContainer ac = getSegmentEdit().getArticleContainer();
 			ArticleContainerID acID = (ArticleContainerID) JDOHelper.getObjectId(ac);
 			String message = String.format(
-					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.articleContainerFinalized"), //$NON-NLS-1$
+					errorMessage, 
 //					TradePlugin.getArticleContainerTypeString(ac.getClass(), false), TradePlugin.getArticleContainerTypeString(ac.getClass(), true),
 					TradePlugin.getArticleContainerTypeString(acID), TradePlugin.getArticleContainerTypeString(acID),
 					ArticleContainerUtil.getArticleContainerID(ac)
@@ -196,6 +196,15 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		return null;
 	}
 
+	
+	protected String doesNonOrderArticleContainerMeetCriteria() {
+		if(isNonOrderArticleContainerFinalized())
+			return Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.articleContainerFinalized"); //$NON-NLS-1$
+		if(isNonOrderArticleContainerAborted())
+			return Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.articleContainerAborted"); //$NON-NLS-1$
+		return null;
+	}
+	
 	/**
 	 * @return <code>true</code> if the current {@link ArticleContainer} is
 	 *         something else than an {@link Order} and is finalized and <code>false</code>
@@ -213,4 +222,11 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		return false;
 	}
 
+	protected boolean isNonOrderArticleContainerAborted() {
+		ArticleContainer ac = getSegmentEdit().getArticleContainer();
+		if (ac instanceof Offer) {
+			return ((Offer) ac).isAborted();
+		} 
+		return false;
+	}
 }
