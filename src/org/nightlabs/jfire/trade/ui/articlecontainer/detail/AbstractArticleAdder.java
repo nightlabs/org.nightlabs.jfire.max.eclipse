@@ -96,11 +96,11 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 			composite = _createComposite(parent);
 		}
 		
-		JDOLifecycleManager.sharedInstance().addNotificationListener(ArticleContainer.class, articleChangedListener);
+		JDOLifecycleManager.sharedInstance().addNotificationListener(ArticleContainer.class, articleContainerChangedListener);
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(ArticleContainer.class, articleChangedListener);
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(ArticleContainer.class, articleContainerChangedListener);
 				((Composite)e.getSource()).removeDisposeListener(this);
 				onDispose();
 			}
@@ -136,7 +136,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	}
 	
 	
-	private NotificationAdapterSWTThreadAsync articleChangedListener = new NotificationAdapterSWTThreadAsync() { //$NON-NLS-1$
+	private NotificationAdapterSWTThreadAsync articleContainerChangedListener = new NotificationAdapterSWTThreadAsync() { //$NON-NLS-1$
 		public void notify(NotificationEvent notificationEvent)
 		{
 			if(doesNonOrderArticleContainerMeetCriteria() != null)

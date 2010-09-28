@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.overview.action;
 
-import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -8,9 +7,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.nightlabs.base.ui.action.WorkbenchPartSelectionAction;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -69,23 +65,13 @@ extends WorkbenchPartSelectionAction
 		articleContainerID = (ArticleContainerID)objectID;
 	}
 	
-	public static String[] FETCH_GROUPS  = new String[] {
-		FetchPlan.DEFAULT,
-		DeliveryNote.FETCH_GROUP_CUSTOMER_ID,
-		DeliveryNote.FETCH_GROUP_ARTICLES,
-		DeliveryNote.FETCH_GROUP_DELIVERY_NOTE_LOCAL,
-		Article.FETCH_GROUP_ARTICLE_LOCAL,
-		Invoice.FETCH_GROUP_CUSTOMER_ID,
-		Invoice.FETCH_GROUP_PRICE,
-		Invoice.FETCH_GROUP_INVOICE_LOCAL
-	};
 	
-	public ArticleContainer getArticleContainer()
+	public ArticleContainer getArticleContainer(String[] fetchGroups)
 	{
 		if(articleContainerID != null)
 		{
 			return ArticleContainerDAO.sharedInstance().getArticleContainer(
-					getArticleContainerID(), FETCH_GROUPS,
+					getArticleContainerID(), fetchGroups,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		}
 		else

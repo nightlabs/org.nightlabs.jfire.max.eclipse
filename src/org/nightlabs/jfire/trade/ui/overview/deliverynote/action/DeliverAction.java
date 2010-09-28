@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.deliverynote.action;
 
+import javax.jdo.FetchPlan;
+
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
@@ -28,7 +30,13 @@ public class DeliverAction extends AbstractArticleContainerAction
 	public boolean calculateEnabled() {
 		if (!super.calculateEnabled())
 			return false;		
-		ArticleContainer articleContainer = getArticleContainer();
+		ArticleContainer articleContainer = getArticleContainer(new String[] {
+				FetchPlan.DEFAULT,
+				DeliveryNote.FETCH_GROUP_CUSTOMER_ID,
+				DeliveryNote.FETCH_GROUP_ARTICLES,
+				DeliveryNote.FETCH_GROUP_DELIVERY_NOTE_LOCAL,
+				Article.FETCH_GROUP_ARTICLE_LOCAL
+			});
 		if (!(articleContainer instanceof DeliveryNote))
 			return true;
 		DeliveryNote deliveryNote = (DeliveryNote)articleContainer;
@@ -45,7 +53,7 @@ public class DeliverAction extends AbstractArticleContainerAction
 		ArticleContainerID articleContainerID = getArticleContainerID();
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				articleContainerID,
-				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH);
+				AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.open();
 	}
