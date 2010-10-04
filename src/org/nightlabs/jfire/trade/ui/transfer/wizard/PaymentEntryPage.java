@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +45,7 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -59,12 +61,19 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.base.ui.wizard.IDynamicPathWizardListener;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
@@ -87,6 +96,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.trade.config.TradePrintingConfigModule;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.modeofpayment.ModeOfPaymentFlavourTable;
+import org.nightlabs.jfire.trade.ui.reserve.ReservationWizardDialog;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
@@ -94,6 +104,7 @@ import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRe
 import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
 import org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -119,7 +130,9 @@ implements IPaymentEntryPage
 	private Label amountTitleLabel;
 	private Label amountValueLabel;
 	private Spinner amountSpinner;
-
+	private DateTimeControl paymentDateControl;
+	private Boolean paymentDateNextPageInitialized = false;
+	
 	private Label modeOfPaymentTitleLabel;
 	private List<ModeOfPaymentFlavour> modeOfPaymentFlavourList = new ArrayList<ModeOfPaymentFlavour>();
 //	private org.eclipse.swt.widgets.List modeOfPaymentFlavourGUIList;
@@ -338,6 +351,28 @@ implements IPaymentEntryPage
 				}
 			});
 
+			
+			spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+			spacer.getGridData().grabExcessVerticalSpace = false;
+			spacer.getGridData().heightHint = 4;
+			
+			XComposite dateComposite = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+			dateComposite.getGridLayout().numColumns = 2;
+			dateComposite.getGridData().grabExcessVerticalSpace = false;
+			new Label(dateComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.PaymentDateLabel.text"));  //$NON-NLS-1$
+			paymentDateControl = new DateTimeControl(dateComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);	
+			paymentDateControl.setDateEditable(false);
+			paymentDateControl.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if(paymentDateControl.getDate() != null)
+					{
+						setPaymentDate(paymentDateControl.getDate());
+					}
+				}
+			});
+			
+			updateDateGUI();
 			// TODO default selection!
 //			modeOfPaymentFlavourGUIList.setSelection(selIdx);
 
@@ -365,6 +400,21 @@ implements IPaymentEntryPage
 		}
 	}
 
+	@Override
+	public void onNext() {
+		super.onNext();
+		if(!paymentDateNextPageInitialized)
+			{   
+				paymentDateNextPageInitialized = true;
+				IWizardPage nextDynamicPage = getNextPage();
+				if (nextDynamicPage instanceof PaymentEntryPage) {
+					PaymentEntryPage nextPagePayment = (PaymentEntryPage)nextDynamicPage;		
+					if(nextPagePayment != null)
+						nextPagePayment.setPaymentDate(getPayment().getPaymentDT());
+				}
+			}
+	}
+	
 	protected PaymentWizardHop getPaymentWizardHop()
 	{
 		return (PaymentWizardHop) getWizardHop();
@@ -556,12 +606,13 @@ implements IPaymentEntryPage
 		}
 		return pageIndex;
 	}
-
+	
 	protected PaymentEntryPage createNextPaymentEntryPage(PaymentEntryPage currentPage, String paymentDirection, long maxAmount)
 	{
 		PaymentWizard wizard = (PaymentWizard)getWizard();
 		// create/remove additional PaymentEntryPage s for multi-payments
 		int pageIndex = getNextPaymentEntryPageIndex(currentPage);
+
 
 		IWizardPage nextDynamicPage =
 			pageIndex >= wizard.getDynamicWizardPageCount() ? null : wizard.getDynamicWizardPage(pageIndex);
@@ -635,6 +686,21 @@ implements IPaymentEntryPage
 		return getPaymentWizardHop().getMaxAmount();
 	}
 
+
+	public void setPaymentDate(Date newDate)
+	{
+		getPayment().setPaymentDT(newDate);
+		updateDateGUI();
+	}
+	
+	protected void updateDateGUI()
+	{
+		if (paymentDateControl != null) {
+			if (getPayment().getPaymentDT() != paymentDateControl.getDate())
+				paymentDateControl.setDate(getPayment().getPaymentDT());
+		}
+	}
+	
 	protected void setMaxAmount(long newMaxAmount)
 	{
 		long oldMaxAmount = getPaymentWizardHop().getMaxAmount();

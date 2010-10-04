@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
@@ -94,6 +96,7 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFact
 import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
 import org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
@@ -139,6 +142,10 @@ implements IDeliveryEntryPage
 	private AutomaticPrintingOptionsGroup automaticPrintingGroup = null;
 
 	private DeliveryConfigurationID deliveryConfigurationID;
+	
+	private DateTimeControl deliveryDateControl;
+	
+	
 
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
@@ -236,6 +243,26 @@ implements IDeliveryEntryPage
 			}
 		});
 
+		spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		spacer.getGridData().grabExcessVerticalSpace = false;
+		spacer.getGridData().heightHint = 4;
+		
+		XComposite dateComposite = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		dateComposite.getGridLayout().numColumns = 2;
+		dateComposite.getGridData().grabExcessVerticalSpace = false;
+		new Label(dateComposite, SWT.NONE).setText("Delivery Date:");  
+		deliveryDateControl = new DateTimeControl(dateComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);	
+		deliveryDateControl.setDateEditable(false);
+		deliveryDateControl.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(deliveryDateControl.getDate() != null)
+				{
+					setPaymentDate(deliveryDateControl.getDate());
+				}
+			}
+		});
+		
 		if (!ArticleContainerPrinterRegistry.sharedInstance().getFactories().isEmpty()) {
 			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.deliveryNote"), null); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -321,6 +348,23 @@ implements IDeliveryEntryPage
 		getContainer().updateButtons();
 	}
 
+	
+	public void setPaymentDate(Date newDate)
+	{
+		getDeliveryWizardHop().getDelivery().setDeliveryDT(newDate);
+		updateDateGUI();
+	}
+	
+	protected void updateDateGUI()
+	{
+		if (deliveryDateControl != null) {
+			Date currentDeliveryDate = getDeliveryWizardHop().getDelivery().getDeliveryDT();
+			if (currentDeliveryDate != deliveryDateControl.getDate())
+				deliveryDateControl.setDate(currentDeliveryDate);
+		}
+	}
+	
+	
 	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void clientDeliveryProcessorFactoryComboSelectionChanged()
 	{
