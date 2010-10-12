@@ -33,7 +33,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
-import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.CellEditor;
@@ -75,22 +74,22 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 		}
 
 		@Override
-		protected boolean canEdit(Object element) {
+		protected boolean canEdit(final Object element) {
 			return true;
 		}
 
 		@Override
-		protected CellEditor getCellEditor(Object element) {
+		protected CellEditor getCellEditor(final Object element) {
 			return editor;
 		}
 
 		@Override
-		protected Object getValue(Object element) {
+		protected Object getValue(final Object element) {
 			return ((TariffCarrier) element).getTariff().getName().getText(getLanguageID());
 		}
 
 		@Override
-		protected void setValue(Object element, Object value) {
+		protected void setValue(final Object element, final Object value) {
 			((TariffCarrier) element).getTariff().getName().setText(getLanguageID(), (String) value);
 			((TariffCarrier) element).setDirty(true);
 			getTableViewer().refresh(true);
@@ -111,23 +110,23 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 	private static String getLocalOrganisationID() {
 		try {
 			return Login.getLogin().getOrganisationID();
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
 	}
 
-	public TariffListComposite(Composite parent, int style) {
+	public TariffListComposite(final Composite parent, final int style) {
 		super(parent, style, false);
 
 		//		WORKAROUND
 		JFireBasePlugin.class.getName();
 
-		Table t = getTable();
+		final Table t = getTable();
 
 		//		t.setHeaderVisible(true);
 		t.setLinesVisible(true);
 
-		GridData tgd = new GridData(GridData.FILL_BOTH);
+		final GridData tgd = new GridData(GridData.FILL_BOTH);
 		tgd.horizontalSpan = 1;
 		tgd.verticalSpan = 1;
 
@@ -141,15 +140,15 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 	}
 
 	protected List<TariffCarrier> getTariffCarriers() {
-		Collection<Tariff> tariffCollection = TariffDAO.sharedInstance().getTariffs(getLocalOrganisationID(), false, FETCH_GROUPS_TARIFF,
+		final Collection<Tariff> tariffCollection = TariffDAO.sharedInstance().getTariffs(getLocalOrganisationID(), false, FETCH_GROUPS_TARIFF,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // TODO use a job for non-blocking UI!
 
-		List<TariffCarrier> tariffCarriers = new ArrayList<TariffCarrier>();
-		for (Tariff tariff : tariffCollection)
+		final List<TariffCarrier> tariffCarriers = new ArrayList<TariffCarrier>();
+		for (final Tariff tariff : tariffCollection)
 			tariffCarriers.add(new TariffCarrier(tariff));
 
 		Collections.sort(tariffCarriers, new Comparator<TariffCarrier>() {
-			public int compare(TariffCarrier o1, TariffCarrier o2) {
+			public int compare(final TariffCarrier o1, final TariffCarrier o2) {
 				return new Integer(o1.getTariff().getTariffIndex()).compareTo(o2.getTariff().getTariffIndex());
 			}
 		});
@@ -164,13 +163,13 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 		moveSelectedTariff(false);
 	}
 
-	private void moveSelectedTariff(boolean up) {
-		TariffCarrier selectedCarrier = getFirstSelectedElement();
+	private void moveSelectedTariff(final boolean up) {
+		final TariffCarrier selectedCarrier = getFirstSelectedElement();
 
 		if (selectedCarrier == null)
 			return;
 
-		int index = tariffCarriers.indexOf(selectedCarrier);
+		final int index = tariffCarriers.indexOf(selectedCarrier);
 		if (up && index > 0)
 			Collections.swap(tariffCarriers, index, index - 1);
 		else if (index < tariffCarriers.size() - 1)
@@ -191,7 +190,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 	/**
 	 * @param languageID The languageID to set.
 	 */
-	public void setLanguageID(String languageID) {
+	public void setLanguageID(final String languageID) {
 		this.languageID = languageID;
 		refresh();
 	}
@@ -202,7 +201,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 			try {
 
 				int tariffIndex = 0;
-				for (TariffCarrier tc : tariffCarriers) {
+				for (final TariffCarrier tc : tariffCarriers) {
 					//				if (csc.isDirty()) { TODO
 					if (accountingManager == null)
 						accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
@@ -220,29 +219,29 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 					try {
 						// TODO Method does not exists !!! Daniel
 //						accountingManager.remove();
-					} catch (Exception x) {
+					} catch (final Exception x) {
 						logger.error("removing bean failed!", x);} //$NON-NLS-1$
 			}
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new ModuleException(x);
 		}
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) {
+	protected void createTableColumns(final TableViewer tableViewer, final Table table) {
 		// Add the columns to the table
-		TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.LEFT);
+		final TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.LEFT);
 		col.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariff.TariffListComposite.tariffNameTableColumn.text")); //$NON-NLS-1$
 		col.setEditingSupport(new TariffNameEditingSupport());
 	}
 
 	@Override
-	protected void setTableProvider(TableViewer tableViewer) {
+	protected void setTableProvider(final TableViewer tableViewer) {
 		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(new TableLabelProvider() {
-			public String getColumnText(Object element, int columnIndex) {
+			public String getColumnText(final Object element, final int columnIndex) {
 				if (element instanceof TariffCarrier) {
-					TariffCarrier tariffCarrier = (TariffCarrier) element;
+					final TariffCarrier tariffCarrier = (TariffCarrier) element;
 					return tariffCarrier.getTariff().getName().getText(getLanguageID());
 				}
 				return ""; //$NON-NLS-1$
@@ -251,14 +250,10 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 	}
 
 	public void createTariff() {
-		try {
-			Tariff tariff = new Tariff(Login.getLogin().getOrganisationID(), Tariff.createTariffID());
-			TariffCarrier tc = new TariffCarrier(tariff);
-			tc.setDirty(true);
-			tariffCarriers.add(tc);
-			refresh();
-		} catch (LoginException x) {
-			throw new RuntimeException(x);
-		}
+		final Tariff tariff = new Tariff(null);
+		final TariffCarrier tc = new TariffCarrier(tariff);
+		tc.setDirty(true);
+		tariffCarriers.add(tc);
+		refresh();
 	}
 }

@@ -50,7 +50,7 @@ public class AddTariffWizard extends DynamicPathWizard
 	private CreateTariffPage createTariffPage;
 	private boolean createNewTariffEnabled = false;
 
-	public AddTariffWizard(Dimension<DimensionValue.TariffDimensionValue> dimension)
+	public AddTariffWizard(final Dimension<DimensionValue.TariffDimensionValue> dimension)
 	{
 		this.dimension = dimension;
 		setForcePreviousAndNextButtons(true);
@@ -70,14 +70,14 @@ public class AddTariffWizard extends DynamicPathWizard
 		try {
 			Tariff tariff = null;
 			if (createNewTariffEnabled) {
-				I18nTextBuffer tariffNameBuffer = createTariffPage.getTariffNameBuffer();
+				final I18nTextBuffer tariffNameBuffer = createTariffPage.getTariffNameBuffer();
 
-				tariff = new Tariff(Login.getLogin().getOrganisationID(), Tariff.createTariffID());
+				tariff = new Tariff(null);
 //						BaseObjectID.makeValidIDString(
 //								priceFragmentTypeNameBuffer.getText(I18nText.DEFAULT_LANGUAGEID), true));
 				tariffNameBuffer.copyTo(tariff.getName());
 
-				AccountingManagerRemote accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
+				final AccountingManagerRemote accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 				tariff = accountingManager.storeTariff(tariff, true, new String[] {FetchPlan.ALL}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT); // TODO not ALL
 			}
 			else
@@ -90,13 +90,13 @@ public class AddTariffWizard extends DynamicPathWizard
 					new DimensionValue.TariffDimensionValue(dimension, tariff));
 
 			return true;
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			ExceptionHandlerRegistry.asyncHandleException(x);
 			throw new RuntimeException(x);
 		}
 	}
 
-	protected void setCreateNewTariffEnabled(boolean enabled)
+	protected void setCreateNewTariffEnabled(final boolean enabled)
 	{
 		removeAllDynamicWizardPages();
 		if (enabled)
