@@ -61,6 +61,7 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
@@ -145,7 +146,7 @@ extends FadeableComposite
 		return isScriptable;
 	}
 
-	public void setScriptable(boolean isScriptable) {
+	public void setScriptable(final boolean isScriptable) {
 		this.isScriptable = isScriptable;
 	}
 
@@ -156,14 +157,14 @@ extends FadeableComposite
 	 * @param articleContainer
 	 * @param productType
 	 */
-	public ArticleBaseComposite(Composite parent, ArticleContainer articleContainer, DynamicProductType productType)
+	public ArticleBaseComposite(final Composite parent, final ArticleContainer articleContainer, final DynamicProductType productType)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.articleContainer = articleContainer;
 		this.productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 	}
 
-	public ArticleBaseComposite(Composite parent, ArticleContainer articleContainer, Article article)
+	public ArticleBaseComposite(final Composite parent, final ArticleContainer articleContainer, final Article article)
 	{
 		this(parent, articleContainer, (DynamicProductType) article.getProductType());
 		createArticle = article;
@@ -188,52 +189,52 @@ extends FadeableComposite
 //		});
 		tariffCombo = new XComboComposite<Tariff>(comp1, getBorderStyle() | SWT.READ_ONLY , new LabelProvider() {
 			@Override
-			public String getText(Object element)
+			public String getText(final Object element)
 			{
 				return ((Tariff)element).getName().getText();
 			}
 		});
-		Tariff dummy = new Tariff("dummy", "_dummy_"); //$NON-NLS-1$ //$NON-NLS-2$
+		final Tariff dummy = new Tariff(TariffID.create("dummy.org", "_dummy_")); //$NON-NLS-1$ //$NON-NLS-2$
 		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.pseudoTariff_loading")); //$NON-NLS-1$
 		tariffCombo.addElement(dummy);
 		tariffCombo.selectElement(dummy);
 		tariffCombo.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event)
+			public void selectionChanged(final SelectionChangedEvent event)
 			{
 				updateInputPriceFragmentTypes();
 			}
 		});
 
-		SashForm comp2 = new SashForm(this, SWT.HORIZONTAL);
+		final SashForm comp2 = new SashForm(this, SWT.HORIZONTAL);
 //		comp2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comp2.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		XComposite comp3 = new XComposite(comp2, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		final XComposite comp3 = new XComposite(comp2, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp3.getGridLayout().numColumns = 3;
 
-		
-		XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		final XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		compName.setLayout(new GridLayout(1,false));
 
 		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFORMATION); //$NON-NLS-1$
 		nameMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	    GridData data = (GridData)nameMessageLabel.getLayoutData();
+	    final GridData data = (GridData)nameMessageLabel.getLayoutData();
 	    data.exclude = true;
 		nameMessageLabel.setVisible(false);
 		productNameText = new Text(compName, getBorderStyle() | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		productNameText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		productNameText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e)
+			public void modifyText(final ModifyEvent e)
 			{
 				productName.setText(NLLocale.getDefault().getLanguage(), productNameText.getText());
 				productNameModified = true;
 			}
 		});
 
-		
-	
-		
-		XComposite buttonComp = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+
+
+		final XComposite buttonComp = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		buttonComp.getGridLayout().numColumns = 1;
 //		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		((GridData)productNameText.getLayoutData()).heightHint = productTypeNameLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 3;
@@ -242,8 +243,8 @@ extends FadeableComposite
 		productNameDialogButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		productNameDialogButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent arg0)
-			{											
+			public void widgetSelected(final SelectionEvent arg0)
+			{
 				if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,ProductNameDialogType.TEXT_EDIT).open())) {
 					updateProductNameUI();
 					productNameModified = true;
@@ -253,20 +254,20 @@ extends FadeableComposite
 		// if the page supports scripting adds the scripting preview button
 		if(isScriptable())
 		{
-			Button previewScriptButton = new Button(buttonComp, SWT.PUSH);
+			final Button previewScriptButton = new Button(buttonComp, SWT.PUSH);
 			previewScriptButton.setImage(SharedImages.PREVIEW_16x16.createImage());
 			previewScriptButton.setToolTipText("Preview Script");
 			previewScriptButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			previewScriptButton.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent arg0)
-				{								
-					ProductNameDialogType productNameDialogType;				
+				public void widgetSelected(final SelectionEvent arg0)
+				{
+					ProductNameDialogType productNameDialogType;
 					// if the User has entered a valid script then a preview is shown
-					JSHTMLExecuter script = new JSHTMLExecuter();	
+					final JSHTMLExecuter script = new JSHTMLExecuter();
 					if(script.containsValidScript(productNameText.getText()) > 0)
 						productNameDialogType = ProductNameDialogType.SCRIPT_PREVIEW;
-					else					
+					else
 						productNameDialogType = ProductNameDialogType.SCRIPT_EDIT;
 
 					if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,productNameDialogType).open())) {
@@ -276,22 +277,22 @@ extends FadeableComposite
 				}
 			});
 		}
-		
+
 		inputPriceFragmentTypeTable = new InputPriceFragmentTypeTable(comp2) {
 			@Override
-			protected void inputPriceFragmentTypeModified(InputPriceFragmentType inputPriceFragmentType)
+			protected void inputPriceFragmentTypeModified(final InputPriceFragmentType inputPriceFragmentType)
 			{
 				if (dynamicTradePriceConfig == null)
 					return;
 
-				IPriceCoordinate priceCoordinate = createPriceCoordinate();
-				FormulaCell formulaCell = dynamicTradePriceConfig.createFormulaCell(priceCoordinate);
+				final IPriceCoordinate priceCoordinate = createPriceCoordinate();
+				final FormulaCell formulaCell = dynamicTradePriceConfig.createFormulaCell(priceCoordinate);
 				formulaCell.setFormula(inputPriceFragmentType.getPriceFragmentType(), String.valueOf(inputPriceFragmentType.getAmount()));
 				inputPriceFragmentTypeModified = true;
 
 				try {
 					priceCalculator.calculatePrices();
-				} catch (PriceCalculationException e) {
+				} catch (final PriceCalculationException e) {
 					throw new RuntimeException(e);
 				}
 
@@ -303,35 +304,35 @@ extends FadeableComposite
 
 		unitCombo = new XComboComposite<Unit>(comp1, getBorderStyle() | SWT.READ_ONLY, new LabelProvider() {
 			@Override
-			public String getText(Object element)
+			public String getText(final Object element)
 			{
 				return ((Unit)element).getName().getText();
 			}
 		});
 		unitCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
+			public void selectionChanged(final SelectionChangedEvent event) {
 				unitSelected();
 			}
 		});
 
 		quantity = new Text(comp1, getBorderStyle());
 		quantity.setText(NumberFormatter.formatFloat(1, 2));
-		GridData gd = new GridData();
+		final GridData gd = new GridData();
 		gd.widthHint = 200;
 		quantity.setLayoutData(gd);
 		quantity.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent event) {
-				Unit unit = unitCombo.getSelectedElement();
+			public void modifyText(final ModifyEvent event) {
+				final Unit unit = unitCombo.getSelectedElement();
 				if (unit == null)
 					return;
 
-				String quantityStr = quantity.getText();
+				final String quantityStr = quantity.getText();
 				if (!"".equals(quantityStr)) { //$NON-NLS-1$
 					try {
 						lastValidQuantity = NumberFormatter.parseFloat(quantityStr);
-					} catch (ParseException e) {
+					} catch (final ParseException e) {
 						MessageDialog.openError(
 								getShell(),
 								Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.quantityInvalidDialog.title"), //$NON-NLS-1$
@@ -354,11 +355,11 @@ extends FadeableComposite
 				/** remove the error message shown once the user clicks
 				on the text box to enter the name again*/
 				@Override
-				public void focusGained(FocusEvent arg0) {
+				public void focusGained(final FocusEvent arg0) {
 					showTextNameMessage(nameMessageText,MessageType.INFORMATION);
 				}
 				@Override
-				public void focusLost(FocusEvent arg0) {
+				public void focusLost(final FocusEvent arg0) {
 					// TODO Auto-generated method stub
 
 				}
@@ -373,7 +374,7 @@ extends FadeableComposite
 	protected boolean inputPriceFragmentTypeModified = false;
 	protected boolean productNameModified = false;
 
-	protected void createUI_additionalElements_comp1(Composite parent)
+	protected void createUI_additionalElements_comp1(final Composite parent)
 	{
 	}
 
@@ -391,7 +392,7 @@ extends FadeableComposite
 
 	private boolean editable = true;
 
-	protected void setEditable(boolean editable) {
+	protected void setEditable(final boolean editable) {
 		if (this.editable == editable)
 			return;
 		this.editable = editable;
@@ -405,7 +406,7 @@ extends FadeableComposite
 	}
 
 	@Override
-	public void setFaded(boolean faded) {
+	public void setFaded(final boolean faded) {
 		super.setFaded(faded);
 		if (!faded) {
 			applyEditableState();
@@ -434,8 +435,8 @@ extends FadeableComposite
 	 */
 	protected IPriceCoordinate createPriceCoordinate()
 	{
-		Order order = (Order) (articleContainer instanceof Order ? articleContainer : null);
-		Offer offer = (Offer) (articleContainer instanceof Offer ? articleContainer : null);
+		final Order order = (Order) (articleContainer instanceof Order ? articleContainer : null);
+		final Offer offer = (Offer) (articleContainer instanceof Offer ? articleContainer : null);
 
 		CurrencyID currencyID = null;
 		if (this.currency != null)
@@ -461,8 +462,8 @@ extends FadeableComposite
 				customerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroup);
 		}
 
-		Tariff tariff = tariffCombo.getSelectedElement();
-		TariffID tariffID = (TariffID) JDOHelper.getObjectId(tariff);
+		final Tariff tariff = tariffCombo.getSelectedElement();
+		final TariffID tariffID = (TariffID) JDOHelper.getObjectId(tariff);
 
 		return new PriceCoordinate(customerGroupID, tariffID, currencyID);
 	}
@@ -486,9 +487,9 @@ extends FadeableComposite
 	private void loadDynamicProductType()
 	{
 		setFaded(true);
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
+		final Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception
+			protected IStatus run(final ProgressMonitor monitor) throws Exception
 			{
 				boolean error = true;
 
@@ -508,7 +509,7 @@ extends FadeableComposite
 					dynamicTradePriceConfig = (DynamicTradePriceConfig) dynamicProductType.getInnerPriceConfig();
 					final List<Tariff> tariffs = new ArrayList<Tariff>(dynamicTradePriceConfig.getTariffs());
 
-					resultPriceConfig = new StablePriceConfig(IDGenerator.getOrganisationID(), temporaryResultPriceConfigID);
+					resultPriceConfig = new StablePriceConfig(PriceConfigID.create(IDGenerator.getOrganisationID(), temporaryResultPriceConfigID));
 					dynamicProductType.setPackagePriceConfig(resultPriceConfig);
 					resultPriceConfig.adoptParameters(dynamicTradePriceConfig);
 
@@ -520,24 +521,24 @@ extends FadeableComposite
 					priceCalculator.preparePriceCalculation();
 					try {
 						priceCalculator.calculatePrices();
-					} catch (PriceCalculationException e) {
+					} catch (final PriceCalculationException e) {
 						throw new RuntimeException(e);
 					}
 
 					Collections.sort(tariffs, new Comparator<Tariff>() {
-						public int compare(Tariff t1, Tariff t2)
+						public int compare(final Tariff t1, final Tariff t2)
 						{
 							return t1.getName().getText().compareTo(t2.getName().getText());
 						}
 					});
 
-					Set<PriceFragmentType> pfts = dynamicTradePriceConfig.getInputPriceFragmentTypes();
+					final Set<PriceFragmentType> pfts = dynamicTradePriceConfig.getInputPriceFragmentTypes();
 					final List<InputPriceFragmentType> ipfts = new ArrayList<InputPriceFragmentType>(pfts.size());
-					for (PriceFragmentType priceFragmentType : pfts)
+					for (final PriceFragmentType priceFragmentType : pfts)
 						ipfts.add(new InputPriceFragmentType(priceFragmentType));
 
 					Collections.sort(ipfts, new Comparator<InputPriceFragmentType>() {
-						public int compare(InputPriceFragmentType ipft1, InputPriceFragmentType ipft2)
+						public int compare(final InputPriceFragmentType ipft1, final InputPriceFragmentType ipft2)
 						{
 							return ipft1.getPriceFragmentType().getName().getText().compareTo(ipft2.getPriceFragmentType().getName().getText());
 						}
@@ -545,15 +546,15 @@ extends FadeableComposite
 
 					final List<Unit> units = UnitDAO.sharedInstance().getUnits(FETCH_GROUPS_UNIT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 					Collections.sort(units, new Comparator<Unit>() {
-						public int compare(Unit u1, Unit u2)
+						public int compare(final Unit u1, final Unit u2)
 						{
 							return u1.getName().getText().compareTo(u2.getName().getText());
 						}
 					});
 
 					// Sort the tariffs according to the config module
-					String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
-					TariffOrderConfigModule cfMod = ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
+					final String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
+					final TariffOrderConfigModule cfMod = ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
 							fetchGroups, -1, new NullProgressMonitor());
 					Collections.sort(tariffs, cfMod.getTariffComparator());
 					// Sorting done
@@ -585,7 +586,7 @@ extends FadeableComposite
 								}
 								if (currency != null) { // should always be true, but we play safe.
 									// check, if the price configuration contains this currency.
-									CurrencyID currencyID = CurrencyID.create(currency.getCurrencyID());
+									final CurrencyID currencyID = CurrencyID.create(currency.getCurrencyID());
 									if (dynamicTradePriceConfig.getCurrency(currencyID, false) == null) {
 										showMessageNoPricesAvailable();
 										return;
@@ -658,11 +659,11 @@ extends FadeableComposite
 	private void showMessageNoPricesAvailable()
 	{
 		// remove all UI that has been created previously
-		for (Control child : getChildren())
+		for (final Control child : getChildren())
 			child.dispose();
 
 
-		MessageComposite mc = new MessageComposite(
+		final MessageComposite mc = new MessageComposite(
 				this, SWT.NONE,
 				String.format(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.message"), dynamicProductType.getName().getText()), //$NON-NLS-1$
 				MessageType.WARNING
@@ -679,12 +680,12 @@ extends FadeableComposite
 		if (Display.getCurrent() == null)
 			throw new IllegalStateException("Wrong thread! This method must be called on the UI thread!"); //$NON-NLS-1$
 
-		Unit unit = unitCombo.getSelectedElement();
+		final Unit unit = unitCombo.getSelectedElement();
 		if (unit != null) {
 			double d;
 			try {
 				d = NumberFormatter.parseFloat(quantity.getText());
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				logger.warn("Failed to parse the quantity \"" + quantity.getText() + "\" as float value! Using 1 as fallback!", e); //$NON-NLS-1$ //$NON-NLS-2$
 				d = 1;
 			}
@@ -693,7 +694,7 @@ extends FadeableComposite
 		applyEditableState();
 	}
 
-	private boolean checkEditable(ProgressMonitor monitor) {
+	private boolean checkEditable(final ProgressMonitor monitor) {
 		if (!checkForEditable)
 			return true;
 		boolean finalized = true;
@@ -709,13 +710,13 @@ extends FadeableComposite
 		return !finalized;
 	}
 
-	private boolean getArticleContainerFinalized(Article article, ProgressMonitor monitor) {
+	private boolean getArticleContainerFinalized(final Article article, final ProgressMonitor monitor) {
 		try {
 			// try to get the offer#finalized value
 			return article.getOffer().isFinalized();
-		} catch (JDODetachedFieldAccessException ex) {
+		} catch (final JDODetachedFieldAccessException ex) {
 			// it was not detached, we get the article with the offer
-			Article _article = ArticleDAO.sharedInstance().getArticle(
+			final Article _article = ArticleDAO.sharedInstance().getArticle(
 					(ArticleID) JDOHelper.getObjectId(article), new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_OFFER},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 100));
 			return _article.getOffer().isFinalized();
@@ -723,9 +724,9 @@ extends FadeableComposite
 	}
 
 
-	private void checkCurrency(ProgressMonitor monitor) {
+	private void checkCurrency(final ProgressMonitor monitor) {
 		if (currency == null) {
-			ArticleContainer ac = articleContainer;
+			final ArticleContainer ac = articleContainer;
 			if (ac instanceof Order)
 				currency = ((Order) ac).getCurrency();
 			else if (ac instanceof Offer)
@@ -739,7 +740,7 @@ extends FadeableComposite
 					 * but strangely the Currency was not set.
 					 * To be sure, we get the Article with correct fetch-groups.
 					 */
-					Article article = ArticleDAO.sharedInstance().getArticle(
+					final Article article = ArticleDAO.sharedInstance().getArticle(
 							(ArticleID) JDOHelper.getObjectId(createArticle),
 							new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_CURRENCY},
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 100));
@@ -754,7 +755,7 @@ extends FadeableComposite
 		}
 	}
 
-	private void checkCustomerGroup(ProgressMonitor monitor) {
+	private void checkCustomerGroup(final ProgressMonitor monitor) {
 		if (customerGroupID == null) {
 			CustomerGroup customerGroup = null;
 			if (articleContainer instanceof Order) {
@@ -771,12 +772,12 @@ extends FadeableComposite
 		}
 	}
 
-	private CustomerGroup getArticleCustomerGroup(Article article, ProgressMonitor monitor) {
+	private CustomerGroup getArticleCustomerGroup(final Article article, final ProgressMonitor monitor) {
 		try {
 			return article.getOrder().getCustomerGroup();
-		} catch (JDODetachedFieldAccessException ex) {
+		} catch (final JDODetachedFieldAccessException ex) {
 			// not detached, need to access it
-			Article _article = ArticleDAO.sharedInstance().getArticle(
+			final Article _article = ArticleDAO.sharedInstance().getArticle(
 					(ArticleID) JDOHelper.getObjectId(article),
 					new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_ORDER, Order.FETCH_GROUP_CUSTOMER_GROUP},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
@@ -791,16 +792,16 @@ extends FadeableComposite
 		if (inputPriceFragmentTypes == null)
 			return;
 
-		IPriceCoordinate priceCoordinate = createPriceCoordinate();
-		PriceCell priceCell = resultPriceConfig.getPriceCell(priceCoordinate, false);
+		final IPriceCoordinate priceCoordinate = createPriceCoordinate();
+		final PriceCell priceCell = resultPriceConfig.getPriceCell(priceCoordinate, false);
 		this.setEnabled(priceCell != null);
 		if (priceCell == null) {
 			MessageDialog.openError(getShell(), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.errorNoPriceCellDialog.title"), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.errorNoPriceCellDialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
-		for (InputPriceFragmentType ipft : inputPriceFragmentTypes) {
-			long amount = priceCell.getPrice().getAmount(ipft.getPriceFragmentType());
+		for (final InputPriceFragmentType ipft : inputPriceFragmentTypes) {
+			final long amount = priceCell.getPrice().getAmount(ipft.getPriceFragmentType());
 			ipft.setAmount(amount);
 		}
 
@@ -809,7 +810,7 @@ extends FadeableComposite
 
 	private Article deferredArticleAssignment = null;
 
-	public void setArticle(Article article)
+	public void setArticle(final Article article)
 	{
 		if (Display.getCurrent() == null)
 			throw new IllegalStateException("This method must be called on the UI Thread! Wrong Thread!"); //$NON-NLS-1$
@@ -830,14 +831,14 @@ extends FadeableComposite
 
 	protected Article article = null;
 
-	protected void _setArticle(Article _article)
+	protected void _setArticle(final Article _article)
 	{
 		if (!_article.getProductType().equals(dynamicProductType))
 			throw new IllegalArgumentException("article.productType != this.productType : " + _article.getProductType() + " != " + dynamicProductType); //$NON-NLS-1$ //$NON-NLS-2$
 
 		this.article = _article;
 
-		DynamicProduct product = (DynamicProduct) article.getProduct();
+		final DynamicProduct product = (DynamicProduct) article.getProduct();
 		if (!tariffCombo.selectElement(article.getTariff()))
 			throw new IllegalStateException("Tariff not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
 
@@ -861,9 +862,9 @@ extends FadeableComposite
 
 		// product.singlePrice.fragments is probably not detached in the ArticleEdit's Articles
 		try {
-			for (InputPriceFragmentType ipft : inputPriceFragmentTypes) {
-				long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
-				PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
+			for (final InputPriceFragmentType ipft : inputPriceFragmentTypes) {
+				final long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
+				final PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
 				if (priceCell != null)
 					priceCell.getPrice().setAmount(ipft.getPriceFragmentType(), amount);
 
@@ -872,15 +873,15 @@ extends FadeableComposite
 
 			inputPriceFragmentTypeTable.refresh();
 			inputPriceFragmentTypeModified = false;
-		} catch (JDODetachedFieldAccessException x) {
+		} catch (final JDODetachedFieldAccessException x) {
 			setFaded(true);
-			Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadArticleWithPriceFragmentsJob.name")) { //$NON-NLS-1$
+			final Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadArticleWithPriceFragmentsJob.name")) { //$NON-NLS-1$
 				@Override
-				protected IStatus run(ProgressMonitor monitor) throws Exception
+				protected IStatus run(final ProgressMonitor monitor) throws Exception
 				{
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.task.loadArticle"), 100); //$NON-NLS-1$
 					try {
-						ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
+						final ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
 						final Article articleWithPriceFragments = ArticleDAO.sharedInstance().getArticle(
 								articleID,
 								new String[] { FetchPlan.DEFAULT, DynamicProductTypeRecurringArticle.FETCH_GROUP_DYNAMIC_PRODUCT_TYPE_RECURRING_ARTICLE_SINGLEPRICE,
@@ -892,16 +893,16 @@ extends FadeableComposite
 						{
 							public void run()
 							{
-								DynamicProduct product = (DynamicProduct) articleWithPriceFragments.getProduct();
+								final DynamicProduct product = (DynamicProduct) articleWithPriceFragments.getProduct();
 								DynamicProductInfo dynamicProductInfo;
 								if (product != null)
 									dynamicProductInfo = product;
 								else
 									dynamicProductInfo = (DynamicProductInfo) articleWithPriceFragments;
 
-								for (InputPriceFragmentType ipft : inputPriceFragmentTypes) {
-									long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
-									PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
+								for (final InputPriceFragmentType ipft : inputPriceFragmentTypes) {
+									final long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
+									final PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
 									if (priceCell != null)
 										priceCell.getPrice().setAmount(ipft.getPriceFragmentType(), amount);
 
@@ -913,7 +914,7 @@ extends FadeableComposite
 								setFaded(false);
 							}
 						});
-					} catch (Exception x) {
+					} catch (final Exception x) {
 						setFadedOnUIThread(false);
 					} finally {
 						monitor.done();
@@ -941,13 +942,13 @@ extends FadeableComposite
 	 * shows the statues Text Message Label above the name text dialog,
 	 * this method should be called after the GUI has been created.
 	 */
-	public void showTextNameMessage(String message,MessageType msgType)
+	public void showTextNameMessage(final String message,final MessageType msgType)
 	{
 		if(nameMessageLabel != null)
 		{
 			if(!nameMessageLabel.isVisible())
 			{
-				GridData data = (GridData)nameMessageLabel.getLayoutData();
+				final GridData data = (GridData)nameMessageLabel.getLayoutData();
 				data.exclude = false;
 				nameMessageLabel.setVisible(true);
 			}
