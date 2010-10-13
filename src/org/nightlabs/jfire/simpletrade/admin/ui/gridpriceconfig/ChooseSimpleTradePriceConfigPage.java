@@ -6,8 +6,6 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
-import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.simpletrade.dao.FormulaPriceConfigDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
@@ -21,12 +19,12 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ChooseSimpleTradePriceConfigPage
 extends AbstractChooseGridPriceConfigPage
 {
-	public ChooseSimpleTradePriceConfigPage(ProductTypeID parentProductTypeID) {
+	public ChooseSimpleTradePriceConfigPage(final ProductTypeID parentProductTypeID) {
 		super(parentProductTypeID);
 	}
 
 	@Override
-	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor)
+	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(final ProgressMonitor monitor)
 	{
 		return FormulaPriceConfigDAO.sharedInstance().getFormulaPriceConfigs(
 				AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG,
@@ -34,10 +32,8 @@ extends AbstractChooseGridPriceConfigPage
 	}
 
 	@Override
-	public IInnerPriceConfig createPriceConfig(I18nText priceConfigName) {
-		FormulaPriceConfig priceConfig = new FormulaPriceConfig(
-				IDGenerator.getOrganisationID(),
-				PriceConfig.createPriceConfigID());
+	public IInnerPriceConfig createPriceConfig(final I18nText priceConfigName) {
+		final FormulaPriceConfig priceConfig = new FormulaPriceConfig(null);
 		priceConfig.getName().copyFrom(priceConfigName);
 		return priceConfig;
 	}

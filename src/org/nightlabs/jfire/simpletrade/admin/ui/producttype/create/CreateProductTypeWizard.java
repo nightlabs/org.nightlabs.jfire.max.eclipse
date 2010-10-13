@@ -40,10 +40,8 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
-import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor;
 import org.nightlabs.jfire.simpletrade.admin.ui.gridpriceconfig.ChooseSimpleTradePriceConfigPage;
@@ -89,9 +87,9 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 			if (_storeManager == null)
 				_storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return _storeManager;
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new ModuleException(e);
 		}
 	}
@@ -104,14 +102,14 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 			if (_simpleTradeManager == null)
 				_simpleTradeManager = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return _simpleTradeManager;
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new ModuleException(e);
 		}
 	}
 
-	public CreateProductTypeWizard(ProductTypeID parentProductTypeID)
+	public CreateProductTypeWizard(final ProductTypeID parentProductTypeID)
 	{
 		this.parentProductTypeID = parentProductTypeID;
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeWizard.windowTitle")); //$NON-NLS-1$
@@ -146,12 +144,12 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 
-				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
+				public void run(final IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
 					try {
-						ProgressMonitorWrapper monitor = new ProgressMonitorWrapper(_monitor);
+						final ProgressMonitorWrapper monitor = new ProgressMonitorWrapper(_monitor);
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeWizard.createSimpleProductTypeMonitor.task.name"), 3); //$NON-NLS-1$
 
-						ProductType parentProductType = ProductTypeDAO.sharedInstance().getProductType(
+						final ProductType parentProductType = ProductTypeDAO.sharedInstance().getProductType(
 								parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, 1));
 
@@ -165,10 +163,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 
 						if (ProductType.PACKAGE_NATURE_OUTER == getProductTypeNamePage().getPackageNature()) {
 							// If the new ProductType is packageable, we need to create a package result price config
-							newProductType.setPackagePriceConfig(
-									new StablePriceConfig(
-											IDGenerator.getOrganisationID(),
-											PriceConfig.createPriceConfigID()));
+							newProductType.setPackagePriceConfig(new StablePriceConfig(null));
 						}
 
 						selectPriceConfigPage.configureProductType(newProductType);
@@ -197,27 +192,27 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 							public void run()
 							{
 								try {
-									ProductTypeEditorInput editorInput = new ProductTypeEditorInput(newProductTypeId);
+									final ProductTypeEditorInput editorInput = new ProductTypeEditorInput(newProductTypeId);
 //									RCPUtil.openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
 
 									Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
-								} catch (Exception e) {
+								} catch (final Exception e) {
 									throw new RuntimeException(e);
 								}
 							}
 						});
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						throw new RuntimeException(e);
 					}
 				}
 			});
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 		return true;
 	}
 
-	public void setPriceConfigSelectionEnabled(boolean enabled)
+	public void setPriceConfigSelectionEnabled(final boolean enabled)
 	{
 		if (priceConfigSelectionEnabled == enabled)
 			return;
@@ -233,7 +228,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		priceConfigSelectionEnabled = enabled;
 	}
 
-	public void setParentProductTypeID(ProductTypeID parentProductTypeID) {
+	public void setParentProductTypeID(final ProductTypeID parentProductTypeID) {
 		this.parentProductTypeID = parentProductTypeID;
 	}
 
