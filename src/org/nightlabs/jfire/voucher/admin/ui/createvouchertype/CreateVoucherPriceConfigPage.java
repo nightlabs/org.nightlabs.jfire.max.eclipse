@@ -13,8 +13,6 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
@@ -35,9 +33,9 @@ public class CreateVoucherPriceConfigPage
 	}
 
 	@Override
-	public Control createPageContents(Composite parent)
+	public Control createPageContents(final Composite parent)
 	{
-		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		final XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		priceConfigNameEditor = new I18nTextEditor(page, Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherPriceConfigPage.priceConfigNameEditor.caption")); //$NON-NLS-1$
 		priceConfigNameEditor.setI18nText(priceConfigName);
@@ -50,10 +48,10 @@ public class CreateVoucherPriceConfigPage
 
 	public VoucherPriceConfig createPriceConfig()
 	{
-		VoucherPriceConfig voucherPriceConfig = new VoucherPriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
+		final VoucherPriceConfig voucherPriceConfig = new VoucherPriceConfig(null);
 		voucherPriceConfig.getName().copyFrom(priceConfigName);
-		Map<Currency, Long> map = currencyAmountTable.getMap();
-		for(Map.Entry<Currency, Long> me : map.entrySet()) {
+		final Map<Currency, Long> map = currencyAmountTable.getMap();
+		for(final Map.Entry<Currency, Long> me : map.entrySet()) {
 			voucherPriceConfig.setPrice(me.getKey(), me.getValue());
 		}
 		return voucherPriceConfig;

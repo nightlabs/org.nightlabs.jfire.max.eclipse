@@ -28,6 +28,7 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.IPackagePriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
+import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
@@ -61,7 +62,7 @@ extends WizardHopPage
 
 	private CreateVoucherPriceConfigPage createVoucherPriceConfigPage = null;
 
-	public SelectVoucherPriceConfigPage(ProductTypeID parentVoucherTypeID)
+	public SelectVoucherPriceConfigPage(final ProductTypeID parentVoucherTypeID)
 	{
 		super(SelectVoucherPriceConfigPage.class.getName(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.title"), //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(VoucherAdminPlugin.getDefault(), SelectVoucherPriceConfigPage.class));
@@ -115,13 +116,13 @@ extends WizardHopPage
 		getContainer().updateButtons();
 	}
 
-	private void setInheritedPriceConfigName(String name)
+	private void setInheritedPriceConfigName(final String name)
 	{
 		inheritPriceConfig.setText(String.format(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.inheritPriceConfigRadio.text"), name)); //$NON-NLS-1$
 	}
 
 	@Override
-	public Control createPageContents(Composite parent)
+	public Control createPageContents(final Composite parent)
 	{
 		final XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
@@ -131,7 +132,7 @@ extends WizardHopPage
 		mode = Mode.INHERIT;
 		inheritPriceConfig.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				updateUI();
 			}
@@ -144,7 +145,7 @@ extends WizardHopPage
 		createPriceConfig.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createPriceConfig.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				updateUI();
 			}
@@ -155,7 +156,7 @@ extends WizardHopPage
 		selectPriceConfig.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectPriceConfig.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				updateUI();
 			}
@@ -168,7 +169,7 @@ extends WizardHopPage
 		assignNoneConfig.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		assignNoneConfig.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				updateUI();
 			}
@@ -180,18 +181,18 @@ extends WizardHopPage
 				AbstractListComposite.getDefaultWidgetStyle(page),(String) null,
 				new LabelProvider() {
 			@Override
-			public String getText(Object element)
+			public String getText(final Object element)
 			{
-				VoucherPriceConfig vpc = (VoucherPriceConfig) element;
+				final VoucherPriceConfig vpc = (VoucherPriceConfig) element;
 				return vpc.getName().getText();
 			}
 		});
-		VoucherPriceConfig dummy = new VoucherPriceConfig("dummy", "dummy"); //$NON-NLS-1$  //$NON-NLS-2$
+		final VoucherPriceConfig dummy = new VoucherPriceConfig(PriceConfigID.create("dummy.org", "dummy")); //$NON-NLS-1$  //$NON-NLS-2$
 		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.priceConfigList.item_loadingData")); //$NON-NLS-1$
 		priceConfigList.addElement(dummy);
 
 		priceConfigList.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event)
+			public void selectionChanged(final SelectionChangedEvent event)
 			{
 				inheritPriceConfig.setSelection(false);
 				createPriceConfig.setSelection(false);
@@ -204,9 +205,9 @@ extends WizardHopPage
 
 		page.setEnabled(false);
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.loadJob.name")) { //$NON-NLS-1$
+		final Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.loadJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception
+			protected IStatus run(final ProgressMonitor monitor) throws Exception
 			{
 				final VoucherType parentVoucherType = parentVoucherTypeID == null ? null : VoucherTypeDAO.sharedInstance().getVoucherType(
 						parentVoucherTypeID,
