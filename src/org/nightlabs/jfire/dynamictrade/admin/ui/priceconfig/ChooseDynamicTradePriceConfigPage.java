@@ -5,10 +5,8 @@ import java.util.List;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
-import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicTradePriceConfigDAO;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.progress.ProgressMonitor;
@@ -20,12 +18,12 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ChooseDynamicTradePriceConfigPage
 extends AbstractChooseGridPriceConfigPage
 {
-	public ChooseDynamicTradePriceConfigPage(ProductTypeID parentProductTypeID) {
+	public ChooseDynamicTradePriceConfigPage(final ProductTypeID parentProductTypeID) {
 		super(parentProductTypeID);
 	}
 
 	@Override
-	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor)
+	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(final ProgressMonitor monitor)
 	{
 		return DynamicTradePriceConfigDAO.sharedInstance().getDynamicTradePriceConfigs(
 				AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG,
@@ -34,8 +32,8 @@ extends AbstractChooseGridPriceConfigPage
 	}
 
 	@Override
-	public IInnerPriceConfig createPriceConfig(I18nText priceConfigName) {
-		DynamicTradePriceConfig pc = new DynamicTradePriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
+	public IInnerPriceConfig createPriceConfig(final I18nText priceConfigName) {
+		final DynamicTradePriceConfig pc = new DynamicTradePriceConfig(null);
 		pc.getName().copyFrom(priceConfigName);
 		return pc;
 	}
