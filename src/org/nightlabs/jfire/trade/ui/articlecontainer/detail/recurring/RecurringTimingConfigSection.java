@@ -18,7 +18,7 @@ import org.nightlabs.base.ui.timepattern.TimePatternSetModifyListener;
 import org.nightlabs.base.ui.timepattern.builder.TimePatternSetBuilderWizard;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.util.Util;
 
@@ -31,27 +31,27 @@ import org.nightlabs.util.Util;
 public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneralSection {
 
 
-	private TimePatternSetComposite timePatternSetComposite;
-	private DateTimeControl stopDateControl;
-	private Button enableEndCheck;
+	private final TimePatternSetComposite timePatternSetComposite;
+	private final DateTimeControl stopDateControl;
+	private final Button enableEndCheck;
 
-	
-	public RecurringTimingConfigSection(FormPage page, Composite parent, final RecurringOfferConfigurationPageController controller) {
+
+	public RecurringTimingConfigSection(final FormPage page, final Composite parent, final RecurringOfferConfigurationPageController controller) {
 		super(page, parent, controller);
 		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.text")); //$NON-NLS-1$
 		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.description")); //$NON-NLS-1$
 
 		timePatternSetComposite = new TimePatternSetComposite(getContainer(), SWT.NONE);
 		timePatternSetComposite.addTimePatternSetModifyListener(new TimePatternSetModifyListener(){
-			@Override			
-			public void timePatternSetModified(TimePatternSetModifyEvent event)
+			@Override
+			public void timePatternSetModified(final TimePatternSetModifyEvent event)
 			{
 				saveTimePattern();
 			}
 
 		});
 
-		XComposite enableDateContainer = new XComposite(getContainer(), SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
+		final XComposite enableDateContainer = new XComposite(getContainer(), SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER);
 		enableDateContainer.getGridLayout().numColumns = 2;
 
 		enableEndCheck = new Button(enableDateContainer, SWT.CHECK);
@@ -60,7 +60,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		enableEndCheck.setSelection(false);
 		enableEndCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				stopDateControl.setEnabled(enableEndCheck.getSelection());
 
 				if(!enableEndCheck.getSelection())
@@ -72,11 +72,11 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 			}
 		});
 
-		stopDateControl = new DateTimeControl(enableDateContainer,false,SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+		stopDateControl = new DateTimeControl(enableDateContainer,false,SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 		stopDateControl.setEnabled(false);
 		stopDateControl.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 
 				if(stopDateControl.getDate()!=null)
 					getController().getControllerObject().setSuspendDate(stopDateControl.getDate());
@@ -86,21 +86,21 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		});
 
 
-		DefineRecurringTimePatternAction defineRecurringTimePatternAction = new DefineRecurringTimePatternAction();
+		final DefineRecurringTimePatternAction defineRecurringTimePatternAction = new DefineRecurringTimePatternAction();
 		getToolBarManager().add(defineRecurringTimePatternAction);
 
-		AddRecurringTimePatternAction addRecurringTimePatternAction = new AddRecurringTimePatternAction();
+		final AddRecurringTimePatternAction addRecurringTimePatternAction = new AddRecurringTimePatternAction();
 		getToolBarManager().add(addRecurringTimePatternAction);
 
-		RemoveRecurringTimePatternAction removeRecurringTimePatternAction = new RemoveRecurringTimePatternAction();
+		final RemoveRecurringTimePatternAction removeRecurringTimePatternAction = new RemoveRecurringTimePatternAction();
 		getToolBarManager().add(removeRecurringTimePatternAction);
 
 		updateToolBarManager();
 	}
-	
+
 	@Override
 	protected void updateConfigOffer(
-			RecurringOfferConfiguration recurringOfferConfiguration) {
+			final RecurringOfferConfiguration recurringOfferConfiguration) {
 
 		timePatternSetComposite.setTimePatternSet(Util.cloneSerializable(recurringOfferConfiguration.getCreatorTask().getTimePatternSet()));
 	}
@@ -126,7 +126,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 	extends Action
 	{
 		public RemoveRecurringTimePatternAction() {
-			super();		
+			super();
 			setId(RemoveRecurringTimePatternAction.class.getName());
 			setText("-"); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.removeAction.tooltip")); //$NON-NLS-1$
@@ -183,10 +183,10 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 
 		getController().getControllerObject().getCreatorTask().getTimePatternSet().clearTimePatterns();
 
-		Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();
-		for (TimePattern p : patterns) {
+		final Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();
+		for (final TimePattern p : patterns) {
 			getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);
 		}
-		markDirty();	
+		markDirty();
 	}
 }

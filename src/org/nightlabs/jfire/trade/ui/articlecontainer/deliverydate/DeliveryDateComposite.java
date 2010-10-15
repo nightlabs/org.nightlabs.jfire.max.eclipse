@@ -50,7 +50,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
@@ -68,7 +68,7 @@ public class DeliveryDateComposite extends XComposite
 	private Set<Class<? extends ArticleContainer>> articleContainerClasses;
 	private Combo typeCombo;
 	private AnchorID selectedLegalEntityID;
-//	private ExpandableComposite advancedFilterComp;
+	//	private ExpandableComposite advancedFilterComp;
 
 	private static final String TYPE_OFFER = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.type.offer"); //$NON-NLS-1$
 	private static final String TYPE_DELIVERY_NOTE = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.type.deliverynote"); //$NON-NLS-1$
@@ -78,7 +78,7 @@ public class DeliveryDateComposite extends XComposite
 	 * @param parent
 	 * @param style
 	 */
-	public DeliveryDateComposite(Composite parent, int style) {
+	public DeliveryDateComposite(final Composite parent, final int style) {
 		super(parent, style);
 		createComposite(this);
 	}
@@ -89,28 +89,28 @@ public class DeliveryDateComposite extends XComposite
 	 * @param layoutMode
 	 * @param layoutDataMode
 	 */
-	public DeliveryDateComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+	public DeliveryDateComposite(final Composite parent, final int style,
+			final LayoutMode layoutMode, final LayoutDataMode layoutDataMode) {
 		super(parent, style, layoutMode, layoutDataMode);
 		createComposite(this);
 	}
 
-	protected void createComposite(Composite parent)
+	protected void createComposite(final Composite parent)
 	{
-//		final Composite filterCriteriaWrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER,
-//				LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
-		IToolkit toolkit = getToolkit(true);
-		Form form = toolkit.createForm(parent);
+		//		final Composite filterCriteriaWrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER,
+		//				LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
+		final IToolkit toolkit = getToolkit(true);
+		final Form form = toolkit.createForm(parent);
 		form.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Composite filterCriteriaWrapper = form.getBody();
+		final Composite filterCriteriaWrapper = form.getBody();
 		filterCriteriaWrapper.setLayout(new GridLayout(3, false));
 		filterCriteriaWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-//		Label label = new Label(filterCriteriaWrapper, SWT.NONE);
-		Label label = toolkit.createLabel(filterCriteriaWrapper, "", SWT.NONE); //$NON-NLS-1$
+		//		Label label = new Label(filterCriteriaWrapper, SWT.NONE);
+		final Label label = toolkit.createLabel(filterCriteriaWrapper, "", SWT.NONE); //$NON-NLS-1$
 		label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.label.deliverydate.text")); //$NON-NLS-1$
 		label.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.label.deliverydate.tooltip")); //$NON-NLS-1$
-		dateTimeControl = new DateTimeControl(filterCriteriaWrapper, true, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT);
+		dateTimeControl = new DateTimeControl(filterCriteriaWrapper, true, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT);
 		toolkit.adapt(dateTimeControl);
 		dateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		dateTimeControl.addSelectionListener(new SelectionAdapter(){
@@ -118,35 +118,35 @@ public class DeliveryDateComposite extends XComposite
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				search();
 			}
 		});
-//		Button searchButton = new Button(filterCriteriaWrapper, SWT.FLAT);
-		Button searchButton = toolkit.createButton(filterCriteriaWrapper, "", SWT.FLAT); //$NON-NLS-1$
+		//		Button searchButton = new Button(filterCriteriaWrapper, SWT.FLAT);
+		final Button searchButton = toolkit.createButton(filterCriteriaWrapper, "", SWT.FLAT); //$NON-NLS-1$
 		searchButton.setImage(SharedImages.SEARCH_16x16.createImage());
 		searchButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.search.tooltip")); //$NON-NLS-1$
 		searchButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				search();
 			}
 		});
 
-//		advancedFilterComp = new ExpandableComposite(filterCriteriaWrapper, ExpandableComposite.TWISTIE);
-//		advancedFilterComp.setText("Filter Options");
-//		advancedFilterComp.addExpansionListener(new IExpansionListener(){
-//			@Override
-//			public void expansionStateChanging(ExpansionEvent e) {
-//
-//			}
-//			@Override
-//			public void expansionStateChanged(ExpansionEvent e) {
-//				filterCriteriaWrapper.layout(true);
-//			}
-//		});
-//		Composite wrapper = new XComposite(advancedFilterComp, SWT.NONE);
-//		onlyCurrentBuisnessPartnerButton = new Button(filterCriteriaWrapper, SWT.CHECK);
+		//		advancedFilterComp = new ExpandableComposite(filterCriteriaWrapper, ExpandableComposite.TWISTIE);
+		//		advancedFilterComp.setText("Filter Options");
+		//		advancedFilterComp.addExpansionListener(new IExpansionListener(){
+		//			@Override
+		//			public void expansionStateChanging(ExpansionEvent e) {
+		//
+		//			}
+		//			@Override
+		//			public void expansionStateChanged(ExpansionEvent e) {
+		//				filterCriteriaWrapper.layout(true);
+		//			}
+		//		});
+		//		Composite wrapper = new XComposite(advancedFilterComp, SWT.NONE);
+		//		onlyCurrentBuisnessPartnerButton = new Button(filterCriteriaWrapper, SWT.CHECK);
 		onlyCurrentBuisnessPartnerButton = toolkit.createButton(filterCriteriaWrapper, "", SWT.CHECK); //$NON-NLS-1$
 		onlyCurrentBuisnessPartnerButton.setSelection(onlyCurrentBusinessPartner);
 		onlyCurrentBuisnessPartnerButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.button.onlyCurrentBusinessPartner.text")); //$NON-NLS-1$
@@ -156,14 +156,14 @@ public class DeliveryDateComposite extends XComposite
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				onlyCurrentBusinessPartner = onlyCurrentBuisnessPartnerButton.getSelection();
 			}
 		});
 
 		typeCombo = new Combo(filterCriteriaWrapper, SWT.READ_ONLY);
 		toolkit.adapt(typeCombo);
-		GridData comboData = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData comboData = new GridData(GridData.FILL_HORIZONTAL);
 		comboData.horizontalSpan = 2;
 		typeCombo.setLayoutData(comboData);
 		typeCombo.setItems(new String[] {TYPE_OFFER, TYPE_DELIVERY_NOTE, TYPE_BOTH});
@@ -172,8 +172,8 @@ public class DeliveryDateComposite extends XComposite
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String text = typeCombo.getText();
+			public void widgetSelected(final SelectionEvent e) {
+				final String text = typeCombo.getText();
 				articleContainerClasses.clear();
 				if (text.equals(TYPE_OFFER)) {
 					articleContainerClasses.add(Offer.class);
@@ -194,15 +194,15 @@ public class DeliveryDateComposite extends XComposite
 		deliveryDateTable = new DeliveryDateTable(parent, SWT.NONE);
 		deliveryDateTable.addDoubleClickListener(new IDoubleClickListener(){
 			@Override
-			public void doubleClick(DoubleClickEvent event) {
+			public void doubleClick(final DoubleClickEvent event) {
 				if (deliveryDateTable.getSelectedElements().size() == 1) {
-					Object selectedObject = deliveryDateTable.getSelectedElements().iterator().next();
+					final Object selectedObject = deliveryDateTable.getSelectedElements().iterator().next();
 					if (selectedObject instanceof ArticleContainerDeliveryDateDTO) {
-						ArticleContainerDeliveryDateDTO dto = (ArticleContainerDeliveryDateDTO) selectedObject;
-						ArticleContainerID articleContainerID = dto.getArticleContainerID();
+						final ArticleContainerDeliveryDateDTO dto = (ArticleContainerDeliveryDateDTO) selectedObject;
+						final ArticleContainerID articleContainerID = dto.getArticleContainerID();
 						try {
 							RCPUtil.openEditor(new ArticleContainerEditorInput(articleContainerID), ArticleContainerEditor.ID_EDITOR);
-						} catch (PartInitException e) {
+						} catch (final PartInitException e) {
 							throw new RuntimeException(e);
 						}
 					}
@@ -213,7 +213,7 @@ public class DeliveryDateComposite extends XComposite
 		SelectionManager.sharedInstance().addNotificationListener(LegalEntity.class, selectionListener);
 		addDisposeListener(new DisposeListener() {
 			@Override
-			public void widgetDisposed(DisposeEvent event) {
+			public void widgetDisposed(final DisposeEvent event) {
 				SelectionManager.sharedInstance().removeNotificationListener(LegalEntity.class, selectionListener);
 			}
 		});
@@ -221,10 +221,10 @@ public class DeliveryDateComposite extends XComposite
 		adaptToToolkit();
 	}
 
-	private NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
+	private final NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
 		@Override
-		public void notify(NotificationEvent notificationEvent) {
-			AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
+		public void notify(final NotificationEvent notificationEvent) {
+			final AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
 			selectedLegalEntityID = legalEntityID;
 			if (onlyCurrentBusinessPartner) {
 				search();
@@ -241,15 +241,15 @@ public class DeliveryDateComposite extends XComposite
 		deliveryDateTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.loading.message")); //$NON-NLS-1$
 
 		final Date deliveryDate = dateTimeControl.getDate();
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.job.search.name")) { //$NON-NLS-1$
+		final Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.deliverydate.DeliveryDateComposite.job.search.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception
+			protected IStatus run(final ProgressMonitor monitor) throws Exception
 			{
 				if (!isDisposed()){
-					QueryCollection<AbstractArticleContainerQuery> articleContainerQueries =
+					final QueryCollection<AbstractArticleContainerQuery> articleContainerQueries =
 						new QueryCollection<AbstractArticleContainerQuery>(ArticleContainer.class);
-					for (Class<? extends ArticleContainer> acClass : articleContainerClasses) {
-						AbstractArticleContainerQuery query = getQuery(acClass);
+					for (final Class<? extends ArticleContainer> acClass : articleContainerClasses) {
+						final AbstractArticleContainerQuery query = getQuery(acClass);
 						query.setAllFieldsDisabled();
 						query.setFieldEnabled(AbstractArticleContainerQuery.FieldName.articleDeliveryDate, true);
 						query.setArticleDeliveryDate(deliveryDate);
@@ -262,9 +262,9 @@ public class DeliveryDateComposite extends XComposite
 						articleContainerQueries.add(query);
 					}
 
-//					final Collection<?> articleContainers = ArticleContainerDAO.sharedInstance().
-//						getArticleContainersForQueries(articleContainerQueries, getFetchGroups(),
-//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					//					final Collection<?> articleContainers = ArticleContainerDAO.sharedInstance().
+					//						getArticleContainersForQueries(articleContainerQueries, getFetchGroups(),
+					//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 					final Collection<ArticleContainerDeliveryDateDTO> dtos = ArticleContainerDAO.sharedInstance().getArticleContainerDeliveryDateDTOs(
 							articleContainerQueries, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 					if (!display.isDisposed()) {
@@ -290,7 +290,7 @@ public class DeliveryDateComposite extends XComposite
 				ArticleContainer.FETCH_GROUP_ARTICLES, Article.FETCH_GROUP_END_CUSTOMER};
 	}
 
-	private AbstractArticleContainerQuery getQuery(Class<? extends ArticleContainer> articleContainerClass) {
+	private AbstractArticleContainerQuery getQuery(final Class<? extends ArticleContainer> articleContainerClass) {
 		if (Offer.class.isAssignableFrom(articleContainerClass)) {
 			return new OfferQuery();
 		}

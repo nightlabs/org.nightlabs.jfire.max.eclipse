@@ -45,7 +45,6 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -61,10 +60,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -72,8 +67,6 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.base.ui.wizard.IDynamicPathWizardListener;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
@@ -96,7 +89,6 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.trade.config.TradePrintingConfigModule;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.modeofpayment.ModeOfPaymentFlavourTable;
-import org.nightlabs.jfire.trade.ui.reserve.ReservationWizardDialog;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
@@ -104,7 +96,7 @@ import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRe
 import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
 import org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -132,10 +124,10 @@ implements IPaymentEntryPage
 	private Spinner amountSpinner;
 	private DateTimeControl paymentDateControl;
 	private Boolean paymentDateNextPageInitialized = false;
-	
+
 	private Label modeOfPaymentTitleLabel;
 	private List<ModeOfPaymentFlavour> modeOfPaymentFlavourList = new ArrayList<ModeOfPaymentFlavour>();
-//	private org.eclipse.swt.widgets.List modeOfPaymentFlavourGUIList;
+	//	private org.eclipse.swt.widgets.List modeOfPaymentFlavourGUIList;
 	private ModeOfPaymentFlavourTable modeOfPaymentFlavourTable;
 
 	private Label clientPaymentProcessorFactoryLabel;
@@ -149,7 +141,7 @@ implements IPaymentEntryPage
 	/**
 	 * Contains items of type {@link ServerPaymentProcessor}.
 	 */
-	private List<ServerPaymentProcessor> serverPaymentProcessorList = new ArrayList<ServerPaymentProcessor>();
+	private final List<ServerPaymentProcessor> serverPaymentProcessorList = new ArrayList<ServerPaymentProcessor>();
 	private Combo serverPaymentProcessorCombo;
 
 	private ModeOfPaymentFlavour selectedModeOfPaymentFlavour = null;
@@ -157,19 +149,19 @@ implements IPaymentEntryPage
 	private ClientPaymentProcessor clientPaymentProcessor = null;
 	private ServerPaymentProcessor selectedServerPaymentProcessor = null;
 
-	private Payment payment;
+	private final Payment payment;
 
 	private TradePrintingConfigModule tradePrintingCfMod = null;
 	private AutomaticPrintingOptionsGroup automaticPrintingGroup;
 
-	public PaymentEntryPage(Payment payment)
+	public PaymentEntryPage(final Payment payment)
 	{
 		super(PaymentEntryPage.class.getName() + '/' + payment.getPaymentID(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.title"), //$NON-NLS-1$
 				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), PaymentEntryPage.class, null, ImageDimension._75x70));
 		setMessage(null); // "Please select a mode of payment.");
 		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.description")); //$NON-NLS-1$
 		this.payment = payment;
-//		new PaymentWizardHop(this, payment); // self-registering
+		//		new PaymentWizardHop(this, payment); // self-registering
 	}
 
 	public Payment getPayment()
@@ -181,7 +173,7 @@ implements IPaymentEntryPage
 	 * @see org.eclipse.jface.wizard.WizardPage#setWizard(org.eclipse.jface.wizard.IWizard)
 	 */
 	@Override
-	public void setWizard(IWizard newWizard)
+	public void setWizard(final IWizard newWizard)
 	{
 		super.setWizard(newWizard);
 		new PaymentWizardHop(this, payment); // self-registering
@@ -190,7 +182,7 @@ implements IPaymentEntryPage
 	private AccountingManagerRemote accountingManager = null;
 
 	protected AccountingManagerRemote getAccountingManager()
-		throws RemoteException, LoginException, NamingException
+	throws RemoteException, LoginException, NamingException
 	{
 		if (accountingManager == null)
 			accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
@@ -202,7 +194,7 @@ implements IPaymentEntryPage
 	{
 		logger.debug("page<"+getName()+">.updateAmountGUI()"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		PaymentWizard wizard = ((PaymentWizard)getWizard());
+		final PaymentWizard wizard = ((PaymentWizard)getWizard());
 		if (wizard == null)
 			return;
 
@@ -210,23 +202,23 @@ implements IPaymentEntryPage
 			logger.debug("page<"+getName()+">.updateAmountGUI(): setting amountValueLabel.text"); //$NON-NLS-1$ //$NON-NLS-2$
 			amountValueLabel.setText(
 					String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.amountValueLabel.text"), //$NON-NLS-1$
-					NumberFormatter.formatCurrency(
-							getPaymentWizardHop().getMaxAmount(),
-							wizard.getCurrency()),
-					NumberFormatter.formatCurrency(
-							getPaymentWizardHop().getAmount(),
-							wizard.getCurrency())
+							NumberFormatter.formatCurrency(
+									getPaymentWizardHop().getMaxAmount(),
+									wizard.getCurrency()),
+									NumberFormatter.formatCurrency(
+											getPaymentWizardHop().getAmount(),
+											wizard.getCurrency())
 					));
 		}
 
 		if (amountSpinner != null) {
 			logger.debug("page<"+getName()+">.updateAmountGUI(): setting amountSpinner.selection"); //$NON-NLS-1$ //$NON-NLS-2$
 
-// TODO is that ok?
-//			if ((int)getPaymentWizardHop().getMaxAmount() != amountSpinner.getMaximum()) {
-//				amountSpinner.setSelection(0);
-//				amountSpinner.setMaximum((int)getPaymentWizardHop().getMaxAmount());
-//			}
+			// TODO is that ok?
+			//			if ((int)getPaymentWizardHop().getMaxAmount() != amountSpinner.getMaximum()) {
+			//				amountSpinner.setSelection(0);
+			//				amountSpinner.setMaximum((int)getPaymentWizardHop().getMaxAmount());
+			//			}
 
 			if ((int)getPaymentWizardHop().getAmount() != amountSpinner.getSelection())
 				amountSpinner.setSelection((int)getPaymentWizardHop().getAmount());
@@ -237,26 +229,26 @@ implements IPaymentEntryPage
 	}
 
 	@Override
-	public Control createPageContents(Composite parent)
+	public Control createPageContents(final Composite parent)
 	{
 		try {
-//			PaymentWizard wizafrd = ((PaymentWizard)getWizard());
+			//			PaymentWizard wizafrd = ((PaymentWizard)getWizard());
 
-			XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+			final XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-			XComposite amountComposite = new XComposite(page, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
+			final XComposite amountComposite = new XComposite(page, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
 			amountComposite.getGridLayout().numColumns = 3;
 			amountComposite.getGridData().grabExcessVerticalSpace = false;
-//			(amountTitleLabel = new Label(amountComposite, SWT.NONE)).setText("Amount to pay: ");
+			//			(amountTitleLabel = new Label(amountComposite, SWT.NONE)).setText("Amount to pay: ");
 			amountTitleLabel = new Label(amountComposite, SWT.NONE);
 			if (Payment.PAYMENT_DIRECTION_INCOMING.equals(getPayment().getPaymentDirection()))
 				amountTitleLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.amountTitleLabel.text_receive")); //$NON-NLS-1$
 			else if (Payment.PAYMENT_DIRECTION_OUTGOING.equals(getPayment().getPaymentDirection())) {
 				// TODO very strange: It seems foreground and backround is ignored in linux/gtk
-//				amountTitleLabel.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+				//				amountTitleLabel.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 				amountTitleLabel.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 				RCPUtil.setControlFontStyle(amountTitleLabel, SWT.BOLD, 0);
-//				amountTitleLabel.setFont(new Font(amountTitleLabel.getDisplay(), amountTitleLabel.getFont().getFontData()[0].getName(), amountTitleLabel.getFont().getFontData()[0].getHeight(), amountTitleLabel.getFont().getFontData()[0].getStyle() | SWT.BOLD));
+				//				amountTitleLabel.setFont(new Font(amountTitleLabel.getDisplay(), amountTitleLabel.getFont().getFontData()[0].getName(), amountTitleLabel.getFont().getFontData()[0].getHeight(), amountTitleLabel.getFont().getFontData()[0].getStyle() | SWT.BOLD));
 				amountTitleLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.amountTitleLabel.text_pay")); //$NON-NLS-1$
 			}
 			else
@@ -272,7 +264,7 @@ implements IPaymentEntryPage
 			// Spinner supports only int and is not very userfriendly. We need a currency-edit-composite!
 			amountSpinner.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e)
+				public void widgetSelected(final SelectionEvent e)
 				{
 					amountSpinnerValueChanged();
 				}
@@ -285,8 +277,8 @@ implements IPaymentEntryPage
 			spacer.getGridData().heightHint = 4;
 			(modeOfPaymentTitleLabel = new Label(page, SWT.NONE)).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.modeOfPaymentFlavourLabel.text")); //$NON-NLS-1$
 			modeOfPaymentFlavourTable = new ModeOfPaymentFlavourTable(page);
-//			modeOfPaymentFlavourGUIList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-//			modeOfPaymentFlavourGUIList.setLayoutData(new GridData(GridData.FILL_BOTH));
+			//			modeOfPaymentFlavourGUIList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+			//			modeOfPaymentFlavourGUIList.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 			spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			spacer.getGridData().grabExcessVerticalSpace = false;
@@ -304,34 +296,34 @@ implements IPaymentEntryPage
 
 			modeOfPaymentFlavourTable.addSelectionChangedListener(
 					new ISelectionChangedListener() {
-						public void selectionChanged(SelectionChangedEvent event)
+						public void selectionChanged(final SelectionChangedEvent event)
 						{
 							setMessage(null);
 							modeOfPaymentFlavourGUIListSelectionChanged();
 						}
 					});
-//			modeOfPaymentFlavourGUIList.addSelectionListener(new SelectionAdapter() {
-//				public void widgetSelected(SelectionEvent e)
-//				{
-//					try {
-//						setMessage(null);
-//						modeOfPaymentGUIListSelectionChanged();
-////						((DynamicPathWizard)getWizard()).updateDialog();
-//					} catch (Exception x) {
-//						throw new RuntimeException(x);
-//					}
-//				}
-//			});
+			//			modeOfPaymentFlavourGUIList.addSelectionListener(new SelectionAdapter() {
+			//				public void widgetSelected(SelectionEvent e)
+			//				{
+			//					try {
+			//						setMessage(null);
+			//						modeOfPaymentGUIListSelectionChanged();
+			////						((DynamicPathWizard)getWizard()).updateDialog();
+			//					} catch (Exception x) {
+			//						throw new RuntimeException(x);
+			//					}
+			//				}
+			//			});
 
 			clientPaymentProcessorFactoryCombo.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e)
+				public void widgetSelected(final SelectionEvent e)
 				{
 					try {
 						setMessage(null);
 						clientPaymentProcessorFactoryComboSelectionChanged();
-//						((DynamicPathWizard)getWizard()).updateDialog();
-					} catch (Exception x) {
+						//						((DynamicPathWizard)getWizard()).updateDialog();
+					} catch (final Exception x) {
 						throw new RuntimeException(x);
 					}
 				}
@@ -339,50 +331,50 @@ implements IPaymentEntryPage
 
 			serverPaymentProcessorCombo.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e)
+				public void widgetSelected(final SelectionEvent e)
 				{
 					try {
 						setMessage(null);
 						serverPaymentProcessorComboSelectionChanged();
-//						((DynamicPathWizard)getWizard()).updateDialog();
-					} catch (Exception x) {
+						//						((DynamicPathWizard)getWizard()).updateDialog();
+					} catch (final Exception x) {
 						throw new RuntimeException(x);
 					}
 				}
 			});
 
-			
+
 			spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			spacer.getGridData().grabExcessVerticalSpace = false;
 			spacer.getGridData().heightHint = 4;
-			
-			XComposite dateComposite = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+			final XComposite dateComposite = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			dateComposite.getGridLayout().numColumns = 2;
 			dateComposite.getGridData().grabExcessVerticalSpace = false;
 			new Label(dateComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.PaymentDateLabel.text"));  //$NON-NLS-1$
-			paymentDateControl = new DateTimeControl(dateComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);	
+			paymentDateControl = new DateTimeControl(dateComposite, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 			paymentDateControl.setDateEditable(false);
 			paymentDateControl.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					if(paymentDateControl.getDate() != null)
 					{
 						setPaymentDate(paymentDateControl.getDate());
 					}
 				}
 			});
-			
+
 			updateDateGUI();
 			// TODO default selection!
-//			modeOfPaymentFlavourGUIList.setSelection(selIdx);
+			//			modeOfPaymentFlavourGUIList.setSelection(selIdx);
 
-//			Display.getDefault().asyncExec(new Runnable() {
-//				public void run()
-//				{
-//					setMessage(null);
-//					modeOfPaymentFlavourGUIListSelectionChanged();
-//				}
-//			});
+			//			Display.getDefault().asyncExec(new Runnable() {
+			//				public void run()
+			//				{
+			//					setMessage(null);
+			//					modeOfPaymentFlavourGUIListSelectionChanged();
+			//				}
+			//			});
 
 			if (!ArticleContainerPrinterRegistry.sharedInstance().getFactories().isEmpty()) {
 				automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page,
@@ -393,9 +385,9 @@ implements IPaymentEntryPage
 			loadModeOfPayments();
 
 			return page;
-		} catch (RuntimeException x) {
+		} catch (final RuntimeException x) {
 			throw x;
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
 	}
@@ -404,17 +396,17 @@ implements IPaymentEntryPage
 	public void onNext() {
 		super.onNext();
 		if(!paymentDateNextPageInitialized)
-			{   
-				paymentDateNextPageInitialized = true;
-				IWizardPage nextDynamicPage = getNextPage();
-				if (nextDynamicPage instanceof PaymentEntryPage) {
-					PaymentEntryPage nextPagePayment = (PaymentEntryPage)nextDynamicPage;		
-					if(nextPagePayment != null)
-						nextPagePayment.setPaymentDate(getPayment().getPaymentDT());
-				}
+		{
+			paymentDateNextPageInitialized = true;
+			final IWizardPage nextDynamicPage = getNextPage();
+			if (nextDynamicPage instanceof PaymentEntryPage) {
+				final PaymentEntryPage nextPagePayment = (PaymentEntryPage)nextDynamicPage;
+				if(nextPagePayment != null)
+					nextPagePayment.setPaymentDate(getPayment().getPaymentDT());
 			}
+		}
 	}
-	
+
 	protected PaymentWizardHop getPaymentWizardHop()
 	{
 		return (PaymentWizardHop) getWizardHop();
@@ -423,10 +415,10 @@ implements IPaymentEntryPage
 	private volatile Job loadModeOfPaymentsJob = null;
 
 	public void loadModeOfPayments() {
-		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.job.loadingModesOfPayment")) { //$NON-NLS-1$
+		final Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.job.loadingModesOfPayment")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				PaymentWizard wizard = (PaymentWizard) getWizard();
+			protected IStatus run(final ProgressMonitor monitor) throws Exception {
+				final PaymentWizard wizard = (PaymentWizard) getWizard();
 				final List<ModeOfPaymentFlavour> modeOfPaymentFlavourList = new LinkedList<ModeOfPaymentFlavour>();
 
 				// load ModeOfPaymentFlavour s
@@ -438,46 +430,46 @@ implements IPaymentEntryPage
 							ModeOfPaymentFlavour.MERGE_MODE_INTERSECTION,
 							true,
 							new String[]{
-									FetchPlan.DEFAULT,
-									ModeOfPaymentFlavour.FETCH_GROUP_THIS_MODE_OF_PAYMENT_FLAVOUR,
-									ModeOfPaymentFlavourName.FETCH_GROUP_NAMES,
-									ModeOfPaymentFlavour.FETCH_GROUP_ICON_16X16_DATA,
-									ModeOfPayment.FETCH_GROUP_NAME,
-									ModeOfPaymentName.FETCH_GROUP_NAMES}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-				} catch (Exception e) {
+								FetchPlan.DEFAULT,
+								ModeOfPaymentFlavour.FETCH_GROUP_THIS_MODE_OF_PAYMENT_FLAVOUR,
+								ModeOfPaymentFlavourName.FETCH_GROUP_NAMES,
+								ModeOfPaymentFlavour.FETCH_GROUP_ICON_16X16_DATA,
+								ModeOfPayment.FETCH_GROUP_NAME,
+								ModeOfPaymentName.FETCH_GROUP_NAMES}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				} catch (final Exception e) {
 					throw new RuntimeException(e);
 				}
 
 				modeOfPaymentFlavourList.clear();
 				modeOfPaymentFlavourList.addAll(c);
 
-//				// filter the list by the entries in the config-module,
-//				// filtering is now done on server
-//				ModeOfPaymentConfigModule mopCfMod = ConfigUtil.getUserCfMod(
-//						ModeOfPaymentConfigModule.class,
-//						new String[] {FetchPlan.DEFAULT, ModeOfPaymentConfigModule.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOURIDS},
-//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-//
-//				for (Iterator<ModeOfPaymentFlavour> it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
-//					ModeOfPaymentFlavourID flavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(it.next());
-//					if (mopCfMod.getModeOfPaymentFlavourIDs().contains(flavourID)) {
-//						it.remove();
-//					}
-//				}
+				//				// filter the list by the entries in the config-module,
+				//				// filtering is now done on server
+				//				ModeOfPaymentConfigModule mopCfMod = ConfigUtil.getUserCfMod(
+				//						ModeOfPaymentConfigModule.class,
+				//						new String[] {FetchPlan.DEFAULT, ModeOfPaymentConfigModule.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOURIDS},
+				//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				//
+				//				for (Iterator<ModeOfPaymentFlavour> it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
+				//					ModeOfPaymentFlavourID flavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(it.next());
+				//					if (mopCfMod.getModeOfPaymentFlavourIDs().contains(flavourID)) {
+				//						it.remove();
+				//					}
+				//				}
 
 
-//				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
-//					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
-//					{
-//						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
-//						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
-//						return name0.compareTo(name1);
-//					}
-//				});
+				//				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
+				//					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
+				//					{
+				//						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
+				//						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
+				//						return name0.compareTo(name1);
+				//					}
+				//				});
 
-				PaymentEntryPageCfMod paymentEntryPageCfMod = getPaymentEntryPageCfMod();
+				final PaymentEntryPageCfMod paymentEntryPageCfMod = getPaymentEntryPageCfMod();
 				final List<ModeOfPaymentFlavour> selList = new ArrayList<ModeOfPaymentFlavour>(1);
-				for (ModeOfPaymentFlavour modeOfPaymentFlavour : modeOfPaymentFlavourList) {
+				for (final ModeOfPaymentFlavour modeOfPaymentFlavour : modeOfPaymentFlavourList) {
 					if (Util.equals(paymentEntryPageCfMod.getModeOfPaymentFlavourPK(), modeOfPaymentFlavour.getPrimaryKey())) {
 						selList.add(modeOfPaymentFlavour);
 						break;
@@ -511,16 +503,16 @@ implements IPaymentEntryPage
 				});
 
 
-//				int selIdx = -1;
-//				for (Iterator it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
-//					ModeOfPaymentFlavour modeOfPaymentFlavour = (ModeOfPaymentFlavour) it.next();
-		//
-//					if (sessionLastSelectedMOPFPK != null && sessionLastSelectedMOPFPK.equals(modeOfPaymentFlavour.getPrimaryKey()))
-//						selIdx = modeOfPaymentFlavourGUIList.getItemCount();
-		//
-//					modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(NLLocale.getDefault().getLanguage()));
-//				}
-//				if (selIdx  < 0) selIdx = 0;
+				//				int selIdx = -1;
+				//				for (Iterator it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
+				//					ModeOfPaymentFlavour modeOfPaymentFlavour = (ModeOfPaymentFlavour) it.next();
+				//
+				//					if (sessionLastSelectedMOPFPK != null && sessionLastSelectedMOPFPK.equals(modeOfPaymentFlavour.getPrimaryKey()))
+				//						selIdx = modeOfPaymentFlavourGUIList.getItemCount();
+				//
+				//					modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(NLLocale.getDefault().getLanguage()));
+				//				}
+				//				if (selIdx  < 0) selIdx = 0;
 
 				return Status.OK_STATUS;
 			}
@@ -530,71 +522,71 @@ implements IPaymentEntryPage
 		loadJob.schedule();
 	}
 
-//	protected void adjustMaxAmount(long diffMaxAmount)
-//	{
-//		PaymentWizardHop pwHop = getPaymentWizardHop();
-//		pwHop.setMaxAmount(
-//				pwHop.getMaxAmount() + diffMaxAmount);
-//
-//		adjustAmount(diffMaxAmount, diffMaxAmount);
-//	}
-//
-//	protected void adjustAmount(long diffMaxAmount, long diffAmount)
-//	{
-//		long newAmount = getPaymentWizardHop().getAmount() + diffAmount;
-//		if (newAmount < 0) {
-//			newAmount = 0; // I think (hope?) the amounts of all following pages are
-//			// automatically adjusted correctly because of maxAmount-adjustment.
-//		}
-//		getPaymentWizardHop().setAmount(newAmount);
-//
-//		PaymentWizard wizard = (PaymentWizard)getWizard();
-//		// create/remove additional PaymentEntryPage s for multi-payments
-//		int pageIndex = wizard.getDynamicWizardPageIndex(this);
-//		if (pageIndex >= 0)
-//			pageIndex += 1;
-//		else {
-//			if (wizard.getPage(this.getName()) != null)
-//				pageIndex = 0;
-//			else
-//				throw new IllegalStateException("Could not find this page in the wizard!");
-//		}
-//
-//
-//		IWizardPage nextDynamicPage =
-//			pageIndex >= wizard.getDynamicWizardPageCount() ? null : wizard.getDynamicWizardPage(pageIndex);
-//
-//		PaymentEntryPage nextPaymentEntryPage = null;
-//		if (nextDynamicPage instanceof PaymentEntryPage) {
-//			nextPaymentEntryPage = (PaymentEntryPage) nextDynamicPage;
-//		}
-//		else {
-//			try {
-//				nextPaymentEntryPage = new PaymentEntryPage(
-//						new Payment(Login.getLogin().getOrganisationID()));
-//			} catch (LoginException e) {
-//				throw new RuntimeException(e);
-//			}
-//			wizard.addDynamicWizardPage(pageIndex, nextPaymentEntryPage);
-//		}
-//
-//		if (nextPaymentEntryPage.getPaymentWizardHop().getMaxAmount() > diffAmount)
-//			nextPaymentEntryPage.adjustMaxAmount(diffMaxAmount - diffAmount);
-//		else {
-//			while (
-//					wizard.getDynamicWizardPageCount() > pageIndex &&
-//					wizard.getDynamicWizardPage(pageIndex) instanceof PaymentEntryPage)
-//			{
-//				wizard.removeDynamicWizardPage(pageIndex);
-//			}
-//		}
-//
-//		updateAmountGUI();
-//	}
+	//	protected void adjustMaxAmount(long diffMaxAmount)
+	//	{
+	//		PaymentWizardHop pwHop = getPaymentWizardHop();
+	//		pwHop.setMaxAmount(
+	//				pwHop.getMaxAmount() + diffMaxAmount);
+	//
+	//		adjustAmount(diffMaxAmount, diffMaxAmount);
+	//	}
+	//
+	//	protected void adjustAmount(long diffMaxAmount, long diffAmount)
+	//	{
+	//		long newAmount = getPaymentWizardHop().getAmount() + diffAmount;
+	//		if (newAmount < 0) {
+	//			newAmount = 0; // I think (hope?) the amounts of all following pages are
+	//			// automatically adjusted correctly because of maxAmount-adjustment.
+	//		}
+	//		getPaymentWizardHop().setAmount(newAmount);
+	//
+	//		PaymentWizard wizard = (PaymentWizard)getWizard();
+	//		// create/remove additional PaymentEntryPage s for multi-payments
+	//		int pageIndex = wizard.getDynamicWizardPageIndex(this);
+	//		if (pageIndex >= 0)
+	//			pageIndex += 1;
+	//		else {
+	//			if (wizard.getPage(this.getName()) != null)
+	//				pageIndex = 0;
+	//			else
+	//				throw new IllegalStateException("Could not find this page in the wizard!");
+	//		}
+	//
+	//
+	//		IWizardPage nextDynamicPage =
+	//			pageIndex >= wizard.getDynamicWizardPageCount() ? null : wizard.getDynamicWizardPage(pageIndex);
+	//
+	//		PaymentEntryPage nextPaymentEntryPage = null;
+	//		if (nextDynamicPage instanceof PaymentEntryPage) {
+	//			nextPaymentEntryPage = (PaymentEntryPage) nextDynamicPage;
+	//		}
+	//		else {
+	//			try {
+	//				nextPaymentEntryPage = new PaymentEntryPage(
+	//						new Payment(Login.getLogin().getOrganisationID()));
+	//			} catch (LoginException e) {
+	//				throw new RuntimeException(e);
+	//			}
+	//			wizard.addDynamicWizardPage(pageIndex, nextPaymentEntryPage);
+	//		}
+	//
+	//		if (nextPaymentEntryPage.getPaymentWizardHop().getMaxAmount() > diffAmount)
+	//			nextPaymentEntryPage.adjustMaxAmount(diffMaxAmount - diffAmount);
+	//		else {
+	//			while (
+	//					wizard.getDynamicWizardPageCount() > pageIndex &&
+	//					wizard.getDynamicWizardPage(pageIndex) instanceof PaymentEntryPage)
+	//			{
+	//				wizard.removeDynamicWizardPage(pageIndex);
+	//			}
+	//		}
+	//
+	//		updateAmountGUI();
+	//	}
 
-	protected int getNextPaymentEntryPageIndex(PaymentEntryPage currentPage)
+	protected int getNextPaymentEntryPageIndex(final PaymentEntryPage currentPage)
 	{
-		PaymentWizard wizard = (PaymentWizard)getWizard();
+		final PaymentWizard wizard = (PaymentWizard)getWizard();
 		int pageIndex = wizard.getDynamicWizardPageIndex(currentPage);
 		if (pageIndex >= 0)
 			pageIndex += 1;
@@ -606,63 +598,63 @@ implements IPaymentEntryPage
 		}
 		return pageIndex;
 	}
-	
-	protected PaymentEntryPage createNextPaymentEntryPage(PaymentEntryPage currentPage, String paymentDirection, long maxAmount)
+
+	protected PaymentEntryPage createNextPaymentEntryPage(final PaymentEntryPage currentPage, final String paymentDirection, final long maxAmount)
 	{
-		PaymentWizard wizard = (PaymentWizard)getWizard();
+		final PaymentWizard wizard = (PaymentWizard)getWizard();
 		// create/remove additional PaymentEntryPage s for multi-payments
-		int pageIndex = getNextPaymentEntryPageIndex(currentPage);
+		final int pageIndex = getNextPaymentEntryPageIndex(currentPage);
 
 
-		IWizardPage nextDynamicPage =
+		final IWizardPage nextDynamicPage =
 			pageIndex >= wizard.getDynamicWizardPageCount() ? null : wizard.getDynamicWizardPage(pageIndex);
 
-		PaymentEntryPage nextPaymentEntryPage = null;
-		if (nextDynamicPage instanceof PaymentEntryPage) {
-			nextPaymentEntryPage = (PaymentEntryPage) nextDynamicPage;
-			if (!paymentDirection.equals(nextPaymentEntryPage.getPayment().getPaymentDirection())) {
-				removeNextPaymentEntryPages();
-				nextPaymentEntryPage = null;
+			PaymentEntryPage nextPaymentEntryPage = null;
+			if (nextDynamicPage instanceof PaymentEntryPage) {
+				nextPaymentEntryPage = (PaymentEntryPage) nextDynamicPage;
+				if (!paymentDirection.equals(nextPaymentEntryPage.getPayment().getPaymentDirection())) {
+					removeNextPaymentEntryPages();
+					nextPaymentEntryPage = null;
+				}
 			}
-		}
 
-		if (nextPaymentEntryPage == null) {
-			try {
-				Payment payment = new Payment(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Payment.class));
-				nextPaymentEntryPage = new PaymentEntryPage(payment);
-				payment.setPaymentDirection(paymentDirection);
-//				payment.setPaymentDirection(getPayment().getPaymentDirection());
-			} catch (LoginException e) {
-				throw new RuntimeException(e);
+			if (nextPaymentEntryPage == null) {
+				try {
+					final Payment payment = new Payment(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Payment.class));
+					nextPaymentEntryPage = new PaymentEntryPage(payment);
+					payment.setPaymentDirection(paymentDirection);
+					//				payment.setPaymentDirection(getPayment().getPaymentDirection());
+				} catch (final LoginException e) {
+					throw new RuntimeException(e);
+				}
+				wizard.addDynamicWizardPage(pageIndex, nextPaymentEntryPage);
+				//			wizard.getPaymentEntryPages().add(nextPaymentEntryPage);
+				nextPaymentEntryPage.setMaxAmount(maxAmount);
+
+				createOrRemovePaymentSummaryPageIfNecessary();
 			}
-			wizard.addDynamicWizardPage(pageIndex, nextPaymentEntryPage);
-//			wizard.getPaymentEntryPages().add(nextPaymentEntryPage);
-			nextPaymentEntryPage.setMaxAmount(maxAmount);
 
-			createOrRemovePaymentSummaryPageIfNecessary();
-		}
-
-		return nextPaymentEntryPage;
+			return nextPaymentEntryPage;
 	}
 
-//	public static List<PaymentEntryPage> getPaymentEntryPages(IWizard wizard)
-//	{
-//		List<PaymentEntryPage> paymentEntryPages = new ArrayList<PaymentEntryPage>();
-//		IWizardPage page = wizard.getStartingPage();
-//		while (page != null) {
-//			if (page instanceof PaymentEntryPage)
-//				paymentEntryPages.add((PaymentEntryPage) page);
-//
-//			page = page.getNextPage();
-//		}
-//		return paymentEntryPages;
-//	}
+	//	public static List<PaymentEntryPage> getPaymentEntryPages(IWizard wizard)
+	//	{
+	//		List<PaymentEntryPage> paymentEntryPages = new ArrayList<PaymentEntryPage>();
+	//		IWizardPage page = wizard.getStartingPage();
+	//		while (page != null) {
+	//			if (page instanceof PaymentEntryPage)
+	//				paymentEntryPages.add((PaymentEntryPage) page);
+	//
+	//			page = page.getNextPage();
+	//		}
+	//		return paymentEntryPages;
+	//	}
 
 	private void createOrRemovePaymentSummaryPageIfNecessary()
 	{
-		PaymentWizard wizard = (PaymentWizard)getWizard();
+		final PaymentWizard wizard = (PaymentWizard)getWizard();
 
-		List<PaymentEntryPage> paymentEntryPages = wizard.getPaymentEntryPages();
+		final List<PaymentEntryPage> paymentEntryPages = wizard.getPaymentEntryPages();
 		PaymentSummaryPage paymentSummaryPage = PaymentSummaryPage.getPaymentSummaryPage(wizard);
 
 		if (paymentEntryPages.size() == 1) {
@@ -676,7 +668,7 @@ implements IPaymentEntryPage
 				return;
 
 			paymentSummaryPage = new PaymentSummaryPage();
-			int index = wizard.getDynamicWizardPageIndex(paymentEntryPages.get(paymentEntryPages.size() - 1));
+			final int index = wizard.getDynamicWizardPageIndex(paymentEntryPages.get(paymentEntryPages.size() - 1));
 			wizard.addDynamicWizardPage(index + 1, paymentSummaryPage);
 		}
 	}
@@ -687,12 +679,12 @@ implements IPaymentEntryPage
 	}
 
 
-	public void setPaymentDate(Date newDate)
+	public void setPaymentDate(final Date newDate)
 	{
 		getPayment().setPaymentDT(newDate);
 		updateDateGUI();
 	}
-	
+
 	protected void updateDateGUI()
 	{
 		if (paymentDateControl != null) {
@@ -700,16 +692,16 @@ implements IPaymentEntryPage
 				paymentDateControl.setDate(getPayment().getPaymentDT());
 		}
 	}
-	
-	protected void setMaxAmount(long newMaxAmount)
+
+	protected void setMaxAmount(final long newMaxAmount)
 	{
-		long oldMaxAmount = getPaymentWizardHop().getMaxAmount();
+		final long oldMaxAmount = getPaymentWizardHop().getMaxAmount();
 		logger.debug("page<"+getName()+">.setMaxAmount(newMaxAmount="+newMaxAmount+"): oldMaxAmount="+oldMaxAmount); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//		if (oldMaxAmount == newMaxAmount)
-//			return;
+		//		if (oldMaxAmount == newMaxAmount)
+		//			return;
 
 		getPaymentWizardHop().setMaxAmount(newMaxAmount);
-		long diffAmount = newMaxAmount - oldMaxAmount;
+		final long diffAmount = newMaxAmount - oldMaxAmount;
 		logger.debug("page<"+getName()+">.setMaxAmount(newMaxAmount="+newMaxAmount+"): diffAmount(new-old)="+diffAmount); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		long newAmount = getPaymentWizardHop().getAmount() + diffAmount;
 		logger.debug("page<"+getName()+">.setMaxAmount(newMaxAmount="+newMaxAmount+"): newAmount="+newAmount); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -720,15 +712,15 @@ implements IPaymentEntryPage
 		setAmount(newAmount);
 	}
 
-	public void setAmount(long newAmount)
+	public void setAmount(final long newAmount)
 	{
-//		if (newAmount > getPaymentWizardHop().getMaxAmount())
-//			throw new IllegalArgumentException("newAmount="+newAmount+" is greater than maxAmount="+getPaymentWizardHop().getMaxAmount());
+		//		if (newAmount > getPaymentWizardHop().getMaxAmount())
+		//			throw new IllegalArgumentException("newAmount="+newAmount+" is greater than maxAmount="+getPaymentWizardHop().getMaxAmount());
 
-		long oldAmount = getPaymentWizardHop().getAmount();
+		final long oldAmount = getPaymentWizardHop().getAmount();
 		logger.debug("page<"+getName()+">.setAmount(newAmount="+newAmount+"): oldAmount="+oldAmount); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//		if (oldAmount == newAmount)
-//			return;
+		//		if (oldAmount == newAmount)
+		//			return;
 
 		if (clientPaymentProcessor != null)
 			clientPaymentProcessor.setAmount(newAmount);
@@ -753,23 +745,23 @@ implements IPaymentEntryPage
 
 			nextPaymentEntryPage = createNextPaymentEntryPage(this, paymentDirection, diffAmount);
 			nextPaymentEntryPage.setMaxAmount(diffAmount);
-//			logger.debug("page<"+getName()+">.setAmount(newAmount="+newAmount+"): calling nextPaymentEntryPage.setMaxAmount(...) ...");
+			//			logger.debug("page<"+getName()+">.setAmount(newAmount="+newAmount+"): calling nextPaymentEntryPage.setMaxAmount(...) ...");
 
-//			String paymentDirection = getPayment().getPaymentDirection();
-//			if (diffAmount < 0) {
-//				if (Payment.PAYMENT_DIRECTION_INCOMING.equals(paymentDirection))
-//					paymentDirection = Payment.PAYMENT_DIRECTION_OUTGOING;
-//				else if (Payment.PAYMENT_DIRECTION_OUTGOING.equals(paymentDirection))
-//					paymentDirection = Payment.PAYMENT_DIRECTION_INCOMING;
-//				else
-//					throw new IllegalStateException("Unknown paymentDirection: " + paymentDirection);
-//
-//				nextPaymentEntryPage.setPaymentDirection(paymentDirection);
-//
-//				diffAmount *= -1;
-//			}
-//
-//			nextPaymentEntryPage.setMaxAmount(diffAmount);
+			//			String paymentDirection = getPayment().getPaymentDirection();
+			//			if (diffAmount < 0) {
+			//				if (Payment.PAYMENT_DIRECTION_INCOMING.equals(paymentDirection))
+			//					paymentDirection = Payment.PAYMENT_DIRECTION_OUTGOING;
+			//				else if (Payment.PAYMENT_DIRECTION_OUTGOING.equals(paymentDirection))
+			//					paymentDirection = Payment.PAYMENT_DIRECTION_INCOMING;
+			//				else
+			//					throw new IllegalStateException("Unknown paymentDirection: " + paymentDirection);
+			//
+			//				nextPaymentEntryPage.setPaymentDirection(paymentDirection);
+			//
+			//				diffAmount *= -1;
+			//			}
+			//
+			//			nextPaymentEntryPage.setMaxAmount(diffAmount);
 		}
 		else {
 			removeNextPaymentEntryPages();
@@ -780,13 +772,13 @@ implements IPaymentEntryPage
 
 	private void removeNextPaymentEntryPages()
 	{
-		int pageIndex = getNextPaymentEntryPageIndex(this);
-		PaymentWizard wizard = (PaymentWizard)getWizard();
+		final int pageIndex = getNextPaymentEntryPageIndex(this);
+		final PaymentWizard wizard = (PaymentWizard)getWizard();
 		while (
 				wizard.getDynamicWizardPageCount() > pageIndex &&
 				wizard.getDynamicWizardPage(pageIndex) instanceof PaymentEntryPage)
 		{
-//			wizard.getPaymentEntryPages().remove(wizard.getDynamicWizardPage(pageIndex));
+			//			wizard.getPaymentEntryPages().remove(wizard.getDynamicWizardPage(pageIndex));
 			wizard.removeDynamicWizardPage(pageIndex);
 		}
 
@@ -797,12 +789,12 @@ implements IPaymentEntryPage
 	{
 		logger.debug("page<"+getName()+">.amountSpinnerValueChanged()"); //$NON-NLS-1$ //$NON-NLS-2$
 		setAmount(amountSpinner.getSelection());
-//		long newAmount = amountSpinner.getSelection();
-//		long diffAmount = newAmount - getPaymentWizardHop().getAmount();
-//		adjustAmount(0, diffAmount);
+		//		long newAmount = amountSpinner.getSelection();
+		//		long diffAmount = newAmount - getPaymentWizardHop().getAmount();
+		//		adjustAmount(0, diffAmount);
 	}
 
-//	protected static String sessionLastSelectedMOPFPK = null;
+	//	protected static String sessionLastSelectedMOPFPK = null;
 
 	protected PaymentEntryPageCfMod getPaymentEntryPageCfMod()
 	{
@@ -813,7 +805,7 @@ implements IPaymentEntryPage
 	{
 		try {
 			setErrorMessage(null);
-//			PaymentWizard wizard = ((PaymentWizard)getWizard());
+			//			PaymentWizard wizard = ((PaymentWizard)getWizard());
 
 			// remove all ClientPaymentProcessorFactory s as they will be fetched again
 			clientPaymentProcessorFactoryCombo.removeAll();
@@ -830,10 +822,10 @@ implements IPaymentEntryPage
 			// set selectedModeOfPaymentFlavour
 			selectedModeOfPaymentFlavour = modeOfPaymentFlavourTable.getSelectedModeOfPaymentFlavour();
 
-//			int idx = modeOfPaymentFlavourGUIList.getSelectionIndex();
-//			if (idx >= 0) {
+			//			int idx = modeOfPaymentFlavourGUIList.getSelectionIndex();
+			//			if (idx >= 0) {
 			if (selectedModeOfPaymentFlavour != null) {
-//				selectedModeOfPaymentFlavour = (ModeOfPaymentFlavour) modeOfPaymentFlavourList.get(idx);
+				//				selectedModeOfPaymentFlavour = (ModeOfPaymentFlavour) modeOfPaymentFlavourList.get(idx);
 				getPaymentWizardHop().getPayment().setModeOfPaymentFlavour(selectedModeOfPaymentFlavour);
 
 				getPaymentEntryPageCfMod().setModeOfPaymentFlavourPK(selectedModeOfPaymentFlavour.getPrimaryKey());
@@ -843,15 +835,15 @@ implements IPaymentEntryPage
 					getClientPaymentProcessorFactories(selectedModeOfPaymentFlavour);
 
 				Collections.sort(clientPaymentProcessorFactoryList, new Comparator<ClientPaymentProcessorFactory>(){
-					public int compare(ClientPaymentProcessorFactory cppf0, ClientPaymentProcessorFactory cppf1)
+					public int compare(final ClientPaymentProcessorFactory cppf0, final ClientPaymentProcessorFactory cppf1)
 					{
-						String name0 = cppf0.getName();
-						String name1 = cppf1.getName();
+						final String name0 = cppf0.getName();
+						final String name1 = cppf1.getName();
 						return name0.compareTo(name1);
 					}
 				});
 
-				for (ClientPaymentProcessorFactory cppf : clientPaymentProcessorFactoryList) {
+				for (final ClientPaymentProcessorFactory cppf : clientPaymentProcessorFactoryList) {
 					clientPaymentProcessorFactoryCombo.add(cppf.getName());
 				}
 
@@ -866,17 +858,17 @@ implements IPaymentEntryPage
 			} // if (selectedModeOfPaymentFlavour != null) {
 
 			clientPaymentProcessorFactoryComboSelectionChanged();
-		} catch (Exception x) {
+		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
 	}
 
 	protected void clientPaymentProcessorFactoryComboSelectionChanged() throws Exception
 	{
-		PaymentWizard wizard = ((PaymentWizard)getWizard());
+		final PaymentWizard wizard = ((PaymentWizard)getWizard());
 
 		removePaymentPages();
-//		wizard.removeAllDynamicWizardPages();
+		//		wizard.removeAllDynamicWizardPages();
 
 		selectedClientPaymentProcessorFactory = null;
 		clientPaymentProcessor = null;
@@ -884,12 +876,12 @@ implements IPaymentEntryPage
 		serverPaymentProcessorList.clear();
 		getPaymentWizardHop().getPayment().setClientPaymentProcessorFactoryID(null);
 
-		int idx = clientPaymentProcessorFactoryCombo.getSelectionIndex();
+		final int idx = clientPaymentProcessorFactoryCombo.getSelectionIndex();
 		if (idx >= 0) {
 			selectedClientPaymentProcessorFactory = clientPaymentProcessorFactoryList.get(idx);
 			getPaymentWizardHop().getPayment().setClientPaymentProcessorFactoryID(selectedClientPaymentProcessorFactory.getID());
 
-			PaymentWizardHop paymentWizardHop = getPaymentWizardHop();
+			final PaymentWizardHop paymentWizardHop = getPaymentWizardHop();
 			clientPaymentProcessor = selectedClientPaymentProcessorFactory.createClientPaymentProcessor();
 			if (clientPaymentProcessor == null)
 				throw new IllegalStateException("ClientPaymentProcessorFactory.createClientPaymentProcessor() returned null! class: " + selectedClientPaymentProcessorFactory.getClass()); //$NON-NLS-1$
@@ -901,7 +893,7 @@ implements IPaymentEntryPage
 			clientPaymentProcessor.setPayment(paymentWizardHop.getPayment());
 			clientPaymentProcessor.init();
 
-			String reqMsg = clientPaymentProcessor.getRequirementCheckKey();
+			final String reqMsg = clientPaymentProcessor.getRequirementCheckKey();
 			if (reqMsg != null) {
 				this.setErrorMessage(reqMsg.trim()); // TODO we need l10n!
 				return;
@@ -914,22 +906,22 @@ implements IPaymentEntryPage
 				paymentData = new PaymentData(getPaymentWizardHop().getPayment());
 			paymentWizardHop.setPaymentData(paymentData);
 
-			Set<ServerPaymentProcessorID> includedSPPs = clientPaymentProcessor.getIncludedServerPaymentProcessorIDs();
+			final Set<ServerPaymentProcessorID> includedSPPs = clientPaymentProcessor.getIncludedServerPaymentProcessorIDs();
 			Set<ServerPaymentProcessorID> excludedSPPs = null;
 			if (includedSPPs == null)
 				excludedSPPs = clientPaymentProcessor.getExcludedServerPaymentProcessorIDs();
 
-			IWizardHopPage paymentPage = clientPaymentProcessor.createPaymentWizardPage();
+			final IWizardHopPage paymentPage = clientPaymentProcessor.createPaymentWizardPage();
 			if (paymentPage != null)
 				addPaymentPage(paymentPage);
 
-			CheckRequirementsEnvironment checkRequirementsEnvironment = new CheckRequirementsEnvironment(
+			final CheckRequirementsEnvironment checkRequirementsEnvironment = new CheckRequirementsEnvironment(
 					getPaymentWizardHop().getPayment().getPaymentDirection(),
 					getPaymentWizardHop().getPayment().getCurrencyID());
 
 			// load ServerPaymentProcessor s
-			ModeOfPaymentFlavourID modeOfPaymentFlavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(selectedModeOfPaymentFlavour);
-			Collection<ServerPaymentProcessor> c = getAccountingManager().getServerPaymentProcessorsForOneModeOfPaymentFlavour(
+			final ModeOfPaymentFlavourID modeOfPaymentFlavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(selectedModeOfPaymentFlavour);
+			final Collection<ServerPaymentProcessor> c = getAccountingManager().getServerPaymentProcessorsForOneModeOfPaymentFlavour(
 					modeOfPaymentFlavourID,
 					checkRequirementsEnvironment,
 					new String[] {
@@ -937,18 +929,18 @@ implements IPaymentEntryPage
 							ServerPaymentProcessor.FETCH_GROUP_NAME
 					}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
-			String clientPaymentProcessorFactoryID = selectedClientPaymentProcessorFactory.getID();
-			for (Iterator<ServerPaymentProcessor> it = c.iterator(); it.hasNext(); ) {
-				ServerPaymentProcessor spp = it.next();
-				ServerPaymentProcessorID sppID = (ServerPaymentProcessorID) JDOHelper.getObjectId(spp);
+			final String clientPaymentProcessorFactoryID = selectedClientPaymentProcessorFactory.getID();
+			for (final Iterator<ServerPaymentProcessor> it = c.iterator(); it.hasNext(); ) {
+				final ServerPaymentProcessor spp = it.next();
+				final ServerPaymentProcessorID sppID = (ServerPaymentProcessorID) JDOHelper.getObjectId(spp);
 
 				if (includedSPPs != null && !includedSPPs.contains(sppID))
-						continue;
+					continue;
 
 				if (excludedSPPs != null && excludedSPPs.contains(sppID))
 					continue;
 
-				Set<String> includedCPPFs = spp.getIncludedClientPaymentProcessorFactoryIDs();
+				final Set<String> includedCPPFs = spp.getIncludedClientPaymentProcessorFactoryIDs();
 				Set<String> excludedCPPFs = null;
 				if (includedCPPFs == null)
 					excludedCPPFs = spp.getExcludedClientPaymentProcessorFactoryIDs();
@@ -963,15 +955,15 @@ implements IPaymentEntryPage
 			}
 
 			Collections.sort(serverPaymentProcessorList, new Comparator<ServerPaymentProcessor>(){
-				public int compare(ServerPaymentProcessor spp0, ServerPaymentProcessor spp1)
+				public int compare(final ServerPaymentProcessor spp0, final ServerPaymentProcessor spp1)
 				{
-					String name0 = spp0.getName().getText(NLLocale.getDefault().getLanguage());
-					String name1 = spp1.getName().getText(NLLocale.getDefault().getLanguage());
+					final String name0 = spp0.getName().getText(NLLocale.getDefault().getLanguage());
+					final String name1 = spp1.getName().getText(NLLocale.getDefault().getLanguage());
 					return name0.compareTo(name1);
 				}
 			});
 
-			for (ServerPaymentProcessor serverPaymentProcessor : serverPaymentProcessorList) {
+			for (final ServerPaymentProcessor serverPaymentProcessor : serverPaymentProcessorList) {
 				serverPaymentProcessorCombo.add(serverPaymentProcessor.getName().getText(NLLocale.getDefault().getLanguage()));
 			}
 
@@ -992,24 +984,24 @@ implements IPaymentEntryPage
 		getWizardHop().removeAllHopPages();
 	}
 
-	protected void addPaymentPage(IWizardHopPage paymentPage)
+	protected void addPaymentPage(final IWizardHopPage paymentPage)
 	{
-//		((IDynamicPathWizard)getWizard()).addDynamicWizardPage(paymentPage);
-//		paymentPage.setWizard(getWizard());
+		//		((IDynamicPathWizard)getWizard()).addDynamicWizardPage(paymentPage);
+		//		paymentPage.setWizard(getWizard());
 		getWizardHop().addHopPage(paymentPage);
 	}
 
 	protected void serverPaymentProcessorComboSelectionChanged()
 	{
-		PaymentWizard wizard = ((PaymentWizard)getWizard());
+		final PaymentWizard wizard = ((PaymentWizard)getWizard());
 
 		selectedServerPaymentProcessor = null;
 		getPaymentWizardHop().getPayment().setServerPaymentProcessorID(null);
 
-		int idx = serverPaymentProcessorCombo.getSelectionIndex();
+		final int idx = serverPaymentProcessorCombo.getSelectionIndex();
 		if (idx >= 0) {
 			selectedServerPaymentProcessor = serverPaymentProcessorList.get(idx);
-			RequirementCheckResult result = selectedServerPaymentProcessor.getRequirementCheckResult();
+			final RequirementCheckResult result = selectedServerPaymentProcessor.getRequirementCheckResult();
 			if (result != null) {
 				this.setErrorMessage(result.getMessage());
 				wizard.updateDialog();
@@ -1063,11 +1055,11 @@ implements IPaymentEntryPage
 	public boolean isPageComplete()
 	{
 		return
-				clientPaymentProcessor != null &&
-				clientPaymentProcessor.getRequirementCheckKey() == null &&
-				selectedClientPaymentProcessorFactory != null &&
-				selectedServerPaymentProcessor != null &&
-				selectedServerPaymentProcessor.getRequirementCheckResult() == null;
+		clientPaymentProcessor != null &&
+		clientPaymentProcessor.getRequirementCheckKey() == null &&
+		selectedClientPaymentProcessorFactory != null &&
+		selectedServerPaymentProcessor != null &&
+		selectedServerPaymentProcessor.getRequirementCheckResult() == null;
 	}
 
 	public int getInvoicesToPrintCount()
@@ -1078,14 +1070,14 @@ implements IPaymentEntryPage
 		return 0;
 	}
 
-//	/**
-//	 * @see org.eclipse.jface.wizard.WizardPage#getNextPage()
-//	 */
-//	public IWizardPage getNextPage()
-//	{
-//		if (paymentPages.isEmpty())
-//			return super.getNextPage();
-//		else
-//			return (IWizardPage)paymentPages.get(0);
-//	}
+	//	/**
+	//	 * @see org.eclipse.jface.wizard.WizardPage#getNextPage()
+	//	 */
+	//	public IWizardPage getNextPage()
+	//	{
+	//		if (paymentPages.isEmpty())
+	//			return super.getNextPage();
+	//		else
+	//			return (IWizardPage)paymentPages.get(0);
+	//	}
 }

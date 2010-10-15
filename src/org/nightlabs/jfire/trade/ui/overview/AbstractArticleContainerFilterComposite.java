@@ -43,7 +43,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchDialog;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -51,7 +51,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public abstract class AbstractArticleContainerFilterComposite<Q extends AbstractArticleContainerQuery>
-	extends AbstractQueryFilterComposite<Q>
+extends AbstractQueryFilterComposite<Q>
 {
 	private static final String ARTICLE_CONTAINER_GROUP_ID = "ArticleContainerFilterComposite"; //$NON-NLS-1$
 
@@ -87,9 +87,9 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public AbstractArticleContainerFilterComposite(Composite parent, int style,
-		LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<? super Q> queryProvider)
+	public AbstractArticleContainerFilterComposite(final Composite parent, final int style,
+			final LayoutMode layoutMode, final LayoutDataMode layoutDataMode,
+			final QueryProvider<? super Q> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite();
@@ -104,8 +104,8 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public AbstractArticleContainerFilterComposite(Composite parent, int style,
-		QueryProvider<? super Q> queryProvider)
+	public AbstractArticleContainerFilterComposite(final Composite parent, final int style,
+			final QueryProvider<? super Q> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite();
@@ -114,18 +114,18 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 	@Override
 	protected void createComposite()
 	{
-		int buttonStyle = SWT.FLAT;
-		Group createDTGroup = new Group(this, SWT.NONE);
+		final int buttonStyle = SWT.FLAT;
+		final Group createDTGroup = new Group(this, SWT.NONE);
 		createDTGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateGroup.text")); //$NON-NLS-1$
 		createDTGroup.setLayout(new GridLayout(2, true));
-		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
+		final long dateTimeEditStyle = IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
 		createDateAfter = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMin.caption")); //$NON-NLS-1$
 		createDateAfter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createDateAfter.setActive(false);
 		createDateAfter.addModifyListener(new ModifyListener()
 		{
 			@Override
-			public void modifyText(ModifyEvent e)
+			public void modifyText(final ModifyEvent e)
 			{
 				getQuery().setCreateDTMin(createDateAfter.getDate());
 			}
@@ -133,7 +133,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		createDateAfter.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.createDTMin, active);
 			}
@@ -144,7 +144,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		createDateBefore.addModifyListener(new ModifyListener()
 		{
 			@Override
-			public void modifyText(ModifyEvent e)
+			public void modifyText(final ModifyEvent e)
 			{
 				getQuery().setCreateDTMax(createDateBefore.getDate());
 			}
@@ -152,15 +152,15 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		createDateBefore.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.createDTMax, active);
 			}
 		});
 		createDTGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
-			LayoutDataMode.GRID_DATA_HORIZONTAL, 4);
+		final Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
+				LayoutDataMode.GRID_DATA_HORIZONTAL, 4);
 
 		final Group userGroup = new Group(wrapper, SWT.NONE);
 		userGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userGroup.text")); //$NON-NLS-1$
@@ -168,13 +168,13 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		userGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		userActiveButton = new Button(userGroup, SWT.CHECK);
 		userActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userActiveButton.text")); //$NON-NLS-1$
-		GridData userLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData userLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		userLabelData.horizontalSpan = 2;
 		userActiveButton.setLayoutData(userLabelData);
 		userActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.createUserID, active);
 			}
@@ -194,13 +194,13 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		vendorGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorActiveButton = new Button(vendorGroup, SWT.CHECK);
 		vendorActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.vendorActiveButton.text")); //$NON-NLS-1$
-		GridData vendorLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData vendorLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		vendorLabelData.horizontalSpan = 2;
 		vendorActiveButton.setLayoutData(vendorLabelData);
 		vendorActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.vendorID, active);
 			}
@@ -220,7 +220,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		customerGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		customerActiveButton = new Button(customerGroup, SWT.CHECK);
 		customerActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerActiveButton.text")); //$NON-NLS-1$
-		GridData customerLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData customerLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		customerLabelData.horizontalSpan = 2;
 		customerActiveButton.setLayoutData(customerLabelData);
 		customerText = new Text(customerGroup, SWT.READ_ONLY | getBorderStyle());
@@ -234,7 +234,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		customerActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.customerID, active);
 			}
@@ -246,7 +246,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		productTypeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeActiveButton = new Button(productTypeGroup, SWT.CHECK);
 		productTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerActiveButton.text")); //$NON-NLS-1$
-		GridData productTypeLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData productTypeLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		productTypeLabelData.horizontalSpan = 2;
 		productTypeActiveButton.setLayoutData(productTypeLabelData);
 		productTypeText = new Text(productTypeGroup, SWT.READ_ONLY | getBorderStyle());
@@ -260,25 +260,25 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		productTypeActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.productTypeID, active);
 			}
 		});
 	}
 
-	private SelectionListener productTypeSelectionListener = new SelectionAdapter()
+	private final SelectionListener productTypeSelectionListener = new SelectionAdapter()
 	{
 		@Override
-		public void widgetSelected(SelectionEvent e)
+		public void widgetSelected(final SelectionEvent e)
 		{
-			GenericProductTypeSearchDialog dialog = new GenericProductTypeSearchDialog(
+			final GenericProductTypeSearchDialog dialog = new GenericProductTypeSearchDialog(
 					getShell());
-			int returnCode = dialog.open();
+			final int returnCode = dialog.open();
 			if (returnCode == Window.OK) {
-				ProductType productType = dialog.getProductType();
+				final ProductType productType = dialog.getProductType();
 				if (productType != null) {
-					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
+					final ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 					getQuery().setProductTypeID(productTypeID);
 					productTypeText.setText(productType.getName().getText());
 				}
@@ -286,15 +286,15 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		}
 	};
 
-	private SelectionListener userSelectionListener = new SelectionAdapter()
+	private final SelectionListener userSelectionListener = new SelectionAdapter()
 	{
 		@Override
-		public void widgetSelected(SelectionEvent e)
+		public void widgetSelected(final SelectionEvent e)
 		{
-			UserSearchDialog dialog = new UserSearchDialog(getShell(), userText.getText());
-			int returnCode = dialog.open();
+			final UserSearchDialog dialog = new UserSearchDialog(getShell(), userText.getText());
+			final int returnCode = dialog.open();
 			if (returnCode == Window.OK) {
-				User selectedUser = dialog.getSelectedUser();
+				final User selectedUser = dialog.getSelectedUser();
 				final UserID selectedUserID = (UserID) JDOHelper.getObjectId(selectedUser);
 				getQuery().setCreateUserID(selectedUserID);
 				if (selectedUser != null)
@@ -303,16 +303,16 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		}
 	};
 
-	private SelectionListener vendorSelectionListener = new SelectionAdapter()
+	private final SelectionListener vendorSelectionListener = new SelectionAdapter()
 	{
 		@Override
-		public void widgetSelected(SelectionEvent e)
+		public void widgetSelected(final SelectionEvent e)
 		{
-			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(vendorText.getText(), false);
+			final LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(vendorText.getText(), false);
 			if (_legalEntity != null) {
 				final AnchorID selectedVendorID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
 				getQuery().setVendorID(selectedVendorID);
-				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedVendorID,
+				final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedVendorID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor()
@@ -322,16 +322,16 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		}
 	};
 
-	private SelectionListener customerSelectionListener = new SelectionAdapter()
+	private final SelectionListener customerSelectionListener = new SelectionAdapter()
 	{
 		@Override
-		public void widgetSelected(SelectionEvent e)
+		public void widgetSelected(final SelectionEvent e)
 		{
-			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(customerText.getText(), false);
+			final LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(customerText.getText(), false);
 			if (_legalEntity != null) {
 				final AnchorID selectedCustomerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
 				getQuery().setCustomerID(selectedCustomerID);
-				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedCustomerID,
+				final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedCustomerID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor()
@@ -370,14 +370,14 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 	}
 
 	@Override
-	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
+	protected void updateUI(final QueryEvent event, final List<FieldChangeCarrier> changedFields)
 	{
-		for (FieldChangeCarrier changedField : changedFields)
+		for (final FieldChangeCarrier changedField : changedFields)
 		{
 			final String propertyName = changedField.getPropertyName();
 			if (AbstractArticleContainerQuery.FieldName.createDTMax.equals(propertyName))
 			{
-				Date maxDate = (Date) changedField.getNewValue();
+				final Date maxDate = (Date) changedField.getNewValue();
 				createDateBefore.setDate(maxDate);
 			}
 			else if (getEnableFieldName(AbstractArticleContainerQuery.FieldName.createDTMax).equals(propertyName))
@@ -391,7 +391,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 			}
 			else if (AbstractArticleContainerQuery.FieldName.createDTMin.equals(propertyName))
 			{
-				Date minDate = (Date) changedField.getNewValue();
+				final Date minDate = (Date) changedField.getNewValue();
 				createDateAfter.setDate(minDate);
 			}
 			else if (AbstractSearchQuery.getEnabledFieldName(
@@ -406,7 +406,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 			}
 			else if (AbstractArticleContainerQuery.FieldName.createUserID.equals(propertyName))
 			{
-				UserID userID = (UserID) changedField.getNewValue();
+				final UserID userID = (UserID) changedField.getNewValue();
 				if (userID == null)
 				{
 					userText.setText(""); //$NON-NLS-1$
@@ -414,8 +414,8 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				else
 				{
 					final User selectedUser = UserDAO.sharedInstance().getUser(
-						userID, new String[] { FetchPlan.DEFAULT },
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							userID, new String[] { FetchPlan.DEFAULT },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 
 					if (selectedUser != null) {
@@ -433,7 +433,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 			}
 			else if (AbstractArticleContainerQuery.FieldName.customerID.equals(propertyName))
 			{
-				AnchorID customerID = (AnchorID) changedField.getNewValue();
+				final AnchorID customerID = (AnchorID) changedField.getNewValue();
 				if (customerID == null)
 				{
 					customerText.setText(""); //$NON-NLS-1$
@@ -441,8 +441,8 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				else
 				{
 					final LegalEntity customer = LegalEntityDAO.sharedInstance().getLegalEntity(
-						customerID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							customerID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 
 					customerText.setText(customer.getPerson().getDisplayName());
@@ -458,7 +458,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 			}
 			else if (AbstractArticleContainerQuery.FieldName.vendorID.equals(propertyName))
 			{
-				AnchorID vendorID = (AnchorID) changedField.getNewValue();
+				final AnchorID vendorID = (AnchorID) changedField.getNewValue();
 				if (vendorID == null)
 				{
 					vendorText.setText(""); //$NON-NLS-1$
@@ -466,8 +466,8 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				else
 				{
 					final LegalEntity vendor = LegalEntityDAO.sharedInstance().getLegalEntity(
-						vendorID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							vendorID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 
 					vendorText.setText(vendor.getPerson().getDisplayName());
@@ -483,7 +483,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 			}
 			else if (AbstractArticleContainerQuery.FieldName.productTypeID.equals(propertyName))
 			{
-				ProductTypeID productTypeID = (ProductTypeID) changedField.getNewValue();
+				final ProductTypeID productTypeID = (ProductTypeID) changedField.getNewValue();
 				if (productTypeID == null)
 				{
 					productTypeText.setText(""); //$NON-NLS-1$
@@ -491,8 +491,8 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				else
 				{
 					final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
-						productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 
 					productTypeText.setText(productType.getName().getText());

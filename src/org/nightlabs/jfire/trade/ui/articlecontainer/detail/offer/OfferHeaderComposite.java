@@ -68,7 +68,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
@@ -82,8 +82,8 @@ extends HeaderComposite
 {
 	private volatile Offer offer;
 
-	private CurrentStateComposite currentStateComposite;
-	private NextTransitionComposite nextTransitionComposite;
+	private final CurrentStateComposite currentStateComposite;
+	private final NextTransitionComposite nextTransitionComposite;
 
 	private XComposite expiryTimestampContainerComp;
 	private XComposite expiryTimestampUnfinalizedComp;
@@ -94,22 +94,22 @@ extends HeaderComposite
 	private DateTimeControl expiryTimestampFinalized;
 	private Button expiryTimestampFinalizedAutoManaged;
 
-	private HeaderVendorCustomerComposite headerVendorCustomerComposite;
+	private final HeaderVendorCustomerComposite headerVendorCustomerComposite;
 
 	protected OfferID getOfferID()
 	{
 		return (OfferID) JDOHelper.getObjectId(offer);
 	}
 
-	private RowData headerVendorCustomerCompositeRowData;
+	private final RowData headerVendorCustomerCompositeRowData;
 
 	private int getHeaderVendorCustomerCompositeRowDataWidth()
 	{
-		RowLayout rowLayout = (RowLayout)getLayout();
+		final RowLayout rowLayout = (RowLayout)getLayout();
 		return getClientArea().width - rowLayout.marginLeft - rowLayout.marginRight - rowLayout.marginWidth;
 	}
 
-	public OfferHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, Offer offer)
+	public OfferHeaderComposite(final ArticleContainerEditComposite articleContainerEditComposite, final Offer offer)
 	{
 		super(articleContainerEditComposite, articleContainerEditComposite, offer);
 		this.offer = offer;
@@ -121,7 +121,7 @@ extends HeaderComposite
 		headerVendorCustomerComposite.setLayoutData(headerVendorCustomerCompositeRowData);
 		addControlListener(new ControlAdapter() {
 			@Override
-			public void controlResized(ControlEvent e) {
+			public void controlResized(final ControlEvent e) {
 				headerVendorCustomerCompositeRowData.width = getHeaderVendorCustomerCompositeRowDataWidth();
 			}
 		});
@@ -135,7 +135,7 @@ extends HeaderComposite
 		nextTransitionComposite.setLayoutData(new RowData(260, SWT.DEFAULT));
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			@Override
-			public void signal(SignalEvent event)
+			public void signal(final SignalEvent event)
 			{
 				signalNextTransition(event);
 			}
@@ -149,7 +149,7 @@ extends HeaderComposite
 			expiryTimestampUnfinalizedComp.setLayoutData(null);
 			expiryTimestampUnfinalizedComp.getGridLayout().numColumns = 2;
 			new Label(expiryTimestampUnfinalizedComp, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.label.expiry.unfinalized")); //$NON-NLS-1$
-			expiryTimestampUnfinalized = new DateTimeControl(expiryTimestampUnfinalizedComp, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+			expiryTimestampUnfinalized = new DateTimeControl(expiryTimestampUnfinalizedComp, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 			new Label(expiryTimestampUnfinalizedComp, SWT.NONE);
 			expiryTimestampUnfinalizedAutoManaged = new Button(expiryTimestampUnfinalizedComp, SWT.CHECK);
 			expiryTimestampUnfinalizedAutoManaged.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.button.text.manageAutomatically")); //$NON-NLS-1$
@@ -160,14 +160,14 @@ extends HeaderComposite
 
 			expiryTimestampUnfinalizedAutoManaged.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					saveExpiryTimestamp();
 				}
 			});
 
 			expiryTimestampUnfinalized.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					expiryTimestampUnfinalizedAutoManaged.setSelection(false);
 					saveExpiryTimestamp();
 				}
@@ -175,7 +175,7 @@ extends HeaderComposite
 
 			expiryTimestampUnfinalized.addModifyListener(new ModifyListener() {
 				@Override
-				public void modifyText(ModifyEvent event) {
+				public void modifyText(final ModifyEvent event) {
 					expiryTimestampModifiedNeedsSaveOnFocusLost = true;
 					expiryTimestampUnfinalizedAutoManaged.setSelection(false);
 				}
@@ -183,7 +183,7 @@ extends HeaderComposite
 
 			expiryTimestampUnfinalized.addFocusListener(new FocusAdapter() {
 				@Override
-				public void focusLost(FocusEvent e) {
+				public void focusLost(final FocusEvent e) {
 					if (expiryTimestampModifiedNeedsSaveOnFocusLost) {
 						expiryTimestampModifiedNeedsSaveOnFocusLost = false;
 						saveExpiryTimestamp();
@@ -200,7 +200,7 @@ extends HeaderComposite
 			expiryTimestampFinalizedComp.setLayoutData(null);
 			expiryTimestampFinalizedComp.getGridLayout().numColumns = 2;
 			new Label(expiryTimestampFinalizedComp, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.label.expiry.finalized")); //$NON-NLS-1$
-			expiryTimestampFinalized = new DateTimeControl(expiryTimestampFinalizedComp, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+			expiryTimestampFinalized = new DateTimeControl(expiryTimestampFinalizedComp, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 			new Label(expiryTimestampFinalizedComp, SWT.NONE);
 			expiryTimestampFinalizedAutoManaged = new Button(expiryTimestampFinalizedComp, SWT.CHECK);
 			expiryTimestampFinalizedAutoManaged.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.button.text.manageAutomatically")); //$NON-NLS-1$
@@ -211,14 +211,14 @@ extends HeaderComposite
 
 			expiryTimestampFinalizedAutoManaged.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					saveExpiryTimestamp();
 				}
 			});
 
 			expiryTimestampFinalized.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					expiryTimestampFinalizedAutoManaged.setSelection(false);
 					saveExpiryTimestamp();
 				}
@@ -226,7 +226,7 @@ extends HeaderComposite
 
 			expiryTimestampFinalized.addModifyListener(new ModifyListener() {
 				@Override
-				public void modifyText(ModifyEvent event) {
+				public void modifyText(final ModifyEvent event) {
 					expiryTimestampModifiedNeedsSaveOnFocusLost = true;
 					expiryTimestampFinalizedAutoManaged.setSelection(false);
 				}
@@ -234,7 +234,7 @@ extends HeaderComposite
 
 			expiryTimestampFinalized.addFocusListener(new FocusAdapter() {
 				@Override
-				public void focusLost(FocusEvent e) {
+				public void focusLost(final FocusEvent e) {
 					if (expiryTimestampModifiedNeedsSaveOnFocusLost) {
 						expiryTimestampModifiedNeedsSaveOnFocusLost = false;
 						saveExpiryTimestamp();
@@ -253,7 +253,7 @@ extends HeaderComposite
 
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Offer.class, offerChangedListener);
 		addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e)
+			public void widgetDisposed(final DisposeEvent e)
 			{
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Offer.class, offerChangedListener);
 			}
@@ -285,12 +285,12 @@ extends HeaderComposite
 		final Date _expiryTimestampFinalized = expiryTimestampFinalized == null ? offer.getExpiryTimestampFinalized() : expiryTimestampFinalized.getDate();
 		final boolean _expiryTimestampFinalizedAutoManaged = expiryTimestampFinalizedAutoManaged == null ? offer.isExpiryTimestampFinalizedAutoManaged() : expiryTimestampFinalizedAutoManaged.getSelection();
 
-		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.name.savingExpiryTimeStamp")) { //$NON-NLS-1$
+		final org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.name.savingExpiryTimeStamp")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
+			protected IStatus run(final ProgressMonitor monitor) throws Exception {
 				monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.name.savingExpiryTimeStamp"), 2); //$NON-NLS-1$
 				try {
-					Offer _offer = OfferDAO.sharedInstance().setOfferExpiry(
+					final Offer _offer = OfferDAO.sharedInstance().setOfferExpiry(
 							getOfferID(),
 							_expiryTimestampUnfinalized, _expiryTimestampUnfinalizedAutoManaged,
 							_expiryTimestampFinalized, _expiryTimestampFinalizedAutoManaged,
@@ -310,7 +310,7 @@ extends HeaderComposite
 		job.schedule();
 	}
 
-	private void onOfferModified(final Offer offer, ProgressMonitor monitor)
+	private void onOfferModified(final Offer offer, final ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.task.name.updateUI"), 100); //$NON-NLS-1$
 		try {
@@ -360,17 +360,17 @@ extends HeaderComposite
 		}
 	}
 
-	private NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
-		public void notify(NotificationEvent notificationEvent)
+	private final NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
+		public void notify(final NotificationEvent notificationEvent)
 		{
-			ProgressMonitor monitor = getProgressMonitor();
+			final ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(
 					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferMonitor.task.name"), //$NON-NLS-1$
 					3
 			);
-			Offer _offer = OfferDAO.sharedInstance().getOffer(
+			final Offer _offer = OfferDAO.sharedInstance().getOffer(
 					(OfferID) JDOHelper.getObjectId(offer),
-//					ArticleContainerEditComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+					//					ArticleContainerEditComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
 					// After a change, it does NOT load the ArticleContainer *with* articles, but *WITHOUT*!
 					// Therefore, it's a bad idea to load them with articles! Marco.
 					ArticleContainerEditComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
@@ -383,14 +383,14 @@ extends HeaderComposite
 
 	private void signalNextTransition(final SignalEvent event)
 	{
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
+		final Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor)
+			protected IStatus run(final IProgressMonitor monitor)
 			{
 				try {
-					TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+					final TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					tm.signalOffer((OfferID)JDOHelper.getObjectId(offer), event.getTransition().getJbpmTransitionName());
-				} catch (Exception x) {
+				} catch (final Exception x) {
 					throw new RuntimeException(x);
 				}
 				return Status.OK_STATUS;

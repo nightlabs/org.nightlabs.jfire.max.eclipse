@@ -96,7 +96,7 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFact
 import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
 import org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
@@ -116,9 +116,9 @@ public class DeliveryEntryPage
 extends WizardHopPage
 implements IDeliveryEntryPage
 {
-	private List<? extends ProductType> productTypes;
+	private final List<? extends ProductType> productTypes;
 	private org.eclipse.swt.widgets.List productTypeGUIList;
-//	private List articles;
+	//	private List articles;
 	private List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours;
 	private ModeOfDeliveryFlavourTable modeOfDeliveryFlavourTable;
 	private Label clientDeliveryProcessorFactoryLabel;
@@ -131,7 +131,7 @@ implements IDeliveryEntryPage
 	/**
 	 * Contains items of type {@link ServerDeliveryProcessor}.
 	 */
-	private List<ServerDeliveryProcessor> serverDeliveryProcessorList = new ArrayList<ServerDeliveryProcessor>();
+	private final List<ServerDeliveryProcessor> serverDeliveryProcessorList = new ArrayList<ServerDeliveryProcessor>();
 	private Combo serverDeliveryProcessorCombo;
 	private ModeOfDeliveryFlavour selectedModeOfDeliveryFlavour = null;
 	private ClientDeliveryProcessorFactory selectedClientDeliveryProcessorFactory = null;
@@ -141,11 +141,11 @@ implements IDeliveryEntryPage
 	private TradePrintingConfigModule tradePrintingCfMod = null;
 	private AutomaticPrintingOptionsGroup automaticPrintingGroup = null;
 
-	private DeliveryConfigurationID deliveryConfigurationID;
-	
+	private final DeliveryConfigurationID deliveryConfigurationID;
+
 	private DateTimeControl deliveryDateControl;
-	
-	
+
+
 
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
@@ -153,10 +153,10 @@ implements IDeliveryEntryPage
 	}
 
 	public DeliveryEntryPage(
-			DeliveryConfigurationID deliveryConfigurationID,
-			Delivery delivery,
-			List<? extends ProductType> productTypes,
-			List<Article> articles)
+			final DeliveryConfigurationID deliveryConfigurationID,
+			final Delivery delivery,
+			final List<? extends ProductType> productTypes,
+			final List<Article> articles)
 	{
 		super(DeliveryEntryPage.class.getName() + '/' + delivery.getDeliveryID(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.title"), //$NON-NLS-1$
 				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), DeliveryEntryPage.class, null, ImageDimension._75x70));
@@ -169,15 +169,15 @@ implements IDeliveryEntryPage
 	}
 
 	@Override
-	public Control createPageContents(Composite parent)
+	public Control createPageContents(final Composite parent)
 	{
-		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		final XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.productTypesLabel.text")); //$NON-NLS-1$
 		productTypeGUIList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		productTypeGUIList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		for (Iterator<? extends ProductType> it = productTypes.iterator(); it.hasNext(); ) {
-			ProductType productType = it.next();
+		for (final Iterator<? extends ProductType> it = productTypes.iterator(); it.hasNext(); ) {
+			final ProductType productType = it.next();
 			productTypeGUIList.add(productType.getName().getText(NLLocale.getDefault().getLanguage()));
 		}
 
@@ -190,12 +190,12 @@ implements IDeliveryEntryPage
 		modeOfDeliveryFlavourTable.setInput(modeOfDeliveryFlavours);
 
 		modeOfDeliveryFlavourTable.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent arg0)
+			public void selectionChanged(final SelectionChangedEvent arg0)
 			{
 				try {
 					setMessage(null);
 					modeOfDeliveryFlavourGUIListSelectionChanged();
-				} catch (Exception x) {
+				} catch (final Exception x) {
 					throw new RuntimeException(x);
 				}
 			}
@@ -211,12 +211,12 @@ implements IDeliveryEntryPage
 
 		clientDeliveryProcessorFactoryCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				try {
 					setMessage(null);
 					clientDeliveryProcessorFactoryComboSelectionChanged();
-				} catch (Exception x) {
+				} catch (final Exception x) {
 					throw new RuntimeException(x);
 				}
 			}
@@ -232,12 +232,12 @@ implements IDeliveryEntryPage
 
 		serverDeliveryProcessorCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				try {
 					setMessage(null);
 					serverDeliveryProcessorComboSelectionChanged();
-				} catch (Exception x) {
+				} catch (final Exception x) {
 					throw new RuntimeException(x);
 				}
 			}
@@ -246,23 +246,23 @@ implements IDeliveryEntryPage
 		spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		spacer.getGridData().grabExcessVerticalSpace = false;
 		spacer.getGridData().heightHint = 4;
-		
-		XComposite dateComposite = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		final XComposite dateComposite = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		dateComposite.getGridLayout().numColumns = 2;
 		dateComposite.getGridData().grabExcessVerticalSpace = false;
-		new Label(dateComposite, SWT.NONE).setText("Delivery Date:");  
-		deliveryDateControl = new DateTimeControl(dateComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);	
+		new Label(dateComposite, SWT.NONE).setText("Delivery Date:");
+		deliveryDateControl = new DateTimeControl(dateComposite, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 		deliveryDateControl.setDateEditable(false);
 		deliveryDateControl.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				if(deliveryDateControl.getDate() != null)
 				{
 					setPaymentDate(deliveryDateControl.getDate());
 				}
 			}
 		});
-		
+
 		if (!ArticleContainerPrinterRegistry.sharedInstance().getFactories().isEmpty()) {
 			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.deliveryNote"), null); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -277,7 +277,7 @@ implements IDeliveryEntryPage
 	private StoreManagerRemote storeManager = null;
 
 	protected StoreManagerRemote getStoreManager()
-		throws RemoteException, LoginException, NamingException
+	throws RemoteException, LoginException, NamingException
 	{
 		if (storeManager == null)
 			storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
@@ -309,28 +309,28 @@ implements IDeliveryEntryPage
 		// set selectedModeOfDeliveryFlavour
 		selectedModeOfDeliveryFlavour = modeOfDeliveryFlavourTable.getSelectedModeOfDeliveryFlavour();
 		if (selectedModeOfDeliveryFlavour != null) {
-//			selectedModeOfDeliveryFlavour = (ModeOfDeliveryFlavour) modeOfDeliveryFlavours.get(idx);
+			//			selectedModeOfDeliveryFlavour = (ModeOfDeliveryFlavour) modeOfDeliveryFlavours.get(idx);
 			getDeliveryEntryPageCfMod().setModeOfDeliveryFlavourPK(getDeliveryConfigurationPK(), selectedModeOfDeliveryFlavour.getPrimaryKey());
 
 			try {
 				clientDeliveryProcessorFactoryList =
-						ClientDeliveryProcessorFactoryRegistry.sharedInstance().
-								getClientDeliveryProcessorFactories(selectedModeOfDeliveryFlavour);
-			} catch (EPProcessorException e) {
+					ClientDeliveryProcessorFactoryRegistry.sharedInstance().
+					getClientDeliveryProcessorFactories(selectedModeOfDeliveryFlavour);
+			} catch (final EPProcessorException e) {
 				throw new RuntimeException(e);
 			}
 
 			Collections.sort(clientDeliveryProcessorFactoryList, new Comparator<ClientDeliveryProcessorFactory>(){
-				public int compare(ClientDeliveryProcessorFactory cppf0, ClientDeliveryProcessorFactory cppf1)
+				public int compare(final ClientDeliveryProcessorFactory cppf0, final ClientDeliveryProcessorFactory cppf1)
 				{
-					String name0 = cppf0.getName();
-					String name1 = cppf1.getName();
+					final String name0 = cppf0.getName();
+					final String name1 = cppf1.getName();
 					return name0.compareTo(name1);
 				}
 			});
 
-			for (Iterator<ClientDeliveryProcessorFactory> it = clientDeliveryProcessorFactoryList.iterator(); it.hasNext(); ) {
-				ClientDeliveryProcessorFactory cppf = it.next();
+			for (final Iterator<ClientDeliveryProcessorFactory> it = clientDeliveryProcessorFactoryList.iterator(); it.hasNext(); ) {
+				final ClientDeliveryProcessorFactory cppf = it.next();
 				clientDeliveryProcessorFactoryCombo.add(cppf.getName());
 			}
 
@@ -348,27 +348,27 @@ implements IDeliveryEntryPage
 		getContainer().updateButtons();
 	}
 
-	
-	public void setPaymentDate(Date newDate)
+
+	public void setPaymentDate(final Date newDate)
 	{
 		getDeliveryWizardHop().getDelivery().setDeliveryDT(newDate);
 		updateDateGUI();
 	}
-	
+
 	protected void updateDateGUI()
 	{
 		if (deliveryDateControl != null) {
-			Date currentDeliveryDate = getDeliveryWizardHop().getDelivery().getDeliveryDT();
+			final Date currentDeliveryDate = getDeliveryWizardHop().getDelivery().getDeliveryDT();
 			if (currentDeliveryDate != deliveryDateControl.getDate())
 				deliveryDateControl.setDate(currentDeliveryDate);
 		}
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void clientDeliveryProcessorFactoryComboSelectionChanged()
 	{
-		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
+		final DeliveryWizard wizard = ((DeliveryWizard)getWizard());
 
 		removeDeliveryPages();
 
@@ -377,7 +377,7 @@ implements IDeliveryEntryPage
 		serverDeliveryProcessorCombo.removeAll();
 		serverDeliveryProcessorList.clear();
 
-		int idx = clientDeliveryProcessorFactoryCombo.getSelectionIndex();
+		final int idx = clientDeliveryProcessorFactoryCombo.getSelectionIndex();
 		if (idx >= 0) {
 			selectedClientDeliveryProcessorFactory = clientDeliveryProcessorFactoryList.get(idx);
 
@@ -390,7 +390,7 @@ implements IDeliveryEntryPage
 			clientDeliveryProcessor.setDelivery(getDeliveryWizardHop().getDelivery());
 			clientDeliveryProcessor.init();
 
-			RequirementCheckResult checkResult = clientDeliveryProcessor.getRequirementCheckResult();
+			final RequirementCheckResult checkResult = clientDeliveryProcessor.getRequirementCheckResult();
 			if (checkResult != null) {
 				this.setErrorMessage(checkResult.getMessage());
 				return;
@@ -406,21 +406,21 @@ implements IDeliveryEntryPage
 					selectedClientDeliveryProcessorFactory.getID());
 			getDeliveryWizardHop().setDeliveryData(deliveryData);
 
-			Set<ServerDeliveryProcessorID> includedSPPs = clientDeliveryProcessor.getIncludedServerDeliveryProcessorIDs();
+			final Set<ServerDeliveryProcessorID> includedSPPs = clientDeliveryProcessor.getIncludedServerDeliveryProcessorIDs();
 			Set<ServerDeliveryProcessorID> excludedSPPs = null;
 			if (includedSPPs == null)
 				excludedSPPs = clientDeliveryProcessor.getExcludedServerDeliveryProcessorIDs();
 
-			IWizardHopPage paymentPage = clientDeliveryProcessor.createDeliveryWizardPage();
+			final IWizardHopPage paymentPage = clientDeliveryProcessor.createDeliveryWizardPage();
 			if (paymentPage != null)
 				addDeliveryPage(paymentPage);
 
-			CheckRequirementsEnvironment checkRequirementsEnvironment = new CheckRequirementsEnvironment(
+			final CheckRequirementsEnvironment checkRequirementsEnvironment = new CheckRequirementsEnvironment(
 					getDeliveryWizardHop().getDelivery().getDeliveryDirection(),
 					getDeliveryWizardHop().getDelivery().getArticleIDs());
 
 			// load ServerDeliveryProcessor s
-			ModeOfDeliveryFlavourID modeOfDeliveryFlavourID = (ModeOfDeliveryFlavourID) JDOHelper.getObjectId(selectedModeOfDeliveryFlavour);
+			final ModeOfDeliveryFlavourID modeOfDeliveryFlavourID = (ModeOfDeliveryFlavourID) JDOHelper.getObjectId(selectedModeOfDeliveryFlavour);
 			Collection<ServerDeliveryProcessor> c;
 			try {
 				c = getStoreManager().getServerDeliveryProcessorsForOneModeOfDeliveryFlavour(
@@ -430,22 +430,22 @@ implements IDeliveryEntryPage
 								FetchPlan.DEFAULT,
 								ServerDeliveryProcessor.FETCH_GROUP_NAME
 						}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
 
-			String clientDeliveryProcessorFactoryID = selectedClientDeliveryProcessorFactory.getID();
-			for (Iterator<ServerDeliveryProcessor> it = c.iterator(); it.hasNext(); ) {
-				ServerDeliveryProcessor spp = it.next();
-				ServerDeliveryProcessorID sppID = (ServerDeliveryProcessorID) JDOHelper.getObjectId(spp);
+			final String clientDeliveryProcessorFactoryID = selectedClientDeliveryProcessorFactory.getID();
+			for (final Iterator<ServerDeliveryProcessor> it = c.iterator(); it.hasNext(); ) {
+				final ServerDeliveryProcessor spp = it.next();
+				final ServerDeliveryProcessorID sppID = (ServerDeliveryProcessorID) JDOHelper.getObjectId(spp);
 
 				if (includedSPPs != null && !includedSPPs.contains(sppID))
-						continue;
+					continue;
 
 				if (excludedSPPs != null && excludedSPPs.contains(sppID))
 					continue;
 
-				Set<String> includedCPPFs = spp.getIncludedClientDeliveryProcessorFactoryIDs();
+				final Set<String> includedCPPFs = spp.getIncludedClientDeliveryProcessorFactoryIDs();
 				Set<String> excludedCPPFs = null;
 				if (includedCPPFs == null)
 					excludedCPPFs = spp.getExcludedClientDeliveryProcessorFactoryIDs();
@@ -460,16 +460,16 @@ implements IDeliveryEntryPage
 			}
 
 			Collections.sort(serverDeliveryProcessorList, new Comparator<ServerDeliveryProcessor>(){
-				public int compare(ServerDeliveryProcessor spp0, ServerDeliveryProcessor spp1)
+				public int compare(final ServerDeliveryProcessor spp0, final ServerDeliveryProcessor spp1)
 				{
-					String name0 = spp0.getName().getText(NLLocale.getDefault().getLanguage());
-					String name1 = spp1.getName().getText(NLLocale.getDefault().getLanguage());
+					final String name0 = spp0.getName().getText(NLLocale.getDefault().getLanguage());
+					final String name1 = spp1.getName().getText(NLLocale.getDefault().getLanguage());
 					return name0.compareTo(name1);
 				}
 			});
 
-			for (Iterator<ServerDeliveryProcessor> it = serverDeliveryProcessorList.iterator(); it.hasNext(); ) {
-				ServerDeliveryProcessor serverDeliveryProcessor = it.next();
+			for (final Iterator<ServerDeliveryProcessor> it = serverDeliveryProcessorList.iterator(); it.hasNext(); ) {
+				final ServerDeliveryProcessor serverDeliveryProcessor = it.next();
 				serverDeliveryProcessorCombo.add(serverDeliveryProcessor.getName().getText(NLLocale.getDefault().getLanguage()));
 			}
 
@@ -490,27 +490,27 @@ implements IDeliveryEntryPage
 		getWizardHop().removeAllHopPages();
 	}
 
-	protected void addDeliveryPage(IWizardHopPage deliveryPage)
+	protected void addDeliveryPage(final IWizardHopPage deliveryPage)
 	{
 		getWizardHop().addHopPage(deliveryPage);
 	}
 
 	protected void serverDeliveryProcessorComboSelectionChanged()
 	{
-		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
+		final DeliveryWizard wizard = ((DeliveryWizard)getWizard());
 
 		selectedServerDeliveryProcessor = null;
 
-		int idx = serverDeliveryProcessorCombo.getSelectionIndex();
+		final int idx = serverDeliveryProcessorCombo.getSelectionIndex();
 		if (idx >= 0) {
 			selectedServerDeliveryProcessor = serverDeliveryProcessorList.get(idx);
 			getDeliveryWizardHop().getDelivery().setServerDeliveryProcessorID(
 					(ServerDeliveryProcessorID) JDOHelper.getObjectId(selectedServerDeliveryProcessor));
 
-			RequirementCheckResult result = selectedServerDeliveryProcessor.getRequirementCheckResult();
+			final RequirementCheckResult result = selectedServerDeliveryProcessor.getRequirementCheckResult();
 			if (result != null) {
 				this.setErrorMessage(result.getMessage());
-//				wizard.updateDialog(); // this is already done be setErrorMessage(...)
+				//				wizard.updateDialog(); // this is already done be setErrorMessage(...)
 				return;
 			}
 
@@ -560,11 +560,11 @@ implements IDeliveryEntryPage
 	public boolean isPageComplete()
 	{
 		return
-				clientDeliveryProcessor != null &&
-				clientDeliveryProcessor.getRequirementCheckResult() == null &&
-				selectedClientDeliveryProcessorFactory != null &&
-				selectedServerDeliveryProcessor != null &&
-				selectedServerDeliveryProcessor.getRequirementCheckResult() == null;
+		clientDeliveryProcessor != null &&
+		clientDeliveryProcessor.getRequirementCheckResult() == null &&
+		selectedClientDeliveryProcessorFactory != null &&
+		selectedServerDeliveryProcessor != null &&
+		selectedServerDeliveryProcessor.getRequirementCheckResult() == null;
 	}
 
 	private String getDeliveryConfigurationPK() {
@@ -575,15 +575,15 @@ implements IDeliveryEntryPage
 
 	public void loadModeOfDeliveries() {
 
-		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.job.loadingDeliveryModes")) { //$NON-NLS-1$
+		final Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.job.loadingDeliveryModes")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				DeliveryWizard deliveryWizard = (DeliveryWizard) getWizard();
+			protected IStatus run(final ProgressMonitor monitor) throws Exception {
+				final DeliveryWizard deliveryWizard = (DeliveryWizard) getWizard();
 				final List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours = new ArrayList<ModeOfDeliveryFlavour>();
 
-				Set<ProductTypeID> ptids = NLJDOHelper.getObjectIDSet(productTypes);
-				ModeOfDeliveryFlavourProductTypeGroupCarrier carrier = getStoreManager().getModeOfDeliveryFlavourProductTypeGroupCarrier(
-//						deliveryWizard.getProductTypeIDs(), // this is wrong, since it loads the ModeOfDeliveryFlavours for all productTypes of the whole wizard!
+				final Set<ProductTypeID> ptids = NLJDOHelper.getObjectIDSet(productTypes);
+				final ModeOfDeliveryFlavourProductTypeGroupCarrier carrier = getStoreManager().getModeOfDeliveryFlavourProductTypeGroupCarrier(
+						//						deliveryWizard.getProductTypeIDs(), // this is wrong, since it loads the ModeOfDeliveryFlavours for all productTypes of the whole wizard!
 						ptids, // only the productTypeIDs for this one page! not for all!
 						deliveryWizard.getCustomerGroupIDs(),
 						ModeOfDeliveryFlavour.MERGE_MODE_SUBTRACTIVE,
@@ -596,43 +596,43 @@ implements IDeliveryEntryPage
 							ModeOfDeliveryFlavourName.FETCH_GROUP_NAMES
 						}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
-				Map<ProductTypeID, ProductType> productTypeByIDMap = deliveryWizard.getProductTypeByIDMap();
+				final Map<ProductTypeID, ProductType> productTypeByIDMap = deliveryWizard.getProductTypeByIDMap();
 
-				for (Iterator<ModeOfDeliveryFlavourProductTypeGroup> itG = carrier.getModeOfDeliveryFlavourProductTypeGroups().iterator(); itG.hasNext(); ) {
-					ModeOfDeliveryFlavourProductTypeGroup group = itG.next();
+				for (final Iterator<ModeOfDeliveryFlavourProductTypeGroup> itG = carrier.getModeOfDeliveryFlavourProductTypeGroups().iterator(); itG.hasNext(); ) {
+					final ModeOfDeliveryFlavourProductTypeGroup group = itG.next();
 
-					List<ProductType> productTypes = new ArrayList<ProductType>();
-					for (Iterator<ProductTypeID> itPT = group.getProductTypeIDs().iterator(); itPT.hasNext();) {
-						ProductTypeID productTypeID = itPT.next();
-						ProductType productType = productTypeByIDMap.get(productTypeID);
+					final List<ProductType> productTypes = new ArrayList<ProductType>();
+					for (final Iterator<ProductTypeID> itPT = group.getProductTypeIDs().iterator(); itPT.hasNext();) {
+						final ProductTypeID productTypeID = itPT.next();
+						final ProductType productType = productTypeByIDMap.get(productTypeID);
 						if (productType == null)
 							throw new IllegalStateException("ProductType with ID \"" + productTypeID + "\" missing in map!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 						productTypes.add(productType);
 					}
 
-					for (Iterator<ModeOfDeliveryFlavourID> itMDOFID = group.getModeOfDeliveryFlavourIDs().iterator(); itMDOFID.hasNext(); ) {
-						ModeOfDeliveryFlavourID modfID = itMDOFID.next();
-						ModeOfDeliveryFlavour modf = carrier.getModeOfDeliveryFlavour(modfID);
+					for (final Iterator<ModeOfDeliveryFlavourID> itMDOFID = group.getModeOfDeliveryFlavourIDs().iterator(); itMDOFID.hasNext(); ) {
+						final ModeOfDeliveryFlavourID modfID = itMDOFID.next();
+						final ModeOfDeliveryFlavour modf = carrier.getModeOfDeliveryFlavour(modfID);
 						modeOfDeliveryFlavours.add(modf);
 					}
 				}
 
 				Collections.sort(modeOfDeliveryFlavours, new Comparator<ModeOfDeliveryFlavour>() {
-					public int compare(ModeOfDeliveryFlavour mopf0, ModeOfDeliveryFlavour mopf1)
+					public int compare(final ModeOfDeliveryFlavour mopf0, final ModeOfDeliveryFlavour mopf1)
 					{
-						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
-						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
+						final String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
+						final String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
 						return name0.compareTo(name1);
 					}
 				});
 
-				DeliveryEntryPageCfMod deliveryEntryPageCfMod = getDeliveryEntryPageCfMod();
+				final DeliveryEntryPageCfMod deliveryEntryPageCfMod = getDeliveryEntryPageCfMod();
 				ModeOfDeliveryFlavour selectedModeOfDeliveryFlavour = null;
 
-				String lastSelectedModeOfDeliveryFlavourPK = deliveryEntryPageCfMod.getDeliveryConfigurationPK2modeOfDeliveryFlavourPK().get(getDeliveryConfigurationPK());
+				final String lastSelectedModeOfDeliveryFlavourPK = deliveryEntryPageCfMod.getDeliveryConfigurationPK2modeOfDeliveryFlavourPK().get(getDeliveryConfigurationPK());
 				if (lastSelectedModeOfDeliveryFlavourPK != null) {
-					for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
+					for (final ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
 						if (lastSelectedModeOfDeliveryFlavourPK.equals(modeOfDeliveryFlavour.getPrimaryKey())) {
 							selectedModeOfDeliveryFlavour = modeOfDeliveryFlavour;
 							break;
@@ -641,7 +641,7 @@ implements IDeliveryEntryPage
 				}
 
 				if (selectedModeOfDeliveryFlavour == null) {
-					for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
+					for (final ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
 						if (Util.equals(deliveryEntryPageCfMod.getModeOfDeliveryFlavourPK(), modeOfDeliveryFlavour.getPrimaryKey())) {
 							selectedModeOfDeliveryFlavour = modeOfDeliveryFlavour;
 							break;

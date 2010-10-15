@@ -19,7 +19,7 @@ import org.nightlabs.jfire.trade.deliverydate.DeliveryDateMode;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleTableProviderConstants;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -29,19 +29,19 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class EditDeliveryDateComposite
 extends XComposite
 {
-	private ArticleDeliveryDateTable table;
+	private final ArticleDeliveryDateTable table;
 	private Collection<ArticleDeliveryDateCarrier> articleDeliveryDateCarriers;
-	private DateTimeControl dateTimeControl;
-	private DeliveryDateMode mode;
+	private final DateTimeControl dateTimeControl;
+	private final DeliveryDateMode mode;
 
-	public EditDeliveryDateComposite(Composite parent, int style, DeliveryDateMode mode) {
+	public EditDeliveryDateComposite(final Composite parent, final int style, final DeliveryDateMode mode) {
 		super(parent, style);
 		this.mode = mode;
 		table = new ArticleDeliveryDateTable(this, SWT.NONE, Article.class.getName(),
 				ArticleTableProviderConstants.SCOPE_PRODUCT_TYPE, mode);
 
-		Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		dateTimeControl = new DateTimeControl(wrapper, true, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT);
+		final Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
+		dateTimeControl = new DateTimeControl(wrapper, true, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT);
 		dateTimeControl.setDate(null);
 		dateTimeControl.setButtonText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateComposite.button.setDeliveryDate.text")); //$NON-NLS-1$
 		dateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -50,9 +50,9 @@ extends XComposite
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Date date = dateTimeControl.getDate();
-				for (ArticleDeliveryDateCarrier carrier : articleDeliveryDateCarriers){
+			public void widgetSelected(final SelectionEvent e) {
+				final Date date = dateTimeControl.getDate();
+				for (final ArticleDeliveryDateCarrier carrier : articleDeliveryDateCarriers){
 					carrier.setDeliveryDate(date);
 				}
 				updateText();
@@ -61,14 +61,14 @@ extends XComposite
 		});
 	}
 
-	public void setArticles(Collection<Article> articles, DeliveryDateMode mode)
+	public void setArticles(final Collection<Article> articles, final DeliveryDateMode mode)
 	{
-		Collection<ArticleID> articleIDs = new ArrayList<ArticleID>(articles.size());
+		final Collection<ArticleID> articleIDs = new ArrayList<ArticleID>(articles.size());
 		articleDeliveryDateCarriers = new ArrayList<ArticleDeliveryDateCarrier>(articles.size());
-		for (Article article : articles) {
-			ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
+		for (final Article article : articles) {
+			final ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
 			articleIDs.add(articleID);
-			ArticleDeliveryDateCarrier articleDeliveryDateCarrier = new ArticleDeliveryDateCarrier(
+			final ArticleDeliveryDateCarrier articleDeliveryDateCarrier = new ArticleDeliveryDateCarrier(
 					articleID, getDeliveryDate(article, mode), mode);
 			articleDeliveryDateCarriers.add(articleDeliveryDateCarrier);
 		}
@@ -78,7 +78,7 @@ extends XComposite
 		updateText();
 	}
 
-	private Date getDeliveryDate(Article article, DeliveryDateMode mode) {
+	private Date getDeliveryDate(final Article article, final DeliveryDateMode mode) {
 		if (mode == DeliveryDateMode.DELIVERY_NOTE){
 			return article.getDeliveryDateDeliveryNote();
 		}
@@ -93,7 +93,7 @@ extends XComposite
 	private void updateText()
 	{
 		if (articleDeliveryDateCarriers != null && !articleDeliveryDateCarriers.isEmpty()) {
-			Date date = articleDeliveryDateCarriers.iterator().next().getDeliveryDate();
+			final Date date = articleDeliveryDateCarriers.iterator().next().getDeliveryDate();
 			dateTimeControl.setDate(date);
 		}
 	}
