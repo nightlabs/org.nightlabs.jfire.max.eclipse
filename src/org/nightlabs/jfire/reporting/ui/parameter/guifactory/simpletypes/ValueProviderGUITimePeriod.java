@@ -20,7 +20,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.ValueProviderConfigUtil;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.util.CalendarUtil;
 import org.nightlabs.util.TimePeriod;
 
@@ -29,7 +29,7 @@ import org.nightlabs.util.TimePeriod;
  *
  */
 public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePeriod> {
-	
+
 	private XComposite wrapper;
 	private DateTimeEdit fromEdit;
 	private DateTimeEdit toEdit;
@@ -37,40 +37,40 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	/**
 	 * 
 	 */
-	public ValueProviderGUITimePeriod(ValueProviderConfig valueProviderConfig) {
+	public ValueProviderGUITimePeriod(final ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#createGUI(org.eclipse.swt.widgets.Composite)
 	 */
-	public Control createGUI(Composite parent) {
+	public Control createGUI(final Composite parent) {
 		if (wrapper == null) {
 			wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			wrapper.getGridData().verticalAlignment = GridData.BEGINNING;
 			wrapper.getGridData().grabExcessVerticalSpace = false;
-			Group group = new Group(wrapper, SWT.NONE);
+			final Group group = new Group(wrapper, SWT.NONE);
 			group.setLayout(new GridLayout(2, true));
 			group.setLayoutData(new GridData(GridData.FILL_BOTH));
 			group.setText(ValueProviderConfigUtil.getValueProviderMessage(getValueProviderConfig()));
-			Calendar cal = Calendar.getInstance();
+			final Calendar cal = Calendar.getInstance();
 			fromEdit = new DateTimeEdit(
-					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
+					group, IDateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.fromDateTimeEdit.caption")); //$NON-NLS-1$
 			fromEdit.addModifyListener(new ModifyListener() {
 				@Override
-				public void modifyText(ModifyEvent e) {
+				public void modifyText(final ModifyEvent e) {
 					notifyOutputChanged();
 				}
-			});			
+			});
 			CalendarUtil.setToMinTimeOfDay(cal);
 			fromEdit.setDate(cal.getTime());
 			toEdit = new DateTimeEdit(
-					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
+					group, IDateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.toDateTimeEdit.caption")); //$NON-NLS-1$
 			toEdit.addModifyListener(new ModifyListener() {
 				@Override
-				public void modifyText(ModifyEvent e) {
+				public void modifyText(final ModifyEvent e) {
 					notifyOutputChanged();
 				}
 			});
@@ -84,7 +84,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public TimePeriod getOutputValue() {
-		TimePeriod period = new TimePeriod();
+		final TimePeriod period = new TimePeriod();
 		if (fromEdit.isActive())
 			period.setFrom(fromEdit.getDate());
 		else
@@ -109,7 +109,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
-	public void setInputParameterValue(String parameterID, Object value) {
+	public void setInputParameterValue(final String parameterID, final Object value) {
 	}
 
 }
