@@ -53,7 +53,7 @@ import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.jbpm.graph.def.id.StateDefinitionID;
 import org.nightlabs.jfire.jbpm.query.StatableQuery;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
@@ -63,14 +63,14 @@ import org.nightlabs.util.Util;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
-	extends AbstractQueryFilterComposite<Q>
+extends AbstractQueryFilterComposite<Q>
 {
 	private DateTimeEdit createDTMin;
 	private DateTimeEdit createDTMax;
 	private Button stateDefinitionActiveButton;
 	private Button onlyInSelectedStateButton;
 	private Button notInSelectedStateButton;
-	private Map<ProcessDefinition, List<StateDefinition>> processDefinition2StateDefinitions;
+	private final Map<ProcessDefinition, List<StateDefinition>> processDefinition2StateDefinitions;
 
 	private static final String[] FETCH_GROUPS_STATE_DEFINITON = new String[] {
 		FetchPlan.DEFAULT,
@@ -106,8 +106,8 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public AbstractStatableSearchComposite(Composite parent, int style, LayoutMode layoutMode,
-		LayoutDataMode layoutDataMode, QueryProvider<? super StatableQuery> queryProvider)
+	public AbstractStatableSearchComposite(final Composite parent, final int style, final LayoutMode layoutMode,
+			final LayoutDataMode layoutDataMode, final QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		processDefinition2StateDefinitions = new HashMap<ProcessDefinition, List<StateDefinition>>();
@@ -117,30 +117,30 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 	/**
 	 * Delegates to {@link StatableFilterComposite#StatableFilterComposite(AbstractQueryFilterComposite, int, XComposite.LayoutMode, LayoutDataMode)}
 	 */
-	public AbstractStatableSearchComposite(Composite parent, int style,
-		QueryProvider<? super StatableQuery> queryProvider)
+	public AbstractStatableSearchComposite(final Composite parent, final int style,
+			final QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		processDefinition2StateDefinitions = new HashMap<ProcessDefinition, List<StateDefinition>>();
 		createComposite();
 	}
 
-//	@Override
-//	public Class<Q> getQueryClass()
-//	{
-//		return StatableQuery.class;
-//	}
+	//	@Override
+	//	public Class<Q> getQueryClass()
+	//	{
+	//		return StatableQuery.class;
+	//	}
 
 	@Override
 	protected void createComposite()
 	{
-		Group group = new Group(this, SWT.NONE);
+		final Group group = new Group(this, SWT.NONE);
 		group.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.query.AbstractStatableSearchComposite.group.state.text")); //$NON-NLS-1$
 		group.setLayout(new GridLayout(4, false));
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
-			LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
+		final XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
+				LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
 		wrapper.getGridLayout().makeColumnsEqualWidth = true;
 		wrapper.getGridData().horizontalSpan = 2;
 		stateDefinitionActiveButton = new Button(wrapper, SWT.CHECK);
@@ -148,21 +148,21 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		stateDefinitionActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(StatableQuery.FieldName.stateDefinitionID, active);
 			}
 		});
 		onlyInSelectedStateButton = new Button(wrapper, SWT.CHECK);
 		onlyInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.query.AbstractStatableSearchComposite.button.onlyInSelectedState.text")); //$NON-NLS-1$
-		GridData selectedStateButtonData = new GridData();
-//		selectedStateButtonData.horizontalSpan = 2;
+		final GridData selectedStateButtonData = new GridData();
+		//		selectedStateButtonData.horizontalSpan = 2;
 		onlyInSelectedStateButton.setLayoutData(selectedStateButtonData);
 		onlyInSelectedStateButton.setEnabled(false);
 		onlyInSelectedStateButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				final Boolean onlyInSelectedState = onlyInSelectedStateButton.getSelection();
 				getQuery().setOnlyInSelectedState(onlyInSelectedState);
@@ -174,14 +174,14 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 
 		notInSelectedStateButton = new Button(wrapper, SWT.CHECK);
 		notInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.query.AbstractStatableSearchComposite.button.notInSelectedState.text")); //$NON-NLS-1$
-		GridData notSelectedStateButtonData = new GridData();
-//		selectedStateButtonData.horizontalSpan = 2;
+		final GridData notSelectedStateButtonData = new GridData();
+		//		selectedStateButtonData.horizontalSpan = 2;
 		notInSelectedStateButton.setLayoutData(notSelectedStateButtonData);
 		notInSelectedStateButton.setEnabled(false);
 		notInSelectedStateButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void widgetSelected(final SelectionEvent e)
 			{
 				final Boolean notInSelectedState = notInSelectedStateButton.getSelection();
 				getQuery().setNotInSelectedState(notInSelectedState);
@@ -192,17 +192,17 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		});
 
 		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(wrapper, SWT.READ_ONLY | getBorderStyle(), processDefinitionLabelProvider);
-		GridData data2 = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData data2 = new GridData(GridData.FILL_HORIZONTAL);
 		data2.horizontalSpan = 1;
 		processDefinitionsCombo.setLayoutData(data2);
 		processDefinitionsCombo.setEnabled(false);
 		processDefinitionsCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			@Override
-			public void selectionChanged(SelectionChangedEvent e)
+			public void selectionChanged(final SelectionChangedEvent e)
 			{
-				ProcessDefinition selectedProcessDefinition = processDefinitionsCombo.getSelectedElement();
-				List<StateDefinition> stateDefinitions = processDefinition2StateDefinitions.get(selectedProcessDefinition);
+				final ProcessDefinition selectedProcessDefinition = processDefinitionsCombo.getSelectedElement();
+				final List<StateDefinition> stateDefinitions = processDefinition2StateDefinitions.get(selectedProcessDefinition);
 				stateDefinitionsCombo.removeAll();
 				stateDefinitionsCombo.addElements(stateDefinitions);
 				if (!stateDefinitionsCombo.getElements().isEmpty())
@@ -211,17 +211,17 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		});
 
 		stateDefinitionsCombo = new XComboComposite<StateDefinition>(wrapper, SWT.READ_ONLY | getBorderStyle(), stateDefinitionLabelProvider);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		stateDefinitionsCombo.setLayoutData(data);
 		stateDefinitionsCombo.setEnabled(false);
 		stateDefinitionsCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			@Override
-			public void selectionChanged(SelectionChangedEvent e)
+			public void selectionChanged(final SelectionChangedEvent e)
 			{
 				final StateDefinitionID stateDefinitionID = (StateDefinitionID)
-					JDOHelper.getObjectId(stateDefinitionsCombo.getSelectedElement());
+				JDOHelper.getObjectId(stateDefinitionsCombo.getSelectedElement());
 
 				getQuery().setStateDefinitionID(stateDefinitionID);
 			}
@@ -229,7 +229,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 
 		createDTMin = new DateTimeEdit(
 				group,
-				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
+				IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				Messages.getString("org.nightlabs.jfire.jbpm.ui.query.AbstractStatableSearchComposite.button.minCreateDT.text")); //$NON-NLS-1$
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
@@ -241,7 +241,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		createDTMin.addModifyListener(new ModifyListener()
 		{
 			@Override
-			public void modifyText(ModifyEvent me)
+			public void modifyText(final ModifyEvent me)
 			{
 				final Date createDTMinDate = createDTMin.getDate();
 				getQuery().setStateCreateDTMin(createDTMinDate);
@@ -250,7 +250,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		createDTMin.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(StatableQuery.FieldName.stateCreateDTMin, active);
 			}
@@ -258,7 +258,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 
 		createDTMax = new DateTimeEdit(
 				group,
-				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
+				IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				Messages.getString("org.nightlabs.jfire.jbpm.ui.query.AbstractStatableSearchComposite.button.maxCreateDT.text")); //$NON-NLS-1$
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
@@ -270,7 +270,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		createDTMax.addModifyListener(new ModifyListener()
 		{
 			@Override
-			public void modifyText(ModifyEvent me)
+			public void modifyText(final ModifyEvent me)
 			{
 				final Date createDTMaxDate = createDTMax.getDate();
 				getQuery().setStateCreateDTMax(createDTMaxDate);
@@ -279,7 +279,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 		createDTMax.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
-			protected void handleSelection(boolean active)
+			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(StatableQuery.FieldName.stateCreateDTMax, active);
 			}
@@ -287,12 +287,12 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 	}
 
 	private XComboComposite<StateDefinition> stateDefinitionsCombo;
-	private ILabelProvider stateDefinitionLabelProvider = new LabelProvider() {
+	private final ILabelProvider stateDefinitionLabelProvider = new LabelProvider() {
 		@Override
-		public String getText(Object element)
+		public String getText(final Object element)
 		{
 			if (element instanceof StateDefinition) {
-				StateDefinition stateDefinition = (StateDefinition) element;
+				final StateDefinition stateDefinition = (StateDefinition) element;
 				return stateDefinition.getName().getText();
 			}
 
@@ -301,12 +301,12 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 	};
 
 	private XComboComposite<ProcessDefinition> processDefinitionsCombo;
-	private ILabelProvider processDefinitionLabelProvider = new LabelProvider() {
+	private final ILabelProvider processDefinitionLabelProvider = new LabelProvider() {
 		@Override
-		public String getText(Object element)
+		public String getText(final Object element)
 		{
 			if (element instanceof ProcessDefinition) {
-				ProcessDefinition processDefinition = (ProcessDefinition) element;
+				final ProcessDefinition processDefinition = (ProcessDefinition) element;
 				return processDefinition.getProcessDefinitionID();
 			}
 			return super.getText(element);
@@ -336,15 +336,15 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 
 		fillStateComboJob = new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.query.AbstractStatableSearchComposite.job.loadProcessDefinition.text")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) {
+			protected IStatus run(final ProgressMonitor monitor) {
 				try {
-//					TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
-					JbpmManagerRemote jbpmManager = JFireEjb3Factory.getRemoteBean(JbpmManagerRemote.class, Login.getLogin().getInitialContextProperties());
+					//					TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+					final JbpmManagerRemote jbpmManager = JFireEjb3Factory.getRemoteBean(JbpmManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 					// TODO: add workflow selection so that only the processdefiniton for the given workflow
-//					Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(statableClassName);
-					Set<ProcessDefinitionID> processDefinitionIDs = retrieveProcessDefinitionIDs(monitor, statableClass);
-					String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
+					//					Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(statableClassName);
+					final Set<ProcessDefinitionID> processDefinitionIDs = retrieveProcessDefinitionIDs(monitor, statableClass);
+					final String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
 							FetchPlan.DEFAULT,
 							ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
 					};
@@ -354,10 +354,10 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							monitor);
 
-					for (ProcessDefinition processDefinition : processDefinitions)
+					for (final ProcessDefinition processDefinition : processDefinitions)
 					{
-						Set<StateDefinitionID> statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
-						Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
+						final Set<StateDefinitionID> statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
+						final Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
 								statedDefinitionIDs,
 								FETCH_GROUPS_STATE_DEFINITON,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -374,9 +374,9 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 
 							processDefinitionsCombo.addElements(processDefinitions);
 							if (!processDefinitions.isEmpty()) {
-								ProcessDefinition firstProcessDefinition = processDefinitions.iterator().next();
+								final ProcessDefinition firstProcessDefinition = processDefinitions.iterator().next();
 								processDefinitionsCombo.selectElement(firstProcessDefinition);
-								List<StateDefinition> stateDefinitionList = processDefinition2StateDefinitions.get(firstProcessDefinition);
+								final List<StateDefinition> stateDefinitionList = processDefinition2StateDefinitions.get(firstProcessDefinition);
 								stateDefinitionsCombo.addElements(stateDefinitionList);
 								if (!stateDefinitionList.isEmpty()) {
 									stateDefinitionsCombo.selectElementByIndex(0);
@@ -389,7 +389,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 							}
 						}
 					});
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					throw new RuntimeException(e);
 				}
 				return Status.OK_STATUS;
@@ -426,12 +426,12 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 	private ProcessDefinition deferredProcessDefinition = null;
 
 	@Override
-	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
+	protected void updateUI(final QueryEvent event, final List<FieldChangeCarrier> changedFields)
 	{
 		if (Display.getCurrent() == null)
 			throw new IllegalStateException("This method must be invoked on the SWT UI thread!"); //$NON-NLS-1$
 
-		for (FieldChangeCarrier fieldChange : changedFields)
+		for (final FieldChangeCarrier fieldChange : changedFields)
 		{
 			if (StatableQuery.FieldName.onlyInSelectedState.equals(fieldChange.getPropertyName()))
 			{
@@ -443,7 +443,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 			}
 			else if (StatableQuery.FieldName.stateCreateDTMax.equals(fieldChange.getPropertyName()))
 			{
-				Date maxDate = (Date) fieldChange.getNewValue();
+				final Date maxDate = (Date) fieldChange.getNewValue();
 				createDTMax.setDate(maxDate);
 			}
 			else if (getEnableFieldName(StatableQuery.FieldName.stateCreateDTMax).equals(
@@ -455,7 +455,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 			}
 			else if (StatableQuery.FieldName.stateCreateDTMin.equals(fieldChange.getPropertyName()))
 			{
-				Date minDate = (Date) fieldChange.getNewValue();
+				final Date minDate = (Date) fieldChange.getNewValue();
 				createDTMin.setDate(minDate);
 			}
 			else if (getEnableFieldName(StatableQuery.FieldName.stateCreateDTMin).equals(
@@ -467,7 +467,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 			}
 			else if (StatableQuery.FieldName.stateDefinitionID.equals(fieldChange.getPropertyName()))
 			{
-				StateDefinitionID tmpID = (StateDefinitionID) fieldChange.getNewValue();
+				final StateDefinitionID tmpID = (StateDefinitionID) fieldChange.getNewValue();
 				if (tmpID == null)
 				{
 					stateDefinitionsCombo.setSelection((StateDefinition) null);
@@ -478,11 +478,11 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 					try
 					{
 						selection = StateDefinitionDAO.sharedInstance().getStateDefintions(
-							Collections.singleton(tmpID), FETCH_GROUPS_STATE_DEFINITON,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+								Collections.singleton(tmpID), FETCH_GROUPS_STATE_DEFINITON,
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 						).iterator().next();
 					}
-					catch (Exception e)
+					catch (final Exception e)
 					{
 						if (e instanceof RuntimeException)
 						{
@@ -510,7 +510,7 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 
 			else if (StatableQuery.FieldName.processDefinitionID.equals(fieldChange.getPropertyName()))
 			{
-				ProcessDefinitionID tmpID = (ProcessDefinitionID) fieldChange.getNewValue();
+				final ProcessDefinitionID tmpID = (ProcessDefinitionID) fieldChange.getNewValue();
 				if (tmpID == null)
 				{
 					processDefinitionsCombo.setSelection((ProcessDefinition) null);
@@ -521,11 +521,11 @@ public abstract class AbstractStatableSearchComposite<Q extends StatableQuery>
 					try
 					{
 						selection = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
-							Collections.singleton(tmpID), FETCH_GROUPS_PROCESS_DEFINITON,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+								Collections.singleton(tmpID), FETCH_GROUPS_PROCESS_DEFINITON,
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 						).iterator().next();
 					}
-					catch (Exception e)
+					catch (final Exception e)
 					{
 						if (e instanceof RuntimeException)
 						{
