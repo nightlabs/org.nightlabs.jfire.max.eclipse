@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.GenericInvertViewerSorter;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
@@ -225,7 +226,7 @@ extends AbstractTableComposite<O>
 	{
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
-		tableViewer.setSorter(new ViewerSorter());
+		tableViewer.setSorter(new GenericInvertViewerSorter(3).getInverseSorter());
 	}
 
 	protected String getCreateUserName(ArticleContainer articleContainer)
