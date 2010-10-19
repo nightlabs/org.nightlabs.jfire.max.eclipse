@@ -26,6 +26,7 @@ import org.nightlabs.base.ui.exceptionhandler.errorreport.ErrorReportWizardDialo
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
@@ -41,6 +42,7 @@ import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticlesWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.QuickSaleErrorHandler;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 public class ErrorDialog
 extends ResizableTitleAreaDialog
@@ -360,10 +362,11 @@ extends ResizableTitleAreaDialog
 
 		if (getPaymentDatas() != null && (transferWizard.getTransferMode() & TransferWizard.TRANSFER_MODE_PAYMENT) > 0) {
 			// add all ArticleIDs from all invoices of all payments
-			Set<InvoiceID> invoiceIDs = new HashSet<InvoiceID>();
+			Set<ObjectID> payableObjectIDs = new HashSet<ObjectID>();
 			for (PaymentData pd : getPaymentDatas()) {
-				invoiceIDs.addAll(pd.getPayment().getInvoiceIDs());
+				payableObjectIDs.addAll(pd.getPayment().getPayableObjectIDs());
 			}
+			Set<InvoiceID> invoiceIDs = CollectionUtil.castSet(payableObjectIDs);
 			List<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(invoiceIDs, new String[] {FetchPlan.DEFAULT, Invoice.FETCH_GROUP_ARTICLES},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			for (Invoice invoice : invoices) {

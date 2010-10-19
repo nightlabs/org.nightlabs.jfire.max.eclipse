@@ -51,6 +51,7 @@ import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
@@ -80,6 +81,7 @@ import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
 import org.nightlabs.jfire.trade.ui.transfer.print.IArticleContainerPrinter;
 import org.nightlabs.jfire.trade.ui.transfer.print.IArticleContainerPrinterFactory;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -235,7 +237,9 @@ public class TransferWizardUtil
 
 			for (PaymentEntryPage paymentEntryPage : paymentWizard.getPaymentEntryPages()) {
 				Payment payment = paymentEntryPage.getPaymentWizardHop().getPayment();
-				payment.setInvoiceIDs(new HashSet<InvoiceID>(paymentWizard.getInvoiceIDs()));
+				Collection<ObjectID> payableObjectIDs = CollectionUtil.castCollection(paymentWizard.getInvoiceIDs());
+//				payment.setInvoiceIDs(new HashSet<InvoiceID>(paymentWizard.getInvoiceIDs()));
+				payment.setPayableObjectIDs(new HashSet<ObjectID>(payableObjectIDs));
 			}
 		} // if (paymentWizard != null) {
 
@@ -304,19 +308,19 @@ public class TransferWizardUtil
 		try {
 			// if a payment was done
 			if (invoicesToPrintCount > 0 && paymentTuples != null) {
-				Set<InvoiceID> invoiceIDsToBePrinted = new HashSet<InvoiceID>();
+				Set<ObjectID> invoiceIDsToBePrinted = new HashSet<ObjectID>();
 
 				for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
 					PaymentData paymentData = paymentPair.getFirst();
 
 					if (paymentData.getPayment().isSuccessfulAndComplete()) {
-						invoiceIDsToBePrinted.addAll(paymentData.getPayment().getInvoiceIDs());
+						invoiceIDsToBePrinted.addAll(paymentData.getPayment().getPayableObjectIDs());
 					}
 				}
 
-				for (InvoiceID invoiceID : invoiceIDsToBePrinted) {
+				for (ObjectID invoiceID : invoiceIDsToBePrinted) {
 					for (int i = 1; i <= invoicesToPrintCount; i++) {
-						printArticleContainer(invoiceID);
+						printArticleContainer((InvoiceID)invoiceID);
 					}
 				}
 
