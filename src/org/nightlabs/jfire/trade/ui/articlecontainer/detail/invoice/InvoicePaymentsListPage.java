@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * the Editor page which lists all the payments of an Invoice.
@@ -37,18 +38,18 @@ public class InvoicePaymentsListPage extends EntityEditorPageWithProgress
 	 * @param editor
 	 */
 	public InvoicePaymentsListPage(FormEditor editor) {
-		super(editor, PAGE_ID, "Payments"); 
+		super(editor, PAGE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListPage.Title"));  //$NON-NLS-1$
 	}
 
 	@Override
 	protected void addSections(Composite parent) {
-		
+
 		final InvoicePaymentsListPageController controller = (InvoicePaymentsListPageController) getPageController();
 
 		invoicePaymentSection = new InvoicePaymentsListSection(this, parent, controller);
 		invoicePaymentSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getManagedForm().addPart(invoicePaymentSection);
-		
+
 		if (controller.isLoaded()) {
 			invoicePaymentSection.setPayableObjectID(controller.getArticleContainerID());
 		}		
@@ -56,9 +57,9 @@ public class InvoicePaymentsListPage extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Payments";
+		return Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListPage.Title"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {	

@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * the Editor page which lists all the payments of an Invoice.
@@ -18,33 +19,32 @@ import org.nightlabs.jdo.ObjectID;
  */
 public class InvoicePaymentsListSection extends ToolBarSectionPart
 {
-	
+
 	private InvoicePaymentsListPageController controller;
-	private InvoicePaymentsListTable paymentTable;
+	private InvoicePaymentsListTable invoicePaymentsListTable;
 
 	/**
 	 * Creates a new instance of the InvoicePaymentsListSection.
 	 */
 	public InvoicePaymentsListSection(IFormPage page, Composite parent, final InvoicePaymentsListPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, "Payments"); 
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListSection.SectionTitle"));  //$NON-NLS-1$
 		this.controller = controller;
-				
+
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;	
 
-		paymentTable = new InvoicePaymentsListTable(client, SWT.NONE);
-		paymentTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+		invoicePaymentsListTable = new InvoicePaymentsListTable(client, SWT.NONE);
+		invoicePaymentsListTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 		updateToolBarManager();
 		getSection().setClient(client);
 	}		
-	
-	
+
+
 	public void setPayableObjectID(final ObjectID payableObjectID)
 	{
-		paymentTable.setPayableObjectID(controller.getArticleContainerID());
+		invoicePaymentsListTable.setPayableObjectID(controller.getArticleContainerID());
 	}
 }

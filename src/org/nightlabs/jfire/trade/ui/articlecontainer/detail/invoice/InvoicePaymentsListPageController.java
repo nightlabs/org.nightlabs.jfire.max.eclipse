@@ -4,6 +4,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -20,9 +21,9 @@ public class InvoicePaymentsListPageController extends EntityEditorPageControlle
 		this.articleContainerID = ((ArticleContainerEditorInput) editor.getEditorInput()).getArticleContainerID();
 	}
 
-		
+
 	public void doLoad(ProgressMonitor monitor) {
-		monitor.beginTask("loading Invoice Payments", 100); 
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListPageController.LoadingJobText"), 100);  //$NON-NLS-1$
 		this.articleContainerID = ((ArticleContainerEditorInput)getEntityEditor().getEditorInput()).getArticleContainerID();
 		monitor.done();
 		setLoaded(true); // must be done before fireModifyEvent!
