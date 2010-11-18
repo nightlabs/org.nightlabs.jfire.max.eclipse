@@ -1491,6 +1491,13 @@
              indexHint="1">
        </articleContainerEditorPageFactory>
        <articleContainerEditorPageFactory
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListPage$Factory"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.invoice.InvoicePaymentsListPage"
+             articleContainerClass="org.nightlabs.jfire.accounting.Invoice"
+             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+             indexHint="300">
+       </articleContainerEditorPageFactory>
+       <articleContainerEditorPageFactory
              articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerPropertySetPage$Factory"
              editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
