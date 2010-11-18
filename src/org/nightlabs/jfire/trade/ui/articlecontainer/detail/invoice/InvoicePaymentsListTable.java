@@ -28,6 +28,7 @@ import org.nightlabs.jfire.accounting.pay.id.PaymentID;
 import org.nightlabs.jfire.base.jdo.JDOObjectsChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.GlobalDateFormatter;
 import org.nightlabs.l10n.GlobalNumberFormatter;
@@ -41,18 +42,23 @@ import org.nightlabs.progress.ProgressMonitor;
 public class InvoicePaymentsListTable 
 extends ActiveJDOObjectTableComposite<PaymentID, Payment>
 {
+
+	public InvoicePaymentsListTable(Composite parent, int style) {
+		super(parent, style);	
+	}
+
 	private ObjectID payableObjectID = null;
+
+	public ObjectID getPayableObjectID() {
+		return payableObjectID;
+	}
 
 	public void setPayableObjectID(final ObjectID payableObjectID)
 	{
 		this.payableObjectID = payableObjectID;
 		load();
 	}
-
-	public InvoicePaymentsListTable(Composite parent, int style) {
-		super(parent, style);	
-	}
-
+	
 	@Override
 	protected ActiveJDOObjectController<PaymentID, Payment> createActiveJDOObjectController() {	
 		return new PaymentsListController();
@@ -67,8 +73,7 @@ extends ActiveJDOObjectTableComposite<PaymentID, Payment>
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListTable.iDTableColumn.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListTable.userTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListTable.dateTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListTable.amountTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoicePaymentsListTable.paymentTableColumn.text")); //$NON-NLS-1$
@@ -79,6 +84,8 @@ extends ActiveJDOObjectTableComposite<PaymentID, Payment>
 		FetchPlan.DEFAULT,
 		Payment.FETCH_GROUP_CURRENCY,
 		Payment.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOUR,
+		Payment.FETCH_GROUP_USER,
+		User.FETCH_GROUP_NAME,
 		ModeOfPaymentFlavour.FETCH_GROUP_NAME,
 		ModeOfPaymentFlavour.FETCH_GROUP_ICON_16X16_DATA
 	};
@@ -97,8 +104,8 @@ extends ActiveJDOObjectTableComposite<PaymentID, Payment>
 
 		@Override
 		protected Collection<Payment> retrieveJDOObjects(ProgressMonitor monitor) {
-			if(payableObjectID != null)
-				return PaymentDAO.sharedInstance().getPaymentsForPayableObject(payableObjectID, FETCH_GROUPS_PAYMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			if(getPayableObjectID() != null)
+				return PaymentDAO.sharedInstance().getPaymentsForPayableObject(getPayableObjectID(), FETCH_GROUPS_PAYMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			return null;
 		}
 
@@ -138,7 +145,6 @@ extends ActiveJDOObjectTableComposite<PaymentID, Payment>
 					if (payment.getModeOfPaymentFlavour()!= null)
 					{
 						byte[] iconData = payment.getModeOfPaymentFlavour().getIcon16x16Data();
-
 						if (iconData == null)
 							return null;
 						ByteArrayInputStream in = new ByteArrayInputStream(iconData);
@@ -161,7 +167,7 @@ extends ActiveJDOObjectTableComposite<PaymentID, Payment>
 				Payment payment = (Payment) element;
 				switch (columnIndex) {
 				case 0:
-					return Long.toString(payment.getPaymentID());
+					return payment.getUser().getName();
 				case 1:
 					return  GlobalDateFormatter.sharedInstance().formatDate(payment.getPaymentDT(), IDateFormatter.FLAGS_DATE_LONG_TIME_HM);
 				case 2:
