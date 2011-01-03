@@ -50,7 +50,7 @@ public class AccountListComposite
 extends AbstractTableComposite<Account>
 {
 	
-	private Boolean openAcountEditor = true;
+	private boolean openAcountEditor;
 	private TableViewerColumn tableViewerColumn;
 	public static String[] FETCH_GROUPS_ACCOUNT = new String[] {
 		FetchPlan.DEFAULT,
@@ -64,7 +64,7 @@ extends AbstractTableComposite<Account>
 	
 	public AccountListComposite(Composite parent, int style)
 	{
-		this(parent, style, true);
+		this(parent, style, false);
 	}
 	
 	public AccountListComposite(Composite parent, int style, boolean openAcountEditor) {

@@ -151,7 +151,7 @@ extends ResizableTitleAreaDialog
 		setMessage("Search and choose the accounts you want to select");
 		
 		accountEntryViewer = new AccountEntryViewer(
-				new AccountEntryFactory().createEntry());
+				new AccountEntryFactory().createEntry(), false);
 		accountEntryViewer.setErrorMessageDisplayer(errorMessagDisplayer);
 		Composite comp = accountEntryViewer.createComposite(parent);
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));

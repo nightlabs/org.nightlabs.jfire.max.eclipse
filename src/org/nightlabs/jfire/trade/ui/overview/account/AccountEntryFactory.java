@@ -24,7 +24,7 @@ extends AbstractEntryFactory
 		return new DefaultEntry(this) {
 
 			public EntryViewer createEntryViewer() {
-				return new AccountEntryViewer(this);
+				return new AccountEntryViewer(this, true);
 			}
 
 			public IWorkbenchPart handleActivation() {

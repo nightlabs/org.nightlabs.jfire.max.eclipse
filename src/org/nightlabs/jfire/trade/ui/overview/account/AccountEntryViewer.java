@@ -28,13 +28,18 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AccountEntryViewer
 	extends JDOQuerySearchEntryViewer<Account, AccountQuery>
 {
-	public AccountEntryViewer(Entry entry) {
+	
+	private Boolean openAcountEditor;
+	
+	public AccountEntryViewer(Entry entry, boolean openAccountEditor) {
 		super(entry);
+		this.openAcountEditor = openAccountEditor;
 	}
 
+	
 	@Override
 	public AbstractTableComposite<Account> createListComposite(Composite parent) {
-		return new AccountListComposite(parent, SWT.NONE);
+		return new AccountListComposite(parent, SWT.NONE, openAcountEditor);
 	}
 
 //	@Override
