@@ -137,7 +137,7 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		accountTable = new AccountListComposite(wrapper, SWT.NONE);
+		accountTable = new AccountListComposite(wrapper, SWT.NONE, false);
 		accountTable.addSelectionChangedListener(selectionListener);
 
 		return wrapper;
