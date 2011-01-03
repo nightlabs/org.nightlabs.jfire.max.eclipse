@@ -49,6 +49,8 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AccountListComposite
 extends AbstractTableComposite<Account>
 {
+	
+	private Boolean openAcountEditor = true;
 	private TableViewerColumn tableViewerColumn;
 	public static String[] FETCH_GROUPS_ACCOUNT = new String[] {
 		FetchPlan.DEFAULT,
@@ -59,17 +61,23 @@ extends AbstractTableComposite<Account>
 		AccountType.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON
 	};
-	public AccountListComposite(Composite parent, int style) {
+	
+	public AccountListComposite(Composite parent, int style)
+	{
+		this(parent, style, true);
+	}
+	
+	public AccountListComposite(Composite parent, int style, boolean openAcountEditor) {
 		super(parent, style);
-
+		setOpenAcountEditor(openAcountEditor);
 		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
-				if (isDisposed()) return;
-
+				if (!isOpenAcountEditor() || isDisposed()) return;
+				
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())
 					return;
-
+				
 				Account account = (Account)s.getFirstElement();
 				try {
 					RCPUtil.openEditor(
@@ -79,6 +87,7 @@ extends AbstractTableComposite<Account>
 					throw new RuntimeException(ex);
 				}
 			}
+
 		});
 
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Account.class, accountChangedListener);
@@ -90,6 +99,15 @@ extends AbstractTableComposite<Account>
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);
 			}
 		});
+	}
+	
+	
+	public Boolean isOpenAcountEditor() {
+		return openAcountEditor;
+	}
+
+	public void setOpenAcountEditor(Boolean openAcountEditor) {
+		this.openAcountEditor = openAcountEditor;
 	}
 
 	@Override
