@@ -76,7 +76,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 		group.setLayout(new GridLayout());
 		group.setText(getValueProviderConfig().getMessage().getText());
 
-		accountEntryViewer = new AccountEntryViewer(new AccountEntryFactory().createEntry());
+		accountEntryViewer = new AccountEntryViewer(new AccountEntryFactory().createEntry(), false);
 		Composite composite = accountEntryViewer.createComposite(group);
 		accountEntryViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
