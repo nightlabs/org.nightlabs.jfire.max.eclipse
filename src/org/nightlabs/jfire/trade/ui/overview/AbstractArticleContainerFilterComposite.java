@@ -74,6 +74,8 @@ extends AbstractQueryFilterComposite<Q>
 	private Text productTypeText;
 	private Button productTypeBrowseButton;
 
+	
+
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -114,10 +116,19 @@ extends AbstractQueryFilterComposite<Q>
 	@Override
 	protected void createComposite()
 	{
-		final int buttonStyle = SWT.FLAT;
 		final Group createDTGroup = new Group(this, SWT.NONE);
 		createDTGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateGroup.text")); //$NON-NLS-1$
 		createDTGroup.setLayout(new GridLayout(2, true));
+		createDTGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createQueryDateOptionsRow(createDTGroup);
+		XComposite wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
+				LayoutDataMode.GRID_DATA_HORIZONTAL, 4);
+		createQueryUserOptionsRow(wrapper);
+	}
+	
+	protected void createQueryDateOptionsRow(Group createDTGroup)
+	{
+
 		final long dateTimeEditStyle = IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
 		createDateAfter = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMin.caption")); //$NON-NLS-1$
 		createDateAfter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -157,11 +168,11 @@ extends AbstractQueryFilterComposite<Q>
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.createDTMax, active);
 			}
 		});
-		createDTGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		final Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
-				LayoutDataMode.GRID_DATA_HORIZONTAL, 4);
-
+	}
+	
+	protected void createQueryUserOptionsRow(XComposite wrapper)
+	{
+		final int buttonStyle = SWT.FLAT;
 		final Group userGroup = new Group(wrapper, SWT.NONE);
 		userGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userGroup.text")); //$NON-NLS-1$
 		userGroup.setLayout(new GridLayout(2, false));
@@ -264,9 +275,9 @@ extends AbstractQueryFilterComposite<Q>
 			{
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.productTypeID, active);
 			}
-		});
+		});		
 	}
-
+	
 	private final SelectionListener productTypeSelectionListener = new SelectionAdapter()
 	{
 		@Override

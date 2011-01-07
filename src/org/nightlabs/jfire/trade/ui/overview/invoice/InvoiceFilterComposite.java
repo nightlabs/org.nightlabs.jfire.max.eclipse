@@ -1,6 +1,19 @@
 package org.nightlabs.jfire.trade.ui.overview.invoice;
 
+import java.util.List;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
+import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
@@ -8,13 +21,9 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
 public class InvoiceFilterComposite
 	extends AbstractArticleContainerFilterComposite<InvoiceQuery>
 {
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 * @param queryProvider
-	 */
+	private Button yesButton; 
+	private Button noButton;	
+	
 	public InvoiceFilterComposite(Composite parent, int style, LayoutMode layoutMode,
 		LayoutDataMode layoutDataMode,
 		QueryProvider<? super InvoiceQuery> queryProvider)
@@ -28,11 +37,78 @@ public class InvoiceFilterComposite
 		super(parent, style, queryProvider);
 	}
 	
+	
+	@Override
+	protected void createQueryUserOptionsRow(XComposite wrapper)
+	{
+		getFieldNames().add(InvoiceQuery.FieldName.outstanding);
+		GridLayout layout = new GridLayout(5, false);
+		layout.makeColumnsEqualWidth = true;
+		wrapper.setLayout(layout);
+		final Group customerGroup = new Group(wrapper, SWT.NONE);
+		customerGroup.setText("Outstanding"); 
+		customerGroup.setLayout( new GridLayout(2, false));
+		customerGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		Button userActiveButton = new Button(customerGroup, SWT.CHECK);
+		userActiveButton.setText("Active"); 
+		final GridData userLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		userLabelData.horizontalSpan = 2;
+		userActiveButton.setLayoutData(userLabelData);
+		userActiveButton.addSelectionListener(new ButtonSelectionListener()
+		{
+			@Override
+			protected void handleSelection(final boolean active)
+			{
+				getQuery().setFieldEnabled(InvoiceQuery.FieldName.outstanding, active);
+			}
+		});
+
+		SelectionListener outstandingSelectionListener = new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(final SelectionEvent e)
+			{
+				((InvoiceQuery)getQuery()).setOutstanding(yesButton.getSelection());		
+			}
+		};
+		
+		yesButton = new Button(customerGroup, SWT.RADIO);
+		yesButton.setText("Yes");
+		yesButton.setEnabled(false);
+		yesButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		yesButton.addSelectionListener(outstandingSelectionListener);
+		yesButton.setSelection(true);
+		
+		noButton = new Button(customerGroup, SWT.RADIO);
+		noButton.setText("No");
+		noButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		noButton.setEnabled(false);
+		noButton.addSelectionListener(outstandingSelectionListener);
+		
+		super.createQueryUserOptionsRow(wrapper);
+	}
+	
 	@Override
 	public Class<InvoiceQuery> getQueryClass() {
 		return InvoiceQuery.class;
 	}
-
+	
+	@Override
+	protected void updateUI(final QueryEvent event, final List<FieldChangeCarrier> changedFields)
+	{
+		super.updateUI(event, changedFields);
+		for (final FieldChangeCarrier changedField : changedFields)
+		{
+			final String propertyName = changedField.getPropertyName();
+			if (getEnableFieldName(InvoiceQuery.FieldName.outstanding).equals(propertyName))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				noButton.setEnabled(active);
+				yesButton.setEnabled(active);	
+			}
+		}
+	}
+	
 //	private Combo booked;
 //	private DateTimeEdit bookDTMin;
 //	private DateTimeEdit bookDTMax;
