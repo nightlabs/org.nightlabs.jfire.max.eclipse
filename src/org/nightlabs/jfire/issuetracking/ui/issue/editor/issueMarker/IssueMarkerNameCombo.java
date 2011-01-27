@@ -50,7 +50,7 @@ public class IssueMarkerNameCombo extends XComboComposite<IssueMarker> {
 
 		Collection<IssueMarker> defaultIssueMarkers = new ArrayList<IssueMarker>(standardNames.length);
 		for(String standardName : standardNames) {
-			IssueMarker issueMarker = new IssueMarker(false);
+			IssueMarker issueMarker = new IssueMarker(null);
 			issueMarker.getName().setText(Locale.ENGLISH.getLanguage(), standardName);
 			defaultIssueMarkers.add(issueMarker);
 		}
