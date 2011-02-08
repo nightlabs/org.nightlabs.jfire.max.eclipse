@@ -963,7 +963,7 @@
             	icon="icons/articlecontainer/detail/action/transfer/PayAction.16x16.png"
             	id="org.nightlabs.jfire.trade.ui.overview.invoice.action.PayInvoiceAction"
            		toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-            	name="%articleEditAction.pay.label" tooltip="%articleEditAction.pay.tooltip"/>         
+            	name="%overview.action.pay.name" tooltip="%overview.action.pay.tooltip"/>         
             <editorActionBarContribution
                 class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
