@@ -31,9 +31,10 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.pdfrenderer.PdfFileLoader;
 import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
 import org.nightlabs.eclipse.ui.pdfviewer.PdfDocument;
-import org.nightlabs.eclipse.ui.pdfviewer.PdfFileLoader;
+import org.nightlabs.eclipse.ui.pdfviewer.PdfProgressMontitorWrapper;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.action.save.SaveAsActionHandler;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PdfViewerComposite;
 import org.nightlabs.jfire.reporting.Birt;
@@ -298,7 +299,7 @@ public class DefaultReportViewerComposite extends XComposite {
 					protected IStatus run(final IProgressMonitor monitor) {
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
 						try {
-							final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new SubProgressMonitor(monitor, 20));
+							final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new PdfProgressMontitorWrapper(new SubProgressMonitor(monitor, 20)));
 							final PdfDocument pdfDocument = new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80));
 
 							display.asyncExec(new Runnable() {
