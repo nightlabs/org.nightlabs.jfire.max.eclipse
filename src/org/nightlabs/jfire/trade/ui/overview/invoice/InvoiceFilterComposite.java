@@ -60,6 +60,7 @@ public class InvoiceFilterComposite
 			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(InvoiceQuery.FieldName.outstanding, active);
+				((InvoiceQuery)getQuery()).setOutstanding(active);
 			}
 		});
 
