@@ -172,18 +172,9 @@ implements ArticleContainerEdit
 	// private ScrolledComposite segmentCompositeScrollContainer;
 
 //	private TabFolder segmentCompositeFolder;
+	
+	/** Parent Composite or TabFolder for all SegmentEditComposites */
 	private Composite segmentCompositeFolder;
-
-	// /**
-	// * This composite holds all those composites which render the segments
-	// * (vertically stacked). It is the content Composite of the
-	// * {@link #segmentCompositeScrollContainer}.
-	// *
-	// * TODO We will change the GUI not to stack the segments vertically, but to
-	// display tabs. Alternatively, they could be stacked, but
-	// "expandable+collapsable".
-	// */
-	// private XComposite segmentCompositeContainer;
 
 	private Label loadingDataLabel;
 
@@ -238,16 +229,8 @@ implements ArticleContainerEdit
 
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditComposite.this behaviour must be supported
 					if (hasDifferentSegments()) {
-						segmentCompositeFolder = new TabFolder(ArticleContainerEditComposite.this, SWT.NONE);
-						segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-						((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
-							@Override
-							public void widgetSelected(SelectionEvent e) {
-								updateActiveSegmentEdit();
-							}
-						});
+						createSegmentTabFolder();
 					}
 					else {
 						segmentCompositeFolder = new XComposite(ArticleContainerEditComposite.this, SWT.NONE, LayoutMode.TOTAL_WRAPPER);
@@ -255,10 +238,8 @@ implements ArticleContainerEdit
 
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-					footerComposite = createFooterComposite(ArticleContainerEditComposite.this);
+					createAndConfigureFooterComposite();
 
-					footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//					footerComposite.refresh();
 					updateHeaderAndFooter();
 
 					EditLockTypeID editLockTypeID = getEditLockTypeID();
@@ -388,7 +369,14 @@ implements ArticleContainerEdit
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
 				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-
+	
+	/**
+	 * Creaetes the Footer Composite and configures it appropirately to this Composites layout.
+	 */
+	private void createAndConfigureFooterComposite() {
+		footerComposite = createFooterComposite(ArticleContainerEditComposite.this);
+		footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
 
 	/**
 	 * This method is called to create the {@link FooterComposite} of this composite.
@@ -515,24 +503,54 @@ implements ArticleContainerEdit
 //			updateHeaderAndFooter(); // I think that's not necessary here. There are already other listeners.
 		}
 	};
+	
+
+	protected void createSegmentTabFolder() {
+		segmentCompositeFolder = new TabFolder(ArticleContainerEditComposite.this, SWT.NONE);
+		segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateActiveSegmentEdit();
+			}
+		});
+		
+	}
+
+	/**
+	 * Clears maps and members that provide index and shortcuts to SegmentEdits
+	 * created. Should only be used when the Composite is re-initialized.
+	 */
+	protected void clearSegmentEditIndices() {
+		segmentEditsByTabItem.clear();
+		singleSegmentSegmentEdit = null;
+		segmentPK2segmentEditMap.clear();
+
+	}
+	
 
 	protected void createSegmentEditComposite(ArticleSegmentGroup asg, SegmentEdit segmentEdit)
 	{
 		Segment segment = segmentEdit.getArticleSegmentGroup().getSegment();
 
-		// TODO Segments can be added while this ArticleContainerEditComposite is visible. Unfortunately,
-		// this was not taken into account when Daniel refactored this class (he removed the TabFolder
-		// when there's only one Segment). After his refactoring, it means that we would need to
-		// rebuild the UI if a Segment is added! Marco.
-
 		TabItem tabItem = null;
 		if (hasDifferentSegments()) {
-			tabItem = new TabItem((TabFolder)segmentCompositeFolder, SWT.NONE);
-			tabItem.setText(
-					String.format(
-							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite.segmentTabItem.text"), //$NON-NLS-1$
-							segment.getSegmentType().getName().getText(),
-							segment.getSegmentIDAsString()));
+			if (!(segmentCompositeFolder instanceof TabFolder)) {
+				// There are different segments now, but the Composite was
+				// initialized with only one so there are not tabs
+				
+				// We need to completely re-initialize the Cmposite
+				initializeCompositeWithTabFolder();
+				// Nothing to do any more the Composite was re-initialized
+				return;
+			} else {
+				tabItem = new TabItem((TabFolder)segmentCompositeFolder, SWT.NONE);
+				tabItem.setText(
+						String.format(
+								Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite.segmentTabItem.text"), //$NON-NLS-1$
+								segment.getSegmentType().getName().getText(),
+								segment.getSegmentIDAsString()));
+			}
 		}
 
 		ScrolledComposite segmentCompositeScrollContainer;
@@ -571,6 +589,37 @@ implements ArticleContainerEdit
 		}
 
 		segmentPK2segmentEditMap.put(segment.getPrimaryKey(), segmentEdit);
+		layout(true, true);
+	}
+
+	/**
+	 * Disposes the segmentCompositeFolder and re-initializes the Composite with Tabs.
+	 */
+	protected void initializeCompositeWithTabFolder() {
+		// We dispose off the current parent element
+		segmentCompositeFolder.dispose();
+		
+		// If there is a footer we need to dispose that, too, the ArticleEdits
+		// will be below the footer otherwise
+		if (footerComposite != null) {
+			footerComposite.dispose();
+		}
+		
+		// and now re-create as TabFolder
+		createSegmentTabFolder();
+		// Additionally re-initialize the Composite. This will create all SegmentEdits
+		try {
+			clearSegmentEditIndices();
+			createSegmentEditComposites();
+		} catch (EPProcessorException e) {
+			throw new RuntimeException(e);
+		}
+		
+		// Recreate the footer if there was one
+		if (footerComposite != null) {
+			createAndConfigureFooterComposite();
+			updateHeaderAndFooter();
+		}
 		layout(true, true);
 	}
 
