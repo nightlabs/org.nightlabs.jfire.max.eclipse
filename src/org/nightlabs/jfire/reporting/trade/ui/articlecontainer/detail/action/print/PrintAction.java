@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -34,13 +35,15 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
-import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemListDialog;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -69,31 +72,52 @@ public class PrintAction extends ArticleContainerReportAction
 			protected IStatus run(ProgressMonitor monitor) {
 				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction.taskName"), 6); //$NON-NLS-1$
 				try {
-					ArticleContainerID articleContainerID = getArticleContainerID();
+					final ArticleContainerID articleContainerID = getArticleContainerID();
 //					InvoiceID invoiceID = (InvoiceID)articleContainerID;
 
-					Map<String, Object> params = new HashMap<String, Object>();
+					final Map<String, Object> params = new HashMap<String, Object>();
 					params.put("articleContainerID", articleContainerID); //$NON-NLS-1$
 
-					ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
-					ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
-					if (defLayoutID == null)
-						throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+					final ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
+					final ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
+					if (defLayoutID == null) {
+//						throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								String type = getReportRegistryItemType();
+								Collection<ReportRegistryItemID> itemIDs = cfMod.getAvailEntries(type);
+								final ReportRegistryItemListDialog dialog = new ReportRegistryItemListDialog(null, itemIDs);
+								int returnType = dialog.open();
+								if (returnType == Window.OK) {
+									Job job = new Job(Messages.getString("Loading Layout...")) {
+										@Override
+										protected IStatus run(ProgressMonitor monitor) throws Exception {
+											ReportRegistryItemID itemID = dialog.getSelectedReportRegistryItem();
+											RenderReportRequest renderReportRequest = new RenderReportRequest(itemID, params);
+											
+											Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(
+													articleContainerID, defLayoutID, params,
+													new SubProgressMonitor(monitor, 2));
+											
+											if (locale == null)
+												locale = Locale.getDefault();
+											renderReportRequest.setLocale(locale);
+											
+											PrintReportLayoutUtil.printReportLayout(
+													renderReportRequest,
+													new SubProgressMonitor(monitor, 4)
+												);
+											return Status.OK_STATUS;
+										}
+									};
+									job.setPriority(Job.LONG);
+									job.schedule();
+								}
+							}
+						});
+					}
 					
-					RenderReportRequest renderReportRequest = new RenderReportRequest(defLayoutID, params);
-					
-					Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(
-							articleContainerID, defLayoutID, params,
-							new SubProgressMonitor(monitor, 2));
-					
-					if (locale == null)
-						locale = Locale.getDefault();
-					renderReportRequest.setLocale(locale);
-					
-					PrintReportLayoutUtil.printReportLayout(
-							renderReportRequest,
-							new SubProgressMonitor(monitor, 4)
-						);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				} finally {
