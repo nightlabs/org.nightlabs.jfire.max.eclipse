@@ -31,6 +31,7 @@ import java.util.Collection;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutAvailEntry;
@@ -56,6 +57,9 @@ public class ReportConfigUtil {
 	 * Only if the dialog is shown this method might return <code>null</code> otherwise an itemID
 	 * is returned or an exception will be thrown.
 	 * </p>
+	 * <p>
+	 * This method can be called from any thread
+	 * </p>
 	 * 
 	 * @param reportRegistryItemType The layout type of the report layout to search.
 	 * @return The default {@link ReportRegistryItemID} for the given type,
@@ -68,16 +72,21 @@ public class ReportConfigUtil {
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()
 			);
-		ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
-		Collection<ReportRegistryItemID> itemIDs = cfMod.getAvailEntries(reportRegistryItemType);
+		final ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
+		final Collection<ReportRegistryItemID> itemIDs = cfMod.getAvailEntries(reportRegistryItemType);
 		ReportRegistryItemID selectedItemID = defLayoutID;
 		if (selectedItemID == null && itemIDs.size() > 0) {
 			selectedItemID = itemIDs.iterator().next(); // choose one if no default is set.
 		}
 		if (itemIDs != null && itemIDs.size() > 1) {
-			ReportRegistryItem selectedItem = SelectReportLayoutDialog.openDialog(itemIDs, defLayoutID);
-			if (selectedItem != null) {
-				selectedItemID = (ReportRegistryItemID) JDOHelper.getObjectId(selectedItem);
+			final ReportRegistryItem[] selectedItem = new ReportRegistryItem[1];
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					selectedItem[0] = SelectReportLayoutDialog.openDialog(itemIDs, defLayoutID);
+				}
+			});
+			if (selectedItem[0] != null) {
+				selectedItemID = (ReportRegistryItemID) JDOHelper.getObjectId(selectedItem[0]);
 			} else {
 				return null;
 			}
