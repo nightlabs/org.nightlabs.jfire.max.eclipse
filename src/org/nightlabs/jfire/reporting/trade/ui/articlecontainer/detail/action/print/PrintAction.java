@@ -41,6 +41,7 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -69,21 +70,21 @@ public class PrintAction extends ArticleContainerReportAction
 			protected IStatus run(ProgressMonitor monitor) {
 				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction.taskName"), 6); //$NON-NLS-1$
 				try {
-					final ArticleContainerID articleContainerID = getArticleContainerID();
+					ArticleContainerID articleContainerID = getArticleContainerID();
 //					InvoiceID invoiceID = (InvoiceID)articleContainerID;
 
-					final Map<String, Object> params = new HashMap<String, Object>();
+					Map<String, Object> params = new HashMap<String, Object>();
 					params.put("articleContainerID", articleContainerID); //$NON-NLS-1$
 
-					final ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
-					final ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
-					if (defLayoutID == null)
-						throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+					ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
+					ReportRegistryItemID layoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
+					if (layoutID == null)
+						layoutID = ReportConfigUtil.getReportLayoutID(getReportRegistryItemType());
 					
-					RenderReportRequest renderReportRequest = new RenderReportRequest(defLayoutID, params);
+					RenderReportRequest renderReportRequest = new RenderReportRequest(layoutID, params);
 					
 					Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(
-							articleContainerID, defLayoutID, params,
+							articleContainerID, layoutID, params,
 							new SubProgressMonitor(monitor, 2));
 					
 					if (locale == null)
