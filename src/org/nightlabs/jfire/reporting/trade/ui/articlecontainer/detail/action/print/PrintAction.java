@@ -30,21 +30,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.jdo.FetchPlan;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.jfire.base.ui.config.ConfigUtil;
-import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
-import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -76,25 +70,26 @@ public class PrintAction extends ArticleContainerReportAction
 					Map<String, Object> params = new HashMap<String, Object>();
 					params.put("articleContainerID", articleContainerID); //$NON-NLS-1$
 
-					ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
-					ReportRegistryItemID layoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
-					if (layoutID == null)
-						layoutID = ReportConfigUtil.getReportLayoutID(getReportRegistryItemType());
+					ReportRegistryItemID layoutID = ReportConfigUtil.getReportLayoutID(getReportRegistryItemType());
 					
-					RenderReportRequest renderReportRequest = new RenderReportRequest(layoutID, params);
-					
-					Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(
-							articleContainerID, layoutID, params,
-							new SubProgressMonitor(monitor, 2));
-					
-					if (locale == null)
-						locale = Locale.getDefault();
-					renderReportRequest.setLocale(locale);
-					
-					PrintReportLayoutUtil.printReportLayout(
-							renderReportRequest,
-							new SubProgressMonitor(monitor, 4)
+					if (layoutID != null) {
+						// layoutID == null indicates that the user cancelled the operation
+
+						RenderReportRequest renderReportRequest = new RenderReportRequest(layoutID, params);
+
+						Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(
+								articleContainerID, layoutID, params,
+								new SubProgressMonitor(monitor, 2));
+
+						if (locale == null)
+							locale = Locale.getDefault();
+						renderReportRequest.setLocale(locale);
+
+						PrintReportLayoutUtil.printReportLayout(
+								renderReportRequest,
+								new SubProgressMonitor(monitor, 4)
 						);
+					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				} finally {
