@@ -9,6 +9,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -45,17 +47,23 @@ extends AbstractIssueLinkAdder
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT); //$NON-NLS-1$
-		personSearchComposite.getResultViewer().addOpenListener(new IOpenListener() {
+		personSearchComposite.addPaintListener(new PaintListener() {
 			@Override
-			public void open(OpenEvent arg0) {
-				notifyIssueLinkDoubleClickListeners();
+			public void paintControl(PaintEvent e) {
+				personSearchComposite.getResultViewer().addOpenListener(new IOpenListener() {
+					@Override
+					public void open(OpenEvent e) {
+						notifyIssueLinkDoubleClickListeners();
+					}
+				});
+				personSearchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent e) {
+						fireSelectionChangedEvent();
+					}
+				});
 			}
 		});
-		personSearchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent e) {
-				fireSelectionChangedEvent();
-			}
-		});
+		
 		Composite buttonBar = personSearchComposite.getButtonBar();
 		createSearchButton(buttonBar);
 		return personSearchComposite;
