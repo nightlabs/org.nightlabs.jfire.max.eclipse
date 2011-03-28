@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
@@ -166,7 +165,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 				for (ReportRegistryItemID itemID : reportRegistryItems) {
 					if (params == null && !paramsSet) {
 						// if no parameters set by now, get them from the user
-						WizardResult dialogResult = ReportParameterWizard.openResult(RCPUtil.getActiveShell(), itemID, false);
+						WizardResult dialogResult = ReportParameterWizard.openResult(itemID, false);
 						if (!dialogResult.isAcquisitionFinished())
 							return Status.OK_STATUS;
 						params = dialogResult.getParameters();

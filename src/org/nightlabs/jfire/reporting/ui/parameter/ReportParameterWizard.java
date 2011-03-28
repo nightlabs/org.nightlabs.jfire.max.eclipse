@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
@@ -182,7 +183,8 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		final WizardResult dialogResult = new WizardResult();
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				Dialog dlg = new Dialog(parentShell, wiz);
+				Shell shell = (parentShell == null)?RCPUtil.getActiveShell():parentShell;
+				Dialog dlg = new Dialog(shell, wiz);
 				dialogResult.setAcquisitionFinished(dlg.open() == Window.OK);
 			}
 		});
@@ -211,6 +213,25 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 */
 	public static WizardResult openResult(final Shell parentShell, ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		return openResult(parentShell, reportLayoutID, isScheduledReport, null);
+	}
+	
+	/**
+	 * Opens the {@link ReportParameterWizard} for the given report layout
+	 * and returns its {@link WizardResult}. The Result will indicate whether the
+	 * wizard finished or the user canceled the wizard. ({@link WizardResult#isAcquistionFinished()})
+	 * <p>
+	 * The parameters acquired by the wizard will also be avaiable in the Result. ({@link WizardResult#getParameters()}).
+	 * This might be <code>null</code>, if the user canceled the wizard,
+	 * or the ReportLayout has no {@link ReportParameterAcquisitionSetup} assigned, or the
+	 * Report has not parameters.
+	 * </p>
+	 *
+	 * @param reportLayoutID The {@link ReportRegistryItemID} to acquire the parameters for.
+	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
+	 * @return The {@link WizardResult} of the parameter acquisition process.
+	 */
+	public static WizardResult openResult(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
+		return openResult(null, reportLayoutID, isScheduledReport, null);
 	}
 	
 	/**
