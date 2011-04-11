@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -35,6 +38,7 @@ import org.nightlabs.jfire.issue.dao.IssueFileAttachmentDAO;
 import org.nightlabs.jfire.issue.id.IssueFileAttachmentID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.IOUtil;
 
 /**
  * A section for the {@link IssueEditorGeneralPage} to handle the interface mechanisms for the
@@ -51,6 +55,7 @@ extends AbstractIssueEditorGeneralSection
 	private DownloadFileToolbarAction downloadFileToolbarAction;
 	private AddFileToolbarAction addFileToolbarAction;
 	private RemoveFileToolbarAction removeFileToolbarAction;
+	private EditFileToolbarAction editFileToolbarAction;
 
 	/**
 	 * Creates a new instance of an IssueFileAttachmentSection.
@@ -65,6 +70,9 @@ extends AbstractIssueEditorGeneralSection
 //		fileLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.label.file.text")); //$NON-NLS-1$
 
 		// Top set of Action buttons.
+		editFileToolbarAction = new EditFileToolbarAction();
+		getToolBarManager().add(editFileToolbarAction);
+
 		downloadFileToolbarAction = new DownloadFileToolbarAction();
 		getToolBarManager().add(downloadFileToolbarAction);
 
@@ -80,6 +88,13 @@ extends AbstractIssueEditorGeneralSection
 		issueFileAttachmentTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) { handleSectionButtons(); }
+		});
+
+		issueFileAttachmentTable.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				editFileToolbarAction.run();
+			}
 		});
 
 		// Place the TableComposite in this Section, ah, nicely?
@@ -115,6 +130,7 @@ extends AbstractIssueEditorGeneralSection
 		boolean isItemSelected = issueFileAttachmentTable.getSelectionIndex() >= 0;
 		downloadFileToolbarAction.setEnabled( isItemSelected );
 		removeFileToolbarAction.setEnabled( isItemSelected );
+		editFileToolbarAction.setEnabled( isItemSelected );
 	}
 
 	/**
@@ -136,7 +152,43 @@ extends AbstractIssueEditorGeneralSection
 		}
 	}
 
+	private File downloadAttachment(final IssueFileAttachment issueFileAttachment)
+	{
+		if (issueFileAttachment == null)
+			return null;
 
+		boolean alreadyPersistent = JDOHelper.getObjectId(issueFileAttachment) != null;
+		IssueFileAttachment iFA = issueFileAttachment;
+		if (alreadyPersistent) {
+			iFA = IssueFileAttachmentDAO.sharedInstance().getIssueFileAttachment(
+					(IssueFileAttachmentID)JDOHelper.getObjectId(issueFileAttachment),
+					new String[] {FetchPlan.DEFAULT, IssueFileAttachment.FETCH_GROUP_DATA},
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new NullProgressMonitor() );
+		}
+
+		InputStream inputStream = iFA.createFileAttachmentInputStream();
+		if (inputStream != null) {
+			try {
+//				tmpFile = File.createTempFile(iFA.getFileName(), "");
+				File tmpDir = IOUtil.getTempDir();
+				File file = new File(tmpDir, iFA.getFileName());
+				file.setWritable(true);
+				FileOutputStream fos = new FileOutputStream(file);
+				try {
+					IOUtil.transferStreamData(inputStream, fos);
+				} finally {
+					inputStream.close();
+					fos.close();
+				}
+//				saveFile(inputStream, file.getName());
+				return file;
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return null;
+	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
 	// --->> FIXME On context menu: [These doesnt seem to be functioning? Kai]
@@ -239,7 +291,6 @@ extends AbstractIssueEditorGeneralSection
 					}
 				}
 			});
-
 		}
 	}
 
@@ -322,6 +373,41 @@ extends AbstractIssueEditorGeneralSection
 
 			// Done!
 			markDirty();
+		}
+	}
+
+	public class EditFileToolbarAction extends Action {
+		public EditFileToolbarAction() {
+			setId(EditFileToolbarAction.class.getName());
+			setImageDescriptor(SharedImages.EDIT_16x16);
+			setToolTipText("Open File");
+			setText("Open File");
+		}
+
+		@Override
+		public void run() {
+			Collection<IssueFileAttachment> items = issueFileAttachmentTable.getSelectedElements();
+			if (items == null || items.isEmpty())
+				return;
+
+			// For now, we shall assume NO multiple selection from the CompositeTable; and that only ONE IssueFileAttachment
+			// is available for download, per selection-action.
+			final IssueFileAttachment issueFileAttachment = items.iterator().next();
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					File file = downloadAttachment(issueFileAttachment);
+					if (Desktop.isDesktopSupported()) {
+						try {
+							// Desktop.edit() sometimes fails with Error message: Falscher Parameter. Desktop.open() always worked for me. Daniel
+//							Desktop.getDesktop().edit(file);
+							Desktop.getDesktop().open(file);
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				}
+			});
 		}
 	}
 }
