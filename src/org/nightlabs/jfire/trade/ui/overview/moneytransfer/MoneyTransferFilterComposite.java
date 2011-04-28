@@ -193,6 +193,7 @@ extends AbstractQueryFilterComposite<MoneyTransferQuery>
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		fromTimeEdit.setDate(cal.getTime());
+		getQuery().setTimestampFromIncl(fromTimeEdit.getDate());
 		fromTimeEdit.setEnabled(false);
 		fromTimeEdit.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -214,6 +215,7 @@ extends AbstractQueryFilterComposite<MoneyTransferQuery>
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		toTimeEdit.setDate(cal.getTime());
+		getQuery().setTimestampToIncl(toTimeEdit.getDate());
 		toTimeEdit.setEnabled(false);
 		toTimeEdit.addSelectionListener(new SelectionAdapter() {
 			@Override
