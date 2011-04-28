@@ -252,6 +252,7 @@ extends AbstractQueryFilterComposite<MoneyTransferQuery>
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
 				fromAccountTypeCombo.setEnabled(active);
+				fromAccountTypeActiveButton.setSelection(active);
 				setSearchSectionActive(active);
 			}
 			if (MoneyTransferQuery.FieldName.toAccountTypeID.equals(changedField.getPropertyName()))
@@ -274,6 +275,7 @@ extends AbstractQueryFilterComposite<MoneyTransferQuery>
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
 				toAccountTypeCombo.setEnabled(active);
+				toAccountTypeActiveButton.setSelection(active);
 				setSearchSectionActive(active);
 			}
 			if (AbstractTransferQuery.FieldName.timestampFromIncl.equals(changedField.getPropertyName()))
@@ -291,6 +293,7 @@ extends AbstractQueryFilterComposite<MoneyTransferQuery>
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
 				fromTimeEdit.setEnabled(active);
+				fromTimeActiveButton.setSelection(active);
 				setSearchSectionActive(active);
 			}
 			else if (AbstractTransferQuery.FieldName.timestampToIncl.equals(changedField.getPropertyName()))
@@ -308,6 +311,7 @@ extends AbstractQueryFilterComposite<MoneyTransferQuery>
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
 				toTimeEdit.setEnabled(active);
+				toTimeActiveButton.setSelection(active);
 				setSearchSectionActive(active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())

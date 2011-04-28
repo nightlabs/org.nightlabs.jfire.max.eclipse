@@ -1171,6 +1171,13 @@
                 id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                 name="%overview.action.search.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.search.tooltip"/>
+            <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
+                icon="icons/overview/Overview-Save.16x16.png"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
+                name="%overview.action.saveQuery.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
     </extension>
     <extension point="org.nightlabs.base.ui.editor2perspective">
