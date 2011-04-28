@@ -222,6 +222,12 @@
               id="org.nightlabs.jfire.trade.ui.reserve.ReservationEditor"
               name="Reservations">
         </editor>
+        <editor
+            class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="true"
+            icon="icons/overview/account/AccountEntryEditor.16x16.png"
+            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryEditor" name="%org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryEditor.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.entityEditor">
         <pageFactory
@@ -1158,6 +1164,14 @@
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
+        <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryEditor">
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+                icon="icons/overview/action/ApplySearchAction.16x16.png"
+                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+                name="%overview.action.search.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.search.tooltip"/>
+        </editorActionBarContributionRegistry>
     </extension>
     <extension point="org.nightlabs.base.ui.editor2perspective">
         <registry
@@ -1291,6 +1305,18 @@
         <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryOwnerNameQuickSearchEntryFactory"
             id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer" name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer.name"/>
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.search.MoneyTransferFromAccountIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="From Account ID"/>
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.search.MoneyTransferFromLegalEntityIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="From LegalEntity ID"/>
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.search.MoneyTransferToAccountIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="To Account ID"/>
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.search.MoneyTransferToLegalEntityIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="To LegalEntity ID"/>
     </extension>
     <extension point="org.nightlabs.base.ui.exceptionhandler">
         <exceptionHandler
@@ -1345,6 +1371,10 @@
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.store.Repository" title="%queryfilterComposite.AdvancedRepositoryFilterSectionTitle"/>
+        <QueryFilter orderHint="0"
+            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferSearchFilterFactory"
+            scope="global"
+            targetClass="org.nightlabs.jfire.accounting.MoneyTransfer" title="Advanced Money Transfer Search"/>
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.overview">
         <categoryFactory
@@ -1392,6 +1422,12 @@
             class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
             icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
             index="0" name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name"/>
+        <entryFactory
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.moneytransfer"
+            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
+            class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTranferEntryFactory"
+            icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
+            index="1" name="%org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryFactory.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
             class="org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory"
