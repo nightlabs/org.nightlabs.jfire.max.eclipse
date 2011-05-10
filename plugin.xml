@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension-point id="userManagementSystemUIMapping" name="User Management Systems UI mapping" schema="schema/userManagementSystemUIMapping.exsd"/>
+	
+	<extension point="org.eclipse.ui.editors">
+    	<editor
+            class="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
+            icon="icons/UserManagementSystem.16x16.png"
+            id="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor" 
+            name="%org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor.name"/>
+	</extension>
+
+	<extension point="org.nightlabs.base.ui.entityEditor">
+        <category
+              class="org.nightlabs.jfire.auth.ui.editor.EntityTreeCategoryUserManagementSystem"
+              icon="icons/UserManagementSystem.16x16.png"
+              id="org.nightlabs.jfire.auth.ui.editor.EntityTreeCategoryUserManagementSystem"
+              name="%entityEditor.category.userManagementSystem">
+           <viewBinding
+                 editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
+                 viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView">
+           </viewBinding>
+        </category>
+	</extension>
+
+</plugin>
