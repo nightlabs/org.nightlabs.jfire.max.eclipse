@@ -60,13 +60,19 @@ extends DynamicPathWizard
 					ProgressMonitor monitor = new ProgressMonitorWrapper(i_monitor);
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.ui.createrelation.CreatePersonRelationWizard.task.creatingPersonRelation.name"), 2 + selectedPersonRelationTypeIDs.size()); //$NON-NLS-1$
 					try {
-						selectedPerson.deflate();
-						Person person = (Person) PropertySetDAO.sharedInstance().storeJDOObject(
-								selectedPerson, true, null, 1,
-								new SubProgressMonitor(monitor, 2)
-						);
+						PropertySetID toPersonID = null;
+						if (!JDOHelper.isDetached(selectedPerson)) {
+							// The person is new (not yet persisted), we need to first store the person
+							selectedPerson.deflate();
+							Person person = (Person) PropertySetDAO.sharedInstance().storeJDOObject(
+									selectedPerson, true, null, 1,
+									new SubProgressMonitor(monitor, 2)
+							);
+							toPersonID = (PropertySetID) JDOHelper.getObjectId(person);
+						} else {
+							toPersonID = (PropertySetID) JDOHelper.getObjectId(selectedPerson);
+						}
 
-						PropertySetID toPersonID = (PropertySetID) JDOHelper.getObjectId(person);
 
 						for (PersonRelationTypeID personRelationTypeID : selectedPersonRelationTypeIDs) {
 							PersonRelationDAO.sharedInstance().createPersonRelation(
