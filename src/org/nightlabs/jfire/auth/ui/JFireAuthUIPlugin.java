@@ -7,18 +7,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class UserManagementSystemPlugin extends AbstractUIPlugin {
+public class JFireAuthUIPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.nightlabs.jfire.auth.ui"; //$NON-NLS-1$
 
 	// The shared instance
-	private static UserManagementSystemPlugin plugin;
+	private static JFireAuthUIPlugin plugin;
 	
 	/**
 	 * The constructor
 	 */
-	public UserManagementSystemPlugin() {
+	public JFireAuthUIPlugin() {
 	}
 
 	/*
@@ -44,7 +44,7 @@ public class UserManagementSystemPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static UserManagementSystemPlugin sharedInstance() {
+	public static JFireAuthUIPlugin sharedInstance() {
 		return plugin;
 	}
 

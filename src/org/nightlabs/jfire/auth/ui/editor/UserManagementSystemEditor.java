@@ -28,7 +28,9 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class UserManagementSystemEditor extends ActiveEntityEditor{
-	
+
+	public static final String EDITOR_ID = "org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor";
+
 	/**
 	 * Default constructor.
 	 */
@@ -37,19 +39,19 @@ public class UserManagementSystemEditor extends ActiveEntityEditor{
 	}
 	
 	/**
-	 * As {@link UserManagementSystemEditor} is used for every {@link UserManagementSystem} we override this method to filter editor pages
+	 * As {@link UserManagementSystemEditor} is used for every {@link UserManagementSystemType} we override this method to filter editor pages
 	 * which are suited for specific user management system being edited. We simply get {@link List} of all {@link EntityEditorPageSettings} 
 	 * and then just remove elements from it based on page factory class name.
-	 * {@link IllegalStateException} is thrown if it appears that no page factories are mapped to a specific {@link UserManagementSystem}. 
+	 * {@link IllegalStateException} is thrown if it appears that no page factories are mapped to a specific {@link UserManagementSystemType}. 
 	 */
 	@Override
 	protected List<EntityEditorPageSettings> getPageSettingsOrdered() {
 		
-		Class<? extends UserManagementSystem> userManagementSystemClass = ((UserManagementSystemEditorInput) getEditorInput()).getUserManagementSystemClass();
+		Class<? extends UserManagementSystemType<?>> userManagementSystemTypeClass = ((UserManagementSystemEditorInput) getEditorInput()).getUserManagementSystemTypeClass();
 		
-		Set<String> pageFactoryClassNames = UserManagementSystemUIMappingRegistry.sharedInstance().getPageFactoryClassNames(userManagementSystemClass);
+		Set<String> pageFactoryClassNames = UserManagementSystemUIMappingRegistry.sharedInstance().getPageFactoryClassNames(userManagementSystemTypeClass);
 		if (pageFactoryClassNames == null || pageFactoryClassNames.isEmpty()){
-			throw new IllegalStateException("There's no EntityEditor pages defined for object of type " + userManagementSystemClass.getName());
+			throw new IllegalStateException("There's no EntityEditor pages defined for object of type " + userManagementSystemTypeClass.getName());
 		}
 
 		List<EntityEditorPageSettings> pageSettings = super.getPageSettingsOrdered();

@@ -6,14 +6,14 @@
          <meta.schema plugin="org.nightlabs.jfire.auth.ui" id="userManagementSystemUIMapping" name="User Management Systems UI mapping"/>
       </appInfo>
       <documentation>
-         This extension provides mapping between specific UserManagementSystem class and UI elements (such as pageFactories or wizard pages)
+         This extension provides mapping between specific UserManagementSystemType class and UI elements (such as pageFactories or wizard hops)
       </documentation>
    </annotation>
 
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="userManagementSystem" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="userManagementSystemType" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -42,10 +42,11 @@
       </complexType>
    </element>
 
-   <element name="userManagementSystem">
+   <element name="userManagementSystemType">
       <complexType>
          <sequence>
             <element ref="pageFactoryMapping" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="creationWizardHopMapping" minOccurs="0" maxOccurs="1"/>
          </sequence>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -53,7 +54,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.security.integration.UserManagementSystem"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.security.integration.UserManagementSystemType"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -69,6 +70,21 @@
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="creationWizardHopMapping">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.auth.ui.wizard.IUserManagementSystemBuilderHop"/>
                </appInfo>
             </annotation>
          </attribute>

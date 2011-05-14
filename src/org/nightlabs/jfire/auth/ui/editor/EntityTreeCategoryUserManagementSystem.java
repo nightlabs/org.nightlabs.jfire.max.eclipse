@@ -15,7 +15,7 @@ import org.nightlabs.base.ui.entity.tree.EntityTree;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jfire.auth.ui.UserManagementSystemPlugin;
+import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
 import org.nightlabs.jfire.base.ui.entity.tree.ActiveJDOEntityTreeCategory;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
@@ -68,7 +68,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 				UserManagementSystem userManagementSystem = (UserManagementSystem) element;
 				String imageSuffix = userManagementSystem.isActive()?"UserManagementSystemActive":"UserManagementSystemInactive";
 				return SharedImages.getSharedImage(
-						UserManagementSystemPlugin.sharedInstance(), EntityTreeCategoryUserManagementSystem.class, imageSuffix, "16x16", ImageFormat.png
+						JFireAuthUIPlugin.sharedInstance(), EntityTreeCategoryUserManagementSystem.class, imageSuffix, "16x16", ImageFormat.png
 						);
 			}else{
 				return super.getColumnImage(element, columnIndex);
@@ -80,11 +80,12 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IEditorInput createEditorInput(Object o){
 		UserManagementSystem userManagementSystem = (UserManagementSystem) o;
 		UserManagementSystemID userManagementSystemID = UserManagementSystemID.create(userManagementSystem.getOrganisationID(), userManagementSystem.getUserManagementSystemID());
-		return new UserManagementSystemEditorInput(userManagementSystemID, userManagementSystem.getClass());
+		return new UserManagementSystemEditorInput(userManagementSystemID, (Class<? extends UserManagementSystemType<?>>) userManagementSystem.getType().getClass());
 	}
 
 	/**

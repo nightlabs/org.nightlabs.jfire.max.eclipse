@@ -19,9 +19,75 @@
               name="%entityEditor.category.userManagementSystem">
            <viewBinding
                  editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
-                 viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView">
+                 viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView" indexHint="11">
            </viewBinding>
         </category>
 	</extension>
+	
+    <extension point="org.nightlabs.base.ui.editor2perspective">
+       <registry
+             editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
+             perspectiveID="org.nightlabs.jfire.base.admin.ui.BaseAdminPerspective" />
+    </extension>
+
+    <extension point="org.eclipse.ui.actionSets">
+        <actionSet id="org.nightlabs.jfire.auth.ui.actions"
+            label="%org.nightlabs.jfire.auth.ui.actionSet.label" visible="true">
+            <menu id="userManagementSystemMenu" 
+            		label="%userManagementSystemMenu.label" 
+            		path="administrationMenu/entityGroup"
+            		icon="icons/UserManagementSystem.16x16.png">
+                <separator name="userManagementSystemGenericGroup"/>
+            </menu>
+            <action
+                class="org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction"
+                icon="icons/RemoveUserManagementSystem.16x16.png"
+                disabledIcon="icons/RemoveUserManagementSystem-Disabled.16x16.png"
+                id="org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction#menu"
+                label="%org.nightlabs.jfire.auth.ui.actions.removeUserManagementSystem.label"
+                enablesFor="+"
+                menubarPath="administrationMenu/userManagementSystemMenu/userManagementSystemGenericGroup" tooltip="%org.nightlabs.jfire.auth.ui.actions.removeUserManagementSystem.tooltip">
+               		<selection class="org.nightlabs.jfire.security.integration.UserManagementSystem"/>
+            </action>
+            <action
+                class="org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction"
+                icon="icons/CreateUserManagementSystem.16x16.png"
+                id="org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction#menu"
+                label="%org.nightlabs.jfire.auth.ui.actions.createUserManagementSystem.label.menu"
+                menubarPath="administrationMenu/userManagementSystemMenu/userManagementSystemGenericGroup" tooltip="%org.nightlabs.jfire.auth.ui.actions.createUserManagementSystem.tooltip"/>
+        </actionSet>
+    </extension>
+
+    <extension point="org.eclipse.ui.viewActions">
+        <viewContribution
+            id="org.nightlabs.jfire.auth.ui.SysAdminEntityTreeView" 
+            targetID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView">
+            <action
+                class="org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction"
+                icon="icons/RemoveUserManagementSystem.16x16.png"
+                disabledIcon="icons/RemoveUserManagementSystem-Disabled.16x16.png"
+                id="org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction"
+                label="%org.nightlabs.jfire.auth.ui.actions.removeUserManagementSystem.label" style="push"
+                enablesFor="+"
+                toolbarPath="additions" tooltip="%org.nightlabs.jfire.auth.ui.actions.removeUserManagementSystem.tooltip">
+               		<selection class="org.nightlabs.jfire.security.integration.UserManagementSystem"/>
+            </action>
+            <action
+                class="org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction"
+                icon="icons/CreateUserManagementSystem.16x16.png"
+                id="org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction"
+                label="%org.nightlabs.jfire.auth.ui.actions.createUserManagementSystem.label" style="push"
+                toolbarPath="additions" tooltip="%org.nightlabs.jfire.auth.ui.actions.createUserManagementSystem.tooltip"/>
+        </viewContribution>
+    </extension>
+
+    <extension point="org.eclipse.ui.newWizards">
+       <wizard
+             category="org.nightlabs.jfire.base.admin.ui"
+             class="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"
+             icon="icons/CreateUserManagementSystem.16x16.png"
+             id="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"
+             name="%org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard.name" />
+    </extension>
 
 </plugin>
