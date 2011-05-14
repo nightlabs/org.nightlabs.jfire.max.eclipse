@@ -11,9 +11,14 @@
 	</extension>
 	
 	<extension point="org.nightlabs.jfire.auth.ui.userManagementSystemUIMapping">
-		<userManagementSystem class="org.nightlabs.jfire.base.security.integration.ldap.LDAPServer">
+		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.InetOrgPersonLDAPServerType">
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
-		</userManagementSystem>
+     		<creationWizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" />
+		</userManagementSystemType>
+		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.SambaLDAPServerType">
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
+     		<creationWizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" />
+		</userManagementSystemType>
 	</extension>
 	
 </plugin>

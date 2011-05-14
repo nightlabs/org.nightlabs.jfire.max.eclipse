@@ -128,20 +128,6 @@ public class LDAPServerGeneralConfigModel{
 	}
 
 	/**
-	 * Get possible {@link EncryptionMethod}s names.
-	 * 
-	 * @return names of {@link EncryptionMethod}s as {@link String}
-	 */
-	public String[] getPossibleEncryptionMethods(){
-		EncryptionMethod[] possibleValues = EncryptionMethod.values();
-		String[] names = new String[possibleValues.length];
-		for (int i = 0; i < possibleValues.length; i++) {
-			names[i] = possibleValues[i].stringValue();
-		}
-		return names;
-	}
-	
-	/**
 	 * Get {@link EncryptionMethod} of {@link LDAPServer}
 	 * 
 	 * @return name of {@link EncryptionMethod}
@@ -156,26 +142,12 @@ public class LDAPServerGeneralConfigModel{
 	 * @param encryptionMethodName
 	 */
 	public void setEncryptionMethod(String encryptionMethodName){
-		EncryptionMethod value = findEncryptionMethodByStringValue(encryptionMethodName);
+		EncryptionMethod value = EncryptionMethod.findEncryptionMethodByStringValue(encryptionMethodName);
 		if (value != null){
 			ldapServer.setEncryptionMethod(value);
 		}
 	}
 
-	/**
-	 * Get possible {@link AuthenticationMethod}s names.
-	 * 
-	 * @return names of {@link AuthenticationMethod}s as {@link String}
-	 */
-	public String[] getPossibleAuthenticationMethods(){
-		AuthenticationMethod[] possibleValues = AuthenticationMethod.values();
-		String[] names = new String[possibleValues.length];
-		for (int i = 0; i < possibleValues.length; i++) {
-			names[i] = possibleValues[i].stringValue();
-		}
-		return names;
-	}
-	
 	/**
 	 * Get {@link AuthenticationMethod} os {@link LDAPServer}
 	 * 
@@ -191,28 +163,10 @@ public class LDAPServerGeneralConfigModel{
 	 * @param authMethodName
 	 */
 	public void setAuthenticationMethod(String authMethodName){
-		AuthenticationMethod value = findAuthenticationMethodByStringValue(authMethodName);
+		AuthenticationMethod value = AuthenticationMethod.findAuthenticationMethodByStringValue(authMethodName);
 		if (value != null){
 			ldapServer.setAuthenticationMethod(value);
 		}
-	}
-
-	private static EncryptionMethod findEncryptionMethodByStringValue(String stringValue){
-	    for(EncryptionMethod v : EncryptionMethod.values()){
-	        if (v.stringValue().equals(stringValue)){
-	            return v;
-	        }
-	    }
-	    return null;
-	}
-
-	private static AuthenticationMethod findAuthenticationMethodByStringValue(String stringValue){
-	    for(AuthenticationMethod v : AuthenticationMethod.values()){
-	        if (v.stringValue().equals(stringValue)){
-	            return v;
-	        }
-	    }
-	    return null;
 	}
 
 }

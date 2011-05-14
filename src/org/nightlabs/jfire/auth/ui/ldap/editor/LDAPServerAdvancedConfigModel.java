@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
-import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 
 /**
  * Simple model of {@link LDAPServer} to be used on UI in {@link LDAPServerAdvancedConfigSection}.
@@ -35,7 +34,7 @@ public class LDAPServerAdvancedConfigModel{
 	 * @return name of LDAP entry
 	 */
 	public String getSyncDN(){
-		return ldapServer.getSyncDN();
+		return ldapServer.getSyncDN()!=null?ldapServer.getSyncDN():"";
 	}
 	
 	/**
@@ -44,6 +43,9 @@ public class LDAPServerAdvancedConfigModel{
 	 * @param syncDN
 	 */
 	public void setSyncDN(String syncDN){
+		if ("".equals(syncDN)){
+			syncDN = null;
+		}
 		ldapServer.setSyncDN(syncDN);
 	}
 	
@@ -53,7 +55,7 @@ public class LDAPServerAdvancedConfigModel{
 	 * @return password as simple {@link String}
 	 */
 	public String getSyncPassword(){
-		return ldapServer.getSyncPassword();
+		return ldapServer.getSyncPassword()!=null?ldapServer.getSyncPassword():"";
 	}
 	
 	/**
@@ -62,6 +64,9 @@ public class LDAPServerAdvancedConfigModel{
 	 * @param syncPassword
 	 */
 	public void setSyncPassword(String syncPassword){
+		if ("".equals(syncPassword)){
+			syncPassword = null;
+		}
 		ldapServer.setSyncPassword(syncPassword);
 	}
 	
@@ -83,16 +88,4 @@ public class LDAPServerAdvancedConfigModel{
 		ldapServer.setLeading(isLeading);
 	}
 	
-	/**
-	 * Get name of {@link LDAPServer} type (extended from {@link UserManagementSystemType})
-	 * 
-	 * @return name of {@link LDAPServer} type or simple class name if name is null
-	 */
-	public String getLDAPServerTypeName(){
-		if (ldapServer.getType().getName() != null){
-			return ldapServer.getType().getName().getText();
-		}else{
-			return ldapServer.getType().getClass().getSimpleName();
-		}
-	}
 }

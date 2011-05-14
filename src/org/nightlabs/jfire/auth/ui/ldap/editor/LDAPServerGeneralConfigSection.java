@@ -24,6 +24,8 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.ModificationFinishedEvent;
 import org.nightlabs.base.ui.language.ModificationFinishedListener;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
+import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider.AuthenticationMethod;
+import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider.EncryptionMethod;
 
 /**
  * Section of {@link LDAPServerEditorMainPage} for editing general {@link LDAPServer} properties:
@@ -124,9 +126,9 @@ public class LDAPServerGeneralConfigSection extends ToolBarSectionPart {
 				portText.setText(model.getPort());
 				nameText.setI18nText(model.getName(), EditMode.BUFFERED);
 				descriptionText.setI18nText(model.getDescription(), EditMode.BUFFERED);
-				encryptionMethodCombo.setItems(model.getPossibleEncryptionMethods());
+				encryptionMethodCombo.setItems(EncryptionMethod.getPossibleEncryptionMethods());
 				encryptionMethodCombo.setText(model.getEncryptionMethod());
-				authMethodCombo.setItems(model.getPossibleAuthenticationMethods());
+				authMethodCombo.setItems(AuthenticationMethod.getPossibleAuthenticationMethods());
 				authMethodCombo.setText(model.getAuthenticationMethod());
 			}
 		}finally{
