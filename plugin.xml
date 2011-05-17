@@ -90,4 +90,16 @@
              name="%org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard.name" />
     </extension>
 
+    <extension point="org.eclipse.ui.preferencePages">
+          <page
+            class="org.nightlabs.jfire.auth.ui.preference.UserManagementSystemPreferenceCategoryPage"
+            id="org.nightlabs.jfire.auth.ui.preference.UserManagementSystemPreferenceCategoryPage"
+            name="%org.nightlabs.jfire.auth.ui.preference.UserManagementSystemPreferenceCategoryPage.name"/>
+          <page
+            class="org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage"
+            id="org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage"
+            name="%org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.name"
+            category="org.nightlabs.jfire.auth.ui.preference.UserManagementSystemPreferenceCategoryPage"/>
+    </extension>
+
 </plugin>

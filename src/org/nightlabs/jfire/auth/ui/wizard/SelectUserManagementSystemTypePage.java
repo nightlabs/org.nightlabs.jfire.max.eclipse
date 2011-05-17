@@ -147,7 +147,7 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 		userManagementSystemTypeButton.setData(userManagementSystemType);
 		userManagementSystemTypeButton.addSelectionListener(builderSelectListener);
 		
-		String userManagementSystemTypeDescription = "Create and configure an instance of LDAP server of specific type";	// TODO remove
+		String userManagementSystemTypeDescription = "No description (could be specified in preferences)";
 		if (userManagementSystemType.getDescription() != null){
 			userManagementSystemTypeDescription = userManagementSystemType.getDescription().getText();
 		}
