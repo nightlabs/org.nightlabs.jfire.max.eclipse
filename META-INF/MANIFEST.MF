@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.eclipse.ui.dialog,
  javax.jdo;bundle-version="2.3.0",
- org.nightlabs.jfire.auth.ui;bundle-version="1.0.0"
+ org.nightlabs.jfire.auth.ui,
+ org.nightlabs.jseditor.ui
 Eclipse-LazyStart: true
 Eclipse-RegisterBuddy: org.nightlabs.jfire.auth.ui
 Bundle-ActivationPolicy: lazy

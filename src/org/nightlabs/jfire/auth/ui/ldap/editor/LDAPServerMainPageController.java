@@ -36,8 +36,7 @@ public class LDAPServerMainPageController extends ActiveEntityEditorPageControll
 		LDAPServer.FETCH_GROUP_DESCRIPTION,
 		LDAPServer.FETCH_GROUP_TYPE,
 		UserManagementSystemType.FETCH_GROUP_NAME,
-		UserManagementSystemType.FETCH_GROUP_DESCRIPTION,
-		LDAPServer.FETCH_GROUP_LDAP_SCRIPT_SET
+		UserManagementSystemType.FETCH_GROUP_DESCRIPTION
 	};
 
 	/**

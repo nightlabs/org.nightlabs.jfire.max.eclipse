@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -15,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
@@ -38,15 +38,17 @@ import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
  */
 public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	
-	private static final int DESCRIPTION_EXPANDABLE_STYLE = ExpandableComposite.CLIENT_INDENT | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE;
-	private static final int SCRIPT_DESCRIPTION_WIDTH = 500;
-	private static final int SCRIPT_BUTTON_WIDTH = 200;
-	
 	private Button isLeadingButton;
 	private Text syncDNText;
 	private Text syncPasswordText;
 
 	private LDAPServerAdvancedConfigModel model;
+	
+	/**
+	 * Page reference is held here for making calls to {@link LDAPServerEditorScriptSetPage}.
+	 * See {@link #openScriptPageSelectionListener}.
+	 */
+	private IFormPage advancedConfigPage;
 
 	/**
 	 * Set to <code>true</code> while automatic refreshing of UI elements
@@ -77,6 +79,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	
 	public LDAPServerAdvancedConfigSection(IFormPage page, Composite parent) {
 		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Advanced"); //$NON-NLS-1$);
+		this.advancedConfigPage = page;
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
 	
@@ -176,56 +179,26 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 10;
 		scriptsLabel.setLayoutData(gd);
-
-
-		createEditScriptButton(parent, toolkit, "Edit bind variables script...");
-		String commonBindScriptDescription = "Used for binding script variables to values taken from JFire objects (e.g. User and Person)." +
-				"These variables are used afterwards in other scripts. Java objects for User and Person " +
-				"are available inside this script. NOT supposed to return any values.";
-		createDescriptionExpandable(parent, toolkit, commonBindScriptDescription);
-
 		
-		createEditScriptButton(parent, toolkit, "Edit get entry name script...");
-		String getEntryNameScriptDescription = "Used for generating a String with an LDAP entry Distingueshed Name which is built usign User and/or Person object's data. " +
-				"Should return a String with an LDAP entry DN on the last line of the script.";
-		createDescriptionExpandable(parent, toolkit, getEntryNameScriptDescription);
-
-		
-		createEditScriptButton(parent, toolkit, "Edit get attribute set script...");
-		String generateAttributesScriptDescription = "Used for generating a LDAPAttributeSet with attributes names and values which are then passed to LDAP modidifcation calls." +
-				"Such modifications happen during synchronization of user data from JFire to LDAP directory when JFire is a leading system." +
-				"This script makes use of variables from bind variables script. Should return LDAPAttributeSet on the last line of the script.";
-		createDescriptionExpandable(parent, toolkit, generateAttributesScriptDescription);
-		
-		
-		createEditScriptButton(parent, toolkit, "Edit get parent entries script...");
-		String getParentScriptDescription =	"Used for generating a List with names of LDAP entries which are parents to all LDAP user entries which should be synchronized. " +
-				"These parent entries are queried during synchronization when LDAPServer is a leading system. Should return an ArrayList of Strings " +
-				"with entries names on the last line of the script.";
-		createDescriptionExpandable(parent, toolkit, getParentScriptDescription);
-
-		
-		createEditScriptButton(parent, toolkit, "Edit sync to JFire script...");
-		String syncScriptDescription = "Used for storing data into JFire objects (User and/or Person) during synchronization when LDAPServer is a leading system. " +
-				"It makes use of several java objects : allAtributes - LDAPAttributeSet with all attributes of LDAP entry to be synchronized, " +
-				"pm - PersistenceManager, organisationID - the ID of JFire organisation, newPersonID - value returned by " +
-				"IDGenerator.nextID(PropertySet.class) used when new Person object is created, logger - org.slf4j.Logger for debug purposes. " +
-				"Should return persisted object (either User or Person) on the last line of the script.";
-		createDescriptionExpandable(parent, toolkit, syncScriptDescription);		
+		for (String scriptName : LDAPScriptSetHelper.getAllScriptNames()){
+			createEditScriptButton(parent, toolkit, scriptName);
+			createDescriptionExpandable(parent, toolkit, LDAPScriptSetHelper.getScriptDescriptionByName(scriptName));
+		}
 
 	}
 	
-	private void createEditScriptButton(Composite parent, FormToolkit toolkit, String buttonText){
-		Button syncToJFireScriptButton = toolkit.createButton(parent, buttonText, SWT.FLAT);
-		syncToJFireScriptButton.addSelectionListener(tempLinkSelectionListener);
+	private void createEditScriptButton(Composite parent, FormToolkit toolkit, String scriptName){
+		Button syncToJFireScriptButton = toolkit.createButton(parent, scriptName+"...", SWT.FLAT);
+		syncToJFireScriptButton.addSelectionListener(openScriptPageSelectionListener);
+		syncToJFireScriptButton.setData(scriptName);
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = SCRIPT_BUTTON_WIDTH;
+		gd.widthHint = 200;
 		syncToJFireScriptButton.setLayoutData(gd);
 	}
 	
 	private void createDescriptionExpandable(Composite parent, FormToolkit toolkit, String descriptionText){
 		ExpandableComposite descriptionExpandable = toolkit.createExpandableComposite(
-				parent, DESCRIPTION_EXPANDABLE_STYLE
+				parent, ExpandableComposite.CLIENT_INDENT | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
 				);
 		descriptionExpandable.setLayout(new FillLayout());
 		descriptionExpandable.setText("See description");
@@ -235,13 +208,34 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		descriptionExpandable.setClient(descriptionLabel);
 		descriptionExpandable.addExpansionListener(descriptionExpansionListener);
 		GridData gd = new GridData();
-		gd.widthHint = SCRIPT_DESCRIPTION_WIDTH;
+		gd.widthHint = 500;
 		descriptionExpandable.setLayoutData(gd);
 	}
 	
-	private SelectionListener tempLinkSelectionListener = new SelectionAdapter() {
+	/**
+	 * This lister finds {@link LDAPServerEditorScriptSetPage}, makes it active and selects a tab item with needed script.
+	 */
+	private SelectionListener openScriptPageSelectionListener = new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent selectionevent) {
-			MessageDialog.openInformation(null, "Script Editor missing!", "Sorry! Small script editor will be added soon.");
+			if (selectionevent.getSource() instanceof Button){
+				
+				IFormPage scriptSetPage = advancedConfigPage.getEditor().setActivePage(LDAPServerEditorScriptSetPage.ID_PAGE);
+				String scriptName = (String) ((Widget) selectionevent.getSource()).getData();
+				
+				if (scriptName != null
+						&& !scriptName.isEmpty()
+						&& scriptSetPage instanceof LDAPServerEditorScriptSetPage){
+					
+					LDAPServerScriptSetSection scriptsSection = ((LDAPServerEditorScriptSetPage) scriptSetPage).getScriptsSection();
+					if (scriptsSection != null
+							&& scriptsSection.getContainer() != null
+							&& !scriptsSection.getContainer().isDisposed()){
+						
+						scriptsSection.setActiveScriptTab(scriptName);
+					}
+				}
+				
+			}
 		};
 	};
 	

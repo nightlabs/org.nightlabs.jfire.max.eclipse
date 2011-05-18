@@ -8,15 +8,22 @@
              editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
              indexHint="10">
        </pageFactory>
+       <pageFactory
+             class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory"
+             editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
+             indexHint="20">
+       </pageFactory>
 	</extension>
 	
 	<extension point="org.nightlabs.jfire.auth.ui.userManagementSystemUIMapping">
 		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.InetOrgPersonLDAPServerType">
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory" />
      		<creationWizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" />
 		</userManagementSystemType>
 		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.SambaLDAPServerType">
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory" />
      		<creationWizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" />
 		</userManagementSystemType>
 	</extension>
