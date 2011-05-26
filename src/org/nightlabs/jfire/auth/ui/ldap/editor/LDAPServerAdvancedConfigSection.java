@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -168,7 +169,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		syncDNText.addModifyListener(dirtyModifyListener);
 		
 		toolkit.createLabel(syncWrapper, "Sync password:", SWT.NONE);
-		syncPasswordText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle());
+		syncPasswordText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle() | SWT.PASSWORD);
 		syncPasswordText.setToolTipText("Password of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
 		syncPasswordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		syncPasswordText.addModifyListener(dirtyModifyListener);
@@ -181,19 +182,21 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		scriptsLabel.setLayoutData(gd);
 		
 		for (String scriptName : LDAPScriptSetHelper.getAllScriptNames()){
-			createEditScriptButton(parent, toolkit, scriptName);
+			createEditScriptLink(parent, scriptName);
 			createDescriptionExpandable(parent, toolkit, LDAPScriptSetHelper.getScriptDescriptionByName(scriptName));
 		}
 
 	}
 	
-	private void createEditScriptButton(Composite parent, FormToolkit toolkit, String scriptName){
-		Button syncToJFireScriptButton = toolkit.createButton(parent, scriptName+"...", SWT.FLAT);
-		syncToJFireScriptButton.addSelectionListener(openScriptPageSelectionListener);
-		syncToJFireScriptButton.setData(scriptName);
+	private void createEditScriptLink(Composite parent, String scriptName){
+		Link syncToJFireScriptLink = new Link(parent, SWT.NONE);
+		syncToJFireScriptLink.setText("<A>"+scriptName+"</A>");
+		syncToJFireScriptLink.addSelectionListener(openScriptPageSelectionListener);
+		syncToJFireScriptLink.setData(scriptName);
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 200;
-		syncToJFireScriptButton.setLayoutData(gd);
+		gd.widthHint = 140;
+		gd.verticalIndent = 3;
+		syncToJFireScriptLink.setLayoutData(gd);
 	}
 	
 	private void createDescriptionExpandable(Composite parent, FormToolkit toolkit, String descriptionText){
@@ -217,7 +220,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	 */
 	private SelectionListener openScriptPageSelectionListener = new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent selectionevent) {
-			if (selectionevent.getSource() instanceof Button){
+			if (selectionevent.getSource() instanceof Link){
 				
 				IFormPage scriptSetPage = advancedConfigPage.getEditor().setActivePage(LDAPServerEditorScriptSetPage.ID_PAGE);
 				String scriptName = (String) ((Widget) selectionevent.getSource()).getData();

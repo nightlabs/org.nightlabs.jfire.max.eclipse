@@ -20,4 +20,6 @@ Eclipse-LazyStart: true
 Eclipse-RegisterBuddy: org.nightlabs.jfire.auth.ui
 Bundle-ActivationPolicy: lazy
 Export-Package: org.nightlabs.jfire.auth.ui.ldap,
- org.nightlabs.jfire.auth.ui.ldap.editor
+ org.nightlabs.jfire.auth.ui.ldap.editor,
+ org.nightlabs.jfire.auth.ui.ldap.tree,
+ org.nightlabs.jfire.auth.ui.ldap.wizard

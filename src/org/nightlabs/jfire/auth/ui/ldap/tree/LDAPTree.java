@@ -1,0 +1,219 @@
+package org.nightlabs.jfire.auth.ui.ldap.tree;
+
+import javax.security.auth.login.LoginException;
+
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
+import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.base.ui.tree.AbstractTreeComposite;
+import org.nightlabs.base.ui.tree.TreeContentProvider;
+import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.BindCredentials;
+import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.LDAPTreeEntryLoadCallback;
+import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
+
+/**
+ * Tree of LDAP entries. Either {@link ILDAPConnectionParamsProvider} or root {@link LDAPTreeEntry} objects should
+ * be passed as input for this tree when calling {@link #setInput(Object)}. In case root {@link LDAPTreeEntry} objects are set
+ * they SHOULD have {@link ILDAPConnectionParamsProvider} set to each of them.
+ * 
+ * {@link LDAPTree} handles load entry events and shows {@link LDAPBindCredentialsDialog} in case attemted LDAP directory has no 
+ * anonymous access. Actual communication with LDAP directory happens inside {@link LDAPTreeEntry} class.
+ * 
+ * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
+ *
+ */
+public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LDAPTreeEntryLoadCallback{
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public LDAPTree(Composite parent) {
+		super(parent);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public LDAPTree(Composite parent, int style) {
+		super(parent, style);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public LDAPTree(Composite parent, boolean init) {
+		super(parent, init);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public LDAPTree(Composite parent, int style, boolean setLayoutData, boolean init, boolean headerVisible) {
+		super(parent, style, setLayoutData, init, headerVisible);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public LDAPTree(Composite parent, int style, boolean setLayoutData, boolean init, boolean headerVisible, boolean sortColumns) {
+		super(parent, style, setLayoutData, init, headerVisible, sortColumns);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setTreeProvider(TreeViewer treeViewer) {
+		treeViewer.setContentProvider(new LDAPTreeContentProvider());
+		treeViewer.setLabelProvider(new LDAPTreeLabelProvider());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void createTreeColumns(Tree tree) {
+		// we have single column, so do nothing
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void treeEntryLoaded(final LDAPTreeEntry loadedEntry) {
+		if (!isDisposed()){
+			getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					if (getInput() instanceof ILDAPConnectionParamsProvider){
+						setInput(loadedEntry.getChildren(null));
+					}else{
+						refresh(loadedEntry, true);
+					}
+				}
+			});
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void hadleTreeEntryLoadError(Throwable cause) {
+		if (cause instanceof LoginException){
+			
+			if (!isDisposed()){
+				getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+
+						// showing dialog for entering bind login/password
+						LDAPBindCredentialsDialog dlg = new LDAPBindCredentialsDialog(RCPUtil.getActiveShell(), null);
+						if (Window.OK == dlg.open()){
+							final String login = dlg.getLogin();
+							final String password = dlg.getPassword();
+							((LDAPTreeContentProvider) getTreeViewer().getContentProvider()).setBindCredentials(new BindCredentials() {
+								@Override
+								public String getPassword() {
+									return password;
+								}
+								@Override
+								public String getLogin() {
+									return login;
+								}
+							});
+							refresh();
+						}
+						
+					}
+				});
+			}
+			
+		}else{
+			throw new RuntimeException(cause);
+		}
+	}
+
+
+	class LDAPTreeContentProvider extends TreeContentProvider{
+		
+		private ILDAPConnectionParamsProvider ldapConnectionParamsProvider;
+		private LDAPTreeEntry[] rootEntries;
+		private BindCredentials bindCredentials;
+		
+		@Override
+		public Object[] getChildren(final Object parentElement) {
+			if (parentElement instanceof LDAPTreeEntry){
+				LDAPTreeEntry[] children = ((LDAPTreeEntry) parentElement).getChildren(bindCredentials, LDAPTree.this);
+				if (children != null){
+					return children;
+				}
+				return new String[]{"loading..."};
+			}
+			return super.getChildren(parentElement);
+		}
+		
+		public boolean hasChildren(Object element) {
+			return true;
+		}
+
+		@Override
+		public Object[] getElements(Object obj) {
+			if (rootEntries == null){
+				LDAPTreeEntry rootTreeEntry = new LDAPTreeEntry("");
+				rootTreeEntry.setLdapConnectionParamsProvider(ldapConnectionParamsProvider);
+				return getChildren(rootTreeEntry);
+			}else{
+				return rootEntries;
+			}
+		}
+	
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			if (newInput instanceof ILDAPConnectionParamsProvider){
+				this.ldapConnectionParamsProvider = (ILDAPConnectionParamsProvider) newInput;
+			}else if (newInput instanceof LDAPTreeEntry[]){
+				this.rootEntries = (LDAPTreeEntry[]) newInput;
+			}else{
+				super.inputChanged(viewer, oldInput, newInput);
+			}
+		}
+		
+		public void setBindCredentials(BindCredentials bindCredentials) {
+			this.bindCredentials = bindCredentials;
+		}
+	}
+	
+	class LDAPTreeLabelProvider extends TableLabelProvider{
+
+		@Override
+		public String getColumnText(Object obj, int i) {
+			if (obj instanceof String){
+				return (String) obj;
+			}else if (obj instanceof LDAPTreeEntry){
+				return ((LDAPTreeEntry) obj).getEntryName();
+			}
+			return "";
+		}
+		
+		@Override
+		public Image getImage(Object element) {
+			if (element instanceof LDAPTreeEntry){
+				return SharedImages.getSharedImage(
+						LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", "16x16", ImageFormat.png
+						);
+			}
+			return super.getImage(element);
+		}
+		
+	}
+
+}
