@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -75,7 +76,7 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), SelectLDAPEntryDialog.class, "titleImage", "66x75", ImageFormat.png));
 
 
-		ldapTree = new LDAPTree(wrapper);
+		ldapTree = new LDAPTree(wrapper, SWT.BORDER);
 		ldapTree.setLayoutData(new GridData(GridData.FILL_BOTH));
 		ldapTree.setInput(ldapConnectionParamsProvider);
 		ldapTree.addSelectionChangedListener(new ISelectionChangedListener() {

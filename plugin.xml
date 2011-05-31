@@ -19,12 +19,18 @@
 		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.InetOrgPersonLDAPServerType">
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory" />
-     		<creationWizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" />
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"/>
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard"/>
 		</userManagementSystemType>
 		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.SambaLDAPServerType">
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory" />
-     		<creationWizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" />
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"/>
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard"/>
 		</userManagementSystemType>
 	</extension>
 	

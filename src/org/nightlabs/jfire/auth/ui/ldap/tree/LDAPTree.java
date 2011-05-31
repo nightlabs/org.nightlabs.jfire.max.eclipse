@@ -5,9 +5,12 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -81,7 +84,8 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	 */
 	@Override
 	public void createTreeColumns(Tree tree) {
-		// we have single column, so do nothing
+		new TreeColumn(tree, SWT.LEFT).setText("LDAP directory entries");
+		tree.setLayout(new WeightedTableLayout(new int[]{100}));
 	}
 
 	/**
@@ -202,6 +206,16 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 				return ((LDAPTreeEntry) obj).getEntryName();
 			}
 			return "";
+		}
+		
+		@Override
+		public Image getColumnImage(Object element, int columnIndex) {
+			if (element instanceof LDAPTreeEntry){
+				return SharedImages.getSharedImage(
+						LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", "16x16", ImageFormat.png
+						);
+			}
+			return super.getColumnImage(element, columnIndex);
 		}
 		
 		@Override
