@@ -40,6 +40,12 @@
                 <separator name="userManagementSystemGenericGroup"/>
             </menu>
             <action
+                class="org.nightlabs.jfire.auth.ui.actions.OpenImportExportWizardAction"
+                icon="icons/ImportExportWizard.16x16.png"
+                id="org.nightlabs.jfire.auth.ui.actions.OpenImportExportWizardAction#menu"
+                label="%org.nightlabs.jfire.auth.ui.actions.openImportExportWizardAction.label.menu"
+                menubarPath="administrationMenu/userManagementSystemMenu/userManagementSystemGenericGroup" tooltip="%org.nightlabs.jfire.auth.ui.actions.openImportExportWizardAction.tooltip"/>
+            <action
                 class="org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction"
                 icon="icons/RemoveUserManagementSystem.16x16.png"
                 disabledIcon="icons/RemoveUserManagementSystem-Disabled.16x16.png"

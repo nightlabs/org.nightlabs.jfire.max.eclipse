@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.base.ui.wizard.IWizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
@@ -83,11 +84,17 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 			throw new IllegalStateException("This method should be called after wizard page contents were created!");
 		}
 		
+		for (Control c : mainWrapper.getChildren()){
+			c.dispose();
+		}
+		
 		Button firstRadioButton = null;
-		for (UserManagementSystemType<?> userManagementSystemType : allUserManagementSystemTypes) {
-			Button userManagementSystemTypeButton = createButtonAndDescription(mainWrapper, userManagementSystemType);
-			if (firstRadioButton == null){
-				firstRadioButton = userManagementSystemTypeButton;
+		if (allUserManagementSystemTypes != null){
+			for (UserManagementSystemType<?> userManagementSystemType : allUserManagementSystemTypes) {
+				Button userManagementSystemTypeButton = createButtonAndDescription(mainWrapper, userManagementSystemType);
+				if (firstRadioButton == null){
+					firstRadioButton = userManagementSystemTypeButton;
+				}
 			}
 		}
 		
@@ -180,10 +187,12 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 					}
 				}
 				
-				currentUserManagementSystemHop = UserManagementSystemUIMappingRegistry.sharedInstance().getUserManagementSystemBuilderWizardHop(
-						(Class<? extends UserManagementSystemType<?>>) currentUserManagementSystemType.getClass()
+				IWizardHop wizardHop = UserManagementSystemUIMappingRegistry.sharedInstance().getWizardHop(
+						(Class<? extends UserManagementSystemType<?>>) currentUserManagementSystemType.getClass(),
+						(Class<? extends DynamicPathWizard>) getWizard().getClass()
 						);
-				if (currentUserManagementSystemHop != null) {
+				if (wizardHop instanceof IUserManagementSystemBuilderHop) {
+					currentUserManagementSystemHop = (IUserManagementSystemBuilderHop) wizardHop;
 					if (getWizard() instanceof DynamicPathWizard) {
 						DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
 						wiz.addDynamicWizardPage(currentUserManagementSystemHop.getEntryPage());

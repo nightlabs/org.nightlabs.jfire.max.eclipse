@@ -8,10 +8,10 @@ import java.util.Set;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.base.ui.wizard.IWizardHop;
 import org.nightlabs.eclipse.extension.AbstractEPProcessor;
 import org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor;
-import org.nightlabs.jfire.auth.ui.wizard.IUserManagementSystemBuilderHop;
-import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 
 /**
@@ -48,10 +48,10 @@ public class UserManagementSystemUIMappingRegistry extends AbstractEPProcessor{
 	private Map<Class<? extends UserManagementSystemType<?>>, Set<String>> pageFactoriesByClass = new HashMap<Class<? extends UserManagementSystemType<?>>, Set<String>>();
 
 	/**
-	 * {@link Map} for holding a {@link IUserManagementSystemBuilderHop} for every {@link UserManagementSystemType} specific class.
+	 * {@link Map} for holding a {@link IWizardHop}s for every {@link UserManagementSystemType} specific class.
 	 */
-	private Map<Class<? extends UserManagementSystemType<?>>, Class<? extends IUserManagementSystemBuilderHop>> wizardHopsByClass = new HashMap<Class<? extends UserManagementSystemType<?>>, Class<? extends IUserManagementSystemBuilderHop>>();
-
+	private Map<Class<? extends UserManagementSystemType<?>>, Map<Class<? extends DynamicPathWizard>, Class<? extends IWizardHop>>> wizardHopsByClass = new HashMap<Class<? extends UserManagementSystemType<?>>, Map<Class<? extends DynamicPathWizard>,Class<? extends IWizardHop>>>();
+	
 	/**
 	 * Get class names of {@link EntityEditor} page factories by specific {@link UserManagementSystemType} class.
 	 * These class names are then used for filtering {@link UserManagementSystemEditor} pages.
@@ -65,16 +65,21 @@ public class UserManagementSystemUIMappingRegistry extends AbstractEPProcessor{
 	}
 
 	/**
-	 * Get {@link IUserManagementSystemBuilderHop} by specific {@link UserManagementSystemType} class.
-	 * These hop is then used in {@link UserManagementSystem} creation wizard.
+	 * Get {@link IWizardHop} for specified {@link DynamicPathWizard} by specific {@link UserManagementSystemType} class.
 	 * 
 	 * @param userManagementSystemTypeClass Class of specific {@link UserManagementSystemType}
-	 * @return instance of {@link IUserManagementSystemBuilderHop}
+	 * @param wizardClass Class of specific {@link DynamicPathWizard}
+	 * @return instance of {@link IWizardHop}
 	 */
-	public IUserManagementSystemBuilderHop getUserManagementSystemBuilderWizardHop(Class<? extends UserManagementSystemType<?>> userManagementSystemTypeClass){
+	public IWizardHop getWizardHop(Class<? extends UserManagementSystemType<?>> userManagementSystemTypeClass,
+			Class<? extends DynamicPathWizard> wizardClass){
 		checkProcessing();
 		try{
-			return wizardHopsByClass==null ? null : wizardHopsByClass.get(userManagementSystemTypeClass).newInstance();
+			if (wizardHopsByClass.get(userManagementSystemTypeClass) instanceof Map){
+				Class<? extends IWizardHop> hopClass = wizardHopsByClass.get(userManagementSystemTypeClass).get(wizardClass);
+				return hopClass != null ? hopClass.newInstance() : null;
+			}
+			return null;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -108,9 +113,18 @@ public class UserManagementSystemUIMappingRegistry extends AbstractEPProcessor{
 					
 					pageFactoriesByClass.get(userManagementSystemTypeClass).add(child.getAttribute("class")); //$NON-NLS-4$
 					
-				}else if ("creationWizardHopMapping".equalsIgnoreCase(child.getName())){ //$NON-NLS-5$
+				}else if ("wizardHopMapping".equalsIgnoreCase(child.getName())){ //$NON-NLS-5$
 					
-					wizardHopsByClass.put(userManagementSystemTypeClass, (Class<? extends IUserManagementSystemBuilderHop>) Class.forName(child.getAttribute("class"))); //$NON-NLS-6$
+					Class<? extends IWizardHop> hopClass = (Class<? extends IWizardHop>) Class.forName(child.getAttribute("class"));
+					Class<? extends DynamicPathWizard> wizardClass = (Class<? extends DynamicPathWizard>) Class.forName(child.getAttribute("wizardClass"));
+					
+					if (wizardHopsByClass.get(userManagementSystemTypeClass) instanceof Map){
+						wizardHopsByClass.get(userManagementSystemTypeClass).put(wizardClass, hopClass);
+					}else{
+						HashMap<Class<? extends DynamicPathWizard>, Class<? extends IWizardHop>> wizardHops = new HashMap<Class<? extends DynamicPathWizard>, Class<? extends IWizardHop>>();
+						wizardHops.put(wizardClass, hopClass);
+						wizardHopsByClass.put(userManagementSystemTypeClass, wizardHops);
+					}
 					
 				}
 			}

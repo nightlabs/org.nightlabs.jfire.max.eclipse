@@ -61,8 +61,7 @@ public class CreateUserManagementSystemWizardHop extends WizardHop{
 		loadJob.addJobChangeListener(new JobChangeAdapter(){
 			@Override
 			public void done(IJobChangeEvent event) {
-				if (Status.OK_STATUS == event.getResult()
-						&& allUserManagementSystemTypes != null){
+				if (Status.OK_STATUS == event.getResult()){
 					getWizard().getContainer().getShell().getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
