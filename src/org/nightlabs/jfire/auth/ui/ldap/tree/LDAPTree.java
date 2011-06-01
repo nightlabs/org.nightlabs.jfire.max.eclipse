@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
@@ -20,7 +21,9 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.LDAPTreeEntryLoadCallback;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * Tree of LDAP entries. Either {@link ILDAPConnectionParamsProvider} or root {@link LDAPTreeEntry} objects should
@@ -147,6 +150,8 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	}
 
 
+	private static final String OBJECT_CLASS_ATTRIBUTE = "objectClass";
+
 	class LDAPTreeContentProvider extends TreeContentProvider{
 		
 		private ILDAPConnectionParamsProvider ldapConnectionParamsProvider;
@@ -172,7 +177,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		@Override
 		public Object[] getElements(Object obj) {
 			if (rootEntries == null){
-				LDAPTreeEntry rootTreeEntry = new LDAPTreeEntry("");
+				LDAPTreeEntry rootTreeEntry = new LDAPTreeEntry("", new String[]{OBJECT_CLASS_ATTRIBUTE});
 				rootTreeEntry.setLdapConnectionParamsProvider(ldapConnectionParamsProvider);
 				return getChildren(rootTreeEntry);
 			}else{
@@ -198,12 +203,17 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	
 	class LDAPTreeLabelProvider extends TableLabelProvider{
 
+		private static final String POSIXACCOUNT = "posixAccount";
+		private static final String PERSON = "person";
+		private static final String ORGANIZATIONALUNIT = "organizationalUnit";
+		private static final String ORGANIZATION = "organization";
+
 		@Override
 		public String getColumnText(Object obj, int i) {
 			if (obj instanceof String){
 				return (String) obj;
 			}else if (obj instanceof LDAPTreeEntry){
-				return ((LDAPTreeEntry) obj).getEntryName();
+				return ((LDAPTreeEntry) obj).getName();
 			}
 			return "";
 		}
@@ -211,9 +221,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (element instanceof LDAPTreeEntry){
-				return SharedImages.getSharedImage(
-						LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", "16x16", ImageFormat.png
-						);
+				return getImageForEntry((LDAPTreeEntry) element);
 			}
 			return super.getColumnImage(element, columnIndex);
 		}
@@ -221,11 +229,35 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		@Override
 		public Image getImage(Object element) {
 			if (element instanceof LDAPTreeEntry){
-				return SharedImages.getSharedImage(
-						LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", "16x16", ImageFormat.png
-						);
+				return getImageForEntry((LDAPTreeEntry) element);
 			}
 			return super.getImage(element);
+		}
+		
+		private Image getImageForEntry(LDAPTreeEntry entry){
+			if (!"".equals(entry.getName()) && entry.hasAttributesLoaded()){
+				try {
+					LDAPAttributeSet attributes = entry.getAttributes(null);
+					if (attributes.containsAnyAttributeValue(OBJECT_CLASS_ATTRIBUTE, CollectionUtil.createHashSet(ORGANIZATIONALUNIT, ORGANIZATION))){
+						
+						return SharedImages.getSharedImage(
+								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeOrg", ImageDimension._16x16.toString(), ImageFormat.png
+								);
+						
+					}else if (attributes.containsAnyAttributeValue(OBJECT_CLASS_ATTRIBUTE, CollectionUtil.createHashSet(PERSON, POSIXACCOUNT))){
+						
+						return SharedImages.getSharedImage(
+								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeUser", ImageDimension._16x16.toString(), ImageFormat.png
+								);
+						
+					}
+				} catch (Exception e) {
+					// do nothing, just show default image
+				}
+			}
+			return SharedImages.getSharedImage(
+					LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", ImageDimension._16x16.toString(), ImageFormat.png
+					);
 		}
 		
 	}

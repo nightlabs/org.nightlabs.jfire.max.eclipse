@@ -156,7 +156,7 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 		}
 		Collection<String> entriesForImport = new ArrayList<String>(selectedLDAPEntries.size());
 		for (LDAPTreeEntry entry : selectedLDAPEntries){
-			entriesForImport.add(entry.getEntryName());
+			entriesForImport.add(entry.getName());
 		}
 		return entriesForImport;
 	}

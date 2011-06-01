@@ -16,6 +16,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnection;
 
@@ -43,7 +44,18 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	 * @param style {@link SWT} style for this composite
 	 */
 	public LDAPEntrySelectorComposite(Composite parent, int style) {
-		this(parent, style, null, null);
+		this(parent, style, null, null, null);
+	}
+
+	/**
+	 * Constructs new {@link LDAPEntrySelectorComposite} with default button text and no image.
+	 * 
+	 * @param parent parent {@link Composite}
+	 * @param style {@link SWT} style for this composite
+	 * @param selectionCriteriaAttributes {@link LDAPAttributeSet} which is used as selection criteria in {@link SelectLDAPEntryDialog}, could be <code>null</code>
+	 */
+	public LDAPEntrySelectorComposite(Composite parent, int style, LDAPAttributeSet selectionCriteriaAttributes) {
+		this(parent, style, null, null, selectionCriteriaAttributes);
 	}
 
 	/**
@@ -54,10 +66,11 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	 * @param style {@link SWT} style for this composite
 	 * @param buttonText default button caption ("Select...") will be used if <code>null</code>
 	 * @param buttonImage no image will be shown by default if <code>null</code>
+	 * @param selectionCriteriaAttributes {@link LDAPAttributeSet} which is used as selection criteria in {@link SelectLDAPEntryDialog}, could be <code>null</code>
 	 */
-	public LDAPEntrySelectorComposite(Composite parent, int style, String buttonText, Image buttonImage) {
+	public LDAPEntrySelectorComposite(Composite parent, int style, String buttonText, Image buttonImage, LDAPAttributeSet selectionCriteriaAttributes) {
 		super(parent, style, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
-		createContent(buttonText, buttonImage);
+		createContent(buttonText, buttonImage, selectionCriteriaAttributes);
 	}
 
 	/**
@@ -82,7 +95,7 @@ public class LDAPEntrySelectorComposite extends XComposite{
 		return entryNameText.getText();
 	}
 	
-	private void createContent(String selectorButtonText, Image selectorButtonImage){
+	private void createContent(String selectorButtonText, Image selectorButtonImage, final LDAPAttributeSet selectionCriteriaAttributes){
 		
 		entryNameText = new Text(this, SWT.BORDER);
 		entryNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -102,10 +115,14 @@ public class LDAPEntrySelectorComposite extends XComposite{
 				}
 				
 				SelectLDAPEntryDialog dlg = new SelectLDAPEntryDialog(RCPUtil.getActiveShell(), null, ldapConnectionParamsProvider);
+				dlg.setSelectionCriteriaAttributes(selectionCriteriaAttributes);
 				if (Window.OK == dlg.open()){
 					Set<LDAPTreeEntry> selectedElements = dlg.getSelectedElements();
 					if (selectedElements != null && selectedElements.iterator().hasNext()){
-						entryNameText.setText(selectedElements.iterator().next().getEntryName());
+						Object entry = selectedElements.iterator().next();
+						if (entry instanceof LDAPTreeEntry){
+							entryNameText.setText(((LDAPTreeEntry) entry).getName());
+						}
 					}
 				}
 			}

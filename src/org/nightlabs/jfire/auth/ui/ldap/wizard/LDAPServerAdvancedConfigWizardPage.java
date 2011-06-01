@@ -19,6 +19,8 @@ import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * Wizard page contributed to {@link CreateUserManagementSystemWizard} by {@link CreateLDAPServerWizardHop}.
@@ -52,7 +54,9 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		parent.setLayout(new GridLayout(2, false));
 		
 		new Label(parent, SWT.NONE).setText("Base DN:");
-		ldapEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE);
+		LDAPAttributeSet selectionCriteria = new LDAPAttributeSet();
+		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("organizationalUnit"));
+		ldapEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE, selectionCriteria);
 		ldapEntrySelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ldapEntrySelector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
 		

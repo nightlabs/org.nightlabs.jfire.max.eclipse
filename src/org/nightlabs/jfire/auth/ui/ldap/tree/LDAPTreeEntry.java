@@ -3,15 +3,19 @@ package org.nightlabs.jfire.auth.ui.ldap.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.security.auth.login.LoginException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnection;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnectionManager;
+import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -26,6 +30,17 @@ public class LDAPTreeEntry {
 	 * Name of LDAP entry
 	 */
 	private String entryName;
+	
+	/**
+	 * LDAP entry attributes will be loaded if any names are specified. Note that the same attributes will be loaded for all children of this {@link LDAPTreeEntry}.
+	 */
+	private String[] attributeNames;
+	
+	/**
+	 * Loaded LDAP entry attributes. Loading of attributes will occur lazily inside {@link #getAttributes()} method. 
+	 * For children of this {@link LDAPTreeEntry} loading will occur inside {@link #getChildren(BindCredentials, LDAPTreeEntryLoadCallback...)} if {@link #attributeNames} are given
+	 */
+	private LDAPAttributeSet entryAttributes;
 	
 	/**
 	 * Connection parameters. They are automatically set to all child entries of this {@link LDAPTreeEntry}.
@@ -48,7 +63,18 @@ public class LDAPTreeEntry {
 	 * @param entryName
 	 */
 	public LDAPTreeEntry(String entryName) {
+		this(entryName, null);
+	}
+	
+	/**
+	 * Constructs new {@link LDAPTreeEntry} with given name and sets attribute names to be loaded
+	 * 
+	 * @param entryName
+	 * @param attributeNames
+	 */
+	public LDAPTreeEntry(String entryName, String[] attributeNames){
 		this.entryName = entryName;
+		this.attributeNames = attributeNames;
 	}
 	
 	/**
@@ -69,8 +95,49 @@ public class LDAPTreeEntry {
 	 * 
 	 * @return Name of this entry
 	 */
-	public String getEntryName() {
+	public String getName() {
 		return entryName;
+	}
+	
+	/**
+	 * Get attributes of this {@link LDAPTreeEntry} represented with an {@link LDAPAttributeSet}.
+	 * If attributes are not loaded yet, they will be fetched from LDAP lazily here. Attributes to be 
+	 * loaded could be specified by {@link #setAttributeNames(String[])}, all attributes will be loaded otherwise.
+	 * 
+	 * As this method could communicate to LDAP directory you should consider to use it within some {@link ProgressMonitor}.
+	 * 
+	 * @param bindCredentials Login(entry name) and password for bind, could be <code>null</code> but in this case anonymous access hould be enabled in LDAP directory
+	 * @return {@link LDAPAttributeSet} with attributes of this entry
+	 * @throws UserManagementSystemCommunicationException 
+	 * @throws LoginException 
+	 */
+	public LDAPAttributeSet getAttributes(BindCredentials bindCredentials) throws UserManagementSystemCommunicationException, LoginException {
+		if (entryAttributes == null){
+			LDAPConnection connection = null;
+			try {
+				connection = LDAPConnectionManager.sharedInstance().getConnection(ldapConnectionParamsProvider);
+				if (bindCredentials != null){
+					connection.bind(bindCredentials.getLogin(), bindCredentials.getPassword());
+				}
+				
+				entryAttributes = connection.getAttributesForEntry(entryName, attributeNames);
+				return entryAttributes;
+
+			} finally {
+				LDAPConnectionManager.sharedInstance().releaseConnection(connection);
+			}
+
+		}
+		return entryAttributes;
+	}
+	
+	/**
+	 * Set attribute names to be loaded.
+	 * 
+	 * @param attributeNames
+	 */
+	public void setAttributeNames(String[] attributeNames) {
+		this.attributeNames = attributeNames;
 	}
 
 	/**
@@ -105,8 +172,9 @@ public class LDAPTreeEntry {
 						
 						childLdapEntries = new ArrayList<LDAPTreeEntry>();
 						for (String entryName : childEntries) {
-							LDAPTreeEntry ldapTreeEntry = new LDAPTreeEntry(entryName);
+							LDAPTreeEntry ldapTreeEntry = new LDAPTreeEntry(entryName, attributeNames);
 							ldapTreeEntry.setLdapConnectionParamsProvider(ldapConnectionParamsProvider);
+							ldapTreeEntry.getAttributes(bindCredentials);	// loading attributes here to save time later
 							childLdapEntries.add(ldapTreeEntry);
 						}
 
@@ -147,6 +215,15 @@ public class LDAPTreeEntry {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Check if attributes have been already loaded for this entry.
+	 * 
+	 * @return <code>true</code> if attributes were loaded
+	 */
+	public boolean hasAttributesLoaded(){
+		return entryAttributes != null;
 	}
 	
 	/**

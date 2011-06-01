@@ -3,6 +3,7 @@ package org.nightlabs.jfire.auth.ui.ldap.tree;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -12,10 +13,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttribute;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnection;
 
@@ -30,6 +34,12 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 
 	private LDAPTree ldapTree;
 	private Set<LDAPTreeEntry> selectedElements;
+	
+	/**
+	 * If this field is set than this {@link LDAPAttributeSet} is used as a selection criteria inside {@link LDAPTree}.
+	 * It means that entries which have the same attrioute values will be allowed for selection.
+	 */
+	private LDAPAttributeSet selectionCriteriaAttributes;
 	
 	/**
 	 * Parameters for {@link LDAPConnection} which are passed to {@link LDAPTree}.
@@ -60,7 +70,25 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 		}
 		this.ldapConnectionParamsProvider = ldapConnectionParamsProvider;
 	}
+	
+	/**
+	 * Set selection criteria. See {@link #selectionCriteriaAttributes} description.
+	 * 
+	 * @param selectionCriteriaAttributes {@link LDAPAttributeSet} used as selection criteria
+	 */
+	public void setSelectionCriteriaAttributes(LDAPAttributeSet selectionCriteriaAttributes) {
+		this.selectionCriteriaAttributes = selectionCriteriaAttributes;
+	}
 
+	/**
+	 * Get selected {@link LDAPTree} elements.
+	 * 
+	 * @return {@link Set} of selected {@link LDAPTreeEntry} objects
+	 */
+	public Set<LDAPTreeEntry> getSelectedElements() {
+		return selectedElements;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -84,7 +112,7 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 			public void selectionChanged(SelectionChangedEvent event) {
 				Button okButton = getButton(OK);
 				if (okButton != null && !okButton.isDisposed()){
-					okButton.setEnabled(event.getSelection() != null && !event.getSelection().isEmpty());
+					okButton.setEnabled(event.getSelection() != null && !event.getSelection().isEmpty() && isSelectionAllowed());
 				}
 			}
 		});
@@ -101,12 +129,34 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 		super.okPressed();
 	}
 	
-	/**
-	 * Get selected {@link LDAPTree} elements.
-	 * 
-	 * @return {@link Set} of selected {@link LDAPTreeEntry} objects
-	 */
-	public Set<LDAPTreeEntry> getSelectedElements() {
-		return selectedElements;
+	private boolean isSelectionAllowed(){
+		if (selectionCriteriaAttributes == null
+				|| ldapTree.getInput() instanceof ILDAPConnectionParamsProvider){
+			setErrorMessage(null);
+			return true;
+		}
+		
+		Set<LDAPTreeEntry> selectedElements = ldapTree.getSelectedElements();
+		for (LDAPTreeEntry ldapTreeEntry : selectedElements) {
+			if (ldapTreeEntry.hasAttributesLoaded()){
+				try {
+					LDAPAttributeSet attributes = ldapTreeEntry.getAttributes(null);
+					for (LDAPAttribute<Object> ldapAttribute : selectionCriteriaAttributes) {
+						if (!attributes.containsAllAttributeValues(ldapAttribute.getName(), ldapAttribute.getValues())){
+							setErrorMessage("Selected entry should contain these attributes: " + selectionCriteriaAttributes.toString());
+							return false;
+						}
+					}
+				} catch (Exception e) {
+					// just writing to log and returning true
+					StatusManager.getManager().handle(
+							new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, e.getMessage(), e),
+							StatusManager.LOG
+							);
+				}
+			}
+		}
+		setErrorMessage(null);
+		return true;
 	}
 }
