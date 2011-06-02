@@ -61,6 +61,8 @@ public class GenericExportWizardPage extends WizardHopPage{
 	
 	private Collection<Object> selectedObjectsIDs = new HashSet<Object>();
 	private boolean shouldExportAll = true;
+	
+	private boolean canFinish = false;
 
 	/**
 	 * Default constructor
@@ -113,6 +115,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 					userTable.setEnabled(true);
 					tableParentLayout.topControl = userTable;
 					userTable.getParent().layout();
+					updateStatus(null);
 				}
 			}
 		});
@@ -128,6 +131,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 					setEnabledRecursively(personSearchComposite, true);
 					tableParentLayout.topControl = personSearchComposite;
 					personSearchComposite.getParent().layout();
+					updateStatus(null);
 				}
 			}
 		});
@@ -152,6 +156,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 				if (selectedObjectsIDs.isEmpty()){
 					updateStatus("Please select at least on User!");
 				}else{
+					canFinish = true;
 					updateStatus(null);
 				}
 			}
@@ -169,6 +174,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 				if (selectedObjectsIDs.isEmpty()){
 					updateStatus("Please find and select at least on Person!");
 				}else{
+					canFinish = true;
 					updateStatus(null);
 				}
 			}
@@ -178,6 +184,14 @@ public class GenericExportWizardPage extends WizardHopPage{
 		
 		setControl(parent);
 		return parent;
+	}
+	
+	@Override
+	public boolean canBeLastPage() {
+		if (shouldExportAll){
+			return true;
+		}
+		return canFinish;
 	}
 
 	/**

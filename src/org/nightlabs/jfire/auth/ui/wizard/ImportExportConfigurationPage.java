@@ -65,6 +65,20 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	}
 
 	/**
+	 * Sets selected {@link UserManagementSystem} and {@link SyncDirection} so this page could be omitted and shows the next one.
+	 * 
+	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
+	 * @param syncDirection Direction of synchronization, either import or export
+	 */
+	public void proceedToNextPage(UserManagementSystem userManagementSystem, SyncDirection syncDirection) {
+		if (userManagementSystem != null && syncDirection != null){
+			this.syncDirection = syncDirection;
+			setSelectedUserManagementSystemInternal(userManagementSystem);
+			getContainer().showPage(getNextPage());
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -231,7 +245,6 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	
 	private ISelectionChangedListener syncPerfomerfSelectListener = new ISelectionChangedListener() {
 		
-		@SuppressWarnings("unchecked")
 		@Override
 		public void selectionChanged(SelectionChangedEvent e) {
 			if (e.getSelection() instanceof StructuredSelection){
@@ -244,29 +257,34 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				}
 				descriptionLabel.setText(importButton.getSelection() ? "Import was selected! TODO: description" : "Export was selected! TODO: description");
 				
-				currentUserManagementSystem = selectedUserManagementSystem;
-				
-				if (currentSynchronizationHop != null) {
-					if (getWizard() instanceof DynamicPathWizard) {
-						DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
-						wiz.removeDynamicWizardPage(currentSynchronizationHop.getEntryPage());
-					}
-				}
-				
-				IWizardHop wizardHop = UserManagementSystemUIMappingRegistry.sharedInstance().getWizardHop(
-						(Class<? extends UserManagementSystemType<?>>) currentUserManagementSystem.getType().getClass(),
-						(Class<? extends DynamicPathWizard>) getWizard().getClass()
-						);
-				if (wizardHop instanceof ISynchronizationPerformerHop) {
-					currentSynchronizationHop = (ISynchronizationPerformerHop) wizardHop;
-					currentSynchronizationHop.configurePages(selectedUserManagementSystem, getSyncDirection());
-					if (getWizard() instanceof DynamicPathWizard) {
-						DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
-						wiz.addDynamicWizardPage(currentSynchronizationHop.getEntryPage());
-					}
-				}
+				setSelectedUserManagementSystemInternal(selectedUserManagementSystem);
 				getContainer().updateButtons();
 			}
 		}
 	};
+	
+	@SuppressWarnings("unchecked")
+	private void setSelectedUserManagementSystemInternal(UserManagementSystem selectedUserManagementSystem){
+		currentUserManagementSystem = selectedUserManagementSystem;
+		
+		if (currentSynchronizationHop != null) {
+			if (getWizard() instanceof DynamicPathWizard) {
+				DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
+				wiz.removeDynamicWizardPage(currentSynchronizationHop.getEntryPage());
+			}
+		}
+		
+		IWizardHop wizardHop = UserManagementSystemUIMappingRegistry.sharedInstance().getWizardHop(
+				(Class<? extends UserManagementSystemType<?>>) currentUserManagementSystem.getType().getClass(),
+				(Class<? extends DynamicPathWizard>) getWizard().getClass()
+				);
+		if (wizardHop instanceof ISynchronizationPerformerHop) {
+			currentSynchronizationHop = (ISynchronizationPerformerHop) wizardHop;
+			currentSynchronizationHop.configurePages(selectedUserManagementSystem, getSyncDirection());
+			if (getWizard() instanceof DynamicPathWizard) {
+				DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
+				wiz.addDynamicWizardPage(currentSynchronizationHop.getEntryPage());
+			}
+		}
+	}
 }

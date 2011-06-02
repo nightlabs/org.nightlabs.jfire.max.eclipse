@@ -54,6 +54,19 @@ public class ImportExportWizard extends DynamicPathWizard{
 		importExportWizardHop = new ImportExportWizardHop();
 		addPage(importExportWizardHop.getEntryPage());
 	}
+	
+	/**
+	 * Proceeds to import or export page depending on {@link #selectedUserManagementSystem} and {@link #selectedSyncDirection}
+	 * whih were set in corresponding constructor.
+	 * 
+	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
+	 * @param syncDirection Direction of synchronization, either import or export
+	 */
+	public void proceedToSynchronizationPage(UserManagementSystem userManagementSystem, SyncDirection syncDirection){
+		if (userManagementSystem != null && syncDirection != null){
+			importExportWizardHop.proceedToNextPage(userManagementSystem, syncDirection);
+		}
+	}
 
 	/**
 	 * {@inheritDoc}

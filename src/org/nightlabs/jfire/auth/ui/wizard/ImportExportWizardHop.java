@@ -52,7 +52,7 @@ public class ImportExportWizardHop extends WizardHop{
 		// create page with "loading usermanagement systems..." label
 		configPage = new ImportExportConfigurationPage();
 		setEntryPage(configPage);
-		
+
 		loadJob = new Job("loading all user management systems") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -81,8 +81,19 @@ public class ImportExportWizardHop extends WizardHop{
 		
 		loadJob.schedule();
 		
-	}	
+	}
 	
+	/**
+	 * Sets selected {@link UserManagementSystem} and {@link SyncDirection} so {@link ImportExportConfigurationPage} 
+	 * and calls it to proceed to the next page.
+	 * 
+	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
+	 * @param syncDirection Direction of synchronization, either import or export
+	 */
+	public void proceedToNextPage(UserManagementSystem userManagementSystem, SyncDirection syncDirection) {
+		configPage.proceedToNextPage(userManagementSystem, syncDirection);
+	}
+
 	/**
 	 * Delegates running synchronization to specific {@link ISynchronizationPerformerHop} implementation.
 	 * 
