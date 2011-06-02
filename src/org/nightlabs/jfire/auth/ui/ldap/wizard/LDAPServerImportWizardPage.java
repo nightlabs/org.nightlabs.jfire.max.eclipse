@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -14,6 +15,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
@@ -22,6 +24,7 @@ import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * Wizard page contributed to {@link ImportExportWizard} by {@link LDAPServerImportExportWizardHop}.
@@ -41,6 +44,8 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 	
 	private Button importAllButton;
 	private Button importSelectedButton;
+	
+	private boolean canFinish = false;
 	
 	/**
 	 * Default constructor
@@ -85,6 +90,7 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 					shouldImportAll = false;
 					ldapTree.setInput(treeConnectionParamsProvider);
 					ldapTree.setEnabled(true);
+					updateStatus(null);
 				}
 			}
 		});
@@ -95,11 +101,29 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (importSelectedButton.getSelection()){
+					canFinish = true;
+					updateStatus(null);
 					selectedLDAPEntries = ldapTree.getSelectedElements();
 					if (selectedLDAPEntries == null || selectedLDAPEntries.isEmpty()){
 						updateStatus("Select at least one entry!");
 					}else{
-						updateStatus(null);
+						for (LDAPTreeEntry treeEntry : selectedLDAPEntries){
+							if (treeEntry.hasAttributesLoaded()){
+								try{
+									if (!treeEntry.getAttributes(null).containsAnyAttributeValue("objectClass", CollectionUtil.createHashSet("person", "posixAccount"))){
+										canFinish = false;
+										updateStatus("Selected entry should have these attributes: objectClass=person or posixAccount");
+										break;
+									}
+								} catch (Exception e) {
+									// just writing to log
+									StatusManager.getManager().handle(
+											new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, e.getMessage(), e),
+											StatusManager.LOG
+											);
+								}
+							}
+						}
 					}
 				}
 			}
@@ -109,7 +133,18 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 		setControl(parent);
 		return parent;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean canBeLastPage() {
+		if (shouldImportAll){
+			return true;
+		}
+		return canFinish;
+	}
+	
 	/**
 	 * {@inheritDoc} 
 	 */

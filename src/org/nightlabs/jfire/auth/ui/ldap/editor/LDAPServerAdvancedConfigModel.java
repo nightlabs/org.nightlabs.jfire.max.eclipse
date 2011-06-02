@@ -87,5 +87,14 @@ public class LDAPServerAdvancedConfigModel{
 	public void setLeading(boolean isLeading){
 		ldapServer.setLeading(isLeading);
 	}
-	
+
+	/**
+	 * Get underlying {@link LDAPServer} instance.
+	 * DO NOT edit it directly!
+	 * 
+	 * @return {@link LDAPServer} instance being edited
+	 */
+	public LDAPServer getLdapServer() {
+		return ldapServer;
+	}
 }

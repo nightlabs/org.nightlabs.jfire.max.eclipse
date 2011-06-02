@@ -6,6 +6,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -25,6 +26,13 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
+import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 
 /**
@@ -186,6 +194,60 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 			createDescriptionExpandable(parent, toolkit, LDAPScriptSetHelper.getScriptDescriptionByName(scriptName));
 		}
 
+
+		Label separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		gd.verticalIndent = 10;
+		separatorLabel.setLayoutData(gd);
+		
+		Button openExportButton = new Button(parent, SWT.PUSH);
+		openExportButton.setText("Export data to LDAP...");
+		openExportButton.setToolTipText("Opens a wizard for exporting JFire entities to LDAP directory");
+		openExportButton.setAlignment(SWT.LEFT);
+		openExportButton.setImage(
+				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "exportButton", ImageDimension._16x16.toString(), ImageFormat.png));
+		gd = new GridData();
+		gd.widthHint = 200;
+		gd.horizontalSpan = 2;
+		openExportButton.setLayoutData(gd);
+		openExportButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				openWizardDialog(model.getLdapServer(), SyncDirection.EXPORT);
+			}
+		});
+
+		Button openImportButton = new Button(parent, SWT.PUSH);
+		openImportButton.setText("Import data from LDAP...");
+		openImportButton.setToolTipText("Opens a wizard for importing LDAP entries into JFire objects");
+		openImportButton.setAlignment(SWT.LEFT);
+		openImportButton.setImage(
+				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "importButton", ImageDimension._16x16.toString(), ImageFormat.png));
+		gd = new GridData();
+		gd.widthHint = 200;
+		gd.horizontalSpan = 2;
+		openImportButton.setLayoutData(gd);
+		openImportButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				openWizardDialog(model.getLdapServer(), SyncDirection.IMPORT);
+			}
+		});
+
+	}
+	
+	private static void openWizardDialog(LDAPServer ldapServer, SyncDirection syncDirection){
+		ImportExportWizard wiz = new ImportExportWizard();
+		DynamicPathWizardDialog dynamicPathWizardDialog = new DynamicPathWizardDialog(wiz.getShell(), wiz) {
+			@Override
+			protected Point getInitialSize() {
+				return new Point(780,650);
+			}
+		};
+		dynamicPathWizardDialog.setBlockOnOpen(false);
+		dynamicPathWizardDialog.open();
+		wiz.proceedToSynchronizationPage(ldapServer, syncDirection);
 	}
 	
 	private void createEditScriptLink(Composite parent, String scriptName){
