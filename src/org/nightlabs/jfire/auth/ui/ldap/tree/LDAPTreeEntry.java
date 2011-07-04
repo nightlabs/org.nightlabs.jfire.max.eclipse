@@ -124,6 +124,9 @@ public class LDAPTreeEntry {
 				return entryAttributes;
 
 			} finally {
+				if (connection != null && bindCredentials != null){
+					connection.unbind();
+				}
 				LDAPConnectionManager.sharedInstance().releaseConnection(connection);
 			}
 
@@ -183,6 +186,9 @@ public class LDAPTreeEntry {
 					} catch (Exception e){
 						return new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, "Error occured during entry loading!", e);
 					} finally {
+						if (connection != null && bindCredentials != null){
+							connection.unbind();
+						}
 						LDAPConnectionManager.sharedInstance().releaseConnection(connection);
 					}
 				}
