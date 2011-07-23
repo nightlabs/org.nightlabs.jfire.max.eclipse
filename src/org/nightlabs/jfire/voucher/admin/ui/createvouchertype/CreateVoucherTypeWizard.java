@@ -13,7 +13,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
@@ -96,7 +96,7 @@ extends DynamicPathWizard
 			voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
 			break;
 		case NONE:
-			break;		
+			break;
 		default:
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}

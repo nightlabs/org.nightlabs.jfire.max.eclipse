@@ -29,7 +29,7 @@ import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.AccountTypeID;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -48,7 +48,7 @@ extends WizardHopPage
 
 	private Currency currency;
 	private Account preselectedAccount;
- 
+
 	private Button createAccount;
 	private Button selectAccount;
 	private ListComposite<Account> accountList;
@@ -109,8 +109,8 @@ extends WizardHopPage
 			}
 		});
 
-		
-		
+
+
 		Account dummy = new Account("a.b", "a.b", new AccountType("a.b", "a.b", false), new LegalEntity("a.b", "a.b"), new Currency("a.b", "a.b", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
 		accountList.addElement(dummy);
