@@ -14,3 +14,7 @@ Export-Package: org.nightlabs.jfire.pbx.ui,
  org.nightlabs.jfire.pbx.ui.call,
  org.nightlabs.jfire.pbx.ui.config
 Bundle-Localization: plugin
+Import-Package: org.eclipse.ui.forms,
+ org.eclipse.ui.forms.editor,
+ org.eclipse.ui.forms.events,
+ org.eclipse.ui.forms.widgets

@@ -22,7 +22,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.extension.AbstractEPProcessor;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.pbx.Call;
 import org.nightlabs.jfire.pbx.NoPhoneSystemAssignedException;
 import org.nightlabs.jfire.pbx.PhoneSystem;
