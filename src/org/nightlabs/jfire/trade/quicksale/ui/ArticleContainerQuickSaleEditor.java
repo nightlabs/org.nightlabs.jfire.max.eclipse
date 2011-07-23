@@ -10,7 +10,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.part.PartAdapter;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;

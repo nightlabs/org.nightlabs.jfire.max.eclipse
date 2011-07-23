@@ -5,9 +5,9 @@ Bundle-SymbolicName: org.nightlabs.jfire.trade.quicksale.ui;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.nightlabs.jfire.trade.quicksale.ui.Activator
 Bundle-Vendor: NightLabs.org
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.nightlabs.jfire.trade.ui
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.trade.ui,
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Bundle-Localization: plugin

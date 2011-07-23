@@ -17,7 +17,7 @@ import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;

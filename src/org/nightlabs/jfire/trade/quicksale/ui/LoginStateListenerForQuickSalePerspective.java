@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
-import org.nightlabs.jfire.base.ui.login.LoginStateListener;
+import org.nightlabs.jfire.base.login.ui.LoginStateChangeEvent;
+import org.nightlabs.jfire.base.login.ui.LoginStateListener;
 
 public class LoginStateListenerForQuickSalePerspective
 implements LoginStateListener
