@@ -30,4 +30,8 @@ Export-Package: org.nightlabs.jfire.reporting.trade.ui,
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.config, org.nightlabs.jfire.base.j2ee
+Import-Package: org.eclipse.ui.forms,
+ org.eclipse.ui.forms.editor,
+ org.eclipse.ui.forms.events,
+ org.eclipse.ui.forms.widgets
  
