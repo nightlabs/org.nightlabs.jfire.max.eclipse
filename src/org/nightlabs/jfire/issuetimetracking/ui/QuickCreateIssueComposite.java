@@ -31,7 +31,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.department.prop.DepartmentDataField;
 import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.idgenerator.IDGenerator;

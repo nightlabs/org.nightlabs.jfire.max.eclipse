@@ -20,7 +20,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssueType;
@@ -33,7 +33,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.progress.NullProgressMonitor;
 
-public class CreateIssueQuickDialog 
+public class CreateIssueQuickDialog
 extends ResizableTitleAreaDialog
 {
 	public CreateIssueQuickDialog(Shell shell) {
@@ -41,7 +41,7 @@ extends ResizableTitleAreaDialog
 	}
 
 	private static final String DEFAULT_MESSAGE = Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.message"); //$NON-NLS-1$
-	
+
 	private QuickCreateIssueComposite quickCreateComposite;
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -59,7 +59,7 @@ extends ResizableTitleAreaDialog
 		quickCreateComposite.setLayoutData(gridData);
 		return wrapper;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
 	 */
@@ -68,7 +68,7 @@ extends ResizableTitleAreaDialog
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.dialogTitle")); //$NON-NLS-1$
 	}
-	
+
 	private static String[] FETCH_GROUP_ISSUE = new String[]{
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_STATE,
@@ -81,7 +81,7 @@ extends ResizableTitleAreaDialog
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 	};
-	
+
 	private Issue newIssue;
 	@Override
 	protected void okPressed() {
@@ -92,12 +92,12 @@ extends ResizableTitleAreaDialog
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					String organisationID = Login.sharedInstance().getOrganisationID();
-				
-					final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);				
+
+					final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);
 					IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, new String[] {IssueType.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.nightlabs.progress.NullProgressMonitor());
 					newIssue.setIssueType(issueType);
 					newIssue.getPropertySet().deflate();
-					
+
 					newIssue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					quickCreateComposite.initData();
 					Display.getDefault().asyncExec(new Runnable() {
@@ -105,7 +105,7 @@ extends ResizableTitleAreaDialog
 						public void run() {
 							if (newIssue != null)
 								setMessage(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.afterSavingMessage")); //$NON-NLS-1$
-							
+
 							Timer timer = new Timer();
 							TimerTask timerTask = new TimerTask(){
 								@Override
@@ -119,11 +119,11 @@ extends ResizableTitleAreaDialog
 								}
 							};
 							timer.schedule(timerTask, 1000 * 2);
-							
+
 							quickCreateComposite.initUI();
 						}
 					});
-					
+
 					return Status.OK_STATUS;
 				}
 			};
@@ -134,17 +134,17 @@ extends ResizableTitleAreaDialog
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 
 	@Override
 	protected Button createButton(Composite parent, int id, String label,
 			boolean defaultButton) {
 		Button button = super.createButton(parent, id, label, defaultButton);
-		if (id == OK) 
+		if (id == OK)
 			button.setEnabled(false);
 		return button;
 	}
-	
+
 	public void setOKButtonEnabled(boolean enabled) {
 		getButton(OK).setEnabled(enabled);
 	}
