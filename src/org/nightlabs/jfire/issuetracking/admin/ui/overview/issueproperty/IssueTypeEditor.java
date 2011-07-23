@@ -3,8 +3,8 @@ package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.login.ui.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditor;
-import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;

@@ -7,14 +7,10 @@ Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.ui,
- org.eclipse.ui.forms,
- org.eclipse.jface.text,
- org.eclipse.ui.editors,
  org.nightlabs.base.ui,
- org.eclipse.ui.workbench.texteditor,
  org.nightlabs.jfire.issuetracking.ui,
- org.nightlabs.jfire.base.ui
+ org.nightlabs.jfire.base.ui,
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.admin.ui,
  org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty

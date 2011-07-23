@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.ui.overview.AbstractEntry;
 import org.nightlabs.jfire.base.ui.overview.EntryFactory;
 import org.nightlabs.jfire.base.ui.overview.EntryViewer;
