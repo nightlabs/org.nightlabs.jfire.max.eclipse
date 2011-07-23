@@ -50,3 +50,7 @@ Export-Package: org.nightlabs.jfire.reporting.admin.parameter.ui,
  org.nightlabs.jfire.reporting.admin.parameter.ui.page,
  org.nightlabs.jfire.reporting.admin.parameter.ui.request,
  org.nightlabs.jfire.reporting.admin.parameter.ui.tool
+Import-Package: org.eclipse.ui.forms,
+ org.eclipse.ui.forms.editor,
+ org.eclipse.ui.forms.events,
+ org.eclipse.ui.forms.widgets
