@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.importlayout;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,7 +49,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -62,7 +60,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.ReportingConstants;
@@ -81,15 +79,15 @@ import org.w3c.dom.Node;
 /**
  * @author  Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  */
-public class ImportReportLayoutDialog 
-extends ResizableTrayDialog 
+public class ImportReportLayoutDialog
+extends ResizableTrayDialog
 {
 	private ReportCategory reportCategory;
 
 	/**
 	 * @param parentShell
 	 */
-	public ImportReportLayoutDialog(Shell parentShell, ReportCategory reportCategory) 
+	public ImportReportLayoutDialog(Shell parentShell, ReportCategory reportCategory)
 	{
 		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
@@ -97,7 +95,7 @@ extends ResizableTrayDialog
 	}
 
 	@Override
-	protected void configureShell(Shell newShell) 
+	protected void configureShell(Shell newShell)
 	{
 		super.configureShell(newShell);
 		newShell.setText("Import Report Layout");
@@ -119,7 +117,7 @@ extends ResizableTrayDialog
 	private boolean needRenamingPropertyFiles = false;
 
 	@Override
-	protected Control createDialogArea(Composite parent) 
+	protected Control createDialogArea(Composite parent)
 	{
 		wrapper = new XComposite(parent, SWT.NONE);
 
@@ -144,7 +142,7 @@ extends ResizableTrayDialog
 				return super.doSetUpFileDialog(filterNames, filterExtensions);
 			};
 		};
-		reportLayoutFileSelectionComposite.getFileTextControl().setEditable(false); 
+		reportLayoutFileSelectionComposite.getFileTextControl().setEditable(false);
 		reportLayoutFileSelectionComposite.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent m) {
@@ -153,7 +151,7 @@ extends ResizableTrayDialog
 			}
 		});
 
-		//Imported Report 
+		//Imported Report
 		reportItemGroup = new Group(wrapper, SWT.NONE);
 		reportItemGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		reportItemGroup.setLayout(new GridLayout(1, false));
@@ -162,7 +160,7 @@ extends ResizableTrayDialog
 		autogenerateIDCheckbox = new Button(reportItemGroup, SWT.CHECK);
 		autogenerateIDCheckbox.setText("Auto generate ReportRegistryItemID: ");
 		autogenerateIDCheckbox.setSelection(true);
-		autogenerateIDCheckbox.addSelectionListener(new SelectionAdapter() 
+		autogenerateIDCheckbox.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -188,7 +186,7 @@ extends ResizableTrayDialog
 		reportRegistryItemNameEditor = new I18nTextEditor(reportItemGroup);
 		reportRegistryItemNameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		reportRegistryItemNameEditor.setEnabled(false);
-		reportRegistryItemNameEditor.addModifyListener(new ModifyListener() 
+		reportRegistryItemNameEditor.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -201,7 +199,7 @@ extends ResizableTrayDialog
 		reportRegistryItemDescriptionEditor = new I18nTextEditorMultiLine(reportItemGroup, reportRegistryItemNameEditor.getLanguageChooser());
 		reportRegistryItemDescriptionEditor.setLayoutData(new GridData(GridData.FILL_BOTH));
 		reportRegistryItemDescriptionEditor.setEnabled(false);
-		reportRegistryItemDescriptionEditor.addModifyListener(new ModifyListener() 
+		reportRegistryItemDescriptionEditor.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -213,20 +211,20 @@ extends ResizableTrayDialog
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				ReportRegistryItemID id = (ReportRegistryItemID)JDOHelper.getObjectId(reportCategory);
-				reportCategory = 
-					(ReportCategory)ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(id, 
-							new String[] {FetchPlan.DEFAULT, ReportRegistryItem.FETCH_GROUP_NAME, ReportCategory.FETCH_GROUP_CHILD_ITEMS}, 
+				reportCategory =
+					(ReportCategory)ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(id,
+							new String[] {FetchPlan.DEFAULT, ReportRegistryItem.FETCH_GROUP_NAME, ReportCategory.FETCH_GROUP_CHILD_ITEMS},
 							monitor);
 				return Status.OK_STATUS;
 			}
 		};
 		job.schedule();
-		
+
 		return wrapper;
 	}
 
 	@Override
-	protected void okPressed() 
+	protected void okPressed()
 	{
 		//Modify the Report Descriptor File based on the changes
 		//Report Category Node
@@ -245,7 +243,7 @@ extends ResizableTrayDialog
 		}
 
 		//Report Node
-		Node reportNode = 
+		Node reportNode =
 			NLDOMUtil.findElementNode(ReportingConstants.REPORT_ELEMENT, reportDescriptorDocument.getDocumentElement());
 
 		//ID
@@ -281,32 +279,32 @@ extends ResizableTrayDialog
 		}
 
 //		File resourceFolder = new File(tmpFolder, "resource");
-//		
+//
 //		File[] resourceFiles = resourceFolder.listFiles();
 //		for (File resourceFile : resourceFiles) {
 //			if (!resourceFile.getName().startsWith(reportRegistryItemID)) {
 //				resourceFile.renameTo(new File(resourceFolder, reportRegistryItemID + resourceFile.getName().split("_")[1]));
 //			}
 //		}
-		
-		//Zip 
+
+		//Zip
 		File outputZipFile = new File(IOUtil.getUserTempDir(
 				TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), reportLayoutFileSelectionComposite.getFile().getName());
 
 		if (needRenamingPropertyFiles) {
-			File resourceFolder = new File(IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), 
+			File resourceFolder = new File(IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX),
 					RESOURCE_FOLDER_NAME);
 			for (File resourceFile : resourceFolder.listFiles()) {
 				String newResourceFileName = resourceFile.getName().replaceAll(IOUtil.getFileNameWithoutExtension(reportLayoutZipFile.getName()), reportIDNode.getNodeValue()); //TODO Check me!!!
 				resourceFile.renameTo(new File(resourceFolder, newResourceFileName));
 			}
 
-			File textPartConfigurationFile = 
+			File textPartConfigurationFile =
 				new File(
-						IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), 
+						IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX),
 						IOUtil.getFileNameWithoutExtension(reportLayoutZipFile.getName()) + ReportingConstants.TEXT_PART_CONFIGURATION_FILE_SUFFIX
 				);
-			String newReportTextPartConfurationName = 
+			String newReportTextPartConfurationName =
 				textPartConfigurationFile.getName().replaceAll(IOUtil.getFileNameWithoutExtension(reportLayoutZipFile.getName()), reportRegistryItemIDText.getText()); //TODO Check me!!!
 			textPartConfigurationFile.renameTo(new File(IOUtil.getUserTempDir(TMP_FOLDER_PREFIX, TMP_FOLDER_SUFFIX), newReportTextPartConfurationName));
 		}
@@ -325,7 +323,7 @@ extends ResizableTrayDialog
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		IOUtil.deleteDirectoryRecursively(tmpFolder);
 
 		super.okPressed();
@@ -341,7 +339,7 @@ extends ResizableTrayDialog
 
 	private String reportRegistryItemID;
 	private File reportLayoutZipFile;
-	
+
 	private File tmpFolder;
 	private void loadDescriptorFile(final File reportLayoutZipFile) {
 		this.reportLayoutZipFile = reportLayoutZipFile;
@@ -377,23 +375,23 @@ extends ResizableTrayDialog
 
 
 				//Report Names
-				Collection<Node> reportChildNameNodes = 
+				Collection<Node> reportChildNameNodes =
 					NLDOMUtil.findNodeList(reportNode, ReportingConstants.REPORT_ELEMENT_NAME);
 
 				for (Node nameNode : reportChildNameNodes) {
 					reportRegistryItemNameEditor.getI18nText().setText(
-							NLDOMUtil.getAttributeValue(nameNode, "language"), 
+							NLDOMUtil.getAttributeValue(nameNode, "language"),
 							nameNode.getTextContent());
 				}
 				reportRegistryItemNameEditor.refresh();
 
 				//Report Descriptions
-				Collection<Node> reportChildDescriptionNodes = 
+				Collection<Node> reportChildDescriptionNodes =
 					NLDOMUtil.findNodeList(reportNode, ReportingConstants.REPORT_ELEMENT_DESCRIPTION);
 
 				for (Node nameNode : reportChildDescriptionNodes) {
 					reportRegistryItemDescriptionEditor.getI18nText().setText(
-							NLDOMUtil.getAttributeValue(nameNode, "language"), 
+							NLDOMUtil.getAttributeValue(nameNode, "language"),
 							nameNode.getTextContent());
 				}
 				reportRegistryItemDescriptionEditor.refresh();
@@ -421,7 +419,7 @@ extends ResizableTrayDialog
 	protected Button createButton(Composite parent, int id, String label,
 			boolean defaultButton) {
 		Button button = super.createButton(parent, id, label, defaultButton);
-		if (id == OK) 
+		if (id == OK)
 			button.setEnabled(false);
 		return button;
 	}

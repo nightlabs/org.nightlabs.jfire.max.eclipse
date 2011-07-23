@@ -32,7 +32,7 @@ import org.eclipse.birt.report.designer.ui.extensions.IDesignerExceptionHandler;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.admin.ui.platform.ClientResourceLocator;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
