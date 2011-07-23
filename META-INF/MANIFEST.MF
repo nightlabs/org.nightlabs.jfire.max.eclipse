@@ -7,10 +7,10 @@ Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.dynamictrade.ui.DynamicTradePlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
- org.nightlabs.tableprovider.ui;bundle-version="1.0.0"
+ org.nightlabs.tableprovider.ui;bundle-version="1.0.0",
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.dynamictrade.ui,
  org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail,
