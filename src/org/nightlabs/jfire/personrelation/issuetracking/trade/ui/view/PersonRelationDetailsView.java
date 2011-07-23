@@ -16,7 +16,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationDetailsComposite;
 import org.nightlabs.jfire.prop.id.PropertySetID;

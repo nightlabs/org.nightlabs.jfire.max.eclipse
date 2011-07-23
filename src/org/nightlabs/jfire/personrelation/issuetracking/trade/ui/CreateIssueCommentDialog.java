@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.dao.IssueCommentDAO;

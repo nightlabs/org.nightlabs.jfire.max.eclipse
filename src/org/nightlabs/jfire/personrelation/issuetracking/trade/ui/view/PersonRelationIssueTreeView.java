@@ -22,7 +22,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.Activator;
@@ -57,7 +57,7 @@ import org.nightlabs.notification.NotificationListener;
  * Since 2010.03.17, we have restored the original behaviours of this {@link PersonRelationIssueTreeView} to the pre-BEHR era. Kai.
  * TODO In the jfire_1.0 branch, the original behaviours of the PersonRelationIssueTreeView was (unconstitutionally) changed when working on the BEHR project. Restore it too!
  *
- * @author Marco หงุ่ยตระกูล-Schulze - marco at nightlabs dot de
+ * @author Marco à¸«à¸‡à¸¸à¹ˆà¸¢à¸•à¸£à¸°à¸�à¸¹à¸¥-Schulze - marco at nightlabs dot de
  * @author khaireel (at) nightlabs (dot) de
  */
 public class PersonRelationIssueTreeView extends

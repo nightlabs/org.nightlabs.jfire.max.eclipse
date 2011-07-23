@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
