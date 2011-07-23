@@ -32,10 +32,8 @@ import java.util.List;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,13 +45,16 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.progress.RCPProgressMonitor;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupDAO;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -113,10 +114,10 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 		customerGroupList.add(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcustomergroup.CustomerGroupSelectionPage.pseudoEntry_loading")); //$NON-NLS-1$
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcustomergroup.CustomerGroupSelectionPage.loadCustomerGroupsJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					customerGroups.clear();
-					customerGroups.addAll(CustomerGroupDAO.sharedInstance().getCustomerGroups(Login.getLogin().getOrganisationID(), false, FETCH_GROUPS_CUSTOMER_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+					customerGroups.addAll(CustomerGroupDAO.sharedInstance().getCustomerGroups(Login.getLogin().getOrganisationID(), false, FETCH_GROUPS_CUSTOMER_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new RCPProgressMonitor(monitor)));
 				} catch (Exception e) {
 					ExceptionHandlerRegistry.asyncHandleException(e);
 					throw new RuntimeException(e);

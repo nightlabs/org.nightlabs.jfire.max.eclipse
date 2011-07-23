@@ -29,7 +29,7 @@ package org.nightlabs.jfire.trade.admin.ui.moneyflow.edit;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.LocalAccountantDelegateTree;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;

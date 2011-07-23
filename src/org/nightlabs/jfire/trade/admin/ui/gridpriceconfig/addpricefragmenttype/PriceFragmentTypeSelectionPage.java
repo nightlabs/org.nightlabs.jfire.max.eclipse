@@ -32,10 +32,8 @@ import java.util.List;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,14 +45,16 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -116,7 +116,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 		priceFragmentTypeList.add(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype.PriceFragmentTypeSelectionPage.pseudoEntry_loading")); //$NON-NLS-1$
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype.PriceFragmentTypeSelectionPage.loadPriceFragmentTypesJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					AccountingManagerRemote accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					priceFragmentTypes.clear();

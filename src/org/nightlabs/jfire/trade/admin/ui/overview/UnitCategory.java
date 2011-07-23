@@ -19,7 +19,6 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
-import org.nightlabs.jfire.trade.admin.ui.editor.CurrencyCreateWizard;
 import org.nightlabs.jfire.trade.admin.ui.editor.UnitEditor;
 import org.nightlabs.jfire.trade.admin.ui.editor.UnitEditorInput;
 

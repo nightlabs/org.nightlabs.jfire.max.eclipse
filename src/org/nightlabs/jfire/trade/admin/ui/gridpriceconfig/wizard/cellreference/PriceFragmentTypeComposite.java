@@ -1,19 +1,11 @@
 package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
-import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeTable;
-import org.nightlabs.progress.NullProgressMonitor;
 
 public class PriceFragmentTypeComposite extends AbstractCellReferenceComposite{
 

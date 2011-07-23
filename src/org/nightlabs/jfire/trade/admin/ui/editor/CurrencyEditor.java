@@ -3,8 +3,8 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
+import org.nightlabs.jfire.base.login.ui.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditor;
-import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CurrencyEditor extends ActiveEntityEditor implements ICloseOnLogoutEditorPart

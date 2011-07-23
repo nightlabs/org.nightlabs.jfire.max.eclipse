@@ -38,25 +38,21 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.InsertCellReferenceAction;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.IJSEditor;
+import org.nightlabs.jseditor.ui.JSEditorFactory;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -69,13 +65,13 @@ public class CellDetail extends XComposite
 	private TabItem tabItemCell;
 	private TabItem tabItemFallback;
 
-	private JSEditorComposite cellDetailText;
-	public JSEditorComposite getCellDetailText() {
+	private IJSEditor cellDetailText;
+	public IJSEditor getCellDetailText() {
 		return cellDetailText;
 	}
 
-	private JSEditorComposite cellDetailFallbackText;
-	public JSEditorComposite getCellDetailFallbackText() {
+	private IJSEditor cellDetailFallbackText;
+	public IJSEditor getCellDetailFallbackText() {
 		return cellDetailFallbackText;
 	}
 //	private Text cellDetailText;
@@ -129,19 +125,19 @@ public class CellDetail extends XComposite
 		tabItemFallback = new TabItem(cellDetailFolder, SWT.NONE);
 		tabItemFallback.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.CellDetail.fallbackTabItem.text")); //$NON-NLS-1$
 
-		cellDetailText = new JSEditorComposite(cellDetailFolder);
-		cellDetailText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		cellDetailText = JSEditorFactory.createJSEditor(cellDetailFolder);
+		cellDetailText.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		cellDetailText.addFocusListener(cellDetailTextFocusListener);
-		cellDetailText.getSourceViewer().getTextWidget().addMouseListener(cellDetailTextMouseListener); //TODO
+		detailTextHookContextMenu(cellDetailText);
 		cellDetailText.setEnabled(false);
-		tabItemCell.setControl(cellDetailText);
+		tabItemCell.setControl(cellDetailText.getControl());
 
-		cellDetailFallbackText = new JSEditorComposite(cellDetailFolder);
-		cellDetailFallbackText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		cellDetailFallbackText = JSEditorFactory.createJSEditor(cellDetailFolder);
+		cellDetailFallbackText.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		cellDetailFallbackText.addFocusListener(cellDetailFallbackTextFocusListener);
-		cellDetailFallbackText.getSourceViewer().getTextWidget().addMouseListener(cellDetailFallbackTextMouseListener);	//TODO
+		fallbackTextHookContextMenu(cellDetailFallbackText);
 		cellDetailFallbackText.setEnabled(false);
-		tabItemFallback.setControl(cellDetailFallbackText);
+		tabItemFallback.setControl(cellDetailFallbackText.getControl());
 
 //		cellDetailText = new Text(cellDetailFolder, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 //		cellDetailText.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -254,29 +250,6 @@ public class CellDetail extends XComposite
 		}
 	};
 
-	//TODO
-	private MouseListener cellDetailTextMouseListener = new MouseAdapter(){
-		@Override
-		public void mouseDown(MouseEvent e) {
-			if(e.button == java.awt.event.MouseEvent.BUTTON3){
-				StyledText textWidget = (StyledText)e.getSource();
-				detailTextHookContextMenu(textWidget);
-				textWidget.getMenu().setVisible(true);
-			}//if
-		}
-	};
-	
-	//TODO
-	private MouseListener cellDetailFallbackTextMouseListener = new MouseAdapter(){
-		@Override
-		public void mouseDown(MouseEvent e) {
-			if(e.button == java.awt.event.MouseEvent.BUTTON3){
-				StyledText textWidget = (StyledText)e.getSource();
-				fallbackTextHookContextMenu(textWidget);
-				textWidget.getMenu().setVisible(true);
-			}//if
-		}
-	};
 	/******************************
 	 * Action
 	 ******************************/
@@ -284,7 +257,7 @@ public class CellDetail extends XComposite
 	private InsertCellReferenceAction cellRefFallbackAction;
 	
 //	private BuildScriptAction buildScriptAction;
-	private void detailTextHookContextMenu(StyledText textWidget) {
+	private void detailTextHookContextMenu(IJSEditor editor) {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
@@ -294,12 +267,10 @@ public class CellDetail extends XComposite
 				manager.add(new Separator());
 			}
 		});
-
-		Menu menu = menuMgr.createContextMenu(textWidget);
-		textWidget.setMenu(menu);
+		editor.createContextMenu(menuMgr);
 	}
 	
-	private void fallbackTextHookContextMenu(StyledText textWidget) {
+	private void fallbackTextHookContextMenu(IJSEditor editor) {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
@@ -309,20 +280,18 @@ public class CellDetail extends XComposite
 				manager.add(new Separator());
 			}
 		});
-
-		Menu menu = menuMgr.createContextMenu(textWidget);
-		textWidget.setMenu(menu);
+		editor.createContextMenu(menuMgr);
 	}
 
 	private void makeActions() {
 		//Insert Cell Reference Menu Item
 		if(cellRefAction == null){
-			cellRefAction = new InsertCellReferenceAction(priceConfigComposite, cellDetailText.getSourceViewer());
+			cellRefAction = new InsertCellReferenceAction(priceConfigComposite, cellDetailText);
 			cellRefAction.setEnabled(true);
 		}//if
 		
 		if(cellRefFallbackAction == null){
-			cellRefFallbackAction = new InsertCellReferenceAction(priceConfigComposite, cellDetailFallbackText.getSourceViewer());
+			cellRefFallbackAction = new InsertCellReferenceAction(priceConfigComposite, cellDetailFallbackText);
 			cellRefFallbackAction.setEnabled(true);
 		}//if
 

@@ -1,22 +1,22 @@
 package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
-import org.eclipse.jface.text.source.SourceViewer;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
+import org.nightlabs.jseditor.ui.IJSEditor;
 
 public class CellReferenceWizard extends DynamicPathWizard
 {
 	private AbstractCellReferencePage page = null;
-	private SourceViewer sourceViewer = null;
+	private IJSEditor targetEditor = null;
 	
 	private StringBuffer sourceBuffer = new StringBuffer();
 	private PriceConfigComposite priceConfigComposite = null;
 	
-	public CellReferenceWizard(SourceViewer sourceViewer, PriceConfigComposite priceConfigComposite){
+	public CellReferenceWizard(IJSEditor targetEditor, PriceConfigComposite priceConfigComposite){
 		super();
-		this.sourceViewer = sourceViewer;
+		this.targetEditor = targetEditor;
 		this.priceConfigComposite = priceConfigComposite;
-		sourceBuffer.append(sourceViewer.getDocument().get());
+		sourceBuffer.append(targetEditor.getDocumentText());
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class CellReferenceWizard extends DynamicPathWizard
 	 */
 	@Override
 	public void addPages() {
-		page = new CellReferencePage(sourceViewer, priceConfigComposite);
+		page = new CellReferencePage(targetEditor, priceConfigComposite);
 		getShell().setSize(600, 600);
 		addPage(page);
 	}
@@ -37,8 +37,8 @@ public class CellReferenceWizard extends DynamicPathWizard
 	
 	@Override
 	public boolean performFinish() {
-		sourceBuffer.append(page.getSourcePreviewComposite().getDocument().get());
-		sourceViewer.getDocument().set(sourceBuffer.toString());
+		sourceBuffer.append(page.getSourcePreviewComposite().getDocumentText());
+		targetEditor.setDocumentText(sourceBuffer.toString());
 		return true;
 	}
 }

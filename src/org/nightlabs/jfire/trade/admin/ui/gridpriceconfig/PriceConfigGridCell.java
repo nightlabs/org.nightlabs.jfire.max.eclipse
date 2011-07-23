@@ -35,7 +35,6 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de

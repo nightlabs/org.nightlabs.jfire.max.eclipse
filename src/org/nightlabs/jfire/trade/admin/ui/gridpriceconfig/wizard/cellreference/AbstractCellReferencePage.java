@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
 import java.util.List;
 
-import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
@@ -14,7 +13,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.IJSEditor;
+import org.nightlabs.jseditor.ui.JSEditorFactory;
 
 public abstract class AbstractCellReferencePage
 extends WizardHopPage
@@ -23,14 +23,14 @@ extends WizardHopPage
 	
 	private List<Composite> pageCompositeList;
 	
-	private SourceViewer sourceViewer;
+	private IJSEditor targetEditor;
 	private PriceConfigComposite priceConfigComposite;
 	
-	private JSEditorComposite scriptPreviewComposite = null;
+	private IJSEditor scriptPreview = null;
 	
-	public AbstractCellReferencePage(SourceViewer sourceViewer, PriceConfigComposite priceConfigComposite){
+	public AbstractCellReferencePage(IJSEditor targetEditor, PriceConfigComposite priceConfigComposite){
 		super(AbstractCellReferencePage.class.getName());
-		this.sourceViewer = sourceViewer;
+		this.targetEditor = targetEditor;
 		this.priceConfigComposite = priceConfigComposite;
 
 		setTitle(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.AbstractCellReferencePage.title")); //$NON-NLS-1$
@@ -39,10 +39,11 @@ extends WizardHopPage
 	
 	protected abstract List<Composite> createDimensionTabItems(TabFolder tabFolder);
 
-	protected SourceViewer getSourceViewer()
+	protected IJSEditor getTargetEditor()
 	{
-		return sourceViewer;
+		return targetEditor;
 	}
+	
 	protected PriceConfigComposite getPriceConfigComposite()
 	{
 		return priceConfigComposite;
@@ -85,14 +86,14 @@ extends WizardHopPage
 		scriptPreviewGroup.setLayoutData(gridData);
 		scriptPreviewGroup.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.AbstractCellReferencePage.scriptPreviewGroup.text")); //$NON-NLS-1$
 		
-		scriptPreviewComposite = new JSEditorComposite(scriptPreviewGroup);
-		scriptPreviewComposite.setLayoutData(gridData);
+		scriptPreview = JSEditorFactory.createJSEditor(scriptPreviewGroup);
+		((Composite) scriptPreview).setLayoutData(gridData);
 		
 		return tabFolder;
 	}
 
-	protected JSEditorComposite getSourcePreviewComposite(){
-		return scriptPreviewComposite;
+	protected IJSEditor getSourcePreviewComposite(){
+		return scriptPreview;
 	}
 	
 //	private TabItem overviewTabItem;

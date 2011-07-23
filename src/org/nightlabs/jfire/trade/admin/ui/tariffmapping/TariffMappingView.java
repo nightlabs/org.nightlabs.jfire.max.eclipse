@@ -22,7 +22,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.TariffMapping;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.tariff.TariffList;
 

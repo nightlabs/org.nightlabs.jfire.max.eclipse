@@ -14,7 +14,6 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 
 /**

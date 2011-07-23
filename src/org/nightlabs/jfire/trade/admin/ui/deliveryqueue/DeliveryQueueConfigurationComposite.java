@@ -6,10 +6,8 @@ import java.util.List;
 
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
@@ -25,10 +23,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
@@ -37,6 +36,7 @@ import org.nightlabs.jfire.store.deliver.DeliveryQueueDAO;
 import org.nightlabs.jfire.store.deliver.id.DeliveryQueueID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class DeliveryQueueConfigurationComposite extends XComposite {
 	private DeliveryQueueTableComposite pqTableComposite;
@@ -133,7 +133,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 
 		Job loadJob = new Job(loadingMsg) {
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					StoreManagerRemote storeManager = getStoreManager();
 					Collection<DeliveryQueueID> deliveryQueueIds = storeManager.getAvailableDeliveryQueueIDs(false);

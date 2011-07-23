@@ -35,7 +35,7 @@ import org.nightlabs.base.ui.language.LanguageChangeEvent;
 import org.nightlabs.base.ui.language.LanguageChangeListener;
 import org.nightlabs.base.ui.language.LanguageChooser;
 import org.nightlabs.base.ui.language.LanguageChooserList;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de

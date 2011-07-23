@@ -17,16 +17,12 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.jdo.JDOObjectsChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
 import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.dao.UnitDAO;
 import org.nightlabs.jfire.store.id.UnitID;
-import org.nightlabs.jfire.trade.admin.ui.overview.CurrencyTable.CurrencyTypeLabelProvider;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class UnitTable 

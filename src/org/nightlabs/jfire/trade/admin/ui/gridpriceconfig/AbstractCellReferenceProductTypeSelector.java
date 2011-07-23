@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 public abstract class AbstractCellReferenceProductTypeSelector implements CellReferenceProductTypeSelector
 {

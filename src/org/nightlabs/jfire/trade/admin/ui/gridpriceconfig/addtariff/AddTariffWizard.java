@@ -36,7 +36,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
 

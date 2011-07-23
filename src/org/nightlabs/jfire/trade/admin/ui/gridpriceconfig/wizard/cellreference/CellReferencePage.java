@@ -6,20 +6,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jseditor.ui.IJSEditor;
 
 public class CellReferencePage extends AbstractCellReferencePage{
 
 	private PriceConfigComposite priceConfigComposite = null;
 
-	public CellReferencePage(SourceViewer sourceViewer, PriceConfigComposite priceConfigComposite) {
-		super(sourceViewer, priceConfigComposite);
+	public CellReferencePage(IJSEditor targetEditor, PriceConfigComposite priceConfigComposite) {
+		super(targetEditor, priceConfigComposite);
 		this.priceConfigComposite = priceConfigComposite;
 	}
 
@@ -104,7 +104,7 @@ public class CellReferencePage extends AbstractCellReferencePage{
 			.append(CellReferenceWizard.R_BRACKET);
 
 		generatedScript = scriptBuilder.toString();
-		getSourcePreviewComposite().getDocument().set(generatedScript);
+		getSourcePreviewComposite().setDocumentText(generatedScript);
 	}
 
 	public String getGeneratedScript(){

@@ -39,7 +39,7 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;

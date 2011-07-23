@@ -34,8 +34,8 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.base.ui.part.PartVisibilityListener;
 import org.nightlabs.base.ui.part.PartVisibilityTracker;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.part.LSDPartController;
 import org.nightlabs.jfire.store.ProductType;
 
 /**
