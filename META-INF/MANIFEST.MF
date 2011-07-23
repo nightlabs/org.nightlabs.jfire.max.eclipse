@@ -5,9 +5,9 @@ Bundle-SymbolicName: org.nightlabs.jfire.personrelation.ui;singleton:=true
 Bundle-Version: 1.1.32
 Bundle-Activator: org.nightlabs.jfire.personrelation.ui.PersonRelationPlugin
 Bundle-Vendor: NightLabs.com
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.nightlabs.jfire.base.ui;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.personrelation.ui,

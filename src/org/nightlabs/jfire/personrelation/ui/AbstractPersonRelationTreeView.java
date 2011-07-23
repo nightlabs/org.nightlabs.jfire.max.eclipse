@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.nightlabs.base.ui.selection.SelectionProviderProxy;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeNode;
 import org.nightlabs.jfire.prop.id.PropertySetID;

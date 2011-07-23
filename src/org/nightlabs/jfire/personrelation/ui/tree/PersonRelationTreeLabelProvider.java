@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -260,6 +261,13 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 		}
 
 		return null;
+	}
+
+
+	@Override
+	public void update(ViewerCell cell) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
