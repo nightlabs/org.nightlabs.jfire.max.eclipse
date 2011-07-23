@@ -17,8 +17,8 @@ Export-Package: org.nightlabs.jfire.simpletrade.admin.ui,
  org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe,
  org.nightlabs.jfire.simpletrade.admin.ui.resource,
  org.nightlabs.jfire.simpletrade.admin.ui.store.search
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.simpletrade.ui,
- org.nightlabs.jfire.trade.admin.ui
+ org.nightlabs.jfire.trade.admin.ui,
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true

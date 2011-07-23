@@ -3,12 +3,13 @@
  */
 package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
+
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.jboss.logging.Logger;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
