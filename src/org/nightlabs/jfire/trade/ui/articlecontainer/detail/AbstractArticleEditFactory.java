@@ -53,7 +53,7 @@ implements ArticleEditFactory
 
 	public IArticleEditActionDelegate getArticleEditActionDelegate(String articleEditActionID)
 	{
-		return (IArticleEditActionDelegate) articleEditActionDelegates.get(articleEditActionID);
+		return articleEditActionDelegates.get(articleEditActionID);
 	}
 
 }

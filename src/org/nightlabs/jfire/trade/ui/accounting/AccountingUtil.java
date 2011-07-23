@@ -28,7 +28,7 @@ package org.nightlabs.jfire.trade.ui.accounting;
 
 import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

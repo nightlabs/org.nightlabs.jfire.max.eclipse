@@ -33,6 +33,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentResult;
+import org.nightlabs.jfire.compatibility.CompatibleDialogConstants;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
@@ -223,11 +224,11 @@ extends ResizableTitleAreaDialog
 		GridData stackTraceGD = ((GridData)errorStackTrace.getLayoutData());
 		if(visible) {
 			stackTraceGD.heightHint = errorStackTrace.getLineHeight() * STACK_TRACE_LINE_COUNT;
-			detailsButton.setText(IDialogConstants.HIDE_DETAILS_LABEL);
+			detailsButton.setText(CompatibleDialogConstants.get().HIDE_DETAILS_LABEL);
 			errorStackTrace.setVisible(true);
 		} else {
 			stackTraceGD.heightHint = 0;
-			detailsButton.setText(IDialogConstants.SHOW_DETAILS_LABEL);
+			detailsButton.setText(CompatibleDialogConstants.get().SHOW_DETAILS_LABEL);
 			errorStackTrace.setVisible(false);
 		}
 		Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -241,7 +242,7 @@ extends ResizableTitleAreaDialog
 		createButton(parent, SEND_ERROR_REPORT_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.sendErrorReport.text"), false); //$NON-NLS-1$
 //		super.createButtonsForButtonBar(parent);
 		createButton(parent, IGNORE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.ignore.text"), false); //$NON-NLS-1$
-		detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL, false);
+		detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, CompatibleDialogConstants.get().SHOW_DETAILS_LABEL, false);
 	}
 
 	protected Control createStackTraceText(Composite parent)

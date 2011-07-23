@@ -39,7 +39,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
@@ -159,7 +159,7 @@ public class CreateOfferAction extends CreateArticleContainerAction
 		public void selectionChanged(IAction action, ISelection selection)
 		{
 			HeaderTreeComposite headerTreeComposite = headerTreeView.getHeaderTreeComposite(); 
-			if (!headerTreeComposite.isDisposed() && headerTreeComposite.getCreateOfferAction() != null) {
+			if (headerTreeComposite != null && !headerTreeComposite.isDisposed() && headerTreeComposite.getCreateOfferAction() != null) {
 				headerTreeComposite.getCreateOfferAction().calculateEnabled(selection);
 				action.setEnabled(headerTreeComposite.getCreateOfferAction().isEnabled());				
 			}

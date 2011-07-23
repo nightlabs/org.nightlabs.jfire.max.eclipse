@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.eclipse.ui.IEditorPart;
-import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
+import org.nightlabs.jfire.base.login.ui.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.trade.ArticleContainer;
 
 /**

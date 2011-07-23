@@ -75,7 +75,7 @@ public class PriceFragmentTypeCombo extends XComposite {
 	
 	public PriceFragmentType getSelectedPriceFragmentType() {
 		if (getCombo().getSelectionIndex() >= 0)
-			return (PriceFragmentType)priceFragmentTypes.get(getCombo().getSelectionIndex());
+			return priceFragmentTypes.get(getCombo().getSelectionIndex());
 		return null;
 	}
 	

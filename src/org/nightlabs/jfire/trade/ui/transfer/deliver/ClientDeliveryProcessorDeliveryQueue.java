@@ -49,7 +49,7 @@ public class ClientDeliveryProcessorDeliveryQueue extends AbstractClientDelivery
 
 	private DeliveryQueueConfigModule getDeliveryQueueConfigModule() {
 		String[] fetchGroups = new String[] { DeliveryQueueConfigModule.FETCH_GROUP_VISIBLE_DELIVERY_QUEUES, DeliveryQueue.FETCH_GROUP_NAME };
-		DeliveryQueueConfigModule printQueueConfigModule = (DeliveryQueueConfigModule) ConfigUtil.getUserCfMod(DeliveryQueueConfigModule.class,
+		DeliveryQueueConfigModule printQueueConfigModule = ConfigUtil.getUserCfMod(DeliveryQueueConfigModule.class,
 				fetchGroups, -1, new NullProgressMonitor());
 
 		return printQueueConfigModule;

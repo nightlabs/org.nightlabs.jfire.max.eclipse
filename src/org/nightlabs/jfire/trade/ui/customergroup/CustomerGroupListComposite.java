@@ -9,11 +9,9 @@ import java.util.List;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -27,10 +25,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.progress.RCPProgressMonitor;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
 public class CustomerGroupListComposite
@@ -114,10 +115,10 @@ implements ISelectionProvider
 
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupListComposite.loadCustomerGroups.job.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor)
+			protected IStatus run(ProgressMonitor monitor)
 			{
 				try {
-					final List<CustomerGroup> _customerGroups = CustomerGroupDAO.sharedInstance().getCustomerGroups(filterOrganisationID, filterOrganisationIDInverse, FETCH_GROUPS_TARIFF, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					final List<CustomerGroup> _customerGroups = CustomerGroupDAO.sharedInstance().getCustomerGroups(filterOrganisationID, filterOrganisationIDInverse, FETCH_GROUPS_TARIFF, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new RCPProgressMonitor(monitor));
 
 					if (customerGroupFilter != null) {
 						for (Iterator<CustomerGroup> it = _customerGroups.iterator(); it.hasNext();) {

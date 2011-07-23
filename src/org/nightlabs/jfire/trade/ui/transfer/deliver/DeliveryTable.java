@@ -35,7 +35,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
-			String localOrganisationID = org.nightlabs.jfire.base.ui.login.Login.sharedInstance().getOrganisationID();
+			String localOrganisationID = org.nightlabs.jfire.base.login.ui.Login.sharedInstance().getOrganisationID();
 
 			if (element instanceof Delivery) {
 				Delivery delivery = (Delivery) element;

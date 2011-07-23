@@ -3,26 +3,14 @@
  */
 package org.nightlabs.jfire.trade.ui.account.editor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
-import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
-import org.nightlabs.jfire.accounting.AccountingManagerBean;
-import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.SummaryAccount;
-import org.nightlabs.jfire.accounting.dao.AccountDAO;
-import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**

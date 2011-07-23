@@ -26,7 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.config;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -39,7 +38,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 import org.nightlabs.jfire.trade.config.SummedPriceFragmentTypeConfigModule;

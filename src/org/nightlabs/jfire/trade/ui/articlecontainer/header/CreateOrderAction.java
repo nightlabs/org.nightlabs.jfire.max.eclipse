@@ -41,8 +41,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
@@ -240,7 +240,7 @@ public class CreateOrderAction extends CreateArticleContainerAction
 		public void selectionChanged(IAction action, ISelection selection) 
 		{
 			HeaderTreeComposite headerTreeComposite = headerTreeView.getHeaderTreeComposite();
-			if (!headerTreeComposite.isDisposed() && headerTreeComposite.getCreateOrderAction() != null) {
+			if (headerTreeComposite != null && !headerTreeComposite.isDisposed() && headerTreeComposite.getCreateOrderAction() != null) {
 				headerTreeComposite.getCreateOrderAction().calculateEnabled(selection);
 				action.setEnabled(headerTreeComposite.getCreateOrderAction().isEnabled());				
 			}

@@ -6,14 +6,13 @@ import java.util.Collections;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchWizardPage;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.person.Person;
@@ -23,6 +22,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 {
@@ -66,7 +66,7 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 
 		loadAdditionalDataJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.search.ExtendedPersonSearchWizardPage.job.loadingCustomerData")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						legalEntity = null;

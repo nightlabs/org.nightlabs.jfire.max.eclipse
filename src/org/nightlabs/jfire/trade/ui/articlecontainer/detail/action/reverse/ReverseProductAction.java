@@ -18,7 +18,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.store.id.ProductID;
 import org.nightlabs.jfire.store.reverse.AlreadyReversedArticleReverseProductError;
 import org.nightlabs.jfire.store.reverse.IReverseProductError;

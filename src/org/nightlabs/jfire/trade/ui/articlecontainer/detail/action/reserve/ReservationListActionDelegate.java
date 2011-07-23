@@ -15,9 +15,9 @@ import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
-import org.nightlabs.jfire.base.ui.login.action.LSDWorkbenchWindowActionDelegate;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.LoginStateChangeEvent;
+import org.nightlabs.jfire.base.login.ui.action.LSDWorkbenchWindowActionDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -61,14 +61,14 @@ public class ReservationListActionDelegate extends LSDWorkbenchWindowActionDeleg
 			}
 		}
 		private final NotificationListener selectionListener = new NotificationAdapterCallerThread(){
-			@SuppressWarnings("unchecked") //$NON-NLS-1$
+			@SuppressWarnings("unchecked") 
 			public void notify(NotificationEvent notificationEvent) {
 				Set<Object> subjects = notificationEvent.getSubjects();
 				setSelection(new StructuredSelection(subjects));
 			}
 		};
 
-		@SuppressWarnings("unchecked") //$NON-NLS-1$
+		@SuppressWarnings("unchecked") 
 		public void setSelection(ISelection selection) {
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;

@@ -72,13 +72,13 @@ implements IEditorInput
 	 */
 	public String getToolTipText()
 	{
-		return getName(); //$NON-NLS-1$
+		return getName(); 
 	}
 
 	/**
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public Object getAdapter(Class adapter)
 	{
 		return null;

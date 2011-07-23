@@ -136,7 +136,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	}
 	
 	
-	private NotificationAdapterSWTThreadAsync articleContainerChangedListener = new NotificationAdapterSWTThreadAsync() { //$NON-NLS-1$
+	private NotificationAdapterSWTThreadAsync articleContainerChangedListener = new NotificationAdapterSWTThreadAsync() { 
 		public void notify(NotificationEvent notificationEvent)
 		{
 			if(doesNonOrderArticleContainerMeetCriteria() != null)

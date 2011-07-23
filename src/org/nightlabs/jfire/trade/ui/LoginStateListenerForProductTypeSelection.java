@@ -2,8 +2,8 @@ package org.nightlabs.jfire.trade.ui;
 
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
-import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
-import org.nightlabs.jfire.base.ui.login.LoginStateListener;
+import org.nightlabs.jfire.base.login.ui.LoginStateChangeEvent;
+import org.nightlabs.jfire.base.login.ui.LoginStateListener;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.notification.NotificationEvent;

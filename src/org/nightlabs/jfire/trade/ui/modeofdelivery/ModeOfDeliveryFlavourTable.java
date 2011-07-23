@@ -40,7 +40,7 @@ extends AbstractTableComposite<ModeOfDeliveryFlavour>
 
 	private static class ContentProvider implements IStructuredContentProvider {
 
-		@SuppressWarnings("unchecked") //$NON-NLS-1$
+		@SuppressWarnings("unchecked") 
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Collection) {
 				return ((Collection)inputElement).toArray();

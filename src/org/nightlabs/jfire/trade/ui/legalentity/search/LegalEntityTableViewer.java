@@ -20,7 +20,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.ui.search.SearchFilterProvider;
 import org.nightlabs.jdo.query.ui.search.SearchResultFetcher;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.ui.person.search.PersonTableViewerConfigurationHelper;
 import org.nightlabs.jfire.base.ui.prop.IPropertySetTableConfig;
 import org.nightlabs.jfire.base.ui.prop.PropertySetTable;

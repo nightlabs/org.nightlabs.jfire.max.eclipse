@@ -1,9 +1,7 @@
 package org.nightlabs.jfire.trade.ui.detail;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -12,12 +10,14 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.ReadOnlyLabeledText;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This is the Composite which is used by the {@link GenericProductTypeDetailView}
@@ -47,7 +47,7 @@ extends XComposite
 	public void setProductTypeID(final ProductTypeID productTypeID) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.detail.GenericProductTypeDetailViewComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(productTypeID,
 						FETCH_GROUP_PRODUCT_TYPE_DETAIL, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
 				Display.getDefault().asyncExec(new Runnable() {

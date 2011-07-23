@@ -91,7 +91,7 @@ extends JDOQuerySearchEntryViewer<R, Q>
 				@Override
 				public void done(IJobChangeEvent event) {
 					//Creates UIs
-					Display.getDefault().asyncExec(new Runnable() {
+					getComposite().getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
 							if (footerComposite != null && !footerComposite.isDisposed()) {

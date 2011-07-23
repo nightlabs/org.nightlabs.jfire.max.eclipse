@@ -87,7 +87,7 @@ extends AbstractEPProcessor
 		}
 		List<Class<?>> typeHierarchy = ReflectUtil.collectTypeHierarchy(searchClass);
 		for (Class<?> classInHierarchy : typeHierarchy) {
-			ArticleContainerEditFactory factory = (ArticleContainerEditFactory) articleContainerEditoFactories.get(classInHierarchy.getName());
+			ArticleContainerEditFactory factory = articleContainerEditoFactories.get(classInHierarchy.getName());
 			if (factory != null)
 				return factory;
 		}

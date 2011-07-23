@@ -163,7 +163,7 @@ public class CreditCardPage extends WizardHopPage
 			@Override
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				paymentData.setExpiryMonth(
-						((Integer)expiryMonthList.get(expiryMonth.getSelectionIndex())).intValue());
+						(expiryMonthList.get(expiryMonth.getSelectionIndex())).intValue());
 			}
 		});
 
@@ -171,7 +171,7 @@ public class CreditCardPage extends WizardHopPage
 			@Override
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				paymentData.setExpiryYear(
-						((Integer)expiryYearList.get(expiryYear.getSelectionIndex())).intValue());
+						(expiryYearList.get(expiryYear.getSelectionIndex())).intValue());
 			}
 		});
 

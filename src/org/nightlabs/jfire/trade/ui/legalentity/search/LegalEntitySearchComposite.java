@@ -17,7 +17,6 @@ import org.nightlabs.jfire.prop.Struct;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.prop.search.PropSearchFilter;
-import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.config.LegalEntitySearchConfigModule;
 import org.nightlabs.jfire.trade.query.LegalEntitySearchFilter;

@@ -68,8 +68,8 @@ import org.nightlabs.config.Config;
 import org.nightlabs.eclipse.extension.EPProcessorException;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.CheckRequirementsEnvironment;
@@ -365,7 +365,7 @@ implements IDeliveryEntryPage
 	}
 
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	protected void clientDeliveryProcessorFactoryComboSelectionChanged()
 	{
 		final DeliveryWizard wizard = ((DeliveryWizard)getWizard());

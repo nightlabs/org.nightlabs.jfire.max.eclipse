@@ -50,7 +50,7 @@ extends RestorableSectionPart
 			{
 				Display.getDefault().asyncExec(new Runnable()
 				{
-					@SuppressWarnings("unchecked") //$NON-NLS-1$
+					@SuppressWarnings("unchecked") 
 					public void run()
 					{
 						productTransferListChanged((List<ProductTransfer>) modifyEvent.getNewObject());

@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse;
 
 import org.eclipse.jface.action.IAction;
-import org.nightlabs.jfire.base.ui.login.action.LSDWorkbenchWindowActionDelegate;
+import org.nightlabs.jfire.base.login.ui.action.LSDWorkbenchWindowActionDelegate;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de

@@ -47,7 +47,7 @@ extends LocalObjectTransfer
 	/**
 	 * @see org.nightlabs.base.ui.dnd.LocalObjectTransfer#validate(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	protected boolean validate(Object object) {
 		if (object instanceof Account)

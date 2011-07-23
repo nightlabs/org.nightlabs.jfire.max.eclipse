@@ -8,10 +8,8 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -29,6 +27,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComboComposite.CaptionOrientation;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -47,6 +46,7 @@ import org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 class DeliveryQueueBrowsingComposite
 extends FadeableComposite
@@ -167,7 +167,7 @@ extends FadeableComposite
 		refreshing = true;
 		Job refreshJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.refreshDeliveryQueuesJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				final DeliveryQueueConfigModule pqCfMod = getDeliveryQueueConfigModule();
 
 				Display.getDefault().asyncExec(new Runnable() {

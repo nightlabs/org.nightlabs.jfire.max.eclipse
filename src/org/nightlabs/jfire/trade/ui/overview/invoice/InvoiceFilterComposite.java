@@ -12,9 +12,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
+import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
@@ -60,7 +60,6 @@ public class InvoiceFilterComposite
 			protected void handleSelection(final boolean active)
 			{
 				getQuery().setFieldEnabled(InvoiceQuery.FieldName.outstanding, active);
-				((InvoiceQuery)getQuery()).setOutstanding(active);
 			}
 		});
 
@@ -69,7 +68,7 @@ public class InvoiceFilterComposite
 			@Override
 			public void widgetSelected(final SelectionEvent e)
 			{
-				((InvoiceQuery)getQuery()).setOutstanding(yesButton.getSelection());		
+				(getQuery()).setOutstanding(yesButton.getSelection());		
 			}
 		};
 		

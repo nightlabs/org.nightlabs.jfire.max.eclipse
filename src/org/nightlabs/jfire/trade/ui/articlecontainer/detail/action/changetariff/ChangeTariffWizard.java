@@ -44,7 +44,7 @@ public class ChangeTariffWizard
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception
 			{
-				TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, org.nightlabs.jfire.base.ui.login.Login.getLogin().getInitialContextProperties());
+				TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, org.nightlabs.jfire.base.login.ui.Login.getLogin().getInitialContextProperties());
 				tm.assignTariff(selectedArticleIDs, selectedTariffID, false, null, 1);
 				return Status.OK_STATUS;
 			}

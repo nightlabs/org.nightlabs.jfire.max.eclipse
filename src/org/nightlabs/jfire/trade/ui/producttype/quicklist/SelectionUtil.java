@@ -32,7 +32,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ObjectID}s which were contained in 
 	 * the given {@link ISelection}
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public static Set<ObjectID> getObjectIDs(ISelection selection) 
 	{
 		Set<ObjectID> objectIDs = new HashSet<ObjectID>();
@@ -63,7 +63,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ProductTypeID}s which were contained in 
 	 * the given {@link ISelection}
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public static Set<ProductTypeID> getProductTypesIDs(ISelection selection) 
 	{
 		Set<ProductTypeID> typeIDs = new HashSet<ProductTypeID>();
@@ -94,7 +94,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ProductTypeGroupID}s which were contained in 
 	 * the given {@link ISelection}
 	 */	
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public static Set<ProductTypeGroupID> getProductTypeGroupsIDs(ISelection selection) 
 	{
 		Set<ProductTypeGroupID> typeIDs = new HashSet<ProductTypeGroupID>();
@@ -126,7 +126,7 @@ public class SelectionUtil {
 	 * @return a {@link SelectionContainment} of all {@link ProductTypeGroupID}s 
 	 * and {@link ProductTypeID}s which were contained in the given {@link ISelection}
 	 */	
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public static SelectionContainment getSelectionContainment(ISelection selection) 
 	{
 		Set<ProductTypeGroupID> productTypeGroupIDs = new HashSet<ProductTypeGroupID>();

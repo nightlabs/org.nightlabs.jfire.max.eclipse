@@ -100,7 +100,7 @@ extends AbstractTableComposite<ProductTransfer>
 					if (otherStr == null || "".equals(otherStr)) //$NON-NLS-1$
 						return String.valueOf(JDOHelper.getObjectId(other));
 
-					return otherStr; //$NON-NLS-1$
+					return otherStr; 
 				case 4:
 					if (other instanceof Repository)
 						return ((Repository)other).getOwner().getPerson().getDisplayName();
