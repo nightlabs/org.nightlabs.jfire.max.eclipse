@@ -12,7 +12,7 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicTradePriceConfigDAO;

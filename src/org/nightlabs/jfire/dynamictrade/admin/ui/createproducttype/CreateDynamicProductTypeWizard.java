@@ -12,7 +12,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditorInput;

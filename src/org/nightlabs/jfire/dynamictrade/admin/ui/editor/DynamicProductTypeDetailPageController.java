@@ -2,7 +2,7 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.editor;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
