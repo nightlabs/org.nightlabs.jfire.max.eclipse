@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: IssueTracking RAP Fragment
+Bundle-SymbolicName: org.nightlabs.jfire.base.j2ee.issuetracking
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: NightLabs.org
+Fragment-Host: org.nightlabs.jfire.base.j2ee;bundle-version="1.0.5"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/JFireIssueTracking.jar,
+ .,
+ lib/JFireIssueTrackerBugTracking.jar
+Export-Package: org.nightlabs.jfire.issue,
+ org.nightlabs.jfire.issue.bug,
+ org.nightlabs.jfire.issue.bug.resource,
+ org.nightlabs.jfire.issue.config,
+ org.nightlabs.jfire.issue.dao,
+ org.nightlabs.jfire.issue.history,
+ org.nightlabs.jfire.issue.history.id,
+ org.nightlabs.jfire.issue.id,
+ org.nightlabs.jfire.issue.issuemarker,
+ org.nightlabs.jfire.issue.issuemarker.id,
+ org.nightlabs.jfire.issue.jbpm,
+ org.nightlabs.jfire.issue.project,
+ org.nightlabs.jfire.issue.project.id,
+ org.nightlabs.jfire.issue.prop,
+ org.nightlabs.jfire.issue.query,
+ org.nightlabs.jfire.issue.resource
