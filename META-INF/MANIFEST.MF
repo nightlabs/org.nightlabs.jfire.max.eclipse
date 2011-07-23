@@ -12,3 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.trade.ui;bundle-version="0.9.7"
 Eclipse-LazyStart: true
 Bundle-Vendor: NightLabs.org
+Import-Package: org.eclipse.ui.forms,
+ org.eclipse.ui.forms.editor,
+ org.eclipse.ui.forms.events,
+ org.eclipse.ui.forms.widgets
