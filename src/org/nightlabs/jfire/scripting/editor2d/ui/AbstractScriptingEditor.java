@@ -40,8 +40,8 @@ import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.NameProvider;
 import org.nightlabs.editor2d.ui.AbstractEditor;
 import org.nightlabs.editor2d.ui.EditorContextMenuProvider;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.part.LSDPartController;
 import org.nightlabs.jfire.scripting.editor2d.ScriptEditor2DFactory;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.editor2d.impl.ScriptEditor2DFactoryImpl;
@@ -50,7 +50,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- * 
+ *
  */
 public abstract class AbstractScriptingEditor
 extends AbstractEditor
@@ -75,19 +75,19 @@ implements ControllablePart
 //			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	protected void init() {
 		login();
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent)
 	{
 		if (!Login.isLoggedIn())
 			LSDPartController.sharedInstance().createPartControl(this, parent);
 	}
-	
+
 	public void createPartContents(Composite parent)
 	{
 		super.createPartControl(parent);
@@ -96,22 +96,22 @@ implements ControllablePart
 		assignAllScripts();
 		getEditorActionBarContributor().getEditorZoomComboContributionItem().setZoomManager(getZoomManager());
 	}
-	
+
 	public void assignVisibleScriptResults()
 	{
 		VisibleScriptUtil.assignVisibleScriptResults(getScriptRootDrawComponent(), getScriptResults());
 	}
-	
+
 	public ScriptRootDrawComponent getScriptRootDrawComponent() {
 		return (ScriptRootDrawComponent) getRootDrawComponent();
 	}
-	
+
 	public void assignAllScripts()
 	{
 		assignScriptResults();
 		assignVisibleScriptResults();
 	}
-	
+
 	public void assignScriptResults()
 	{
 		if (logger.isDebugEnabled())
@@ -119,69 +119,69 @@ implements ControllablePart
 		getScriptRootDrawComponent().assignScriptResults(
 				getScriptResults());
 	}
-	
+
 	private Map<ScriptRegistryItemID, Object> scriptID2Result = null;
 	public void clearScriptResults() {
 		scriptID2Result = null;
 	}
-	
+
 	protected Object getScriptResult(ScriptRegistryItemID scriptID) {
 		return getScriptResults().get(scriptID);
 	}
-	
+
 	protected Map<ScriptRegistryItemID, Object> getScriptResults() {
 		if (scriptID2Result == null) {
 			scriptID2Result = getScriptResults(getScriptRootDrawComponent().getScriptRegistryItemIDs());
 		}
 		return scriptID2Result;
 	}
-		
+
 	@Override
 	protected EditPartFactory createEditPartFactory() {
   	return new ScriptingEditorEditPartFactory();
   }
-	
+
   @Override
   protected NameProvider createNameProvider() {
 		return new ScriptingEditor2DNameProvider();
 	}
-  
+
   @Override
   protected ContextMenuProvider createContextMenuProvider() {
   	return new EditorContextMenuProvider(getGraphicalViewer(), getActionRegistry());
   }
-  
+
 	@Override
   protected EditPartFactory createOutlineEditPartFactory() {
   	return new ScriptingEditorTreePartFactory(getFilterManager());
   }
-	
+
 	@Override
 	protected Editor2DFactory createModelFactory() {
 		return new ScriptEditor2DFactoryImpl();
 	}
-	
+
 	protected ScriptEditor2DFactory getScriptEditor2DFactory() {
 		return (ScriptEditor2DFactory) getModelFactory();
 	}
-	  	
+
 	@Override
 	public void setFocus()
 	{
 		// TODO: to avoid NullPointerException at org.eclipse.gef.ui.parts.GraphicalEditor.setFocus(GraphicalEditor.java:354)
 	}
-	
+
 	protected abstract Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs);
-	
+
 //	protected IScriptResultChangedListener scriptResultChangedListener = new IScriptResultChangedListener(){
 //		public void scriptResultsChanged(ScriptResultsChangedEvent event) {
 //			clearScriptResults();
 //			assignAllScripts();
 //		}
 //	};
-	
+
 //	public abstract IScriptResultProvider getScriptResultProvider();
-	
+
 //	@Override
 //	protected Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs) {
 //		return getScriptResultProvider().getScriptResults(scriptIDs);

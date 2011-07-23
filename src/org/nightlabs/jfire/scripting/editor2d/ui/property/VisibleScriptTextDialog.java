@@ -1,10 +1,8 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.editor2d.ui.property;
 
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,19 +14,22 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.editor2d.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.condition.Script;
-import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.DocumentEvent;
+import org.nightlabs.jseditor.ui.IDocumentListener;
+import org.nightlabs.jseditor.ui.IJSEditor;
+import org.nightlabs.jseditor.ui.JSEditorFactory;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-public class VisibleScriptTextDialog 
-//extends CenteredDialog 
+public class VisibleScriptTextDialog
+//extends CenteredDialog
 extends ResizableTitleAreaDialog
 {
 	private Script script;
-	private JSEditorComposite jsEditorComposite;
- 
+	private IJSEditor jsEditor;
+
 	/**
 	 * @param parentShell
 	 */
@@ -38,7 +39,7 @@ extends ResizableTitleAreaDialog
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
-	protected void evaluateScript() 
+	protected void evaluateScript()
 	{
 //		if (getScript() != null) {
 //			ScriptRegistry scriptRegistry = ScriptRegistryDAO.sharedInstance().getScriptRegistry(
@@ -54,34 +55,30 @@ extends ResizableTitleAreaDialog
 //			} catch (Exception e) {
 //				setErrorMessage("The script is wrong!");
 //				throw new RuntimeException(e);
-//			}			
+//			}
 //		}
 	}
-	
+
 	@Override
-	protected Control createDialogArea(Composite parent) 
+	protected Control createDialogArea(Composite parent)
 	{
 		setTitle("Edit visible script");
 		setMessage("Here you can edit the visible script");
-		
+
 		Composite wrapper = new XComposite(parent, SWT.NONE);
-		jsEditorComposite = new JSEditorComposite(wrapper, SWT.BORDER);
-		jsEditorComposite.getDocument().addDocumentListener(new IDocumentListener(){
+		jsEditor = JSEditorFactory.createJSEditor(wrapper);
+		jsEditor.addDocumentListener(new IDocumentListener() {
 			@Override
-			public void documentChanged(DocumentEvent event) {
+			public void documentChanged(DocumentEvent documentEvent) {
 				evaluateScript();
-			}
-			@Override
-			public void documentAboutToBeChanged(DocumentEvent event) {
-				
 			}
 		});
 		if (script != null && script.getText() != null)
-			jsEditorComposite.setDocumentText(script.getText());
-		
+			jsEditor.setDocumentText(script.getText());
+
 		return wrapper;
 	}
-	
+
 	/**
 	 * Return the script.
 	 * @return the script
@@ -92,7 +89,7 @@ extends ResizableTitleAreaDialog
 
 	@Override
 	protected void okPressed() {
-		script.setText(jsEditorComposite.getDocumentText());
+		script.setText(jsEditor.getDocumentText());
 		super.okPressed();
 	}
 
@@ -102,16 +99,17 @@ extends ResizableTitleAreaDialog
 		super.createButtonsForButtonBar(parent);
 		Button deleteScriptButton = createButton(
 				parent, ID_DELETE_SCRIPT,
-				"Delete Script", 
+				"Delete Script",
 				false);
 		deleteScriptButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setReturnCode(ID_DELETE_SCRIPT);
 				close();
 			}
 		});
 	}
-	
+
 	@Override
 	public void create() {
 		super.create();
