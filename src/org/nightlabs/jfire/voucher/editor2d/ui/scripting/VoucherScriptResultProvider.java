@@ -9,7 +9,7 @@ import org.nightlabs.base.ui.progress.XProgressMonitor;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.AbstractScriptResultProvider;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.store.id.ProductID;

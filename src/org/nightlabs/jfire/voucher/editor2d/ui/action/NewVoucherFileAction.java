@@ -5,7 +5,7 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.action.NewFileAction;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog;
 import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 

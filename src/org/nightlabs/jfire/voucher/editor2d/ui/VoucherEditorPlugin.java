@@ -2,7 +2,7 @@ package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.osgi.framework.BundleContext;
 

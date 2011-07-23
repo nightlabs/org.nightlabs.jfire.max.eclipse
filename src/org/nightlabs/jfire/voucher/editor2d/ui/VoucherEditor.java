@@ -7,8 +7,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.editor2d.ui.AbstractPaletteFactory;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.part.LSDPartController;
 import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptingEditor;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.IScriptResultChangedListener;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.IScriptResultProvider;
@@ -44,7 +44,7 @@ implements ControllablePart
 	protected boolean isScriptResultAvailable() {
 		return getScriptResultProvider().getScriptResults() != null;
 	}
-	
+
 	@Override
 	public boolean canDisplayPart() {
 		return isScriptResultAvailable();
@@ -54,7 +54,7 @@ implements ControllablePart
 	protected AbstractPaletteFactory createPaletteFactory() {
 		return new VoucherEditorPlatteFactory(getScriptEditor2DFactory());
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent)
 	{
@@ -67,7 +67,7 @@ implements ControllablePart
 	public IScriptResultProvider getScriptResultProvider() {
 		return VoucherScriptResultProvider.sharedInstance();
 	}
-			
+
 	protected IScriptResultChangedListener scriptResultChangedListener = new IScriptResultChangedListener(){
 		public void scriptResultsChanged(ScriptResultsChangedEvent event) {
 			clearScriptResults();
