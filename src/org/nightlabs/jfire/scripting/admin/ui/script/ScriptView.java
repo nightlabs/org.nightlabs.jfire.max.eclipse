@@ -43,8 +43,8 @@ import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.base.ui.part.PartVisibilityListener;
 import org.nightlabs.base.ui.part.PartVisibilityTracker;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.part.LSDPartController;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin;
@@ -80,9 +80,9 @@ implements
 	private XComposite wrapper;
 	private ScriptRegistryItemTree registryItemTree;
 	private ScriptRegistryItemTreeMenuManager contextMenuManager;
-	
+
 	private IDoubleClickListener treeDoubleClickListener = new IDoubleClickListener () {
-		public void doubleClick(DoubleClickEvent event) {			
+		public void doubleClick(DoubleClickEvent event) {
 			ScriptRegistryItem item = registryItemTree.getFirstSelectedElement();
 			if (item instanceof Script) {
 				try {
@@ -120,7 +120,7 @@ implements
 		wrapper = new XComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 		registryItemTree =new ScriptRegistryItemTree(wrapper, true, ScriptingAdminPlugin.ZONE_ADMIN);
 		registryItemTree.getTreeViewer().addDoubleClickListener(treeDoubleClickListener);
-		contextMenuManager = new ScriptRegistryItemTreeMenuManager(registryItemTree, this);		
+		contextMenuManager = new ScriptRegistryItemTreeMenuManager(registryItemTree, this);
 		registryItemTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedElements(), true, true);

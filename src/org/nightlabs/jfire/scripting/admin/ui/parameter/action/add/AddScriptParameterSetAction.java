@@ -10,7 +10,7 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.scripting.ScriptManagerRemote;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.admin.ui.parameter.action.ScriptParameterSetAction;

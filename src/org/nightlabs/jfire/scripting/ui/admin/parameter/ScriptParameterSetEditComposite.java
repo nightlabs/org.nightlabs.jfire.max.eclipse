@@ -22,7 +22,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.dao.ScriptParameterSetDAO;
@@ -43,7 +43,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 		ScriptParameterSet.FETCH_GROUP_NAME,
 		ScriptParameterSet.FETCH_GROUP_PARAMETERS
 	};
-	
+
 //	private ScriptParameterSetID selectedParameterSetID;
 
 	private XComposite wrapper;
@@ -81,7 +81,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 
 	private DisposeListener disposeListener = new DisposeListener() {
 		public void widgetDisposed(DisposeEvent e) {
-			// commented listener because was never notified from old DAO and completely unnecessary			
+			// commented listener because was never notified from old DAO and completely unnecessary
 //			ScriptParameterSetProvider.sharedInstance().remveReportRegistryListener(registryListener);
 			JDOLifecycleManager.sharedInstance().removeNotificationListener(ScriptParameterSetID.class, setChangeListener);
 		}

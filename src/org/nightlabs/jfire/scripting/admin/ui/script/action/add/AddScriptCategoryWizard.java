@@ -32,7 +32,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.scripting.ScriptCategory;
 import org.nightlabs.jfire.scripting.ScriptManagerRemote;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
