@@ -28,7 +28,7 @@ package org.nightlabs.jfire.simpletrade.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.osgi.framework.BundleContext;
 

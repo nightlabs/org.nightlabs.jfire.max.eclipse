@@ -13,8 +13,8 @@ Export-Package: org.nightlabs.jfire.simpletrade.ui,
  org.nightlabs.jfire.simpletrade.ui.detail,
  org.nightlabs.jfire.simpletrade.ui.producttype.quicklist,
  org.nightlabs.jfire.simpletrade.ui.prop.edit.blockbased.special
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
- org.nightlabs.tableprovider.ui;bundle-version="1.0.0"
+ org.nightlabs.tableprovider.ui;bundle-version="1.0.0",
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
