@@ -7,10 +7,9 @@ Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.ui.forms,
- org.nightlabs.jfire.base.ui;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.jbpm.ui,
  org.nightlabs.jfire.jbpm.ui.query,
