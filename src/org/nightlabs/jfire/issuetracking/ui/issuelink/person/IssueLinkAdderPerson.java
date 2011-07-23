@@ -9,13 +9,13 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.AsyncInitEvent;
+import org.nightlabs.base.ui.composite.AsyncInitListener;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
@@ -47,9 +47,30 @@ extends AbstractIssueLinkAdder
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		personSearchComposite = new PersonSearchComposite(parent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT); //$NON-NLS-1$
-		personSearchComposite.addPaintListener(new PaintListener() {
+//		personSearchComposite.addPaintListener(new PaintListener() {
+//			@Override
+//			public void paintControl(PaintEvent e) {
+//				personSearchComposite.getResultViewer().addOpenListener(new IOpenListener() {
+//					@Override
+//					public void open(OpenEvent e) {
+//						notifyIssueLinkDoubleClickListeners();
+//					}
+//				});
+//				personSearchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+//					public void selectionChanged(SelectionChangedEvent e) {
+//						fireSelectionChangedEvent();
+//					}
+//				});
+//			}
+//		});
+		
+		// There is no paint-listener in RAP. Introduced a new AsyncInitListener. And btw. the above code 
+		// was called too often as paint-events are triggered pretty often! It should be called only once IMHO. Marco :-)
+
+		personSearchComposite.addAsyncInitListener(new AsyncInitListener() {
 			@Override
-			public void paintControl(PaintEvent e) {
+			public void initialised(AsyncInitEvent event)
+			{
 				personSearchComposite.getResultViewer().addOpenListener(new IOpenListener() {
 					@Override
 					public void open(OpenEvent e) {
@@ -61,11 +82,11 @@ extends AbstractIssueLinkAdder
 						fireSelectionChangedEvent();
 					}
 				});
+
+				Composite buttonBar = personSearchComposite.getButtonBar();
+				createSearchButton(buttonBar);
 			}
 		});
-		
-		Composite buttonBar = personSearchComposite.getButtonBar();
-		createSearchButton(buttonBar);
 		return personSearchComposite;
 	}
 
@@ -79,6 +100,7 @@ extends AbstractIssueLinkAdder
 				doSearch();
 			}
 		});
+		parent.layout(true);
 		return searchButton;
 	}
 

@@ -113,7 +113,8 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		}
 
 		Label sep = new Label(page, SWT.SEPARATOR | SWT.HORIZONTAL
-				| SWT.LINE_SOLID);
+//				| SWT.LINE_SOLID);
+				);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		sep.setLayoutData(gridData);

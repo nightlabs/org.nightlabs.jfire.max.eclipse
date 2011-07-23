@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -49,7 +50,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
@@ -349,7 +350,9 @@ implements IIssueLinkSelection
 			Image combinedIcon = new Image(getDisplay(),
 					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
 					ISSUE_MARKER_IMAGE_DIMENSION.height);
-			GC gc = new GC(combinedIcon);
+			// FIXME TODO RAP commented because of incompatibility with RAP
+//			GC gc = new GC(combinedIcon);
+			GC gc = new GC(combinedIcon.getDevice());
 			Image icon = null;
 			int i = 0;
 			try {
@@ -393,6 +396,12 @@ implements IIssueLinkSelection
 		protected int[][] getColumnSpan(Object element) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public void update(ViewerCell cell) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 

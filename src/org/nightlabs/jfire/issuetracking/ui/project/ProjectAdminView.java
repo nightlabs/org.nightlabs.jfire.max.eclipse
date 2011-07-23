@@ -2,8 +2,8 @@ package org.nightlabs.jfire.issuetracking.ui.project;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction;
 
 public class ProjectAdminView

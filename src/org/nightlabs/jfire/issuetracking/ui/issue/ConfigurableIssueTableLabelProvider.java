@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
@@ -263,7 +264,9 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
 					ISSUE_MARKER_IMAGE_DIMENSION.height
 			);
 
-			GC gc = new GC(combiImage);
+			// FIXME TODO RAP commented because of incompatibility with RAP
+//			GC gc = new GC(combiImage);
+			GC gc = new GC(combiImage.getDevice());
 			try {
 				Iterator<IssueMarker> itIssueMarkers = issue.getIssueMarkers().iterator();
 				for(int i=0; i<maxIssueMarkerCountPerIssue; i++) {
@@ -412,5 +415,11 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
 			}
 			return 0;
 		}
+	}
+
+	@Override
+	public void update(ViewerCell cell) {
+		// TODO Auto-generated method stub
+		
 	}
 }
