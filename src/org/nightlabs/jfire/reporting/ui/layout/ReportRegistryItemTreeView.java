@@ -31,8 +31,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.Login;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.reporting.RoleConstants;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemActionMenuManager;
@@ -44,7 +44,7 @@ import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemActionMe
  * that are registered to the correct scope by the
  * extension point
  * <code>org.nightlabs.jfire.reporting.ui.reportRegistryItemAction</code>
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -56,7 +56,7 @@ extends LSDViewPart
 	private XComposite wrapper;
 	private ReportRegistryItemTree registryItemTree;
 	private ReportRegistryItemActionMenuManager contextMenuManager;
-	
+
 	public ReportRegistryItemTreeView() {
 		super();
 	}
@@ -92,15 +92,15 @@ extends LSDViewPart
 		});
 		registryItemTree.getTreeViewer().expandToLevel(3);
 	}
-	
+
 	protected ReportRegistryItemTree createReportRegistryItemTree(Composite parent) {
 		return new ReportRegistryItemTree(parent, true, getNotificationZone(), RoleConstants.renderReport);
 	}
-	
+
 	public abstract String getActionScope();
-	
+
 	public abstract String getNotificationZone();
-	
+
 	@Override
 	public boolean canDisplayPart() {
 		return Login.isLoggedIn();
@@ -112,7 +112,7 @@ extends LSDViewPart
 	protected ReportRegistryItemTree getRegistryItemTree() {
 		return registryItemTree;
 	}
-	
+
 	protected ReportRegistryItemActionMenuManager getContextMenuManager() {
 		return contextMenuManager;
 	}

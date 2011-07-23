@@ -32,7 +32,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.app.AbstractApplication;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.parameter.ReportParameterManagerRemote;
 import org.nightlabs.util.CacheDirTag;
@@ -45,7 +45,7 @@ public class ReportingPlugin extends AbstractUIPlugin {
 
 	//The shared instance.
 	private static ReportingPlugin plugin;
-	
+
 	public static final String PLUGIN_ID = ReportingPlugin.class.getPackage().getName();
 
 	public static final String SCOPE_REPORTING = "reporting"; //$NON-NLS-1$

@@ -31,14 +31,14 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
-import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
+import org.nightlabs.jfire.base.login.ui.part.ICloseOnLogoutEditorPart;
 
 /**
  * Abstract implementation of an Editor that can be used as
  * {@link ReportViewerEditor} it provides several helper
  * methods that can be used by concrete implementations in order to
  * show reports.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -46,11 +46,11 @@ public abstract class AbstractReportViewerEditor
 extends EditorPart
 implements ReportViewerEditor, ICloseOnLogoutEditorPart
 {
-	
+
 	private ReportViewerEditorInput viewerInput;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public AbstractReportViewerEditor() {
 		super();

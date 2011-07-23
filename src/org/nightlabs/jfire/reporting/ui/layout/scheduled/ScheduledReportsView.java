@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.layout.scheduled;
 
@@ -11,7 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.reporting.scheduled.id.ScheduledReportID;
 import org.nightlabs.jfire.reporting.ui.layout.scheduled.action.ScheduledReportActionMenuManager;
 import org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportEditor;
@@ -23,7 +23,7 @@ import org.nightlabs.jfire.reporting.ui.layout.scheduled.editor.ScheduledReportE
 public class ScheduledReportsView extends LSDViewPart {
 
 //	private ScheduledReportsTable scheduledReportsTable;
-	
+
 	public ScheduledReportsView() {
 	}
 
