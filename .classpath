@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="lib/JFireDynamicTrade.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JFireSimpleTrade.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/com.thoughtworks.xstream.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ehcache-1.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jbpm-3.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jbpm-identity-3.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JFireEntityUserSet.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JFireHTMLProp.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JFireJbpm.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JFireQueryStore.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JFireTrade.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.nightlabs.htmlcontent.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.xmlpull.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/rhino_js.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
