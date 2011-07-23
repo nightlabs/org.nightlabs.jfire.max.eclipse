@@ -34,7 +34,7 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.person.create.CreatePersonWizard;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
 import org.nightlabs.jfire.contact.ui.resource.Messages;
