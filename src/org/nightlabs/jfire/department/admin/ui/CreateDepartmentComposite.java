@@ -8,31 +8,31 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.department.Department;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 /**
  * A composite that contains UIs for adding {@link Department}.
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class CreateDepartmentComposite 
+public class CreateDepartmentComposite
 extends XComposite
 {
 	/**
 	 * Contructs a composite used for adding {@link Department}.
-	 * 
+	 *
 	 * @param parent -the parent composite
-	 * @param style - the SWT style flag 
+	 * @param style - the SWT style flag
 	 */
 	public CreateDepartmentComposite(Department newDepartment, Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
 		this.newDepartment = newDepartment;
-		
+
 		if (newDepartment == null)
 			this.newDepartment = new Department(Login.sharedInstance().getOrganisationID(), IDGenerator.nextID(Department.class));
-		
+
 		createComposite();
 	}
 

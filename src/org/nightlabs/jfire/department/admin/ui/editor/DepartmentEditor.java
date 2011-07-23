@@ -3,8 +3,8 @@ package org.nightlabs.jfire.department.admin.ui.editor;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.login.ui.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditor;
-import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.department.Department;
 import org.nightlabs.jfire.department.dao.DepartmentDAO;
 import org.nightlabs.jfire.department.id.DepartmentID;
