@@ -35,7 +35,7 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.security.dao.UserManagementSystemTypeDAO;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 import org.nightlabs.progress.ProgressMonitor;
@@ -134,11 +134,17 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 		nameEditor.setToolTipText("Name this user management system type in defferent languages");
 		nameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		nameEditor.setVisible(false);
-		nameEditor.getText().addModifyListener(new ModifyListener() {
+		nameEditor.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
 				isDirty = true;
-				setValid(nameEditor.getText() != null && !"".equals(nameEditor.getText().getText()));
+				String editText = "";
+				try{
+					nameEditor.getEditText();
+				}catch(Exception e){
+					// do nothing in case text is disposed or null
+				}
+				setValid(!"".equals(editText));
 			}
 		});
 
@@ -147,7 +153,7 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 		descriptionEditor.setVisibleLineCount(I18nTextEditorMultiLine.DEFAULT_LINECOUNT + 3);
 		descriptionEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		descriptionEditor.setVisible(false);
-		descriptionEditor.getText().addModifyListener(new ModifyListener() {
+		descriptionEditor.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent arg0) {
 				isDirty = true;
@@ -162,10 +168,15 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 	 */
 	@Override
 	public boolean performOk() {
+		String editText = "";
+		try{
+			nameEditor.getEditText();
+		}catch(Exception e){
+			// do nothing in case text is disposed or null
+		}
 		if (Login.isLoggedIn() 
 				&& selectedUserManagementSystemType != null
-				&& nameEditor.getText() != null
-				&& !"".equals(nameEditor.getText().getText())
+				&& !"".equals(editText)
 				&& isDirty){
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(RCPUtil.getActiveShell());
 			progressDialog.setOpenOnRun(true);
