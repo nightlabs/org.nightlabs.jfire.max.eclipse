@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.jbpm.ui;visibility:=reexport,
  org.nightlabs.tableprovider.ui;visibility:=reexport,
- org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
+ org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.ui,
  org.nightlabs.jfire.issuetracking.ui.issue,
