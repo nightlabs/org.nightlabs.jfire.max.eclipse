@@ -16,5 +16,5 @@ Export-Package: org.nightlabs.jfire.simpletrade.ui,
 Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.tableprovider.ui;bundle-version="1.0.0",
- org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
+ org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
