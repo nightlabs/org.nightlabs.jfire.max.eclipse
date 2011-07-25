@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.base.ui,
  org.nightlabs.jfire.issuetracking.ui,
  org.nightlabs.jfire.base.ui,
- org.nightlabs.jfire.compatibility;bundle-version="1.0.0"
+ org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.admin.ui,
  org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty
