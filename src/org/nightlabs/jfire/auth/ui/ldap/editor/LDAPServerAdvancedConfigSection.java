@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,6 +35,7 @@ import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper.LDAPAttributeSyncPolicy;
 
 /**
  * Section of {@link LDAPServerEditorMainPage} for editing advanced {@link LDAPServer} properties:
@@ -50,6 +52,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	private Button isLeadingButton;
 	private Text syncDNText;
 	private Text syncPasswordText;
+	private CCombo attributeSyncPolicyCombo;
 
 	private LDAPServerAdvancedConfigModel model;
 	
@@ -115,6 +118,8 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 				isLeadingButton.setSelection(model.isLeading());
 				syncDNText.setText(model.getSyncDN());
 				syncPasswordText.setText(model.getSyncPassword());
+				attributeSyncPolicyCombo.setItems(LDAPAttributeSyncPolicy.getPossibleAttributeSyncPolicyValues());
+				attributeSyncPolicyCombo.setText(model.getAttributeSyncPolicy());
 			}
 		}finally{
 			refreshing = false;
@@ -131,6 +136,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 			model.setLeading(isLeadingButton.getSelection());
 			model.setSyncDN(syncDNText.getText());
 			model.setSyncPassword(syncPasswordText.getText());
+			model.setAttributeSyncPolicy(attributeSyncPolicyCombo.getText());
 		}
 		super.commit(onSave);
 	}
@@ -158,6 +164,22 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 				"It's done just after modification is stored to the database with the help of JDO Lifecycle listeners.";
 		createDescriptionExpandable(parent, toolkit, leadingSystemDescription);
 		
+		
+		Label attributeSyncTypeLabel = toolkit.createLabel(parent, "Attribute sync policy:", SWT.NONE);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		attributeSyncTypeLabel.setLayoutData(gd);
+		attributeSyncPolicyCombo = new CCombo(parent, toolkit.getBorderStyle() | SWT.READ_ONLY);
+		attributeSyncPolicyCombo.setToolTipText("Changes method which is used when synchronizing LDAP attributes into Person datafields, see description for more details");
+		attributeSyncPolicyCombo.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
+		attributeSyncPolicyCombo.addSelectionListener(dirtySelectionListener);
+		createDescriptionExpandable(
+				parent, toolkit, 
+				"LDAP attributes could be mapped to Person datafields in different ways: ALL - every attribute from LDAP schema of this server " +
+				"will be mapped to Person datafields and all needed structures will be created, MANDATORY ONLY - only attributes which are " +
+				"mandatory by LDAP schema will be mapped, others are mapped inside corresponding script, NONE - nothing will be mapped by the " +
+				"system, all mapping will occur inside script which could be edited by administrator.");
+
 
 		Composite syncWrapper = toolkit.createComposite(parent, SWT.NONE);
 		GridLayout gLayout = new GridLayout(2, false);
@@ -166,8 +188,9 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		gLayout.marginWidth = 0;
 		gLayout.marginHeight = 0;
 		syncWrapper.setLayout(gLayout);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.horizontalSpan = 2;
+		gd.verticalIndent = 20;
 		syncWrapper.setLayoutData(gd);
 		
 		toolkit.createLabel(syncWrapper, "Sync entry DN:", SWT.NONE);
@@ -182,6 +205,13 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		syncPasswordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		syncPasswordText.addModifyListener(dirtyModifyListener);
 
+
+		Label separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		gd.verticalIndent = 20;
+		separatorLabel.setLayoutData(gd);
+		
 		
 		Label scriptsLabel = toolkit.createLabel(parent, "Edit scripts for configuring LDAP and JFire interaction:", SWT.NONE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -195,7 +225,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		}
 
 
-		Label separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL);
+		separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 10;
@@ -261,7 +291,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		syncToJFireScriptLink.setLayoutData(gd);
 	}
 	
-	private void createDescriptionExpandable(Composite parent, FormToolkit toolkit, String descriptionText){
+	private ExpandableComposite createDescriptionExpandable(Composite parent, FormToolkit toolkit, String descriptionText){
 		ExpandableComposite descriptionExpandable = toolkit.createExpandableComposite(
 				parent, ExpandableComposite.CLIENT_INDENT | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
 				);
@@ -275,6 +305,8 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		GridData gd = new GridData();
 		gd.widthHint = 500;
 		descriptionExpandable.setLayoutData(gd);
+		
+		return descriptionExpandable;
 	}
 	
 	/**

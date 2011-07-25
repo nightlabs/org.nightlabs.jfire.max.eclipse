@@ -209,16 +209,28 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 	public boolean isPageComplete() {
 		return checkTextNotEmpty(hostText) 
 				&& checkTextNotEmpty(portText) 
-				&& (nameText != null && !nameText.isDisposed() && checkTextNotEmpty(nameText.getText()));
+				&& (nameText != null && !nameText.isDisposed() && checkTextNotEmpty(nameText));
 	}
 	
+	private boolean checkTextNotEmpty(I18nTextEditor text){
+		String editText = "";
+		try{
+			text.getEditText();
+		}catch(Exception e){
+			// do nothing in case text is disposed or null
+		}
+		return text != null 
+				&& (!text.isDisposed() 
+						&& !editText.isEmpty());
+	}
+
 	private boolean checkTextNotEmpty(Text text){
 		return text != null 
 				&& (!text.isDisposed() 
 						&& text.getText() != null 
 						&& !text.getText().isEmpty());
 	}
-	
+
 	private ModifyListener defaultModifyListener = new ModifyListener() {
 		@Override
 		public void modifyText(ModifyEvent arg0) {
@@ -227,6 +239,12 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 	};
 	
 	private boolean verifyInput(){
+		String editNameText = "";
+		try{
+			nameText.getEditText();
+		}catch(Exception e){
+			// do nothing in case text is disposed or null
+		}
 		if (hostText.getText() == null || "".equals(hostText.getText())){
 			updateStatus("Host should be specified for LDAP server!");
 			return false;
@@ -240,7 +258,7 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 				updateStatus("Port value should be an Integer!");
 				return false;
 			}
-		}else if (nameText.getText().getText() == null || "".equals(nameText.getText().getText())){
+		}else if ("".equals(editNameText)){
 			updateStatus("Name should be specified for LDAP server!");
 			return false;
 		}

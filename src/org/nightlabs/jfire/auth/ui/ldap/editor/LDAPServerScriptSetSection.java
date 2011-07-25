@@ -29,7 +29,7 @@ import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetModel.NamedScript;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
-import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.rcp.editor.JSEditorComposite;
 
 /**
  * Section of {@link LDAPServerEditorScriptSetPage} for editing scripts in {@link LDAPServer}'s {@link LDAPScriptSet}.

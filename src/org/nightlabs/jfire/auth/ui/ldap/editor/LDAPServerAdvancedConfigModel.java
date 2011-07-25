@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper.LDAPAttributeSyncPolicy;
 
 /**
  * Simple model of {@link LDAPServer} to be used on UI in {@link LDAPServerAdvancedConfigSection}.
@@ -86,6 +87,27 @@ public class LDAPServerAdvancedConfigModel{
 	 */
 	public void setLeading(boolean isLeading){
 		ldapServer.setLeading(isLeading);
+	}
+	
+	/**
+	 * Get {@link LDAPAttributeSyncPolicy} of {@link LDAPServer}
+	 * 
+	 * @return name of {@link LDAPAttributeSyncPolicy}
+	 */
+	public String getAttributeSyncPolicy(){
+		return ldapServer.getAttributeSyncPolicy().stringValue();
+	}
+
+	/**
+	 * Set {@link LDAPAttributeSyncPolicy} to {@link LDAPServer}
+	 * 
+	 * @param ldapAttributeSyncPolicy name
+	 */
+	public void setAttributeSyncPolicy(String ldapAttributeSyncPolicy){
+		LDAPAttributeSyncPolicy value = LDAPAttributeSyncPolicy.findAttributeSyncPolicyByStringValue(ldapAttributeSyncPolicy);
+		if (value != null){
+			ldapServer.setAttributeSyncPolicy(value);
+		}
 	}
 
 	/**

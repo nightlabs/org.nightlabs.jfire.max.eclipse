@@ -215,7 +215,7 @@ public class LDAPServerGeneralConfigSection extends ToolBarSectionPart {
 		
 		descriptionText = new I18nTextEditorMultiLine(parent, "Description:");
 		descriptionText.setToolTipText("Describe this LDAP server in different languages");
-		descriptionText.setVisibleLineCount(I18nTextEditorMultiLine.DEFAULT_LINECOUNT + 2);
+		descriptionText.setVisibleLineCount(I18nTextEditorMultiLine.DEFAULT_LINECOUNT + 5);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		descriptionText.setLayoutData(gd);

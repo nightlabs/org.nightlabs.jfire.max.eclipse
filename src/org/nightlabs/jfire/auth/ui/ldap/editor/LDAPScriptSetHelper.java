@@ -42,11 +42,10 @@ public class LDAPScriptSetHelper {
 				"with entries names on the last line of the script.");
 		scriptsData.put(
 				SYNC_TO_JFIRE_SCRIPT_NAME, 
-				"Used for storing data into JFire objects (User and/or Person) during synchronization when LDAPServer is a leading system. " +
+				"Used for storing/removing data into JFire objects (User and/or Person) during synchronization when LDAPServer is a leading system. " +
 				"It makes use of several java objects : allAtributes - LDAPAttributeSet with all attributes of LDAP entry to be synchronized, " +
-				"pm - PersistenceManager, organisationID - the ID of JFire organisation, newPersonID - value returned by " +
-				"IDGenerator.nextID(PropertySet.class) used when new Person object is created, logger - org.slf4j.Logger for debug purposes. " +
-				"Should return persisted object (either User or Person) on the last line of the script.");
+				"pm - PersistenceManager, organisationID - the ID of JFire organisation, logger - org.slf4j.Logger for debug purposes. " +
+				"Should return Person object on the last line of the script or nothing if object was removed.");
 	}
 
 	/**
