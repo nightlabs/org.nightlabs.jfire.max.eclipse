@@ -53,6 +53,7 @@ public class CreateLDAPServerWizardHop extends WizardHop implements IUserManagem
 		ldapServer.setSyncPassword(advancedConfigPage.getSyncPassword());
 		ldapServer.setLeading(advancedConfigPage.getLeadingState());
 		ldapServer.setBaseDN(advancedConfigPage.getBaseEntryDN());
+		ldapServer.setAttributeSyncPolicy(advancedConfigPage.getAttributeSyncPolicy());
 		
 		return ldapServer;
 	}

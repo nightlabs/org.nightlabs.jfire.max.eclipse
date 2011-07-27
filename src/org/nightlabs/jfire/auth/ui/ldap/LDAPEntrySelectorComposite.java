@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -93,6 +94,24 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	 */
 	public String getEntryName() {
 		return entryNameText.getText();
+	}
+	
+	/**
+	 * Add {@link ModifyListener} to underlying {@link Text} field of this selector
+	 * 
+	 * @param modifyListener
+	 */
+	public void addModifyListener(ModifyListener modifyListener){
+		entryNameText.addModifyListener(modifyListener);
+	}
+	
+	/**
+	 * Remove {@link ModifyListener} from underlying {@link Text} field of this selector
+	 * 
+	 * @param modifyListener
+	 */
+	public void removeModifyListener(ModifyListener modifyListener){
+		entryNameText.removeModifyListener(modifyListener);
 	}
 	
 	private void createContent(String selectorButtonText, Image selectorButtonImage, final LDAPAttributeSet selectionCriteriaAttributes){

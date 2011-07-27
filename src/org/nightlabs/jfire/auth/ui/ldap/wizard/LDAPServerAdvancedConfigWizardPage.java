@@ -1,6 +1,9 @@
 package org.nightlabs.jfire.auth.ui.ldap.wizard;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,6 +23,8 @@ import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper.LDAPAttributeSyncPolicy;
 import org.nightlabs.util.CollectionUtil;
 
 /**
@@ -35,6 +40,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	private Text syncDNText;
 	private Text syncPasswordText;
 	private LDAPEntrySelectorComposite ldapEntrySelector;
+	private CCombo attributeSyncPolicyCombo;
 
 	/**
 	 * Default constructor
@@ -53,12 +59,23 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		Composite parent = new Composite(wizardParent, SWT.NONE);
 		parent.setLayout(new GridLayout(2, false));
 		
-		new Label(parent, SWT.NONE).setText("Base DN:");
+		new Label(parent, SWT.NONE).setText("Base entry name:");
 		LDAPAttributeSet selectionCriteria = new LDAPAttributeSet();
 		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("organizationalUnit"));
 		ldapEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE, selectionCriteria);
 		ldapEntrySelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ldapEntrySelector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
+		ldapEntrySelector.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent modifyevent) {
+				String selectedEntryName = ldapEntrySelector.getEntryName();
+				if (selectedEntryName == null || selectedEntryName.isEmpty()){
+					updateStatus("Please select base LDAP entry!");
+				}else{
+					updateStatus(null);
+				}
+			}
+		});
 		
 		String baseEntryDescription = "Name of LDAP entry which is used as base for constructing LDAP distingueshed names from JFire objects data " +
 				"(e.g. userID). It means that all LDAP users (entries) which are supposed to be used in JFire-LDAP interaction (including login) should " +
@@ -94,21 +111,51 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		gd.widthHint = 500;
 		gd.verticalIndent = 10;
 		leadingSystemDescriptionExpandable.setLayoutData(gd);
-
-		Label syncDNLabel = new Label(parent, SWT.NONE);
-		syncDNLabel.setText("Sync entry DN:");
+		
+		
+		Label attSyncLabel = new Label(parent, SWT.NONE);
+		attSyncLabel.setText("Attribute sync policy:");
 		gd = new GridData();
-		gd.verticalIndent = 5;
-		syncDNLabel.setLayoutData(gd);
+		gd.horizontalSpan = 2;
+		gd.verticalIndent = 10;
+		attSyncLabel.setLayoutData(gd);
 		
-		syncDNText = new Text(parent, SWT.BORDER);
+		attributeSyncPolicyCombo = new CCombo(parent, SWT.BORDER);
+		attributeSyncPolicyCombo.setEditable(false);
+		attributeSyncPolicyCombo.setToolTipText("Changes method which is used when synchronizing LDAP attributes into Person datafields, see description for more details");
+		attributeSyncPolicyCombo.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
+		attributeSyncPolicyCombo.setItems(LDAPAttributeSyncPolicy.getPossibleAttributeSyncPolicyValues());
+		attributeSyncPolicyCombo.setText(LDAPServer.LDAP_DEFAULT_ATTRIBUTE_SYNC_POLICY.stringValue());
+		ExpandableComposite attSyncPolicyDescriptionExpandable = createDescriptionExpandable(
+											parent, 
+											"LDAP attributes could be mapped to Person datafields in different ways: ALL - every attribute from LDAP schema of this server " +
+											"will be mapped to Person datafields and all needed structures will be created, MANDATORY ONLY - only attributes which are " +
+											"mandatory by LDAP schema will be mapped, others are mapped inside corresponding script, NONE - nothing will be mapped by the " +
+											"system, all mapping will occur inside script which could be edited by administrator.");
+		gd = new GridData();
+		gd.widthHint = 500;
+		attSyncPolicyDescriptionExpandable.setLayoutData(gd);
+
+
+		Composite syncWrapper = new Composite(parent, SWT.NONE);
+		GridLayout gLayout = new GridLayout(2, false);
+		gLayout.verticalSpacing = 10;
+		gLayout.horizontalSpacing = 10;
+		gLayout.marginWidth = 0;
+		gLayout.marginHeight = 0;
+		syncWrapper.setLayout(gLayout);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		gd.horizontalSpan = 2;
+		gd.verticalIndent = 20;
+		syncWrapper.setLayoutData(gd);
+		
+		new Label(syncWrapper, SWT.NONE).setText("Sync entry DN:");
+		syncDNText = new Text(syncWrapper, SWT.BORDER);
 		syncDNText.setToolTipText("Distingueshed name of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.verticalIndent = 5;
-		syncDNText.setLayoutData(gd);
+		syncDNText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		new Label(parent, SWT.NONE).setText("Sync password:");
-		syncPasswordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
+		new Label(syncWrapper, SWT.NONE).setText("Sync password:");
+		syncPasswordText = new Text(syncWrapper, SWT.BORDER | SWT.PASSWORD);
 		syncPasswordText.setToolTipText("Password of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
 		syncPasswordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -162,6 +209,28 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 			return ldapEntrySelector.getEntryName();
 		}
 		return "";
+	}
+	
+	/**
+	 * Get selected {@link LDAPAttributeSyncPolicy}, see {@link AttributeStructFieldSyncHelper} for details
+	 * 
+	 * @return selected value of {@link LDAPAttributeSyncPolicy}
+	 */
+	public LDAPAttributeSyncPolicy getAttributeSyncPolicy(){
+		return LDAPAttributeSyncPolicy.findAttributeSyncPolicyByStringValue(attributeSyncPolicyCombo.getText());
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isPageComplete() {
+		if (ldapEntrySelector != null 
+				&& !ldapEntrySelector.isDisposed()
+				&& !"".equals(ldapEntrySelector.getEntryName())){
+			return true;
+		}
+		return false;
 	}
 	
 	private ExpandableComposite createDescriptionExpandable(Composite parent, String descriptionText){

@@ -212,10 +212,18 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 				&& (nameText != null && !nameText.isDisposed() && checkTextNotEmpty(nameText));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean canBeLastPage() {
+		return false;
+	}
+	
 	private boolean checkTextNotEmpty(I18nTextEditor text){
 		String editText = "";
 		try{
-			text.getEditText();
+			editText = text.getEditText();
 		}catch(Exception e){
 			// do nothing in case text is disposed or null
 		}
@@ -241,7 +249,7 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 	private boolean verifyInput(){
 		String editNameText = "";
 		try{
-			nameText.getEditText();
+			editNameText = nameText.getEditText();
 		}catch(Exception e){
 			// do nothing in case text is disposed or null
 		}
