@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
@@ -122,6 +123,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		
 		attributeSyncPolicyCombo = new CCombo(parent, SWT.BORDER);
 		attributeSyncPolicyCombo.setEditable(false);
+		attributeSyncPolicyCombo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		attributeSyncPolicyCombo.setToolTipText("Changes method which is used when synchronizing LDAP attributes into Person datafields, see description for more details");
 		attributeSyncPolicyCombo.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		attributeSyncPolicyCombo.setItems(LDAPAttributeSyncPolicy.getPossibleAttributeSyncPolicyValues());
