@@ -3,13 +3,26 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.eclipse.parent</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>org.nightlabs.jfire</groupId>
 		<artifactId>org.nightlabs.jfire.parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
+	
+	<properties>
+<!--
+We now build against static dependencies and leave the platform-dependent stuff to the assembly only.
+The reason is that all our libraries (except for org.nightlabs.eclipse.compatibility.rap/rcp) are platform-agnostic
+and it makes therefore no sense to compile them 5 or more times. The only reason to do so is that there might be a mistake
+and platform-dependent stuff might be used by error. But this isn't worth the far more complex build configuration and
+the much longer build time (factor 5 at least).
+We now build solely against RAP, because the feature-set of RAP is smaller than the one of RCP. Hence, we don't need (most of)
+the properties anymore.
+Marco :-)
+--> 
+		<org.nightlabs.eclipse.compatibility.artifactId>org.nightlabs.eclipse.compatibility.rap</org.nightlabs.eclipse.compatibility.artifactId>
+	</properties>
 
 	<dependencyManagement>
 		<dependencies>
