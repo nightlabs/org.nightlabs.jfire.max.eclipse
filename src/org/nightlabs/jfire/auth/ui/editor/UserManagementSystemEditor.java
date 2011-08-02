@@ -12,6 +12,7 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageSettings;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditor;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
@@ -29,7 +30,7 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public class UserManagementSystemEditor extends ActiveEntityEditor{
 
-	public static final String EDITOR_ID = "org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor";
+	public static final String EDITOR_ID = "org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"; //$NON-NLS-1$
 
 	/**
 	 * Default constructor.
@@ -51,7 +52,7 @@ public class UserManagementSystemEditor extends ActiveEntityEditor{
 		
 		Set<String> pageFactoryClassNames = UserManagementSystemUIMappingRegistry.sharedInstance().getPageFactoryClassNames(userManagementSystemTypeClass);
 		if (pageFactoryClassNames == null || pageFactoryClassNames.isEmpty()){
-			throw new IllegalStateException("There's no EntityEditor pages defined for object of type " + userManagementSystemTypeClass.getName());
+			throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor.noPagesDefinedExceptionText") + userManagementSystemTypeClass.getName()); //$NON-NLS-1$
 		}
 
 		List<EntityEditorPageSettings> pageSettings = super.getPageSettingsOrdered();
@@ -84,15 +85,15 @@ public class UserManagementSystemEditor extends ActiveEntityEditor{
 			UserManagementSystem userManagementSystem = (UserManagementSystem) entity;
 			String userManagementSystemName = userManagementSystem.getUserManagementSystemID()+User.SEPARATOR_BETWEEN_USER_ID_AND_ORGANISATION_ID+userManagementSystem.getOrganisationID();
 			if (userManagementSystem.getName() != null 
-					&& !"".equals(userManagementSystem.getName().getText())){
+					&& !"".equals(userManagementSystem.getName().getText())){ //$NON-NLS-1$
 				userManagementSystemName = userManagementSystem.getName().getText();
 			}
 			String userManagementSystemTypeName = userManagementSystem.getType().getClass().getSimpleName();
 			if (userManagementSystem.getType().getName() != null 
-					&& !"".equals(userManagementSystem.getType().getName().getText())){
+					&& !"".equals(userManagementSystem.getType().getName().getText())){ //$NON-NLS-1$
 				userManagementSystemTypeName = userManagementSystem.getType().getName().getText();
 			}
-			return userManagementSystemName + " [" + userManagementSystemTypeName + "]";
+			return userManagementSystemName + " [" + userManagementSystemTypeName + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return entity.getClass().getSimpleName();
 	}

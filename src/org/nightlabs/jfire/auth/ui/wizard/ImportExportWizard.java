@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.auth.ui.actions.OpenImportExportWizardAction;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 
@@ -83,7 +84,7 @@ public class ImportExportWizard extends DynamicPathWizard{
 						
 						final SyncDirection syncDirection = importExportWizardHop.getSyncDirection();
 						
-						String monitorMessage = SyncDirection.IMPORT.equals(syncDirection) ? "Performing import..." : "Performing export...";
+						String monitorMessage = SyncDirection.IMPORT.equals(syncDirection) ? Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.monitorMessageImport") : Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.monitorMessageExport"); //$NON-NLS-1$ //$NON-NLS-2$
 						monitor.beginTask(monitorMessage, 2);
 						
 						importExportWizardHop.performSynchronization();
@@ -96,8 +97,8 @@ public class ImportExportWizard extends DynamicPathWizard{
 								@Override
 								public void run(){
 									try{
-										String msg = SyncDirection.IMPORT.equals(syncDirection) ? "Import completed successfully." : "Export completed successfully.";
-										ImportExportMessageDialog.openSyncInformation(RCPUtil.getActiveShell(), "Import/Export tool", msg);
+										String msg = SyncDirection.IMPORT.equals(syncDirection) ? Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.importCompletedMsg") : Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.exportCompletedMsg"); //$NON-NLS-1$ //$NON-NLS-2$
+										ImportExportMessageDialog.openSyncInformation(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.syncInformationDlgTitle"), msg); //$NON-NLS-1$
 									}catch(Exception e){
 										throw new RuntimeException(e);
 									}
@@ -120,7 +121,7 @@ public class ImportExportWizard extends DynamicPathWizard{
 	static class ImportExportMessageDialog extends MessageDialog{
 
 	    public static boolean openSyncInformation(Shell parent, String title, String message) {
-	        MessageDialog dialog = new ImportExportMessageDialog(parent, title, null, message, MessageDialog.INFORMATION, new String[]{"OK"}, 0);
+	        MessageDialog dialog = new ImportExportMessageDialog(parent, title, null, message, MessageDialog.INFORMATION, new String[]{"OK"}, 0); //$NON-NLS-1$
 	        return dialog.open() == 0;
 	    }
 
@@ -141,8 +142,8 @@ public class ImportExportWizard extends DynamicPathWizard{
 		protected Control createCustomArea(Composite parent) {
 			
 			Button runAnotherButton = new Button(parent, SWT.PUSH);
-			runAnotherButton.setText("Run another import/export");
-			runAnotherButton.setToolTipText("Starts import/export wizard once again");
+			runAnotherButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.runAnotherButtonLabel")); //$NON-NLS-1$
+			runAnotherButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.runAnotherButtonDescription")); //$NON-NLS-1$
 			runAnotherButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

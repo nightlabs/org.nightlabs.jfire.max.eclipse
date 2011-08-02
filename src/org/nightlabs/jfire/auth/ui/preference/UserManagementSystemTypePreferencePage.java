@@ -35,6 +35,7 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.security.dao.UserManagementSystemTypeDAO;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
@@ -72,7 +73,7 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 	 */
 	public UserManagementSystemTypePreferencePage() {
 		super();
-		setDescription("Name and describe available user management system types");
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -103,8 +104,8 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 		gd.heightHint = 150;
 		userManagementSystemTypeTable.setLayoutData(gd);
 		
-		userManagementSystemTypeTable.setInput("loading...");
-		loadTypesJob = new Job("loading all user management system types...") {
+		userManagementSystemTypeTable.setInput(Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.userManagementSystemTypeTableLoadingLabel")); //$NON-NLS-1$
+		loadTypesJob = new Job(Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.loadUserManagementSystemTypesJobTitle")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor){
 				try {
@@ -130,26 +131,26 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 		};
 		loadTypesJob.schedule();
 		
-		nameEditor = new I18nTextEditor(content, "Name:");
-		nameEditor.setToolTipText("Name this user management system type in defferent languages");
+		nameEditor = new I18nTextEditor(content, Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.nameEditorLabel")); //$NON-NLS-1$
+		nameEditor.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.nameEditorTooltip")); //$NON-NLS-1$
 		nameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		nameEditor.setVisible(false);
 		nameEditor.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
 				isDirty = true;
-				String editText = "";
+				String editText = ""; //$NON-NLS-1$
 				try{
 					nameEditor.getEditText();
 				}catch(Exception e){
 					// do nothing in case text is disposed or null
 				}
-				setValid(!"".equals(editText));
+				setValid(!"".equals(editText)); //$NON-NLS-1$
 			}
 		});
 
-		descriptionEditor = new I18nTextEditorMultiLine(content, "Description:");
-		descriptionEditor.setToolTipText("Describe this user management system type in different languages");
+		descriptionEditor = new I18nTextEditorMultiLine(content, Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.descriptionEditorLabel")); //$NON-NLS-1$
+		descriptionEditor.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.preference.UserManagementSystemTypePreferencePage.descriptionEditorTooltip")); //$NON-NLS-1$
 		descriptionEditor.setVisibleLineCount(I18nTextEditorMultiLine.DEFAULT_LINECOUNT + 3);
 		descriptionEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.VERTICAL_ALIGN_BEGINNING));
 		descriptionEditor.setVisible(false);
@@ -168,7 +169,7 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 	 */
 	@Override
 	public boolean performOk() {
-		String editText = "";
+		String editText = ""; //$NON-NLS-1$
 		try{
 			nameEditor.getEditText();
 		}catch(Exception e){
@@ -176,7 +177,7 @@ public class UserManagementSystemTypePreferencePage extends PreferencePage imple
 		}
 		if (Login.isLoggedIn() 
 				&& selectedUserManagementSystemType != null
-				&& !"".equals(editText)
+				&& !"".equals(editText) //$NON-NLS-1$
 				&& isDirty){
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(RCPUtil.getActiveShell());
 			progressDialog.setOpenOnRun(true);

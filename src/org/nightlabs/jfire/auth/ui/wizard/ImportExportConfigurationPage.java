@@ -26,6 +26,7 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
 import org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
@@ -56,12 +57,16 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 
 	private SyncDirection syncDirection = SyncDirection.IMPORT;
 	
+	//TODO
+	private static final String IMPORT_DESCRIPTION = "TODO";
+	private static final String EXPORT_DESCRIPTION = "TODO";
+	
 	/**
 	 * Default constructor
 	 */
 	public ImportExportConfigurationPage()	{
-		super(ImportExportConfigurationPage.class.getName(), "Select user management system", SharedImages.getWizardPageImageDescriptor(JFireAuthUIPlugin.sharedInstance(), ImportExportConfigurationPage.class));
-		setDescription("Please select one of the available user management systems for import or export and proceed to the next step");
+		super(ImportExportConfigurationPage.class.getName(), Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.pageTitle"), SharedImages.getWizardPageImageDescriptor(JFireAuthUIPlugin.sharedInstance(), ImportExportConfigurationPage.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -89,7 +94,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 		mainWrapper.setLayout(gridLayout);
 		
 		loadingLabel = new Label(mainWrapper, SWT.NONE);
-		loadingLabel.setText("Loading all usermanagement systems...");
+		loadingLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.loadingLabel")); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		loadingLabel.setLayoutData(gd);
@@ -113,7 +118,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	 */
 	public void setUserManagementSystems(List<UserManagementSystem> allUserManagementSystems) {
 		if (mainWrapper == null){
-			throw new IllegalStateException("This method should be called after wizard page contents were created!");
+			throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.setUserManagementSystemsIllegalyCalledExceptionText")); //$NON-NLS-1$
 		}
 		
 		if (allUserManagementSystems != null && !allUserManagementSystems.isEmpty()){
@@ -133,18 +138,18 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				buttonsWrapper.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_VERTICAL));
 				
 				importButton = new Button(buttonsWrapper, SWT.RADIO);
-				importButton.setText("Import from selected system");
-				importButton.setToolTipText("If selected next page will configure import options for fetching user data from selected system to JFire");
+				importButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.importCheckButtonLabel")); //$NON-NLS-1$
+				importButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.importCheckButtonTooltip")); //$NON-NLS-1$
 				importButton.setSelection(true);
 				importButton.setEnabled(false);
 				importButton.setImage(
-						SharedImages.sharedInstance().getImage(JFireAuthUIPlugin.sharedInstance(), ImportExportConfigurationPage.class, "importButton", ImageDimension._16x16.toString(), ImageFormat.png));
+						SharedImages.sharedInstance().getImage(JFireAuthUIPlugin.sharedInstance(), ImportExportConfigurationPage.class, "importButton", ImageDimension._16x16.toString(), ImageFormat.png)); //$NON-NLS-1$
 				importButton.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if (importButton.getSelection()){
 							syncDirection = SyncDirection.IMPORT;
-							descriptionLabel.setText("Import was selected! TODO: description");
+							descriptionLabel.setText(IMPORT_DESCRIPTION);
 							
 							SelectionChangedEvent event = new SelectionChangedEvent(
 									userManagementSystemTable, userManagementSystemTable.getSelection());
@@ -154,17 +159,17 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				});
 	
 				exportButton = new Button(buttonsWrapper, SWT.RADIO);
-				exportButton.setText("Export to selected system");
-				exportButton.setToolTipText("If selected next page will configure export options for sending user data from JFire to selected system");
+				exportButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.exportCheckButtonLabel")); //$NON-NLS-1$
+				exportButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.exportCheckButtonDescription")); //$NON-NLS-1$
 				exportButton.setEnabled(false);
 				exportButton.setImage(
-						SharedImages.sharedInstance().getImage(JFireAuthUIPlugin.sharedInstance(), ImportExportConfigurationPage.class, "exportButton", ImageDimension._16x16.toString(), ImageFormat.png));
+						SharedImages.sharedInstance().getImage(JFireAuthUIPlugin.sharedInstance(), ImportExportConfigurationPage.class, "exportButton", ImageDimension._16x16.toString(), ImageFormat.png)); //$NON-NLS-1$
 				exportButton.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if (exportButton.getSelection()){
 							syncDirection = SyncDirection.EXPORT;
-							descriptionLabel.setText("Export was selected! TODO: description");
+							descriptionLabel.setText(EXPORT_DESCRIPTION);
 
 							SelectionChangedEvent event = new SelectionChangedEvent(
 									userManagementSystemTable, userManagementSystemTable.getSelection());
@@ -174,7 +179,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				});
 				
 				Group descriptionGroup = new Group(buttonsWrapper, SWT.NONE);
-				descriptionGroup.setText("Description");
+				descriptionGroup.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.descriptionGroupLabel")); //$NON-NLS-1$
 				descriptionGroup.setLayout(new GridLayout(1, false));
 				GridData gd = new GridData(GridData.FILL_VERTICAL | GridData.GRAB_VERTICAL);
 				gd.verticalIndent = 20;
@@ -183,7 +188,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				descriptionGroup.setLayoutData(gd);
 				
 				descriptionLabel = new Label(descriptionGroup, SWT.WRAP);
-				descriptionLabel.setText("Select user management system");
+				descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.descriptionLabelInitialText")); //$NON-NLS-1$
 				descriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 			}
 			
@@ -191,11 +196,11 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 
 		}else{
 			
-			loadingLabel.setText("No User management system exist! Want to create one?");
+			loadingLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.loadingLabel_noUserManagementSystemsExist")); //$NON-NLS-1$
 			
 			Button openCreationWizardButton = new Button(mainWrapper, SWT.PUSH);
-			openCreationWizardButton.setText("Create new User management system...");
-			openCreationWizardButton.setToolTipText("New wizard for user management system creation will open, current wizard will be closed");
+			openCreationWizardButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.openCreationWizardButtonLabel")); //$NON-NLS-1$
+			openCreationWizardButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.openCreationWizardButtonTooltip")); //$NON-NLS-1$
 			GridData gd = new GridData();
 			gd.horizontalSpan = 2;
 			gd.verticalIndent = 5;
@@ -255,7 +260,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				if (selectedUserManagementSystem == null){
 					return;
 				}
-				descriptionLabel.setText(importButton.getSelection() ? "Import was selected! TODO: description" : "Export was selected! TODO: description");
+				descriptionLabel.setText(importButton.getSelection() ? IMPORT_DESCRIPTION : EXPORT_DESCRIPTION);
 				
 				setSelectedUserManagementSystemInternal(selectedUserManagementSystem);
 				getContainer().updateButtons();

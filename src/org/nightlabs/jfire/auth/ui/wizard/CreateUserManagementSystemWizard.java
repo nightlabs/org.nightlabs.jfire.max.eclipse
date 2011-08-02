@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor;
 import org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditorInput;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
@@ -42,7 +43,7 @@ public class CreateUserManagementSystemWizard extends DynamicPathWizard implemen
 	 */
 	public CreateUserManagementSystemWizard() {
 		setNeedsProgressMonitor(true);
-		setWindowTitle("Create new UserManagementSystem instance"); //$NON-NLS-1$
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard.windowTitle")); //$NON-NLS-1$
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.auth.ui.editor;
 
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 import org.nightlabs.jfire.security.integration.id.UserManagementSystemID;
@@ -25,7 +26,7 @@ public class UserManagementSystemEditorInput extends JDOObjectEditorInput<UserMa
 	public UserManagementSystemEditorInput(UserManagementSystemID userManagementSystemID, Class<? extends UserManagementSystemType<?>> userManagementSystemClass){
 		super(userManagementSystemID);
 		this.userManagementSystemClass = userManagementSystemClass;
-		setName("UserManagementSystem input"); //$NON-NLS-1$
+		setName(Messages.getString("org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditorInput.editorInputName")); //$NON-NLS-1$
 	}
 	
 	/**

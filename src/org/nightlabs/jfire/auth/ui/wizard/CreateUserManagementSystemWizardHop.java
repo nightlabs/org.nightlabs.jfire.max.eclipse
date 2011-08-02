@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.WizardHop;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.security.dao.UserManagementSystemTypeDAO;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
@@ -48,7 +49,7 @@ public class CreateUserManagementSystemWizardHop extends WizardHop{
 		selectTypePage = new SelectUserManagementSystemTypePage();
 		setEntryPage(selectTypePage);
 		
-		loadJob = new Job("loading all user management system types") { //$NON-NLS-1$
+		loadJob = new Job(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizardHop.loadUserManagementSystemTypesJobTitle")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				allUserManagementSystemTypes = UserManagementSystemTypeDAO.sharedInstance().getAllUserManagementSystemTypes(

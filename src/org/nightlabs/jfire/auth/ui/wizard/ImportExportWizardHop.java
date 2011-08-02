@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.WizardHop;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
@@ -53,7 +54,7 @@ public class ImportExportWizardHop extends WizardHop{
 		configPage = new ImportExportConfigurationPage();
 		setEntryPage(configPage);
 
-		loadJob = new Job("loading all user management systems") {
+		loadJob = new Job(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizardHop.loadAllUserManagementSystemsJobTitle")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				allUserManagementSystems = UserManagementSystemDAO.sharedInstance().getAllUserManagementSystems(

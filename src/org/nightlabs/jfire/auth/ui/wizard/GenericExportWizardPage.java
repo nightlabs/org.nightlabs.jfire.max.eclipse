@@ -24,6 +24,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchComposite;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchUseCaseConstants;
 import org.nightlabs.jfire.base.ui.security.UserTable;
@@ -68,8 +69,8 @@ public class GenericExportWizardPage extends WizardHopPage{
 	 * Default constructor
 	 */
 	public GenericExportWizardPage() {
-		super(GenericExportWizardPage.class.getName(), "Export JFire objects to LDAP server");
-		setDescription("Select JFire objects for export");
+		super(GenericExportWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.pageTitle")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -82,9 +83,9 @@ public class GenericExportWizardPage extends WizardHopPage{
 		parent.setLayout(new GridLayout(1, false));
 		
 		exportAllButton = new Button(parent, SWT.RADIO);
-		exportAllButton.setText("Export all");
+		exportAllButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.exportAllButtonLabel")); //$NON-NLS-1$
 		exportAllButton.setSelection(true);
-		exportAllButton.setToolTipText("Export all user management system related JFire entities");
+		exportAllButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.exportAllButtonTooltip")); //$NON-NLS-1$
 		exportAllButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -102,8 +103,8 @@ public class GenericExportWizardPage extends WizardHopPage{
 		});
 		
 		exportSelectedUsers = new Button(parent, SWT.RADIO);
-		exportSelectedUsers.setText("Export selected Users only");
-		exportSelectedUsers.setToolTipText("Export only User objects selected in a table below");
+		exportSelectedUsers.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.exportSelectedUsersButtonLabel")); //$NON-NLS-1$
+		exportSelectedUsers.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.exportSelectedUsersButtonTooltip")); //$NON-NLS-1$
 		exportSelectedUsers.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -121,8 +122,8 @@ public class GenericExportWizardPage extends WizardHopPage{
 		});
 
 		exportSelectedPersons = new Button(parent, SWT.RADIO);
-		exportSelectedPersons.setText("Export selected Persons only");
-		exportSelectedPersons.setToolTipText("Export only Person objects found and selected in search form result table below");
+		exportSelectedPersons.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.exportSelectedPersonsButtonLabel")); //$NON-NLS-1$
+		exportSelectedPersons.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.exportSelectedPersonsButtonTooltip")); //$NON-NLS-1$
 		exportSelectedPersons.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -154,7 +155,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 					selectedObjectsIDs.add(UserID.create(user.getOrganisationID(), user.getUserID()));
 				}
 				if (selectedObjectsIDs.isEmpty()){
-					updateStatus("Please select at least on User!");
+					updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.pageErrorStatus_noUserSelected")); //$NON-NLS-1$
 				}else{
 					canFinish = true;
 					updateStatus(null);
@@ -163,7 +164,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 		});
 		tableParentLayout.topControl = userTable;
 		
-		personSearchComposite = new PersonSearchComposite(tableParent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT);
+		personSearchComposite = new PersonSearchComposite(tableParent, SWT.NONE, "", PersonSearchUseCaseConstants.USE_CASE_ID_DEFAULT); //$NON-NLS-1$
 		personSearchComposite.createSearchButton(personSearchComposite.getButtonBar());
 		personSearchComposite.getResultViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -172,7 +173,7 @@ public class GenericExportWizardPage extends WizardHopPage{
 					selectedObjectsIDs.add(PropertySetID.create(person.getOrganisationID(), person.getPropertySetID()));
 				}
 				if (selectedObjectsIDs.isEmpty()){
-					updateStatus("Please find and select at least on Person!");
+					updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.pageErrorStatus_noPersonSelected")); //$NON-NLS-1$
 				}else{
 					canFinish = true;
 					updateStatus(null);
@@ -236,8 +237,8 @@ public class GenericExportWizardPage extends WizardHopPage{
 	private static final String[] USER_FETCH_GROUPS = new String[] {FetchPlan.DEFAULT};
 	
 	private void loadUserTable(){
-		userTable.setInput("loading users...");
-		Job job = new Job("loading users...") {
+		userTable.setInput(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.userTableLoadingLabel")); //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage.loadUsersJobTitle")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor){
 				try {

@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 
@@ -46,9 +47,9 @@ public class UserManagementSystemTable extends AbstractTableComposite<UserManage
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		new TableColumn(table, SWT.LEFT).setText("Name");
-		new TableColumn(table, SWT.LEFT).setText("Type");
-		new TableColumn(table, SWT.LEFT).setText("Is leading?");
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.UserManagementSystemTable.columnName")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.UserManagementSystemTable.columnType")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.UserManagementSystemTable.columnLeading")); //$NON-NLS-1$
 		
 		table.setLayout(new WeightedTableLayout(new int[] {40, 40, 20}));
 	}
@@ -92,7 +93,7 @@ public class UserManagementSystemTable extends AbstractTableComposite<UserManage
 						}
 						return typeName;
 					case(2):
-						return userManagementSystem.isLeading() ? "yes" : "no";
+						return userManagementSystem.isLeading() ? Messages.getString("org.nightlabs.jfire.auth.ui.wizard.UserManagementSystemTable.leadingLabel_yes") : Messages.getString("org.nightlabs.jfire.auth.ui.wizard.UserManagementSystemTable.leadingLabel_no"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			return null;

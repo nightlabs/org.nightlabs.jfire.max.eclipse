@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.tree.EntityTree;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
@@ -48,15 +49,15 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 				UserManagementSystem userManagementSystem = (UserManagementSystem) o;
 				String userManagementSystemName = userManagementSystem.getUserManagementSystemID()+User.SEPARATOR_BETWEEN_USER_ID_AND_ORGANISATION_ID+userManagementSystem.getOrganisationID();
 				if (userManagementSystem.getName() != null 
-						&& !"".equals(userManagementSystem.getName().getText())){
+						&& !"".equals(userManagementSystem.getName().getText())){ //$NON-NLS-1$
 					userManagementSystemName = userManagementSystem.getName().getText();
 				}
 				String userManagementSystemTypeName = userManagementSystem.getType().getClass().getSimpleName();
 				if (userManagementSystem.getType().getName() != null 
-						&& !"".equals(userManagementSystem.getType().getName().getText())){
+						&& !"".equals(userManagementSystem.getType().getName().getText())){ //$NON-NLS-1$
 					userManagementSystemTypeName = userManagementSystem.getType().getName().getText();
 				}
-				return userManagementSystemName + " [" + userManagementSystemTypeName + "]";
+				return userManagementSystemName + " [" + userManagementSystemTypeName + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				return super.getText(o);
 			}
@@ -66,10 +67,9 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (element instanceof UserManagementSystem){
 				UserManagementSystem userManagementSystem = (UserManagementSystem) element;
-				String imageSuffix = userManagementSystem.isActive()?"UserManagementSystemActive":"UserManagementSystemInactive";
+				String imageSuffix = userManagementSystem.isActive()?"UserManagementSystemActive":"UserManagementSystemInactive"; //$NON-NLS-1$ //$NON-NLS-2$
 				return SharedImages.getSharedImage(
-						JFireAuthUIPlugin.sharedInstance(), EntityTreeCategoryUserManagementSystem.class, imageSuffix, "16x16", ImageFormat.png
-						);
+						JFireAuthUIPlugin.sharedInstance(), EntityTreeCategoryUserManagementSystem.class, imageSuffix, ImageDimension._16x16, ImageFormat.png);
 			}else{
 				return super.getColumnImage(element, columnIndex);
 			}

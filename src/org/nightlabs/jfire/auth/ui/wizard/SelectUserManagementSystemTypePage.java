@@ -20,6 +20,7 @@ import org.nightlabs.base.ui.wizard.IWizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 
@@ -47,8 +48,8 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 	 * Default constructor
 	 */
 	public SelectUserManagementSystemTypePage()	{
-		super(SelectUserManagementSystemTypePage.class.getName(), "Select User Management System Type", SharedImages.getWizardPageImageDescriptor(JFireAuthUIPlugin.sharedInstance(), SelectUserManagementSystemTypePage.class));
-		setDescription("Please select one of the available User Management System Types and proceed to the next step");
+		super(SelectUserManagementSystemTypePage.class.getName(), Messages.getString("org.nightlabs.jfire.auth.ui.wizard.SelectUserManagementSystemTypePage.pageTitle"), SharedImages.getWizardPageImageDescriptor(JFireAuthUIPlugin.sharedInstance(), SelectUserManagementSystemTypePage.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.SelectUserManagementSystemTypePage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 		mainWrapper.setLayout(new GridLayout(1, false));
 		
 		loadingLabel = new Label(mainWrapper, SWT.NONE);
-		loadingLabel.setText("Loading all usermanagement system types...");
+		loadingLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.SelectUserManagementSystemTypePage.loadingLabelText")); //$NON-NLS-1$
 		
 		setControl(mainWrapper);
 		return mainWrapper;
@@ -81,7 +82,7 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 	 */
 	public void setUserManagementSystemTypes(List<UserManagementSystemType<?>> allUserManagementSystemTypes) {
 		if (mainWrapper == null){
-			throw new IllegalStateException("This method should be called after wizard page contents were created!");
+			throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.SelectUserManagementSystemTypePage.setUserManagementSystemsIllegalyCalledExceptionText")); //$NON-NLS-1$
 		}
 		
 		for (Control c : mainWrapper.getChildren()){
@@ -102,7 +103,7 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 			loadingLabel.dispose();
 			firstRadioButton.setSelection(true);
 		}else{
-			loadingLabel.setText("No User Management System Types exist!");
+			loadingLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.SelectUserManagementSystemTypePage.loadingLabel_noUserManagementSystemTypesExist")); //$NON-NLS-1$
 		}
 		mainWrapper.layout();
 		
@@ -154,7 +155,7 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 		userManagementSystemTypeButton.setData(userManagementSystemType);
 		userManagementSystemTypeButton.addSelectionListener(builderSelectListener);
 		
-		String userManagementSystemTypeDescription = "No description (could be specified in preferences)";
+		String userManagementSystemTypeDescription = Messages.getString("org.nightlabs.jfire.auth.ui.wizard.SelectUserManagementSystemTypePage.userManagementSystemTypeDefaultDescription"); //$NON-NLS-1$
 		if (userManagementSystemType.getDescription() != null){
 			userManagementSystemTypeDescription = userManagementSystemType.getDescription().getText();
 		}

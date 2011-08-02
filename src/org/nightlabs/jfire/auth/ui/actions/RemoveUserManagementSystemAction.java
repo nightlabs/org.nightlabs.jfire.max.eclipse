@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.nightlabs.base.ui.entity.tree.EntityTree;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.base.login.ui.action.LSDWorkbenchWindowActionDelegate;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
@@ -43,7 +44,7 @@ public class RemoveUserManagementSystemAction extends LSDWorkbenchWindowActionDe
 		try	{
 			if (selectedUserManagementSystemIDs != null
 					&& !selectedUserManagementSystemIDs.isEmpty()
-					&& MessageDialog.openConfirm(RCPUtil.getActiveShell(), "Delete user management system(s)", "Delete selected user management system(s)?")){
+					&& MessageDialog.openConfirm(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction.confirmTitle"), Messages.getString("org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction.confirmMessage"))){ //$NON-NLS-1$ //$NON-NLS-2$
 				
 				ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(RCPUtil.getActiveShell());
 				progressDialog.setOpenOnRun(true);
@@ -56,7 +57,7 @@ public class RemoveUserManagementSystemAction extends LSDWorkbenchWindowActionDe
 						RCPUtil.getActiveShell().getDisplay().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								MessageDialog.openInformation(RCPUtil.getActiveShell(), "Delete user management system(s)", "User management system(s) were removed.");
+								MessageDialog.openInformation(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction.infoTitle"), Messages.getString("org.nightlabs.jfire.auth.ui.actions.RemoveUserManagementSystemAction.infoMessage")); //$NON-NLS-1$ //$NON-NLS-2$
 							}
 						});
 					}
