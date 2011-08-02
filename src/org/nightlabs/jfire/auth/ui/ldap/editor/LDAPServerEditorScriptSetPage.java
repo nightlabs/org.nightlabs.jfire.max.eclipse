@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 
@@ -49,7 +50,7 @@ public class LDAPServerEditorScriptSetPage extends EntityEditorPageWithProgress{
 	 * @param editor The editor for which to create this form page.
 	 */
 	public LDAPServerEditorScriptSetPage(FormEditor editor){
-		super(editor, ID_PAGE, "JFire-LDAP interaction scripts"); //$NON-NLS-1$
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage.pageTitle")); //$NON-NLS-1$
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class LDAPServerEditorScriptSetPage extends EntityEditorPageWithProgress{
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "Edit JFire-LDAP interaction scripts (Do NOT edit these scripts unless you know exactly what you are doing!)"; //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage.pageFormTitle"); //$NON-NLS-1$
 	}
 	
 }

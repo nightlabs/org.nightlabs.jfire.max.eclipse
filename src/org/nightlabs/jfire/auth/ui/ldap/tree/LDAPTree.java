@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.LDAPTreeEntryLoadCallback;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
@@ -87,7 +88,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	 */
 	@Override
 	public void createTreeColumns(Tree tree) {
-		new TreeColumn(tree, SWT.LEFT).setText("LDAP directory entries");
+		new TreeColumn(tree, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree.treeColumnLDAPEntries")); //$NON-NLS-1$
 		tree.setLayout(new WeightedTableLayout(new int[]{100}));
 	}
 
@@ -150,7 +151,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	}
 
 
-	private static final String OBJECT_CLASS_ATTRIBUTE = "objectClass";
+	private static final String OBJECT_CLASS_ATTRIBUTE = "objectClass"; //$NON-NLS-1$
 
 	class LDAPTreeContentProvider extends TreeContentProvider{
 		
@@ -165,7 +166,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 				if (children != null){
 					return children;
 				}
-				return new String[]{"loading..."};
+				return new String[]{Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree.loadingText")}; //$NON-NLS-1$
 			}
 			return super.getChildren(parentElement);
 		}
@@ -177,7 +178,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		@Override
 		public Object[] getElements(Object obj) {
 			if (rootEntries == null){
-				LDAPTreeEntry rootTreeEntry = new LDAPTreeEntry("", new String[]{OBJECT_CLASS_ATTRIBUTE});
+				LDAPTreeEntry rootTreeEntry = new LDAPTreeEntry("", new String[]{OBJECT_CLASS_ATTRIBUTE}); //$NON-NLS-1$
 				rootTreeEntry.setLdapConnectionParamsProvider(ldapConnectionParamsProvider);
 				return getChildren(rootTreeEntry);
 			}else{
@@ -203,10 +204,10 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	
 	class LDAPTreeLabelProvider extends TableLabelProvider{
 
-		private static final String POSIXACCOUNT = "posixAccount";
-		private static final String PERSON = "person";
-		private static final String ORGANIZATIONALUNIT = "organizationalUnit";
-		private static final String ORGANIZATION = "organization";
+		private static final String POSIXACCOUNT = "posixAccount"; //$NON-NLS-1$
+		private static final String PERSON = "person"; //$NON-NLS-1$
+		private static final String ORGANIZATIONALUNIT = "organizationalUnit"; //$NON-NLS-1$
+		private static final String ORGANIZATION = "organization"; //$NON-NLS-1$
 
 		@Override
 		public String getColumnText(Object obj, int i) {
@@ -215,7 +216,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 			}else if (obj instanceof LDAPTreeEntry){
 				return ((LDAPTreeEntry) obj).getName();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		
 		@Override
@@ -235,19 +236,19 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		}
 		
 		private Image getImageForEntry(LDAPTreeEntry entry){
-			if (!"".equals(entry.getName()) && entry.hasAttributesLoaded()){
+			if (!"".equals(entry.getName()) && entry.hasAttributesLoaded()){ //$NON-NLS-1$
 				try {
 					LDAPAttributeSet attributes = entry.getAttributes(null);
 					if (attributes.containsAnyAttributeValue(OBJECT_CLASS_ATTRIBUTE, CollectionUtil.createHashSet(ORGANIZATIONALUNIT, ORGANIZATION))){
 						
 						return SharedImages.getSharedImage(
-								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeOrg", ImageDimension._16x16.toString(), ImageFormat.png
+								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeOrg", ImageDimension._16x16.toString(), ImageFormat.png //$NON-NLS-1$
 								);
 						
 					}else if (attributes.containsAnyAttributeValue(OBJECT_CLASS_ATTRIBUTE, CollectionUtil.createHashSet(PERSON, POSIXACCOUNT))){
 						
 						return SharedImages.getSharedImage(
-								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeUser", ImageDimension._16x16.toString(), ImageFormat.png
+								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeUser", ImageDimension._16x16.toString(), ImageFormat.png //$NON-NLS-1$
 								);
 						
 					}
@@ -256,7 +257,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 				}
 			}
 			return SharedImages.getSharedImage(
-					LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", ImageDimension._16x16.toString(), ImageFormat.png
+					LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNode", ImageDimension._16x16.toString(), ImageFormat.png //$NON-NLS-1$
 					);
 		}
 		

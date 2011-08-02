@@ -19,6 +19,7 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
@@ -51,8 +52,8 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 	 * Default constructor
 	 */
 	public LDAPServerImportWizardPage() {
-		super(LDAPServerImportWizardPage.class.getName(), "Import from LDAP server", SharedImages.getWizardPageImageDescriptor(LdapUIPlugin.sharedInstance(), LDAPServerImportWizardPage.class));
-		setDescription("Run import all entries from LDAP server or select entries to be imported");
+		super(LDAPServerImportWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.pageTitle"), SharedImages.getWizardPageImageDescriptor(LdapUIPlugin.sharedInstance(), LDAPServerImportWizardPage.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -65,8 +66,8 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 		parent.setLayout(new GridLayout(1, false));
 		
 		importAllButton = new Button(parent, SWT.RADIO);
-		importAllButton.setText("Import all");
-		importAllButton.setToolTipText("Import all eligible LDAP entries (their parent(s) are specified in LDAP scripts)");
+		importAllButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.importAllButtonLabel")); //$NON-NLS-1$
+		importAllButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.importAllButtonTooltip")); //$NON-NLS-1$
 		importAllButton.setSelection(true);
 		importAllButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -81,8 +82,8 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 		});
 		
 		importSelectedButton = new Button(parent, SWT.RADIO);
-		importSelectedButton.setText("Import selected only");
-		importSelectedButton.setToolTipText("Import selected LDAP user related entries only");
+		importSelectedButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.importSelectedButtonLabel")); //$NON-NLS-1$
+		importSelectedButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.importSelectedButtonTooltip")); //$NON-NLS-1$
 		importSelectedButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -105,14 +106,14 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 					updateStatus(null);
 					selectedLDAPEntries = ldapTree.getSelectedElements();
 					if (selectedLDAPEntries == null || selectedLDAPEntries.isEmpty()){
-						updateStatus("Select at least one entry!");
+						updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.pageStatus_noEntriesSelected")); //$NON-NLS-1$
 					}else{
 						for (LDAPTreeEntry treeEntry : selectedLDAPEntries){
 							if (treeEntry.hasAttributesLoaded()){
 								try{
-									if (!treeEntry.getAttributes(null).containsAnyAttributeValue("objectClass", CollectionUtil.createHashSet("person", "posixAccount"))){
+									if (!treeEntry.getAttributes(null).containsAnyAttributeValue("objectClass", CollectionUtil.createHashSet("person", "posixAccount"))){ //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 										canFinish = false;
-										updateStatus("Selected entry should have these attributes: objectClass=person or posixAccount");
+										updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportWizardPage.pageStatus_entryShouldHaveAttributes")); //$NON-NLS-1$
 										break;
 									}
 								} catch (Exception e) {

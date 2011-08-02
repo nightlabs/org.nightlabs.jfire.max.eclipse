@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttribute;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
@@ -66,7 +67,7 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 	 */
 	public void setLdapConnectionParamsProvider(ILDAPConnectionParamsProvider ldapConnectionParamsProvider) {
 		if (ldapConnectionParamsProvider == null){
-			throw new IllegalArgumentException("ILDAPConnectionParamsProvider can't be null!");
+			throw new IllegalArgumentException("ILDAPConnectionParamsProvider can't be null!"); //$NON-NLS-1$
 		}
 		this.ldapConnectionParamsProvider = ldapConnectionParamsProvider;
 	}
@@ -98,10 +99,10 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 		wrapper.setLayout(new GridLayout(1, false));
 		wrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		setTitle("Select LDAP entry");
-		setMessage("Please select at least one LDAP entry");
+		setTitle(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog.dlgTitle")); //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog.dlgMessage")); //$NON-NLS-1$
 		setTitleImage(
-				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), SelectLDAPEntryDialog.class, "titleImage", "66x75", ImageFormat.png));
+				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), SelectLDAPEntryDialog.class, "titleImage", "66x75", ImageFormat.png)); //$NON-NLS-1$ //$NON-NLS-2$
 
 
 		ldapTree = new LDAPTree(wrapper, SWT.BORDER);
@@ -143,7 +144,7 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 					LDAPAttributeSet attributes = ldapTreeEntry.getAttributes(null);
 					for (LDAPAttribute<Object> ldapAttribute : selectionCriteriaAttributes) {
 						if (!attributes.containsAllAttributeValues(ldapAttribute.getName(), ldapAttribute.getValues())){
-							setErrorMessage("Selected entry should contain these attributes: " + selectionCriteriaAttributes.toString());
+							setErrorMessage(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog.errorMessage_entryAttributes") + selectionCriteriaAttributes.toString()); //$NON-NLS-1$
 							return false;
 						}
 					}

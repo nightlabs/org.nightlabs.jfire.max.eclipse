@@ -27,6 +27,7 @@ import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetModel.NamedScript;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jseditor.ui.rcp.editor.JSEditorComposite;
@@ -64,7 +65,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 
 	
 	public LDAPServerScriptSetSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Interaction scripts");
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.sectionTitle")); //$NON-NLS-1$
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
 	
@@ -74,7 +75,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 	@Override
 	public boolean setFormInput(Object input) {
 		if (!(input instanceof LDAPScriptSet)){
-			throw new IllegalArgumentException("Input must be a LDAPScriptSet object!");
+			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.illegalFormInputExceptionText")); //$NON-NLS-1$
 		}
 		this.ldapScriptSetModel = new LDAPServerScriptSetModel((LDAPScriptSet) input);
 		return super.setFormInput(input);
@@ -175,9 +176,9 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 		descriptionExpandable.setLayoutData(gd);
 
 		descriptionExpandable.setExpanded(false);
-		descriptionExpandable.setText("Show description and tips");
+		descriptionExpandable.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.showDescriptionExpanableLabel")); //$NON-NLS-1$
 
-		scriptDescriptionLabel = toolkit.createLabel(descriptionExpandable, "", SWT.WRAP);
+		scriptDescriptionLabel = toolkit.createLabel(descriptionExpandable, "", SWT.WRAP); //$NON-NLS-1$
 
 		descriptionExpandable.setClient(scriptDescriptionLabel);
 		descriptionExpandable.addExpansionListener(new ExpansionAdapter(){
@@ -189,9 +190,9 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 				if (e.getState()){
 					gd.minimumHeight = 90;
 					gd.heightHint = 90;
-					descriptionExpandable.setText("Hide description and tips");
+					descriptionExpandable.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.hideDescriptionExpanableLabel")); //$NON-NLS-1$
 				}else{
-					descriptionExpandable.setText("Show description and tips");
+					descriptionExpandable.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.showDescriptionExpanableLabel")); //$NON-NLS-1$
 				}
 				descriptionExpandable.setLayoutData(gd);
 				((Control) e.getSource()).getParent().layout();

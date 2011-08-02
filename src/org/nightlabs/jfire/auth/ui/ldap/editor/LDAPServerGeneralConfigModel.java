@@ -25,7 +25,7 @@ public class LDAPServerGeneralConfigModel{
 	 */
 	public LDAPServerGeneralConfigModel(LDAPServer ldapServer){
 		if (ldapServer == null){
-			throw new IllegalArgumentException("LDAPServer can't be null!");
+			throw new IllegalArgumentException("LDAPServer can't be null!"); //$NON-NLS-1$
 		}
 		this.ldapServer = ldapServer;
 	}
@@ -92,7 +92,7 @@ public class LDAPServerGeneralConfigModel{
 	 * @return port as {@link String}
 	 */
 	public String getPort(){
-		return ""+ldapServer.getPort();
+		return ""+ldapServer.getPort(); //$NON-NLS-1$
 	}
 	
 	/**

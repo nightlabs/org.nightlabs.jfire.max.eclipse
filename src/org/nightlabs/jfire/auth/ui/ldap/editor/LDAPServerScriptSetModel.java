@@ -76,7 +76,7 @@ public class LDAPServerScriptSetModel {
 		}else if (LDAPScriptSetHelper.SYNC_TO_JFIRE_SCRIPT_NAME.equals(scriptName)){
 			return ldapScriptSet.getSyncLdapToJFireScript();
 		}else{
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 

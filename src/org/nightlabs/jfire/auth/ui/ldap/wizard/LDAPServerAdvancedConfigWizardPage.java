@@ -21,6 +21,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
@@ -47,8 +48,8 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	 * Default constructor
 	 */
 	public LDAPServerAdvancedConfigWizardPage() {
-		super(LDAPServerAdvancedConfigWizardPage.class.getName(), "Configure LDAP server", SharedImages.getWizardPageImageDescriptor(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigWizardPage.class));
-		setDescription("LDAP server advanced configuration");
+		super(LDAPServerAdvancedConfigWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.pageTitle"), SharedImages.getWizardPageImageDescriptor(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigWizardPage.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -60,9 +61,9 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		Composite parent = new Composite(wizardParent, SWT.NONE);
 		parent.setLayout(new GridLayout(2, false));
 		
-		new Label(parent, SWT.NONE).setText("Base entry name:");
+		new Label(parent, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.baseEntryLabel")); //$NON-NLS-1$
 		LDAPAttributeSet selectionCriteria = new LDAPAttributeSet();
-		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("organizationalUnit"));
+		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("organizationalUnit")); //$NON-NLS-1$ //$NON-NLS-2$
 		ldapEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE, selectionCriteria);
 		ldapEntrySelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ldapEntrySelector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
@@ -71,18 +72,15 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 			public void modifyText(ModifyEvent modifyevent) {
 				String selectedEntryName = ldapEntrySelector.getEntryName();
 				if (selectedEntryName == null || selectedEntryName.isEmpty()){
-					updateStatus("Please select base LDAP entry!");
+					updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.pageStatus_noBaseEntry")); //$NON-NLS-1$
 				}else{
 					updateStatus(null);
 				}
 			}
 		});
 		
-		String baseEntryDescription = "Name of LDAP entry which is used as base for constructing LDAP distingueshed names from JFire objects data " +
-				"(e.g. userID). It means that all LDAP users (entries) which are supposed to be used in JFire-LDAP interaction (including login) should " +
-				"be located directly unser this base entry. Base entry can be changed later or even more than one base entry could be added by editing " +
-				"JFire-LDAP interaction scripts within LDAPServer editor.";
-		ExpandableComposite baseEntryDescriptionExpandable = createDescriptionExpandable(parent, baseEntryDescription);
+		ExpandableComposite baseEntryDescriptionExpandable = createDescriptionExpandable(
+				parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.baseEntryDescription")); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.widthHint = 500;
@@ -96,18 +94,14 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		
 		
 		isLeadingButton = new Button(parent, SWT.CHECK);
-		isLeadingButton.setText("is a leading system");
-		isLeadingButton.setToolTipText("If LDAP is a leading system than all user modifications are synchronized from LDAP directory to JFire. \nOtherwise it's done other way around.");
+		isLeadingButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.isLeadingCheckButonLabel")); //$NON-NLS-1$
+		isLeadingButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.isLeadingCheckButtonTooltip")); //$NON-NLS-1$
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.verticalIndent = 10;
 		isLeadingButton.setLayoutData(gd);
 		
-		String leadingSystemDescription = "If LDAP is a leading system (and this checkbox is on) than all users are maintained in LDAP directory and modifications are synchronized to JFire. " +
-											"It's done in several ways: during user login (if it exists in LDAP but not in JFire), with timer task which launches every hour and " +
-											"(not supported yet!) with push notifications from LDAP server.\n" +
-											"If JFire is a leading system than all users are maintained inside JFire and modifications are synchronized to LDAP directory. " +
-											"It's done just after modification is stored to the database with the help of JDO Lifecycle listeners.";
-		ExpandableComposite leadingSystemDescriptionExpandable = createDescriptionExpandable(parent, leadingSystemDescription);
+		ExpandableComposite leadingSystemDescriptionExpandable = createDescriptionExpandable(
+				parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.leadingSystemDescription")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 500;
 		gd.verticalIndent = 10;
@@ -115,7 +109,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		
 		
 		Label attSyncLabel = new Label(parent, SWT.NONE);
-		attSyncLabel.setText("Attribute sync policy:");
+		attSyncLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.attributeSyncPolicyLabel")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 10;
@@ -124,16 +118,13 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		attributeSyncPolicyCombo = new CCombo(parent, SWT.BORDER);
 		attributeSyncPolicyCombo.setEditable(false);
 		attributeSyncPolicyCombo.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-		attributeSyncPolicyCombo.setToolTipText("Changes method which is used when synchronizing LDAP attributes into Person datafields, see description for more details");
+		attributeSyncPolicyCombo.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.attributeSyncPolicyComboTooltip")); //$NON-NLS-1$
 		attributeSyncPolicyCombo.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		attributeSyncPolicyCombo.setItems(LDAPAttributeSyncPolicy.getPossibleAttributeSyncPolicyValues());
 		attributeSyncPolicyCombo.setText(LDAPServer.LDAP_DEFAULT_ATTRIBUTE_SYNC_POLICY.stringValue());
 		ExpandableComposite attSyncPolicyDescriptionExpandable = createDescriptionExpandable(
 											parent, 
-											"LDAP attributes could be mapped to Person datafields in different ways: ALL - every attribute from LDAP schema of this server " +
-											"will be mapped to Person datafields and all needed structures will be created, MANDATORY ONLY - only attributes which are " +
-											"mandatory by LDAP schema will be mapped, others are mapped inside corresponding script, NONE - nothing will be mapped by the " +
-											"system, all mapping will occur inside script which could be edited by administrator.");
+											Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.attributeSyncPolicyDescription")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 500;
 		attSyncPolicyDescriptionExpandable.setLayoutData(gd);
@@ -151,14 +142,14 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		gd.verticalIndent = 20;
 		syncWrapper.setLayoutData(gd);
 		
-		new Label(syncWrapper, SWT.NONE).setText("Sync entry DN:");
+		new Label(syncWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncEntryDNLabel")); //$NON-NLS-1$
 		syncDNText = new Text(syncWrapper, SWT.BORDER);
-		syncDNText.setToolTipText("Distingueshed name of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
+		syncDNText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncDNTextTooltip")); //$NON-NLS-1$
 		syncDNText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		new Label(syncWrapper, SWT.NONE).setText("Sync password:");
+		new Label(syncWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncPasswordLabel")); //$NON-NLS-1$
 		syncPasswordText = new Text(syncWrapper, SWT.BORDER | SWT.PASSWORD);
-		syncPasswordText.setToolTipText("Password of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
+		syncPasswordText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncPasswordTextTooltip")); //$NON-NLS-1$
 		syncPasswordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		setControl(parent);
@@ -210,7 +201,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		if (ldapEntrySelector != null){
 			return ldapEntrySelector.getEntryName();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	/**
@@ -229,7 +220,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	public boolean isPageComplete() {
 		if (ldapEntrySelector != null 
 				&& !ldapEntrySelector.isDisposed()
-				&& !"".equals(ldapEntrySelector.getEntryName())){
+				&& !"".equals(ldapEntrySelector.getEntryName())){ //$NON-NLS-1$
 			return true;
 		}
 		return false;
@@ -249,7 +240,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		descriptionExpandable.clientVerticalSpacing = 5;
 		descriptionExpandable.titleBarTextMarginWidth = -2;
 		descriptionExpandable.setLayout(new FillLayout());
-		descriptionExpandable.setText("See description");
+		descriptionExpandable.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.descriptionExpandableLabel")); //$NON-NLS-1$
 		
 		Label descriptionLabel = new Label(descriptionExpandable, SWT.WRAP);
 		descriptionLabel.setText(descriptionText);

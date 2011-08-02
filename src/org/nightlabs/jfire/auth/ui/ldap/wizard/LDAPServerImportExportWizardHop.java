@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
@@ -47,7 +48,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	@Override
 	public void configurePages(UserManagementSystem userManagementSystem, SyncDirection syncDirection) {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
-			throw new IllegalArgumentException("LDAPServerImportExportWizardHop accepts LDAPServer instances only!");
+			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
 		removeAllHopPages();
 		if (SyncDirection.IMPORT.equals(syncDirection)){
@@ -65,7 +66,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	@Override
 	public void performSynchronization(UserManagementSystem userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
-			throw new IllegalArgumentException("LDAPServerImportExportWizardHop accepts LDAPServer instances only!");
+			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
 		
 		String organisationID = GlobalSecurityReflector.sharedInstance().getUserDescriptor().getOrganisationID();
@@ -102,7 +103,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				syncEvent.setJFireObjectsIds(objectIDsToSync);
 				
 			}else{
-				throw new IllegalArgumentException("Unknown SyncDirection! Possible valuse are: IMPORT, EXPORT.");
+				throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.unknownSyncDirectionExceptionText")); //$NON-NLS-1$
 			}
 			
 			if ((syncEvent.getJFireObjectsIds() != null && !syncEvent.getJFireObjectsIds().isEmpty())

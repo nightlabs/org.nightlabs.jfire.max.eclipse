@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnection;
@@ -85,7 +86,7 @@ public class LDAPTreeEntry {
 	 */
 	public void setLdapConnectionParamsProvider(ILDAPConnectionParamsProvider ldapConnectionParamsProvider) {
 		if (ldapConnectionParamsProvider == null){
-			throw new IllegalArgumentException("ILDAPConnectionParamsProvider can't be null!");
+			throw new IllegalArgumentException("ILDAPConnectionParamsProvider can't be null!"); //$NON-NLS-1$
 		}
 		this.ldapConnectionParamsProvider = ldapConnectionParamsProvider;
 	}
@@ -160,7 +161,7 @@ public class LDAPTreeEntry {
 			
 		}else{
 			
-			loadJob = new Job("loading ldap entries...") {
+			loadJob = new Job(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.loadLDAPEntriesJobTitle")) { //$NON-NLS-1$
 	
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -184,7 +185,7 @@ public class LDAPTreeEntry {
 						return Status.OK_STATUS;
 
 					} catch (Exception e){
-						return new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, "Error occured during entry loading!", e);
+						return new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.errorStatusTitle"), e); //$NON-NLS-1$
 					} finally {
 						if (connection != null && bindCredentials != null){
 							connection.unbind();

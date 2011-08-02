@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider.AuthenticationMethod;
@@ -46,8 +47,8 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 	 * Default constructor
 	 */
 	public LDAPServerGeneralConfigWizardPage() {
-		super(LDAPServerAdvancedConfigWizardPage.class.getName(), "Configure LDAP server", SharedImages.getWizardPageImageDescriptor(LdapUIPlugin.sharedInstance(), LDAPServerGeneralConfigWizardPage.class));
-		setDescription("LDAP server general configuration");
+		super(LDAPServerAdvancedConfigWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.pageTitle"), SharedImages.getWizardPageImageDescriptor(LdapUIPlugin.sharedInstance(), LDAPServerGeneralConfigWizardPage.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.pageDescription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -60,8 +61,8 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 		parent.setLayout(new GridLayout(2, false));
 		
 		isActiveButton = new Button(parent, SWT.CHECK);
-		isActiveButton.setText("is active and used for login");
-		isActiveButton.setToolTipText("Indicates if bind operation will be called against this LDAP server on login");
+		isActiveButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.isActiveCheckButtonLabel")); //$NON-NLS-1$
+		isActiveButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.isActiveCheckButtonTooltip")); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		isActiveButton.setLayoutData(gd);
@@ -77,18 +78,18 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		leftWrapper.setLayoutData(gd);
 		
-		new Label(leftWrapper, SWT.NONE).setText("Host:");
+		new Label(leftWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.hostLabel")); //$NON-NLS-1$
 		hostText = new Text(leftWrapper, SWT.BORDER);
-		hostText.setToolTipText(String.format("Specify host to connect to LDAP directory. \nDefault (%s) will be used if empty.", LDAPServer.LDAP_DEFAULT_HOST));
+		hostText.setToolTipText(String.format(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.hostTextTooltip"), LDAPServer.LDAP_DEFAULT_HOST)); //$NON-NLS-1$
 		hostText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		hostText.setText(LDAPServer.LDAP_DEFAULT_HOST);
 		hostText.addModifyListener(defaultModifyListener);
 		
-		new Label(leftWrapper, SWT.NONE).setText("Port:");
+		new Label(leftWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.portLabel")); //$NON-NLS-1$
 		portText = new Text(leftWrapper, SWT.BORDER);
-		portText.setToolTipText(String.format("Specify port to connect to LDAP directory. \nDefault (%s) will be used if empty", LDAPServer.LDAP_DEFAULT_PORT));
+		portText.setToolTipText(String.format(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.portTextTooltip"), LDAPServer.LDAP_DEFAULT_PORT)); //$NON-NLS-1$
 		portText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		portText.setText(""+LDAPServer.LDAP_DEFAULT_PORT);
+		portText.setText(""+LDAPServer.LDAP_DEFAULT_PORT); //$NON-NLS-1$
 		portText.addModifyListener(defaultModifyListener);
 
 		Composite rightWrapper = new Composite(parent, SWT.NONE);
@@ -102,23 +103,23 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		rightWrapper.setLayoutData(gd);
 
-		new Label(rightWrapper, SWT.NONE).setText("Encryption method:");
+		new Label(rightWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.encryptionMethodLabel")); //$NON-NLS-1$
 		encryptionMethodCombo = new CCombo(rightWrapper, SWT.BORDER | SWT.READ_ONLY);
-		encryptionMethodCombo.setToolTipText("Changes encryption method used during communication with LDAP directory");
+		encryptionMethodCombo.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.encryptionMethodComboTooltip")); //$NON-NLS-1$
 		encryptionMethodCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		encryptionMethodCombo.setItems(EncryptionMethod.getPossibleEncryptionMethods());
 		encryptionMethodCombo.setText(LDAPServer.LDAP_DEFAULT_ENCRYPTION_METHOD.stringValue());
 		
-		new Label(rightWrapper, SWT.NONE).setText("Authentication method:");
+		new Label(rightWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.authMethodLabel")); //$NON-NLS-1$
 		authMethodCombo = new CCombo(rightWrapper, SWT.BORDER | SWT.READ_ONLY);
-		authMethodCombo.setToolTipText("Changes authentication method used during binding against LDAP directory");
+		authMethodCombo.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.authMethodComboTooltip")); //$NON-NLS-1$
 		authMethodCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		authMethodCombo.setItems(AuthenticationMethod.getPossibleAuthenticationMethods());
 		authMethodCombo.setText(LDAPServer.LDAP_DEFAULT_AUTHENTICATION_METHOD.stringValue());
 
 		
-		nameText = new I18nTextEditor(parent, "Name:");
-		nameText.setToolTipText("Name this LDAP server in different languages");
+		nameText = new I18nTextEditor(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.nameTextLabel")); //$NON-NLS-1$
+		nameText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.nameTextTooltip")); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 10;
@@ -128,8 +129,8 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 		nameText.setI18nText(defaultLdapName);
 		nameText.addModifyListener(defaultModifyListener);
 		
-		descriptionText = new I18nTextEditorMultiLine(parent, "Description:");
-		descriptionText.setToolTipText("Describe this LDAP server in different languages");
+		descriptionText = new I18nTextEditorMultiLine(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.descriptionTextLabel")); //$NON-NLS-1$
+		descriptionText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.descriptionTextTooltip")); //$NON-NLS-1$
 		descriptionText.setVisibleLineCount(I18nTextEditorMultiLine.DEFAULT_LINECOUNT + 2);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -221,7 +222,7 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 	}
 	
 	private boolean checkTextNotEmpty(I18nTextEditor text){
-		String editText = "";
+		String editText = ""; //$NON-NLS-1$
 		try{
 			editText = text.getEditText();
 		}catch(Exception e){
@@ -247,27 +248,27 @@ public class LDAPServerGeneralConfigWizardPage extends WizardHopPage{
 	};
 	
 	private boolean verifyInput(){
-		String editNameText = "";
+		String editNameText = ""; //$NON-NLS-1$
 		try{
 			editNameText = nameText.getEditText();
 		}catch(Exception e){
 			// do nothing in case text is disposed or null
 		}
-		if (hostText.getText() == null || "".equals(hostText.getText())){
-			updateStatus("Host should be specified for LDAP server!");
+		if (hostText.getText() == null || "".equals(hostText.getText())){ //$NON-NLS-1$
+			updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.pageStatus_noHost")); //$NON-NLS-1$
 			return false;
-		}else if (portText.getText() == null || "".equals(portText.getText())){
-			updateStatus("Port should be specified for LDAP server!");
+		}else if (portText.getText() == null || "".equals(portText.getText())){ //$NON-NLS-1$
+			updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.pageStatus_noPort")); //$NON-NLS-1$
 			return false;
 		}else if (portText.getText() != null && !portText.getText().isEmpty()){
 			try{
 				Integer.parseInt(portText.getText());
 			}catch(NumberFormatException e){
-				updateStatus("Port value should be an Integer!");
+				updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.pageStatus_portNotInteger")); //$NON-NLS-1$
 				return false;
 			}
-		}else if ("".equals(editNameText)){
-			updateStatus("Name should be specified for LDAP server!");
+		}else if ("".equals(editNameText)){ //$NON-NLS-1$
+			updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerGeneralConfigWizardPage.pageStatus_noName")); //$NON-NLS-1$
 			return false;
 		}
 		updateStatus(null);

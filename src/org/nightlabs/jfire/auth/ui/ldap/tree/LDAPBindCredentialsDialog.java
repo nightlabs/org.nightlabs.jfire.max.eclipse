@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 
 /**
  * Dialog for entering login and password for binding against LDAP directory.
@@ -47,20 +48,20 @@ public class LDAPBindCredentialsDialog extends ResizableTitleAreaDialog{
 		wrapper.setLayout(new GridLayout(1, false));
 		wrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		setTitle("Enter login and password");
-		setMessage("Please enter login and password for binding against LDAP directory \nbecause it does not have anonymous access");
+		setTitle(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPBindCredentialsDialog.dlgTitle")); //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPBindCredentialsDialog.dlgMessage")); //$NON-NLS-1$
 		setTitleImage(
-				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPBindCredentialsDialog.class, "titleImage", "66x75", ImageFormat.png));
+				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPBindCredentialsDialog.class, "titleImage", "66x75", ImageFormat.png)); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		Composite dialogAreaParent = new Composite(wrapper, SWT.NONE);
 		dialogAreaParent.setLayout(new GridLayout(2, false));
 		dialogAreaParent.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		new Label(dialogAreaParent, SWT.NONE).setText("Login:");
+		new Label(dialogAreaParent, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPBindCredentialsDialog.loginLabel")); //$NON-NLS-1$
 		loginText = new Text(dialogAreaParent, SWT.BORDER);
 		loginText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(dialogAreaParent, SWT.NONE).setText("Password:");
+		new Label(dialogAreaParent, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPBindCredentialsDialog.passwordLabel")); //$NON-NLS-1$
 		passwordText = new Text(dialogAreaParent, SWT.BORDER | SWT.PASSWORD);
 		passwordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 

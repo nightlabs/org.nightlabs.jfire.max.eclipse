@@ -8,6 +8,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 
 /**
@@ -51,7 +52,7 @@ public class LDAPServerEditorMainPage extends EntityEditorPageWithProgress{
 	 * @param editor The editor for which to create this form page.
 	 */
 	public LDAPServerEditorMainPage(FormEditor editor){
-		super(editor, ID_PAGE, "LDAP Server configuration"); //$NON-NLS-1$
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage.pageTitle")); //$NON-NLS-1$
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class LDAPServerEditorMainPage extends EntityEditorPageWithProgress{
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "Edit LDAP server configuration"; //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage.pageFormTitle"); //$NON-NLS-1$
 	}
 	
 	/**

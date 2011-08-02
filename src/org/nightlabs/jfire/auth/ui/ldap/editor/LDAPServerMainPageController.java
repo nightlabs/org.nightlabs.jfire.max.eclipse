@@ -5,6 +5,7 @@ import javax.jdo.FetchPlan;
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
@@ -51,7 +52,7 @@ public class LDAPServerMainPageController extends ActiveEntityEditorPageControll
 					);
 			
 			if (!(userManagementSystem instanceof LDAPServer)){
-				throw new IllegalArgumentException("Editor input is not a LDAPServer!");
+				throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerMainPageController.wrongEditorInputExceptionText")); //$NON-NLS-1$
 			}
 
 			return (LDAPServer) userManagementSystem;

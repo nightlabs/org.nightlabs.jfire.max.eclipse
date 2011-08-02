@@ -7,7 +7,6 @@ import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFi
  * Simple model of {@link LDAPServer} to be used on UI in {@link LDAPServerAdvancedConfigSection}.
  * It just wraps around {@link LDAPServer} and performs some additional data transformation and 
  * verification.
- * TODO: hide sync password
  * 
  * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
  *
@@ -24,7 +23,7 @@ public class LDAPServerAdvancedConfigModel{
 	 */
 	public LDAPServerAdvancedConfigModel(LDAPServer ldapServer){
 		if (ldapServer == null){
-			throw new IllegalArgumentException("LDAPServer can't be null!");
+			throw new IllegalArgumentException("LDAPServer can't be null!"); //$NON-NLS-1$
 		}
 		this.ldapServer = ldapServer;
 	}
@@ -35,7 +34,7 @@ public class LDAPServerAdvancedConfigModel{
 	 * @return name of LDAP entry
 	 */
 	public String getSyncDN(){
-		return ldapServer.getSyncDN()!=null?ldapServer.getSyncDN():"";
+		return ldapServer.getSyncDN()!=null?ldapServer.getSyncDN():""; //$NON-NLS-1$
 	}
 	
 	/**
@@ -44,7 +43,7 @@ public class LDAPServerAdvancedConfigModel{
 	 * @param syncDN
 	 */
 	public void setSyncDN(String syncDN){
-		if ("".equals(syncDN)){
+		if ("".equals(syncDN)){ //$NON-NLS-1$
 			syncDN = null;
 		}
 		ldapServer.setSyncDN(syncDN);
@@ -56,7 +55,7 @@ public class LDAPServerAdvancedConfigModel{
 	 * @return password as simple {@link String}
 	 */
 	public String getSyncPassword(){
-		return ldapServer.getSyncPassword()!=null?ldapServer.getSyncPassword():"";
+		return ldapServer.getSyncPassword()!=null?ldapServer.getSyncPassword():""; //$NON-NLS-1$
 	}
 	
 	/**
@@ -65,7 +64,7 @@ public class LDAPServerAdvancedConfigModel{
 	 * @param syncPassword
 	 */
 	public void setSyncPassword(String syncPassword){
-		if ("".equals(syncPassword)){
+		if ("".equals(syncPassword)){ //$NON-NLS-1$
 			syncPassword = null;
 		}
 		ldapServer.setSyncPassword(syncPassword);

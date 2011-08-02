@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog;
@@ -30,7 +31,7 @@ import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnect
  */
 public class LDAPEntrySelectorComposite extends XComposite{
 
-	private static final String SELECT_BUTTON_DEFAULT_CAPTION = "Select...";
+	private static final String SELECT_BUTTON_DEFAULT_CAPTION = Messages.getString("org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.selectButtonDefaultCaption"); //$NON-NLS-1$
 	private Text entryNameText;
 	
 	/**
@@ -82,7 +83,7 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	 */
 	public void setLdapConnectionParamsProvider(ILDAPConnectionParamsProvider ldapConnectionParamsProvider) {
 		if (ldapConnectionParamsProvider == null){
-			throw new IllegalArgumentException("ILDAPConnectionParamsProvider can't be null!");
+			throw new IllegalArgumentException("ILDAPConnectionParamsProvider can't be null!"); //$NON-NLS-1$
 		}
 		this.ldapConnectionParamsProvider = ldapConnectionParamsProvider;
 	}
@@ -130,7 +131,7 @@ public class LDAPEntrySelectorComposite extends XComposite{
 			public void widgetSelected(SelectionEvent selectionevent) {
 				
 				if (ldapConnectionParamsProvider == null){
-					throw new IllegalStateException("ILDAPConnectionParamsProvider is not set! Connection to LDAPServer is not possible.");
+					throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.noConnectionProviderExceptionText")); //$NON-NLS-1$
 				}
 				
 				SelectLDAPEntryDialog dlg = new SelectLDAPEntryDialog(RCPUtil.getActiveShell(), null, ldapConnectionParamsProvider);

@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
@@ -101,7 +102,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	@Override
 	public boolean setFormInput(Object input) {
 		if (!(input instanceof LDAPServer)){
-			throw new IllegalArgumentException("Input must be a LDAPServer object!");
+			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.illegalInputExceptionText")); //$NON-NLS-1$
 		}
 		this.model = new LDAPServerAdvancedConfigModel((LDAPServer) input);
 		return super.setFormInput(input);
@@ -153,32 +154,26 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		parentLayout.marginTop = 10;
 		parentLayout.marginRight = 20;
 		
-		isLeadingButton = toolkit.createButton(parent, "is a leading system", SWT.CHECK | SWT.FLAT);
-		isLeadingButton.setToolTipText("If LDAP is a leading system than all user modifications are synchronized from LDAP directory to JFire. \nOtherwise it's done other way around.");
+		isLeadingButton = toolkit.createButton(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.isLeadingCheckButtonLabel"), SWT.CHECK | SWT.FLAT); //$NON-NLS-1$
+		isLeadingButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.isLeadingCheckButtonTooltip")); //$NON-NLS-1$
 		isLeadingButton.addSelectionListener(dirtySelectionListener);
 		isLeadingButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		String leadingSystemDescription = "If LDAP is a leading system (and this checkbox is on) than all users are maintained in LDAP directory and modifications are synchronized to JFire. " +
-				"It's done in several ways: during user login (if it exists in LDAP but not in JFire), with timer task which launches every hour and " +
-				"(not supported yet!) with push notifications from LDAP server.\n" +
-				"If JFire is a leading system than all users are maintained inside JFire and modifications are synchronized to LDAP directory. " +
-				"It's done just after modification is stored to the database with the help of JDO Lifecycle listeners.";
-		createDescriptionExpandable(parent, toolkit, leadingSystemDescription);
+		createDescriptionExpandable(
+				parent, toolkit, 
+				Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.leadingSystemDescription")); //$NON-NLS-1$
 		
 		
-		Label attributeSyncTypeLabel = toolkit.createLabel(parent, "Attribute sync policy:", SWT.NONE);
+		Label attributeSyncTypeLabel = toolkit.createLabel(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.attributeSycnPolicyLabel"), SWT.NONE); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		attributeSyncTypeLabel.setLayoutData(gd);
 		attributeSyncPolicyCombo = new CCombo(parent, toolkit.getBorderStyle() | SWT.READ_ONLY);
-		attributeSyncPolicyCombo.setToolTipText("Changes method which is used when synchronizing LDAP attributes into Person datafields, see description for more details");
+		attributeSyncPolicyCombo.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.attributeSyncPolicyComboTooltip")); //$NON-NLS-1$
 		attributeSyncPolicyCombo.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		attributeSyncPolicyCombo.addSelectionListener(dirtySelectionListener);
 		createDescriptionExpandable(
 				parent, toolkit, 
-				"LDAP attributes could be mapped to Person datafields in different ways: ALL - every attribute from LDAP schema of this server " +
-				"will be mapped to Person datafields and all needed structures will be created, MANDATORY ONLY - only attributes which are " +
-				"mandatory by LDAP schema will be mapped, others are mapped inside corresponding script, NONE - nothing will be mapped by the " +
-				"system, all mapping will occur inside script which could be edited by administrator.");
+				Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.attributeSyncPolicyDescription")); //$NON-NLS-1$
 
 
 		Composite syncWrapper = toolkit.createComposite(parent, SWT.NONE);
@@ -193,27 +188,27 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		gd.verticalIndent = 20;
 		syncWrapper.setLayoutData(gd);
 		
-		toolkit.createLabel(syncWrapper, "Sync entry DN:", SWT.NONE);
-		syncDNText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle());
-		syncDNText.setToolTipText("Distingueshed name of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
+		toolkit.createLabel(syncWrapper, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncEntryDNLabel"), SWT.NONE); //$NON-NLS-1$
+		syncDNText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle()); //$NON-NLS-1$
+		syncDNText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncDNTextTooltip")); //$NON-NLS-1$
 		syncDNText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		syncDNText.addModifyListener(dirtyModifyListener);
 		
-		toolkit.createLabel(syncWrapper, "Sync password:", SWT.NONE);
-		syncPasswordText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle() | SWT.PASSWORD);
-		syncPasswordText.setToolTipText("Password of LDAP entry which is used for binding \nduring synchronization between LDAP directory and JFire");
+		toolkit.createLabel(syncWrapper, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncPasswordLabel"), SWT.NONE); //$NON-NLS-1$
+		syncPasswordText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle() | SWT.PASSWORD); //$NON-NLS-1$
+		syncPasswordText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncPasswordTextTooltip")); //$NON-NLS-1$
 		syncPasswordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		syncPasswordText.addModifyListener(dirtyModifyListener);
 
 
-		Label separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL);
+		Label separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 20;
 		separatorLabel.setLayoutData(gd);
 		
 		
-		Label scriptsLabel = toolkit.createLabel(parent, "Edit scripts for configuring LDAP and JFire interaction:", SWT.NONE);
+		Label scriptsLabel = toolkit.createLabel(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.editScriptsLabel"), SWT.NONE); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 10;
@@ -225,18 +220,18 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		}
 
 
-		separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL);
+		separatorLabel = toolkit.createLabel(parent, "", SWT.SEPARATOR | SWT.HORIZONTAL); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.verticalIndent = 10;
 		separatorLabel.setLayoutData(gd);
 		
 		Button openExportButton = new Button(parent, SWT.PUSH);
-		openExportButton.setText("Export data to LDAP...");
-		openExportButton.setToolTipText("Opens a wizard for exporting JFire entities to LDAP directory");
+		openExportButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openExportButtonLabel")); //$NON-NLS-1$
+		openExportButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openExportButtonTooltip")); //$NON-NLS-1$
 		openExportButton.setAlignment(SWT.LEFT);
 		openExportButton.setImage(
-				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "exportButton", ImageDimension._16x16.toString(), ImageFormat.png));
+				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "exportButton", ImageDimension._16x16.toString(), ImageFormat.png)); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 200;
 		gd.horizontalSpan = 2;
@@ -249,11 +244,11 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		});
 
 		Button openImportButton = new Button(parent, SWT.PUSH);
-		openImportButton.setText("Import data from LDAP...");
-		openImportButton.setToolTipText("Opens a wizard for importing LDAP entries into JFire objects");
+		openImportButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openImportButtonLabel")); //$NON-NLS-1$
+		openImportButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openImportBurttonTooltip")); //$NON-NLS-1$
 		openImportButton.setAlignment(SWT.LEFT);
 		openImportButton.setImage(
-				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "importButton", ImageDimension._16x16.toString(), ImageFormat.png));
+				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "importButton", ImageDimension._16x16.toString(), ImageFormat.png)); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 200;
 		gd.horizontalSpan = 2;
@@ -282,7 +277,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	
 	private void createEditScriptLink(Composite parent, String scriptName){
 		Link syncToJFireScriptLink = new Link(parent, SWT.NONE);
-		syncToJFireScriptLink.setText("<A>"+scriptName+"</A>");
+		syncToJFireScriptLink.setText("<A>"+scriptName+"</A>"); //$NON-NLS-1$ //$NON-NLS-2$
 		syncToJFireScriptLink.addSelectionListener(openScriptPageSelectionListener);
 		syncToJFireScriptLink.setData(scriptName);
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
@@ -296,7 +291,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 				parent, ExpandableComposite.CLIENT_INDENT | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
 				);
 		descriptionExpandable.setLayout(new FillLayout());
-		descriptionExpandable.setText("See description");
+		descriptionExpandable.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.descriptionExpandableLabel")); //$NON-NLS-1$
 		
 		Label descriptionLabel = toolkit.createLabel(descriptionExpandable, descriptionText, SWT.WRAP);
 		
