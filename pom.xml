@@ -9,6 +9,36 @@
 		<artifactId>org.nightlabs.jfire.parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
+
+	<repositories>
+		<!--
+		Here are only those repositories declared that are needed to download
+		the parent-pom.xml (which contains all used repositories).
+		
+		Important:
+		It is recommended that you use a mirror! See the parent-pom for details.
+		-->
+		<repository>
+			<id>dev.nightlabs.org-libs-releases-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/libs-releases-local/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>dev.nightlabs.org-libs-snapshots-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/libs-snapshots-local/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
 	
 	<properties>
 <!--
@@ -42,6 +72,36 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jdo.query.ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.osgi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.login.rap.ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.login.rcp.ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.ui</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
