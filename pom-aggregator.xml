@@ -33,6 +33,10 @@
 		<module>../org.nightlabs.jfire.base.login.rcp.ui</module>
 		<module>../org.nightlabs.jfire.base.login.ui</module>
 		<module>../org.nightlabs.jfire.base.ui</module>
+		<module>../org.nightlabs.jfire.base.ui.app.rcp</module>
+		<!-- TODO later...
+		<module>../org.nightlabs.jfire.errorreport.mantis</module>
+		-->
 		<module>../org.nightlabs.jfire.querystore.ui</module>
 	</modules>
 </project>
