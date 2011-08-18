@@ -136,18 +136,18 @@ Marco :-)
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
-		<resources>
-			<resource>
-				<directory>.</directory>
-				<includes>
-					<include>plugin.xml</include>
-					<include>plugin*.properties</include>
-					<include>schema/**/*</include>
-				</includes>
-			</resource>
-		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
+						<Bundle-Localization>plugin</Bundle-Localization>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
-
 </project>
