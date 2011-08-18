@@ -22,6 +22,7 @@
 	
 	<modules>
 		<module>../org.nightlabs.jfire.eclipse.parent</module>
+		<module>../org.nightlabs.jfire.eclipse.parent.legacy</module>
 
 		<module>../org.nightlabs.clientui.ui</module>
 		<module>../org.nightlabs.jdo.query.ui</module>
@@ -38,5 +39,8 @@
 		<module>../org.nightlabs.jfire.errorreport.mantis</module>
 		-->
 		<module>../org.nightlabs.jfire.querystore.ui</module>
+		
+		
+		<module>../org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</module>
 	</modules>
 </project>
