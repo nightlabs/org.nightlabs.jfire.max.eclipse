@@ -31,12 +31,12 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.eclipse.ui.pdfrenderer.PdfFileLoader;
-import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
-import org.nightlabs.eclipse.ui.pdfviewer.PdfDocument;
-import org.nightlabs.eclipse.ui.pdfviewer.PdfProgressMontitorWrapper;
+import org.nightlabs.eclipse.ui.pdfrenderer.PDFFileLoader;
+import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPDFDocument;
+import org.nightlabs.eclipse.ui.pdfviewer.PDFDocument;
+import org.nightlabs.eclipse.ui.pdfviewer.PDFProgressMontitorWrapper;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.action.save.SaveAsActionHandler;
-import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PdfViewerComposite;
+import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PDFViewerComposite;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -79,7 +79,7 @@ public class DefaultReportViewerComposite extends XComposite {
 //	private Frame awtFrame;
 //	private Viewer viewer;
 //	private PdfViewer pdfViewer;
-	private PdfViewerComposite pdfViewerComposite;
+	private PDFViewerComposite pdfViewerComposite;
 
 	/**
 	 * The {@link PreparedRenderedReportLayout} for the currently
@@ -142,7 +142,7 @@ public class DefaultReportViewerComposite extends XComposite {
 //		pdfViewer = new PdfViewer();
 //		pdfViewer.createControl(stack, SWT.BORDER);
 
-		pdfViewerComposite = new PdfViewerComposite(stack, SWT.BORDER);
+		pdfViewerComposite = new PDFViewerComposite(stack, SWT.BORDER);
 		new SaveAsActionHandler(pdfViewerComposite.getPdfViewer()) {
 			@Override
 			public void saveAs() {
@@ -299,15 +299,15 @@ public class DefaultReportViewerComposite extends XComposite {
 					protected IStatus run(final IProgressMonitor monitor) {
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
 						try {
-							final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new PdfProgressMontitorWrapper(new SubProgressMonitor(monitor, 20)));
-							final PdfDocument pdfDocument = new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80));
+							final PDFFile pdfFile = PDFFileLoader.loadPDF(preparedLayout.getEntryFileAsURL(), new PDFProgressMontitorWrapper(new SubProgressMonitor(monitor, 20)));
+							final PDFDocument pdfDocument = new OneDimensionalPDFDocument(pdfFile, new SubProgressMonitor(monitor, 80));
 
 							display.asyncExec(new Runnable() {
 								public void run() {
 									if (isDisposed())
 										return;
 
-									pdfViewerComposite.getPdfViewer().setPdfDocument(pdfDocument);
+									pdfViewerComposite.getPdfViewer().setPDFDocument(pdfDocument);
 									stackLayout.topControl = pdfViewerComposite;
 									DefaultReportViewerComposite.this.layout(true, true);
 								}
