@@ -4,12 +4,12 @@ Bundle-Name: JFire PBX UI
 Bundle-SymbolicName: org.nightlabs.jfire.pbx.ui;singleton:=true
 Bundle-Version: 1.1.0.qualifier
 Bundle-Activator: org.nightlabs.jfire.pbx.ui.PBXPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.pbx.ui,
  org.nightlabs.jfire.pbx.ui.call,
  org.nightlabs.jfire.pbx.ui.config
@@ -17,4 +17,5 @@ Bundle-Localization: plugin
 Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
- org.eclipse.ui.forms.widgets
+ org.eclipse.ui.forms.widgets,
+ org.apache.log4j
