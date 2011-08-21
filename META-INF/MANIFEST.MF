@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.trade.admin.ui;singleton:=true
 Bundle-Version: 1.1.17.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.trade.admin.ui,
@@ -40,4 +41,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.base.admin.ui;visibility:=reexport,
  org.nightlabs.jfire.entityuserset.ui;bundle-version="0.9.7";visibility:=reexport,
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
