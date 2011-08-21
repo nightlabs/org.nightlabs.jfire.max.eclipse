@@ -4,14 +4,15 @@ Bundle-Name: PersonRelation/IssueTracking/Trade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.personrelation.issuetracking.trade.ui;singleton:=true
 Bundle-Version: 1.1.33
 Bundle-Activator: org.nightlabs.jfire.personrelation.issuetracking.trade.ui.Activator
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.personrelation.ui;visibility:=reexport,
  org.nightlabs.jfire.issuetracking.trade.ui;visibility:=reexport,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
+Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.personrelation.issuetracking.trade.ui,
  org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action,
