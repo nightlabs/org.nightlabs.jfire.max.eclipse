@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.voucher.admin.ui;singleton:=true
 Bundle-Version: 1.1.2.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -14,7 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.editor2d.viewer.ui;bundle-version="1.0.7",
  org.nightlabs.jfire.trade.editor2d.ui;bundle-version="1.0.0",
  org.nightlabs.editor2d
-Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.voucher.admin.ui,
  org.nightlabs.jfire.voucher.admin.ui.createvouchertype,
  org.nightlabs.jfire.voucher.admin.ui.editor,
@@ -26,4 +26,5 @@ Export-Package: org.nightlabs.jfire.voucher.admin.ui,
 Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
- org.eclipse.ui.forms.widgets
+ org.eclipse.ui.forms.widgets,
+ org.apache.log4j
