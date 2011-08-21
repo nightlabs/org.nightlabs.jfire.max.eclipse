@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.scripting.ui;singleton:=true
 Bundle-Version: 1.1.2.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.scripting.ui.ScriptingPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.scripting.ui,
@@ -13,4 +14,4 @@ Export-Package: org.nightlabs.jfire.scripting.ui,
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
