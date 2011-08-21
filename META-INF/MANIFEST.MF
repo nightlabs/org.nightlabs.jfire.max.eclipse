@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.scripting.editor2d.ui;singleton:=true
 Bundle-Version: 1.0.2.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditor2DPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -15,7 +16,6 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.editor2d.ui;visibility:=reexport,
  org.nightlabs.jseditor.ui,
  org.nightlabs.editor2d
-Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.scripting.editor2d.ui,
  org.nightlabs.jfire.scripting.editor2d.ui.action,
  org.nightlabs.jfire.scripting.editor2d.ui.command,
@@ -32,4 +32,5 @@ Export-Package: org.nightlabs.jfire.scripting.editor2d.ui,
 Eclipse-RegisterBuddy: org.nightlabs.base.ui,
  org.nightlabs.jfire.base.j2ee
 Import-Package: org.eclipse.jface.text,
- org.eclipse.ui.views.properties
+ org.eclipse.ui.views.properties,
+ org.apache.log4j
