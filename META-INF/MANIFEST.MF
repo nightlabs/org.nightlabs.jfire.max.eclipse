@@ -4,13 +4,14 @@ Bundle-Name: Voucher Print Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.voucher.print.ui;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: org.nightlabs.jfire.voucher.print.ui.VoucherPrintPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.scripting.print.ui;visibility:=reexport,
  org.nightlabs.editor2d
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
 Export-Package: org.nightlabs.jfire.voucher.print.ui,
  org.nightlabs.jfire.voucher.print.ui.transfer.deliver
 Bundle-ClassPath: .
