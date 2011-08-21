@@ -4,10 +4,11 @@ Bundle-Name: EntityUserSet UI Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.entityuserset.ui
 Bundle-Version: 1.0.2.qualifier
 Bundle-Activator: org.nightlabs.jfire.entityuserset.ui.Activator
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.base.ui,
  org.nightlabs.jfire.base.admin.ui,
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.entityuserset.ui
+Import-Package: org.apache.log4j
