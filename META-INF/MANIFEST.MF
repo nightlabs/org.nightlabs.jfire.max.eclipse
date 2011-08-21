@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.simpletrade.ui;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.simpletrade.ui.SimpletradePlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.simpletrade.ui,
@@ -17,4 +18,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.tableprovider.ui;bundle-version="1.0.0",
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
