@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.reporting.admin.parameter.ui;singleton:
 Bundle-Version: 1.0.3.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.reporting.admin.parameter.ui.ReportingAdminParameterPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.gef,
@@ -39,7 +40,6 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.birt.report.engine.emitter.html,
  org.eclipse.birt.report.engine.emitter.pdf,
  org.nightlabs.jfire.reporting.admin.ui
-Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.reporting.admin.parameter.ui,
  org.nightlabs.jfire.reporting.admin.parameter.ui.command,
  org.nightlabs.jfire.reporting.admin.parameter.ui.editpart,
@@ -53,4 +53,5 @@ Export-Package: org.nightlabs.jfire.reporting.admin.parameter.ui,
 Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
- org.eclipse.ui.forms.widgets
+ org.eclipse.ui.forms.widgets,
+ org.apache.log4j
