@@ -5,13 +5,13 @@ Bundle-SymbolicName: org.nightlabs.jfire.dynamictrade.admin.ui;singleton:=true
 Bundle-Version: 1.0.5.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.dynamictrade.admin.ui.DynamicTradeAdminPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.admin.ui;visibility:=reexport,
  org.nightlabs.jfire.dynamictrade.ui;visibility:=reexport,
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.dynamictrade.admin.ui,
  org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype,
  org.nightlabs.jfire.dynamictrade.admin.ui.editor,
@@ -20,3 +20,4 @@ Export-Package: org.nightlabs.jfire.dynamictrade.admin.ui,
  org.nightlabs.jfire.dynamictrade.admin.ui.resource,
  org.nightlabs.jfire.dynamictrade.admin.ui.store.search,
  org.nightlabs.jfire.dynamictrade.admin.ui.tree
+Import-Package: org.apache.log4j
