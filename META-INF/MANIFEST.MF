@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.simpletrade.admin.ui;singleton:=true
 Bundle-Version: 1.1.5.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.simpletrade.admin.ui.SimpleTradeAdminPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.simpletrade.admin.ui,
@@ -21,4 +22,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.simpletrade.ui,
  org.nightlabs.jfire.trade.admin.ui,
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
