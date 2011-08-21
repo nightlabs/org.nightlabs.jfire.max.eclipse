@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.reporting.admin.ui;singleton:=true
 Bundle-Version: 1.1.10.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.reporting.admin.ui,
@@ -58,6 +59,6 @@ Require-Bundle: org.eclipse.ui,
  com.essiembre.eclipse.i18n.resourcebundle,
  org.eclipse.birt.resources,
  org.nightlabs.jfire.reporting.oda.wrapper;bundle-version="1.1.0"
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
 Eclipse-RegisterBuddy: org.nightlabs.jfire.reporting.ui,
  org.nightlabs.jfire.base.j2ee
