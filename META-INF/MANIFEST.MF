@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.trade.ui;singleton:=true
 Bundle-Version: 1.1.45.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.ui.TradePlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.trade.ui,
@@ -99,6 +100,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.clientui.ui;bundle-version="1.0.1",
  org.nightlabs.tableprovider.ui;bundle-version="1.1.0",
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.config
