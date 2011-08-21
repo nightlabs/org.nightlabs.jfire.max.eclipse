@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.voucher.ui;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.voucher.ui.VoucherPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -12,7 +13,7 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.keyreader.ui,
  org.nightlabs.tableprovider.ui;bundle-version="1.0.0"
-Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
 Export-Package: org.nightlabs.jfire.voucher.ui,
  org.nightlabs.jfire.voucher.ui.articlecontainer.detail,
  org.nightlabs.jfire.voucher.ui.detail,
