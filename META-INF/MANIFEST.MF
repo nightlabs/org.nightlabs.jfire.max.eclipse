@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.scripting.admin.ui;singleton:=true
 Bundle-Version: 1.1.1.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.scripting.admin.ui,
@@ -26,8 +27,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.jface.text,
  org.eclipse.core.filesystem
-Eclipse-LazyStart: true
 Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
- org.eclipse.ui.forms.widgets
+ org.eclipse.ui.forms.widgets,
+ org.apache.log4j
