@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.asterisk.ui;singleton:=true
 Bundle-Version: 1.1.2.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.asterisk.ui.ContactAsteriskPlugin
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -12,10 +13,10 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.contact.ui;visibility:=reexport,
  org.nightlabs.jfire.pbx.ui;visibility:=reexport
-Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.config
 Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
- org.eclipse.ui.forms.widgets
+ org.eclipse.ui.forms.widgets,
+ org.apache.log4j
