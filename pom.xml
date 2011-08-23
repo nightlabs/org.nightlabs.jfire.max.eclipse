@@ -4,9 +4,46 @@
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.eclipse.parent</artifactId>
 	<packaging>pom</packaging>
+
+<!--
 	<parent>
 		<groupId>org.nightlabs.jfire</groupId>
 		<artifactId>org.nightlabs.jfire.parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+	</parent>
+
+	Is now inherited from 'org.nightlabs.eclipse.parent' and imports dependencyManagenent only from
+	'org.nightlabs.jfire.parent'. This is because there are far more settings that are not inherited via
+	an import in dependency-management for the eclipse-based-client than there are on the jfire level.
+	
+	See this parent/import-dependency-management graph:
+	
+	org.nightlabs.parent ––––––––––––is–parent–of––––––––––––––––––––––> org.nightlabs.eclipse.parent
+	       |                                                                        |
+	       is                                                                       is
+	       |                                                                        |
+	       parent                                                                   parent
+	       |                                                                        |
+	       of                                                                       of
+	       |                                                                        |
+	       V                                                                        V
+	org.nightlabs.jfire.parent –––imported–in–dependency–management–––> org.nightlabs.jfire.eclipse.parent
+	       |                                                                        |
+	       is                                                                       is
+	       |                                                                        |
+	       parent                                                                   parent
+	       |                                                                        |
+	       of                                                                       of
+	       |                                                                        |
+	       V                                                                        V
+    jfire.based.project.parent –––imported–in–dependency–management–––> jfire.base.project.eclipse.parent
+
+	Marco :-)
+-->
+
+	<parent>
+		<groupId>org.nightlabs.eclipse</groupId>
+		<artifactId>org.nightlabs.eclipse.parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
@@ -40,8 +77,9 @@
 		</repository>
 	</repositories>
 	
+<!-- Not needed anymore - see <parent> above. Marco :-)
 	<properties>
-<!--
+<!-
 We now build against static dependencies and leave the platform-dependent stuff to the assembly only.
 The reason is that all our libraries (except for org.nightlabs.eclipse.compatibility.rap/rcp) are platform-agnostic
 and it makes therefore no sense to compile them 5 or more times. The only reason to do so is that there might be a mistake
@@ -50,15 +88,20 @@ the much longer build time (factor 5 at least).
 We now build solely against RAP, because the feature-set of RAP is smaller than the one of RCP. Hence, we don't need (most of)
 the properties anymore.
 Marco :-)
---> 
+-> 
 		<org.nightlabs.eclipse.compatibility.artifactId>org.nightlabs.eclipse.compatibility.rap</org.nightlabs.eclipse.compatibility.artifactId>
 	</properties>
+-->
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<!-- See <parent> above. Marco :-)
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.eclipse.parent</artifactId>
+				-->
+				<groupId>org.nightlabs.jfire</groupId>
+				<artifactId>org.nightlabs.jfire.parent</artifactId>
 				<version>1.2.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
@@ -136,6 +179,11 @@ Marco :-)
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+<!--
+	Is now inherited from 'org.nightlabs.eclipse.parent' and imports dependencyManagenent only from
+	'org.nightlabs.jfire.parent'. See <parent> above. Marco :-)
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -150,4 +198,5 @@ Marco :-)
 			</plugin>
 		</plugins>
 	</build>
+-->
 </project>
