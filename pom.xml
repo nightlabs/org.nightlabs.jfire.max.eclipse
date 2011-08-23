@@ -93,6 +93,11 @@ Marco :-)
 	</properties>
 -->
 
+	<properties>
+		<!-- This redeclaration is necessary, because the original declaration is not inherited anymore due to the change of the parent/dependency-management-import-strategy -->
+		<jfire.version>${nightlabs.version}</jfire.version>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -110,72 +115,72 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.clientui.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jdo.query.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.j2ee</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.j2ee.osgi</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.login.rap.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.login.rcp.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.admin.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.intro.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jdo.query.ui</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.ui.app.rcp</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.errorreport.mantis</artifactId>
-				<version>${project.version}</version>
+				<version>${jfire.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
