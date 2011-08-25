@@ -9,7 +9,7 @@ Bundle-Vendor: NightLabs.com
 Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j, org.nightlabs.util, org.nightlabs.progress, org.nightlabs.i18n
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.nightlabs.jfire.personrelation.ui,
  org.nightlabs.jfire.personrelation.ui.createrelation,

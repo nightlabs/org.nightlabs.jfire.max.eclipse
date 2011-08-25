@@ -73,7 +73,8 @@ public abstract class AbstractPersonRelationTreeView<N extends PersonRelationTre
 		// Register PRIORITY-ORDERED context-menus.
 		registerContextMenuContibutions(personRelationTree);
 		IDoubleClickListener doubleClickListener = personRelationTree.integratePriorityOrderedContextMenu(personRelationTree);
-		personRelationTree.addDoubleClickListener(doubleClickListener);
+		if (doubleClickListener != null)
+			personRelationTree.addDoubleClickListener(doubleClickListener);
 
 		// Initialise all other operational listeners for the PersonRelationTree.
 		initPersonRelationTreeListeners(personRelationTree);
