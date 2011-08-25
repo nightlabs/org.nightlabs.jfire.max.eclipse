@@ -39,6 +39,7 @@
 		<module>../org.nightlabs.jfire.errorreport.mantis</module>
 		-->
 		<module>../org.nightlabs.jfire.querystore.ui</module>
+		<module>../org.nightlabs.jfire.personrelation.ui</module>
 		
 		<module>../org.nightlabs.jfire.eclipse.min.assembly.parent</module>
 		<module>../org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</module>

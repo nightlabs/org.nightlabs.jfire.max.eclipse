@@ -182,6 +182,11 @@ Marco :-)
 				<artifactId>org.nightlabs.jfire.errorreport.mantis</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.personrelation.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
