@@ -235,9 +235,9 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 				Collection<? extends Object> objects = delegate.retrieveJDOObjects(Collections.unmodifiableSet(objectIDsLeft), monitor);
 				if (objects != null) {
 					for (Object object : objects) {
-						Object objectID = JDOHelper.getObjectId(object);
+						Object objectID = delegate.getJDOObjectID(object);
 						if (objectID == null)
-							throw new IllegalStateException("JDOHelper.getObjectId(object) returned null! delegate=" + delegate + " object=" + object); //$NON-NLS-1$ //$NON-NLS-2$
+							throw new IllegalStateException("delegate.getJDOObjectID(object) returned null! delegate=" + delegate + " object=" + object); //$NON-NLS-1$ //$NON-NLS-2$
 
 						objectIDsLeft.remove(objectID);
 						result.add(object);
@@ -608,6 +608,34 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 			personRelationComparator = new PersonRelationComparator();	// Default.
 
 		return personRelationComparator;
+	}
+	
+	@Override
+	protected ObjectID getJDOObjectID(Object jdoObject) {
+		ObjectID superResult = super.getJDOObjectID(jdoObject);
+		if (superResult != null)
+			return superResult;
+		List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+		for (IPersonRelationTreeControllerDelegate delegate : delegates) {
+			ObjectID delegateResult = delegate.getJDOObjectID(jdoObject);
+			if (delegateResult != null)
+				return delegateResult;
+		}
+		return null;
+	}
+	
+	@Override
+	protected boolean includeObjectIDForLifecycleListener(ObjectID objectID) {
+		boolean superResult = super.includeObjectIDForLifecycleListener(objectID);
+		if (!superResult)
+			return superResult;
+		List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+		for (IPersonRelationTreeControllerDelegate delegate : delegates) {
+			boolean delegateResult = delegate.includeObjectIDForLifecycleListener(objectID);
+			if (!delegateResult)
+				return delegateResult;
+		}
+		return true;
 	}
 
 	// -------------------------------------------------------------------------------------------------- ++ ------>>

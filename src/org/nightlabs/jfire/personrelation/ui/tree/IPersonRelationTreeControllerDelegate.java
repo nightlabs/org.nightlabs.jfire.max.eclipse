@@ -24,4 +24,6 @@ public interface IPersonRelationTreeControllerDelegate
 	Collection<? extends ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor);
 	Collection<Class<? extends Object>> getJDOObjectClasses();
 	TreeNodeMultiParentResolver getPersonRelationParentResolverDelegate();
+	ObjectID getJDOObjectID(Object jdoObject);
+	boolean includeObjectIDForLifecycleListener(ObjectID objectID);
 }
