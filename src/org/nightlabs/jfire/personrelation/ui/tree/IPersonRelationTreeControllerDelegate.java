@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
+import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -19,11 +20,12 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public interface IPersonRelationTreeControllerDelegate
 {
-	Map<ObjectID, Long> retrieveChildCount(Set<ObjectID> parentIDs, ProgressMonitor monitor);
+	Map<ObjectID, Long> retrieveChildCount(Set<? extends PersonRelationTreeNode> parentNodes, Set<ObjectID> parentIDs, ProgressMonitor monitor);
 	Collection<?> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor);
-	Collection<? extends ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor);
+	Collection<? extends ObjectID> retrieveChildObjectIDs(PersonRelationTreeNode parentNode, ProgressMonitor monitor);
 	Collection<Class<? extends Object>> getJDOObjectClasses();
 	TreeNodeMultiParentResolver getPersonRelationParentResolverDelegate();
 	ObjectID getJDOObjectID(Object jdoObject);
 	boolean includeObjectIDForLifecycleListener(ObjectID objectID);
+	void setRootPersonIDs(Collection<PropertySetID> rootPersonIDs);
 }

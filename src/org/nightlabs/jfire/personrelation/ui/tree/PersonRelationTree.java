@@ -3,7 +3,6 @@ package org.nightlabs.jfire.personrelation.ui.tree;
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -28,8 +27,6 @@ import org.nightlabs.jfire.prop.id.PropertySetID;
  */
 public class PersonRelationTree<N extends PersonRelationTreeNode> extends AbstractTreeComposite<N>
 {
-	private static final Logger logger = Logger.getLogger(PersonRelationTree.class);
-
 	private Collection<PropertySetID> personIDs;
 
 	// Note: (since 2010.03.28)
@@ -39,7 +36,7 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 	private PersonRelationTreeLabelProvider<N> personRelationTreeLabelProvider = null;
 	protected PersonRelationTreeLabelProvider<N> createPersonRelationTreeLabelProvider(TreeViewer treeViewer) {
 		// We supply the default PersonRelationTreeProvider here. Override it for more specificity.
-		return new PersonRelationTreeLabelProvider<N>(treeViewer);
+		return new PersonRelationTreeLabelProvider<N>(treeViewer, true);
 	}
 	
 	public void addPersonRelationTreeLabelProviderDelegate(IPersonRelationTreeLabelProviderDelegate delegate)
@@ -159,10 +156,17 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 //
 //	// ------------------------------------------------------------------------------------------------------------------->>
 
-
+	/**
+	 * Override this method in order to control whether the TreeController and
+	 * LabelProvider should add the default delegates for PersonRelations.
+	 * @return In this case, <code>true</code>.
+	 */
+	protected boolean isAddDefaultDelegates() {
+		return true;
+	}
 
 	protected PersonRelationTreeController<N> createPersonRelationTreeController() {
-		return new PersonRelationTreeController<N>() {
+		return new PersonRelationTreeController<N>(isAddDefaultDelegates()) {
 			@Override
 			protected void onJDOObjectsChanged(JDOLazyTreeNodesChangedEvent<ObjectID, N> changedEvent) {
 				JDOLazyTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
@@ -214,10 +218,16 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 
 		super.setInput(null);
 		this.personIDs = personIDs;
-		for (IPersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates())
+		for (IPersonRelationTreeLabelProviderDelegate delegate : getAllPersonRelationTreeLabelProviderDelegates()) {
 			delegate.clear();
-
-		personRelationTreeController.setRootPersonIDs(personIDs);
+		}
+		
+		getPersonRelationTreeController().clear();
+		
+		for (IPersonRelationTreeControllerDelegate delegate: getPersonRelationTreeController().getPersonRelationTreeControllerDelegates()) {
+			delegate.setRootPersonIDs(personIDs);
+		}
+		
 		super.setInput(personRelationTreeController);
 	}
 

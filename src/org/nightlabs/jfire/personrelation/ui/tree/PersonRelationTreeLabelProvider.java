@@ -10,14 +10,7 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
-import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.person.Person;
-import org.nightlabs.jfire.personrelation.PersonRelation;
-import org.nightlabs.jfire.personrelation.id.PersonRelationID;
-import org.nightlabs.jfire.personrelation.ui.PersonRelationPlugin;
-import org.nightlabs.jfire.prop.id.PropertySetID;
-import org.nightlabs.util.NLLocale;
 
 /**
  * This should give us more control when we need to access the Graphics Control in the super class's {@link ColumnSpanLabelProvider}.
@@ -32,14 +25,17 @@ import org.nightlabs.util.NLLocale;
  */
 public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> extends ColumnSpanLabelProvider {
 	private final Logger logger = Logger.getLogger(PersonRelationTreeLabelProvider.class);
-	private String languageID = NLLocale.getDefault().getLanguage();
 
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 
 	
-	public PersonRelationTreeLabelProvider(ColumnViewer columnViewer) {
+	public PersonRelationTreeLabelProvider(ColumnViewer columnViewer, boolean addDefaultDelegates) {
 		super(columnViewer);
+		if (addDefaultDelegates) {
+			addPersonRelationTreeLabelProviderDelegate(new DefaultPersonRelationTreeLabelProviderDelegatePerson());
+			addPersonRelationTreeLabelProviderDelegate(new DefaultPersonRelationTreeLabelProviderDelegatePersonRelation());
+		}
 	}
 
 
@@ -71,27 +67,6 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 				if (result != null)
 					return result;
 			}
-
-			if (jdoObjectID instanceof PropertySetID) {
-				PropertySetID personID = (PropertySetID) jdoObjectID;
-
-				switch (spanColIndex) {
-					case 0:
-						return personID.organisationID + '/' + personID.propertySetID;
-					default:
-						break;
-				}
-			}
-			else if (jdoObjectID instanceof PersonRelationID) {
-				PersonRelationID personRelationID = (PersonRelationID) jdoObjectID;
-
-				switch (spanColIndex) {
-					case 0:
-						return personRelationID.organisationID + '/' + personRelationID.personRelationID;
-					default:
-						break;
-				}
-			}
 			else {
 				switch (spanColIndex) {
 					case 0:
@@ -110,28 +85,6 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 					return result;
 			}
 
-			if (jdoObject instanceof Person) {
-				Person person = (Person) jdoObject;
-
-				switch (spanColIndex) {
-					case 0:
-						return person.getDisplayName(); // I have encountered cases where the displayName is not set; eg. when the check-box to auto-generate displayName is not selected. Any forthcoming solutions? Kai
-					default:
-						break;
-				}
-			}
-			else if (jdoObject instanceof PersonRelation) {
-				PersonRelation personRelation = (PersonRelation) jdoObject;
-
-				switch (spanColIndex) {
-					case 0:
-						return personRelation.getPersonRelationType().getName().getText(languageID);
-					case 1:
-						return personRelation.getTo().getDisplayName();
-					default:
-						break;
-				}
-			}
 			else {
 				switch (spanColIndex) {
 					case 0:
@@ -172,12 +125,6 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 				if (result != null)
 					return result;
 			}
-
-			if (jdoObject instanceof Person)
-				return new int[][] { {0, 1} };
-
-			if (jdoObject instanceof PersonRelation)
-				return null; // null means each real column assigned to one visible column
 
 			return null; // null means each real column assigned to one visible column
 		}
@@ -243,21 +190,6 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 				if (result != null)
 					return result;
 			}
-		}
-
-		if (jdoObject instanceof Person) {
-			return spanColIndex == 0
-					? SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, jdoObject.getClass().getSimpleName())
-					: null;
-		}
-
-		if (jdoObject instanceof PersonRelation) {
-			if (spanColIndex == 0) {
-				String suffix = jdoObject.getClass().getSimpleName();
-				return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), PersonRelationTreeLabelProvider.class, suffix);
-			}
-			else
-				return null;
 		}
 
 		return null;
