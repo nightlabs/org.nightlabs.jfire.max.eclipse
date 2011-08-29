@@ -25,6 +25,7 @@ import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.PersonRelationTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.extended.PropertySetTreeLabelProviderDelegate;
 import org.nightlabs.jfire.personrelation.issuetracking.trade.ui.resource.Messages;
+import org.nightlabs.jfire.personrelation.ui.tree.DefaultPersonRelationTreeControllerDelegate;
 import org.nightlabs.jfire.personrelation.ui.tree.NodalHierarchyHandler;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTree;
 import org.nightlabs.jfire.personrelation.ui.tree.PersonRelationTreeController;
@@ -72,9 +73,9 @@ public class HierarchicalPersonRelationIssueTreeView extends PersonRelationIssue
 	protected PersonRelationTree<PersonRelationTreeNode> createAndInitPersonRelationTree(Composite parent) {
 		PersonRelationTree<PersonRelationTreeNode> personRelationTree =  super.createAndInitPersonRelationTree(parent);
 
-		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(PersonRelationTreeController.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_DATA_FIELDS} );
+		Object[] fetchGroupPersonRelation = ArrayUtils.addAll(DefaultPersonRelationTreeControllerDelegate.FETCH_GROUPS_PERSON_RELATION, new String[] {Person.FETCH_GROUP_DATA_FIELDS} );
 		PersonRelationTreeController<PersonRelationTreeNode> personRelationTreeController = personRelationTree.getPersonRelationTreeController();
-		personRelationTreeController.setPersonRelationFetchGroups((String[]) fetchGroupPersonRelation);
+		personRelationTreeController.getPersonRelationTreeControllerDelegate(DefaultPersonRelationTreeControllerDelegate.class).setPersonRelationFetchGroups((String[])fetchGroupPersonRelation);
 
 		// Delegate specialised label providers for this hierarchical view.
 		personRelationTree.addPersonRelationTreeLabelProviderDelegate(new PropertySetTreeLabelProviderDelegate(personRelationTreeController));

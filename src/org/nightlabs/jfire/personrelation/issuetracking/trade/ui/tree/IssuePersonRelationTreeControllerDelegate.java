@@ -174,8 +174,9 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 
 	@Override
 	public Collection<? extends ObjectID> retrieveChildObjectIDs(PersonRelationTreeNode parentNode, ProgressMonitor monitor) {
+		ObjectID parentID = parentNode != null ? parentNode.getJdoObjectID() : null;
 		if (logger.isDebugEnabled())
-			logger.debug("retrieveChildObjectIDs: entered for: " + parentNode != null ? parentNode.getJdoObjectID() : "null"); //$NON-NLS-1$
+			logger.debug("retrieveChildObjectIDs: entered for: " + parentID); //$NON-NLS-1$
 
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssuesForPerson.name"), 100); //$NON-NLS-1$
 		try {
