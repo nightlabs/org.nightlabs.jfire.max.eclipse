@@ -70,6 +70,24 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 		clear();
 	}
 
+	/**
+	 * Returns the delegate of the given class, if present, <code>null</code> otherwise.
+	 * 
+	 * @param <T> 
+	 * @param clazz
+	 * @return
+	 */
+	public <T extends IPersonRelationTreeControllerDelegate> T getPersonRelationTreeControllerDelegate(Class<T> clazz)
+	{
+		List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
+		for (IPersonRelationTreeControllerDelegate delegate : delegates) {
+			if (clazz.isInstance(delegate)) {
+				return (T) delegate;
+			}
+		}
+		return null;
+	}	
+
 	@Override
 	public void clear() {
 		super.clear();

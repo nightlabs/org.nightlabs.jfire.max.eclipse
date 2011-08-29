@@ -70,8 +70,7 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePersonRelation extend
 	{
 		if (jdoObject instanceof PersonRelation) {
 			if (spanColIndex == 0) {
-				String suffix = jdoObject.getClass().getSimpleName();
-				return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), DefaultPersonRelationTreeLabelProviderDelegatePersonRelation.class, suffix);
+				return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), DefaultPersonRelationTreeLabelProviderDelegatePersonRelation.class);
 			}
 			else
 				return null;

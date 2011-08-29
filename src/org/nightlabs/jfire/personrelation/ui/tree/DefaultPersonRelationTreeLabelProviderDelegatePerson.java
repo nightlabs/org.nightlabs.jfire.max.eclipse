@@ -65,7 +65,7 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePerson extends Abstra
 	{
 		if (jdoObject instanceof Person) {
 			return spanColIndex == 0
-					? SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), DefaultPersonRelationTreeLabelProviderDelegatePerson.class, jdoObject.getClass().getSimpleName())
+					? SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), DefaultPersonRelationTreeLabelProviderDelegatePerson.class)
 					: null;
 		}
 		return null;
