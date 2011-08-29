@@ -19,15 +19,34 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<scope>provided</scope>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.base</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.ui</artifactId>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.progress</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.jdo</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>${org.nightlabs.eclipse.compatibility.artifactId}</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.base.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+		</dependency>
+
+		
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.base</artifactId>
@@ -53,11 +72,11 @@
 			<artifactId>org.nightlabs.jfire.issue</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.issuetracking.trade.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.nightlabs.jfire.eclipse</groupId> -->
+<!-- 			<artifactId>org.nightlabs.jfire.issuetracking.trade.ui</artifactId> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.personrelation</artifactId>
@@ -73,16 +92,22 @@
 			<artifactId>org.nightlabs.jfire.personrelation.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.nightlabs.jfire</groupId>
-			<artifactId>org.nightlabs.jfire.trade</artifactId>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.nightlabs.jfire</groupId> -->
+<!-- 			<artifactId>org.nightlabs.jfire.trade</artifactId> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.nightlabs.jfire.eclipse</groupId> -->
+<!-- 			<artifactId>org.nightlabs.jfire.trade.ui</artifactId> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency>		 -->
+
 		<dependency>
 			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.trade.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>		
+			<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
