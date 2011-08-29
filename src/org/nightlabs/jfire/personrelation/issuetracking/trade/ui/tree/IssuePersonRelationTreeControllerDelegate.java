@@ -62,7 +62,7 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 	};
 
 	@Override
-	public Map<ObjectID, Long> retrieveChildCount(Set<? extends PersonRelationTreeNode> parentNodes, ProgressMonitor monitor) {
+	public Map<ObjectID, Long> retrieveChildCount(Set<? extends PersonRelationTreeNode> parentNodes, Set<ObjectID> parentIDs, ProgressMonitor monitor) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("retrieveChildCount: entered with " + parentIDs.size() + " parentIDs."); //$NON-NLS-1$ //$NON-NLS-2$
 			if (logger.isTraceEnabled()) {
@@ -70,10 +70,6 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 					logger.trace("retrieveChildCount:   * " + parentID); //$NON-NLS-1$
 				}
 			}
-		}
-		Set<ObjectID> parentIDs = new HashSet<ObjectID>();
-		for (PresonRelationTreeNode parentNode : parentNodes) {
-			parentIDs.add(parentNode.getJdoObjectID());
 		}
 
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.tree.IssuePersonRelationTreeControllerDelegate.task.loadingLinkedIssueCountsForPersons.name"), 150); //$NON-NLS-1$
@@ -177,7 +173,7 @@ public class IssuePersonRelationTreeControllerDelegate extends AbstractPersonRel
 	}
 
 	@Override
-	public Collection<? extends ObjectID> retrieveChildObjectIDs(ObjectID parentID, ProgressMonitor monitor) {
+	public Collection<? extends ObjectID> retrieveChildObjectIDs(PersonRelationTreeNode parentNode, ProgressMonitor monitor) {
 		if (logger.isDebugEnabled())
 			logger.debug("retrieveChildObjectIDs: entered for: " + parentID); //$NON-NLS-1$
 
