@@ -28,6 +28,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
+	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2DelegateCache = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 
 	
 	public PersonRelationTreeLabelProvider(ColumnViewer columnViewer, boolean addDefaultDelegates) {
@@ -45,7 +46,8 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 		Class<?> objectClass = delegate.getJDOObjectClass();
 		jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.put(objectIDClass, delegate);
 		jdoObjectClass2PersonRelationTreeLabelProviderDelegate.put(objectClass, delegate);
-
+		jdoObjectClass2DelegateCache.clear();
+		
 		if (logger.isTraceEnabled())
 			logger.trace("addPersonRelationTreeLabelProviderDelegate: added " + delegate + " for objectClass " + (objectClass == null ? null : objectClass.getName()) + " and objectIDClass " + (objectIDClass == null ? null : objectIDClass.getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
@@ -61,7 +63,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 	
 	protected String getJDOObjectText(ObjectID jdoObjectID, Object jdoObject, int spanColIndex) {
 		if (jdoObject == null) {
-			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObjectID);
 			if (delegate != null) {
 				String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
 				if (result != null)
@@ -78,7 +80,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 		}
 		else {
 			// We check for the delegate first in order to allow overriding the defaults following below. Marco.
-			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObject);
 			if (delegate != null) {
 				String result = delegate.getJDOObjectText(jdoObjectID, jdoObject, spanColIndex);
 				if (result != null)
@@ -98,6 +100,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 		return null;
 	}
 
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected int[][] getColumnSpan(Object element) {
@@ -109,7 +112,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 		ObjectID jdoObjectID = node.getJdoObjectID();
 		Object jdoObject = node.getJdoObject();
 		if (jdoObject == null) {
-			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObjectID);
 			if (delegate != null) {
 				int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
 				if (result != null)
@@ -119,7 +122,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 			return new int[][] { {0, 1} };
 		}
 		else {
-			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObject);
 			if (delegate != null) {
 				int[][] result = delegate.getJDOObjectColumnSpan(jdoObjectID, jdoObject);
 				if (result != null)
@@ -129,6 +132,44 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 			return null; // null means each real column assigned to one visible column
 		}
 	}
+
+	/**
+	 * Gets the delegate for the class of the given ID-object without taking its
+	 * type-hierarchy into account as ObjectIDs should not have a type hierarchy
+	 * 
+	 * @param jdoObject The object to find the delegate for.
+	 * @return The delegate for the object, or <code>null</code> if none could
+	 *         be found.
+	 */
+	private IPersonRelationTreeLabelProviderDelegate getDelegate(ObjectID jdoObjectID) {
+		return jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+	}
+
+	/**
+	 * Gets the delegate for the class of the given objec with respect to its
+	 * type-hierarchy, so a delegate registered for a super-class will be found
+	 * to.
+	 * 
+	 * @param jdoObject The object to find the delegate for.
+	 * @return The delegate for the object, or <code>null</code> if none could
+	 *         be found.
+	 */
+	private IPersonRelationTreeLabelProviderDelegate getDelegate(Object jdoObject) {
+		Class<? extends Object> clazz = jdoObject.getClass();
+		if (!jdoObjectClass2DelegateCache.containsKey(clazz)) {
+			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(clazz);
+			jdoObjectClass2DelegateCache.put(clazz, delegate);
+			if (delegate == null) {
+				// no direct delegate found for the class, search type hierarchy
+				for (Class<?> delegateClazz : jdoObjectClass2PersonRelationTreeLabelProviderDelegate.keySet()) {
+					if (delegateClazz.isAssignableFrom(clazz)) {
+						jdoObjectClass2DelegateCache.put(clazz, jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(delegateClazz));
+					}
+				}
+			}
+		}
+		return jdoObjectClass2DelegateCache.get(clazz);
+	}	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -176,7 +217,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 	protected Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex)
 	{
 		if (jdoObject == null) {
-			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate.get(jdoObjectID.getClass());
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObjectID);
 			if (delegate != null) {
 				Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
 				if (result != null)
@@ -184,7 +225,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 			}
 		}
 		else {
-			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(jdoObject.getClass());
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObject);
 			if (delegate != null) {
 				Image result = delegate.getJDOObjectImage(jdoObjectID, jdoObject, spanColIndex);
 				if (result != null)
