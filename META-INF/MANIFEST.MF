@@ -11,10 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.editors,
  org.eclipse.ui.forms,
- org.nightlabs.jfire.base.ui;visibility:=reexport,
- org.nightlabs.eclipse.ui.dialog,
- javax.jdo;bundle-version="2.3.0",
- org.nightlabs.jfire.base.login.ui;bundle-version="1.0.0"
+ org.nightlabs.jfire.base.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Bundle-ActivationPolicy: lazy
