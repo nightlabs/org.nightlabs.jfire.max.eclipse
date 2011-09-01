@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.auth.ui.ldap.wizard;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.security.auth.login.LoginException;
 
@@ -16,7 +17,9 @@ import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPManagerRemote;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncException;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.FetchEventTypeDataUnit;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.LDAPSyncEventType;
 import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
@@ -85,7 +88,11 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				}else{
 					entriesToSync = getImportPage().getSelectedEntries();
 				}
-				syncEvent.setLdapUsersIds(entriesToSync);
+				Collection<FetchEventTypeDataUnit> dataUnits = new HashSet<FetchEventTypeDataUnit>();
+				for (String ldapName : entriesToSync){
+					dataUnits.add(new FetchEventTypeDataUnit(ldapName));
+				}
+				syncEvent.setFetchEventTypeDataUnits(dataUnits);
 				
 			}else if (SyncDirection.EXPORT.equals(syncDirection)){
 				
@@ -100,14 +107,18 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				}else{
 					objectIDsToSync = getExportPage().getSelectedObjectIDs();	
 				}
-				syncEvent.setJFireObjectsIds(objectIDsToSync);
+				Collection<SendEventTypeDataUnit> dataUnits = new HashSet<SendEventTypeDataUnit>();
+				for (Object objectId : objectIDsToSync){
+					dataUnits.add(new SendEventTypeDataUnit(objectId));
+				}
+				syncEvent.setSendEventTypeDataUnits(dataUnits);
 				
 			}else{
 				throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.unknownSyncDirectionExceptionText")); //$NON-NLS-1$
 			}
 			
-			if ((syncEvent.getJFireObjectsIds() != null && !syncEvent.getJFireObjectsIds().isEmpty())
-					|| (syncEvent.getLdapUsersIds() != null && !syncEvent.getLdapUsersIds().isEmpty())){
+			if ((syncEvent.getSendEventTypeDataUnits() != null && !syncEvent.getSendEventTypeDataUnits().isEmpty())
+					|| (syncEvent.getFetchEventTypeDataUnits() != null && !syncEvent.getFetchEventTypeDataUnits().isEmpty())){
 				
 				LDAPManagerRemote remoteLdapManager = JFireEjb3Factory.getRemoteBean(LDAPManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
 				remoteLdapManager.runLDAPServerSynchronization(
