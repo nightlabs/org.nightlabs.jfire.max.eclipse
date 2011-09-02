@@ -2,7 +2,10 @@ package org.nightlabs.jfire.auth.ui.ldap.editor;
 
 import java.util.Map;
 
+import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPScriptSetHelper.NamedScript;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
+import org.nightlabs.jfire.base.security.integration.ldap.id.LDAPScriptSetID;
+import org.nightlabs.jfire.base.security.integration.ldap.scripts.ILDAPScriptProvider;
 
 /**
  * Simple model of {@link LDAPScriptSet} to be used on UI in {@link LDAPServerScriptSetSection}.
@@ -16,46 +19,17 @@ public class LDAPServerScriptSetModel {
 
 	private LDAPScriptSet ldapScriptSet;
 
-	/**
-	 * Class for holding different script data in a convinient way.
-	 * 
-	 * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
-	 *
-	 */
-	public static class NamedScript {
-		
-		private String scriptName;
-		private String scriptContent;
-		private String scriptDescription;
-		
-		public NamedScript(String name, String content){
-			this.scriptName = name;
-			this.scriptContent = content;
-		}
-		
-		public String getScriptName() {
-			return scriptName;
-		}
-		
-		public String getScriptContent() {
-			return scriptContent;
-		}
-		
-		public void setScriptContent(String scriptContent) {
-			this.scriptContent = scriptContent;
-		}
-		
-		public void setScriptDescription(String scriptDescription) {
-			this.scriptDescription = scriptDescription;
-		}
-		
-		public String getScriptDescription() {
-			return scriptDescription;
-		}
-	}
-
 	public LDAPServerScriptSetModel(LDAPScriptSet ldapScriptSet) {
 		this.ldapScriptSet = ldapScriptSet;
+	}
+	
+	/**
+	 * Get ID of underlying {@link LDAPScriptSet} object.
+	 * 
+	 * @return {@link LDAPScriptSetID}
+	 */
+	public LDAPScriptSetID getLDAPScriptSetID(){
+		return LDAPScriptSetID.create(ldapScriptSet.getOrganisationID(), ldapScriptSet.getLdapScriptSetID());
 	}
 	
 	/**
@@ -64,16 +38,16 @@ public class LDAPServerScriptSetModel {
 	 * @param scriptName script name
 	 * @return script's content
 	 */
-	public String getScriptContentByName(String scriptName){
-		if (LDAPScriptSetHelper.BIND_VARIABLES_SCRIPT_NAME.equals(scriptName)){
+	public String getScriptContentById(String scriptID){
+		if (ILDAPScriptProvider.BIND_VARIABLES_SCRIPT_ID.equals(scriptID)){
 			return ldapScriptSet.getBindVariablesScript();
-		}else if (LDAPScriptSetHelper.GET_ENTRY_NAME_SCRIPT_NAME.equals(scriptName)){
+		}else if (ILDAPScriptProvider.GET_ENTRY_NAME_SCRIPT_ID.equals(scriptID)){
 			return ldapScriptSet.getLdapDNScript();
-		}else if (LDAPScriptSetHelper.GET_ATTRIBUTE_SET_SCRIPT_NAME.equals(scriptName)){
+		}else if (ILDAPScriptProvider.GET_ATTRIBUTE_SET_SCRIPT_ID.equals(scriptID)){
 			return ldapScriptSet.getGenerateJFireToLdapAttributesScript();
-		}else if (LDAPScriptSetHelper.GET_PARENT_ENTRIES_SCRIPT_NAME.equals(scriptName)){
+		}else if (ILDAPScriptProvider.GET_PARENT_ENTRIES_SCRIPT_ID.equals(scriptID)){
 			return ldapScriptSet.getGenerateParentLdapEntriesScript();
-		}else if (LDAPScriptSetHelper.SYNC_TO_JFIRE_SCRIPT_NAME.equals(scriptName)){
+		}else if (ILDAPScriptProvider.SYNC_TO_JFIRE_SCRIPT_ID.equals(scriptID)){
 			return ldapScriptSet.getSyncLdapToJFireScript();
 		}else{
 			return ""; //$NON-NLS-1$
@@ -82,21 +56,23 @@ public class LDAPServerScriptSetModel {
 
 	/**
 	 * Sets modified script content to underlying {@link LDAPScriptSet} instance. 
+	 * @param namedScriptsLocal 
 	 * 
 	 * @param namedScripts
 	 */
-	public void commitScriptContent(Map<String, NamedScript> namedScripts){
-		for (String scriptName : LDAPScriptSetHelper.getAllScriptNames()){
-			String scriptContent = namedScripts.get(scriptName).getScriptContent();
-			if (LDAPScriptSetHelper.BIND_VARIABLES_SCRIPT_NAME.equals(scriptName)){
+	public void commitScriptContent(Map<String, NamedScript> namedScriptsLocal){
+		for (NamedScript script : namedScriptsLocal.values()){
+			String scriptID = script.getScriptID();
+			String scriptContent = script.getScriptContent();
+			if (ILDAPScriptProvider.BIND_VARIABLES_SCRIPT_ID.equals(scriptID)){
 				ldapScriptSet.setBindVariablesScript(scriptContent);
-			}else if (LDAPScriptSetHelper.GET_ENTRY_NAME_SCRIPT_NAME.equals(scriptName)){
+			}else if (ILDAPScriptProvider.GET_ENTRY_NAME_SCRIPT_ID.equals(scriptID)){
 				ldapScriptSet.setLdapDNScript(scriptContent);
-			}else if (LDAPScriptSetHelper.GET_ATTRIBUTE_SET_SCRIPT_NAME.equals(scriptName)){
+			}else if (ILDAPScriptProvider.GET_ATTRIBUTE_SET_SCRIPT_ID.equals(scriptID)){
 				ldapScriptSet.setGenerateJFireToLdapAttributesScript(scriptContent);
-			}else if (LDAPScriptSetHelper.GET_PARENT_ENTRIES_SCRIPT_NAME.equals(scriptName)){
+			}else if (ILDAPScriptProvider.GET_PARENT_ENTRIES_SCRIPT_ID.equals(scriptID)){
 				ldapScriptSet.setGenerateParentLdapEntriesScript(scriptContent);
-			}else if (LDAPScriptSetHelper.SYNC_TO_JFIRE_SCRIPT_NAME.equals(scriptName)){
+			}else if (ILDAPScriptProvider.SYNC_TO_JFIRE_SCRIPT_ID.equals(scriptID)){
 				ldapScriptSet.setSyncLdapToJFireScript(scriptContent);
 			}
 		}

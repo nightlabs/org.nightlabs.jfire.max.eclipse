@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPScriptSetHelper.NamedScript;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
@@ -214,9 +215,9 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		gd.verticalIndent = 10;
 		scriptsLabel.setLayoutData(gd);
 		
-		for (String scriptName : LDAPScriptSetHelper.getAllScriptNames()){
-			createEditScriptLink(parent, scriptName);
-			createDescriptionExpandable(parent, toolkit, LDAPScriptSetHelper.getScriptDescriptionByName(scriptName));
+		for (NamedScript namedScript : LDAPScriptSetHelper.getNamedScripts()){
+			createEditScriptLink(parent, namedScript.getScriptID(), namedScript.getScriptName());
+			createDescriptionExpandable(parent, toolkit, LDAPScriptSetHelper.getScriptDescriptionByID(namedScript.getScriptID()));
 		}
 
 
@@ -275,11 +276,11 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		wiz.proceedToSynchronizationPage(ldapServer, syncDirection);
 	}
 	
-	private void createEditScriptLink(Composite parent, String scriptName){
+	private void createEditScriptLink(Composite parent, String scriptID, String scriptName){
 		Link syncToJFireScriptLink = new Link(parent, SWT.NONE);
 		syncToJFireScriptLink.setText("<A>"+scriptName+"</A>"); //$NON-NLS-1$ //$NON-NLS-2$
 		syncToJFireScriptLink.addSelectionListener(openScriptPageSelectionListener);
-		syncToJFireScriptLink.setData(scriptName);
+		syncToJFireScriptLink.setData(scriptID);
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 140;
 		gd.verticalIndent = 3;
@@ -312,10 +313,10 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 			if (selectionevent.getSource() instanceof Link){
 				
 				IFormPage scriptSetPage = advancedConfigPage.getEditor().setActivePage(LDAPServerEditorScriptSetPage.ID_PAGE);
-				String scriptName = (String) ((Widget) selectionevent.getSource()).getData();
+				String scriptID = (String) ((Widget) selectionevent.getSource()).getData();
 				
-				if (scriptName != null
-						&& !scriptName.isEmpty()
+				if (scriptID != null
+						&& !scriptID.isEmpty()
 						&& scriptSetPage instanceof LDAPServerEditorScriptSetPage){
 					
 					LDAPServerScriptSetSection scriptsSection = ((LDAPServerEditorScriptSetPage) scriptSetPage).getScriptsSection();
@@ -323,7 +324,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 							&& scriptsSection.getContainer() != null
 							&& !scriptsSection.getContainer().isDisposed()){
 						
-						scriptsSection.setActiveScriptTab(scriptName);
+						scriptsSection.setActiveScriptTab(scriptID);
 					}
 				}
 				

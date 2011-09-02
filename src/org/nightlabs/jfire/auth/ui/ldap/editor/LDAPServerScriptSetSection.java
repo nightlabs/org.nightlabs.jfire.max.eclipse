@@ -1,8 +1,14 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
-import java.util.HashMap;
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -13,8 +19,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -23,13 +31,19 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
-import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetModel.NamedScript;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
+import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPScriptSetHelper.NamedScript;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSetDAO;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
+import org.nightlabs.jfire.base.security.integration.ldap.scripts.ILDAPScriptProvider;
 import org.nightlabs.jseditor.ui.rcp.editor.JSEditorComposite;
 
 /**
@@ -48,7 +62,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 	
 	private JSEditorComposite jsEditorComposite;
 	
-	private Map<String, NamedScript> namedScripts;
+	Map<String, NamedScript> namedScriptsLocal;
 	
 	/**
 	 * Set to <code>true</code> while automatic refreshing of UI elements
@@ -86,14 +100,13 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 	 */
 	@Override
 	public void commit(boolean onSave) {
-		if (ldapScriptSetModel != null 
-				&& namedScripts != null
-				&& !namedScripts.isEmpty()){
-			
+		if (ldapScriptSetModel != null
+				&& namedScriptsLocal != null
+				&& !namedScriptsLocal.isEmpty()){
 			if (scriptsTabFolder != null && !scriptsTabFolder.isDisposed()){
 				commitScriptTab(scriptsTabFolder.getSelection());
 			}
-			ldapScriptSetModel.commitScriptContent(namedScripts);
+			ldapScriptSetModel.commitScriptContent(namedScriptsLocal);
 		}
 		super.commit(onSave);
 	}
@@ -124,24 +137,24 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 	}
 	
 	/**
-	 * Sets active tab (or tab index if model is not yet loaded) in a tab folder based on given script name. 
-	 * This script name should be one of the constants defined in {@link LDAPScriptSetHelper}.
+	 * Sets active tab (or tab index if model is not yet loaded) in a tab folder based on given script ID. 
+	 * This script ID should be one of the constants defined in {@link ILDAPScriptProvider}.
 	 * 
-	 * @param scriptName
+	 * @param scriptID
 	 */
-	public void setActiveScriptTab(String scriptName){
-		if (scriptName == null
-				|| scriptName.isEmpty()
+	public void setActiveScriptTab(String scriptID){
+		if (scriptID == null
+				|| scriptID.isEmpty()
 				|| scriptsTabFolder == null
 				|| scriptsTabFolder.isDisposed()){
 			return;
 		}
 		if (scriptsTabFolder.getItemCount() == 0){
-			selectItemWhenLoaded = LDAPScriptSetHelper.getScriptNameIndex(scriptName);
+			selectItemWhenLoaded = LDAPScriptSetHelper.getScriptIndexByID(scriptID);
 		}else{
 			for (CTabItem tabItem : scriptsTabFolder.getItems()){
 				NamedScript namedScript = (NamedScript) tabItem.getData();
-				if (scriptName.equals(namedScript.getScriptName())){
+				if (scriptID.equals(namedScript.getScriptID())){
 					scriptsTabFolder.setSelection(tabItem);
 					Event e = new Event();
 					e.widget = tabItem;
@@ -158,7 +171,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 		section.setLayout(new GridLayout());
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Composite parent = EntityEditorUtil.createCompositeClient(toolkit, section, 1);
+		Composite parent = EntityEditorUtil.createCompositeClient(toolkit, section, 2);
 		GridLayout gLayout = (GridLayout) parent.getLayout();
 		gLayout.verticalSpacing = 10;
 		
@@ -200,8 +213,59 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 		});
 		
 		
+		Button resetScriptButton = toolkit.createButton(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.resetScriptButtonText"), SWT.NONE); //$NON-NLS-1$
+		resetScriptButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.resetScriptButtonTooltip")); //$NON-NLS-1$
+		resetScriptButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		resetScriptButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				if (MessageDialog.openConfirm(RCPUtil.getActiveShell(), 
+						Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.resetScriptConfirmTitle"),  //$NON-NLS-1$
+						Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.resetScriptConfirmMessage"))){ //$NON-NLS-1$
+					
+					CTabItem selectedItem = scriptsTabFolder.getSelection();
+					final String scriptID = ((NamedScript) selectedItem.getData()).getScriptID();
+					
+					ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(RCPUtil.getActiveShell());
+					try {
+						progressDialog.run(true, false, new IRunnableWithProgress() {
+							@Override
+							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+								final String inititalContent = LDAPScriptSetDAO.sharedInstance().getInitialScriptContent(
+										ldapScriptSetModel.getLDAPScriptSetID(), scriptID, new ProgressMonitorWrapper(monitor));
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										if (inititalContent != null){
+											jsEditorComposite.setDocumentText(inititalContent);
+											markDirty();
+										}else{
+											StatusManager.getManager().handle(
+													new Status(
+															Status.ERROR, LdapUIPlugin.PLUGIN_ID, 
+															Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.scriptContentisNullErrorMessage")), //$NON-NLS-1$
+															StatusManager.SHOW);
+										}
+									}
+								});
+							}
+						});
+					} catch (Exception e) {
+						StatusManager.getManager().handle(
+								new Status(
+										Status.ERROR, LdapUIPlugin.PLUGIN_ID, 
+										Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerScriptSetSection.exceptionGettingScriptMessage"), e), //$NON-NLS-1$
+										StatusManager.SHOW);
+					}
+				}
+			}
+		});
+		
+		
 		scriptsTabFolder = new CTabFolder(parent, SWT.TOP);
-		scriptsTabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		scriptsTabFolder.setLayoutData(gd);
 		scriptsTabFolder.addSelectionListener(scriptSelectionListener);
 
 		jsEditorComposite = new JSEditorComposite(scriptsTabFolder);
@@ -213,12 +277,13 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 	}
 	
 	private void initScriptTabs(){
-		namedScripts = new HashMap<String, NamedScript>();
 		int i = 0;
 		boolean itemsExist = scriptsTabFolder.getItemCount() > 0;
-		for (String scriptName : LDAPScriptSetHelper.getAllScriptNames()){
-			NamedScript namedScript = new NamedScript(scriptName, new String(ldapScriptSetModel.getScriptContentByName(scriptName)));
-			namedScript.setScriptDescription(LDAPScriptSetHelper.getScriptDescriptionByName(scriptName));
+		namedScriptsLocal = new LinkedHashMap<String, LDAPScriptSetHelper.NamedScript>();
+		for (NamedScript namedScript : LDAPScriptSetHelper.getNamedScripts()){
+			NamedScript localNamedScript = namedScript.clone();
+			String scriptIDLocal = localNamedScript.getScriptID();
+			localNamedScript.setScriptContent(new String(ldapScriptSetModel.getScriptContentById(scriptIDLocal)));
 			
 			CTabItem tabItem = null;
 			if (itemsExist){
@@ -226,11 +291,11 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 			}else{
 				tabItem = new CTabItem(scriptsTabFolder, SWT.NONE);
 			}
-			tabItem.setText(namedScript.getScriptName());
-			tabItem.setData(namedScript);
+			tabItem.setText(localNamedScript.getScriptName());
+			tabItem.setData(localNamedScript);
 			i++;
 			
-			namedScripts.put(scriptName, namedScript);
+			namedScriptsLocal.put(scriptIDLocal, localNamedScript);
 		}
 	}
 
