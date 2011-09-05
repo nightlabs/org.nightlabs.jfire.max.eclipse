@@ -44,6 +44,7 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 		FetchPlan.DEFAULT,
 		PersonRelation.FETCH_GROUP_PERSON_RELATION_TYPE,
 		PersonRelationType.FETCH_GROUP_NAME,
+		PersonRelationType.FETCH_GROUP_ICON16x16DATA,
 		PersonRelation.FETCH_GROUP_FROM_ID,
 		PersonRelation.FETCH_GROUP_TO,
 		PersonRelation.FETCH_GROUP_FROM_PERSON_RELATION_IDS,
