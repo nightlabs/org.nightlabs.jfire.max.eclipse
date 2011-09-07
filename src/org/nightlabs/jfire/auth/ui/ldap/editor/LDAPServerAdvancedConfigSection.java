@@ -1,5 +1,10 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
+import javax.jdo.FetchPlan;
+import javax.jdo.JDODetachedFieldAccessException;
+import javax.script.ScriptException;
+
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
@@ -25,19 +30,36 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite;
+import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPScriptSetHelper.NamedScript;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSetDAO;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
+import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper.LDAPAttributeSyncPolicy;
+import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
+import org.nightlabs.jfire.security.NoUserException;
+import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.UserDescriptor;
+import org.nightlabs.jfire.security.dao.UserDAO;
+import org.nightlabs.jfire.security.id.UserID;
+import org.nightlabs.jfire.security.integration.id.UserManagementSystemID;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * Section of {@link LDAPServerEditorMainPage} for editing advanced {@link LDAPServer} properties:
@@ -52,7 +74,7 @@ import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFi
 public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	
 	private Button isLeadingButton;
-	private Text syncDNText;
+	private LDAPEntrySelectorComposite syncDNSelector;
 	private Text syncPasswordText;
 	private CCombo attributeSyncPolicyCombo;
 
@@ -118,7 +140,9 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		try{
 			if (model != null){
 				isLeadingButton.setSelection(model.isLeading());
-				syncDNText.setText(model.getSyncDN());
+				syncDNSelector.setEntryName(model.getSyncDN());
+				syncDNSelector.setLdapConnectionParamsProvider(model.getLdapServer());
+				setBindCredentialsToSelector(syncDNSelector);
 				syncPasswordText.setText(model.getSyncPassword());
 				attributeSyncPolicyCombo.setItems(LDAPAttributeSyncPolicy.getPossibleAttributeSyncPolicyValues());
 				attributeSyncPolicyCombo.setText(model.getAttributeSyncPolicy());
@@ -136,7 +160,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	public void commit(boolean onSave) {
 		if (model != null){
 			model.setLeading(isLeadingButton.getSelection());
-			model.setSyncDN(syncDNText.getText());
+			model.setSyncDN(syncDNSelector.getEntryName());
 			model.setSyncPassword(syncPasswordText.getText());
 			model.setAttributeSyncPolicy(attributeSyncPolicyCombo.getText());
 		}
@@ -190,10 +214,12 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		syncWrapper.setLayoutData(gd);
 		
 		toolkit.createLabel(syncWrapper, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncEntryDNLabel"), SWT.NONE); //$NON-NLS-1$
-		syncDNText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle()); //$NON-NLS-1$
-		syncDNText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncDNTextTooltip")); //$NON-NLS-1$
-		syncDNText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		syncDNText.addModifyListener(dirtyModifyListener);
+		LDAPAttributeSet selectionCriteria = new LDAPAttributeSet();
+		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("person", "posixAccount")); //$NON-NLS-1$ //$NON-NLS-2$
+		syncDNSelector = new LDAPEntrySelectorComposite(syncWrapper, SWT.NONE, selectionCriteria);
+		syncDNSelector.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncDNTextTooltip")); //$NON-NLS-1$
+		syncDNSelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		syncDNSelector.addModifyListener(dirtyModifyListener);
 		
 		toolkit.createLabel(syncWrapper, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.syncPasswordLabel"), SWT.NONE); //$NON-NLS-1$
 		syncPasswordText = toolkit.createText(syncWrapper, "", toolkit.getBorderStyle() | SWT.PASSWORD); //$NON-NLS-1$
@@ -261,6 +287,85 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 			}
 		});
 
+	}
+	
+	private boolean credentialsSet = false;
+	private void setBindCredentialsToSelector(LDAPEntrySelectorComposite selectorComposite){
+		if (credentialsSet){
+			return;
+		}
+		boolean fallToGlobalSyncCredentials = false;
+		BindCredentials bindCredentials = null;
+		try{
+			UserDescriptor userDescriptor = GlobalSecurityReflector.sharedInstance().getUserDescriptor();
+			if (User.USER_ID_SYSTEM.equals(userDescriptor.getUserID())){
+				fallToGlobalSyncCredentials = true;
+			}else{
+				String bindPwd = null;
+				Object credential = GlobalSecurityReflector.sharedInstance().getCredential();
+				if (credential instanceof String){
+					bindPwd = (String) credential;
+				}else if (credential instanceof char[]){
+					bindPwd = new String((char[])credential);
+				}else{
+					fallToGlobalSyncCredentials = true;
+				}
+				
+				User user = UserDAO.sharedInstance().getUser(
+						UserID.create(userDescriptor.getOrganisationID(), userDescriptor.getUserID()), 
+						new String[]{FetchPlan.DEFAULT, User.FETCH_GROUP_NAME, User.FETCH_GROUP_PERSON, Person.FETCH_GROUP_DATA_FIELDS}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+
+				String bindDN = null;
+				LDAPServer ldapServer = model.getLdapServer();
+				try{
+					bindDN = ldapServer.getLdapScriptSet().getLdapDN(user);
+				}catch(JDODetachedFieldAccessException e){
+					LDAPScriptSet ldapScriptSet = LDAPScriptSetDAO.sharedInstance().getLDAPScriptSetByLDAPServerID(
+							UserManagementSystemID.create(ldapServer.getOrganisationID(), ldapServer.getUserManagementSystemID()), 
+							new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					bindDN = ldapScriptSet.getLdapDN(user);
+				}
+
+				final String bindUser = bindDN;
+				final String bindPassword = bindPwd;
+				bindCredentials = new BindCredentials() {
+					@Override
+					public String getPassword() {
+						return bindPassword;
+					}
+					@Override
+					public String getLogin() {
+						return bindUser;
+					}
+				};
+			}
+		}catch(NoUserException e){
+			// There's no logged in User, so we'll try to bind with syncDN and syncPasswrod
+			fallToGlobalSyncCredentials = true;
+		} catch (ScriptException e) {
+			StatusManager.getManager().handle(new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, e.getMessage(), e), StatusManager.LOG);
+			fallToGlobalSyncCredentials = true;
+		}
+		
+		if (fallToGlobalSyncCredentials){
+			final String globalUser = syncDNSelector.getEntryName();
+			final String globalPwd = syncPasswordText.getText();
+			bindCredentials = new BindCredentials() {
+				@Override
+				public String getPassword() {
+					return globalPwd;
+				}
+				@Override
+				public String getLogin() {
+					return globalUser;
+				}
+			};
+		}
+		
+		selectorComposite.setBindCredentials(bindCredentials);
+		credentialsSet = true;
 	}
 	
 	private static void openWizardDialog(LDAPServer ldapServer, SyncDirection syncDirection){

@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
+import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPBindCredentialsDialog;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog;
@@ -33,12 +34,29 @@ public class LDAPEntrySelectorComposite extends XComposite{
 
 	private static final String SELECT_BUTTON_DEFAULT_CAPTION = Messages.getString("org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.selectButtonDefaultCaption"); //$NON-NLS-1$
 	private Text entryNameText;
+	private Button openLdapTreeButton;
 	
 	/**
 	 * Parameters for {@link LDAPConnection} which are passed to {@link LDAPTree}.
 	 */
 	private ILDAPConnectionParamsProvider ldapConnectionParamsProvider;
+	
+	/**
+	 * Credentials for binding against LDAP directory which are passed to {@link LDAPTree}.
+	 */
+	private BindCredentials bindCredentials;
 
+	/**
+	 * Simple interface representing credentials for binding agains LDAP directory.
+	 * 
+	 * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
+	 *
+	 */
+	public static interface BindCredentials{
+		String getLogin();
+		String getPassword();
+	}
+	
 	/**
 	 * Constructs new {@link LDAPEntrySelectorComposite} with default button text and no image.
 	 * 
@@ -89,12 +107,36 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	}
 	
 	/**
+	 * Set {@link BindCredentials} to be used for binding against LDAP directory. If they are not set and LDAP directory does not
+	 * allow anonymous access than a simple dialog {@link LDAPBindCredentialsDialog} will be shown when {@link LDAPTree} is opened.
+	 * 
+	 * @param bindCredentials NOT <code>null</code> {@link BindCredentials} object, {@link IllegalArgumentException} will be thrown otherwise
+	 */
+	public void setBindCredentials(BindCredentials bindCredentials){
+		if (bindCredentials == null){
+			throw new IllegalArgumentException("BindCredentials can't be null!");
+		}
+		this.bindCredentials = bindCredentials;
+	}
+	
+	/**
 	 * Get selected LDAP entry name.
 	 * 
 	 * @return selected LDAP entry name
 	 */
 	public String getEntryName() {
 		return entryNameText.getText();
+	}
+	
+	/**
+	 * Set initital entry name.
+	 * 
+	 * @param entryName
+	 */
+	public void setEntryName(String entryName) {
+		if (!entryNameText.isDisposed()){
+			entryNameText.setText(entryName);
+		}
 	}
 	
 	/**
@@ -120,7 +162,7 @@ public class LDAPEntrySelectorComposite extends XComposite{
 		entryNameText = new Text(this, SWT.BORDER);
 		entryNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		Button openLdapTreeButton = new Button(this, SWT.PUSH);
+		openLdapTreeButton = new Button(this, SWT.PUSH);
 		openLdapTreeButton.setText(
 				selectorButtonText!=null && !selectorButtonText.isEmpty()?selectorButtonText:SELECT_BUTTON_DEFAULT_CAPTION);
 		if (selectorButtonImage != null){
@@ -134,7 +176,8 @@ public class LDAPEntrySelectorComposite extends XComposite{
 					throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.noConnectionProviderExceptionText")); //$NON-NLS-1$
 				}
 				
-				SelectLDAPEntryDialog dlg = new SelectLDAPEntryDialog(RCPUtil.getActiveShell(), null, ldapConnectionParamsProvider);
+				SelectLDAPEntryDialog dlg = new SelectLDAPEntryDialog(
+						RCPUtil.getActiveShell(), null, ldapConnectionParamsProvider, bindCredentials);
 				dlg.setSelectionCriteriaAttributes(selectionCriteriaAttributes);
 				if (Window.OK == dlg.open()){
 					Set<LDAPTreeEntry> selectedElements = dlg.getSelectedElements();

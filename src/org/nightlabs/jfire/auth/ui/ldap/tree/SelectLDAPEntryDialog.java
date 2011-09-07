@@ -17,6 +17,7 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
+import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttribute;
@@ -38,7 +39,7 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 	
 	/**
 	 * If this field is set than this {@link LDAPAttributeSet} is used as a selection criteria inside {@link LDAPTree}.
-	 * It means that entries which have the same attrioute values will be allowed for selection.
+	 * It means that entries which have the same attribute values will be allowed for selection.
 	 */
 	private LDAPAttributeSet selectionCriteriaAttributes;
 	
@@ -46,6 +47,11 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 	 * Parameters for {@link LDAPConnection} which are passed to {@link LDAPTree}.
 	 */
 	private ILDAPConnectionParamsProvider ldapConnectionParamsProvider;
+	
+	/**
+	 * Credentials for binding against LDAP directory which are passed to {@link LDAPTree}.
+	 */
+	private BindCredentials bindCredentials;
 
 	/**
 	 * Constructs a new {@link SelectLDAPEntryDialog}. Note that {@link ILDAPConnectionParamsProvider} is a MUST parameter although
@@ -56,8 +62,22 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 	 * @param ldapConnectionParamsProvider {@link LDAPConnection} parameters provider
 	 */
 	public SelectLDAPEntryDialog(Shell shell, ResourceBundle resourceBundle, ILDAPConnectionParamsProvider ldapConnectionParamsProvider) {
+		this(shell, resourceBundle, ldapConnectionParamsProvider, null);
+	}
+
+	/**
+	 * Constructs a new {@link SelectLDAPEntryDialog}. Note that {@link ILDAPConnectionParamsProvider} is a MUST parameter although
+	 * you could specify it later with {@link #setLdapConnectionParamsProvider(ILDAPConnectionParamsProvider)} BEFORE opening this dialog.
+	 * 
+	 * @param shell Parent {@link Shell}
+	 * @param resourceBundle The resource bundle to use for initial size and location hints. May be <code>null</code>.
+	 * @param ldapConnectionParamsProvider {@link LDAPConnection} parameters provider
+	 * @param bindCredentials {@link BindCredentials} used for binding agains LDAP directory
+	 */
+	public SelectLDAPEntryDialog(Shell shell, ResourceBundle resourceBundle, ILDAPConnectionParamsProvider ldapConnectionParamsProvider, BindCredentials bindCredentials) {
 		super(shell, resourceBundle);
 		this.ldapConnectionParamsProvider = ldapConnectionParamsProvider;
+		this.bindCredentials = bindCredentials;
 	}
 	
 	/**
@@ -106,6 +126,7 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 
 
 		ldapTree = new LDAPTree(wrapper, SWT.BORDER);
+		ldapTree.setBindCredentials(bindCredentials);
 		ldapTree.setLayoutData(new GridData(GridData.FILL_BOTH));
 		ldapTree.setInput(ldapConnectionParamsProvider);
 		ldapTree.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -141,9 +162,9 @@ public class SelectLDAPEntryDialog extends ResizableTitleAreaDialog{
 		for (LDAPTreeEntry ldapTreeEntry : selectedElements) {
 			if (ldapTreeEntry.hasAttributesLoaded()){
 				try {
-					LDAPAttributeSet attributes = ldapTreeEntry.getAttributes(null);
+					LDAPAttributeSet attributes = ldapTreeEntry.getAttributes(bindCredentials);
 					for (LDAPAttribute<Object> ldapAttribute : selectionCriteriaAttributes) {
-						if (!attributes.containsAllAttributeValues(ldapAttribute.getName(), ldapAttribute.getValues())){
+						if (!attributes.containsAnyAttributeValue(ldapAttribute.getName(), ldapAttribute.getValues())){
 							setErrorMessage(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog.errorMessage_entryAttributes") + selectionCriteriaAttributes.toString()); //$NON-NLS-1$
 							return false;
 						}

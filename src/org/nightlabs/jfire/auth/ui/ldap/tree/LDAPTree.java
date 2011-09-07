@@ -18,9 +18,9 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
-import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.LDAPTreeEntryLoadCallback;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
@@ -38,6 +38,11 @@ import org.nightlabs.util.CollectionUtil;
  *
  */
 public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LDAPTreeEntryLoadCallback{
+	
+	/**
+	 * Credentials for binding against LDAP directory.
+	 */
+	private BindCredentials bindCredentials;
 	
 	/**
 	 * {@inheritDoc}
@@ -128,7 +133,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 						if (Window.OK == dlg.open()){
 							final String login = dlg.getLogin();
 							final String password = dlg.getPassword();
-							((LDAPTreeContentProvider) getTreeViewer().getContentProvider()).setBindCredentials(new BindCredentials() {
+							bindCredentials = new BindCredentials() {
 								@Override
 								public String getPassword() {
 									return password;
@@ -137,7 +142,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 								public String getLogin() {
 									return login;
 								}
-							});
+							};
 							refresh();
 						}
 						
@@ -150,14 +155,23 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		}
 	}
 
+	/**
+	 * Set {@link BindCredentials} to be used when binding against LDAP directory. If not set and LDAP directory does not allow
+	 * anonymous access than simple dialog {@link LDAPBindCredentialsDialog} will be shown when tree content provider will try to load data.
+	 * 
+	 * @param bindCredentials
+	 */
+	public void setBindCredentials(BindCredentials bindCredentials) {
+		this.bindCredentials = bindCredentials;
+	}
 
+	
 	private static final String OBJECT_CLASS_ATTRIBUTE = "objectClass"; //$NON-NLS-1$
 
 	class LDAPTreeContentProvider extends TreeContentProvider{
 		
 		private ILDAPConnectionParamsProvider ldapConnectionParamsProvider;
 		private LDAPTreeEntry[] rootEntries;
-		private BindCredentials bindCredentials;
 		
 		@Override
 		public Object[] getChildren(final Object parentElement) {
@@ -197,9 +211,6 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 			}
 		}
 		
-		public void setBindCredentials(BindCredentials bindCredentials) {
-			this.bindCredentials = bindCredentials;
-		}
 	}
 	
 	class LDAPTreeLabelProvider extends TableLabelProvider{
@@ -238,7 +249,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		private Image getImageForEntry(LDAPTreeEntry entry){
 			if (!"".equals(entry.getName()) && entry.hasAttributesLoaded()){ //$NON-NLS-1$
 				try {
-					LDAPAttributeSet attributes = entry.getAttributes(null);
+					LDAPAttributeSet attributes = entry.getAttributes(bindCredentials);
 					if (attributes.containsAnyAttributeValue(OBJECT_CLASS_ATTRIBUTE, CollectionUtil.createHashSet(ORGANIZATIONALUNIT, ORGANIZATION))){
 						
 						return SharedImages.getSharedImage(

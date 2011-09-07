@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
@@ -231,17 +232,6 @@ public class LDAPTreeEntry {
 	 */
 	public boolean hasAttributesLoaded(){
 		return entryAttributes != null;
-	}
-	
-	/**
-	 * Simple interface representing credentials for binding agains LDAP directory.
-	 * 
-	 * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
-	 *
-	 */
-	public static interface BindCredentials{
-		String getLogin();
-		String getPassword();
 	}
 	
 	/**
