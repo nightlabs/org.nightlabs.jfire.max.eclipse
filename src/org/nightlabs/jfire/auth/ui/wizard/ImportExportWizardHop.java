@@ -113,4 +113,13 @@ public class ImportExportWizardHop extends WizardHop{
 	public SyncDirection getSyncDirection(){
 		return configPage.getSyncDirection();
 	}
+	
+	/**
+	 * Get {@link UserManagementSystem} selected for import/export on {@link ImportExportConfigurationPage}
+	 * 
+	 * @return selected {@link UserManagementSystem}
+	 */
+	public UserManagementSystem getSelectedUserManagementSystem(){
+		return configPage.getSelectedUserManagementSystem();
+	}
 }

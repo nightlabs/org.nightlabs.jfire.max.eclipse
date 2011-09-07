@@ -273,10 +273,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 		currentUserManagementSystem = selectedUserManagementSystem;
 		
 		if (currentSynchronizationHop != null) {
-			if (getWizard() instanceof DynamicPathWizard) {
-				DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
-				wiz.removeDynamicWizardPage(currentSynchronizationHop.getEntryPage());
-			}
+			getWizardHop().removeHopPage(currentSynchronizationHop.getEntryPage());
 		}
 		
 		IWizardHop wizardHop = UserManagementSystemUIMappingRegistry.sharedInstance().getWizardHop(
@@ -286,10 +283,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 		if (wizardHop instanceof ISynchronizationPerformerHop) {
 			currentSynchronizationHop = (ISynchronizationPerformerHop) wizardHop;
 			currentSynchronizationHop.configurePages(selectedUserManagementSystem, getSyncDirection());
-			if (getWizard() instanceof DynamicPathWizard) {
-				DynamicPathWizard wiz = (DynamicPathWizard)getWizard();
-				wiz.addDynamicWizardPage(currentSynchronizationHop.getEntryPage());
-			}
+			getWizardHop().addHopPage(currentSynchronizationHop.getEntryPage());
 		}
 	}
 }
