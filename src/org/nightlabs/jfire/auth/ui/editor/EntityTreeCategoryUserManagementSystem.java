@@ -84,7 +84,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	@Override
 	public IEditorInput createEditorInput(Object o){
 		UserManagementSystem userManagementSystem = (UserManagementSystem) o;
-		UserManagementSystemID userManagementSystemID = UserManagementSystemID.create(userManagementSystem.getOrganisationID(), userManagementSystem.getUserManagementSystemID());
+		UserManagementSystemID userManagementSystemID = userManagementSystem.getUserManagementSystemObjectID();
 		return new UserManagementSystemEditorInput(userManagementSystemID, (Class<? extends UserManagementSystemType<?>>) userManagementSystem.getType().getClass());
 	}
 

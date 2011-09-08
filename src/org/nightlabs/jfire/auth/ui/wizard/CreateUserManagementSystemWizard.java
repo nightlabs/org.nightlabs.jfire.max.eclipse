@@ -75,7 +75,7 @@ public class CreateUserManagementSystemWizard extends DynamicPathWizard implemen
 						
 						@SuppressWarnings("unchecked")
 						final Class<? extends UserManagementSystemType<?>> userManegementSystemTypeClass = (Class<? extends UserManagementSystemType<?>>) userManagementSystem.getType().getClass();
-						final UserManagementSystemID userManagementSystemID = UserManagementSystemID.create(userManagementSystem.getOrganisationID(), userManagementSystem.getUserManagementSystemID());
+						final UserManagementSystemID userManagementSystemID = userManagementSystem.getUserManagementSystemObjectID();
 						
 						UserManagementSystemDAO.sharedInstance().storeUserManagementSystem(
 								userManagementSystem, false, null, 1, new ProgressMonitorWrapper(monitor)
