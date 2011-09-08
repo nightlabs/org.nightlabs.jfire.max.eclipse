@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.jdo.FetchPlan;
-import javax.jdo.JDODetachedFieldAccessException;
-import javax.script.ScriptException;
-
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -22,7 +18,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
@@ -31,18 +26,13 @@ import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizardHop;
-import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSetDAO;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
-import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.NoUserException;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.UserDescriptor;
-import org.nightlabs.jfire.security.dao.UserDAO;
-import org.nightlabs.jfire.security.id.UserID;
-import org.nightlabs.jfire.security.integration.id.UserManagementSystemID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
@@ -243,23 +233,8 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 					fallToGlobalSyncCredentials = true;
 				}
 				
-				User user = UserDAO.sharedInstance().getUser(
-						UserID.create(userDescriptor.getOrganisationID(), userDescriptor.getUserID()), 
-						new String[]{FetchPlan.DEFAULT, User.FETCH_GROUP_NAME, User.FETCH_GROUP_PERSON, Person.FETCH_GROUP_DATA_FIELDS}, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-						);
-
-				String bindDN = null;
-				try{
-					bindDN = ldapServer.getLdapScriptSet().getLdapDN(user);
-				}catch(JDODetachedFieldAccessException e){
-					LDAPScriptSet ldapScriptSet = LDAPScriptSetDAO.sharedInstance().getLDAPScriptSetByLDAPServerID(
-							UserManagementSystemID.create(ldapServer.getOrganisationID(), ldapServer.getUserManagementSystemID()), 
-							new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					bindDN = ldapScriptSet.getLdapDN(user);
-				}
-
-				final String bindUser = bindDN;
+				final String bindUser = LDAPScriptSetDAO.sharedInstance().getLDAPEntryName(
+						ldapServer.getUserManagementSystemObjectID(), userDescriptor.getUserObjectID(), new NullProgressMonitor());
 				final String bindPassword = bindPwd;
 				bindCredentials = new BindCredentials() {
 					@Override
@@ -274,9 +249,6 @@ public class LDAPServerImportWizardPage extends WizardHopPage{
 			}
 		}catch(NoUserException e){
 			// There's no logged in User, so we'll try to bind with syncDN and syncPasswrod
-			fallToGlobalSyncCredentials = true;
-		} catch (ScriptException e) {
-			StatusManager.getManager().handle(new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, e.getMessage(), e), StatusManager.LOG);
 			fallToGlobalSyncCredentials = true;
 		}
 		

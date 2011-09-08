@@ -11,21 +11,19 @@ import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop;
-import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPManagerRemote;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent;
-import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
-import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncException;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.FetchEventTypeDataUnit;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.LDAPSyncEventType;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
+import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncException;
 import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 import org.nightlabs.jfire.security.integration.UserManagementSystemManagerRemote;
-import org.nightlabs.jfire.security.integration.id.UserManagementSystemID;
 
 /**
  * Implementation if {@link ISynchronizationPerformerHop} for running synchronization for {@link LDAPServer} instances.
@@ -122,7 +120,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				
 				LDAPManagerRemote remoteLdapManager = JFireEjb3Factory.getRemoteBean(LDAPManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
 				remoteLdapManager.runLDAPServerSynchronization(
-						UserManagementSystemID.create(organisationID, ldapServer.getUserManagementSystemID()), syncEvent);
+						ldapServer.getUserManagementSystemObjectID(), syncEvent);
 				
 			}
 			
