@@ -86,7 +86,9 @@ public class SelectUserManagementSystemTypePage extends WizardHopPage{
 		}
 		
 		for (Control c : mainWrapper.getChildren()){
-			c.dispose();
+			if (!c.equals(loadingLabel)){
+				c.dispose();
+			}
 		}
 		
 		Button firstRadioButton = null;
