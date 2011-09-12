@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
@@ -31,6 +32,7 @@ extends AbstractTableComposite<PersonRelationType>
 		FetchGroup.DEFAULT,
 		PersonRelationType.FETCH_GROUP_NAME,
 		PersonRelationType.FETCH_GROUP_DESCRIPTION,
+		PersonRelationType.FETCH_GROUP_ICON16x16DATA
 	};
 
 	public PersonRelationTypeList(Composite parent) {
@@ -106,6 +108,14 @@ extends AbstractTableComposite<PersonRelationType>
 					default:
 						return null;
 				}
+			}
+			
+			@Override
+			public Image getColumnImage(Object element, int columnIndex) {
+				if (columnIndex == 0 && element instanceof PersonRelationType) {
+					return PersonRelationPlugin.getDefault().getPersonRelationTypeIcon((PersonRelationType) element);
+				}
+				return super.getColumnImage(element, columnIndex);
 			}
 		});
 	}

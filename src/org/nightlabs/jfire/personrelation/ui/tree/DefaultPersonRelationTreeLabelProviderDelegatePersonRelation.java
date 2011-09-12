@@ -77,21 +77,7 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePersonRelation extend
 			PersonRelation personRelation = (PersonRelation) jdoObject;
 			if (spanColIndex == 0) {
 				PersonRelationType personRelationType = personRelation.getPersonRelationType();
-				String imageKey = "PersonRelationType-" + personRelationType.getPersonRelationTypeID() + ".16x16";
-				ImageRegistry imageRegistry = PersonRelationPlugin.getDefault().getImageRegistry();
-				Image image = imageRegistry.get(imageKey);
-				if (image == null && personRelationType.getIcon16x16Data() != null) {
-					try {
-						image = new Image(null, new ImageData(new ByteArrayInputStream(personRelationType.getIcon16x16Data())));
-						imageRegistry.put(imageKey, image);
-					} catch (Exception e) {
-						// rather display no image than having an error here...
-						image = null;
-					}
-				}
-				if (image != null)
-					return image;
-				return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), DefaultPersonRelationTreeLabelProviderDelegatePersonRelation.class);
+				return PersonRelationPlugin.getDefault().getPersonRelationTypeIcon(personRelationType);
 			}
 			else
 				return null;
@@ -99,7 +85,6 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePersonRelation extend
 
 		return null;
 	}
-
 
 	@Override
 	public Class<? extends ObjectID> getJDOObjectIDClass() {

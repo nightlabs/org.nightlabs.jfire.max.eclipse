@@ -1,6 +1,14 @@
 package org.nightlabs.jfire.personrelation.ui;
 
+import java.io.ByteArrayInputStream;
+
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.jfire.personrelation.PersonRelationType;
+import org.nightlabs.jfire.personrelation.ui.tree.DefaultPersonRelationTreeLabelProviderDelegatePersonRelation;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -47,4 +55,23 @@ public class PersonRelationPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
+	
+	public Image getPersonRelationTypeIcon(PersonRelationType personRelationType) {
+		// TODO: Add a listener to remove PersonRelationType-images when the type is changed
+		String imageKey = "PersonRelationType-" + personRelationType.getPersonRelationTypeID() + ".16x16";
+		ImageRegistry imageRegistry = getImageRegistry();
+		Image image = imageRegistry.get(imageKey);
+		if (image == null && personRelationType.getIcon16x16Data() != null) {
+			try {
+				image = new Image(null, new ImageData(new ByteArrayInputStream(personRelationType.getIcon16x16Data())));
+				imageRegistry.put(imageKey, image);
+			} catch (Exception e) {
+				// rather display no image than having an error here...
+				image = null;
+			}
+		}
+		if (image != null)
+			return image;
+		return SharedImages.getSharedImage(PersonRelationPlugin.getDefault(), DefaultPersonRelationTreeLabelProviderDelegatePersonRelation.class);
+	}	
 }

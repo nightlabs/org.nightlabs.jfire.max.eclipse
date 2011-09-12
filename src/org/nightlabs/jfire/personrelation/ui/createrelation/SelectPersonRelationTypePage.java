@@ -2,6 +2,8 @@ package org.nightlabs.jfire.personrelation.ui.createrelation;
 
 import java.util.Collection;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +30,12 @@ extends WizardHopPage
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				updateStatus(null);
+			}
+		});
+		personRelationTypeList.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				getContainer().showPage(getNextPage());
 			}
 		});
 		return personRelationTypeList;

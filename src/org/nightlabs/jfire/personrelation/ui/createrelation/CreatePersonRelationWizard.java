@@ -75,10 +75,7 @@ extends DynamicPathWizard
 
 
 						for (PersonRelationTypeID personRelationTypeID : selectedPersonRelationTypeIDs) {
-							PersonRelationDAO.sharedInstance().createPersonRelation(
-									personRelationTypeID, fromPersonID, toPersonID,
-									new SubProgressMonitor(monitor, 1)
-							);
+							createPersonRelation(fromPersonID, toPersonID, personRelationTypeID, new SubProgressMonitor(monitor, 1));
 						}
 					} finally {
 						monitor.done();
@@ -92,4 +89,26 @@ extends DynamicPathWizard
 		return true;
 	}
 
+	/**
+	 * This method is called in order to create a new PersonRelation of the given type between the given persons.
+	 * <p>
+	 * The standard-implementation uses {@link PersonRelationDAO#createPersonRelation(PersonRelationTypeID, PropertySetID, PropertySetID, ProgressMonitor)}.
+	 * Subclasses may overwrite in order to do more specialized work.
+	 * </p> 
+	 * 
+	 * @param fromPersonID ID of the person that should be the origin of the new relation. 
+	 * @param toPersonID ID of the person that should be the target of the new relation.
+	 * @param personRelationTypeID The ID of the type of the new relation.
+	 * @param monitor A monitor to report progress to.
+	 */
+	protected void createPersonRelation(
+			PropertySetID fromPersonID, PropertySetID toPersonID,
+			PersonRelationTypeID personRelationTypeID, ProgressMonitor monitor) {
+		
+		PersonRelationDAO.sharedInstance().createPersonRelation(
+				personRelationTypeID, fromPersonID, toPersonID,
+				new SubProgressMonitor(monitor, 1)
+		);
+	}
+	
 }
