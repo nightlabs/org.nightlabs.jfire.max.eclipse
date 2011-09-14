@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.admin.ui.deliveryqueue;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,7 @@ import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.login.ui.Login;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
@@ -137,7 +138,8 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 				try {
 					StoreManagerRemote storeManager = getStoreManager();
 					Collection<DeliveryQueueID> deliveryQueueIds = storeManager.getAvailableDeliveryQueueIDs(false);
-					deliveryQueues = DeliveryQueueDAO.sharedInstance().getDeliveryQueues(deliveryQueueIds, new String[] {DeliveryQueue.FETCH_GROUP_NAME, DeliveryQueue.FETCH_GROUP_HAS_PENDING_DELIVERIES}, 1, new NullProgressMonitor());
+					deliveryQueues = new ArrayList<DeliveryQueue>(
+							DeliveryQueueDAO.sharedInstance().getDeliveryQueues(deliveryQueueIds, new String[] {DeliveryQueue.FETCH_GROUP_NAME, DeliveryQueue.FETCH_GROUP_HAS_PENDING_DELIVERIES}, 2, new NullProgressMonitor()));
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException(e);
@@ -209,7 +211,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 	}
 
 	void addDeliveryQueue() {
-		DeliveryQueue deliveryQueue = new DeliveryQueue(SecurityReflector.getUserDescriptor().getOrganisationID());
+		DeliveryQueue deliveryQueue = new DeliveryQueue(GlobalSecurityReflector.sharedInstance().getUserDescriptor().getOrganisationID());
 
 		Dialog dialog = new DeliveryQueueNameEditDialog(RCPUtil.getActiveShell(), deliveryQueue);
 

@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.admin.ui.deliveryqueue;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -7,7 +8,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -41,7 +41,7 @@ public class DeliveryQueueTableComposite extends AbstractTableComposite<Delivery
 			}
 		});
 		
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 	}
 
 }
