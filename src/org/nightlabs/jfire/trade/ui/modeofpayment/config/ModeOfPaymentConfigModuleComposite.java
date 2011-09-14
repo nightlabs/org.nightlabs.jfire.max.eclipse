@@ -139,8 +139,9 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 			public void widgetSelected(SelectionEvent e) {
 				Collection<ModeOfPaymentFlavour> flavours = modeOfPaymentFlavourTable.getElements();
 				List<ModeOfPaymentFlavourID> flavourIDs = NLJDOHelper.getObjectIDList(flavours);
-				if (flavourIDs.size() <= 0)
-					return;
+// This code will not allow to add any elements to the table if table is completely empty, so I've commented it out. Denis.				
+//				if (flavourIDs.size() <= 0)
+//					return;
 				AddDialog dlg = new AddDialog(getShell(), flavourIDs);
 				if (dlg.open() == Window.OK && dlg.getNewIDs() != null) {
 					flavourIDs.addAll(dlg.getNewIDs());
