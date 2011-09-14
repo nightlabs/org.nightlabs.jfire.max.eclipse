@@ -24,10 +24,10 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class CreatePersonRelationWizard
 extends DynamicPathWizard
 {
-	protected PropertySetID fromPersonID;
+	private PropertySetID fromPersonID;
 
-	protected SelectPersonRelationTypePage selectPersonRelationTypePage;
-	protected PersonSearchWizardPage personSearchWizardPage;
+	private SelectPersonRelationTypePage selectPersonRelationTypePage;
+	private PersonSearchWizardPage personSearchWizardPage;
 
 	public CreatePersonRelationWizard(PropertySetID fromPersonID) {
 		if (fromPersonID == null)
@@ -109,6 +109,18 @@ extends DynamicPathWizard
 				personRelationTypeID, fromPersonID, toPersonID,
 				new SubProgressMonitor(monitor, 1)
 		);
+	}
+
+	public PropertySetID getFromPersonID() {
+		return fromPersonID;
+	}
+
+	public SelectPersonRelationTypePage getSelectPersonRelationTypePage() {
+		return selectPersonRelationTypePage;
+	}
+
+	public PersonSearchWizardPage getPersonSearchWizardPage() {
+		return personSearchWizardPage;
 	}
 	
 }
