@@ -126,7 +126,7 @@ extends AbstractUserConfigModulePreferencePage
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int idx = getConfigModule().getSummedPriceFragmentTypeList().indexOf(priceFragmentTypeTable.getSelectedPriceFragmentType());
-				if (idx < getConfigModule().getSummedPriceFragmentTypeList().size() - 1) {
+				if (idx >= 0 && idx < getConfigModule().getSummedPriceFragmentTypeList().size() - 1) {
 					Collections.swap(getConfigModule().getSummedPriceFragmentTypeList(), idx, idx + 1);
 					priceFragmentTypeTable.setInput(getConfigModule().getSummedPriceFragmentTypeList());
 					getPageDirtyStateManager().markDirty();
