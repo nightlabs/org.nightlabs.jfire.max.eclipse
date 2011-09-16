@@ -160,11 +160,20 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 	 * @see DefaultPersonRelationTreeControllerDelegate#retrieveJDOObjects(Set, ProgressMonitor)
 	 */
 	protected Collection<Object> retrieveJDOObjectsByPropertySetIDs(Collection<Object> result, Set<PropertySetID> personIDs, ProgressMonitor monitor, int tix) {
-		result.addAll(PropertySetDAO.sharedInstance().getPropertySets(
-				personIDs,
-				FETCH_GROUPS_PERSON, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new SubProgressMonitor(monitor, tix)
-		));
+		if (getTrimmedPersonStructFields() == null) {
+			result.addAll(PropertySetDAO.sharedInstance().getPropertySets(
+					personIDs,
+					FETCH_GROUPS_PERSON, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new SubProgressMonitor(monitor, tix)
+			));
+		} else {
+			result.addAll(TrimmedPropertySetDAO.sharedInstance().getTrimmedPropertySets(
+					personIDs,
+					getTrimmedPersonStructFields(),
+					FETCH_GROUPS_PERSON, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new SubProgressMonitor(monitor, tix)
+			));
+		}
 		
 		return result;
 	}
@@ -188,7 +197,7 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 
 	protected void replaceToPersonsWithTrimmedVersion(ProgressMonitor monitor, List<PersonRelation> personRelations) {
 		
-		Set<StructFieldID> trimmedRelationToStructFields = getTrimmedRelationToStructFields();
+		Set<StructFieldID> trimmedRelationToStructFields = getTrimmedPersonStructFields();
 		if (trimmedRelationToStructFields != null) {
 			Map<Person, PersonRelation> relationsToReplace = new HashMap<Person, PersonRelation>();
 			for (PersonRelation personRelation : personRelations) {
@@ -218,7 +227,7 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 		}
 	}
 	
-	protected Set<StructFieldID> getTrimmedRelationToStructFields() {
+	protected Set<StructFieldID> getTrimmedPersonStructFields() {
 		return null;
 	}
 	
