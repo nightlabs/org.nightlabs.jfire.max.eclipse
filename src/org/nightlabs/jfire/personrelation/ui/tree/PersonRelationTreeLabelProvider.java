@@ -7,7 +7,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.jdo.ObjectID;
@@ -23,7 +25,7 @@ import org.nightlabs.jdo.ObjectID;
  * @author Marco Schulze
  * @author khaireel
  */
-public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> extends ColumnSpanLabelProvider {
+public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> extends ColumnSpanLabelProvider implements IColorProvider {
 	private final Logger logger = Logger.getLogger(PersonRelationTreeLabelProvider.class);
 
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
@@ -241,6 +243,31 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 	public void update(ViewerCell cell) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Color getForeground(Object element) {
+		if (element == null)
+			return null;
+
+		if (!(element instanceof PersonRelationTreeNode))
+			return null;
+
+		@SuppressWarnings("unchecked")
+		N node = (N) element;
+		Object jdoObject = node.getJdoObject();
+		if (jdoObject != null) {
+			IPersonRelationTreeLabelProviderDelegate delegate = getDelegate(jdoObject);
+			if (delegate != null && (delegate instanceof IColorProvider)) {
+				return ((IColorProvider) delegate).getForeground(jdoObject);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Color getBackground(Object element) {
+		return null;
 	}
 
 }

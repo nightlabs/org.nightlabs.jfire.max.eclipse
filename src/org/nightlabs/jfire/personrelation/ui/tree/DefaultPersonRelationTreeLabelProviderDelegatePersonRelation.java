@@ -51,9 +51,9 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePersonRelation extend
 
 				switch (spanColIndex) {
 					case 0:
-						return personRelation.getPersonRelationType().getName().getText(languageID);
+						return getPersonRelationTypeDisplayText(personRelation);
 					case 1:
-						return personRelation.getTo().getDisplayName();
+						return getPersonRelationToDisplayText(personRelation);
 					default:
 						break;
 				}
@@ -69,6 +69,14 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePersonRelation extend
 		}
 
 		return null;
+	}
+
+	protected String getPersonRelationToDisplayText(PersonRelation personRelation) {
+		return personRelation.getTo().getDisplayName();
+	}
+
+	protected String getPersonRelationTypeDisplayText(PersonRelation personRelation) {
+		return personRelation.getPersonRelationType().getName().getText(languageID);
 	}
 
 	public Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex)

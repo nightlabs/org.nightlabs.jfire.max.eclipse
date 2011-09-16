@@ -20,11 +20,6 @@ implements IPersonRelationTreeControllerDelegate
 	}
 	
 	@Override
-	public boolean includeObjectIDForLifecycleListener(ObjectID objectID) {
-		return true;
-	}
-	
-	@Override
 	public void setRootPersonIDs(Collection<PropertySetID> rootPersonIDs) {
 		this.rootPersonIDs = rootPersonIDs;
 	}

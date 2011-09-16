@@ -26,6 +26,5 @@ public interface IPersonRelationTreeControllerDelegate
 	Collection<Class<? extends Object>> getJDOObjectClasses();
 	TreeNodeMultiParentResolver getPersonRelationParentResolverDelegate();
 	ObjectID getJDOObjectID(Object jdoObject);
-	boolean includeObjectIDForLifecycleListener(ObjectID objectID);
 	void setRootPersonIDs(Collection<PropertySetID> rootPersonIDs);
 }

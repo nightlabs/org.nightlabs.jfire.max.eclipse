@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.personrelation.ui.tree;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDODetachedFieldAccessException;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
@@ -17,16 +19,21 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
+import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.personrelation.PersonRelation;
 import org.nightlabs.jfire.personrelation.PersonRelationComparator;
 import org.nightlabs.jfire.personrelation.PersonRelationFilterCriteria;
+import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
 import org.nightlabs.jfire.personrelation.PersonRelationType;
 import org.nightlabs.jfire.personrelation.dao.PersonRelationDAO;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.id.PersonRelationTypeID;
 import org.nightlabs.jfire.personrelation.ui.resource.Messages;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.PropertySetDAO;
+import org.nightlabs.jfire.prop.dao.TrimmedPropertySetDAO;
 import org.nightlabs.jfire.prop.id.PropertySetID;
+import org.nightlabs.jfire.prop.id.StructFieldID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -84,6 +91,7 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 	public Collection<Class<? extends Object>> getJDOObjectClasses() {
 		Set<Class<? extends Object>> classes = new HashSet<Class<? extends Object>>();
 		classes.add(PersonRelation.class);
+		classes.add(Person.class);
 		return classes;
 	}
 
@@ -166,13 +174,52 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 	 * @see DefaultPersonRelationTreeControllerDelegate#retrieveJDOObjects(Set, ProgressMonitor)
 	 */
 	protected Collection<Object> retrieveJDOObjectsByPersonRelationIDs(Collection<Object> result, Set<PersonRelationID> personRelationIDs, ProgressMonitor monitor, int tix) {
-		result.addAll(PersonRelationDAO.sharedInstance().getPersonRelations(
+		List<PersonRelation> personRelations = PersonRelationDAO.sharedInstance().getPersonRelations(
 				personRelationIDs,
 				getPersonRelationFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new SubProgressMonitor(monitor, tix)
-		));
+		);
+		result.addAll(personRelations);
+		
+		replaceToPersonsWithTrimmedVersion(monitor, personRelations);
 		
 		return result;
+	}
+
+	protected void replaceToPersonsWithTrimmedVersion(ProgressMonitor monitor, List<PersonRelation> personRelations) {
+		
+		Set<StructFieldID> trimmedRelationToStructFields = getTrimmedRelationToStructFields();
+		if (trimmedRelationToStructFields != null) {
+			Map<Person, PersonRelation> relationsToReplace = new HashMap<Person, PersonRelation>();
+			for (PersonRelation personRelation : personRelations) {
+				try {
+					if (personRelation.getTo() != null) {
+						relationsToReplace.put(personRelation.getTo(), personRelation);
+					}
+				} catch (JDODetachedFieldAccessException e) {
+					// to was not detached, ignore
+				}
+			}
+			Set<PropertySetID> propIDs = new HashSet<PropertySetID>();
+			for (Person person : relationsToReplace.keySet()) {
+				propIDs.add((PropertySetID) JDOHelper.getObjectId(person));
+			}
+			Collection<? extends PropertySet> trimmedPropertySets = TrimmedPropertySetDAO.sharedInstance().getTrimmedPropertySets(propIDs, trimmedRelationToStructFields, new String[] {PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			try {
+				Field toField = PersonRelation.class.getDeclaredField("to");
+				toField.setAccessible(true);
+				for (PropertySet propertySet : trimmedPropertySets) {
+					PersonRelation personRelation = relationsToReplace.get(propertySet);
+					toField.set(personRelation, propertySet);
+				}
+			} catch (Exception e) {
+				logger.error("Failed replacing PersonRelation-to with trimmed version", e);
+			}
+		}
+	}
+	
+	protected Set<StructFieldID> getTrimmedRelationToStructFields() {
+		return null;
 	}
 	
 //	/**
@@ -454,6 +501,6 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 
 	@Override
 	public TreeNodeMultiParentResolver getPersonRelationParentResolverDelegate() {
-		return null;
+		return new PersonRelationParentResolver();
 	}
 }

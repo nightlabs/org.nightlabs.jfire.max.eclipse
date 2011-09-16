@@ -43,7 +43,7 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePerson extends Abstra
 
 				switch (spanColIndex) {
 					case 0:
-						return person.getDisplayName(); // I have encountered cases where the displayName is not set; eg. when the check-box to auto-generate displayName is not selected. Any forthcoming solutions? Kai
+						return getPersonDisplayText(person); // I have encountered cases where the displayName is not set; eg. when the check-box to auto-generate displayName is not selected. Any forthcoming solutions? Kai
 					default:
 						break;
 				}
@@ -59,6 +59,10 @@ public class DefaultPersonRelationTreeLabelProviderDelegatePerson extends Abstra
 		}
 
 		return null;
+	}
+
+	protected String getPersonDisplayText(Person person) {
+		return person.getDisplayName();
 	}
 
 	public Image getJDOObjectImage(ObjectID jdoObjectID, Object jdoObject, int spanColIndex)

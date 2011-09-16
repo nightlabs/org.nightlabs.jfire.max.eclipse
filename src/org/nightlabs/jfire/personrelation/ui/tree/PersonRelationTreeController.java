@@ -14,7 +14,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeMultiParentResolver;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.jfire.personrelation.PersonRelationParentResolver;
+import org.nightlabs.jfire.personrelation.PersonRelationParentResolverProxy;
 import org.nightlabs.jfire.personrelation.id.PersonRelationID;
 import org.nightlabs.jfire.personrelation.ui.resource.Messages;
 import org.nightlabs.jfire.prop.id.PropertySetID;
@@ -57,7 +57,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 			unregisterChangeListener();
 			personRelationTreeControllerDelegates.add(delegate);
 
-			PersonRelationParentResolver personRelationParentResolver = (PersonRelationParentResolver) getTreeNodeMultiParentResolver();
+			PersonRelationParentResolverProxy personRelationParentResolver = (PersonRelationParentResolverProxy) getTreeNodeMultiParentResolver();
 			TreeNodeMultiParentResolver parentResolverDelegate = delegate.getPersonRelationParentResolverDelegate();
 			if (parentResolverDelegate != null)
 				personRelationParentResolver.addDelegate(parentResolverDelegate);
@@ -100,7 +100,7 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 
 	@Override
 	protected TreeNodeMultiParentResolver createTreeNodeMultiParentResolver() {
-		return new PersonRelationParentResolver();
+		return new PersonRelationParentResolverProxy();
 	}
 
 
@@ -253,19 +253,5 @@ extends ActiveJDOObjectLazyTreeController<ObjectID, Object, N>
 				return delegateResult;
 		}
 		return null;
-	}
-	
-	@Override
-	protected boolean includeObjectIDForLifecycleListener(ObjectID objectID) {
-		boolean superResult = super.includeObjectIDForLifecycleListener(objectID);
-		if (!superResult)
-			return superResult;
-		List<IPersonRelationTreeControllerDelegate> delegates = getPersonRelationTreeControllerDelegates();
-		for (IPersonRelationTreeControllerDelegate delegate : delegates) {
-			boolean delegateResult = delegate.includeObjectIDForLifecycleListener(objectID);
-			if (!delegateResult)
-				return delegateResult;
-		}
-		return true;
 	}
 }
