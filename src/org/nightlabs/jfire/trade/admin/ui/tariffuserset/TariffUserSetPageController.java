@@ -106,6 +106,10 @@ extends AbstractProductTypePageController<ProductType>
 					{
 						@Override
 						public EntityUserSetID getInheritedEntityUserSetID(ProgressMonitor monitor) {
+							if (getProductType().getExtendedProductTypeID() == null){
+								// ProductType is a root one
+								return null;
+							}
 							ProductType extendedProductType = getExtendedProductType(monitor, getProductType().getExtendedProductTypeID());
 							if (extendedProductType != null) {
 								TariffUserSet tariffUserSet = extendedProductType.getTariffUserSet();
