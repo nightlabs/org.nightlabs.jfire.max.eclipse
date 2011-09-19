@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -199,11 +200,16 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 		
 		Set<StructFieldID> trimmedRelationToStructFields = getTrimmedPersonStructFields();
 		if (trimmedRelationToStructFields != null) {
-			Map<Person, PersonRelation> relationsToReplace = new HashMap<Person, PersonRelation>();
+			Map<Person, Collection<PersonRelation>> relationsToReplace = new HashMap<Person, Collection<PersonRelation>>();
 			for (PersonRelation personRelation : personRelations) {
 				try {
 					if (personRelation.getTo() != null) {
-						relationsToReplace.put(personRelation.getTo(), personRelation);
+						Collection<PersonRelation> relations = relationsToReplace.get(personRelation.getTo());
+						if (relations == null) {
+							relations = new LinkedList<PersonRelation>();
+							relationsToReplace.put(personRelation.getTo(), relations);
+						}
+						relations.add(personRelation);
 					}
 				} catch (JDODetachedFieldAccessException e) {
 					// to was not detached, ignore
@@ -218,8 +224,10 @@ public class DefaultPersonRelationTreeControllerDelegate<N extends PersonRelatio
 				Field toField = PersonRelation.class.getDeclaredField("to");
 				toField.setAccessible(true);
 				for (PropertySet propertySet : trimmedPropertySets) {
-					PersonRelation personRelation = relationsToReplace.get(propertySet);
-					toField.set(personRelation, propertySet);
+					Collection<PersonRelation> relations = relationsToReplace.get(propertySet);
+					for (PersonRelation personRelation : relations) {
+						toField.set(personRelation, propertySet);
+					}
 				}
 			} catch (Exception e) {
 				logger.error("Failed replacing PersonRelation-to with trimmed version", e);
