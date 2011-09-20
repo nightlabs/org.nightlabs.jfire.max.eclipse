@@ -434,7 +434,7 @@ public abstract class PriceConfigComposite extends XComposite
 			public void widgetSelected(SelectionEvent e) {
 				AbstractChooseGridPriceConfigWizard wizard = createChoosePriceConfigWizard(
 						(ProductTypeID) JDOHelper.getObjectId(packageProductType.getExtendedProductType()));
-				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getShell(), wizard);
 //				dialog.setTitle("Choose Price Configuration");
 				int returnCode = dialog.open();
 				if (returnCode == Window.OK) {
@@ -720,10 +720,12 @@ public abstract class PriceConfigComposite extends XComposite
 
 		// Kai: 2009-11-13
 		// Check to see if there are STILL any more errors contained in the price configs; i.e. dont save if errors persist.
-		try {
-			priceCalculator.calculatePrices();
-		} catch (PriceCalculationException e) {
-			throw new RuntimeException("Invalid or incomplete formula in the price configuration(s): " + e.getShortenedErrorMessage());
+		if (priceCalculator != null){
+			try {
+				priceCalculator.calculatePrices();
+			} catch (PriceCalculationException e) {
+				throw new RuntimeException("Invalid or incomplete formula in the price configuration(s): " + e.getShortenedErrorMessage());
+			}
 		}
 
 		if (!priceConfigIDs.isEmpty()) {
