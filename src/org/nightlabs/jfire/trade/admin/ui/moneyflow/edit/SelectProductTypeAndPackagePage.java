@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.admin.ui.moneyflow.edit;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -39,6 +40,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
@@ -47,6 +49,7 @@ import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.store.ProductTypeTree;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -121,8 +124,13 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		productTypeTree.getGridData().horizontalSpan = 2;
 		productTypeTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
-				if (getContainer() != null)
+				try{
 					getContainer().updateButtons();
+				}catch(Exception e){
+					// NPE is possible while loading is not done yet
+					StatusManager.getManager().handle(
+							new Status(Status.WARNING, TradeAdminPlugin.PLUGIN_ID, e.getMessage(), e), StatusManager.LOG);
+				}
 			}
 		});
 

@@ -33,6 +33,10 @@ import org.osgi.framework.BundleContext;
  * The main plugin class to be used in the desktop.
  */
 public class TradeAdminPlugin extends AbstractUIPlugin {
+
+	// The plug-in ID
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.trade.admin.ui"; //$NON-NLS-1$
+
 	//The shared instance.
 	private static TradeAdminPlugin plugin;
 //	//Resource bundle.
