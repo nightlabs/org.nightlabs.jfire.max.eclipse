@@ -33,13 +33,11 @@ import java.util.Map;
 
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.reporting.Birt;
@@ -163,9 +161,8 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 		Job viewJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction.printJob.name")) { //$NON-NLS-1$
 
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				ProgressMonitor pMonitor = new ProgressMonitorWrapper(monitor);
-				pMonitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction.task.searchPrintPreviewConfiguration"), 6); //$NON-NLS-1$
+			protected IStatus run(ProgressMonitor monitor) {
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction.task.searchPrintPreviewConfiguration"), 6); //$NON-NLS-1$
 				Map<String, Object> params = null;
 				boolean paramsSet = false;
 				if (nextRunParams != null) {
@@ -183,7 +180,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 						params = dialogResult.getParameters();
 						paramsSet = true;
 					}
-					String useCaseID = getReportUseCaseID(itemID, params, new SubProgressMonitor(pMonitor, 3));
+					String useCaseID = getReportUseCaseID(itemID, params, new SubProgressMonitor(monitor, 3));
 					if (useCaseID == null) {
 						// Try to lookup the UseCase by the reportLayoutType
 						ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCaseByLayoutType(itemID.reportRegistryItemType);
@@ -222,7 +219,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 
 					ReportViewer viewer = viewerFactory.createReportViewer();
 					RenderReportRequest renderRequest = new RenderReportRequest(itemID, params, outFormat);
-					Locale requestLocale = getRenderRequestLocale(itemID, params, new SubProgressMonitor(pMonitor, 3));
+					Locale requestLocale = getRenderRequestLocale(itemID, params, new SubProgressMonitor(monitor, 3));
 					if (requestLocale != null) {
 						renderRequest.setLocale(requestLocale);
 					} else {
