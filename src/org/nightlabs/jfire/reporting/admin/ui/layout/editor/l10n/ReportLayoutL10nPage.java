@@ -99,6 +99,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof JFireRemoteReportEditorInput) {
 			JFireRemoteReportEditorInput input = (JFireRemoteReportEditorInput) editorInput;
+			reportEditorInput = input;
 			reportLayoutID = input.getReportRegistryItemID();
 			PreparedLayoutL10nData l10nData = ReportLayoutL10nUtil.prepareReportLayoutL10nData(input);
 			bundleFolder = l10nData.getBundleFolder();
@@ -276,7 +277,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	@Override
 	public void setInput(IEditorInput input) {
 		logger.debug("setInput "+input); //$NON-NLS-1$
-		super.setInput(reportEditorInput);
+		super.setInput(input);
 	}
 
 //	/**
