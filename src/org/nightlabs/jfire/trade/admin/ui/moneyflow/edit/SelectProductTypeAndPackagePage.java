@@ -121,7 +121,8 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		productTypeTree.getGridData().horizontalSpan = 2;
 		productTypeTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
-				getContainer().updateButtons();
+				if (getContainer() != null)
+					getContainer().updateButtons();
 			}
 		});
 
