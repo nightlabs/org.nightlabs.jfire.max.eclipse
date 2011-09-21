@@ -1,11 +1,12 @@
 package org.nightlabs.jfire.trade.quicksale.ui;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.login.ui.LoginStateChangeEvent;
 import org.nightlabs.jfire.base.login.ui.LoginStateListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoginStateListenerForQuickSalePerspective
 implements LoginStateListener
@@ -23,7 +24,7 @@ implements LoginStateListener
 		{
 			public void run()
 			{
-				final Logger logger = Logger.getLogger(LoginStateListenerForQuickSalePerspective.class);
+				final Logger logger = LoggerFactory.getLogger(LoginStateListenerForQuickSalePerspective.class);
 
 				String activePerspectiveID = RCPUtil.getActivePerspectiveID();
 				if (activePerspectiveID == null) {

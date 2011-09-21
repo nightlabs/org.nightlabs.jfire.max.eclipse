@@ -9,7 +9,6 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -75,6 +74,8 @@ import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -83,7 +84,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ArticleContainerQuickSaleEditorPage
 extends ArticleContainerEditorPage
 {
-	private static final Logger logger = Logger.getLogger(ArticleContainerQuickSaleEditorPage.class);
+	private static final Logger logger = LoggerFactory.getLogger(ArticleContainerQuickSaleEditorPage.class);
 
 	public static class Factory implements IEntityEditorPageFactory {
 		@Override

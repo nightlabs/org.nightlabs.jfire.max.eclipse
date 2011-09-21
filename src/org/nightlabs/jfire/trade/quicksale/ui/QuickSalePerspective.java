@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.quicksale.ui;
 
 import javax.security.auth.login.LoginException;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFolderLayout;
@@ -26,6 +25,8 @@ import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListVi
 import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -36,7 +37,7 @@ implements IPerspectiveFactory
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final Logger logger = Logger.getLogger(QuickSalePerspective.class);
+	private static final Logger logger = LoggerFactory.getLogger(QuickSalePerspective.class);
 
 	public static final String ID_PERSPECTIVE = QuickSalePerspective.class.getName();
 
