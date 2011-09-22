@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
 import org.nightlabs.jfire.scripting.ScriptCategory;
@@ -63,7 +63,7 @@ public class ActiveScriptRegistryItemTreeController extends ActiveJDOObjectTreeC
 		}
 		else {
 			try {
-				if (ScriptCategory.class.equals(JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(parentID))) 
+				if (ScriptCategory.class.equals(GlobalJDOManagerProvider.sharedInstance().getObjectID2PCClassMap().getPersistenceCapableClass(parentID))) 
 					scriptItemIDs =  ScriptRegistryItemDAO.sharedInstance().getScriptRegistryItemIDsForParent(parentID);	
 			} catch (Exception e) {
 				throw new RuntimeException(e);
