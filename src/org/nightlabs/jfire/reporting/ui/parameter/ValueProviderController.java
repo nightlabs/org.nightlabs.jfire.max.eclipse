@@ -9,7 +9,7 @@ import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
@@ -24,7 +24,7 @@ import org.nightlabs.jfire.reporting.parameter.dao.ValueProviderDAO;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderCategoryID;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -76,14 +76,14 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 	protected void createRegisterChangeListener() {
 		if (changeListener == null) {
 			changeListener = new ChangeListener(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ValueProviderController.registerChangeListener.name")); //$NON-NLS-1$
-			JDOLifecycleManager.sharedInstance().addNotificationListener(new Class[] {ValueProviderCategory.class, ValueProvider.class}, changeListener);
+			GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addNotificationListener(new Class[] {ValueProviderCategory.class, ValueProvider.class}, changeListener);
 		}
 	}
 
 	@Override
 	protected void unregisterChangeListener() {
 		if (changeListener == null) {
-			JDOLifecycleManager.sharedInstance().addNotificationListener(new Class[] {ValueProviderCategory.class, ValueProvider.class}, changeListener);
+			GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addNotificationListener(new Class[] {ValueProviderCategory.class, ValueProvider.class}, changeListener);
 			changeListener = null;
 		}
 	}
@@ -92,7 +92,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 	@Override
 	protected Collection<Object> retrieveChildren(ObjectID parentID, Object parent, ProgressMonitor monitor) {
 		ReportParameterManagerRemote reportParameterManager = JFireEjb3Factory.getRemoteBean(
-				ReportParameterManagerRemote.class, SecurityReflector.getInitialContextProperties());
+				ReportParameterManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
 		if (parentID == null) {
 			try {
 				Set<ValueProviderCategoryID> topCategories = reportParameterManager.getValueProviderCategoryIDsForParent(null);

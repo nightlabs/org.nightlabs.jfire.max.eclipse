@@ -36,7 +36,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
 import org.nightlabs.jfire.reporting.ReportManagerRemote;
@@ -45,7 +45,7 @@ import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItemParentResolver;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.id.RoleID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -120,8 +120,7 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 	protected Collection<ReportRegistryItem> retrieveChildren(ReportRegistryItemID parentID, ReportRegistryItem parent, ProgressMonitor monitor) {
 		Collection<ReportRegistryItemID> itemIDs = null;
 		ReportManagerRemote reportManager = JFireEjb3Factory.getRemoteBean(
-				ReportManagerRemote.class, SecurityReflector
-						.getInitialContextProperties());
+				ReportManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
 		if (parentID == null && topLevelItemIDs == null) {
 			// Top-Level items requested and no top-level item-ids set.
 			try {
@@ -139,7 +138,7 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 		} else {
 			// child items of a certain node requested, get their ids from the server
 			try {
-				if (ReportCategory.class.equals(JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(parentID))) {
+				if (ReportCategory.class.equals(GlobalJDOManagerProvider.sharedInstance().getObjectID2PCClassMap().getPersistenceCapableClass(parentID))) {
 					if (filterRoleID == null)
 						itemIDs = reportManager.getReportRegistryItemIDsForParent(parentID);
 					else
