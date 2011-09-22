@@ -67,8 +67,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.InvoiceLocal;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
@@ -262,11 +261,11 @@ implements ArticleContainerEdit
 					// TODO whenever we change sth., we should refresh the lock by calling editLockHandle.refresh()!
 
 					final Class<? extends ArticleContainer> articleContainerClass = articleContainer.getClass();
-					JDOLifecycleManager.sharedInstance().addNotificationListener(articleContainerClass, articleContainerChangedListener);
+					GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addNotificationListener(articleContainerClass, articleContainerChangedListener);
 
 					addDisposeListener(new DisposeListener() {
 						public void widgetDisposed(DisposeEvent e) {
-							JDOLifecycleManager.sharedInstance().removeNotificationListener(articleContainerClass, articleContainerChangedListener);
+							GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeNotificationListener(articleContainerClass, articleContainerChangedListener);
 
 //							ArticleContainerID articleContainerID = getArticleContainerID();
 //							// TODO WORKAROUND JPOX bug begin
@@ -680,7 +679,7 @@ implements ArticleContainerEdit
 	protected void createSegmentEditAndComposite(ArticleSegmentGroup asg) {
 		Segment segment = asg.getSegment();
 		SegmentType segmentType = segment.getSegmentType();
-		Class<?> articleContainerClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(articleContainerID);
+		Class<?> articleContainerClass = GlobalJDOManagerProvider.sharedInstance().getObjectID2PCClassMap().getPersistenceCapableClass(articleContainerID);
 		SegmentEditFactory sef = SegmentEditFactoryRegistry.sharedInstance().getSegmentEditFactory(articleContainerClass, segmentType.getClass(), true);
 
 		SegmentEdit segmentEdit = sef.createSegmentEdit(this, articleContainerClass, asg);
