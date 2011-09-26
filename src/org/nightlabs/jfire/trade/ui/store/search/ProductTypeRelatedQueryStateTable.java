@@ -68,7 +68,7 @@ public class ProductTypeRelatedQueryStateTable
 			{
 				// display the image of the checkbox corresponding to the value of the corresponding state
 				// if the state field is enabled in the query.
-				// Otherwise display an unchecked disabled checkbox.
+				// Otherwise display a checked disabled checkbox.
 				final ProductTypeStateDescription desc = (ProductTypeStateDescription) element;
 				if (desc.isEnabled())
 				{
