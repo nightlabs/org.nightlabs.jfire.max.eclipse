@@ -47,7 +47,7 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.login.ui.Login;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManagerRemote;
@@ -120,26 +120,28 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 			TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			for (Article article : tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)) {
 				if (isPaymentEnabled()) {
-					if (invoiceIDs == null)
-						invoiceIDs = new HashSet<InvoiceID>();
-					invoiceIDs.add(article.getInvoiceID());
 					if (article.getInvoice() == null) {
 						if (articlesToCreateInvoiceFor == null)
 							articlesToCreateInvoiceFor = new HashSet<ArticleID>();
 						articlesToCreateInvoiceFor.add((ArticleID) JDOHelper.getObjectId(article));
 //						throw new IllegalStateException("isPaymentEnabled() && article.getInvoice() != null"); //$NON-NLS-1$
+					}else{
+						if (invoiceIDs == null)
+							invoiceIDs = new HashSet<InvoiceID>();
+						invoiceIDs.add(article.getInvoiceID());
 					}
 				}
 
 				if (isDeliveryEnabled()) {
-					if (deliveryNoteIDs == null)
-						deliveryNoteIDs = new HashSet<DeliveryNoteID>();
-					deliveryNoteIDs.add(article.getDeliveryNoteID());
 					if (article.getDeliveryNote() == null) {
 						if (articlesToCreateDeliveryNoteFor == null)
 							articlesToCreateDeliveryNoteFor = new HashSet<ArticleID>();
 						articlesToCreateDeliveryNoteFor.add((ArticleID) JDOHelper.getObjectId(article));
 //						throw new IllegalStateException("isDeliveryEnabled() && article.getDeliveryNote() != null"); //$NON-NLS-1$
+					}else{
+						if (deliveryNoteIDs == null)
+							deliveryNoteIDs = new HashSet<DeliveryNoteID>();
+						deliveryNoteIDs.add(article.getDeliveryNoteID());
 					}
 				}
 
@@ -162,7 +164,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 
 			// The LegalEntityID of the local organisation
 			AnchorID mandatorID = AnchorID.create(
-					SecurityReflector.getUserDescriptor().getOrganisationID(),
+					GlobalSecurityReflector.sharedInstance().getUserDescriptor().getOrganisationID(),
 					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());
 			setCurrency(currency);
 			setCustomerID(customerID);
