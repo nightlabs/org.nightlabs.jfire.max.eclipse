@@ -48,7 +48,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -149,7 +149,7 @@ extends DynamicPathWizardPage
 	public void configureProductType(ProductType productType) 
 	{
 		if (originEntityVendor != null)
-			productType.setVendor(originEntityOwner);      
+			productType.setVendor(originEntityVendor);      
 
 		if (originEntityVendor != null)
 			productType.setOwner(originEntityOwner);
@@ -226,7 +226,7 @@ extends DynamicPathWizardPage
 					{
 
 						String VendorOrgId = vendorEditComposite.getLegalEntity().getOrganisationID();
-						if (!VendorOrgId.equals(SecurityReflector.getUserDescriptor().getOrganisationID()) && (vendorEditComposite.getLegalEntity() instanceof OrganisationLegalEntity))
+						if (!VendorOrgId.equals(GlobalSecurityReflector.sharedInstance().getUserDescriptor().getOrganisationID()) && (vendorEditComposite.getLegalEntity() instanceof OrganisationLegalEntity))
 						{
 							MessageDialog.openError(RCPUtil.getActiveShell(),Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.errorDialog.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.errorDialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
 							//	revert to original value						
