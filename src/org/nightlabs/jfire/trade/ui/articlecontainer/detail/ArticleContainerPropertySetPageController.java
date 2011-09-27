@@ -63,7 +63,11 @@ extends ActiveEntityEditorPageController<ArticleContainer>
 	@Override
 	protected ArticleContainer storeEntity(ArticleContainer controllerObject, ProgressMonitor monitor)
 	{
-		PropertySetDAO.sharedInstance().storeJDOObject(getPropertySet(), false, null, 1, monitor);
+		PropertySet propertySet = getPropertySet();
+		if (propertySet != null){
+			propertySet.deflate();
+		}
+		PropertySetDAO.sharedInstance().storeJDOObject(propertySet, false, null, 1, monitor);
 		return null; // causes cache eviction and the retrieve method to be called by the framework.
 	}
 
