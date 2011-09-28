@@ -25,8 +25,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -38,9 +36,9 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
@@ -75,17 +73,17 @@ extends LSDViewPart
 	private Composite body;
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
-	private IMemento initMemento = null;
+//	private IMemento initMemento = null;
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
 	 */
-	@Override
-	public void init(IViewSite site, IMemento memento) throws PartInitException {
-		super.init(site, memento);
-		this.initMemento = memento;
-	}
+//	@Override
+//	public void init(IViewSite site, IMemento memento) throws PartInitException {
+//		super.init(site, memento);
+//		this.initMemento = memento;
+//	}
 
-	private Composite parent;
+//	private Composite parent;
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -94,7 +92,7 @@ extends LSDViewPart
 	@Override
 	public void createPartContents(Composite parent)
 	{
-		this.parent = parent;
+//		this.parent = parent;
 
 		contributeToActionBars();
 
@@ -128,10 +126,10 @@ extends LSDViewPart
 			}
 		});
 
-		JDOLifecycleManager.sharedInstance().addLifecycleListener(issueCommentAddNotificationListener);
+		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addLifecycleListener(issueCommentAddNotificationListener);
 		scrolledForm.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event) {
-				JDOLifecycleManager.sharedInstance().removeLifecycleListener(issueCommentAddNotificationListener);
+				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeLifecycleListener(issueCommentAddNotificationListener);
 			}
 		});
 	}
@@ -161,6 +159,9 @@ extends LSDViewPart
 		Job job = new Job("Loading Issue...") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				if (issueID == null){
+					return new Status(Status.WARNING, IssueTrackingPlugin.PLUGIN_ID, "Issue ID is null! Can't reload issue!");
+				}
 				final Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
