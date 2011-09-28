@@ -2,12 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
-	<!-- @generated - Auto generated POM. Remove this marker after review. -->
-	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.reporting.ui</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.artifactId}</name>
 
@@ -16,26 +13,102 @@
 		<artifactId>org.nightlabs.jfire.eclipse.parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
-
+	
+	<properties>
+	<!-- As wished by fleque, I do this here -->
+		<birt.version>2.2.0</birt.version>
+	</properties>
+	
 	<dependencies>
+	
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>org.eclipse.birt.report-designer.v2-2-0-mvnzd</groupId>
 			<artifactId>org.eclipse.core.runtime</artifactId>
 			<scope>provided</scope>
+			<version>3.3.100</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.datatools.connectivity.oda</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>org.eclipse.birt.report-designer.v2-2-0-mvnzd</groupId>
 			<artifactId>org.eclipse.ui</artifactId>
+			<version>3.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>org.eclipse.birt.report-designer.v2-2-0-mvnzd</groupId>
 			<artifactId>org.eclipse.ui.browser</artifactId>
+			<version>3.2.100</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.birt.report-designer.v2-2-0-mvnzd</groupId>
+			<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+			<version>3.3.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>${org.nightlabs.eclipse.compatibility.artifactId}</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.base.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.pdfviewer.extension</artifactId>
+			<scope>provided</scope>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+			<scope>provided</scope>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.extension</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.treestate</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.pdfrenderer</artifactId>
+			<scope>provided</scope>
+			<version>${project.version}</version><!-- move to parent -->
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.pdfviewer</artifactId>
+			<scope>provided</scope>
+			<version>${project.version}</version><!-- move to parent -->
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.config</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.concurrent</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.progress</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.util</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -45,19 +118,20 @@
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
-			<artifactId>org.nightlabs.config</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.nightlabs.eclipse</groupId>
-			<artifactId>org.nightlabs.eclipse.ui.pdfviewer.extension</artifactId>
+			<artifactId>org.nightlabs.jdo</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
-			<artifactId>org.nightlabs.jdo</artifactId>
+			<artifactId>org.nightlabs.base</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.i18n</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.base</artifactId>
@@ -79,15 +153,41 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.base.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.reporting</artifactId>
 			<scope>provided</scope>
 		</dependency>		
+		
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.preference.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.base.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-ejb_3.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.jdo</groupId>
+		    <artifactId>jdo-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -101,7 +201,5 @@
 				</excludes>
 			</resource>
 		</resources>
-
-
 	</build>
 </project>
