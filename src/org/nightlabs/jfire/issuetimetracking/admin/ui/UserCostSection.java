@@ -6,8 +6,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +38,7 @@ extends ToolBarSectionPart
 	private CostRevenueComposite costRevenueComposite;
 
 	private User selectedUser;
-	private ProjectCostValue projectCostValue;
+//	private ProjectCostValue projectCostValue;
 	/**
 	 * @param page
 	 * @param parent
@@ -82,6 +80,9 @@ extends ToolBarSectionPart
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				selectedUser = userList.getSelectedElement();
+				if (selectedUser == null){
+					return;
+				}
 
 				ProjectCostValue projectCostValue = projectCost.getProjectCostValue(selectedUser.getUserID());
 				if (projectCostValue == null)
@@ -145,31 +146,31 @@ extends ToolBarSectionPart
 
 	private PriceFragmentType priceFragmentType;
 
-	private ModifyListener modifyListener = new ModifyListener() {
-		@Override
-		public void modifyText(ModifyEvent e) {
-			if (priceFragmentType == null)
-				priceFragmentType =
-					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
-							new String[] { FetchPlan.DEFAULT},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor());
-
-			if (selectedUser != null) {
-				ProjectCostValue projectCostValue = projectCost.getProjectCostValue(selectedUser.getUserID());
-				if (projectCostValue == null) {
-					projectCostValue = createProjectCostValue(selectedUser);
-				}
-
-//				if (e.getSource() == costSpinner)
-//					projectCostValue.getCost().setAmount(priceFragmentType, costSpinner.getSelection());
-//				if (e.getSource() == revenueSpinner)
-//					projectCostValue.getRevenue().setAmount(priceFragmentType, revenueSpinner.getSelection());
-
-				markDirty();
-			}
-		}
-	};
+//	private ModifyListener modifyListener = new ModifyListener() {
+//		@Override
+//		public void modifyText(ModifyEvent e) {
+//			if (priceFragmentType == null)
+//				priceFragmentType =
+//					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
+//							new String[] { FetchPlan.DEFAULT},
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//							new NullProgressMonitor());
+//
+//			if (selectedUser != null) {
+//				ProjectCostValue projectCostValue = projectCost.getProjectCostValue(selectedUser.getUserID());
+//				if (projectCostValue == null) {
+//					projectCostValue = createProjectCostValue(selectedUser);
+//				}
+//
+////				if (e.getSource() == costSpinner)
+////					projectCostValue.getCost().setAmount(priceFragmentType, costSpinner.getSelection());
+////				if (e.getSource() == revenueSpinner)
+////					projectCostValue.getRevenue().setAmount(priceFragmentType, revenueSpinner.getSelection());
+//
+//				markDirty();
+//			}
+//		}
+//	};
 
 	protected void assertSWTThread()
 	{
