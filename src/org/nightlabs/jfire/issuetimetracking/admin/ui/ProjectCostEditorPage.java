@@ -3,8 +3,6 @@ package org.nightlabs.jfire.issuetimetracking.admin.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.jdo.FetchPlan;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,11 +17,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jfire.accounting.Price;
-import org.nightlabs.jfire.accounting.PriceFragment;
-import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issuetimetracking.ProjectCost;
-import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 
 public class ProjectCostEditorPage
@@ -68,7 +61,7 @@ extends EntityEditorPageWithProgress
 	private ProjectCostSection projectCostSection;
 	private UserCostSection userCostSection;
 
-	private ProjectCost projectCost;
+//	private ProjectCost projectCost;
 	@Override
 	protected void addSections(Composite parent) {
 		controller = (ProjectCostEditorPageController)getPageController();
@@ -99,19 +92,19 @@ extends EntityEditorPageWithProgress
 		getManagedForm().addPart(userCostSection);
 	}
 
-	private static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT,
-		Project.FETCH_GROUP_MEMBERS,
-		ProjectCost.FETCH_GROUP_PROJECT,
-		ProjectCost.FETCH_GROUP_CURRENCY,
-		ProjectCost.FETCH_GROUP_DEFAULT_COST,
-		ProjectCost.FETCH_GROUP_DEFAULT_REVENUE,
-		ProjectCostValue.FETCH_GROUP_COST,
-		ProjectCostValue.FETCH_GROUP_REVENUE,
-		Price.FETCH_GROUP_CURRENCY,
-		Price.FETCH_GROUP_FRAGMENTS,
-		PriceFragment.FETCH_GROUP_PRICE_FRAGMENT_TYPE
-	};
+//	private static final String[] FETCH_GROUPS = new String[] {
+//		FetchPlan.DEFAULT,
+//		Project.FETCH_GROUP_MEMBERS,
+//		ProjectCost.FETCH_GROUP_PROJECT,
+//		ProjectCost.FETCH_GROUP_CURRENCY,
+//		ProjectCost.FETCH_GROUP_DEFAULT_COST,
+//		ProjectCost.FETCH_GROUP_DEFAULT_REVENUE,
+//		ProjectCostValue.FETCH_GROUP_COST,
+//		ProjectCostValue.FETCH_GROUP_REVENUE,
+//		Price.FETCH_GROUP_CURRENCY,
+//		Price.FETCH_GROUP_FRAGMENTS,
+//		PriceFragment.FETCH_GROUP_PRICE_FRAGMENT_TYPE
+//	};
 
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
