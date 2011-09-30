@@ -96,6 +96,8 @@ Marco :-)
 	<properties>
 		<!-- This redeclaration is necessary, because the original declaration is not inherited anymore due to the change of the parent/dependency-management-import-strategy -->
 		<jfire.version>${nightlabs.version}</jfire.version>
+		<birt-runtime.version>2.2.0</birt-runtime.version>
+		<birt-report-designer.version>2.2.0</birt-report-designer.version>
 	</properties>
 
 	<dependencyManagement>
@@ -165,11 +167,6 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
-				<version>${jfire.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.nightlabs.jfire.eclipse</groupId>
-				<artifactId>org.nightlabs.jdo.query.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
