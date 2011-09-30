@@ -237,6 +237,12 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
 			if (issue.getDeadlineTimestamp() != null)
 				return deadlineDateTimeFormat.format(issue.getDeadlineTimestamp());
 		}
+		
+		if (fieldName.equals(Issue.FieldName.issueResolution)) {
+			if (issue.getIssueResolution() != null)
+				return issue.getIssueResolution().getName().getText();
+		}
+
 		return "";
 	}
 
