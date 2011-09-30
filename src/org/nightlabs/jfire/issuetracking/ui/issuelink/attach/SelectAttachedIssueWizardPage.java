@@ -66,9 +66,22 @@ extends WizardHopPage
 		switch (actionForIssue) {
 			case createNewIssue:
 				createNewIssueRadio.setSelection(true);
+				if (newIssue == null) {
+					newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+					newIssue.createIssueLink(issueLinkType, (ObjectID)JDOHelper.getObjectId(attachedObject), attachedObject.getClass());
+				}
+				if (createIssueGeneralWizardPage == null){
+					createIssueGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
+					new WizardHop(this);
+					getWizardHop().addHopPage(createIssueGeneralWizardPage);
+				}
 				break;
 			case selectExistingIssue:
 				selectExistingIssueRadio.setSelection(true);
+				if (createIssueGeneralWizardPage != null){
+					getWizardHop().removeHopPage(createIssueGeneralWizardPage);
+					createIssueGeneralWizardPage = null;
+				}
 				break;
 			default:
 				throw new IllegalStateException("Unknown actionForIssue: " + actionForIssue); //$NON-NLS-1$
@@ -150,14 +163,7 @@ extends WizardHopPage
 		if (actionForIssue != null)
 			switch (actionForIssue) {
 				case createNewIssue:
-					if (newIssue == null) {
-						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-						newIssue.createIssueLink(issueLinkType, (ObjectID)JDOHelper.getObjectId(attachedObject), attachedObject.getClass());
-						createIssueGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
-						new WizardHop(this);
-						getWizardHop().addHopPage(createIssueGeneralWizardPage);
-					}
-					return false;
+					return true;
 				case selectExistingIssue:
 					return selectedIssue != null;
 				default:
@@ -190,11 +196,6 @@ extends WizardHopPage
 	@Override
 	public boolean canFlipToNextPage() {
 		return actionForIssue == ActionForIssue.createNewIssue;
-	}
-
-	@Override
-	public boolean canBeLastPage() {
-		return super.canBeLastPage();
 	}
 
 	public Issue getIssue() {

@@ -80,7 +80,7 @@ extends AbstractWizardPageProviderDelegate
 							User reporter = Login.getLogin().getUser(
 									new String[] {User.FETCH_GROUP_NAME},
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-									new org.eclipse.core.runtime.SubProgressMonitor(_monitor, 50)
+									new SubProgressMonitor(new ProgressMonitorWrapper(_monitor), 50)
 							);
 							issue.setReporter(reporter);
 
