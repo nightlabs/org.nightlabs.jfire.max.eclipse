@@ -8,6 +8,8 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -73,12 +75,13 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 
 	private IssueTable issueResultTable;
 	private IColumnConfiguration columnConfiguration;
+	private Job loadColumnConfigurationJob;
 	
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(final Composite parent) {
 		//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
 		issueResultTable = new IssueTable(parent, SWT.NONE, false);
-		Job loadColumnConfiguration = new Job("Load Column Configuration") {
+		loadColumnConfigurationJob = new Job("Load Column Configuration") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				columnConfiguration = IssueTable.getDefaultColumnConfiguration(monitor);
@@ -94,7 +97,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 				return Status.OK_STATUS;
 			}
 		};
-		loadColumnConfiguration.schedule();
+		loadColumnConfigurationJob.schedule();
 
 		// [Observation; 02.07.2009]
 		// It seems a good idea to have a NotificationListener here, to note whether an
@@ -161,9 +164,28 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 								// constraints of the previous query. Kai.
 								DirtyObjectID dirtyObjectID = (DirtyObjectID) obj;
 								if ( issueIDs.contains(dirtyObjectID.getObjectID()) ) {
-									issues = doSearch(previousSavedQuery, new SubProgressMonitor(monitor, 90));
-									issueResultTable.setInput(issues);
-									handleContextMenuItems();
+									final Collection<Issue> foundIssues = doSearch(previousSavedQuery, new SubProgressMonitor(monitor, 90));
+									if (loadColumnConfigurationJob.getResult() == null){	// job is not finished
+										loadColumnConfigurationJob.addJobChangeListener(new JobChangeAdapter(){
+											@Override
+											public void done(IJobChangeEvent event) {
+												if (Status.OK_STATUS == event.getResult()){
+													getComposite().getDisplay().asyncExec(new Runnable() {
+														@Override
+														public void run() {
+															issueResultTable.setInput(foundIssues);
+															handleContextMenuItems();
+														}
+													});
+												}
+												super.done(event);
+											}
+										});
+									}else{
+										issueResultTable.setInput(foundIssues);
+										handleContextMenuItems();
+									}
+									
 									break;
 								}
 							}
