@@ -30,7 +30,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
@@ -48,6 +48,7 @@ import org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.table.config.IColumnConfiguration;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -71,11 +72,29 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 	}
 
 	private IssueTable issueResultTable;
-
+	private IColumnConfiguration columnConfiguration;
+	
 	@Override
-	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
+	public AbstractTableComposite<Issue> createListComposite(final Composite parent) {
 		//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
-		issueResultTable = new IssueTable(parent, SWT.NONE);
+		issueResultTable = new IssueTable(parent, SWT.NONE, false);
+		Job loadColumnConfiguration = new Job("Load Column Configuration") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				columnConfiguration = IssueTable.getDefaultColumnConfiguration(monitor);
+				if (!parent.isDisposed()) {
+					parent.getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							issueResultTable.setIssueTableConfigurations(columnConfiguration);
+							issueResultTable.layout(true, true);
+						}
+					});
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		loadColumnConfiguration.schedule();
 
 		// [Observation; 02.07.2009]
 		// It seems a good idea to have a NotificationListener here, to note whether an
@@ -83,11 +102,11 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		// We dont have to make this 'completely' active, since its showing the results of the current search... right??
 		// --> Let's give this a go first, and then decide later on. Kai.
 		previousSavedQuery = null;
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeNotificationListener);
+		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addNotificationListener(Issue.class, issueChangeNotificationListener);
 
 		issueResultTable.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event) {
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, issueChangeNotificationListener);
+				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeNotificationListener(Issue.class, issueChangeNotificationListener);
 			}
 		});
 

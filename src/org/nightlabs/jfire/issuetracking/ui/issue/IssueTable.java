@@ -35,6 +35,7 @@ import org.nightlabs.jfire.table.config.IColumnConfiguration;
 import org.nightlabs.jfire.table.config.IColumnContentDescriptor;
 import org.nightlabs.jfire.table.config.IColumnDescriptor;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * The table used for listing {@link Issue} elements.
@@ -51,6 +52,27 @@ extends AbstractTableComposite<Issue>
 	// would need, based on the ColumnDescriptors that we have configured to want to use.
 	private List<? extends IColumnContentDescriptor> columnContentDescriptors = null;
 	private ColumnSpanLabelProvider issueTableLabelProvider;
+	
+	/**
+	 * Loads default column configuration which earlier was loaded directly in deprecated IssueTable constructor.
+	 * 
+	 * @param monitor The {@link ProgressMonitor} to use
+	 * @return loaded column configuration
+	 */
+	public static IColumnConfiguration getDefaultColumnConfiguration(ProgressMonitor monitor){
+		IssueTableConfigModule issueTableCfMod = ConfigUtil.getUserCfMod(
+				IssueTableConfigModule.class,
+				new String[] {FetchPlan.DEFAULT,
+					IssueTableConfigModule.FETCH_GROUP_COLUMNDESCRIPTORS,
+					ColumnDescriptor.FETCH_GROUP_COL_FIELD_NAMES,
+					ColumnDescriptor.FETCH_GROUP_COL_NAME,
+					ColumnDescriptor.FETCH_GROUP_COL_TOOLTIP_DESCRIPTION,
+					ColumnDescriptor.FETCH_GROUP_COL_FETCH_GROUPS},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+		monitor.done();
+		return issueTableCfMod;
+	}
 
 	/**
 	 * Constructs the issue table.
@@ -72,7 +94,7 @@ extends AbstractTableComposite<Issue>
 		this(parent, style, false);
 
 		// The setup --> According to the criteria defined in the (default) IssueTableConfigModule.
-		// Currently, as of 2010.04.26, the default IssueTable has 9 columns.
+		// Currently, as of 2011.09.30, the default IssueTable has 10 columns.
 		IssueTableConfigModule issueTableCfMod = ConfigUtil.getUserCfMod(
 				IssueTableConfigModule.class,
 				new String[] {FetchPlan.DEFAULT,
