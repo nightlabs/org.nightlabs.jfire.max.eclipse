@@ -2,7 +2,6 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
 import javax.jdo.FetchPlan;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -43,7 +42,7 @@ public class LegalEntityPersonIssueLinkTreeView extends LSDViewPart implements I
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
+//	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
 	public static final String ID_VIEW = LegalEntityPersonIssueLinkTreeView.class.getName();
 
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;

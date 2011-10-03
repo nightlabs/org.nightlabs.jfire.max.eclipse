@@ -20,7 +20,8 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.GlobalDateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -36,7 +37,7 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerOrder.order.name"), //$NON-NLS-1$
 //				linkedObject.getPrimaryKey());
 				ArticleContainerUtil.getArticleContainerID(order),
-				DateFormatter.formatDateShort(order.getCreateDT(), false));
+				GlobalDateFormatter.sharedInstance().formatDate(order.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT));
 	}
 
 	@Override

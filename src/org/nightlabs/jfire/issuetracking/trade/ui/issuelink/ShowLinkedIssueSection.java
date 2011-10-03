@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -20,13 +22,14 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
@@ -40,6 +43,7 @@ import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
+import org.nightlabs.jfire.table.config.IColumnConfiguration;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -59,6 +63,7 @@ extends ToolBarSectionPart
 	private ShowLinkedIssuePageController controller;
 	private IFormPage page;
 	private IssueTable issueTable;
+	private IColumnConfiguration columnConfiguration;
 
 	private AddIssueLinkAction addIssueLinkAction;
 	private IssueLinkActionRemove issueLinkActionRemove;
@@ -74,11 +79,11 @@ extends ToolBarSectionPart
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
-		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		final XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;
 
 
-		issueTable = new IssueTable(client, SWT.NONE);
+		issueTable = new IssueTable(client, SWT.NONE, false);
 		issueTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 		issueTable.addSelectionChangedListener(new ISelectionChangedListener(){
 			@Override
@@ -86,15 +91,31 @@ extends ToolBarSectionPart
 				handleRemoveActionButton();
 			}
 		});
-
+		Job loadColumnConfiguration = new Job("Load Column Configuration") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				columnConfiguration = IssueTable.getDefaultColumnConfiguration(monitor);
+				if (!client.isDisposed()) {
+					client.getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							issueTable.setIssueTableConfigurations(columnConfiguration);
+							issueTable.layout(true, true);
+						}
+					});
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		loadColumnConfiguration.schedule();
 
 		// See notes in [Observation and strategy, 23.06.2009] in ShowLinkedIssuePageController.
-		JDOLifecycleManager.sharedInstance().addLifecycleListener(issueLinksLifeCycleListener);
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeNotificationListener);
+		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addLifecycleListener(issueLinksLifeCycleListener);
+		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addNotificationListener(Issue.class, issueChangeNotificationListener);
 		issueTable.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event) {
-				JDOLifecycleManager.sharedInstance().removeLifecycleListener(issueLinksLifeCycleListener);
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, issueChangeNotificationListener);
+				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeLifecycleListener(issueLinksLifeCycleListener);
+				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeNotificationListener(Issue.class, issueChangeNotificationListener);
 			}
 		});
 
@@ -266,7 +287,7 @@ extends ToolBarSectionPart
 		public void run() {
 			Object linkedObject = controller.getArticleContainer();
 			AttachIssueToObjectWizard attachIssueToObjectWizard = new AttachIssueToObjectWizard(linkedObject);
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(attachIssueToObjectWizard)
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), attachIssueToObjectWizard)
 			{
 				@Override
 				protected Point getInitialSize()

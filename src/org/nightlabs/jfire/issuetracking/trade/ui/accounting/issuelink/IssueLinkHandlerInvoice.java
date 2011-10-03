@@ -21,7 +21,8 @@ import org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandl
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.GlobalDateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -42,7 +43,7 @@ extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 		return String.format(
 				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerInvoice.invoice.name"), //$NON-NLS-1$
 				ArticleContainerUtil.getArticleContainerID(invoice),
-				DateFormatter.formatDateShort(invoice.getFinalizeDT(), false));
+				GlobalDateFormatter.sharedInstance().formatDate(invoice.getFinalizeDT(), IDateFormatter.FLAGS_DATE_SHORT));
 	}
 
 	@Override

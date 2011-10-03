@@ -180,7 +180,7 @@ extends EntityEditorPageWithProgress
 		@Override
 		public void run() {
 			AttachIssueToObjectWizard attachIssueToObjectWizard = new AttachIssueToObjectWizard(linkedObject);
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(attachIssueToObjectWizard)
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSite().getShell(), attachIssueToObjectWizard)
 			{
 				@Override
 				protected Point getInitialSize()

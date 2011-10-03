@@ -17,7 +17,7 @@ import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
@@ -138,7 +138,7 @@ public class LegalEntityPersonIssueLinkTableView extends LSDViewPart implements 
 				Person.class, notificationListenerPersonSelected);
 
 		// add notification listener for issue (link) changes
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);
+		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addNotificationListener(Issue.class, issueChangeListener);
 
 		// unregister listeners when disposed
 		personIssueLinksComposite.addDisposeListener(new DisposeListener() {
@@ -148,7 +148,7 @@ public class LegalEntityPersonIssueLinkTableView extends LSDViewPart implements 
 				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
 						Person.class, notificationListenerPersonSelected);
 
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, issueChangeListener);
+				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeNotificationListener(Issue.class, issueChangeListener);
 			}
 		});
 

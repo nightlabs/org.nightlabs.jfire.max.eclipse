@@ -19,7 +19,8 @@ import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.store.dao.ReceptionNoteDAO;
 import org.nightlabs.jfire.store.id.ReceptionNoteID;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.GlobalDateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -59,7 +60,7 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 		return String.format(
 				Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerReceptionNote.receptionNote.name"), //$NON-NLS-1$
 				ArticleContainerUtil.getArticleContainerID(linkedObject),
-				DateFormatter.formatDateShort(linkedObject.getCreateDT(), false));
+				GlobalDateFormatter.sharedInstance().formatDate(linkedObject.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT));
 	}
 
 	@Override

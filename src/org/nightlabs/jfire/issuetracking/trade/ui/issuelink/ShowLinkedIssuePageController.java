@@ -12,6 +12,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
@@ -65,6 +66,8 @@ extends EntityEditorPageController
 		Issue.FETCH_GROUP_ISSUE_MARKERS,          // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_NAME,             // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,  // <-- Since 14.05.2009
+		Issue.FETCH_GROUP_ISSUE_RESOLUTION,       // <-- Since 30.09.2011
+		IssueResolution.FETCH_GROUP_NAME          // <-- Since 30.09.2011
 	};
 
 	/**
@@ -125,8 +128,14 @@ extends EntityEditorPageController
 		this.articleContainer =
 			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
-		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
-				null, // This must be the local organisationID! The backend now chooses this automatically, when passing null. Marco.
+//		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
+//				null, // This must be the local organisationID! The backend now chooses this automatically, when passing null. Marco.
+//				articleContainerID,
+//				FETCH_GROUPS,
+//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//				monitor);
+
+		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinks(
 				articleContainerID,
 				FETCH_GROUPS,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
