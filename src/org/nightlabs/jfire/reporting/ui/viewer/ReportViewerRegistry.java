@@ -121,7 +121,7 @@ public class ReportViewerRegistry extends AbstractEPProcessor {
 		
 		if (element.getName().equalsIgnoreCase("reportViewerFactory")) { //$NON-NLS-1$
 			String id = element.getAttribute("id"); //$NON-NLS-1$
-			if (!checkString(id))
+			if (!(id != null && !id.trim().isEmpty()))
 				throw new EPProcessorException("The id - attribute is not valid: '"+id+"'.", extension); //$NON-NLS-1$ //$NON-NLS-2$
 			ReportViewerFactory factory;
 			try {
@@ -130,7 +130,7 @@ public class ReportViewerRegistry extends AbstractEPProcessor {
 				throw new EPProcessorException("Could not create ReportViewerFactory '"+element.getAttribute("class")+"'", e); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 			String name = element.getAttribute("name"); //$NON-NLS-1$
-			if (!checkString(name))
+			if (!(name != null && !name.trim().isEmpty()))
 				throw new EPProcessorException("The name - attribute is not valid: '"+id+"'.", extension); //$NON-NLS-1$ //$NON-NLS-2$
 			String description = element.getAttribute("description"); //$NON-NLS-1$
 			if (description == null)

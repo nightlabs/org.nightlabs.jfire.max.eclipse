@@ -21,7 +21,7 @@ import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.id.UserID;
 
 /**
@@ -51,7 +51,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	 */
 	public ValueProviderGUICurrentUserMultiple(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
-		currentUserID = Collections.singleton(SecurityReflector.getUserDescriptor().getUserObjectID());
+		currentUserID = Collections.singleton(GlobalSecurityReflector.sharedInstance().getUserDescriptor().getUserObjectID());
 	}
 
 	/* (non-Javadoc)

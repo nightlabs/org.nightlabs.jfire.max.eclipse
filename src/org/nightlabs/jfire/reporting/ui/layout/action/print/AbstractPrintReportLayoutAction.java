@@ -39,7 +39,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
@@ -110,7 +110,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 		Collection<ReportRegistryItemID> itemIDs = new ArrayList<ReportRegistryItemID>();
 		for (ReportRegistryItem item : reportRegistryItems) {
 			ReportRegistryItemID id = (ReportRegistryItemID)JDOHelper.getObjectId(item);
-			if (ReportLayout.class.isAssignableFrom(JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(id))) {
+			if (ReportLayout.class.isAssignableFrom(GlobalJDOManagerProvider.sharedInstance().getObjectID2PCClassMap().getPersistenceCapableClass(id))) {
 				itemIDs.add(id);
 			}
 		}

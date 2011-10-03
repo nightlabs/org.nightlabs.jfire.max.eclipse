@@ -31,15 +31,15 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.jdo.cache.Cache;
-import org.nightlabs.jfire.reporting.ReportManagerRemote;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandlerRegistry;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
@@ -213,7 +213,7 @@ public class RenderedReportLayoutProvider {
 			ProgressMonitor monitor
 		)
 	{
-		ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, SecurityReflector.getInitialContextProperties());
+		ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
 		try {
 			return rm.renderReportLayout(renderRequest);
 		} catch (Exception e) {
@@ -228,11 +228,11 @@ public class RenderedReportLayoutProvider {
 	 * @return A cached {@link RenderedReportEntry} or <code>null</code>
 	 */
 	protected RenderedReportEntry getRenderedReportEntry(RenderedReportKey key) {
-		return (RenderedReportEntry)Cache.sharedInstance().get(null, key, (String[])null, 0);
+		return (RenderedReportEntry)GlobalJDOManagerProvider.sharedInstance().getCache().get(null, key, (String[])null, 0);
 	}
 
 	protected void setRenderedReportEntry(RenderedReportKey key, RenderedReportEntry entry) {
-		 Cache.sharedInstance().put(null, key, entry, (String[])null, 0);
+		GlobalJDOManagerProvider.sharedInstance().getCache().put(null, key, entry, (String[])null, 0);
 	}
 
 	private static RenderedReportLayoutProvider sharedInstance;

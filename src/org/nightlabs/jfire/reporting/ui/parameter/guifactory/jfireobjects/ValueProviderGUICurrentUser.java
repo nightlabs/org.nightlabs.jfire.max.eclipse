@@ -21,7 +21,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
-import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.id.UserID;
 
 /**
@@ -53,7 +53,7 @@ public class ValueProviderGUICurrentUser extends AbstractValueProviderGUI<UserID
 	 */
 	public ValueProviderGUICurrentUser(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
-		currentUserID = SecurityReflector.getUserDescriptor().getUserObjectID();
+		currentUserID = GlobalSecurityReflector.sharedInstance().getUserDescriptor().getUserObjectID();
 	}
 
 	/* (non-Javadoc)

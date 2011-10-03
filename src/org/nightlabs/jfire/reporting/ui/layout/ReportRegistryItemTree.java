@@ -71,11 +71,18 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 		}
 		
 		protected String getTooltipText(Object element, int columnText) {
-			ReportRegistryItem item = ((ReportRegistryItemNode)element).getJdoObject();
-			if (item.getDescription().isEmpty())
+			if (element instanceof String){
+				return (String) element;
+			}else if (element instanceof ReportRegistryItemNode){
+				ReportRegistryItem item = ((ReportRegistryItemNode)element).getJdoObject();
+				if (item.getDescription().isEmpty()){
+					return null;
+				}else{ 
+					return item.getDescription().getText();
+				}
+			}else{
 				return null;
-			else 
-				return item.getDescription().getText();
+			}
 		}
 		
 		@Override
