@@ -3,6 +3,8 @@ package org.nightlabs.jfire.issuetracking.ui.issue.create;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -18,7 +20,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueUserComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueUserComposite.Orientation;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -49,11 +51,17 @@ extends WizardHopPage
 		deadlineLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueReminderWizardPage.label.deadline.text")); //$NON-NLS-1$
 
 		Composite deadlineWrapper = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
-		deadlineDateTime = new DateTimeControl(deadlineWrapper, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY);
+		deadlineDateTime = new DateTimeControl(deadlineWrapper, SWT.NONE, IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY);
 		deadlineDateTime.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		deadlineDateTime.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				issue.setDeadlineTimestamp(deadlineDateTime.getDate());
+			}
+		});
+		deadlineDateTime.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 				issue.setDeadlineTimestamp(deadlineDateTime.getDate());
 			}
 		});
