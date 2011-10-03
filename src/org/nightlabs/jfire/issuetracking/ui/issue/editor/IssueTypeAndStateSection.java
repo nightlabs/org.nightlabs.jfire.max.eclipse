@@ -32,6 +32,7 @@ extends AbstractIssueEditorGeneralSection
 
 	private Label issueTypeLabel;
 	private Label statusLabel;
+	private Label nextTransitionLabel;
 
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
@@ -75,14 +76,16 @@ extends AbstractIssueEditorGeneralSection
 		// Status
 		statusLabel = new Label(getClient(), SWT.WRAP);
 		statusLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.label.status.text")); //$NON-NLS-1$
-		gd = new GridData();
-		gd.horizontalSpan = 1;
-		statusLabel.setLayoutData(gd);
 
 		currentStateComposite = new CurrentStateComposite(getClient(), SWT.WRAP);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		currentStateComposite.setLayoutData(gd);
+
+		
+		// Next transition
+		nextTransitionLabel = new Label(getClient(), SWT.WRAP);
+		nextTransitionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.label.nextstatus.text")); //$NON-NLS-1$
 
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE, false);
 		nextTransitionComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -172,7 +175,7 @@ extends AbstractIssueEditorGeneralSection
 		});*/
 
 		gd = new GridData();
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = 2;
 		nextTransitionComposite.setLayoutData(gd);
 	}
 
