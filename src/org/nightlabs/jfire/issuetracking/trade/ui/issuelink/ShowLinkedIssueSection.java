@@ -6,6 +6,8 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -64,6 +66,7 @@ extends ToolBarSectionPart
 	private IFormPage page;
 	private IssueTable issueTable;
 	private IColumnConfiguration columnConfiguration;
+	private Job loadColumnConfigurationJob;
 
 	private AddIssueLinkAction addIssueLinkAction;
 	private IssueLinkActionRemove issueLinkActionRemove;
@@ -91,7 +94,7 @@ extends ToolBarSectionPart
 				handleRemoveActionButton();
 			}
 		});
-		Job loadColumnConfiguration = new Job("Load Column Configuration") {
+		loadColumnConfigurationJob = new Job("Load Column Configuration") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				columnConfiguration = IssueTable.getDefaultColumnConfiguration(monitor);
@@ -107,7 +110,7 @@ extends ToolBarSectionPart
 				return Status.OK_STATUS;
 			}
 		};
-		loadColumnConfiguration.schedule();
+		loadColumnConfigurationJob.schedule();
 
 		// See notes in [Observation and strategy, 23.06.2009] in ShowLinkedIssuePageController.
 		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addLifecycleListener(issueLinksLifeCycleListener);
@@ -228,9 +231,27 @@ extends ToolBarSectionPart
 	/**
 	 * Sets the {@link Issue}s linked to the {@link ArticleContainer}, and updates the remove-Action-button.
 	 */
-	public void setLinkedIssues(Collection<Issue> issues) {
-		issueTable.setInput(issues);
-		handleRemoveActionButton();
+	public void setLinkedIssues(final Collection<Issue> issues) {
+		if (loadColumnConfigurationJob.getResult() == null){	// job is not finished
+			loadColumnConfigurationJob.addJobChangeListener(new JobChangeAdapter(){
+				@Override
+				public void done(IJobChangeEvent event) {
+					if (Status.OK_STATUS == event.getResult()){
+						getSection().getShell().getDisplay().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								setLinkedIssues(issues);
+							}
+						});
+					}
+					super.done(event);
+				}
+				
+			});
+		}else{
+			issueTable.setInput(issues);
+			handleRemoveActionButton();
+		}
 	}
 
 	/**
