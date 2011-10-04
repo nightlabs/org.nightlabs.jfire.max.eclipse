@@ -51,7 +51,10 @@ public class ScheduleReportAction extends ReportRegistryItemAction {
 	 */
 	@Override
 	public void run(Collection<ReportRegistryItem> reportRegistryItems) {
-		CreateScheduledReportWizard.open(RCPUtil.getActiveShell(), (ReportLayout) reportRegistryItems.iterator().next());
+		if (reportRegistryItems != null
+				&& !reportRegistryItems.isEmpty()){
+			CreateScheduledReportWizard.open(RCPUtil.getActiveShell(), (ReportLayout) reportRegistryItems.iterator().next());
+		}
 	}
 
 	@Override
