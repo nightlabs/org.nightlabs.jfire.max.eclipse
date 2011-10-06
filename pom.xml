@@ -96,8 +96,11 @@ Marco :-)
 	<properties>
 		<!-- This redeclaration is necessary, because the original declaration is not inherited anymore due to the change of the parent/dependency-management-import-strategy -->
 		<jfire.version>${nightlabs.version}</jfire.version>
-		<birt-runtime.version>2.2.0</birt-runtime.version>
-		<birt-report-designer.version>2.2.0</birt-report-designer.version>
+		<birt.version>2.6.0</birt.version><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
+		<birt-runtime.group>org.eclipse.birt.runtime.v2-6-0-mvnzd</birt-runtime.group><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
+		<birt-rcp-report-designer.group>org.eclipse.birt.rcp-report-designer.v2-6-0-mvnzd</birt-rcp-report-designer.group>
+		<eclipse-ide.version>3.6.2</eclipse-ide.version>
+		<eclipse-ide.group>org.eclipse.rcp-helios-SR2-linux-gtk-mvnzd</eclipse-ide.group>
 	</properties>
 
 	<dependencyManagement>
@@ -184,6 +187,198 @@ Marco :-)
 				<artifactId>org.nightlabs.jfire.personrelation.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.oda.client</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.oda.wrapper</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.eclipse.ui.pdfviewer.extension</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.eclipse.ui.pdfrenderer</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.eclipse.ui.pdfviewer</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.essiembre.eclipse</groupId>
+				<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
+				<version>0.7.8</version>
+			</dependency>
+			
+			<!-- ################### birt-report-designer #################################### -->
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.examples</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.reportitem</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.reportitem.ui</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.ui</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.ui.extension</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.core</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui.rcp</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui.editors</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui.editors.schematic</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.engine</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.engine.emitter.html</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.engine.emitter.pdf</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.core.resources</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.core.runtime</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.datatools.connectivity.oda</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.datatools.connectivity.oda.design.ui</artifactId>
+				<version>3.2.3</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.datatools.connectivity.ui</artifactId>
+				<version>1.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.emf.ecore</artifactId>
+				<version>2.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.gef</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.help</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.browser</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.forms</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.views</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.workbench.texteditor</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+ 			<dependency>
+	 			<!-- as there is no org.eclipse.swt-package with content available in the bundle "birt-rcp-designer-2_6", 
+	 			and we are using this just on scope 'provide', we use the *.win32.* library. (Sebl, 2011-10-06) -->
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			 
+			 <dependency>
+				<groupId>${eclipse-ide.group}</groupId>
+				<artifactId>org.eclipse.ui.ide</artifactId>
+				<version>${eclipse-ide.version}</version>
+			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 
