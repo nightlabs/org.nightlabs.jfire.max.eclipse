@@ -61,7 +61,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart
 		ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
 		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
 		VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS,
-		VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,Account.FETCH_GROUP_NAME
+		VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_CURRENCY
 	};
 
 	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {

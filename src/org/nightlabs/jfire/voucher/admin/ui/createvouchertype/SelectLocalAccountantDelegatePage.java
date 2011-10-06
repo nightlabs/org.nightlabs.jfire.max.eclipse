@@ -180,7 +180,8 @@ extends WizardHopPage
 		FetchPlan.DEFAULT, LocalAccountantDelegate.FETCH_GROUP_NAME,
 		VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS,
 		VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,
-		Account.FETCH_GROUP_NAME
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_CURRENCY
 	};
 
 	private void setInheritedLocalAccountantDelegateName(String name)

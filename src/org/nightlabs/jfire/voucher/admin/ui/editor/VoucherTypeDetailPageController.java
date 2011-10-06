@@ -25,7 +25,6 @@ import org.nightlabs.util.CollectionUtil;
 public class VoucherTypeDetailPageController
 extends AbstractProductTypeDetailPageController<VoucherType>
 {
-	private static final long serialVersionUID = 1L;
 	private VoucherLayout voucherLayout;
 
 	/**
@@ -53,7 +52,9 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 					ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
 					ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
 					VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS,
-					VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,Account.FETCH_GROUP_NAME,
+					VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,
+					Account.FETCH_GROUP_NAME,
+					Account.FETCH_GROUP_CURRENCY,
 					VoucherType.FETCH_GROUP_VOUCHER_LAYOUT
 			}
 	);

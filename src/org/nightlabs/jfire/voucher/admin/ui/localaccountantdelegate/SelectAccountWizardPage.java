@@ -159,7 +159,7 @@ extends WizardHopPage
 	}
 
 	protected static final String[] FETCH_GROUPS_ACCOUNT = {
-		FetchPlan.DEFAULT, Account.FETCH_GROUP_NAME
+		FetchPlan.DEFAULT, Account.FETCH_GROUP_NAME, Account.FETCH_GROUP_CURRENCY
 	};
 
 	private CreateProductAccountWizardPage createAccountWizardPage = null;
