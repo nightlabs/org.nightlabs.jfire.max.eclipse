@@ -1,9 +1,15 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.id.AccountTypeID;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class SelectAccountWizard
 		extends DynamicPathWizard
@@ -36,18 +42,41 @@ public class SelectAccountWizard
 	@Override
 	public boolean performFinish()
 	{
-		switch (selectAccountWizardPage.getMode()) {
-			case CREATE:
-				selectedAccount = selectAccountWizardPage.createAccount(selectedAccountTypeID); // this does not yet store it to the server - ALL is stored when the main wizard stores its data
-				break;
-			case SELECT:
-				selectedAccount = selectAccountWizardPage.getSelectedAccount();
-				break;
-			default:
-				throw new IllegalStateException("Unknown mode: " + selectAccountWizardPage.getMode()); //$NON-NLS-1$
-		}
+		final boolean[] result = new boolean[] {false};
+		try{
+			getContainer().run(false, false, new IRunnableWithProgress(){
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException{
+					ProgressMonitor wrappedMonitor = new ProgressMonitorWrapper(monitor);
+					try{
+						wrappedMonitor.beginTask("Selecting account...", 1);
+						
+						switch (selectAccountWizardPage.getMode()) {
+						case CREATE:
+							selectedAccount = selectAccountWizardPage.createAccount(selectedAccountTypeID, wrappedMonitor); // this does not yet store it to the server - ALL is stored when the main wizard stores its data
+							break;
+						case SELECT:
+							selectedAccount = selectAccountWizardPage.getSelectedAccount();
+							break;
+						default:
+							throw new IllegalStateException("Unknown mode: " + selectAccountWizardPage.getMode()); //$NON-NLS-1$
+						}
+						
+						monitor.worked(1);
+						result[0] = true;
 
-		return true;
+					}catch(Exception e){
+						wrappedMonitor.setCanceled(true);
+						throw new RuntimeException(e);
+					}finally{
+						wrappedMonitor.done();
+					}
+				}
+			});
+		}catch (Exception e){
+			throw new RuntimeException(e);
+		}
+		return result[0];
 	}
 
 	private Account selectedAccount = null;

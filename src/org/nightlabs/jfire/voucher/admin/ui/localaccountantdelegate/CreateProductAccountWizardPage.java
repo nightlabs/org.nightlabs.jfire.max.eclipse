@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
 import javax.jdo.FetchPlan;
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -15,12 +16,14 @@ import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
 import org.nightlabs.jfire.accounting.id.AccountTypeID;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
-import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.OrganisationLegalEntity;
+import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.transfer.Anchor;
-import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.math.Base36Coder;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 
 public  class CreateProductAccountWizardPage extends WizardHopPage{
@@ -55,18 +58,21 @@ public  class CreateProductAccountWizardPage extends WizardHopPage{
 	}
 
 	
-	public Account createAccount(AccountTypeID accountTypeID)
+	public Account createAccount(AccountTypeID accountTypeID, ProgressMonitor monitor) throws LoginException
 	{
-		// TODO this method should be called async! if it is, it should get a monitor - if it doesn't we need refactoring
 		AccountType accountType = AccountTypeDAO.sharedInstance().getAccountType(
 				accountTypeID,
-				new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));
+
+		OrganisationLegalEntity owner = LegalEntityDAO.sharedInstance().getOrganisationLegalEntity(
+				Login.getLogin().getOrganisationID(), true, new String[] { FetchPlan.DEFAULT }, 1,
+				new SubProgressMonitor(monitor, 50));
 
 		Account account = new Account(
 				IDGenerator.getOrganisationID(),
 				new Base36Coder(false).encode(IDGenerator.nextID(Anchor.class, accountTypeID.accountTypeID), 1),
 				accountType,
-				(LegalEntity)null, // this will be set by the EJB to the OrganisationLegalEntity
+				owner,
 				getCurrency());
 		account.getName().copyFrom(getAccountName());
 		return account;

@@ -3,6 +3,7 @@ package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -216,11 +217,11 @@ extends WizardHopPage
 		return mode;
 	}
 
-	public Account createAccount(AccountTypeID selectedAccountTypeID)
+	public Account createAccount(AccountTypeID selectedAccountTypeID, ProgressMonitor monitor) throws LoginException
 	{
 		if (mode != Mode.CREATE)
 			throw new IllegalStateException("Cannot create Account in mode " + mode); //$NON-NLS-1$
 
-		return createAccountWizardPage.createAccount(selectedAccountTypeID);
+		return createAccountWizardPage.createAccount(selectedAccountTypeID, monitor);
 	}
 }
