@@ -2,12 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
-	<!-- @generated - Auto generated POM. Remove this marker after review. -->
-	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.reporting.admin.ui</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.artifactId}</name>
 
@@ -19,153 +16,230 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>XXX</groupId>
+			<groupId>com.essiembre.eclipse</groupId>
 			<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-runtime.group}</groupId>
+			<artifactId>modelapi</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${birt-runtime.group}</groupId>
+			<artifactId>coreapi</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${birt-runtime.group}</groupId>
+			<artifactId>org.eclipse.datatools.connectivity.oda</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${birt-runtime.group}</groupId>
+			<artifactId>org.eclipse.datatools.connectivity.oda.design</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${birt-runtime.group}</groupId>
+			<artifactId>org.eclipse.emf.common</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.chart.examples</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.chart.reportitem</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.chart.reportitem.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.chart.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.chart.ui.extension</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.birt.core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.designer.core</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.designer.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.designer.ui.editors</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.designer.ui.editors.schematic</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.designer.ui.rcp</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.engine</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.engine.emitter.html</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.birt.report.engine.emitter.pdf</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.birt.report.model</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.birt.resources</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.core.resources</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.core.runtime</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.datatools.connectivity.oda.design.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.datatools.connectivity.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.emf.ecore</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.gef</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.help</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.ui.forms</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.ui.ide</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.ui.views</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
 			<artifactId>org.eclipse.ui.workbench.texteditor</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>${eclipse-ide.group}</groupId>
+			<artifactId>org.eclipse.ui.ide</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.jdo</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.base</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.config</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.progress</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.util</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.xml</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.i18n</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>${org.nightlabs.eclipse.compatibility.artifactId}</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.base.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.extension</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.base</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.base.admin.ui</artifactId>
+			<groupId>org.nightlabs.jfire</groupId>
+			<artifactId>org.nightlabs.jfire.base.bean</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -184,11 +258,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.base.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.reporting</artifactId>
 			<scope>provided</scope>
@@ -200,12 +269,28 @@
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
-			<artifactId>org.nightlabs.jfire.reporting.oda.client</artifactId>
+			<artifactId>org.nightlabs.jfire.reporting.oda.wrapper</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
-			<artifactId>org.nightlabs.jfire.reporting.oda.wrapper</artifactId>
+			<artifactId>org.nightlabs.jfire.scripting</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.base.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.reporting.oda.client</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -214,15 +299,31 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.nightlabs.jfire</groupId>
-			<artifactId>org.nightlabs.jfire.scripting</artifactId>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.scripting.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.scripting.ui</artifactId>
+			<artifactId>org.nightlabs.jfire.base.admin.ui</artifactId>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-ejb_3.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.jdo</groupId>
+		    <artifactId>jdo-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -236,7 +337,5 @@
 				</excludes>
 			</resource>
 		</resources>
-
-
 	</build>
 </project>
