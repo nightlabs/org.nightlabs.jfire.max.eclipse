@@ -6,7 +6,7 @@ Bundle-Version: 1.0.4.qualifier
 Bundle-Activator: org.nightlabs.jfire.prop.file.ui.Activator
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.nightlabs.eclipse.compatibility,
  org.eclipse.core.runtime,
  org.nightlabs.base;bundle-version="1.0.1",
  org.nightlabs.jfire.base.ui;bundle-version="1.0.14"
