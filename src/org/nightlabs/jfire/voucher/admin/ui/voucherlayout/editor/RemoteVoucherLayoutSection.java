@@ -42,5 +42,6 @@ public class RemoteVoucherLayoutSection extends ToolBarSectionPart {
 
 	public void selectVoucherLayout(VoucherLayout VoucherLayout) {
 		voucherLayoutComposite.selectLayout(VoucherLayout);
+		voucherLayoutComposite.layout(true, true);
 	}
 }
