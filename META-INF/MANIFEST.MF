@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.nightlabs.jfire.prop.html.ui;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: org.nightlabs.jfire.prop.html.ui.Activator
 Bundle-Vendor: NightLabs.org
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.nightlabs.eclipse.compatibility,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui,
  org.nightlabs.eclipse.ui.fckeditor
