@@ -9,10 +9,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.AsyncInitEvent;
 import org.nightlabs.base.ui.composite.AsyncInitListener;
@@ -24,7 +20,6 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.progress.ProgressMonitor;
@@ -83,26 +78,27 @@ extends AbstractIssueLinkAdder
 					}
 				});
 
-				Composite buttonBar = personSearchComposite.getButtonBar();
-				createSearchButton(buttonBar);
+				personSearchComposite.createSearchButton(personSearchComposite.getButtonBar());
+				personSearchComposite.layout(true, true);
+//				createSearchButton(buttonBar);
 			}
 		});
 		return personSearchComposite;
 	}
 
-	public Button createSearchButton(Composite parent) {
-		Button searchButton = new Button(parent, SWT.PUSH);
-		searchButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkAdderPerson.searchButton.text")); //$NON-NLS-1$
-		searchButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		searchButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				doSearch();
-			}
-		});
-		parent.layout(true);
-		return searchButton;
-	}
+//	private Button createSearchButton(Composite parent) {
+//		Button searchButton = new Button(parent, SWT.PUSH);
+//		searchButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkAdderPerson.searchButton.text")); //$NON-NLS-1$
+//		searchButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+//		searchButton.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				doSearch();
+//			}
+//		});
+//		parent.layout(true);
+//		return searchButton;
+//	}
 
 	@Override
 	protected void doSearch() {
