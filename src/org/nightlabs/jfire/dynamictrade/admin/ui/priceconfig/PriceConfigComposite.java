@@ -2,6 +2,7 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
@@ -41,14 +42,25 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)
 	{
 		try {
-			// We clear the packaging result price configs for optimisation reasons (prevent transferring to the server).
-			// They are cleared in any case during pre-attach and pre-store of DynamicTradePriceConfig.
-			Collection<P> clonedPCs = Util.cloneSerializable(priceConfigs);
-			Collection<DynamicTradePriceConfig> dynamicTradePriceConfigs = new ArrayList<DynamicTradePriceConfig>(clonedPCs.size());
-			for (P priceConfig : clonedPCs) {
-				DynamicTradePriceConfig dtpc = (DynamicTradePriceConfig) priceConfig;
-				dtpc.clearPackagingResultPriceConfigs();
-				dynamicTradePriceConfigs.add(dtpc);
+			Collection<DynamicTradePriceConfig> dynamicTradePriceConfigs = new ArrayList<DynamicTradePriceConfig>();
+			if (!priceConfigs.isEmpty()){
+				ClassLoader classLoader = null;
+				Iterator<P> iterator = priceConfigs.iterator();
+				while (iterator.hasNext()) {
+					P priceConfig = (P) iterator.next();
+					if (priceConfig != null){
+						classLoader = priceConfig.getClass().getClassLoader();
+						break;
+					}
+				}
+				Collection<P> clonedPCs = Util.cloneSerializableAll(priceConfigs, classLoader);
+				// We clear the packaging result price configs for optimisation reasons (prevent transferring to the server).
+				// They are cleared in any case during pre-attach and pre-store of DynamicTradePriceConfig.
+				for (P priceConfig : clonedPCs) {
+					DynamicTradePriceConfig dtpc = (DynamicTradePriceConfig) priceConfig;
+					dtpc.clearPackagingResultPriceConfigs();
+					dynamicTradePriceConfigs.add(dtpc);
+				}
 			}
 			DynamicTradeManagerRemote dtm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			dynamicTradePriceConfigs = dtm.storeDynamicTradePriceConfigs(dynamicTradePriceConfigs, true, assignInnerPriceConfigCommand);
