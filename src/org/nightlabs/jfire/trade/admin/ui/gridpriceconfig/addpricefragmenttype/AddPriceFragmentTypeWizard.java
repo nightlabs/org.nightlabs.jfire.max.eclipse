@@ -36,6 +36,7 @@ import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
+import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue.PriceFragmentTypeDimensionValue;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -43,12 +44,12 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class AddPriceFragmentTypeWizard extends DynamicPathWizard
 {
-	private Dimension dimension;
+	private Dimension<PriceFragmentTypeDimensionValue> dimension;
 	private PriceFragmentTypeSelectionPage priceFragmentTypeSelectionPage;
 	private CreatePriceFragmentTypePage createPriceFragmentTypePage;
 	private boolean createNewPriceFragmentTypeEnabled = false;
 
-	public AddPriceFragmentTypeWizard(Dimension dimension)
+	public AddPriceFragmentTypeWizard(Dimension<PriceFragmentTypeDimensionValue> dimension)
 	{
 		this.dimension = dimension;
 		setForcePreviousAndNextButtons(true);

@@ -122,8 +122,8 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						currencyList.removeAll();
-						for (Iterator it = currencies.iterator(); it.hasNext(); ) {
-							Currency currency = (Currency) it.next();
+						for (Iterator<Currency> it = currencies.iterator(); it.hasNext(); ) {
+							Currency currency = it.next();
 							currencyList.add(currency.getCurrencySymbol());
 						}
 					}
@@ -143,7 +143,9 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	@Override
 	public boolean isPageComplete()
 	{
-		return selectedCurrency != null;
+		if (createNewCurrencyRadio == null)
+			return false;
+		return createNewCurrencyRadio.getSelection() || selectedCurrency != null;
 	}
 
 	/**

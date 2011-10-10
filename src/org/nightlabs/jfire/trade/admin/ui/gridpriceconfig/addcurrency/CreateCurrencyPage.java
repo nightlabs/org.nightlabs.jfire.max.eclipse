@@ -11,8 +11,13 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
+import org.nightlabs.jfire.trade.admin.ui.editor.CurrencyCreateWizardPage;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
+/**
+ * @deprecated Use {@link CurrencyCreateWizardPage} instead
+ */
+@Deprecated
 public class CreateCurrencyPage extends DynamicPathWizardPage {
 
 

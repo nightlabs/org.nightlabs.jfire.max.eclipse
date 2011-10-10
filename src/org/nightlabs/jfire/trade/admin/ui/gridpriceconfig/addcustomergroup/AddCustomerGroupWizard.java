@@ -43,6 +43,7 @@ import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
+import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue.CustomerGroupDimensionValue;
 import org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupDAO;
 
 /**
@@ -50,13 +51,13 @@ import org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupDAO;
  */
 public class AddCustomerGroupWizard extends DynamicPathWizard
 {
-	private Dimension dimension;
+	private Dimension<CustomerGroupDimensionValue> dimension;
 	
 	private boolean createNewCustomerGroupEnabled = false;
 	private CustomerGroupSelectionPage customerGroupSelectionPage;
 	private CreateCustomerGroupPage createCustomerGroupPage;
 
-	public AddCustomerGroupWizard(Dimension dimension)
+	public AddCustomerGroupWizard(Dimension<CustomerGroupDimensionValue> dimension)
 	{
 		this.dimension = dimension;
 		setForcePreviousAndNextButtons(true);

@@ -122,8 +122,8 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						tariffList.removeAll();
-						for (Iterator it = tariffs.iterator(); it.hasNext(); ) {
-							Tariff tariff = (Tariff) it.next();
+						for (Iterator<Tariff> it = tariffs.iterator(); it.hasNext(); ) {
+							Tariff tariff = it.next();
 							tariffList.add(tariff.getName().getText());
 						}
 					}

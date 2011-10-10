@@ -64,7 +64,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 	private Button createNewPriceFragmentTypeRadio;
 	private Button chooseExistingPriceFragmentTypeRadio;
 	private PriceFragmentType selectedPriceFragmentType = null;
-	private List priceFragmentTypes = new ArrayList();
+	private List<PriceFragmentType> priceFragmentTypes = new ArrayList<PriceFragmentType>();
 	private org.eclipse.swt.widgets.List priceFragmentTypeList;
 
 	public PriceFragmentTypeSelectionPage()
@@ -130,8 +130,8 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						priceFragmentTypeList.removeAll();
-						for (Iterator it = priceFragmentTypes.iterator(); it.hasNext(); ) {
-							PriceFragmentType priceFragmentType = (PriceFragmentType) it.next();
+						for (Iterator<PriceFragmentType> it = priceFragmentTypes.iterator(); it.hasNext(); ) {
+							PriceFragmentType priceFragmentType = it.next();
 							priceFragmentTypeList.add(priceFragmentType.getName().getText());
 						}
 					}
