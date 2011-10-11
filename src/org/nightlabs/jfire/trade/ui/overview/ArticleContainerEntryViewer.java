@@ -148,8 +148,8 @@ extends JDOQuerySearchEntryViewer<R, Q>
 		footerTextTotal.setLayoutData(gridData);
 
 		if (getListComposite().getElements().isEmpty()) {
-			displayTotals((Collection<R>) Collections.emptySet(), footerTextSelection);
-			displayTotals((Collection<R>) Collections.emptySet(), footerTextTotal);
+			displayTotals((Collection<R>) Collections.EMPTY_SET, footerTextSelection);
+			displayTotals((Collection<R>) Collections.EMPTY_SET, footerTextTotal);
 		}
 		else {
 			displayTotals(getListComposite().getSelectedElements(), footerTextSelection);
