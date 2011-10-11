@@ -38,6 +38,8 @@ import javax.jdo.JDOHelper;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.context.UIContext;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
@@ -67,7 +69,6 @@ import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.notification.ArticleLifecycleListenerFilter;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -314,8 +315,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 		return articleCarriers;
 	}
 
-//	private NotificationListener notificationListenerArticlesChanged = new NotificationAdapterJob("Reloading changed articles") {
-	private NotificationListener notificationListenerArticlesChanged = new NotificationAdapterCallerThread() { // TODO this must not be called on the caller thread - only temporarily for debugging!
+	private NotificationListener notificationListenerArticlesChanged = new NotificationAdapterJob("Reloading changed articles") {
 		public void notify(final NotificationEvent notificationEvent)
 		{
 			synchronized (ClientArticleSegmentGroupSet.this) { // there is no guarantee, that a job enqueued first is executed first or is there?!???!???
@@ -492,7 +492,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 				dirtyArticles, dirtyArticleCarriers,
 				deletedArticles, deletedArticleCarriers);
 
-		Display.getDefault().asyncExec(new Runnable()
+		UIContext.getDisplay().asyncExec(new Runnable()
 		{
 			public void run()
 			{
