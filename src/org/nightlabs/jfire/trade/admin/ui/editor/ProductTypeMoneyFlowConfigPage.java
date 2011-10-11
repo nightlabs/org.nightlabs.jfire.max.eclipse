@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.nightlabs.base.ui.context.UIContext;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.util.RCPUtil;
@@ -51,7 +52,7 @@ extends EntityEditorPageWithProgress
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		final ProductTypeMoneyFlowConfigPageController controller = (ProductTypeMoneyFlowConfigPageController) getPageController();
-		Display.getDefault().asyncExec(new Runnable() {
+		UIContext.getDisplay().asyncExec(new Runnable() {
 			public void run() {
 //				moneyFlowSection.setProductTypeID(controller.getProductTypeID());
 				if (isDisposed())
