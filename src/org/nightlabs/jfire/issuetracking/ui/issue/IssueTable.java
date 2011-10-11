@@ -51,7 +51,7 @@ extends AbstractTableComposite<Issue>
 	// In that same config-module, there also exists all the necessary fetch-groups from which we
 	// would need, based on the ColumnDescriptors that we have configured to want to use.
 	private List<? extends IColumnContentDescriptor> columnContentDescriptors = null;
-	private ColumnSpanLabelProvider issueTableLabelProvider;
+	private ConfigurableIssueTableLabelProvider issueTableLabelProvider;
 	
 	/**
 	 * Loads default column configuration which earlier was loaded directly in deprecated IssueTable constructor.

@@ -16,15 +16,17 @@ import java.util.Set;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
 import org.nightlabs.base.ui.table.IColumnComparatorProvider;
+import org.nightlabs.eclipse.compatibility.CompatibleGC;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.Issue.FieldName;
@@ -51,8 +53,9 @@ import org.nightlabs.util.BaseComparator;
  * @author khaireel at nightlabs dot de
  */
 public class ConfigurableIssueTableLabelProvider
-extends ColumnSpanLabelProvider
-implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
+//extends ColumnSpanLabelProvider
+extends CellLabelProvider
+implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider, ITableLabelProvider
 {
 	// The scope of the fields; in retrospect, this should be the same for ALL JDOObjects represented and displayed in the table columns (right?).
 	private String scope; // = TradePlugin.ZONE_SALE;
@@ -79,7 +82,9 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
 	 */
 	public ConfigurableIssueTableLabelProvider
 	(ColumnViewer columnViewer, XComposite parent, List<? extends IColumnContentDescriptor> columnContentDescriptors, String scope) {
-		super(columnViewer);
+//		super(columnViewer);
+		super();
+		
 		this.parent = parent;
 		this.columnContentDescriptors = columnContentDescriptors;
 		this.scope = scope;
@@ -127,7 +132,7 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
 	// ---------------------------------------------------------------------------------------- || -------------------------------------------->>
 	// [Section] The general known handlers of a LabelProvider.
 	// ---------------------------------------------------------------------------------------- || -------------------------------------------->>
-	@Override
+//	@Override
 	protected int[][] getColumnSpan(Object element) { return null; }
 
 	@Override
@@ -270,9 +275,8 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider
 					ISSUE_MARKER_IMAGE_DIMENSION.height
 			);
 
-			// FIXME TODO RAP commented because of incompatibility with RAP
-//			GC gc = new GC(combiImage);
-			GC gc = new GC(combiImage.getDevice());
+			// RAP Implementation is not yet working
+			GC gc = CompatibleGC.newGC(combiImage);
 			try {
 				Iterator<IssueMarker> itIssueMarkers = issue.getIssueMarkers().iterator();
 				for(int i=0; i<maxIssueMarkerCountPerIssue; i++) {
