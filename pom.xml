@@ -2,12 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
-	<!-- @generated - Auto generated POM. Remove this marker after review. -->
-	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.trade.ui</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.artifactId}</name>
 
@@ -19,28 +16,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.ui.forms</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.nightlabs.eclipse</groupId>
-			<artifactId>org.nightlabs.base.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.nightlabs.eclipse</groupId>
-			<artifactId>org.nightlabs.clientui.ui</artifactId>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.base</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -50,9 +27,71 @@
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.concurrent</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.i18n</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.jdo</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.progress</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.util</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.query</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.query.jdo</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>${org.nightlabs.eclipse.compatibility.artifactId}</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.base.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>		
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.preference.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.eclipse.extension</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>org.nightlabs.tableprovider.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.base</artifactId>
@@ -74,28 +113,13 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.base.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.jbpm</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.jbpm.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.query.store</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -108,21 +132,58 @@
 			<artifactId>org.nightlabs.jfire.trade</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>org.nightlabs</groupId>
-			<artifactId>org.nightlabs.query</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.nightlabs</groupId>
-			<artifactId>org.nightlabs.query.jdo</artifactId>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.clientui.ui</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs.eclipse</groupId>
-			<artifactId>org.nightlabs.tableprovider.ui</artifactId>
+			<artifactId>org.nightlabs.eclipse.ui.treestate</artifactId>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jdo.query.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.base.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.jbpm.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-ejb_3.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -136,7 +197,5 @@
 				</excludes>
 			</resource>
 		</resources>
-
-
 	</build>
 </project>
