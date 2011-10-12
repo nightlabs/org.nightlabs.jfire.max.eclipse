@@ -37,7 +37,14 @@ class AccountChooserWizardPage extends WizardHopPage {
 				if(accountChooserComposite.getAccountListComposite().getFirstSelectedElement() != null){
 					Account selectedAccount = accountChooserComposite.getAccountListComposite().getFirstSelectedElement();
 					selectedAccountAnchorID = AnchorID.create(selectedAccount.getOrganisationID(), selectedAccount.getAnchorTypeID(), selectedAccount.getAnchorID());
-					updatePageComplete();
+					String validationResult = ManualMoneyTransferWizard.isValidManualTransferAnchor(selectedAccountAnchorID);
+					if (validationResult != null) {
+						selectedAccountAnchorID = null;
+						setErrorMessage(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.AccountChooserWizardPage.invalidSelection." + validationResult));
+					} else {
+						setErrorMessage(null);
+					}
+					getContainer().updateButtons();
 				}//if
 			}
 		});
@@ -57,19 +64,6 @@ class AccountChooserWizardPage extends WizardHopPage {
 	@Override
 	public boolean canBeLastPage() {
 		return false;
-	}
-	
-	private void updatePageComplete() {
-		setPageComplete(false);
-
-		if(selectedAccountAnchorID == null){
-			setMessage(null);
-			setErrorMessage("an Account must be choosed"); //$NON-NLS-1$
-			return;
-		}
-
-		setMessage(null);
-		setErrorMessage(null);
 	}
 	
 	public AnchorID getSelectedAccount() {

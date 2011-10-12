@@ -12,9 +12,11 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.ManualMoneyTransfer;
+import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -35,17 +37,30 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 		this.selectedAccountAnchorID = selectedAccountAnchorID;
 	}
 
+	public static String isValidManualTransferAnchor(AnchorID anchorID) {
+		Class<?> accountClass = GlobalJDOManagerProvider.sharedInstance().getObjectID2PCClassMap().getPersistenceCapableClass(anchorID);
+		if (SummaryAccount.class.isAssignableFrom(accountClass)) {
+			// have a summary-account, can't do manual transfer
+			return "summaryAccountNotValid";
+		}
+		return null;
+	}
+	
 	/**
 	 * Adding the page to the wizard.
 	 */
 	@Override
 	public void addPages() {
+		if (selectedAccountAnchorID != null && isValidManualTransferAnchor(selectedAccountAnchorID) != null) {
+			selectedAccountAnchorID = null;
+		}
+		
 		if(selectedAccountAnchorID == null){
 			fromAccountChooserPage = new AccountChooserWizardPage();
 			fromAccountChooserPage.setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizard.fromAccountChooserPage.title")); //$NON-NLS-1$
 			fromAccountChooserPage.setSelectedAccount(selectedAccountAnchorID);
 			addPage(fromAccountChooserPage);
-		}//if
+		}
 
 		toAccountChooserPage = new AccountChooserWizardPage();
 		toAccountChooserPage.setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizard.toAccountChooserPageTitle")); //$NON-NLS-1$
@@ -96,8 +111,18 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 
 	@Override
 	public boolean canFinish() {
-		if(selectedAccountAnchorID == null || toAccountChooserPage.getSelectedAccount() == null || moneyTransferPage.getAmount() <= 0)
+		if (fromAccountChooserPage != null && fromAccountChooserPage.getSelectedAccount() == null) {
+			// fromAccountChooserPage was created but no valid selection
 			return false;
+		}
+		if (toAccountChooserPage != null && toAccountChooserPage.getSelectedAccount() == null) {
+			// fromAccountChooserPage was created but no valid selection
+			return false;
+		}
+		if (moneyTransferPage.getAmount() <= 0) {
+			// No amount was specified
+			return false;
+		}
 		return true;
 	}
 
