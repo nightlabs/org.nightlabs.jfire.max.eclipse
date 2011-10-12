@@ -14,7 +14,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
@@ -52,14 +51,9 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	private Button importButton;
 	private Button exportButton;
 	private Label loadingLabel;
-	private Label descriptionLabel;
 	private UserManagementSystemTable userManagementSystemTable;
 
 	private SyncDirection syncDirection = SyncDirection.IMPORT;
-	
-	//TODO
-	private static final String IMPORT_DESCRIPTION = "TODO";
-	private static final String EXPORT_DESCRIPTION = "TODO";
 	
 	/**
 	 * Default constructor
@@ -90,7 +84,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	public Control createPageContents(Composite parent) {
 		mainWrapper = new Composite(parent, SWT.NONE);
 		GridLayout gridLayout = new GridLayout(2, false);
-		gridLayout.horizontalSpacing = 20;
+		gridLayout.horizontalSpacing = 10;
 		mainWrapper.setLayout(gridLayout);
 		
 		loadingLabel = new Label(mainWrapper, SWT.NONE);
@@ -149,7 +143,6 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 					public void widgetSelected(SelectionEvent e) {
 						if (importButton.getSelection()){
 							syncDirection = SyncDirection.IMPORT;
-							descriptionLabel.setText(IMPORT_DESCRIPTION);
 							
 							SelectionChangedEvent event = new SelectionChangedEvent(
 									userManagementSystemTable, userManagementSystemTable.getSelection());
@@ -169,7 +162,6 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 					public void widgetSelected(SelectionEvent e) {
 						if (exportButton.getSelection()){
 							syncDirection = SyncDirection.EXPORT;
-							descriptionLabel.setText(EXPORT_DESCRIPTION);
 
 							SelectionChangedEvent event = new SelectionChangedEvent(
 									userManagementSystemTable, userManagementSystemTable.getSelection());
@@ -178,18 +170,6 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 					}
 				});
 				
-				Group descriptionGroup = new Group(buttonsWrapper, SWT.NONE);
-				descriptionGroup.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.descriptionGroupLabel")); //$NON-NLS-1$
-				descriptionGroup.setLayout(new GridLayout(1, false));
-				GridData gd = new GridData(GridData.FILL_VERTICAL | GridData.GRAB_VERTICAL);
-				gd.verticalIndent = 20;
-				gd.widthHint = 300;
-				gd.minimumWidth = 300;
-				descriptionGroup.setLayoutData(gd);
-				
-				descriptionLabel = new Label(descriptionGroup, SWT.WRAP);
-				descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.descriptionLabelInitialText")); //$NON-NLS-1$
-				descriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
 			}
 			
 			userManagementSystemTable.setInput(allUserManagementSystems);
@@ -260,7 +240,6 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				if (selectedUserManagementSystem == null){
 					return;
 				}
-				descriptionLabel.setText(importButton.getSelection() ? IMPORT_DESCRIPTION : EXPORT_DESCRIPTION);
 				
 				setSelectedUserManagementSystemInternal(selectedUserManagementSystem);
 				getContainer().updateButtons();
