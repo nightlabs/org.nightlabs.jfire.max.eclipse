@@ -2,8 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
-	<!-- @generated - Auto generated POM. Remove this marker after review. -->
-	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.trade.editor2d.ui</artifactId>
@@ -18,6 +16,7 @@
 	</parent>
 
 	<dependencies>
+	<!-- 
 		<dependency>
 			<groupId>org.eclipse.XXX</groupId>
 			<artifactId>org.eclipse.core.runtime</artifactId>
@@ -26,6 +25,12 @@
 		<dependency>
 			<groupId>org.eclipse.XXX</groupId>
 			<artifactId>org.eclipse.ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	 -->
+	 	<dependency>
+			<groupId>org.nightlabs.eclipse</groupId>
+			<artifactId>${org.nightlabs.eclipse.compatibility.artifactId}</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
