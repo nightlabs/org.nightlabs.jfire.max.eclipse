@@ -17,5 +17,4 @@
                tooltip="%org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction.tooltip"/>
       </actionSet>
    </extension>
-
 </plugin>

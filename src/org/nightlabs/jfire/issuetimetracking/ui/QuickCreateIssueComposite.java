@@ -38,6 +38,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetimetracking.IssueTimeTrackingStruct;
 import org.nightlabs.jfire.issuetimetracking.ui.resource.Messages;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTypeCombo;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.prop.IStruct;
@@ -90,6 +91,7 @@ extends XComposite
 		initUI();
 	}
 
+	private IssueTypeCombo issueTypeCombo;
 	private ProjectComboComposite projectComboComposite;
 	private DepartmentComboComposite departmentComboComposite;
 	private DateTimeControl startDateControl;
@@ -106,12 +108,20 @@ extends XComposite
 
 		XComposite mainComposite = new XComposite(this, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER);
-		mainComposite.getGridLayout().numColumns = 5;
+		
+		int numCols = 6;
+		
+		mainComposite.getGridLayout().numColumns = numCols;
 
+		issueTypeCombo = new IssueTypeCombo(mainComposite, SWT.BORDER | SWT.READ_ONLY, Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.issueTypeLabel"));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		issueTypeCombo.setLayoutData(gridData);
+		
+		
 		//Project
 		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComposite.setLayoutData(gridData);
 
 		new Label(projectComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueComposite.projectLabel")); //$NON-NLS-1$
@@ -199,7 +209,7 @@ extends XComposite
 		//Subject & Description
 		XComposite subjectDescriptionComposite = new XComposite(mainComposite, SWT.NONE);
 		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 5;
+		gridData.horizontalSpan = numCols;
 		subjectDescriptionComposite.setLayoutData(gridData);
 
 		Label subjectLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
@@ -248,6 +258,7 @@ extends XComposite
 	}
 
 	public Issue getCreatingIssue() {
+		newIssue.setIssueType(issueTypeCombo.getSelectedElement());
 		newIssue.getSubject().copyFrom(subjectText.getI18nText());
 		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
 
@@ -289,6 +300,7 @@ extends XComposite
 
 		subjectText.setI18nText(new I18nTextBuffer());
 		descriptionText.setI18nText(new I18nTextBuffer());
+		durationText.setFocus();
 	}
 
 	private User currentUser;

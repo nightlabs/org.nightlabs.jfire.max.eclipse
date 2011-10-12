@@ -1,8 +1,5 @@
 package org.nightlabs.jfire.issuetimetracking.ui;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -20,13 +17,9 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLocal;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
-import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
-import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetimetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -91,11 +84,6 @@ extends ResizableTitleAreaDialog
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.settingValueJob")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					String organisationID = Login.sharedInstance().getOrganisationID();
-
-					final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);
-					IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, new String[] {IssueType.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.nightlabs.progress.NullProgressMonitor());
-					newIssue.setIssueType(issueType);
 					newIssue.getPropertySet().deflate();
 
 					newIssue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
@@ -106,19 +94,20 @@ extends ResizableTitleAreaDialog
 							if (newIssue != null)
 								setMessage(Messages.getString("org.nightlabs.jfire.issuetimetracking.ui.CreateIssueQuickDialog.afterSavingMessage")); //$NON-NLS-1$
 
-							Timer timer = new Timer();
-							TimerTask timerTask = new TimerTask(){
-								@Override
-								public void run() {
-									Display.getDefault().asyncExec(new Runnable() {
-										@Override
-										public void run() {
-											setMessage(DEFAULT_MESSAGE);
-										}
-									});
-								}
-							};
-							timer.schedule(timerTask, 1000 * 2);
+							// Commented so the user will see that a new issue was created
+//							Timer timer = new Timer();
+//							TimerTask timerTask = new TimerTask(){
+//								@Override
+//								public void run() {
+//									Display.getDefault().asyncExec(new Runnable() {
+//										@Override
+//										public void run() {
+//											setMessage(DEFAULT_MESSAGE);
+//										}
+//									});
+//								}
+//							};
+//							timer.schedule(timerTask, 1000 * 2);
 
 							quickCreateComposite.initUI();
 						}
