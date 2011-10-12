@@ -63,6 +63,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
@@ -443,39 +444,29 @@ extends AbstractCombiTransferWizard
 						if (invoiceIDs == null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
 								AccountingManagerRemote accountingManager = TransferWizardUtil.getAccountingManager();
-								invoiceIDs = new ArrayList<InvoiceID>(1);
 								if (invoiceID != null)
 									invoiceIDs.add(invoiceID);
 								else {
-//								 FIXME IDPREFIX (next line) should be asked from user if necessary!
-									Invoice invoice = accountingManager.createInvoice(
-											articleContainerID, null,
-											true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-									InvoiceID invoiceID = (InvoiceID) JDOHelper.getObjectId(invoice);
-									invoiceIDs.add(invoiceID);
+									invoiceIDs = getArticlesInvoiceIDs();
+									Collection<ArticleID> articleIDsWithoutInvoice = getArticleIDsWithoutInvoice();
+									if (articleIDsWithoutInvoice != null && articleIDsWithoutInvoice.size() > 0) {
+										Invoice invoice = accountingManager.createInvoice(
+												articleIDsWithoutInvoice, null,
+												true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+										InvoiceID invoiceID = (InvoiceID) JDOHelper.getObjectId(invoice);
+										invoiceIDs.add(invoiceID);
+									}
 								}
 							}
 						}
 
 						if ((getTransferMode() & TRANSFER_MODE_DELIVERY) != 0) {
-							deliveryNoteIDs = new HashSet<DeliveryNoteID>();
-							// find out which articles still miss a DeliveryNote
-							List<Article> articlesWithoutDeliveryNote = null;
-							for (Article article : articleContainer.getArticles()) {
-								if (article.getDeliveryNoteID() == null) {
-									if (articlesWithoutDeliveryNote == null)
-										articlesWithoutDeliveryNote = new LinkedList<Article>();
-
-									articlesWithoutDeliveryNote.add(article);
-								} else {
-									deliveryNoteIDs.add(article.getDeliveryNoteID());
-								}
-							}
-
-							if (articlesWithoutDeliveryNote != null) {
+							deliveryNoteIDs = getArticlesDeliveryNoteIDs();
+							Collection<ArticleID> articleIDsWithoutDeliveryNote = getArticleIDsWithoutDeliveryNote();
+							if (articleIDsWithoutDeliveryNote != null && articleIDsWithoutDeliveryNote.size() > 0) {
 								StoreManagerRemote storeManager = TransferWizardUtil.getStoreManager();
 //							 FIXME IDPREFIX (next line) should be asked from user if necessary!
-								DeliveryNote createdNote = storeManager.createDeliveryNote(articleContainerID, null, true, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+								DeliveryNote createdNote = storeManager.createDeliveryNote(articleIDsWithoutDeliveryNote, null, true, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								deliveryNoteIDs.add((DeliveryNoteID) JDOHelper.getObjectId(createdNote));
 							}
 						}
@@ -512,6 +503,58 @@ extends AbstractCombiTransferWizard
 		return true;
 	}
 
+	/**
+	 * @return The ids of all Articles out of the already filtered articlesToTransfer that don't have an invoice yet. 
+	 */
+	private Collection<ArticleID> getArticleIDsWithoutInvoice() {
+		List<ArticleID> result = new LinkedList<ArticleID>();
+		for (Article article : articlesToTransfer) {
+			if (article.getInvoiceID() == null) {
+				result.add((ArticleID) JDOHelper.getObjectId(article));
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * @return The ids of all Invoices of the Articles out of the already filtered articlesToTransfer. 
+	 */
+	private Collection<InvoiceID> getArticlesInvoiceIDs() {
+		List<InvoiceID> result = new LinkedList<InvoiceID>();
+		for (Article article : articlesToTransfer) {
+			if (article.getInvoiceID() != null) {
+				result.add(article.getInvoiceID());
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * @return The ids of all Articles out of the already filtered articlesToTransfer that don't have a delivery-note yet. 
+	 */
+	private Collection<ArticleID> getArticleIDsWithoutDeliveryNote() {
+		List<ArticleID> result = new LinkedList<ArticleID>();
+		for (Article article : articlesToTransfer) {
+			if (article.getDeliveryNoteID() == null) {
+				result.add((ArticleID) JDOHelper.getObjectId(article));
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * @return The ids of all DeliveryNotes of the Articles out of the already filtered articlesToTransfer. 
+	 */
+	private Collection<DeliveryNoteID> getArticlesDeliveryNoteIDs() {
+		List<DeliveryNoteID> result = new LinkedList<DeliveryNoteID>();
+		for (Article article : articlesToTransfer) {
+			if (article.getDeliveryNoteID() != null) {
+				result.add(article.getDeliveryNoteID());
+			}
+		}
+		return result;
+	}
+	
 //	/**
 //	 * @return Returns the offer.
 //	 */
