@@ -86,7 +86,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				columnConfiguration = IssueTable.getDefaultColumnConfiguration(monitor);
 				if (!parent.isDisposed()) {
-					parent.getDisplay().asyncExec(new Runnable() {
+					parent.getDisplay().syncExec(new Runnable() {
 						@Override
 						public void run() {
 							issueResultTable.setIssueTableConfigurations(columnConfiguration);
@@ -216,7 +216,13 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		// We save the previous query; used later in the notification listener, in case we need
 		// to refresh the table entries, given the query constraints.
 		previousSavedQuery = queryMap;
-
+		
+		// We need to join the load column config job here in order to have the correct fetch-groups
+		try {
+			loadColumnConfigurationJob.join();
+		} catch (InterruptedException e) {
+			logger.error("Could not join loadColumnConfigurationJob", e);
+		}
 		return IssueDAO.sharedInstance().getIssuesForQueries(
 				queryMap,
 				issueResultTable.getIssueTableFetchGroups(), // IssueTable.FETCH_GROUPS_ISSUE,
