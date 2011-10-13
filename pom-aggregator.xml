@@ -24,14 +24,16 @@
 		<!-- ##### parents ##### -->
 		<module>../org.nightlabs.jfire.eclipse.parent</module>
 		<module>../org.nightlabs.jfire.eclipse.parent.legacy</module>
-	
-		<!-- ##### UI-projects for jfire-MAX ##### -->
+
+		<!-- 
 		<module>../org.nightlabs.eclipse.preference.ui</module>
 		<module>../org.nightlabs.eclipse.ui.dialog</module>
 		<module>../org.nightlabs.eclipse.ui.pdfrenderer</module>
 		<module>../org.nightlabs.eclipse.ui.pdfviewer</module>
 		<module>../org.nightlabs.eclipse.ui.pdfviewer.extension</module>
+		 -->	
 		
+		<!-- ##### UI-projects for jfire-MAX ##### -->
 		<module>../org.nightlabs.jfire.entityuserset.ui</module>
 		<module>../org.nightlabs.jfire.jbpm.ui</module>
 		<module>../org.nightlabs.jfire.personrelation.ui</module>
