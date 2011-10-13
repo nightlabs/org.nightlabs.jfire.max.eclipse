@@ -36,10 +36,14 @@
 		<!-- ##### UI-projects for jfire-MAX ##### -->
 		<module>../org.nightlabs.jfire.entityuserset.ui</module>
 		<module>../org.nightlabs.jfire.jbpm.ui</module>
+
 		<module>../org.nightlabs.jfire.personrelation.ui</module>
+
 		<module>../org.nightlabs.jfire.reporting.admin.ui</module>
 		<module>../org.nightlabs.jfire.reporting.oda.client</module>
 		<module>../org.nightlabs.jfire.reporting.ui</module>
+
+		<module>../org.nightlabs.jfire.scripting.ui</module>
 		<module>../org.nightlabs.jfire.trade.admin.ui</module>
 <!-- 	<module>../org.nightlabs.jfire.trade.editor2d.ui</module> -->
 		<module>../org.nightlabs.jfire.trade.ui</module>
