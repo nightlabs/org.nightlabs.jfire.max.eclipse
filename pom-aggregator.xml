@@ -44,6 +44,9 @@
 		<module>../org.nightlabs.jfire.reporting.ui</module>
 
 		<module>../org.nightlabs.jfire.scripting.ui</module>
+		<module>../org.nightlabs.jfire.simpletrade.ui</module>
+		<module>../org.nightlabs.jfire.simpletrade.admin.ui</module>
+		
 		<module>../org.nightlabs.jfire.trade.admin.ui</module>
 <!-- 	<module>../org.nightlabs.jfire.trade.editor2d.ui</module> -->
 		<module>../org.nightlabs.jfire.trade.ui</module>
