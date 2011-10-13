@@ -18,20 +18,6 @@
 	</parent>
 
 	<dependencies>
-	
-		<!-- 
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.XXX</groupId>
-			<artifactId>org.eclipse.ui</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		 -->
-		 
 		<dependency>
 			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.jdo</artifactId>
@@ -80,12 +66,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs.eclipse</groupId>
-			<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+			<artifactId>org.nightlabs.eclipse.extension</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs.eclipse</groupId>
-			<artifactId>org.nightlabs.eclipse.extension</artifactId>
+			<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -114,7 +100,6 @@
 			<artifactId>org.nightlabs.jfire.base.dao</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.jbpm</artifactId>
