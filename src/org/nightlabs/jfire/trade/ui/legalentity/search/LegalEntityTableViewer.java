@@ -170,7 +170,7 @@ implements SearchResultFetcher {
 					try {
 						Set<LegalEntityPersonMappingBean> legalEntityPersonMappings = new HashSet<LegalEntityPersonMappingBean>(
 								(Collection<? extends LegalEntityPersonMappingBean>) propertyManager.searchPropertySets(searchFilter,
-										new String[] {}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
+										new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
 						monitor.worked(1);
 
 						setInput(legalEntityPersonMappings, new SubProgressMonitor(monitor, 9));
