@@ -261,6 +261,16 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.simpletrade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.simpletrade.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.trade.admin.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
