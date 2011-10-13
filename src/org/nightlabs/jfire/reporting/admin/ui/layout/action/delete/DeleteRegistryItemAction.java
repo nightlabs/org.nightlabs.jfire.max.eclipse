@@ -26,11 +26,15 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.delete;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.util.RCPUtil;
@@ -84,24 +88,50 @@ public class DeleteRegistryItemAction extends ReportRegistryItemAction {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.ReportRegistryItemAction#run(org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItem)
 	 */
-	public @Override void run(Collection<ReportRegistryItem> reportRegistryItems) {
+	public @Override void run(final Collection<ReportRegistryItem> reportRegistryItems) {
 		// confirm the delete
 		boolean confirm = MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.delete.deleteregistryitemaction.title"), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.delete.deleteregistryitemaction.description"));  //$NON-NLS-1$ //$NON-NLS-2$
 		if(!confirm)
 			return;
-		for (ReportRegistryItem reportRegistryItem : reportRegistryItems) {
-			ReportRegistryItemID itemID = (ReportRegistryItemID) JDOHelper.getObjectId(reportRegistryItem);
-			if (reportRegistryItem instanceof ReportLayout)
-				RCPUtil.closeEditor(new JFireRemoteReportEditorInput(itemID), false);
-			// closes all open ReportLayouts in the Editor if we delete a category
-			if (reportRegistryItem instanceof ReportCategory)
-				RCPUtil.getActiveWorkbenchPage().closeAllEditors(false);
-			 try {
-				ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
-				rm.deleteRegistryItem(itemID);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(RCPUtil.getActiveShell());
+		progressDialog.setOpenOnRun(true);
+		try {
+			progressDialog.run(false, false, new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Removing...", reportRegistryItems.size());
+					try{
+						for (final ReportRegistryItem reportRegistryItem : reportRegistryItems) {
+							final ReportRegistryItemID itemID = (ReportRegistryItemID) JDOHelper.getObjectId(reportRegistryItem);
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									if (reportRegistryItem instanceof ReportLayout){
+										RCPUtil.closeEditor(new JFireRemoteReportEditorInput(itemID), false);
+									}else if (reportRegistryItem instanceof ReportCategory){
+										// closes all open ReportLayouts in the Editor if we delete a category
+										RCPUtil.getActiveWorkbenchPage().closeAllEditors(false);
+									}
+								}
+							});
+							ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(
+									ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
+							rm.deleteRegistryItem(itemID);
+							monitor.worked(1);
+						}
+					} catch (Exception e) {
+						monitor.setCanceled(true);
+						throw new InvocationTargetException(e);
+					}finally{
+						monitor.done();
+					}
+				}
+			});
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e.getTargetException());
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
