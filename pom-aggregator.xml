@@ -48,6 +48,7 @@
 <!-- 	<module>../org.nightlabs.jfire.trade.editor2d.ui</module> -->
 		<module>../org.nightlabs.jfire.trade.ui</module>
 
+		<module>../org.nightlabs.jseditor.ui</module>
 		<module>../org.nightlabs.tableprovider.ui</module>
 
 		<!-- ##### Assemblies ##### -->
