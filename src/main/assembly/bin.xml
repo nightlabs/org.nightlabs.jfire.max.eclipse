@@ -7,7 +7,7 @@
 	<formats>
 		<format>tar.gz</format>
 	</formats>
-	<baseDirectory>bsg-crm</baseDirectory>
+	<baseDirectory>jfire-client</baseDirectory>
 	<fileSets>
 		<fileSet>
 			<directory>${assembly.jfire.directory}</directory>
