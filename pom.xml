@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
@@ -16,13 +15,14 @@
 
 	<properties>
 		<assembly.directory>${project.build.directory}/assembly</assembly.directory>
-		<assembly.jfire.directory>${assembly.directory}/jfire-client</assembly.jfire.directory>
-		<assembly.plugins.directory>${assembly.jfire.directory}/plugins</assembly.plugins.directory>
+<!-- 	<assembly.jfire.directory>${assembly.directory}/jfire-client</assembly.jfire.directory> -->
+		<assembly.eclipse.directory>${assembly.directory}/eclipse</assembly.eclipse.directory>
+		<assembly.plugins.directory>${assembly.eclipse.directory}/plugins</assembly.plugins.directory>
+
 	</properties>
 	
 	<dependencies>
 		<!-- ##### UI-projects, NOT jfire-min, only jfire-MAX ##### -->
-	
 		<dependency>
 			<groupId>org.nightlabs.jfire.eclipse</groupId>
 			<artifactId>org.nightlabs.jfire.entityuserset.ui</artifactId>
