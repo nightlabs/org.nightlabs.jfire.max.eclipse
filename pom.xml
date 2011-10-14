@@ -1,6 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
 		<artifactId>org.nightlabs.jfire.eclipse.max.assembly.parent</artifactId>
 		<groupId>org.nightlabs.jfire.eclipse</groupId>
@@ -12,15 +13,16 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<eclipse.platform.artifactId>org.eclipse.platform.win32</eclipse.platform.artifactId>
+		<jfire.eclipse.assembly.artifactId>org.nightlabs.jfire.eclipse.min.assembly.win32</jfire.eclipse.assembly.artifactId>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>org.eclipse.platform.win32</artifactId>
-			<version>3.6</version>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>${jfire.eclipse.assembly.artifactId}</artifactId>
+			<version>${project.version}</version>
 			<type>zip</type>
+			<classifier>bin</classifier>
 		</dependency>
 	</dependencies>
 
