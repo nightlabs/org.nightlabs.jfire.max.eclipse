@@ -13,17 +13,16 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<eclipse.platform.artifactId>org.eclipse.platform.linux-gtk-x86_64</eclipse.platform.artifactId>
+		<jfire.eclipse.assembly.artifactId>org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</jfire.eclipse.assembly.artifactId>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>org.eclipse.platform.linux-gtk-x86_64</artifactId>
-			<version>3.6</version>
-			<!-- FIXME: Using manually created zip-bundle because tar.gz bundles can't 
-				be filtered with excludes. See: http://jira.codehaus.org/browse/MDEP-242 -->
-			<type>zip</type>
+			<groupId>org.nightlabs.jfire.eclipse</groupId>
+			<artifactId>org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</artifactId>
+			<version>${project.version}</version>
+			<type>tar.gz</type>
+			<classifier>bin</classifier>
 		</dependency>
 	</dependencies>
 
