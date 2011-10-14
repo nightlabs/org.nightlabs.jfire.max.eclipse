@@ -15,10 +15,8 @@
 
 	<properties>
 		<assembly.directory>${project.build.directory}/assembly</assembly.directory>
-<!-- 	<assembly.jfire.directory>${assembly.directory}/jfire-client</assembly.jfire.directory> -->
-		<assembly.eclipse.directory>${assembly.directory}/eclipse</assembly.eclipse.directory>
+		<assembly.eclipse.directory>${assembly.directory}/jfire-client</assembly.eclipse.directory>
 		<assembly.plugins.directory>${assembly.eclipse.directory}/plugins</assembly.plugins.directory>
-
 	</properties>
 	
 	<dependencies>
