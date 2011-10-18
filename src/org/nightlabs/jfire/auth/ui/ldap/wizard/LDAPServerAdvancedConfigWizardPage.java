@@ -39,7 +39,7 @@ import org.nightlabs.util.CollectionUtil;
 public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	
 	private Button isLeadingButton;
-	private Text syncDNText;
+	private LDAPEntrySelectorComposite syncDNselector;
 	private Text syncPasswordText;
 	private LDAPEntrySelectorComposite ldapEntrySelector;
 	private CCombo attributeSyncPolicyCombo;
@@ -143,9 +143,12 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		syncWrapper.setLayoutData(gd);
 		
 		new Label(syncWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncEntryDNLabel")); //$NON-NLS-1$
-		syncDNText = new Text(syncWrapper, SWT.BORDER);
-		syncDNText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncDNTextTooltip")); //$NON-NLS-1$
-		syncDNText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		selectionCriteria = new LDAPAttributeSet();
+		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("person", "posixAccount")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		syncDNselector = new LDAPEntrySelectorComposite(syncWrapper, SWT.NONE, selectionCriteria);
+		syncDNselector.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncDNTextTooltip")); //$NON-NLS-1$
+		syncDNselector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		syncDNselector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
 		
 		new Label(syncWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.syncPasswordLabel")); //$NON-NLS-1$
 		syncPasswordText = new Text(syncWrapper, SWT.BORDER | SWT.PASSWORD);
@@ -162,8 +165,8 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	 * @return LDAP entry full name or <code>null</code> if not set
 	 */
 	public String getSyncDN() {
-		if (syncDNText != null){
-			return syncDNText.getText();
+		if (syncDNselector != null){
+			return syncDNselector.getEntryName();
 		}
 		return null;
 	}
