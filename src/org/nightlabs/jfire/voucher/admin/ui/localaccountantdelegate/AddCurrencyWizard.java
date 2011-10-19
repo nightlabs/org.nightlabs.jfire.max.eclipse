@@ -1,15 +1,12 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
-import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage;
 
-public class AddCurrencyWizard
-		extends DynamicPathWizard
+public class AddCurrencyWizard extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.AddCurrencyWizard
 {
-	private VoucherLocalAccountantDelegateComposite voucherLocalAccountantDelegateComposite;
-	private CurrencySelectionPage currencySelectionPage;
+	private final VoucherLocalAccountantDelegateComposite voucherLocalAccountantDelegateComposite;
 
-	public AddCurrencyWizard(VoucherLocalAccountantDelegateComposite voucherLocalAccountantDelegateComposite)
+	public AddCurrencyWizard(final VoucherLocalAccountantDelegateComposite voucherLocalAccountantDelegateComposite)
 	{
 		this.voucherLocalAccountantDelegateComposite = voucherLocalAccountantDelegateComposite;
 	}
@@ -17,14 +14,16 @@ public class AddCurrencyWizard
 	@Override
 	public void addPages()
 	{
-		currencySelectionPage = new CurrencySelectionPage();
+		CurrencySelectionPage currencySelectionPage = new CurrencySelectionPage();
+		setCurrencySelectionPage(currencySelectionPage);
 		addPage(currencySelectionPage);
 	}
 
 	@Override
 	public boolean performFinish()
 	{
-		voucherLocalAccountantDelegateComposite.addCurrency(currencySelectionPage.getSelectedCurrency());
+		super.performFinish();
+		voucherLocalAccountantDelegateComposite.addCurrency(getCurrency());
 		return true;
 	}
 }

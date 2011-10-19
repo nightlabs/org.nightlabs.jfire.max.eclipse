@@ -43,7 +43,7 @@ import org.nightlabs.util.NLLocale;
 public class SelectVoucherPriceConfigPage
 extends WizardHopPage
 {
-	private ProductTypeID parentVoucherTypeID;
+	private final ProductTypeID parentVoucherTypeID;
 
 	public static enum Mode {
 		INHERIT,
@@ -66,6 +66,7 @@ extends WizardHopPage
 	{
 		super(SelectVoucherPriceConfigPage.class.getName(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.title"), //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(VoucherAdminPlugin.getDefault(), SelectVoucherPriceConfigPage.class));
+		this.setDescription(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.description")); //$NON-NLS-1$
 		this.parentVoucherTypeID = parentVoucherTypeID;
 		new WizardHop(this);
 	}
@@ -74,44 +75,50 @@ extends WizardHopPage
 
 	private void addCreateVoucherPriceConfigPage()
 	{
-		if (createVoucherPriceConfigPage == null)
+		if (createVoucherPriceConfigPage == null) {
 			createVoucherPriceConfigPage = new CreateVoucherPriceConfigPage();
+		}
 
-		if (!getWizardHop().getHopPages().contains(createVoucherPriceConfigPage))
+		if (!getWizardHop().getHopPages().contains(createVoucherPriceConfigPage)) {
 			getWizardHop().addHopPage(createVoucherPriceConfigPage);
+		}
 	}
 
 	private void removeCreateVoucherPriceConfigPage()
 	{
-		if (createVoucherPriceConfigPage == null)
+		if (createVoucherPriceConfigPage == null) {
 			return;
+		}
 
 		getWizardHop().removeHopPage(createVoucherPriceConfigPage);
 	}
 
 	private void updateUI()
 	{
-		if (inheritPriceConfig.getSelection())
+		if (inheritPriceConfig.getSelection()) {
 			mode = Mode.INHERIT;
-		else if (createPriceConfig.getSelection())
+		} else if (createPriceConfig.getSelection()) {
 			mode = Mode.CREATE;
-		else if (selectPriceConfig.getSelection())
+		} else if (selectPriceConfig.getSelection()) {
 			mode = Mode.SELECT;
-		else if (assignNoneConfig.getSelection())
+		} else if (assignNoneConfig.getSelection()) {
 			mode = Mode.NONE;
-		else
+		} else {
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
+		}
 
 
-		if (mode == Mode.NONE)
+		if (mode == Mode.NONE) {
 			priceConfigList.setEnabled(false);
-		else
+		} else {
 			priceConfigList.setEnabled(true);
+		}
 
-		if (mode == Mode.CREATE)
+		if (mode == Mode.CREATE) {
 			addCreateVoucherPriceConfigPage();
-		else
+		} else {
 			removeCreateVoucherPriceConfigPage();
+		}
 
 		getContainer().updateButtons();
 	}
@@ -222,10 +229,11 @@ extends WizardHopPage
 					public void run()
 					{
 						inheritedPriceConfig = parentVoucherType == null ? null : parentVoucherType.getPackagePriceConfig();
-						if (inheritedPriceConfig == null)
+						if (inheritedPriceConfig == null) {
 							setInheritedPriceConfigName(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.inheritedPriceConfigName_noneAssigned")); //$NON-NLS-1$
-						else
+						} else {
 							setInheritedPriceConfigName(inheritedPriceConfig.getName().getText());
+						}
 
 						priceConfigList.removeAll();
 						priceConfigList.addElements(voucherPriceConfigs);
@@ -253,8 +261,9 @@ extends WizardHopPage
 
 	public VoucherPriceConfig createPriceConfig()
 	{
-		if (mode != Mode.CREATE)
+		if (mode != Mode.CREATE) {
 			throw new IllegalStateException("mode != Mode.CREATE"); //$NON-NLS-1$
+		}
 
 		return createVoucherPriceConfigPage.createPriceConfig();
 	}
@@ -266,8 +275,9 @@ extends WizardHopPage
 
 	public VoucherPriceConfig getSelectedPriceConfig()
 	{
-		if (mode != Mode.SELECT)
+		if (mode != Mode.SELECT) {
 			return null;
+		}
 
 		return selectedPriceConfig;
 	}
@@ -275,7 +285,7 @@ extends WizardHopPage
 	@Override
 	public boolean isPageComplete()
 	{
-		if (mode != null)
+		if (mode != null) {
 			switch (mode) {
 			case INHERIT:
 				return true;
@@ -288,8 +298,8 @@ extends WizardHopPage
 			default:
 				throw new IllegalStateException("What's this?!"); //$NON-NLS-1$
 			}
-
-		else
+		} else {
 			return false;
+		}
 	}
 }

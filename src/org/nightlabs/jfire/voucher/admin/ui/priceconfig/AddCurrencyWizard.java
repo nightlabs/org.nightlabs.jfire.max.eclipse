@@ -1,15 +1,12 @@
 package org.nightlabs.jfire.voucher.admin.ui.priceconfig;
 
-import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage;
 
-public class AddCurrencyWizard
-		extends DynamicPathWizard
+public class AddCurrencyWizard extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.AddCurrencyWizard
 {
-	private CurrencyAmountTable currencyAmountTable;
-	private CurrencySelectionPage currencySelectionPage;
+	private final CurrencyAmountTable currencyAmountTable;
 
-	public AddCurrencyWizard(CurrencyAmountTable currencyAmountTable)
+	public AddCurrencyWizard(final CurrencyAmountTable currencyAmountTable)
 	{
 		this.currencyAmountTable = currencyAmountTable;
 	}
@@ -17,14 +14,16 @@ public class AddCurrencyWizard
 	@Override
 	public void addPages()
 	{
-		currencySelectionPage = new CurrencySelectionPage();
+		CurrencySelectionPage currencySelectionPage = new CurrencySelectionPage();
+		setCurrencySelectionPage(currencySelectionPage);
 		addPage(currencySelectionPage);
 	}
 
 	@Override
 	public boolean performFinish()
 	{
-		currencyAmountTable.addCurrency(currencySelectionPage.getSelectedCurrency());
+		super.performFinish();
+		currencyAmountTable.addCurrency(getCurrency());
 		return true;
 	}
 }

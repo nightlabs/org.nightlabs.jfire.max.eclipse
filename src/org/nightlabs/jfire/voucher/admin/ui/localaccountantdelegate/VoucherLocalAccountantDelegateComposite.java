@@ -50,38 +50,39 @@ implements ISelectionProvider
 
 	private static class VoucherLocalAccountantDelegateLabelProvider extends LabelProvider implements ITableLabelProvider
 	{
-		public Image getColumnImage(Object element, int columnIndex)
+		public Image getColumnImage(final Object element, final int columnIndex)
 		{
 			return null;
 		}
 
-		public String getColumnText(Object element, int columnIndex)
+		public String getColumnText(final Object element, final int columnIndex)
 		{
 			if (element instanceof Map.Entry) {
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)element;
 				switch (columnIndex) {
-					case 0:
-						return me.getKey().getCurrencySymbol();
-					case 1:
-						return me.getValue() == null ? Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite.VoucherLocalAccountantDelegateLabelProvider.accountName_noneAssigned") : me.getValue().getName().getText(); //$NON-NLS-1$
-					default:
-						return ""; //$NON-NLS-1$
+				case 0:
+					return me.getKey().getCurrencySymbol();
+				case 1:
+					return me.getValue() == null ? Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite.VoucherLocalAccountantDelegateLabelProvider.accountName_noneAssigned") : me.getValue().getName().getText(); //$NON-NLS-1$
+				default:
+					return ""; //$NON-NLS-1$
 				}
 			}
 
-			if (columnIndex == 0)
+			if (columnIndex == 0) {
 				return String.valueOf(element);
-			else
+			} else {
 				return ""; //$NON-NLS-1$
+			}
 		}
 	}
 
-	private ICellModifier cellModifier = new ICellModifier() {
-		public boolean canModify(Object element, String property)
+	private final ICellModifier cellModifier = new ICellModifier() {
+		public boolean canModify(final Object element, final String property)
 		{
 			return COLUMN_ACCOUNT.equals(property);
 		}
-		public Object getValue(Object element, String property)
+		public Object getValue(final Object element, final String property)
 		{
 			if (COLUMN_ACCOUNT.equals(property)) {
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)element;
@@ -89,41 +90,41 @@ implements ISelectionProvider
 			}
 			return null;
 		}
-		public void modify(Object element, String property, Object value)
+		public void modify(final Object element, final String property, final Object value)
 		{
 			TableItem tableItem = (TableItem)element;
-//			Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)tableItem.getData();
+			//			Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)tableItem.getData();
 
 			if (COLUMN_ACCOUNT.equals(property)) {
 				logger.info("ICellModifier.modify: value=" + value); //$NON-NLS-1$
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>) value;
 
-//				Account account = (Account) value;
-//				me.setValue(account);
+				//				Account account = (Account) value;
+				//				me.setValue(account);
 				tableItem.setText(1, ((ITableLabelProvider)tableViewer.getLabelProvider()).getColumnText(me, 1));
 
-//				String txt = (String) value;
-//				Account v = null;
-//				try {
-//					v = new Account(txt);
-//				} catch (NumberFormatException x) {
-//					MessageDialog.openError(getShell(), "Invalid Number", "The text you entered is not a valid number!");
-//				}
-//				if (v != null) {
-//					me.setValue(new Account(txt));
-//					tableItem.setText(1, ((ITableLabelProvider)tableViewer.getLabelProvider()).getColumnText(me, 1));
-//				}
+				//				String txt = (String) value;
+				//				Account v = null;
+				//				try {
+				//					v = new Account(txt);
+				//				} catch (NumberFormatException x) {
+				//					MessageDialog.openError(getShell(), "Invalid Number", "The text you entered is not a valid number!");
+				//				}
+				//				if (v != null) {
+				//					me.setValue(new Account(txt));
+				//					tableItem.setText(1, ((ITableLabelProvider)tableViewer.getLabelProvider()).getColumnText(me, 1));
+				//				}
 			}
 		}
 	};
 
-//	private DialogCellEditor cellEditor;
+	//	private DialogCellEditor cellEditor;
 
-	private DialogCellEditor createDialogCellEditor(Table table)
+	private DialogCellEditor createDialogCellEditor(final Table table)
 	{
 		return new DialogCellEditor(table) {
 			@Override
-			protected void updateContents(Object value)
+			protected void updateContents(final Object value)
 			{
 				Object v = getValue();
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)v;
@@ -132,24 +133,25 @@ implements ISelectionProvider
 			}
 
 			@Override
-			protected Object openDialogBox(Control cellEditorWindow)
+			protected Object openDialogBox(final Control cellEditorWindow)
 			{
 				Object v = getValue();
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)v;
 
 				SelectAccountWizard selectAccountWizard = new SelectAccountWizard(me.getKey(), me.getValue(),JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER);
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(selectAccountWizard);
-				if (dialog.open() != Window.OK)
+				if (dialog.open() != Window.OK) {
 					return null;
+				}
 
 				me.setValue(selectAccountWizard.getSelectedAccount());
-//				map.put(me.getKey(), selectAccountWizard.getSelectedAccount());
+				//				map.put(me.getKey(), selectAccountWizard.getSelectedAccount());
 				return me;
 			}
 		};
 	}
 
-	private TableViewer tableViewer;
+	private final TableViewer tableViewer;
 
 	private Button addCurrencyButton;
 	private Button removeCurrencyButton;
@@ -157,7 +159,7 @@ implements ISelectionProvider
 	protected static final String COLUMN_CURRENCY = "currency"; //$NON-NLS-1$
 	protected static final String COLUMN_ACCOUNT = "account"; //$NON-NLS-1$
 
-	public VoucherLocalAccountantDelegateComposite(Composite parent, boolean showButtons)
+	public VoucherLocalAccountantDelegateComposite(final Composite parent, final boolean showButtons)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
@@ -171,7 +173,7 @@ implements ISelectionProvider
 		tableViewer.setCellEditors(new CellEditor[] {null, createDialogCellEditor(table)});
 		tableViewer.setColumnProperties(new String[] { COLUMN_CURRENCY, COLUMN_ACCOUNT });
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event)
+			public void selectionChanged(final SelectionChangedEvent event)
 			{
 				fireSelectionChangedEvent();
 			}
@@ -191,7 +193,7 @@ implements ISelectionProvider
 			addCurrencyButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			addCurrencyButton.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e)
+				public void widgetSelected(final SelectionEvent e)
 				{
 					addCurrency();
 				}
@@ -201,7 +203,7 @@ implements ISelectionProvider
 			removeCurrencyButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			removeCurrencyButton.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void widgetSelected(SelectionEvent e)
+				public void widgetSelected(final SelectionEvent e)
 				{
 					removeCurrency();
 				}
@@ -224,10 +226,11 @@ implements ISelectionProvider
 	 *
 	 * @param currency The <code>Currency</code> to add.
 	 */
-	public void addCurrency(Currency currency)
+	public void addCurrency(final Currency currency)
 	{
-		if (map == null || map.containsKey(currency))
+		if (map == null || map.containsKey(currency)) {
 			return;
+		}
 
 		map.put(currency, null);
 		setMap(map);
@@ -240,8 +243,9 @@ implements ISelectionProvider
 	public void removeCurrency()
 	{
 		Currency c = getSelectedCurrency();
-		if (c != null)
+		if (c != null) {
 			removeCurrency(c);
+		}
 	}
 
 	/**
@@ -249,10 +253,11 @@ implements ISelectionProvider
 	 *
 	 * @param currency The <code>Currency</code> to remove.
 	 */
-	public void removeCurrency(Currency currency)
+	public void removeCurrency(final Currency currency)
 	{
-		if (map == null)
+		if (map == null) {
 			return;
+		}
 
 		map.remove(currency);
 
@@ -260,17 +265,17 @@ implements ISelectionProvider
 		fireSelectionChangedEvent();
 	}
 
-	public void setMap(Map<Currency, Account> map)
+	public void setMap(final Map<Currency, Account> map)
 	{
 		this.map = map;
 
-		if (map == null)
+		if (map == null) {
 			tableViewer.setInput(null);
-		else {
+		} else {
 			List<Map.Entry<Currency, Account>> l = new ArrayList<Map.Entry<Currency, Account>>(map.size());
 			l.addAll(map.entrySet());
 			Collections.sort(l, new Comparator<Map.Entry<Currency, Account>>() {
-				public int compare(Map.Entry<Currency, Account> me1, Map.Entry<Currency, Account> me2)
+				public int compare(final Map.Entry<Currency, Account> me1, final Map.Entry<Currency, Account> me2)
 				{
 					return me1.getKey().getCurrencySymbol().compareTo(me2.getKey().getCurrencySymbol());
 				}
@@ -295,17 +300,20 @@ implements ISelectionProvider
 	protected void fireSelectionChangedEvent()
 	{
 		IStructuredSelection sel = (IStructuredSelection) getSelection();
-		if (sel.isEmpty())
+		if (sel.isEmpty()) {
 			selectedCurrency = null;
-		else
+		} else {
 			selectedCurrency = ((Map.Entry<Currency, Account>)sel.getFirstElement()).getKey();
+		}
 
-		if (removeCurrencyButton != null)
+		if (removeCurrencyButton != null) {
 			removeCurrencyButton.setEnabled(selectedCurrency != null);
+		}
 
 		Object[] listeners = selectionChangedListeners.getListeners();
-		if (listeners.length < 1)
+		if (listeners.length < 1) {
 			return;
+		}
 
 		SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
 		for (Object l : listeners) {
@@ -314,14 +322,14 @@ implements ISelectionProvider
 		}
 	}
 
-	private ListenerList selectionChangedListeners = new ListenerList();
+	private final ListenerList selectionChangedListeners = new ListenerList();
 
-	public void addSelectionChangedListener(ISelectionChangedListener listener)
+	public void addSelectionChangedListener(final ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.add(listener);
 	}
 
-	public void removeSelectionChangedListener(ISelectionChangedListener listener)
+	public void removeSelectionChangedListener(final ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.remove(listener);
 	}
@@ -331,7 +339,7 @@ implements ISelectionProvider
 		return tableViewer.getSelection();
 	}
 
-	public void setSelection(ISelection selection)
+	public void setSelection(final ISelection selection)
 	{
 		tableViewer.setSelection(selection);
 	}
