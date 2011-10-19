@@ -21,8 +21,8 @@ import org.nightlabs.jfire.accounting.Currency;
  *
  */
 
-public class CurrencyCreateWizardPage 
-extends WizardHopPage 
+public class CurrencyCreateWizardPage
+extends WizardHopPage
 {
 	private Label currencyIdLabel;
 	private Label currencySymbolLabel;
@@ -37,12 +37,12 @@ extends WizardHopPage
 	}
 
 	@Override
-	public Control createPageContents(Composite parent) {
+	public Control createPageContents(final Composite parent) {
 		Composite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		ModifyListener modifyListenerCheckInput = new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				checkInput();
 			}
 		};
@@ -68,31 +68,31 @@ extends WizardHopPage
 		decimalDigitCountSpinner.addModifyListener(modifyListenerCheckInput);
 
 		new Label(page, SWT.NONE).setText("Note: Once the decimal digit count has been stored. You won't be able to change it again.");
-		
+
 		setPageComplete(false);
 
 		return page;
 	}
 
 	@Override
-	public void setErrorMessage(String newMessage) {
+	public void setErrorMessage(final String newMessage) {
 		super.setErrorMessage(newMessage);
 		setPageComplete(newMessage == null);
 	}
 
 	private void checkInput() {
-		if (currencyIdText.getText().isEmpty())
+		if (currencyIdText.getText().isEmpty()) {
 			setErrorMessage("A currency ID is required!");
-		else if (!ObjectIDUtil.isValidIDString(currencyIdText.getText()))
+		} else if (!ObjectIDUtil.isValidIDString(currencyIdText.getText())) {
 			setErrorMessage(
 					String.format("The currency ID \"%s\" is not a valid identifier!", currencyIdText.getText())
 			);
-		else if (currencySymbolText.getText().isEmpty())
+		} else if (currencySymbolText.getText().isEmpty()) {
 			setErrorMessage("A currency symbol is required!");
-		else {
+		} else {
 			setErrorMessage(null);
 
-			if (currencyIdText.getText().length() != 3)
+			if (currencyIdText.getText().length() != 3) {
 				setMessage(
 						String.format(
 								"Usually, an ISO-4217 currency ID has exactly 3 characters. The value you entered, contains %2$d characters. Are you sure that your currency ID \"%1$s\" is correct?",
@@ -101,7 +101,7 @@ extends WizardHopPage
 						),
 						WARNING
 				);
-			else if (!currencyIdText.getText().matches("[A-Z]+"))
+			} else if (!currencyIdText.getText().matches("[A-Z]+")) {
 				setMessage(
 						String.format(
 								"Usually, an ISO-4217 currency ID consists only of capital ASCII letters ('A' to 'Z'). Are you sure that your currency ID \"%s\" is correct?",
@@ -109,7 +109,7 @@ extends WizardHopPage
 						),
 						WARNING
 				);
-			else if (currencySymbolText.getText().contains(" ") || currencySymbolText.getText().contains("\t"))
+			} else if (currencySymbolText.getText().contains(" ") || currencySymbolText.getText().contains("\t")) {
 				setMessage(
 						String.format(
 								"The currency symbol \"%s\" contains white spaces! Are you sure that this is correct?",
@@ -117,8 +117,9 @@ extends WizardHopPage
 						),
 						WARNING
 				);
-			else
+			} else {
 				setMessage(null, WARNING);
+			}
 		}
 	}
 

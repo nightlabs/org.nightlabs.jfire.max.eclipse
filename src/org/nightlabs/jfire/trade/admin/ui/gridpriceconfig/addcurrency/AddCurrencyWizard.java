@@ -50,12 +50,14 @@ public class AddCurrencyWizard extends DynamicPathWizard
 	private Dimension<CurrencyDimensionValue> dimension;
 
 	private boolean createNewCurrencyEnabled = false;
-	private Currency newCurrency;
-	
+	private Currency currency;
+
 	private CurrencySelectionPage currencySelectionPage;
 	private CurrencyCreateWizardPage createCurrencyPage;
 
-	public AddCurrencyWizard(Dimension<CurrencyDimensionValue> dimension)
+	public AddCurrencyWizard() { }
+
+	public AddCurrencyWizard(final Dimension<CurrencyDimensionValue> dimension)
 	{
 		this.dimension = dimension;
 		setForcePreviousAndNextButtons(true);
@@ -79,12 +81,12 @@ public class AddCurrencyWizard extends DynamicPathWizard
 	public boolean performFinish()
 	{
 		try {
-			Currency currency = null;
 			if (createNewCurrencyEnabled){
+				System.out.println("creating new currency...");
 				getContainer().run(false, false, new IRunnableWithProgress() {
 					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						newCurrency = CurrencyDAO.sharedInstance().storeCurrency(
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						currency = CurrencyDAO.sharedInstance().storeCurrency(
 								createCurrencyPage.createCurrency(),
 								true,
 								null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -92,16 +94,19 @@ public class AddCurrencyWizard extends DynamicPathWizard
 						);
 					}
 				});
-				currency = newCurrency;
-			}else{
+			} else{
 				currency = currencySelectionPage.getSelectedCurrency();
-				if (currency == null)
+				if (currency == null) {
 					throw new IllegalStateException("currencySelectionPage.getSelectedCurrency() returned null!"); //$NON-NLS-1$
+				}
 			}
-	
-			dimension.guiFeedbackAddDimensionValue(
+
+			// TODO set dimension in AddCurrencyWizard() constructor implicitly called by subclasses if necessary
+			if (dimension != null) {
+				dimension.guiFeedbackAddDimensionValue(
 					new DimensionValue.CurrencyDimensionValue(dimension, currency));
-			
+			}
+
 		} catch (Exception x) {
 			ExceptionHandlerRegistry.asyncHandleException(x);
 			return false;
@@ -110,13 +115,25 @@ public class AddCurrencyWizard extends DynamicPathWizard
 		return true;
 	}
 
-	protected void setCreateNewCurrencyEnabled(boolean enabled) {
+	protected void setCreateNewCurrencyEnabled(final boolean enabled) {
 		removeAllDynamicWizardPages();
-		if (enabled)
+		if (enabled) {
+			createCurrencyPage = new CurrencyCreateWizardPage();
 			addDynamicWizardPage(createCurrencyPage);
-
+		}
 		createNewCurrencyEnabled = enabled;
 		updateDialog();
 	}
 
+	public CurrencySelectionPage getCurrencySelectionPage() {
+		return currencySelectionPage;
+	}
+
+	public void setCurrencySelectionPage(final CurrencySelectionPage currencySelectionPage) {
+		this.currencySelectionPage = currencySelectionPage;
+	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
 }

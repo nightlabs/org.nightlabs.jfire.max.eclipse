@@ -56,7 +56,7 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public class CurrencySelectionPage extends DynamicPathWizardPage
 {
-	private List<Currency> currencies = new ArrayList<Currency>();
+	private final List<Currency> currencies = new ArrayList<Currency>();
 	private org.eclipse.swt.widgets.List currencyList;
 	private Currency selectedCurrency = null;
 	private Button createNewCurrencyRadio;
@@ -72,38 +72,37 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	public Control createPageContents(Composite parent)
+	public Control createPageContents(final Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-
 		createNewCurrencyRadio = new Button(page, SWT.RADIO);
 		createNewCurrencyRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage.createNewCurrencyRadio.text"));
-        createNewCurrencyRadio.addSelectionListener(new SelectionAdapter() {
-
-        	@Override
-        	public void widgetSelected(SelectionEvent event){
-        	((AddCurrencyWizard)getWizard()).setCreateNewCurrencyEnabled(createNewCurrencyRadio.getSelection());
-
-        	}
+		createNewCurrencyRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				((AddCurrencyWizard) getWizard()).setCreateNewCurrencyEnabled(createNewCurrencyRadio.getSelection());
+			}
 		});
 
 		chooseExistingCurrencyRadio = new Button(page,SWT.RADIO);
 		chooseExistingCurrencyRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage.chooseExistingCurrencyRadio.text"));
 		chooseExistingCurrencyRadio.setSelection(true);
 
-
 		currencyList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		currencyList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		currencyList.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(final SelectionEvent event) {
 				int selIdx = currencyList.getSelectionIndex();
-				if (selIdx < 0)
+				if (selIdx < 0) {
 					selectedCurrency = null;
-				else if (selIdx < currencies.size())
+				} else if (selIdx < currencies.size()) {
 					selectedCurrency = currencies.get(selIdx);
-
+					createNewCurrencyRadio.setSelection(false);
+					chooseExistingCurrencyRadio.setSelection(true);
+				}
+				((DynamicPathWizard)getWizard()).removeAllDynamicWizardPages();
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}
 		});
@@ -111,7 +110,7 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 		currencyList.add(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage.pseudoEntry_loading")); //$NON-NLS-1$
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage.loadCurrenciesJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) {
+			protected IStatus run(final ProgressMonitor monitor) {
 				try {
 					currencies.clear();
 					currencies.addAll(CurrencyDAO.sharedInstance().getCurrencies(monitor));
@@ -137,15 +136,46 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 		return page;
 	}
 
+	@Override
+	public boolean canFlipToNextPage() {
+		if (createNewCurrencyRadio.getSelection()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * User must not finish the wizard here when he/she wants to create a new currency as this would lead to exceptions.
+	 * I'm using a flag here, perhaps there is a "more sophisticated" solution.
+	 * TODO When entering valid (!) data in the next page (currency creation page), moving back here and performing finish,
+	 * the data entered in the creation page is taken into consideration even when the (other) checkbox to choose an existing
+	 * currency is selected before. This leads to some kind of user confusion. My suggestion: disable the finish button when
+	 * moving back to this page in the case currency creation checkbox is selected (this is the case when opening the wizard
+	 * the first time before moving to the next page, but not in this special situation).
+	 */
+	boolean canPerformFinish;
+
+	@Override
+	public void onNext() {
+		canPerformFinish = true;
+	}
+
+	@Override
+	public void onShow() {
+		canPerformFinish = false;
+		isPageComplete();
+	}
+
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
 	@Override
 	public boolean isPageComplete()
 	{
-		if (createNewCurrencyRadio == null)
-			return false;
-		return createNewCurrencyRadio.getSelection() || selectedCurrency != null;
+		if (canPerformFinish) {
+			return true;
+		}
+		return (chooseExistingCurrencyRadio != null && chooseExistingCurrencyRadio.getSelection() && selectedCurrency != null);
 	}
 
 	/**
