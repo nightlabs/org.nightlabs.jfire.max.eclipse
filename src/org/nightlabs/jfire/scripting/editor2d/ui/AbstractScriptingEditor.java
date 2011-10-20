@@ -79,6 +79,7 @@ implements ControllablePart
 	@Override
 	protected void init() {
 		login();
+		super.init();
 	}
 
 	@Override
