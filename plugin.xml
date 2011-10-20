@@ -174,18 +174,18 @@
             relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
             visible="true"/>
       <formPage
-            class="org.eclipse.birt.report.designer.ui.editors.pages.ReportXMLSourceEditorFormPage"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.xml.JFireReportXMLSourceEditorFormPage"
             displayName="%layout.editor.page.xmlsource"
-            id="org.eclipse.birt.report.designer.ui.editors.design.xmlsource"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.xml.JFireReportXMLSourceEditorFormPage"
             position="right"
             relative="org.nightlabs.jfire.reporting.admin.ui.textpart.ReportTextPartConfigurationPage"
             visible="true"/>
       <formPage
             class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
-            displayName="Localisation"
+            displayName="%layout.editor.page.l10n"
             id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             position="right"
-            relative="org.eclipse.birt.report.designer.ui.editors.design.xmlsource"
+            relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.xml.JFireReportXMLSourceEditorFormPage"
             visible="true"/>
       <formPage
             class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"

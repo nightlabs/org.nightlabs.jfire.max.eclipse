@@ -87,7 +87,6 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	private int staleType;
 	private Control control;
 	private FormEditor editor;
-	private JFireRemoteReportEditorInput reportEditorInput;
 
 	private ReportRegistryItemID reportLayoutID;
 	private Map<String, ReportLayoutLocalisationData> localisationBundle;
@@ -99,7 +98,6 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof JFireRemoteReportEditorInput) {
 			JFireRemoteReportEditorInput input = (JFireRemoteReportEditorInput) editorInput;
-			reportEditorInput = input;
 			reportLayoutID = input.getReportRegistryItemID();
 			PreparedLayoutL10nData l10nData = ReportLayoutL10nUtil.prepareReportLayoutL10nData(input);
 			bundleFolder = l10nData.getBundleFolder();

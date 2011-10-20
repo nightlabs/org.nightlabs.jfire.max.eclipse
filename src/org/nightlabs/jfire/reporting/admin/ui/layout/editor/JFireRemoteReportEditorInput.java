@@ -55,6 +55,7 @@ import org.nightlabs.jfire.security.MissingRoleException;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.security.id.AuthorityID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.IOUtil;
 import org.nightlabs.util.NLLocale;
 
@@ -76,7 +77,7 @@ implements IJFireRemoteReportEditorInput
 		ReportLayout.FETCH_GROUP_THIS_REPORT_LAYOUT
 	};
 	
-	private ReportRegistryItemID reportRegistryItemID;
+	private final ReportRegistryItemID reportRegistryItemID;
 	private JFireLocalReportEditorInput localInput;
 	private ReportRegistryItemName layoutName;
 
@@ -230,14 +231,20 @@ implements IJFireRemoteReportEditorInput
 	 * @param monitor
 	 */
 	public static void saveRemoteLayout(IJFireRemoteReportEditorInput input, IProgressMonitor monitor) {
-		ReportLayout layout = (ReportLayout) ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(input.getReportRegistryItemID(), REPORT_LAYOUT_COMPLETE_FETCH_GROUPS, new ProgressMonitorWrapper(monitor));
+		ProgressMonitor mon = null;
+		if (monitor != null) {
+			mon = new ProgressMonitorWrapper(monitor); 
+		} else {
+			mon = new NullProgressMonitor();
+		}
+		ReportLayout layout = (ReportLayout) ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(input.getReportRegistryItemID(), REPORT_LAYOUT_COMPLETE_FETCH_GROUPS, mon);
 		try {
 			layout.loadFile(input.getPath().toFile());
 		} catch (IOException e) {
 			throw new RuntimeException("Could not load the ReportLayouts file "+input.getPath().toOSString(),e); //$NON-NLS-1$
 		}
 		try {
-			ReportRegistryItemDAO.sharedInstance().storeReportRegistryItem(layout, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+			ReportRegistryItemDAO.sharedInstance().storeReportRegistryItem(layout, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, mon);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to store report layout", e); //$NON-NLS-1$
 		}
