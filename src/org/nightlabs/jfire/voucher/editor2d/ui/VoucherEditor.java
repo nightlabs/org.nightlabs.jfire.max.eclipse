@@ -7,6 +7,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.editor2d.ui.AbstractPaletteFactory;
+import org.nightlabs.io.IOFilterMan;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.login.ui.part.LSDPartController;
 import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptingEditor;
@@ -14,6 +15,7 @@ import org.nightlabs.jfire.scripting.editor2d.ui.script.IScriptResultChangedList
 import org.nightlabs.jfire.scripting.editor2d.ui.script.IScriptResultProvider;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.ScriptResultsChangedEvent;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
+import org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter;
 import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 
 /**
@@ -64,6 +66,12 @@ implements ControllablePart
 			VoucherPartController.sharedInstance().createPartControl(this, parent);
 	}
 
+	@Override
+	protected void configureIOFilterMan(IOFilterMan ioFilterMan) {
+		ioFilterMan.setDefaultReadIOFilter(ioFilterMan.getIOFilter(VoucherXStreamFilter.FILE_EXTENSION));
+		ioFilterMan.setDefaultWriteIOFilter(ioFilterMan.getIOFilter(VoucherXStreamFilter.FILE_EXTENSION));
+	}
+	
 	public IScriptResultProvider getScriptResultProvider() {
 		return VoucherScriptResultProvider.sharedInstance();
 	}
