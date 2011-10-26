@@ -289,13 +289,8 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 			if (User.USER_ID_SYSTEM.equals(userDescriptor.getUserID())){
 				fallToGlobalSyncCredentials = true;
 			}else{
-				String bindPwd = null;
-				Object credential = GlobalSecurityReflector.sharedInstance().getCredential();
-				if (credential instanceof String){
-					bindPwd = (String) credential;
-				}else if (credential instanceof char[]){
-					bindPwd = new String((char[])credential);
-				}else{
+				String bindPwd = LDAPServer.getLDAPPasswordForCurrentUser();
+				if (bindPwd == null){
 					fallToGlobalSyncCredentials = true;
 				}
 				
