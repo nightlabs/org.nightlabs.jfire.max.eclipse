@@ -172,7 +172,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart
 		accountsDelegateMap =  new HashMap<Currency, Account>();
 		if (voucherLocalAccountantDelegate != null) {
 			for (Map.Entry<String, Account> me : voucherLocalAccountantDelegate.getAccounts().entrySet()) {
-				accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
+				accountsDelegateMap.put(me.getValue().getCurrency(), me.getValue());
 			}
 			String str = String.format("%s - %s",Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherAccountConfigSection.accountConfiguration"),voucherLocalAccountantDelegate.getName().getText());				 //$NON-NLS-1$ //$NON-NLS-2$
 			getSection().setText(str);
