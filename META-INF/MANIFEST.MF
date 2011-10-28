@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EntityUserSet UI Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.entityuserset.ui
-Bundle-Version: 1.0.2.qualifier
+Bundle-Version: 1.2.0
 Bundle-Activator: org.nightlabs.jfire.entityuserset.ui.Activator
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
