@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Issue Tracking Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.admin.ui;singleton:=true
-Bundle-Version: 1.1.8.qualifier
+Bundle-Version: 1.2.0
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin
 Bundle-Vendor: NightLabs.org
