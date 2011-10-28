@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JFire Contact PBX UI
 Bundle-SymbolicName: org.nightlabs.jfire.contact.pbx.ui;singleton:=true
-Bundle-Version: 1.0.4.qualifier
+Bundle-Version: 1.2.0
 Bundle-Activator: org.nightlabs.jfire.contact.pbx.ui.ContactPBXUIPlugin
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.ui,
