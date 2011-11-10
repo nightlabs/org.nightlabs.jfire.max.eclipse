@@ -30,7 +30,7 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
  */
-public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeCategory<UserManagementSystemID, UserManagementSystem>{
+public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeCategory<UserManagementSystemID, UserManagementSystem<?>>{
 	
 	/**
 	 * Label provider for {@link UserManagementSystem} objects in {@link EntityTree}.
@@ -46,7 +46,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 			if (o instanceof String) {
 				return (String) o;
 			} else if (o instanceof UserManagementSystem) {
-				UserManagementSystem userManagementSystem = (UserManagementSystem) o;
+				UserManagementSystem<?> userManagementSystem = (UserManagementSystem<?>) o;
 				String userManagementSystemName = userManagementSystem.getUserManagementSystemID()+User.SEPARATOR_BETWEEN_USER_ID_AND_ORGANISATION_ID+userManagementSystem.getOrganisationID();
 				if (userManagementSystem.getName() != null 
 						&& !"".equals(userManagementSystem.getName().getText())){ //$NON-NLS-1$
@@ -66,7 +66,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (element instanceof UserManagementSystem){
-				UserManagementSystem userManagementSystem = (UserManagementSystem) element;
+				UserManagementSystem<?> userManagementSystem = (UserManagementSystem<?>) element;
 				String imageSuffix = userManagementSystem.isActive()?"UserManagementSystemActive":"UserManagementSystemInactive"; //$NON-NLS-1$ //$NON-NLS-2$
 				return SharedImages.getSharedImage(
 						JFireAuthUIPlugin.sharedInstance(), EntityTreeCategoryUserManagementSystem.class, imageSuffix, ImageDimension._16x16, ImageFormat.png);
@@ -83,7 +83,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	@SuppressWarnings("unchecked")
 	@Override
 	public IEditorInput createEditorInput(Object o){
-		UserManagementSystem userManagementSystem = (UserManagementSystem) o;
+		UserManagementSystem<?> userManagementSystem = (UserManagementSystem<?>) o;
 		UserManagementSystemID userManagementSystemID = userManagementSystem.getUserManagementSystemObjectID();
 		return new UserManagementSystemEditorInput(userManagementSystemID, (Class<? extends UserManagementSystemType<?>>) userManagementSystem.getType().getClass());
 	}
@@ -100,7 +100,8 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Class<UserManagementSystem> getJDOObjectClass(){
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Class getJDOObjectClass(){
 		return UserManagementSystem.class;
 	}
 
@@ -118,7 +119,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Collection<UserManagementSystem> retrieveJDOObjects(Set<UserManagementSystemID> userIDs, ProgressMonitor monitor){
+	protected Collection<UserManagementSystem<?>> retrieveJDOObjects(Set<UserManagementSystemID> userIDs, ProgressMonitor monitor){
 		return UserManagementSystemDAO.sharedInstance().getUserManagementSystems(
 				userIDs, FETCH_GROUPS_USER_MANAGEMENT_SYSTEM, FETCH_DEPTH_USER_MANAGEMENT_SYSTEM, monitor
 				);
@@ -128,12 +129,12 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Collection<UserManagementSystem> retrieveJDOObjects(ProgressMonitor monitor){
-		List<UserManagementSystem> userManagementSystems = UserManagementSystemDAO.sharedInstance().getAllUserManagementSystems(
+	protected Collection<UserManagementSystem<?>> retrieveJDOObjects(ProgressMonitor monitor){
+		List<UserManagementSystem<?>> userManagementSystems = UserManagementSystemDAO.sharedInstance().getAllUserManagementSystems(
 				FETCH_GROUPS_USER_MANAGEMENT_SYSTEM, FETCH_DEPTH_USER_MANAGEMENT_SYSTEM, monitor
 				);
-		List<UserManagementSystem> res = new ArrayList<UserManagementSystem>(userManagementSystems.size());
-		for (UserManagementSystem userManagementSystem : userManagementSystems) {
+		List<UserManagementSystem<?>> res = new ArrayList<UserManagementSystem<?>>(userManagementSystems.size());
+		for (UserManagementSystem<?> userManagementSystem : userManagementSystems) {
 			res.add(userManagementSystem);
 		}
 		return res;
@@ -143,7 +144,7 @@ public class EntityTreeCategoryUserManagementSystem extends ActiveJDOEntityTreeC
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void sortJDOObjects(List<UserManagementSystem> userManagementSystems){
+	protected void sortJDOObjects(List<UserManagementSystem<?>> userManagementSystems){
 		Collections.sort(userManagementSystems);	// note that UserManagementSystem implements Comparable
 	}
 	

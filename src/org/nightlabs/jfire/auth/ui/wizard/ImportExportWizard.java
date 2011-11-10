@@ -63,7 +63,7 @@ public class ImportExportWizard extends DynamicPathWizard{
 	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
 	 * @param syncDirection Direction of synchronization, either import or export
 	 */
-	public void proceedToSynchronizationPage(UserManagementSystem userManagementSystem, SyncDirection syncDirection){
+	public void proceedToSynchronizationPage(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection){
 		if (userManagementSystem != null && syncDirection != null){
 			importExportWizardHop.proceedToNextPage(userManagementSystem, syncDirection);
 		}

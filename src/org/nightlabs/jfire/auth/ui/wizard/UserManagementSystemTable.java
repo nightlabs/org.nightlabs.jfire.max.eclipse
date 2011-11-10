@@ -19,7 +19,7 @@ import org.nightlabs.jfire.security.integration.UserManagementSystemType;
  * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
  *
  */
-public class UserManagementSystemTable extends AbstractTableComposite<UserManagementSystem>{
+public class UserManagementSystemTable extends AbstractTableComposite<UserManagementSystem<?>>{
 
 	/**
 	 * {@inheritDoc} 
@@ -73,7 +73,7 @@ public class UserManagementSystemTable extends AbstractTableComposite<UserManage
 			if (element instanceof String){
 				return (String) element;
 			}else if (element instanceof UserManagementSystem) {
-				UserManagementSystem userManagementSystem = (UserManagementSystem) element;
+				UserManagementSystem<?> userManagementSystem = (UserManagementSystem<?>) element;
 				switch (columnIndex) {
 					case(0):
 						String name = userManagementSystem.getClass().getSimpleName();

@@ -45,7 +45,7 @@ import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 public class ImportExportConfigurationPage extends WizardHopPage{
 	
 	private ISynchronizationPerformerHop currentSynchronizationHop;
-	private UserManagementSystem currentUserManagementSystem;
+	private UserManagementSystem<?> currentUserManagementSystem;
 	
 	private Composite mainWrapper;
 	private Button importButton;
@@ -69,7 +69,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
 	 * @param syncDirection Direction of synchronization, either import or export
 	 */
-	public void proceedToNextPage(UserManagementSystem userManagementSystem, SyncDirection syncDirection) {
+	public void proceedToNextPage(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
 		if (userManagementSystem != null && syncDirection != null){
 			this.syncDirection = syncDirection;
 			setSelectedUserManagementSystemInternal(userManagementSystem);
@@ -110,7 +110,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	 * 
 	 * @param allUserManagementSystems
 	 */
-	public void setUserManagementSystems(List<UserManagementSystem> allUserManagementSystems) {
+	public void setUserManagementSystems(List<UserManagementSystem<?>> allUserManagementSystems) {
 		if (mainWrapper == null){
 			throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.setUserManagementSystemsIllegalyCalledExceptionText")); //$NON-NLS-1$
 		}
@@ -224,7 +224,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	 * 
 	 * @return selected {@link UserManagementSystem}
 	 */
-	public UserManagementSystem getSelectedUserManagementSystem(){
+	public UserManagementSystem<?> getSelectedUserManagementSystem(){
 		return currentUserManagementSystem;
 	}
 	
@@ -234,7 +234,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 		public void selectionChanged(SelectionChangedEvent e) {
 			if (e.getSelection() instanceof StructuredSelection){
 			
-				UserManagementSystem selectedUserManagementSystem = (UserManagementSystem) ((StructuredSelection) e.getSelection()).getFirstElement();
+				UserManagementSystem<?> selectedUserManagementSystem = (UserManagementSystem<?>) ((StructuredSelection) e.getSelection()).getFirstElement();
 				importButton.setEnabled(selectedUserManagementSystem != null);
 				exportButton.setEnabled(selectedUserManagementSystem != null);
 				if (selectedUserManagementSystem == null){
@@ -248,7 +248,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	};
 	
 	@SuppressWarnings("unchecked")
-	private void setSelectedUserManagementSystemInternal(UserManagementSystem selectedUserManagementSystem){
+	private void setSelectedUserManagementSystemInternal(UserManagementSystem<?> selectedUserManagementSystem){
 		currentUserManagementSystem = selectedUserManagementSystem;
 		
 		if (currentSynchronizationHop != null) {

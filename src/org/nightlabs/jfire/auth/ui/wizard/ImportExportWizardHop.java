@@ -42,7 +42,7 @@ public class ImportExportWizardHop extends WizardHop{
 	// UserManagementSystem -> UserManagementSystemType -> UserManagementSystemTypeName -> names
 	private static final int FETCH_DEPTH_USER_MANAGEMENT_SYSTEM = 4;
 
-	private List<UserManagementSystem> allUserManagementSystems;
+	private List<UserManagementSystem<?>> allUserManagementSystems;
 	
 	/**
 	 * Default constructor. Creates {@link ImportExportConfigurationPage} and starts a {@link Job} for loading all
@@ -91,7 +91,7 @@ public class ImportExportWizardHop extends WizardHop{
 	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
 	 * @param syncDirection Direction of synchronization, either import or export
 	 */
-	public void proceedToNextPage(UserManagementSystem userManagementSystem, SyncDirection syncDirection) {
+	public void proceedToNextPage(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
 		configPage.proceedToNextPage(userManagementSystem, syncDirection);
 	}
 
@@ -119,7 +119,7 @@ public class ImportExportWizardHop extends WizardHop{
 	 * 
 	 * @return selected {@link UserManagementSystem}
 	 */
-	public UserManagementSystem getSelectedUserManagementSystem(){
+	public UserManagementSystem<?> getSelectedUserManagementSystem(){
 		return configPage.getSelectedUserManagementSystem();
 	}
 }

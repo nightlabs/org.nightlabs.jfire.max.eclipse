@@ -30,7 +30,7 @@ public interface ISynchronizationPerformerHop extends IWizardHop{
 	 * @param userManagementSystem
 	 * @param syncDirection
 	 */
-	void configurePages(UserManagementSystem userManagementSystem, SyncDirection syncDirection);
+	void configurePages(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection);
 
 	/**
 	 * This method is called by {@link ImportExportWizardHop} when {@link ImportExportWizard#performFinish()} is executed. Actual synchronization 
@@ -41,6 +41,6 @@ public interface ISynchronizationPerformerHop extends IWizardHop{
 	 * @throws LoginException
 	 * @throws UserManagementSystemCommunicationException
 	 */
-	void performSynchronization(UserManagementSystem userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException;
+	void performSynchronization(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException;
 
 }

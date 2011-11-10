@@ -68,7 +68,7 @@ public class CreateUserManagementSystemWizard extends DynamicPathWizard implemen
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException{
 					try{
 						
-						UserManagementSystem userManagementSystem = createUserManagementSystemWizardHop.createUserManagementSystem();
+						UserManagementSystem<?> userManagementSystem = createUserManagementSystemWizardHop.createUserManagementSystem();
 						if (userManagementSystem == null){
 							return;
 						}

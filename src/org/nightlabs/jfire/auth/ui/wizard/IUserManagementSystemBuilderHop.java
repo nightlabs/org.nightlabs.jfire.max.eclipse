@@ -21,6 +21,6 @@ public interface IUserManagementSystemBuilderHop extends IWizardHop{
 	 * @param userManagementSystemType {@link UserManagementSystemType} of newly created {@link UserManagementSystem}
 	 * @return created specific {@link UserManagementSystem} instance
 	 */
-	UserManagementSystem buildUserManagementSystem(UserManagementSystemType<?> userManagementSystemType);
+	UserManagementSystem<?> buildUserManagementSystem(UserManagementSystemType<?> userManagementSystemType);
 	
 }
