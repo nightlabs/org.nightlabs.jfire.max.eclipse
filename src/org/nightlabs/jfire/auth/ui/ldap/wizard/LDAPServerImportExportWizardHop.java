@@ -13,17 +13,16 @@ import org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.security.integration.ldap.LDAPManagerRemote;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.FetchEventTypeDataUnit;
-import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.LDAPSyncEventType;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
-import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncException;
 import org.nightlabs.jfire.security.GlobalSecurityReflector;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 import org.nightlabs.jfire.security.integration.UserManagementSystemManagerRemote;
+import org.nightlabs.jfire.security.integration.UserManagementSystemSyncEvent.SyncEventGenericType;
+import org.nightlabs.jfire.security.integration.UserManagementSystemSyncException;
 
 /**
  * Implementation if {@link ISynchronizationPerformerHop} for running synchronization for {@link LDAPServer} instances.
@@ -47,7 +46,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void configurePages(UserManagementSystem userManagementSystem, SyncDirection syncDirection) {
+	public void configurePages(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
 			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
@@ -65,7 +64,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void performSynchronization(UserManagementSystem userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException {
+	public void performSynchronization(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
 			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
@@ -78,7 +77,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 
 			if (SyncDirection.IMPORT.equals(syncDirection)){
 				
-				syncEvent = new LDAPSyncEvent(LDAPSyncEventType.FETCH);
+				syncEvent = new LDAPSyncEvent(SyncEventGenericType.FETCH);
 				syncEvent.setOrganisationID(organisationID);
 				Collection<String> entriesToSync = null;
 				if (getImportPage().shouldImportAll()){
@@ -94,7 +93,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				
 			}else if (SyncDirection.EXPORT.equals(syncDirection)){
 				
-				syncEvent = new LDAPSyncEvent(LDAPSyncEventType.SEND);
+				syncEvent = new LDAPSyncEvent(SyncEventGenericType.SEND);
 				syncEvent.setOrganisationID(organisationID);
 				Collection<Object> objectIDsToSync = null;
 				if (getExportPage().shouldExportAll()){
@@ -118,13 +117,14 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 			if ((syncEvent.getSendEventTypeDataUnits() != null && !syncEvent.getSendEventTypeDataUnits().isEmpty())
 					|| (syncEvent.getFetchEventTypeDataUnits() != null && !syncEvent.getFetchEventTypeDataUnits().isEmpty())){
 				
-				LDAPManagerRemote remoteLdapManager = JFireEjb3Factory.getRemoteBean(LDAPManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
-				remoteLdapManager.runLDAPServerSynchronization(
+				UserManagementSystemManagerRemote remoteBean = JFireEjb3Factory.getRemoteBean(
+						UserManagementSystemManagerRemote.class, GlobalSecurityReflector.sharedInstance().getInitialContextProperties());
+				remoteBean.runLDAPServerSynchronization(
 						ldapServer.getUserManagementSystemObjectID(), syncEvent);
 				
 			}
 			
-		} catch (LDAPSyncException e) {
+		} catch (UserManagementSystemSyncException e) {
 			throw new UserManagementSystemCommunicationException(e);
 		}
 	}
