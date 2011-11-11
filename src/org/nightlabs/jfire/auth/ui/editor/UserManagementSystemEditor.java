@@ -82,7 +82,7 @@ public class UserManagementSystemEditor extends ActiveEntityEditor{
 	@Override
 	protected String getEditorTitleFromEntity(Object entity) {
 		if (entity instanceof UserManagementSystem) {
-			UserManagementSystem<?> userManagementSystem = (UserManagementSystem<?>) entity;
+			UserManagementSystem userManagementSystem = (UserManagementSystem) entity;
 			String userManagementSystemName = userManagementSystem.getUserManagementSystemID()+User.SEPARATOR_BETWEEN_USER_ID_AND_ORGANISATION_ID+userManagementSystem.getOrganisationID();
 			if (userManagementSystem.getName() != null 
 					&& !"".equals(userManagementSystem.getName().getText())){ //$NON-NLS-1$

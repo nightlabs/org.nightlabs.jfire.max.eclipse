@@ -27,6 +27,7 @@ import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
 import org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction;
 import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
+import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 
@@ -45,7 +46,7 @@ import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 public class ImportExportConfigurationPage extends WizardHopPage{
 	
 	private ISynchronizationPerformerHop currentSynchronizationHop;
-	private UserManagementSystem<?> currentUserManagementSystem;
+	private SynchronizableUserManagementSystem<?> currentUserManagementSystem;
 	
 	private Composite mainWrapper;
 	private Button importButton;
@@ -69,7 +70,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
 	 * @param syncDirection Direction of synchronization, either import or export
 	 */
-	public void proceedToNextPage(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
+	public void proceedToNextPage(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
 		if (userManagementSystem != null && syncDirection != null){
 			this.syncDirection = syncDirection;
 			setSelectedUserManagementSystemInternal(userManagementSystem);
@@ -110,7 +111,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	 * 
 	 * @param allUserManagementSystems
 	 */
-	public void setUserManagementSystems(List<UserManagementSystem<?>> allUserManagementSystems) {
+	public void setUserManagementSystems(List<SynchronizableUserManagementSystem<?>> allUserManagementSystems) {
 		if (mainWrapper == null){
 			throw new IllegalStateException(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportConfigurationPage.setUserManagementSystemsIllegalyCalledExceptionText")); //$NON-NLS-1$
 		}
@@ -220,11 +221,11 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	}
 	
 	/**
-	 * Get selected {@link UserManagementSystem}
+	 * Get selected {@link SynchronizableUserManagementSystem}
 	 * 
-	 * @return selected {@link UserManagementSystem}
+	 * @return selected {@link SynchronizableUserManagementSystem}
 	 */
-	public UserManagementSystem<?> getSelectedUserManagementSystem(){
+	public SynchronizableUserManagementSystem<?> getSelectedUserManagementSystem(){
 		return currentUserManagementSystem;
 	}
 	
@@ -234,7 +235,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 		public void selectionChanged(SelectionChangedEvent e) {
 			if (e.getSelection() instanceof StructuredSelection){
 			
-				UserManagementSystem<?> selectedUserManagementSystem = (UserManagementSystem<?>) ((StructuredSelection) e.getSelection()).getFirstElement();
+				SynchronizableUserManagementSystem<?> selectedUserManagementSystem = (SynchronizableUserManagementSystem<?>) ((StructuredSelection) e.getSelection()).getFirstElement();
 				importButton.setEnabled(selectedUserManagementSystem != null);
 				exportButton.setEnabled(selectedUserManagementSystem != null);
 				if (selectedUserManagementSystem == null){
@@ -248,7 +249,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 	};
 	
 	@SuppressWarnings("unchecked")
-	private void setSelectedUserManagementSystemInternal(UserManagementSystem<?> selectedUserManagementSystem){
+	private void setSelectedUserManagementSystemInternal(SynchronizableUserManagementSystem<?> selectedUserManagementSystem){
 		currentUserManagementSystem = selectedUserManagementSystem;
 		
 		if (currentSynchronizationHop != null) {
@@ -256,7 +257,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 		}
 		
 		IWizardHop wizardHop = UserManagementSystemUIMappingRegistry.sharedInstance().getWizardHop(
-				(Class<? extends UserManagementSystemType<?>>) currentUserManagementSystem.getType().getClass(),
+				(Class<? extends UserManagementSystemType<?>>) ((UserManagementSystem) currentUserManagementSystem).getType().getClass(),
 				(Class<? extends DynamicPathWizard>) getWizard().getClass()
 				);
 		if (wizardHop instanceof ISynchronizationPerformerHop) {

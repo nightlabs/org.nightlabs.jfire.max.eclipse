@@ -3,6 +3,7 @@ package org.nightlabs.jfire.auth.ui.wizard;
 import javax.security.auth.login.LoginException;
 
 import org.nightlabs.base.ui.wizard.IWizardHop;
+import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 
@@ -30,7 +31,7 @@ public interface ISynchronizationPerformerHop extends IWizardHop{
 	 * @param userManagementSystem
 	 * @param syncDirection
 	 */
-	void configurePages(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection);
+	void configurePages(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection);
 
 	/**
 	 * This method is called by {@link ImportExportWizardHop} when {@link ImportExportWizard#performFinish()} is executed. Actual synchronization 
@@ -41,6 +42,6 @@ public interface ISynchronizationPerformerHop extends IWizardHop{
 	 * @throws LoginException
 	 * @throws UserManagementSystemCommunicationException
 	 */
-	void performSynchronization(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException;
+	void performSynchronization(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException;
 
 }

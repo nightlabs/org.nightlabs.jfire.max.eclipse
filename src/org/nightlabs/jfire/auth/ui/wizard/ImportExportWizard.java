@@ -18,11 +18,12 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.auth.ui.actions.OpenImportExportWizardAction;
 import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
+import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 
 /**
- * Wizard for running user data import/export between JFire and selected {@link UserManagementSystem}. Inititally it has a {@link ImportExportWizardHop}
- * which contributes a generic page {@link ImportExportConfigurationPage} for selecting a {@link UserManagementSystem} and type of interaction:
+ * Wizard for running user data import/export between JFire and selected {@link SynchronizableUserManagementSystem}. Inititally it has a {@link ImportExportWizardHop}
+ * which contributes a generic page {@link ImportExportConfigurationPage} for selecting a {@link SynchronizableUserManagementSystem} and type of interaction:
  * import or export.
  * 
  * When specific {@link UserManagementSystem} is selected new pages are added to the wizard dynamically which correspond to specific 
@@ -60,10 +61,10 @@ public class ImportExportWizard extends DynamicPathWizard{
 	 * Proceeds to import or export page depending on {@link #selectedUserManagementSystem} and {@link #selectedSyncDirection}
 	 * whih were set in corresponding constructor.
 	 * 
-	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
+	 * @param userManagementSystem {@link SynchronizableUserManagementSystem} selected for synchronization
 	 * @param syncDirection Direction of synchronization, either import or export
 	 */
-	public void proceedToSynchronizationPage(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection){
+	public void proceedToSynchronizationPage(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection){
 		if (userManagementSystem != null && syncDirection != null){
 			importExportWizardHop.proceedToNextPage(userManagementSystem, syncDirection);
 		}

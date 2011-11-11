@@ -84,7 +84,7 @@ public class CreateUserManagementSystemWizardHop extends WizardHop{
 	 * 
 	 * @return created {@link UserManagementSystem} instance
 	 */
-	public UserManagementSystem<?> createUserManagementSystem(){
+	public UserManagementSystem createUserManagementSystem(){
 		return selectTypePage.getUserManagementSystemBuilderHop().buildUserManagementSystem(selectTypePage.getSelectedUserManagementSystemType());
 	}
 }

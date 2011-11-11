@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.auth.ui.wizard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -14,6 +15,7 @@ import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
+import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
@@ -42,7 +44,7 @@ public class ImportExportWizardHop extends WizardHop{
 	// UserManagementSystem -> UserManagementSystemType -> UserManagementSystemTypeName -> names
 	private static final int FETCH_DEPTH_USER_MANAGEMENT_SYSTEM = 4;
 
-	private List<UserManagementSystem<?>> allUserManagementSystems;
+	private List<SynchronizableUserManagementSystem<?>> allSyncUserManagementSystems;
 	
 	/**
 	 * Default constructor. Creates {@link ImportExportConfigurationPage} and starts a {@link Job} for loading all
@@ -57,8 +59,14 @@ public class ImportExportWizardHop extends WizardHop{
 		loadJob = new Job(Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizardHop.loadAllUserManagementSystemsJobTitle")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				allUserManagementSystems = UserManagementSystemDAO.sharedInstance().getAllUserManagementSystems(
+				List<UserManagementSystem> allUserManagementSystems = UserManagementSystemDAO.sharedInstance().getAllUserManagementSystems(
 						FETCH_GROUPS_USER_MANAGEMENT_SYSTEM, FETCH_DEPTH_USER_MANAGEMENT_SYSTEM, monitor);
+				allSyncUserManagementSystems = new ArrayList<SynchronizableUserManagementSystem<?>>();
+				for (UserManagementSystem userManagementSystem : allUserManagementSystems) {
+					if (userManagementSystem instanceof SynchronizableUserManagementSystem){
+						allSyncUserManagementSystems.add((SynchronizableUserManagementSystem<?>) userManagementSystem);
+					}
+				}
 				
 				return Status.OK_STATUS;
 			}
@@ -71,7 +79,7 @@ public class ImportExportWizardHop extends WizardHop{
 					getWizard().getContainer().getShell().getDisplay().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							configPage.setUserManagementSystems(allUserManagementSystems);
+							configPage.setUserManagementSystems(allSyncUserManagementSystems);
 						}
 					});
 				}
@@ -91,7 +99,7 @@ public class ImportExportWizardHop extends WizardHop{
 	 * @param userManagementSystem {@link UserManagementSystem} selected for synchronization
 	 * @param syncDirection Direction of synchronization, either import or export
 	 */
-	public void proceedToNextPage(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
+	public void proceedToNextPage(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
 		configPage.proceedToNextPage(userManagementSystem, syncDirection);
 	}
 
@@ -119,7 +127,7 @@ public class ImportExportWizardHop extends WizardHop{
 	 * 
 	 * @return selected {@link UserManagementSystem}
 	 */
-	public UserManagementSystem<?> getSelectedUserManagementSystem(){
+	public SynchronizableUserManagementSystem<?> getSelectedUserManagementSystem(){
 		return configPage.getSelectedUserManagementSystem();
 	}
 }
