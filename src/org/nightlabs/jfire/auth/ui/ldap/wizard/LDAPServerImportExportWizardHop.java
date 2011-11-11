@@ -18,7 +18,7 @@ import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.FetchEventTypeDataUnit;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
 import org.nightlabs.jfire.security.GlobalSecurityReflector;
-import org.nightlabs.jfire.security.integration.UserManagementSystem;
+import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 import org.nightlabs.jfire.security.integration.UserManagementSystemManagerRemote;
 import org.nightlabs.jfire.security.integration.UserManagementSystemSyncEvent.SyncEventGenericType;
@@ -46,7 +46,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void configurePages(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
+	public void configurePages(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
 			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
@@ -64,7 +64,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void performSynchronization(UserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException {
+	public void performSynchronization(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
 			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}

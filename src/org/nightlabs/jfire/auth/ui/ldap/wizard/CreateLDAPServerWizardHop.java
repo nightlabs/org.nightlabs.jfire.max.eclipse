@@ -38,7 +38,7 @@ public class CreateLDAPServerWizardHop extends WizardHop implements IUserManagem
 	 * {@inheritDoc}
 	 */
 	@Override
-	public UserManagementSystem<?> buildUserManagementSystem(UserManagementSystemType<?> userManagementSystemType) {
+	public UserManagementSystem buildUserManagementSystem(UserManagementSystemType<?> userManagementSystemType) {
 		
 		LDAPServer ldapServer = (LDAPServer) userManagementSystemType.createUserManagementSystem();
 		

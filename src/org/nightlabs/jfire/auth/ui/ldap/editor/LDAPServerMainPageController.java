@@ -47,7 +47,7 @@ public class LDAPServerMainPageController extends ActiveEntityEditorPageControll
 	protected LDAPServer retrieveEntity(ProgressMonitor monitor) {
 		if (ldapServerID != null){
 			
-			UserManagementSystem<?> userManagementSystem = UserManagementSystemDAO.sharedInstance().getUserManagementSystem(
+			UserManagementSystem userManagementSystem = UserManagementSystemDAO.sharedInstance().getUserManagementSystem(
 					ldapServerID, FETCH_GROUPS_LDAP_SERVER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor
 					);
 			
