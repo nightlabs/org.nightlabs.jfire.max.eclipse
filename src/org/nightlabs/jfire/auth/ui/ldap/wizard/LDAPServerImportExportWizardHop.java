@@ -69,7 +69,6 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
 		
-		String organisationID = GlobalSecurityReflector.sharedInstance().getUserDescriptor().getOrganisationID();
 		LDAPServer ldapServer = (LDAPServer) userManagementSystem;
 		LDAPSyncEvent syncEvent = null;
 
@@ -77,8 +76,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 
 			if (SyncDirection.IMPORT.equals(syncDirection)){
 				
-				syncEvent = new LDAPSyncEvent(SyncEventGenericType.FETCH);
-				syncEvent.setOrganisationID(organisationID);
+				syncEvent = new LDAPSyncEvent(SyncEventGenericType.FETCH_USER);
 				Collection<String> entriesToSync = null;
 				if (getImportPage().shouldImportAll()){
 					entriesToSync = ldapServer.getAllEntriesForSync();
@@ -93,8 +91,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				
 			}else if (SyncDirection.EXPORT.equals(syncDirection)){
 				
-				syncEvent = new LDAPSyncEvent(SyncEventGenericType.SEND);
-				syncEvent.setOrganisationID(organisationID);
+				syncEvent = new LDAPSyncEvent(SyncEventGenericType.SEND_USER);
 				Collection<Object> objectIDsToSync = null;
 				if (getExportPage().shouldExportAll()){
 					
