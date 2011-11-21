@@ -4,9 +4,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -88,14 +86,16 @@ public class CurrentStateComposite
 	}
 	public void setStatable(final Statable _statable)
 	{
-		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite.loadJob.name")) { //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				setStatable(_statable, monitor);
 				return Status.OK_STATUS;
 			}
-		}.schedule();
+		};
+		job.setRule(JFireJbpmPlugin.stateCompositeSchedulingRule);
+		job.schedule();
 	}
 
 	private State state;
@@ -108,35 +108,28 @@ public class CurrentStateComposite
 
 	public void setStatable(Statable _statable, ProgressMonitor monitor)
 	{
-		IJobManager jobManager = Job.getJobManager();
-		try{
-			jobManager.beginRule(JFireJbpmPlugin.stateCompositeSchedulingRule, new NullProgressMonitor());
-			
-			this.statable = _statable;
-			StateID stateID = (StateID) JDOHelper.getObjectId(statable.getStatableLocal().getState());
-	
-			this.state = StateDAO.sharedInstance().getState(stateID, FETCH_GROUPS_STATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-	
-			Runnable runnable = new Runnable()
+		this.statable = _statable;
+		StateID stateID = (StateID) JDOHelper.getObjectId(statable.getStatableLocal().getState());
+
+		this.state = StateDAO.sharedInstance().getState(stateID, FETCH_GROUPS_STATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+
+		Runnable runnable = new Runnable()
+		{
+			public void run()
 			{
-				public void run()
-				{
-					if (stateDefinitionName.isDisposed())
-						return;
-	
-					stateDefinitionName.setText(state.getStateDefinition().getName().getText());
-					timestamp.setText(GlobalDateFormatter.sharedInstance().formatDate(state.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS));
-					userName.setText(state.getUser().getName()); // + " (" + state.getUser().getOrganisationID() + ")");
-					getParent().layout(true, true);
-				}
-			};
-	
-			if (Display.getCurrent() == null)
-				Display.getDefault().asyncExec(runnable);
-			else
-				runnable.run();
-		}finally{
-			jobManager.endRule(JFireJbpmPlugin.stateCompositeSchedulingRule);
-		}
+				if (stateDefinitionName.isDisposed())
+					return;
+
+				stateDefinitionName.setText(state.getStateDefinition().getName().getText());
+				timestamp.setText(GlobalDateFormatter.sharedInstance().formatDate(state.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS));
+				userName.setText(state.getUser().getName()); // + " (" + state.getUser().getOrganisationID() + ")");
+				getParent().layout(true, true);
+			}
+		};
+
+		if (Display.getCurrent() == null)
+			Display.getDefault().asyncExec(runnable);
+		else
+			runnable.run();
 	}
 }
