@@ -9,6 +9,8 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
@@ -25,12 +27,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.statushandlers.StatusManager;
+import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -46,6 +53,8 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueCommentID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
@@ -113,6 +122,13 @@ extends LSDViewPart
 		body.setLayout(layout);
 
 		SelectionManager.sharedInstance().addNotificationListener(IssueTrackingPlugin.ZONE_PROPERTY, Issue.class, issueSelectionListener);
+		try{
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
+		}catch(Exception e){
+			StatusManager.getManager().handle(
+					new Status(Status.ERROR, IssueTrackingPlugin.PLUGIN_ID, "Excxeption adding part listener!", e),	 //$NON-NLS-1$ 
+					StatusManager.LOG);
+		}
 
 		scrolledForm.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -200,10 +216,47 @@ extends LSDViewPart
 	private NotificationListener issueSelectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
 			Object firstSelection = notificationEvent.getFirstSubject();
-			if (firstSelection instanceof IssueID) {
+			if (firstSelection instanceof IssueID
+					&& !firstSelection.equals(issueID)) {
 				issueID = (IssueID) firstSelection;
 				reloadIssue();
 			}
+		}
+	};
+	private IPartListener partListener = new IPartListener() {
+		@Override
+		public void partOpened(IWorkbenchPart part) {
+			getIssueID(part);
+		}
+		@Override
+		public void partBroughtToTop(IWorkbenchPart part) {
+			getIssueID(part);
+		}
+		@Override
+		public void partActivated(IWorkbenchPart part) {
+			getIssueID(part);
+		}
+		@SuppressWarnings("unchecked")
+		private void getIssueID(IWorkbenchPart part){
+			if (part instanceof IssueEditor){
+				IssueEditor issueEditor = (IssueEditor) part;
+				if (issueEditor.getEditorInput() instanceof IssueEditorInput){
+					IssueID issueID = ((JDOObjectEditorInput<IssueID>) issueEditor.getEditorInput()).getJDOObjectID();
+					if (issueID != null 
+							&& !issueID.equals(IssueCommentView.this.issueID)){
+						IssueCommentView.this.issueID = issueID;
+						reloadIssue();
+					}
+				}
+			}
+		}
+		@Override
+		public void partDeactivated(IWorkbenchPart arg0) {
+			// do nothing
+		}
+		@Override
+		public void partClosed(IWorkbenchPart arg0) {
+			// do nothing
 		}
 	};
 
@@ -401,31 +454,49 @@ extends LSDViewPart
 
 		@Override
 		public void run() {
-			new Job("Loading Issue...") {
+			Job loadIssueJob = new Job("Loading Issue...") {
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
+					if (issueID == null){
+						return new Status(Status.WARNING, IssueTrackingPlugin.PLUGIN_ID, "Issue ID is null! Can't reload issue in AddCommentAction!"); //$NON-NLS-1$
+					}
 					issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 					return Status.OK_STATUS;
 				}
-			}.schedule();
-			 
-			IssueCommentAddDialog dialog = new IssueCommentAddDialog(RCPUtil.getActiveShell(), issue, user);
-			int result = dialog.open();
-			if (result == Dialog.OK) {
-				final IssueComment comment = new IssueComment(issue, dialog.getCommentString(), user);
-				Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.storeCommentJob.text")) { //$NON-NLS-1$
-					@Override
-					protected IStatus run(ProgressMonitor monitor) throws Exception {
-						monitor.beginTask("Storing comment", 100);
-						IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, 1, monitor);
-						monitor.done();
-						return Status.OK_STATUS;
+			};
+			loadIssueJob.addJobChangeListener(new JobChangeAdapter(){
+				@Override
+				public void done(IJobChangeEvent event) {
+					if (Status.OK_STATUS == event.getResult() && issue != null){
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								IssueCommentAddDialog dialog = new IssueCommentAddDialog(RCPUtil.getActiveShell(), issue, user);
+								int result = dialog.open();
+								if (result == Dialog.OK) {
+									final IssueComment comment = new IssueComment(issue, dialog.getCommentString(), user);
+									Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issueIssueCommentView.storeCommentJob.text")) { //$NON-NLS-1$
+										@Override
+										protected IStatus run(ProgressMonitor monitor) throws Exception {
+											monitor.beginTask("Storing comment", 100);
+											IssueCommentDAO.sharedInstance().storeIssueComment(comment, false, null, 1, monitor);
+											monitor.done();
+											return Status.OK_STATUS;
+										}
+									};
+									job.setPriority(Job.SHORT);
+									job.schedule();
+								}
+							}
+						});
+					}else{
+						StatusManager.getManager().handle(
+								new Status(Status.WARNING, IssueTrackingPlugin.PLUGIN_ID, "Issue is null! Comment could not be added by AddCommentAction!"),	 //$NON-NLS-1$ 
+								StatusManager.LOG);
 					}
-				};
-				job.setPriority(Job.SHORT);
-				job.schedule();
-
-			}
-		}
-	}
+					super.done(event);
+				}
+			});
+			loadIssueJob.schedule();
+		}	}
 }
