@@ -1,6 +1,9 @@
 package org.nightlabs.jfire.jbpm.ui;
 
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
+import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -13,7 +16,24 @@ public class JFireJbpmPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static JFireJbpmPlugin plugin;
-	
+
+	/**
+	 * Self-conflicting {@link ISchedulingRule} to prevent code in {@link CurrentStateComposite#setStatable(org.nightlabs.jfire.jbpm.graph.def.Statable, org.nightlabs.progress.ProgressMonitor)}
+	 * and {@link NextTransitionComposite#setStatable(org.nightlabs.jfire.jbpm.graph.def.Statable, org.nightlabs.progress.ProgressMonitor)}
+	 * run simultaneously which may cause a deadlock situation (at least I had it on a Win7x64 machine), Denis Dudnik.
+	 */
+	public static final ISchedulingRule stateCompositeSchedulingRule = new ISchedulingRule() {
+		@Override
+		public boolean isConflicting(ISchedulingRule rule) {
+			return rule == this;
+		}
+		
+		@Override
+		public boolean contains(ISchedulingRule rule) {
+			return rule == this;
+		}
+	};
+
 	/**
 	 * The constructor
 	 */

@@ -10,7 +10,9 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -34,6 +36,7 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
+import org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -129,43 +132,50 @@ implements ISelectionProvider
 	}
 	public void setStatable(Statable _statable, ProgressMonitor monitor)
 	{
-		this.statable = _statable;
-		final State state = statable.getStatableLocal().getState();
-		stateID = (StateID) JDOHelper.getObjectId(state);
-
-		// fetch the possible further transitions for the current state
-		final List<Transition> transitions = TransitionDAO.sharedInstance().getTransitions(
-				stateID, Boolean.TRUE, FETCH_GROUPS_TRANSITION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-		Collections.sort(transitions, new Comparator<Transition>() {
-			@Override
-			public int compare(Transition t1, Transition t2)
+		IJobManager jobManager = Job.getJobManager();
+		try{
+			jobManager.beginRule(JFireJbpmPlugin.stateCompositeSchedulingRule, new NullProgressMonitor());
+			
+			this.statable = _statable;
+			final State state = statable.getStatableLocal().getState();
+			stateID = (StateID) JDOHelper.getObjectId(state);
+	
+			// fetch the possible further transitions for the current state
+			final List<Transition> transitions = TransitionDAO.sharedInstance().getTransitions(
+					stateID, Boolean.TRUE, FETCH_GROUPS_TRANSITION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			Collections.sort(transitions, new Comparator<Transition>() {
+				@Override
+				public int compare(Transition t1, Transition t2)
+				{
+					return t1.getName().getText().compareTo(t2.getName().getText());
+				}
+			});
+	
+			Runnable runnable = new Runnable()
 			{
-				return t1.getName().getText().compareTo(t2.getName().getText());
-			}
-		});
-
-		Runnable runnable = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (nextTransitionCombo.isDisposed())
-					return;
-
-				nextTransitionCombo.removeAll();
-				nextTransitionCombo.addElement(EMPTY_TRANSITION);
-				nextTransitionCombo.addElements(transitions);
-				nextTransitionCombo.setSelection(0);
-				setEnabled(true);
-				updateUI();
-				layout(true);
-			}
-		};
-
-		if (Display.getCurrent() == null)
-			Display.getDefault().asyncExec(runnable);
-		else
-			runnable.run();
+				@Override
+				public void run()
+				{
+					if (nextTransitionCombo.isDisposed())
+						return;
+	
+					nextTransitionCombo.removeAll();
+					nextTransitionCombo.addElement(EMPTY_TRANSITION);
+					nextTransitionCombo.addElements(transitions);
+					nextTransitionCombo.setSelection(0);
+					setEnabled(true);
+					updateUI();
+					layout(true);
+				}
+			};
+	
+			if (Display.getCurrent() == null)
+				Display.getDefault().asyncExec(runnable);
+			else
+				runnable.run();
+		}finally{
+			jobManager.endRule(JFireJbpmPlugin.stateCompositeSchedulingRule);
+		}
 	}
 
 	private StateID stateID;

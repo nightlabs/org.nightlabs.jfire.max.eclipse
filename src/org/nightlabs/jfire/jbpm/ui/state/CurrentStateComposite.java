@@ -4,7 +4,9 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -22,6 +24,7 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
+import org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.l10n.GlobalDateFormatter;
 import org.nightlabs.l10n.IDateFormatter;
@@ -105,28 +108,35 @@ public class CurrentStateComposite
 
 	public void setStatable(Statable _statable, ProgressMonitor monitor)
 	{
-		this.statable = _statable;
-		StateID stateID = (StateID) JDOHelper.getObjectId(statable.getStatableLocal().getState());
-
-		this.state = StateDAO.sharedInstance().getState(stateID, FETCH_GROUPS_STATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-
-		Runnable runnable = new Runnable()
-		{
-			public void run()
+		IJobManager jobManager = Job.getJobManager();
+		try{
+			jobManager.beginRule(JFireJbpmPlugin.stateCompositeSchedulingRule, new NullProgressMonitor());
+			
+			this.statable = _statable;
+			StateID stateID = (StateID) JDOHelper.getObjectId(statable.getStatableLocal().getState());
+	
+			this.state = StateDAO.sharedInstance().getState(stateID, FETCH_GROUPS_STATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+	
+			Runnable runnable = new Runnable()
 			{
-				if (stateDefinitionName.isDisposed())
-					return;
-
-				stateDefinitionName.setText(state.getStateDefinition().getName().getText());
-				timestamp.setText(GlobalDateFormatter.sharedInstance().formatDate(state.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS));
-				userName.setText(state.getUser().getName()); // + " (" + state.getUser().getOrganisationID() + ")");
-				getParent().layout(true, true);
-			}
-		};
-
-		if (Display.getCurrent() == null)
-			Display.getDefault().asyncExec(runnable);
-		else
-			runnable.run();
+				public void run()
+				{
+					if (stateDefinitionName.isDisposed())
+						return;
+	
+					stateDefinitionName.setText(state.getStateDefinition().getName().getText());
+					timestamp.setText(GlobalDateFormatter.sharedInstance().formatDate(state.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS));
+					userName.setText(state.getUser().getName()); // + " (" + state.getUser().getOrganisationID() + ")");
+					getParent().layout(true, true);
+				}
+			};
+	
+			if (Display.getCurrent() == null)
+				Display.getDefault().asyncExec(runnable);
+			else
+				runnable.run();
+		}finally{
+			jobManager.endRule(JFireJbpmPlugin.stateCompositeSchedulingRule);
+		}
 	}
 }
