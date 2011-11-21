@@ -37,11 +37,8 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.GlobalJDOManagerProvider;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.base.login.ui.part.LSDViewPart;
-import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.dao.IssueCommentDAO;
@@ -50,9 +47,6 @@ import org.nightlabs.jfire.issue.id.IssueCommentID;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
-import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
-import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
-import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
@@ -126,34 +120,37 @@ extends LSDViewPart
 			}
 		});
 
-		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addLifecycleListener(issueCommentAddNotificationListener);
+		final JDOListenerAccessor accessor = new JDOListenerAccessor();
+		GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().addLifecycleListener(accessor.issueCommentAddNotificationListener);
 		scrolledForm.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event) {
-				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeLifecycleListener(issueCommentAddNotificationListener);
+				GlobalJDOManagerProvider.sharedInstance().getLifecycleManager().removeLifecycleListener(accessor.issueCommentAddNotificationListener);
 			}
 		});
 	}
 
-	private JDOLifecycleListener issueCommentAddNotificationListener = new JDOLifecycleAdapterJob("Loading Issue") {
-		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
-				IssueComment.class,
-				false,
-				JDOLifecycleState.NEW,
-				JDOLifecycleState.DELETED);
+	class JDOListenerAccessor {
+		private org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener issueCommentAddNotificationListener = new org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob("Loading Issue") {
+			private org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter filter = new org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter(
+					IssueComment.class,
+					false,
+					org.nightlabs.jfire.jdo.notification.JDOLifecycleState.NEW,
+					org.nightlabs.jfire.jdo.notification.JDOLifecycleState.DELETED);
 
-		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
-		{
-			return filter;
-		}
+			public org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
+			{
+				return filter;
+			}
 
-		public void notify(JDOLifecycleEvent event)
-		{
-			ProgressMonitor monitor = getProgressMonitor();
-			monitor.beginTask("Reloading Data...", 100);
-			reloadIssue();
-			monitor.done();
-		}
-	};
+			public void notify(org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent event)
+			{
+				ProgressMonitor monitor = getProgressMonitor();
+				monitor.beginTask("Reloading Data...", 100);
+				reloadIssue();
+				monitor.done();
+			}
+		};
+	}
 
 	public void reloadIssue() {
 		Job job = new Job("Loading Issue...") {
