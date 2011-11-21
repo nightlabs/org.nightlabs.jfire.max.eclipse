@@ -25,7 +25,8 @@ import org.nightlabs.jfire.jbpm.dao.StateDAO;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.GlobalDateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class StateHistoryComposite
@@ -46,7 +47,7 @@ extends AbstractTableComposite<State>
 
 			switch (columnIndex) {
 				case 0:
-					return DateFormatter.formatDateShortTimeHMS(state.getCreateDT(), true);
+					return GlobalDateFormatter.sharedInstance().formatDate(state.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY);
 				case 1:
 					return state.getStateDefinition().getName().getText();
 				case 2:

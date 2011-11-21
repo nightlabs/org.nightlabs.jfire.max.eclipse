@@ -23,7 +23,8 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.l10n.GlobalDateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CurrentStateComposite
@@ -117,7 +118,7 @@ public class CurrentStateComposite
 					return;
 
 				stateDefinitionName.setText(state.getStateDefinition().getName().getText());
-				timestamp.setText(DateFormatter.formatDateShortTimeHMS(state.getCreateDT(), false));
+				timestamp.setText(GlobalDateFormatter.sharedInstance().formatDate(state.getCreateDT(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HMS));
 				userName.setText(state.getUser().getName()); // + " (" + state.getUser().getOrganisationID() + ")");
 				getParent().layout(true, true);
 			}
