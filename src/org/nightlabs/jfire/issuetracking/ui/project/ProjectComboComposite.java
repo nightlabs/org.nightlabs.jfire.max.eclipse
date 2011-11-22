@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
@@ -22,7 +21,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.base.ui.job.Job;
@@ -207,40 +205,35 @@ implements ISelectionProvider
 		Object selObj = sel.getFirstElement();
 
 		if (selObj instanceof Project)
-			setSelectedProject((Project) selObj);
+			setSelectedProject(((Project) selObj).getObjectId());
 		else if (selObj instanceof ProjectID)
 			setSelectedProject((ProjectID) selObj);
 		else
 			throw new IllegalArgumentException("selection.getFirstElement() is neither null, nor an instanceof " + Project.class.getName()+ " or " + ProjectID.class.getName()+ "! It is an instance of " + (selObj == null ? null : selObj.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
-	public void setSelectedProject(Project project) {
-		setSelectedProjectID(project == null ? -1 : project.getProjectID());
-	}
-
 	public void setSelectedProject(ProjectID projectID) {
-		setSelectedProjectID(projectID == null ? -1 : projectID.projectID);
-	}
-
-	private void setSelectedProjectID(long projectID) {
 		int idx = -1;
-		int i = 0;
-		for (Project project : projectList) {
-			if (project.getProjectID() == projectID) {
-				idx = i;
-				break;
+		if (projectID != null){
+			int i = 0;
+			for (Project project : projectList) {
+				if (project.getProjectID() == projectID.projectID
+						&& project.getOrganisationID().equals(projectID.organisationID)) {
+					idx = i;
+					break;
+				}
+				++i;
 			}
-			++i;
 		}
 
 		if (idx < 0) {
 			projectCombo.deselectAll();
 			selectedProject = null;
-		}
-		else {
+		} else {
 			projectCombo.select(idx);
 			selectedProject = projectList.get(idx);
 		}
+		fireSelectionChangedEvent();
 	}
 
 	public Project getSelectedProject() {

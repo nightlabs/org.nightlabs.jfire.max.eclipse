@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstantsIssue;
+import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
@@ -68,8 +69,12 @@ extends AbstractIssueEditorGeneralSection
 		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent e) {
-				getController().getIssue().setProject(projectComboComposite.getSelectedProject());
-				markDirty();
+				Project selectedProject = projectComboComposite.getSelectedProject();
+				if (selectedProject != null
+						&& !selectedProject.equals(getController().getIssue().getProject())){
+					getController().getIssue().setProject(selectedProject);
+					markDirty();
+				}
 			}
 		});
 
@@ -263,7 +268,7 @@ extends AbstractIssueEditorGeneralSection
 				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.label.project.text")) //$NON-NLS-1$
 		);
 
-		projectComboComposite.setSelectedProject(issue.getProject());
+		projectComboComposite.setSelectedProject(issue.getProject()!=null?issue.getProject().getObjectId():null);
 
 		currentStateComposite.setStatable(issue);
 		nextTransitionComposite.setStatable(issue);
