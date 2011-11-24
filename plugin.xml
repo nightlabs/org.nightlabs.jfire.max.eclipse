@@ -10,12 +10,16 @@
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView"
             icon="icons/view/PersonRelationDetailsView.16x16.png"
             id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView" 
-            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView.name"/>            
+            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView.name"/>
+            
+        <!--                
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.HierarchicalPersonRelationIssueTreeView"
             icon="icons/view/HierarchicalPersonRelationIssueTreeView.16x16.png"
             id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.HierarchicalPersonRelationIssueTreeView" 
             name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.HierarchicalPersonRelationIssueTreeView.name"/>
+            
+            -->
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">

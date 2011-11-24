@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.personrelation.issuetracking.trade.ui;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.IShellProvider;
@@ -12,6 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
@@ -25,6 +28,13 @@ import org.nightlabs.progress.SubProgressMonitor;
 
 public class CreateIssueCommentDialog extends ResizableTrayDialog
 {
+	private static String[] FETCH_GROUP_ISSUE = new String[] {
+		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_ISSUE_COMMENTS,
+		Issue.FETCH_GROUP_SUBJECT,
+		IssueComment.FETCH_GROUP_USER,
+		IssueComment.FETCH_GROUP_ISSUE};
+
 	private IssueID issueID;
 	private Text commentText;
 
@@ -56,7 +66,10 @@ public class CreateIssueCommentDialog extends ResizableTrayDialog
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				monitor.beginTask(Messages.getString("org.nightlabs.jfire.personrelation.issuetracking.trade.ui.CreateIssueCommentDialog.task.createNewComment.name"), 100); //$NON-NLS-1$
 				try {
-					Issue issue = IssueDAO.sharedInstance().getIssue(issueID, null, 1, new SubProgressMonitor(monitor, 20));
+					Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 20));
+					if (issue == null) {
+						throw new IllegalStateException("The issue with the ID " + issueID + " does not exist in the database.");
+					}
 					User user = Login.getLogin().getUser(null, 1, new SubProgressMonitor(monitor, 20));
 					IssueComment issueComment = new IssueComment(issue, newCommentText, user);
 					IssueCommentDAO.sharedInstance().storeIssueComment(issueComment, false, null, 1, new SubProgressMonitor(monitor, 60));
