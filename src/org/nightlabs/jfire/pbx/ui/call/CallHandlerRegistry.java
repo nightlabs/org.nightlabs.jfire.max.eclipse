@@ -25,6 +25,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.pbx.Call;
 import org.nightlabs.jfire.pbx.NoPhoneSystemAssignedException;
+import org.nightlabs.jfire.pbx.PhoneNumberDataFieldCall;
 import org.nightlabs.jfire.pbx.PhoneSystem;
 import org.nightlabs.jfire.pbx.PhoneSystemException;
 import org.nightlabs.jfire.pbx.dao.PhoneSystemDAO;
@@ -200,7 +201,7 @@ public class CallHandlerRegistry extends AbstractEPProcessor
 
 			if (phoneNumberDataField != null) {
 				DataFieldID phoneNumberDataFieldID = (DataFieldID) JDOHelper.getObjectId(phoneNumberDataField);
-				Call call = new Call(phoneNumberDataFieldID);
+				Call call = new PhoneNumberDataFieldCall(phoneNumberDataFieldID);
 				call(phoneSystem, call, new SubProgressMonitor(monitor, 40));
 			}
 
