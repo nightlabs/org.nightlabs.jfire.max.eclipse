@@ -208,7 +208,7 @@ public class PersonRelationTree<N extends PersonRelationTreeNode> extends Abstra
 		personRelationTreeLabelProvider = createPersonRelationTreeLabelProvider(treeViewer);
 		
 		treeViewer.setContentProvider(new PersonRelationTreeContentProvider<N>());
-		treeViewer.setLabelProvider(personRelationTreeLabelProvider);
+		treeViewer.setLabelProvider(personRelationTreeLabelProvider.getLabelProviderToUseForTree());
 	}
 
 	public void setInputPersonIDs(Collection<PropertySetID> personIDs, PropertySetID source)

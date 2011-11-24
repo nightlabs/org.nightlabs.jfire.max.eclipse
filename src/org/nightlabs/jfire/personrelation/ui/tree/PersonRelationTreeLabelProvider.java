@@ -6,12 +6,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.labelprovider.ColumnSpanLabelProvider;
+import org.nightlabs.eclipse.compatibility.Compatibility;
 import org.nightlabs.jdo.ObjectID;
 
 /**
@@ -25,16 +28,22 @@ import org.nightlabs.jdo.ObjectID;
  * @author Marco Schulze
  * @author khaireel
  */
-public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> extends ColumnSpanLabelProvider implements IColorProvider {
+public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> 
+//extends ColumnSpanLabelProvider 
+extends CellLabelProvider
+implements IColorProvider, ITableLabelProvider
+{
 	private final Logger logger = Logger.getLogger(PersonRelationTreeLabelProvider.class);
-
+	private ColumnViewer columnViewer;
+	
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectIDClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2PersonRelationTreeLabelProviderDelegate = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 	private Map<Class<?>, IPersonRelationTreeLabelProviderDelegate> jdoObjectClass2DelegateCache = new HashMap<Class<?>, IPersonRelationTreeLabelProviderDelegate>();
 
 	
 	public PersonRelationTreeLabelProvider(ColumnViewer columnViewer, boolean addDefaultDelegates) {
-		super(columnViewer);
+//		super(columnViewer);
+		this.columnViewer = columnViewer;
 		if (addDefaultDelegates) {
 			addPersonRelationTreeLabelProviderDelegate(new DefaultPersonRelationTreeLabelProviderDelegatePerson());
 			addPersonRelationTreeLabelProviderDelegate(new DefaultPersonRelationTreeLabelProviderDelegatePersonRelation());
@@ -104,7 +113,6 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 
 
 	@SuppressWarnings("unchecked")
-	@Override
 	protected int[][] getColumnSpan(Object element) {
 		if (!(element instanceof PersonRelationTreeNode))
 			return null; // null means each real column assigned to one visible column
@@ -156,7 +164,7 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 	 * @return The delegate for the object, or <code>null</code> if none could
 	 *         be found.
 	 */
-	private IPersonRelationTreeLabelProviderDelegate getDelegate(Object jdoObject) {
+	public IPersonRelationTreeLabelProviderDelegate getDelegate(Object jdoObject) {
 		Class<? extends Object> clazz = jdoObject.getClass();
 		if (!jdoObjectClass2DelegateCache.containsKey(clazz)) {
 			IPersonRelationTreeLabelProviderDelegate delegate = jdoObjectClass2PersonRelationTreeLabelProviderDelegate.get(clazz);
@@ -268,6 +276,53 @@ public class PersonRelationTreeLabelProvider<N extends PersonRelationTreeNode> e
 	@Override
 	public Color getBackground(Object element) {
 		return null;
+	}
+	
+	private static class ColumnSpanLabelProviderDelegate extends ColumnSpanLabelProvider implements IColorProvider {
+
+		private PersonRelationTreeLabelProvider<?> delegate;
+		
+		public ColumnSpanLabelProviderDelegate(PersonRelationTreeLabelProvider<?> delegate, ColumnViewer columnViewer) {
+			super(columnViewer);
+			this.delegate = delegate;
+		}
+		
+		@Override
+		protected int[][] getColumnSpan(Object element) {
+			return delegate.getColumnSpan(element);
+		}
+
+		@Override
+		public String getColumnText(Object element, int spanColIndex) {
+			return delegate.getColumnText(element, spanColIndex);
+		}
+		
+		@Override
+		public Image getColumnImage(Object element, int spanColIndex) {
+			return delegate.getColumnImage(element, spanColIndex);
+		}
+
+		@Override
+		public Color getBackground(Object element) {
+			return delegate.getBackground(element);
+		}
+
+		@Override
+		public Color getForeground(Object element) {
+			return delegate.getForeground(element);
+		}
+		
+	}
+	
+	CellLabelProvider getLabelProviderToUseForTree() {
+		if (Compatibility.isRCP) {
+			// ColumnSpanLabelProvider works for RCP so we use that here...
+			return new ColumnSpanLabelProviderDelegate(this, columnViewer);
+		}
+		else {
+			// In all other cases we return 'this', a non-spanning CellLabelProvider.
+			return this;
+		}
 	}
 
 }
