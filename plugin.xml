@@ -36,6 +36,11 @@
             editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
             icon48x48="icons/editor/overview/Rights.48x48.png" indexHint="200"/>
         <pageFactory
+            class="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypePropertySetPage$Factory"
+            description="%org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypePropertySetPage$Factory.description"
+            editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
+            icon48x48="icons/editor/overview/Preferences.48x48.png" indexHint="450"/>    
+        <pageFactory
             class="org.nightlabs.jfire.dynamictrade.admin.ui.tariffuserset.TariffUserSetPage$Factory"
             description="%org.nightlabs.jfire.dynamictrade.admin.ui.tariffuserset.TariffUserSetPage$Factory.description"
             editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"

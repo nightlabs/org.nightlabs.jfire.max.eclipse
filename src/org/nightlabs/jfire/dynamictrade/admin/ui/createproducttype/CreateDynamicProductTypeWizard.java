@@ -77,6 +77,7 @@ extends DynamicPathWizard
 				dynamicProductTypeNamePage.getPackageNature());
 		dynamicProductType.getName().copyFrom(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer());
 		dynamicProductType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
+		dynamicProductType.getFieldMetaData(DynamicProductType.FieldName.propertySet).setValueInherited(false);
 
 		selectPriceConfigPage.configureProductType(dynamicProductType);
 
