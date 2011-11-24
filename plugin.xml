@@ -1312,6 +1312,7 @@
         <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryOwnerNameQuickSearchEntryFactory"
             id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer" name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer.name"/>
+<!--
         <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.search.MoneyTransferFromAccountIDQuickSearchEntryFactory"
             id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="From Account ID"/>
@@ -1323,7 +1324,8 @@
             id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="To Account ID"/>
         <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.moneytransfer.search.MoneyTransferToLegalEntityIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="To LegalEntity ID"/>
+            id="org.nightlabs.jfire.trade.ui.overview.moneytransfer.MoneyTransferEntryViewer" name="To LegalEntity ID"/> 
+-->
     </extension>
     <extension point="org.nightlabs.base.ui.exceptionhandler">
         <exceptionHandler

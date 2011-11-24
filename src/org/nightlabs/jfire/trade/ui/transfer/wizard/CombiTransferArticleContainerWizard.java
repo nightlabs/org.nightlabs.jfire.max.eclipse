@@ -444,8 +444,10 @@ extends AbstractCombiTransferWizard
 						if (invoiceIDs == null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
 								AccountingManagerRemote accountingManager = TransferWizardUtil.getAccountingManager();
-								if (invoiceID != null)
+								if (invoiceID != null) {
+									invoiceIDs = new HashSet<InvoiceID>();
 									invoiceIDs.add(invoiceID);
+								} 
 								else {
 									invoiceIDs = getArticlesInvoiceIDs();
 									Collection<ArticleID> articleIDsWithoutInvoice = getArticleIDsWithoutInvoice();
