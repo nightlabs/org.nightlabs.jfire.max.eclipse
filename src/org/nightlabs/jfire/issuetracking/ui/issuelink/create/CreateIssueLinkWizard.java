@@ -13,6 +13,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
@@ -30,6 +31,7 @@ extends DynamicPathWizard
 	private SelectIssueLinkHandlerFactoryWizardPage selectIssueLinkHandlerFactoryPage;
 	private SelectLinkedObjectWizardPage selectLinkedObjectPage;
 	private SelectIssueLinkTypeWizardPage selectIssueLinkTypePage;
+	private IssueLinkHandlerFactory<ObjectID, Object> lastSelectedIssueLinkHandlerFactory;
 
 	public CreateIssueLinkWizard(IssueLinkTable issueLinkTable, Issue issue) {
 		this.issueLinkTable = issueLinkTable;
@@ -51,10 +53,15 @@ extends DynamicPathWizard
 		selectIssueLinkHandlerFactoryPage.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				if (selectIssueLinkHandlerFactoryPage.getLinkHandlerFactoryTreeComposite().getIssueLinkHandlerFactory() == null)
+				IssueLinkHandlerFactory<ObjectID, Object> issueLinkHandlerFactory = selectIssueLinkHandlerFactoryPage.getLinkHandlerFactoryTreeComposite().getIssueLinkHandlerFactory();
+				if (issueLinkHandlerFactory == lastSelectedIssueLinkHandlerFactory) {
+					return;
+				}
+				if (issueLinkHandlerFactory == null)
 					issueLinkAdder = null;
 				else
-					issueLinkAdder = selectIssueLinkHandlerFactoryPage.getLinkHandlerFactoryTreeComposite().getIssueLinkHandlerFactory().createIssueLinkAdder(issue);
+					issueLinkAdder = issueLinkHandlerFactory.createIssueLinkAdder(issue);
+				lastSelectedIssueLinkHandlerFactory = issueLinkHandlerFactory;
 
 				selectLinkedObjectPage.setIssueLinkAdder(issueLinkAdder);
 				selectIssueLinkTypePage.setIssueLinkAdder(issueLinkAdder);

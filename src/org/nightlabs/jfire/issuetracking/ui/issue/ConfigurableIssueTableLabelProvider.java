@@ -90,7 +90,7 @@ implements TableLabelProvider<IssueID, Issue>, IColumnComparatorProvider, ITable
 		this.scope = scope;
 
 		// Sets up the Image tracking mechanism.
-		if (parent != null) {
+		if (parent != null && !parent.isDisposed()) {
 			// Attach the images to the parent's dispose listener.
 			parent.addDisposeListener(new DisposeListener() {
 				@Override

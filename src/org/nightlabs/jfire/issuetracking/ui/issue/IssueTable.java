@@ -192,6 +192,8 @@ extends AbstractTableComposite<Issue>
 		// Guard.
 		if (columnContentDescriptors == null)
 			return;
+		if (table == null || table.isDisposed())
+			return;
 
 		// Go through the list, in order of the intended appearance.
 		int[] weights = new int[columnContentDescriptors.size()];
@@ -217,6 +219,8 @@ extends AbstractTableComposite<Issue>
 	protected void setTableProvider(TableViewer tableViewer) {
 		// Guard.
 		if (columnContentDescriptors == null)
+			return;
+		if (tableViewer.getTable().isDisposed())
 			return;
 
 		// Only because of the scope there existed a dependency to org.nightlabs.jfire.trade.ui.TradePlugin although not needed at all

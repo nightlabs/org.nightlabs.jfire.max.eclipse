@@ -220,8 +220,10 @@ public class IssueFilterCompositePeopleRelated
 						new NullProgressMonitor());
 					if (selectedAssignee != null) {
 						assigneeText.setText(selectedAssignee.getName());
-						setSearchSectionActiveBySelection(true);
+//						setSearchSectionActiveBySelection(true);
 					}
+				} else {
+					assigneeText.setText("");
 				}
 				// end new
 			}

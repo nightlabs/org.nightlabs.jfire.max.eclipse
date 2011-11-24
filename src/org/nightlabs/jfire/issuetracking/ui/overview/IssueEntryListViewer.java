@@ -76,7 +76,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 	private IssueTable issueResultTable;
 	private IColumnConfiguration columnConfiguration;
 	private Job loadColumnConfigurationJob;
-	
+
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(final Composite parent) {
 		//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
@@ -89,6 +89,8 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 					parent.getDisplay().syncExec(new Runnable() {
 						@Override
 						public void run() {
+							if (issueResultTable.isDisposed())
+								return;
 							issueResultTable.setIssueTableConfigurations(columnConfiguration);
 							issueResultTable.layout(true, true);
 						}
@@ -185,7 +187,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 										issueResultTable.setInput(foundIssues);
 										handleContextMenuItems();
 									}
-									
+
 									break;
 								}
 							}
@@ -216,7 +218,7 @@ extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 		// We save the previous query; used later in the notification listener, in case we need
 		// to refresh the table entries, given the query constraints.
 		previousSavedQuery = queryMap;
-		
+
 		// We need to join the load column config job here in order to have the correct fetch-groups
 		try {
 			loadColumnConfigurationJob.join();

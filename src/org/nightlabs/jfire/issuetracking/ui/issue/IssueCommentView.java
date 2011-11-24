@@ -173,7 +173,7 @@ extends LSDViewPart
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				if (issueID == null){
-					return new Status(Status.WARNING, IssueTrackingPlugin.PLUGIN_ID, "Issue ID is null! Can't reload issue!");
+					return new Status(Status.WARNING, IssueTrackingPlugin.PLUGIN_ID, "Issue ID is null! Can't reload issue!"); //$NON-NLS-1$
 				}
 				final Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
@@ -498,5 +498,6 @@ extends LSDViewPart
 				}
 			});
 			loadIssueJob.schedule();
-		}	}
+		}
+	}
 }
