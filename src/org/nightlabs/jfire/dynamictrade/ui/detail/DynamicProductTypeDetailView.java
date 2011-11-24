@@ -20,8 +20,8 @@ implements IProductTypeDetailView
 	public Composite createComposite(Composite parent)
 	{
 		dynamicProductTypeDetailViewComposite = new DynamicProductTypeDetailViewComposite(parent, SWT.NONE);
-//		if (initMemento != null)
-//			dynamicProductTypeDetailViewComposite.restoreState(initMemento);
+		if (initMemento != null)
+			dynamicProductTypeDetailViewComposite.restoreState(initMemento);
 		return dynamicProductTypeDetailViewComposite;
 	}
 
@@ -31,16 +31,15 @@ implements IProductTypeDetailView
 			dynamicProductTypeDetailViewComposite.setProductTypeID(productTypeID);
 	}
 
-//	private IMemento initMemento;
+	private IMemento initMemento;
 	@Override
 	public void init(IMemento memento) {
-//		this.initMemento = memento;
+		this.initMemento = memento;
 	}
 
 	@Override
 	public void saveState(IMemento memento) {
-//		if (dynamicProductTypeDetailViewComposite != null)
-//			dynamicProductTypeDetailViewComposite.saveState(memento);
+		if (dynamicProductTypeDetailViewComposite != null)
+			dynamicProductTypeDetailViewComposite.saveState(memento);
 	}
-
 }
