@@ -249,6 +249,7 @@ extends AbstractIssueEditorGeneralSection
 	 * Handles the action to save (or download to a local copy) of an {@link IssueFileAttachment}.
 	 */
 	public class DownloadFileToolbarAction extends Action {
+
 		public DownloadFileToolbarAction() {
 			setId(DownloadFileToolbarAction.class.getName());
 			setImageDescriptor(SharedImages.SAVE_16x16);
@@ -270,11 +271,18 @@ extends AbstractIssueEditorGeneralSection
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					IssueFileAttachment iFA = IssueFileAttachmentDAO.sharedInstance().getIssueFileAttachment(
-							(IssueFileAttachmentID)JDOHelper.getObjectId(issueFileAttachment),
-							new String[] {FetchPlan.DEFAULT, IssueFileAttachment.FETCH_GROUP_DATA},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor() );
+					IssueFileAttachmentID iFAID = (IssueFileAttachmentID)JDOHelper.getObjectId(issueFileAttachment);
+					IssueFileAttachment iFA = issueFileAttachment;
+					if (iFAID != null) {
+						// The fileAttachment was saved before and thus might
+						// have been detached without data, re-query it from the
+						// server (or cache)
+						iFA = IssueFileAttachmentDAO.sharedInstance().getIssueFileAttachment(
+								(IssueFileAttachmentID)JDOHelper.getObjectId(issueFileAttachment),
+								new String[] {FetchPlan.DEFAULT, IssueFileAttachment.FETCH_GROUP_DATA},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								new NullProgressMonitor() );
+					}
 
 					InputStream inputStream = iFA.createFileAttachmentInputStream();
 					if (inputStream != null) {
