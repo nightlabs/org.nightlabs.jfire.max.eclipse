@@ -95,7 +95,7 @@ extends WizardHopPage
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor);
 
-				Display.getDefault().asyncExec(new Runnable() {
+				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
 //						if (issueLinkTypes.size() > 0) {
