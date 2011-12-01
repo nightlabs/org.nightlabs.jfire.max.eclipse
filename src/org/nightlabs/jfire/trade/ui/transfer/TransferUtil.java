@@ -93,8 +93,7 @@ public class TransferUtil
 		Article articleToCheck = ArticleDAO.sharedInstance().getArticle(
 						(ArticleID) JDOHelper.getObjectId(article), new String[] { FetchPlan.DEFAULT,Article.FETCH_GROUP_OFFER },
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-		
-		if (article == null || article.getOffer() == null)
+		if (articleToCheck == null || articleToCheck.getOffer() == null)
 			return false;
 		if (articleToCheck.getOffer().isAborted()) {
 			return false;

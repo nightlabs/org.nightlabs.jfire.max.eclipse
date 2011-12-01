@@ -239,7 +239,7 @@ extends XComposite
 			@Override
 			public void widgetDisposed(DisposeEvent arg0)
 			{
-				setSelectedLegalEntity(null, true);
+				setSelectedLegalEntity(null, false);
 
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(
 						LegalEntityViewConfigModule.class, notificationListener);
