@@ -3,14 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>org.nightlabs.jfire.eclipse.max.assembly.parent</artifactId>
 		<groupId>org.nightlabs.jfire.eclipse</groupId>
+		<artifactId>org.nightlabs.jfire.eclipse.max.assembly.parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
 		<relativePath>../org.nightlabs.jfire.eclipse.max.assembly.parent/pom.xml</relativePath>
 	</parent>
-	<groupId>org.nightlabs.jfire.eclipse</groupId>
+	
 	<artifactId>org.nightlabs.jfire.eclipse.max.assembly.linux-gtk-x86_64</artifactId>
 	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
 
 	<properties>
 		<jfire.eclipse.assembly.artifactId>org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</jfire.eclipse.assembly.artifactId>
