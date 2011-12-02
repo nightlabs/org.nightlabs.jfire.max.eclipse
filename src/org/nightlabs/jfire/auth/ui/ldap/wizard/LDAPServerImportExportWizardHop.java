@@ -79,7 +79,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 				syncEvent = new LDAPSyncEvent(SyncEventGenericType.FETCH_USER);
 				Collection<String> entriesToSync = null;
 				if (getImportPage().shouldImportAll()){
-					entriesToSync = ldapServer.getAllEntriesForSync();
+					entriesToSync = ldapServer.getAllUserEntriesForSync();
 				}else{
 					entriesToSync = getImportPage().getSelectedEntries();
 				}

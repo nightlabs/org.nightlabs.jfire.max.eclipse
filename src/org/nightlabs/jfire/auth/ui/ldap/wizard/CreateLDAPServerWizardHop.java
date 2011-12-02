@@ -3,6 +3,7 @@ package org.nightlabs.jfire.auth.ui.ldap.wizard;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard;
 import org.nightlabs.jfire.auth.ui.wizard.IUserManagementSystemBuilderHop;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider.AuthenticationMethod;
@@ -52,7 +53,8 @@ public class CreateLDAPServerWizardHop extends WizardHop implements IUserManagem
 		ldapServer.setSyncDN(advancedConfigPage.getSyncDN());
 		ldapServer.setSyncPassword(advancedConfigPage.getSyncPassword());
 		ldapServer.setLeading(advancedConfigPage.getLeadingState());
-		ldapServer.setBaseDN(advancedConfigPage.getBaseEntryDN());
+		ldapServer.setBaseDN(LDAPScriptSet.BASE_USER_ENTRY_NAME_PLACEHOLDER, advancedConfigPage.getBaseEntryDN(LDAPScriptSet.BASE_USER_ENTRY_NAME_PLACEHOLDER));
+		ldapServer.setBaseDN(LDAPScriptSet.BASE_GROUP_ENTRY_NAME_PLACEHOLDER, advancedConfigPage.getBaseEntryDN(LDAPScriptSet.BASE_GROUP_ENTRY_NAME_PLACEHOLDER));
 		ldapServer.setAttributeSyncPolicy(advancedConfigPage.getAttributeSyncPolicy());
 		
 		return ldapServer;

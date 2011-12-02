@@ -23,6 +23,7 @@ import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper;
@@ -41,7 +42,8 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	private Button isLeadingButton;
 	private LDAPEntrySelectorComposite syncDNselector;
 	private Text syncPasswordText;
-	private LDAPEntrySelectorComposite ldapEntrySelector;
+	private LDAPEntrySelectorComposite ldapUserEntrySelector;
+	private LDAPEntrySelectorComposite ldapGroupEntrySelector;
 	private CCombo attributeSyncPolicyCombo;
 
 	/**
@@ -64,13 +66,13 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		new Label(parent, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.baseEntryLabel")); //$NON-NLS-1$
 		LDAPAttributeSet selectionCriteria = new LDAPAttributeSet();
 		selectionCriteria.createAttribute("objectClass", CollectionUtil.createHashSet("organizationalUnit")); //$NON-NLS-1$ //$NON-NLS-2$
-		ldapEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE, selectionCriteria);
-		ldapEntrySelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ldapEntrySelector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
-		ldapEntrySelector.addModifyListener(new ModifyListener() {
+		ldapUserEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE, selectionCriteria);
+		ldapUserEntrySelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ldapUserEntrySelector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
+		ldapUserEntrySelector.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent modifyevent) {
-				String selectedEntryName = ldapEntrySelector.getEntryName();
+				String selectedEntryName = ldapUserEntrySelector.getEntryName();
 				if (selectedEntryName == null || selectedEntryName.isEmpty()){
 					updateStatus(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerAdvancedConfigWizardPage.pageStatus_noBaseEntry")); //$NON-NLS-1$
 				}else{
@@ -85,6 +87,29 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 		gd.horizontalSpan = 2;
 		gd.widthHint = 500;
 		baseEntryDescriptionExpandable.setLayoutData(gd);
+
+		new Label(parent, SWT.NONE).setText("Base group entry:");
+		ldapGroupEntrySelector = new LDAPEntrySelectorComposite(parent, SWT.NONE, selectionCriteria);
+		ldapGroupEntrySelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ldapGroupEntrySelector.setLdapConnectionParamsProvider(((CreateLDAPServerWizardHop) getWizardHop()).getLDAPConnectionParamsProvider());
+		ldapGroupEntrySelector.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent modifyevent) {
+				String selectedEntryName = ldapGroupEntrySelector.getEntryName();
+				if (selectedEntryName == null || selectedEntryName.isEmpty()){
+					updateStatus("No base goup entry!");
+				}else{
+					updateStatus(null);
+				}
+			}
+		});
+		
+		ExpandableComposite baseGroupEntryDescriptionExpandable = createDescriptionExpandable(
+				parent, "TODO: description");
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		gd.widthHint = 500;
+		baseGroupEntryDescriptionExpandable.setLayoutData(gd);
 
 		
 		Label separatorLdabel = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -196,13 +221,18 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	}
 	
 	/**
-	 * Get base entry DN (see {@link LDAPServer#setBaseDN(String)})
+	 * Get base entry DN (see {@link LDAPServer#setBaseDN(String, String)})
 	 * 
+	 * @param propName either {@link LDAPScriptSet#BASE_USER_ENTRY_NAME_PLACEHOLDER} or {@link LDAPScriptSet#BASE_GROUP_ENTRY_NAME_PLACEHOLDER}
 	 * @return name of base entry 
 	 */
-	public String getBaseEntryDN(){
-		if (ldapEntrySelector != null){
-			return ldapEntrySelector.getEntryName();
+	public String getBaseEntryDN(String propName){
+		if (LDAPScriptSet.BASE_USER_ENTRY_NAME_PLACEHOLDER.equals(propName)
+				&& ldapUserEntrySelector != null){
+			return ldapUserEntrySelector.getEntryName();
+		}else if (LDAPScriptSet.BASE_GROUP_ENTRY_NAME_PLACEHOLDER.equals(propName)
+				&& ldapGroupEntrySelector != null){
+			return ldapGroupEntrySelector.getEntryName();
 		}
 		return ""; //$NON-NLS-1$
 	}
@@ -221,9 +251,12 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 	 */
 	@Override
 	public boolean isPageComplete() {
-		if (ldapEntrySelector != null 
-				&& !ldapEntrySelector.isDisposed()
-				&& !"".equals(ldapEntrySelector.getEntryName())){ //$NON-NLS-1$
+		if (ldapUserEntrySelector != null 
+				&& !ldapUserEntrySelector.isDisposed()
+				&& !"".equals(ldapUserEntrySelector.getEntryName())
+				&& ldapGroupEntrySelector != null 
+				&& !ldapGroupEntrySelector.isDisposed()
+				&& !"".equals(ldapGroupEntrySelector.getEntryName())){ //$NON-NLS-1$
 			return true;
 		}
 		return false;
