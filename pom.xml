@@ -2,12 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
-	<!-- @generated - Auto generated POM. Remove this marker after review. -->
-	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.scripting.ui</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>${project.artifactId}</name>
 
@@ -18,7 +14,6 @@
 	</parent>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.jdo</artifactId>
@@ -126,7 +121,5 @@
 				</excludes>
 			</resource>
 		</resources>
-
-
 	</build>
 </project>
