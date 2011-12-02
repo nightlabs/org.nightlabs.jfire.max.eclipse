@@ -4,6 +4,7 @@
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.eclipse.parent</artifactId>
 	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
 
 <!--
 	<parent>
