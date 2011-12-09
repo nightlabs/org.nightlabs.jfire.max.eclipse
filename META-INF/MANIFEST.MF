@@ -8,11 +8,11 @@ Bundle-Activator: org.nightlabs.jfire.asterisk.ui.ContactAsteriskPlugin
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.contact.ui;visibility:=reexport,
- org.nightlabs.jfire.pbx.ui;visibility:=reexport
+ org.nightlabs.jfire.pbx.ui;visibility:=reexport,
+ org.nightlabs.eclipse.compatibility
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.config
 Import-Package: org.eclipse.ui.forms,
