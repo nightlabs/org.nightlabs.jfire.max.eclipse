@@ -5,10 +5,10 @@ Bundle-SymbolicName: org.nightlabs.jfire.contact.pbx.ui;singleton:=true
 Bundle-Version: 1.2.0
 Bundle-Activator: org.nightlabs.jfire.contact.pbx.ui.ContactPBXUIPlugin
 Bundle-Vendor: NightLabs.org
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.contact.ui,
- org.nightlabs.jfire.pbx.ui
+ org.nightlabs.jfire.pbx.ui,
+ org.nightlabs.eclipse.compatibility
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
