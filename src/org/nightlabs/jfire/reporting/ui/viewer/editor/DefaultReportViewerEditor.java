@@ -69,6 +69,7 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	@Override
 	public void createPartControl(Composite parent) {
 		defaultReportViewerComposite = new DefaultReportViewerComposite(parent, SWT.NONE);
+		defaultReportViewerComposite.setLayoutData(null);
 	}
 
 	/* (non-Javadoc)

@@ -60,6 +60,7 @@ public class DefaultReportViewer extends AbstractEditorReportViewer {
 		if (Composite.class.isInstance(adapterObject)) {
 			if (compositeAdapter == null) {
 				compositeAdapter = new DefaultReportViewerComposite((Composite) adapterObject, SWT.NONE);
+				compositeAdapter.setLayoutData(null);
 			}
 			return compositeAdapter;
 		}

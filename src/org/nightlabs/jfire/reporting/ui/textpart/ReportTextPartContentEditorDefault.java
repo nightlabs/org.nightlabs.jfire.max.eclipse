@@ -4,11 +4,11 @@
 package org.nightlabs.jfire.reporting.ui.textpart;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 
 /**
@@ -19,15 +19,16 @@ public class ReportTextPartContentEditorDefault
 extends XComposite
 implements IReportTextPartContentEditor {
 
-	private StyledText text;
-
+//	private StyledText text;
+private Text text;
 	/**
 	 * @param parent
 	 * @param style
 	 */
 	public ReportTextPartContentEditorDefault(Composite parent, int style) {
 		super(parent, style, LayoutMode.ORDINARY_WRAPPER);
-		text = new StyledText(this, getBorderStyle() | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+//		text = new StyledText(this, getBorderStyle() | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		text = new Text(this, getBorderStyle() | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) ;
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
 		adaptToToolkit();
 	}

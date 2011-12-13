@@ -23,19 +23,19 @@ Export-Package: org.nightlabs.jfire.reporting.ui,
  org.nightlabs.jfire.reporting.ui.viewer,
  org.nightlabs.jfire.reporting.ui.viewer.editor,
  org.nightlabs.jfire.reporting.ui.viewer.editor.action
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.config,
  org.nightlabs.base.ui,
  org.nightlabs.jfire.base.ui,
  org.nightlabs.jfire.base.j2ee,
  org.eclipse.ui.browser,
  org.eclipse.datatools.connectivity.oda;visibility:=reexport,
- org.nightlabs.eclipse.ui.pdfviewer.extension
+ org.nightlabs.eclipse.compatibility
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.config, org.nightlabs.jfire.base.j2ee
-Import-Package: org.eclipse.ui.forms,
+Import-Package: org.apache.log4j,
+ org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
  org.eclipse.ui.forms.widgets

@@ -4,17 +4,16 @@
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
@@ -22,7 +21,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -30,13 +28,6 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.eclipse.ui.pdfrenderer.PDFFileLoader;
-import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPDFDocument;
-import org.nightlabs.eclipse.ui.pdfviewer.PDFDocument;
-import org.nightlabs.eclipse.ui.pdfviewer.PDFProgressMontitorWrapper;
-import org.nightlabs.eclipse.ui.pdfviewer.extension.action.save.SaveAsActionHandler;
-import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PDFViewerComposite;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -46,9 +37,6 @@ import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.RenderedReportLayoutProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.IOUtil;
-
-import com.sun.pdfview.PDFFile;
 
 /**
  * This Composite incorporates two widgets to view
@@ -79,7 +67,6 @@ public class DefaultReportViewerComposite extends XComposite {
 //	private Frame awtFrame;
 //	private Viewer viewer;
 //	private PdfViewer pdfViewer;
-	private PDFViewerComposite pdfViewerComposite;
 
 	/**
 	 * The {@link PreparedRenderedReportLayout} for the currently
@@ -139,73 +126,8 @@ public class DefaultReportViewerComposite extends XComposite {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		browser = new BrowserWrapperComposite(stack, SWT.NONE);
 
-//		pdfViewer = new PdfViewer();
-//		pdfViewer.createControl(stack, SWT.BORDER);
-
-		pdfViewerComposite = new PDFViewerComposite(stack, SWT.BORDER);
-		new SaveAsActionHandler(pdfViewerComposite.getPdfViewer()) {
-			@Override
-			public void saveAs() {
-				String suggestedDirectory;
-				String suggestedFilePath;
-				String suggestedFileName;
-
-				if (lastSaveDirectory == null)
-					lastSaveDirectory = IOUtil.getUserHome();
-
-				suggestedFileName = Long.toHexString(System.currentTimeMillis()) + ".pdf"; // TODO is there a way to get a nicer name? i.e. the name of the report and its currently displayed data - e.g. sth. like "Offer-2008-234"??? //$NON-NLS-1$
-				File f = new File(lastSaveDirectory, suggestedFileName);
-				suggestedDirectory = lastSaveDirectory.getAbsolutePath();
-				suggestedFilePath = f.getAbsolutePath();
-
-				FileDialog fileDialog = new FileDialog(RCPUtil.getActiveShell(), SWT.SAVE);
-				fileDialog.setFileName(suggestedFileName);
-
-				if (suggestedFilePath != null && !"".equals(suggestedFilePath)) //$NON-NLS-1$
-					fileDialog.setFilterPath(suggestedDirectory);
-
-				fileDialog.setText(String.format("Save PDF file %s", suggestedFileName, suggestedFilePath)); //$NON-NLS-1$
-				String fileName = fileDialog.open();
-				if (fileName != null) {
-					final File file = new File(fileName);
-					if (file.exists()) {
-						if (!MessageDialog.openQuestion(RCPUtil.getActiveShell(), String.format("Overwrite?", file.getName(), file.getAbsolutePath()), String.format("The file \"%s\" already exists. Do you want to overwrite it?", file.getName(), file.getAbsolutePath()))) //$NON-NLS-1$ //$NON-NLS-2$
-							return;
-					}
-
-					lastSaveDirectory = file.getParentFile();
-
-					Job job = new Job(String.format("Saving PDF file %s", file.getName())) { //$NON-NLS-1$
-						@Override
-						protected IStatus run(ProgressMonitor monitor)
-						throws Exception
-						{
-							monitor.beginTask(String.format("Saving PDF file %s", file.getName()), 100); //$NON-NLS-1$
-							try {
-								monitor.worked(10);
-
-								InputStream in = preparedLayout.getEntryFileAsURL().openStream();
-								try {
-									FileOutputStream out = new FileOutputStream(file);
-									try {
-										IOUtil.transferStreamData(in, out);
-									} finally {
-										out.close();
-									}
-								} finally {
-									in.close();
-								}
-
-							} finally {
-								monitor.done();
-							}
-							return Status.OK_STATUS;
-						}
-					};
-					job.schedule();
-				}
-			}
-		};
+		DefaultReportViewerUtil.createPDFViewer(stack);
+		
 		stackLayout.topControl = fetchingLayoutComposite;
 	}
 
@@ -291,44 +213,14 @@ public class DefaultReportViewerComposite extends XComposite {
 		this.preparedLayout = preparedLayout;
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
 		if (!isDisposed()) {
-			final Display display = getDisplay();
 			if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
-//				threadDeathWorkaround.registerComposite(this);
-				org.eclipse.core.runtime.jobs.Job loadJob = new org.eclipse.core.runtime.jobs.Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadJob.name")) { //$NON-NLS-1$
-					@Override
-					protected IStatus run(final IProgressMonitor monitor) {
-						monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
-						try {
-							final PDFFile pdfFile = PDFFileLoader.loadPDF(preparedLayout.getEntryFileAsURL(), new PDFProgressMontitorWrapper(new SubProgressMonitor(monitor, 20)));
-							final PDFDocument pdfDocument = new OneDimensionalPDFDocument(pdfFile, new SubProgressMonitor(monitor, 80));
-
-							display.asyncExec(new Runnable() {
-								public void run() {
-									if (isDisposed())
-										return;
-
-									pdfViewerComposite.getPdfViewer().setPDFDocument(pdfDocument);
-									stackLayout.topControl = pdfViewerComposite;
-									DefaultReportViewerComposite.this.layout(true, true);
-								}
-							});
-						}
-						catch (final Exception x) {
-							throw new RuntimeException(x);
-						}
-						finally {
-							monitor.done();
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				loadJob.setPriority(Job.SHORT);
-				loadJob.schedule();
+				DefaultReportViewerUtil.updatePDFViewer(preparedLayout, stackLayout);
 			}
 			else {
 				// Use the browser widget as default for all other
 				stackLayout.topControl = browser;
-				browser.setUrl(preparedLayout.getEntryFileAsURL().toString());
+				browser.setUrl(DefaultReportViewerUtil.getResourceLocation(preparedLayout));
+				
 			}
 			if (errorLink != null && !errorLink.isDisposed()) {
 				errorLink.dispose();
