@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.reporting.trade.ui.JFireReportingTradePlugin
 Bundle-Localization: plugin
 Bundle-Vendor: NightLabs.org
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.nightlabs.eclipse.compatibility,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.jfire.reporting.ui
