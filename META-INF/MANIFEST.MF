@@ -11,7 +11,7 @@ Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.scripting.ui,
  org.nightlabs.jfire.scripting.ui.condition,
  org.nightlabs.jfire.scripting.ui.tree
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.nightlabs.jfire.base.ui;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.eclipse.compatibility
 Import-Package: org.apache.log4j
