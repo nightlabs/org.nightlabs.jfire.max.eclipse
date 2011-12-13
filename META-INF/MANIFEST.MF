@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Rap
+Bundle-SymbolicName: org.nightlabs.jfire.reporting.ui.rap
+Bundle-Version: 1.2.0.qualifier
+Fragment-Host: org.nightlabs.jfire.reporting.ui;bundle-version="1.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
