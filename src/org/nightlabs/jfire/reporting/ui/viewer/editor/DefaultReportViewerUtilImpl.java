@@ -7,23 +7,21 @@ import java.io.InputStream;
 import org.eclipse.rwt.RWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
 
 public class DefaultReportViewerUtilImpl extends DefaultReportViewerUtil {
 
 	@Override
-	protected void internalCreatePDFViewer(Composite parent) {
+	public void createPDFViewer(Composite parent) {
 		
 	}
 
 	@Override
-	protected String internalGetResourceLocation(
-			PreparedRenderedReportLayout preparedLayout) {
+	public String getResourceLocation() {
 		String result = null;
 		try {
-			InputStream in = new FileInputStream(preparedLayout.getEntryFile());
-			RWT.getResourceManager().register(preparedLayout.getEntryFile().getName(), in);
-			result = RWT.getResourceManager().getLocation(preparedLayout.getEntryFile().getName());
+			InputStream in = new FileInputStream(getPreparedLayout().getEntryFile());
+			RWT.getResourceManager().register(getPreparedLayout().getEntryFile().getName(), in);
+			result = RWT.getResourceManager().getLocation(getPreparedLayout().getEntryFile().getName());
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("Can't find report file", e);
 		}
@@ -31,7 +29,7 @@ public class DefaultReportViewerUtilImpl extends DefaultReportViewerUtil {
 	}
 
 	@Override
-	protected void internalUpdatePDFViewer(PreparedRenderedReportLayout layout, StackLayout stack) {
+	public void updatePDFViewer(StackLayout stack) {
 		
 	}
 
