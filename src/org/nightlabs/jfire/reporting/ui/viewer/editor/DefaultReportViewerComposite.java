@@ -4,23 +4,18 @@
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -77,6 +72,8 @@ public class DefaultReportViewerComposite extends XComposite {
 	 * Hyperlink displayed when there where errors during report rendering.
 	 */
 	private ImageHyperlink errorLink;
+	
+	private DefaultReportViewerUtil reportViewerUtil;
 
 /*	private static class ThreadDeathWorkaround implements IExceptionHandler {
 		private Set<DefaultReportViewerComposite> registeredComposites = new HashSet<DefaultReportViewerComposite>();
@@ -126,7 +123,8 @@ public class DefaultReportViewerComposite extends XComposite {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		browser = new BrowserWrapperComposite(stack, SWT.NONE);
 
-		DefaultReportViewerUtil.createPDFViewer(stack);
+		reportViewerUtil = DefaultReportViewerUtil.create(); 
+		reportViewerUtil.createPDFViewer(stack);
 		
 		stackLayout.topControl = fetchingLayoutComposite;
 	}
@@ -211,15 +209,16 @@ public class DefaultReportViewerComposite extends XComposite {
 	 */
 	protected void updateViewer(Birt.OutputFormat format, final PreparedRenderedReportLayout preparedLayout) {
 		this.preparedLayout = preparedLayout;
+		reportViewerUtil.setReportLayout(preparedLayout);
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
 		if (!isDisposed()) {
 			if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
-				DefaultReportViewerUtil.updatePDFViewer(preparedLayout, stackLayout);
+				reportViewerUtil.updatePDFViewer(stackLayout);
 			}
 			else {
 				// Use the browser widget as default for all other
 				stackLayout.topControl = browser;
-				browser.setUrl(DefaultReportViewerUtil.getResourceLocation(preparedLayout));
+				browser.setUrl(reportViewerUtil.getResourceLocation());
 				
 			}
 			if (errorLink != null && !errorLink.isDisposed()) {
