@@ -5,3 +5,5 @@ Bundle-SymbolicName: org.nightlabs.jfire.reporting.ui.rcp
 Bundle-Version: 1.0.0.qualifier
 Fragment-Host: org.nightlabs.jfire.reporting.ui;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.nightlabs.eclipse.ui.pdfviewer;bundle-version="1.0.5",
+ org.nightlabs.eclipse.ui.pdfviewer.extension;bundle-version="1.1.3"

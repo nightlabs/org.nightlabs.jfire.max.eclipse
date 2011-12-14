@@ -1,12 +1,19 @@
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import org.eclipse.rwt.RWT;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
+import org.eclipse.swt.widgets.FileDialog;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.pdfrenderer.PDFFileLoader;
 import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPDFDocument;
@@ -14,14 +21,20 @@ import org.nightlabs.eclipse.ui.pdfviewer.PDFDocument;
 import org.nightlabs.eclipse.ui.pdfviewer.PDFProgressMontitorWrapper;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.action.save.SaveAsActionHandler;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PDFViewerComposite;
+import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.IOUtil;
+
+import com.sun.pdfview.PDFFile;
 
 public class DefaultReportViewerUtilImpl extends DefaultReportViewerUtil {
 
 	private PDFViewerComposite pdfViewerComposite;
+	private File lastSaveDirectory = null;
 
 	@Override
-	protected void internalCreatePDFViewer(Composite parent) {
-		pdfViewerComposite = new PDFViewerComposite(stack, SWT.BORDER);
+	public void createPDFViewer(Composite parent) {
+		pdfViewerComposite = new PDFViewerComposite(parent, SWT.BORDER);
 		new SaveAsActionHandler(pdfViewerComposite.getPdfViewer()) {
 			@Override
 			public void saveAs() {
@@ -63,7 +76,7 @@ public class DefaultReportViewerUtilImpl extends DefaultReportViewerUtil {
 							try {
 								monitor.worked(10);
 
-								InputStream in = preparedLayout.getEntryFileAsURL().openStream();
+								InputStream in = getPreparedLayout().getEntryFileAsURL().openStream();
 								try {
 									FileOutputStream out = new FileOutputStream(file);
 									try {
@@ -88,29 +101,29 @@ public class DefaultReportViewerUtilImpl extends DefaultReportViewerUtil {
 	}
 
 	@Override
-	protected String internalGetResourceLocation(
-			PreparedRenderedReportLayout preparedLayout) {
-		return preparedLayout.getEntryFileAsURL().toString();
+	public String getResourceLocation() {
+		return getPreparedLayout().getEntryFileAsURL().toString();
 	}
 
 	@Override
-	protected void internalUpdatePDFViewer(PreparedRenderedReportLayout layout) {
+	public void updatePDFViewer(final StackLayout stack) {
+		
 		org.eclipse.core.runtime.jobs.Job loadJob = new org.eclipse.core.runtime.jobs.Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
 				try {
-					final PDFFile pdfFile = PDFFileLoader.loadPDF(preparedLayout.getEntryFileAsURL(), new PDFProgressMontitorWrapper(new SubProgressMonitor(monitor, 20)));
+					final PDFFile pdfFile = PDFFileLoader.loadPDF(getPreparedLayout().getEntryFileAsURL(), new PDFProgressMontitorWrapper(new SubProgressMonitor(monitor, 20)));
 					final PDFDocument pdfDocument = new OneDimensionalPDFDocument(pdfFile, new SubProgressMonitor(monitor, 80));
 
-					display.asyncExec(new Runnable() {
+					pdfViewerComposite.getDisplay().asyncExec(new Runnable() {
 						public void run() {
-							if (isDisposed())
+							if (pdfViewerComposite.isDisposed())
 								return;
 
 							pdfViewerComposite.getPdfViewer().setPDFDocument(pdfDocument);
-							stackLayout.topControl = pdfViewerComposite;
-							DefaultReportViewerComposite.this.layout(true, true);
+							stack.topControl = pdfViewerComposite;
+							pdfViewerComposite.layout(true, true);
 						}
 					});
 				}
