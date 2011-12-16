@@ -1,9 +1,12 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -16,7 +19,10 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.GenericInvertViewerSorter;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.base.ui.table.column.config.ITableColumnConfigurationAdapter;
+import org.nightlabs.base.ui.table.column.config.TableColumnConfigurator;
 import org.nightlabs.jfire.accounting.Price;
+import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -27,20 +33,21 @@ import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.util.BaseComparator;
 
 /**
- * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
+ * @author Frederik Loeser <!-- frederik [AT] nightlabs [DOT] de -->
  */
 public abstract class AbstractArticleContainerListComposite<O extends ArticleContainer>
 extends AbstractTableComposite<O>
 {
-	
+
 	public static final Comparator<ArticleContainer> ARTICLE_CONTAINER_CREATE_DT_COMPARATOR = new Comparator<ArticleContainer>(){
 		@Override
-		public int compare(ArticleContainer o1, ArticleContainer o2)
+		public int compare(final ArticleContainer o1, final ArticleContainer o2)
 		{
-			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			final int result = BaseComparator.comparatorNullCheck(o1, o2);
 			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
-				int result2 = BaseComparator.comparatorNullCheck(o1.getCreateDT(), o2.getCreateDT());
+				final int result2 = BaseComparator.comparatorNullCheck(o1.getCreateDT(), o2.getCreateDT());
 				if (result2 == BaseComparator.COMPARE_RESULT_NOT_NULL) {
 					return TableLabelProvider.DATE_COMPARATOR.compare(o1.getCreateDT(), o2.getCreateDT());
 				}
@@ -52,9 +59,9 @@ extends AbstractTableComposite<O>
 
 	public static final Comparator<Price> PRICE_COMPARATOR = new Comparator<Price>(){
 		@Override
-		public int compare(Price o1, Price o2)
+		public int compare(final Price o1, final Price o2)
 		{
-			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			final int result = BaseComparator.comparatorNullCheck(o1, o2);
 			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
 				return (int) (o1.getAmount() - o2.getAmount());
 			}
@@ -64,24 +71,24 @@ extends AbstractTableComposite<O>
 
 	public static final Comparator<ArticleContainer> ARTICLE_COUNT_COMPARATOR = new Comparator<ArticleContainer>(){
 		@Override
-		public int compare(ArticleContainer o1, ArticleContainer o2)
+		public int compare(final ArticleContainer o1, final ArticleContainer o2)
 		{
 			return Integer.valueOf(o1.getArticleCount()).compareTo(o2.getArticleCount());
 		}
 	};
-	
+
 	public class LabelProvider extends TableLabelProvider
 	{
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			return AbstractArticleContainerListComposite.this.getColumnImage(element, columnIndex);
 		}
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
+		public String getColumnText(final Object element, final int columnIndex) {
 			return AbstractArticleContainerListComposite.this.getColumnText(element, columnIndex);
 		}
 		@Override
-		public Comparator<?> getColumnComparator(Object element, int columnIndex) {
+		public Comparator<?> getColumnComparator(final Object element, final int columnIndex) {
 			return AbstractArticleContainerListComposite.this.getColumnComparator(element, columnIndex);
 		}
 	}
@@ -90,7 +97,7 @@ extends AbstractTableComposite<O>
 	 * @param parent
 	 * @param style
 	 */
-	public AbstractArticleContainerListComposite(Composite parent, int style) {
+	public AbstractArticleContainerListComposite(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
@@ -100,8 +107,8 @@ extends AbstractTableComposite<O>
 	 * @param initTable
 	 * @param viewerStyle
 	 */
-	public AbstractArticleContainerListComposite(Composite parent, int style,
-			boolean initTable, int viewerStyle)
+	public AbstractArticleContainerListComposite(final Composite parent, final int style,
+			final boolean initTable, final int viewerStyle)
 	{
 		super(parent, style, initTable, viewerStyle);
 	}
@@ -109,7 +116,7 @@ extends AbstractTableComposite<O>
 	private LinkedList<Integer> weightedColumns;
 	private LinkedList<Integer> fixedColumns;
 
-	protected void addFixedColumn(int columnWidth)
+	protected void addFixedColumn(final int columnWidth)
 	{
 		if (weightedColumns == null)
 		{
@@ -120,7 +127,7 @@ extends AbstractTableComposite<O>
 		fixedColumns.add(Integer.valueOf(columnWidth));
 	}
 
-	protected void addWeightedColumn(int columnWeight)
+	protected void addWeightedColumn(final int columnWeight)
 	{
 		if (weightedColumns == null)
 		{
@@ -136,7 +143,7 @@ extends AbstractTableComposite<O>
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table)
+	protected void createTableColumns(final TableViewer tableViewer, final Table table)
 	{
 //		This layout is simply to buggy (columns may be resized to size = 0 => they disappear!
 //		And not like the other layouts where you can make them visible again by pulling the divider in the reverse direction.)
@@ -200,13 +207,39 @@ extends AbstractTableComposite<O>
 		createAdditionalTableColumns(tableViewer, table);
 
 		getTable().setLayout( new WeightedTableLayout(getPrimitiveArray(weightedColumns), getPrimitiveArray(fixedColumns)) );
+
+		new TableColumnConfigurator(new ITableColumnConfigurationAdapter() {
+			@Override
+			public String getTableID() {
+				final StringBuilder sb = new StringBuilder();
+				try {
+					sb.append(AbstractArticleContainerListComposite.this.getClass().getSimpleName()).append("_")
+						.append(Login.getLogin().getUserID());
+				} catch (final LoginException e) {
+					throw new RuntimeException(e);
+				}
+				return sb.toString();
+			}
+			@Override
+			public Table getTable() {
+				return tableViewer.getTable();
+			}
+			@Override
+			public List<String> getColumnIDs() {
+				final List<String> columnIDs = new ArrayList<String>();
+				for (int i = 0; i < tableViewer.getTable().getColumnCount(); i++)
+					columnIDs.add(String.valueOf(i));
+
+				return columnIDs;
+			}
+		});
 	}
 
-	private int[] getPrimitiveArray(List<Integer> list)
+	private int[] getPrimitiveArray(final List<Integer> list)
 	{
-		int[] primitiveArray = new int[list.size()];
+		final int[] primitiveArray = new int[list.size()];
 		int i = 0;
-		for (Integer value : list)
+		for (final Integer value : list)
 		{
 			primitiveArray[i] = (value == null || value < 0) ? -1 : value;
 			i++;
@@ -221,14 +254,14 @@ extends AbstractTableComposite<O>
 //	protected abstract void createArticleContainerIDTableColumn(TableViewer tableViewer, Table table);
 
 	@Override
-	protected void setTableProvider(TableViewer tableViewer)
+	protected void setTableProvider(final TableViewer tableViewer)
 	{
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.setSorter(new GenericInvertViewerSorter(3).getInverseSorter());
 	}
 
-	protected String getCreateUserName(ArticleContainer articleContainer)
+	protected String getCreateUserName(final ArticleContainer articleContainer)
 	{
 		if (articleContainer.getCreateUser() != null) {
 			return articleContainer.getCreateUser().getName();
@@ -237,12 +270,12 @@ extends AbstractTableComposite<O>
 		return ""; //$NON-NLS-1$
 	}
 
-	protected String getStateName(Statable statable)
+	protected String getStateName(final Statable statable)
 	{
 		// I think we need to look for the newest State in both, statableLocal and statable! Marco.
-		StatableLocal statableLocal = statable.getStatableLocal();
+		final StatableLocal statableLocal = statable.getStatableLocal();
 		State state = statable.getState();
-		State state2 = statableLocal.getState();
+		final State state2 = statableLocal.getState();
 		if (state2 != null) {
 			if (state == null)
 				state = state2;
@@ -256,8 +289,8 @@ extends AbstractTableComposite<O>
 		return ""; //$NON-NLS-1$
 	}
 
-	protected Comparator<?> getColumnComparator(Object element, int columnIndex) {
-		int firstAdditionalColumnIndex = getFirstAdditionalColumnIndex();
+	protected Comparator<?> getColumnComparator(final Object element, final int columnIndex) {
+		final int firstAdditionalColumnIndex = getFirstAdditionalColumnIndex();
 		if (columnIndex >= firstAdditionalColumnIndex) {
 			return getAdditionalColumnComparator(element, columnIndex - firstAdditionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
 		}
@@ -269,20 +302,20 @@ extends AbstractTableComposite<O>
 		}
 	}
 
-	protected Image getColumnImage(Object element, int columnIndex)
+	protected Image getColumnImage(final Object element, final int columnIndex)
 	{
 		int firstAdditionalColumnIndex = 6;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
 			firstAdditionalColumnIndex = 7;
 
-		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
+		final int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
 		if (additionalColumnIndex < 0)
 			return null;
 
 		return getAdditionalColumnImage(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
 	}
 
-	protected String formatDate(Date date) {
+	protected String formatDate(final Date date) {
 		return DateFormatter.formatDateShortTimeHM(date, true);
 	}
 
@@ -330,11 +363,11 @@ extends AbstractTableComposite<O>
 			firstAdditionalColumnIndex = 7;
 		return firstAdditionalColumnIndex;
 	}
-	
-	protected String getColumnText(Object element, int columnIndex)
+
+	protected String getColumnText(final Object element, final int columnIndex)
 	{
 		if (element instanceof ArticleContainer) {
-			ArticleContainer articleContainer = (ArticleContainer) element;
+			final ArticleContainer articleContainer = (ArticleContainer) element;
 			switch (columnIndex) {
 				case 0:
 					return ArticleContainerUtil.getArticleContainerID(articleContainer);
@@ -350,17 +383,17 @@ extends AbstractTableComposite<O>
 					return String.valueOf(articleContainer.getArticleCount());
 			}
 		}
-		
-		int firstAdditionalColumnIndex = getFirstAdditionalColumnIndex();
-		
+
+		final int firstAdditionalColumnIndex = getFirstAdditionalColumnIndex();
+
 		if (element instanceof Statable && columnIndex == 6) {
-			Statable statable = (Statable) element;
+			final Statable statable = (Statable) element;
 			return getStateName(statable);
 		}
 		if (columnIndex == 0)
 			return String.valueOf(element);
 
-		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
+		final int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
 		if (additionalColumnIndex < 0)
 			return ""; //$NON-NLS-1$
 
@@ -383,10 +416,10 @@ extends AbstractTableComposite<O>
 	 * @param columnIndex The absolute column index (0-based).
 	 * @return the <code>Comparator</code> to use for the given column, or null to use the default comparator.
 	 */
-	protected Comparator<?> getAdditionalColumnComparator(Object element, int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex) {
+	protected Comparator<?> getAdditionalColumnComparator(final Object element, final int additionalColumnIndex, final int firstAdditionalColumnIndex, final int columnIndex) {
 		return null;
 	}
-	
+
 	/**
 	 * @param element The element for which to obtain a column's image
 	 * @param additionalColumnIndex The 0-based index for additional columns. It is the result of: <code>columnIndex - firstAdditionalColumnIndex</code>
@@ -394,7 +427,7 @@ extends AbstractTableComposite<O>
 	 * @param columnIndex The absolute column index (0-based).
 	 * @return the <code>Image</code> to display in the given column for the given element or <code>null</code> if no image should be shown.
 	 */
-	protected Image getAdditionalColumnImage(Object element, int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex) {
+	protected Image getAdditionalColumnImage(final Object element, final int additionalColumnIndex, final int firstAdditionalColumnIndex, final int columnIndex) {
 		return null;
 	}
 }
