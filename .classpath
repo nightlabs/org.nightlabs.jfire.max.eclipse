@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/JFireTradeDashboard.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/JFirePropFile.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/JFireDynamicTrade.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/JFireSimpleTrade.jar"/>
