@@ -26,11 +26,13 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.GlobalJFireEjb3Provider;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadget;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetLastCustomersConfig;
 import org.nightlabs.jfire.trade.dashboard.DashboardManagerRemote;
 import org.nightlabs.jfire.trade.dashboard.LastCustomerTransaction;
+import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -84,8 +86,11 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 				public String getColumnText(Object element, int columnIndex) {
 					if (columnIndex == 0)
 						return ((CustomerTransaction) element).legalEntityName;
-					if (columnIndex == 1)
-						return ((CustomerTransaction) element).transactionInfo.getTransactionType(); // TODO: Mach menschenlesbar über Messages.getString(prefix + transactionInfo.getTransactionType())
+					if (columnIndex == 1) {
+						String type = ((CustomerTransaction) element).transactionInfo.getTransactionType();
+						return Messages.getString(
+							"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomers.TransactionInfoTable." + type);
+					}
 					return "";
 				}
 			});
@@ -130,7 +135,7 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 					
 					Collection<LegalEntity> legalEntities = LegalEntityDAO.sharedInstance().getLegalEntities(
 						anchorIDToLegalEntity.keySet(), 
-						new String[] {FetchPlan.DEFAULT, "TODO"}, 
+						new String[] {FetchPlan.ALL, "TODO"}, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						new SubProgressMonitor(monitor, 50)
 					);
@@ -164,7 +169,27 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 			private String getLegalEntityName(LegalEntity legalEntity) {
 				// TODO
 				// Look for displayName, or Name and FirstName or Company....
-				return legalEntity.getAnchorID();
+				
+				String displayName = legalEntity.getPerson().getDisplayName();
+
+				if (displayName == null || displayName.equals("")) {
+					IStruct structure = legalEntity.getPerson().getStructure();
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				return displayName;
 			}
 		};
 			

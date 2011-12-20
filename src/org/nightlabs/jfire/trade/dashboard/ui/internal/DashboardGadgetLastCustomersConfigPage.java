@@ -15,6 +15,7 @@ import org.nightlabs.jfire.base.dashboard.ui.AbstractDashbardGadgetConfigPage;
 import org.nightlabs.jfire.dashboard.DashboardGadgetLayoutEntry;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetLastCustomersConfig;
 import org.nightlabs.jfire.trade.dashboard.DashboardLayoutConfigModuleInitialiser;
+import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 
 /**
  * WizardPage to configure properties of "Last Customers" dashboard gadget.
@@ -28,7 +29,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 
 	public DashboardGadgetLastCustomersConfigPage() {
 		super(DashboardGadgetLastCustomersConfigPage.class.getName());
-		setTitle("My Last Customers Gadget");
+		setTitle(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.title"));
 	}
 
 	@Override
@@ -39,13 +40,15 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		gridData.verticalIndent = 15;
 		
 		Label descriptionLabel = new Label(wrapper, SWT.NONE);
-		descriptionLabel.setText("For the JFire \"My Last Customers\" gadget you can configure title and amount of\nlast customers to be shown");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.descriptionLabel.text"));
 		
-		gadgetTitle = new I18nTextEditor(wrapper, "Select the title for this dashboard gadget.");
+		gadgetTitle = new I18nTextEditor(wrapper, Messages.getString(
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption"));
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
 		
 		Label spinnerLabel = new Label(wrapper, SWT.NONE);
-		spinnerLabel.setText("Select the amount of last customers to be shown.");
+		spinnerLabel.setText(Messages.getString(
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.spinnerLabel.text"));
 		spinnerLabel.setLayoutData(gridData);
 		
 		int max = 50;
@@ -56,7 +59,8 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		spinnerAmountOfCustomers.setMaximum(max);	// just setting a fix value here
 		
 		int amount = 0;
-		Object config = getLayoutEntry().getConfig();
+		DashboardGadgetLayoutEntry layoutEntry = getLayoutEntry();
+		Object config = getLayoutEntry().getConfig();	// TODO config is null
 		if (config instanceof DashboardGadgetLastCustomersConfig)
 			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();
 		
