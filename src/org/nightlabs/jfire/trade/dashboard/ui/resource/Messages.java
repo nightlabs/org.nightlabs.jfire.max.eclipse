@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.dashboard.ui.internal.resource;
+package org.nightlabs.jfire.trade.dashboard.ui.resource;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
