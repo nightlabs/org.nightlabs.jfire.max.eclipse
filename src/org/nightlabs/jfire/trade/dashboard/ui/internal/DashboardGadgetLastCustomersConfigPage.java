@@ -30,18 +30,21 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 	public Control createPageContents(final Composite parent) {
 		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		DashboardGadgetLastCustomersConfig config = (DashboardGadgetLastCustomersConfig) getLayoutEntry().getConfig();
-		int amount = config.getAmountLastCustomers();
+		int amount = 0;
+		Object config = getLayoutEntry().getConfig();
+		if (config instanceof DashboardGadgetLastCustomersConfig)
+			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();
 		
 		gadgetTitle = new I18nTextEditor(wrapper, "My Last Customers");
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
 
+		int max = 50;
 		spinnerAmountOfCustomers = new Spinner(wrapper, SWT.BORDER);
 		spinnerAmountOfCustomers.setMinimum(0);
 		spinnerAmountOfCustomers.setIncrement(1);
 		spinnerAmountOfCustomers.setPageIncrement(5);
-		spinnerAmountOfCustomers.setMaximum(50);	// just setting a fix value here
-		spinnerAmountOfCustomers.setSelection(amount < spinnerAmountOfCustomers.getMaximum() + 1 ? amount : spinnerAmountOfCustomers.getMaximum());
+		spinnerAmountOfCustomers.setMaximum(max);	// just setting a fix value here
+		spinnerAmountOfCustomers.setSelection(amount < max + 1 ? amount : max);
 		
 		return wrapper;
 	}
