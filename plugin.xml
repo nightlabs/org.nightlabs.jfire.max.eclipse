@@ -10,5 +10,14 @@
             name="LastCustomers-Gadget">
       </dashboardGadgetFactory>
    </extension>
+   <extension
+         point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
+      <dashboardGadgetFactory
+            class="org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetInvoiceFactory"
+            dashboardGadgetType="DashboardGadgetInvoiceFactory"
+            description="This gadget displays a user defined list of invoices."
+            name="Invoice gadget">
+      </dashboardGadgetFactory>
+   </extension>
 
 </plugin>
