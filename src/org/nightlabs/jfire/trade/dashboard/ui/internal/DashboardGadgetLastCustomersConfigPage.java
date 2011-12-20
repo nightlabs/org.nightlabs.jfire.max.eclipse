@@ -31,7 +31,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		DashboardGadgetLastCustomersConfig config = (DashboardGadgetLastCustomersConfig) getLayoutEntry().getConfig();
-		config.getAmountLastCustomers();
+		int amount = config.getAmountLastCustomers();
 		
 		gadgetTitle = new I18nTextEditor(wrapper, "My Last Customers");
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
@@ -40,9 +40,10 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		spinnerAmountOfCustomers.setMinimum(0);
 		spinnerAmountOfCustomers.setIncrement(1);
 		spinnerAmountOfCustomers.setPageIncrement(5);
-		spinnerAmountOfCustomers.setMaximum(config.getAmountLastCustomers());
-		spinnerAmountOfCustomers.setSelection(spinnerAmountOfCustomers.getMaximum() > 4 ? 5 : spinnerAmountOfCustomers.getMaximum());
-
+		// TODO get total amount of customers or...?
+//		spinnerAmountOfCustomers.setMaximum();
+		spinnerAmountOfCustomers.setSelection(amount < spinnerAmountOfCustomers.getMaximum() + 1 ? amount : spinnerAmountOfCustomers.getMaximum());
+		
 		return wrapper;
 	}
 
