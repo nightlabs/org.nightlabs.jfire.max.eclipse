@@ -40,8 +40,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		spinnerAmountOfCustomers.setMinimum(0);
 		spinnerAmountOfCustomers.setIncrement(1);
 		spinnerAmountOfCustomers.setPageIncrement(5);
-		// TODO get total amount of customers or...?
-//		spinnerAmountOfCustomers.setMaximum();
+		spinnerAmountOfCustomers.setMaximum(50);	// just setting a fix value here
 		spinnerAmountOfCustomers.setSelection(amount < spinnerAmountOfCustomers.getMaximum() + 1 ? amount : spinnerAmountOfCustomers.getMaximum());
 		
 		return wrapper;
