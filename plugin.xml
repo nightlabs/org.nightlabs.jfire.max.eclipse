@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
+      <dashboardGadgetFactory
+            class="org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersFactory"
+            dashboardGadgetType="DashboardGadgetLastCustomersFactory"
+            description="This gadget displays the last customers the user has worked with."
+            name="LastCustomers-Gadget">
+      </dashboardGadgetFactory>
+   </extension>
+
+</plugin>
