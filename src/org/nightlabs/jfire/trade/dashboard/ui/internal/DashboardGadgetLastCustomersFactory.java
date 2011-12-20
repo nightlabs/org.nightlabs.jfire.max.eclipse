@@ -10,8 +10,7 @@ public class DashboardGadgetLastCustomersFactory extends
 
 	@Override
 	public IDashboardGadgetConfigPage<?> createConfigurationWizardPage() {
-//		return new DashboardGadgetLastCustomersConfigPage();
-		return null;
+		return new DashboardGadgetLastCustomersConfigPage();
 	}
 
 	@Override
