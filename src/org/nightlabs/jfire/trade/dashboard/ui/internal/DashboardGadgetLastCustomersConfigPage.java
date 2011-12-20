@@ -14,7 +14,10 @@ import org.nightlabs.jfire.dashboard.DashboardGadgetLayoutEntry;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetLastCustomersConfig;
 import org.nightlabs.jfire.trade.dashboard.DashboardLayoutConfigModuleInitialiser;
 
-
+/**
+ * WizardPage to configure properties of "Last Customers" dashboard gadget.
+ * @author Frederik Loeser <!-- frederik [AT] nightlabs [DOT] de -->
+ */
 public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadgetConfigPage<Object> {
 
 	private I18nTextEditor gadgetTitle;
@@ -59,14 +62,12 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 	public void configure(final DashboardGadgetLayoutEntry layoutEntry) {
 		layoutEntry.getEntryName().copyFrom(gadgetTitle != null ? gadgetTitle.getI18nText() : createInitialName());
 		
-		// Create Config object for "Last customers" widget and set it for the given layoutEntry.
+		// Create Config object for "Last customers" dashboard gadget and set it for the given layoutEntry.
 		DashboardGadgetLastCustomersConfig config = new DashboardGadgetLastCustomersConfig(spinnerAmountOfCustomers.getSelection());
 		layoutEntry.setConfig(config);
 	}
 
 	@Override
 	public void setMessage(String message, int type) {
-		// TODO Auto-generated method stub
-		
 	}
 }
