@@ -1,8 +1,10 @@
 package org.nightlabs.jfire.trade.dashboard.ui.internal;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -26,27 +28,38 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 
 	public DashboardGadgetLastCustomersConfigPage() {
 		super(DashboardGadgetLastCustomersConfigPage.class.getName());
-//		setTitle("My Last Customers Gadget");
+		setTitle("My Last Customers Gadget");
 	}
 
 	@Override
 	public Control createPageContents(final Composite parent) {
 		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		int amount = 0;
-		Object config = getLayoutEntry().getConfig();
-		if (config instanceof DashboardGadgetLastCustomersConfig)
-			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();
+		GridData gridData = new GridData();
+		gridData.verticalIndent = 15;
 		
-		gadgetTitle = new I18nTextEditor(wrapper, "My Last Customers");
+		Label descriptionLabel = new Label(wrapper, SWT.NONE);
+		descriptionLabel.setText("For the JFire \"My Last Customers\" gadget you can configure title and amount of\nlast customers to be shown");
+		
+		gadgetTitle = new I18nTextEditor(wrapper, "Select the title for this dashboard gadget.");
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
-
+		
+		Label spinnerLabel = new Label(wrapper, SWT.NONE);
+		spinnerLabel.setText("Select the amount of last customers to be shown.");
+		spinnerLabel.setLayoutData(gridData);
+		
 		int max = 50;
 		spinnerAmountOfCustomers = new Spinner(wrapper, SWT.BORDER);
 		spinnerAmountOfCustomers.setMinimum(0);
 		spinnerAmountOfCustomers.setIncrement(1);
 		spinnerAmountOfCustomers.setPageIncrement(5);
 		spinnerAmountOfCustomers.setMaximum(max);	// just setting a fix value here
+		
+		int amount = 0;
+		Object config = getLayoutEntry().getConfig();
+		if (config instanceof DashboardGadgetLastCustomersConfig)
+			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();
+		
 		spinnerAmountOfCustomers.setSelection(amount < max + 1 ? amount : max);
 		
 		return wrapper;

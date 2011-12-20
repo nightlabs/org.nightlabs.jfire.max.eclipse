@@ -5,5 +5,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireDashboard"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireTradeDashboard"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
