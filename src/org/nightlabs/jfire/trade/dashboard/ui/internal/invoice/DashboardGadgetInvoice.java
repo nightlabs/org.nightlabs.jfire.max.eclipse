@@ -156,6 +156,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 				tableItem.setInvoiceAmount(formatInvoiceAmount(invoice));
 				tableItem.setInvoiceID((ArticleContainerID) JDOHelper.getObjectId(invoice));
 				tableItem.setAmountToPay(invoice.getInvoiceLocal().getAmountToPay());
+				tableItem.setInvoiceCreationDate(invoice.getCreateDT());
 				tableItems.add(tableItem);
 			}
 			return tableItems;

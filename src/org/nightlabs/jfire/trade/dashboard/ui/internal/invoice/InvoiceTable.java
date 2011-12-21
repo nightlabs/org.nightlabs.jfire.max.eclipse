@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.l10n.GlobalDateFormatter;
+import org.nightlabs.l10n.IDateFormatter;
 
 public class InvoiceTable extends AbstractTableComposite<InvoiceTableItem> {
 	
@@ -23,14 +25,17 @@ public class InvoiceTable extends AbstractTableComposite<InvoiceTableItem> {
 		TableColumn col0 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
 		col0.setText("ID");
 		TableColumn col1 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-		col1.setText("Customer");
-		TableColumn col2 = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
-		col2.setText("Amount");
+		col1.setText("Date");
+		TableColumn col2 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
+		col2.setText("Customer");
+		TableColumn col3 = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
+		col3.setText("Amount");
 		
 		final TableLayout tableLayout = new TableLayout();
-		tableLayout.addColumnData(new ColumnWeightData(30));
-		tableLayout.addColumnData(new ColumnWeightData(60));
-		tableLayout.addColumnData(new ColumnWeightData(30));
+		tableLayout.addColumnData(new ColumnWeightData(20));
+		tableLayout.addColumnData(new ColumnWeightData(25));
+		tableLayout.addColumnData(new ColumnWeightData(50));
+		tableLayout.addColumnData(new ColumnWeightData(25));
 		table.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -51,9 +56,14 @@ public class InvoiceTable extends AbstractTableComposite<InvoiceTableItem> {
 			public String getColumnText(Object element, int columnIndex) {
 				if (columnIndex == 0)
 					return ((InvoiceTableItem) element).getInvoiceId();
-				if (columnIndex == 1)
-					return ((InvoiceTableItem) element).getBusinessPartnerName();
+				if (columnIndex == 1) {
+					String date = GlobalDateFormatter.sharedInstance().formatDate(
+							((InvoiceTableItem) element).getInvoiceCreationDate(), IDateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+					return date;
+				}
 				if (columnIndex == 2)
+					return ((InvoiceTableItem) element).getBusinessPartnerName();
+				if (columnIndex == 3)
 					return ((InvoiceTableItem) element).getInvoiceAmount();
 				return "";
 			}
