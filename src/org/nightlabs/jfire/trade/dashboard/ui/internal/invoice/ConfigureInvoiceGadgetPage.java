@@ -95,9 +95,9 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		gridData.widthHint = 500;
 		
 		Label gadgetDescription = new Label(wrapper, SWT.WRAP);
-		gadgetDescription.setText("This gadget will help you to see the invoices of your most interest.");
+		gadgetDescription.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.0")); //$NON-NLS-1$
 		
-		gadgetTitle = new I18nTextEditor(wrapper, "Set the title of this gadget:");
+		gadgetTitle = new I18nTextEditor(wrapper, Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.1")); //$NON-NLS-1$
 		if (!getLayoutEntry().getEntryName().isEmpty()) {
 			gadgetTitle.setI18nText(getLayoutEntry().getEntryName());
 		} else {
@@ -109,17 +109,19 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		gridData.verticalIndent = 15;
 		
 		Label amountOfInvoicesLabel = new Label(wrapper, SWT.LEFT);
-		amountOfInvoicesLabel.setText("Amount of invoices to show:");
+		amountOfInvoicesLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.2")); //$NON-NLS-1$
 		amountOfInvoicesLabel.setLayoutData(gridData);
 		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
 		amountOfInvoices.setMinimum(1);
+		amountOfInvoices.setMaximum(100);
+		amountOfInvoices.setIncrement(5);
 		amountOfInvoices.setSelection(5);
 		
 		gridData = new GridData();
 		gridData.verticalIndent = 15;
 		
 		Label choosenQueryLabel = new Label(wrapper, SWT.LEFT);
-		choosenQueryLabel.setText("Select a query of the invoices:");
+		choosenQueryLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.3")); //$NON-NLS-1$
 		choosenQueryLabel.setLayoutData(gridData);
 		choosenQuery = new ComboViewer(wrapper);
 //		choosenQuery.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -131,7 +133,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 			}
 		});
 		
-		Job loadQueriesJob = new Job("Loading queries...") 
+		Job loadQueriesJob = new Job(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.4"))  //$NON-NLS-1$
 		{
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception 
@@ -178,7 +180,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	private InvoiceQueryItem createDefaultItem() {
 		//non-persistent query: 
 		QueryStoreID invoiceQueryItemId = null;
-		InvoiceQueryItem defaultQueryItem = new InvoiceQueryItem(invoiceQueryItemId, "Latest invoices");
+		InvoiceQueryItem defaultQueryItem = new InvoiceQueryItem(invoiceQueryItemId, Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.5")); //$NON-NLS-1$
 		return defaultQueryItem;
 	}
 
@@ -186,7 +188,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	private I18nText createInitialName() {
 		I18nTextBuffer text = new I18nTextBuffer();
 		//TODO get localised initial message
-		text.setText(Locale.ENGLISH, "My last invoices:");
+		text.setText(Locale.ENGLISH, Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.6")); //$NON-NLS-1$
 		return text;
 	}
 	

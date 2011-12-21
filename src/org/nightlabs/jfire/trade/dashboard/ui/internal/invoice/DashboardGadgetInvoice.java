@@ -34,6 +34,7 @@ import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetInvoiceConfig;
 import org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action.EditInvoiceAction;
 import org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action.PayInvoiceAction;
+import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.l10n.GlobalNumberFormatter;
@@ -64,7 +65,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 	@Override
 	public void refresh() {
 		getGadgetContainer().setTitle(getGadgetContainer().getLayoutEntry().getName());
-		Job refreshJob = new RefreshGadgetJob("Load invoices Job");
+		Job refreshJob = new RefreshGadgetJob(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoice.0")); //$NON-NLS-1$
 		refreshJob.schedule();	
 	}
 	
@@ -76,7 +77,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 
 		@Override
 		protected IStatus run(ProgressMonitor monitor) {
-			monitor.beginTask("Retrieving invoices", 100);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoice.1"), 100); //$NON-NLS-1$
 			try {
 				displayLoadingMessage();
 				DashboardGadgetLayoutEntry<?> layoutEntry = getGadgetContainer().getLayoutEntry();
@@ -100,7 +101,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 		@SuppressWarnings("unchecked")
 		private QueryCollection<? extends InvoiceQuery> getConfiguredQueryCollection(DashboardGadgetInvoiceConfig config, ProgressMonitor monitor) {
 			
-			monitor.beginTask("Loading query", 1);
+			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoice.2"), 1); //$NON-NLS-1$
 			try {
 				QueryCollection<InvoiceQuery> queryCollection = null;
 				if (config.getInvoiceQueryItemId() != null) {
@@ -184,7 +185,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 			invoiceTable.getDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
-					invoiceTable.setLoadingMessage("Loading...");
+					invoiceTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoice.3")); //$NON-NLS-1$
 				}
 			});
 		}
