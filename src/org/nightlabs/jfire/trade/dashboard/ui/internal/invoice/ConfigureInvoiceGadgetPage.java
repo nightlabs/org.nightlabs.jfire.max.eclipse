@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
@@ -27,6 +28,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashbardGadgetConfigPage;
 import org.nightlabs.jfire.dashboard.DashboardGadgetLayoutEntry;
@@ -39,8 +41,6 @@ import org.nightlabs.progress.ProgressMonitor;
 
 public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage<Object> {
 	
-	private static final String QueryStoreID = null;
-
 	protected static final String DashboardGadgetInvoice = null;
 
 	private I18nTextEditor gadgetTitle;
@@ -135,15 +135,17 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception 
 			{
+				//get all stored queries
 				Collection<BaseQueryStore> queries = QueryStoreDAO.sharedInstance().getQueryStoresByReturnType(
 						Invoice.class, 
 						true, 
-						new String[]{BaseQueryStore.FETCH_GROUP_NAME, BaseQueryStore.FETCH_GROUP_DESCRIPTION}, 
-						1, 
+						new String[]{FetchPlan.DEFAULT, BaseQueryStore.FETCH_GROUP_NAME}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						monitor
 				);
-				final List<InvoiceQueryItem> input = new LinkedList<ConfigureInvoiceGadgetPage.InvoiceQueryItem>();
-				input.add(createDefaultItem()); //TODO could this be set in italic style?
+				
+				final List<InvoiceQueryItem> input = new LinkedList<InvoiceQueryItem>();
+				input.add(createDefaultItem());
 				for (BaseQueryStore baseQueryStore : queries) {
 					input.add(new InvoiceQueryItem((QueryStoreID) JDOHelper.getObjectId(baseQueryStore), baseQueryStore.getName().getText()));
 				}
@@ -152,14 +154,18 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 					@Override
 					public void run() {
 						choosenQuery.setInput(input);
-						choosenQuery.setSelection(new StructuredSelection(config.getInvoiceQueryItemId()));
+						if (config != null && config.getInvoiceQueryItemId() != null)
+							for (InvoiceQueryItem invoiceQueryItem : input) {
+								if (invoiceQueryItem.invoiceQueryItemId.equals(config.getInvoiceQueryItemId()))
+									choosenQuery.setSelection(new StructuredSelection(invoiceQueryItem));
+							}
 					}
 				});
 				
 				return Status.OK_STATUS;
 			}
 		};
-		
+		loadQueriesJob.schedule();
 		return wrapper;
 	}
 
