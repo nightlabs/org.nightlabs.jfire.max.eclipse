@@ -35,16 +35,21 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 	@Override
 	public Control createPageContents(final Composite parent) {
 		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-
-		GridData gridData = new GridData();
-		gridData.verticalIndent = 15;
 		
-		Label descriptionLabel = new Label(wrapper, SWT.NONE);
+		Label descriptionLabel = new Label(wrapper, SWT.WRAP);
 		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.descriptionLabel.text"));
+		
+		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+		gridData.verticalIndent = 15;
+		gridData.widthHint = 500;
 		
 		gadgetTitle = new I18nTextEditor(wrapper, Messages.getString(
 			"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption"));
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
+		gadgetTitle.setLayoutData(gridData);
+		
+		gridData = new GridData();
+		gridData.verticalIndent = 15;
 		
 		Label spinnerLabel = new Label(wrapper, SWT.NONE);
 		spinnerLabel.setText(Messages.getString(
@@ -53,14 +58,13 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		
 		int max = 50;
 		spinnerAmountOfCustomers = new Spinner(wrapper, SWT.BORDER);
-		spinnerAmountOfCustomers.setMinimum(0);
+		spinnerAmountOfCustomers.setMinimum(1);
 		spinnerAmountOfCustomers.setIncrement(1);
 		spinnerAmountOfCustomers.setPageIncrement(5);
 		spinnerAmountOfCustomers.setMaximum(max);	// just setting a fix value here
 		
-		int amount = 0;
-		DashboardGadgetLayoutEntry layoutEntry = getLayoutEntry();
-		Object config = getLayoutEntry().getConfig();	// TODO config is null
+		int amount = 5;
+		Object config = getLayoutEntry().getConfig();
 		if (config instanceof DashboardGadgetLastCustomersConfig)
 			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();
 		
