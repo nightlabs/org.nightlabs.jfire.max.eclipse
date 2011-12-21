@@ -18,7 +18,7 @@ import org.nightlabs.jfire.trade.dashboard.TradeDashboardGadgetsConfigModuleInit
 import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 
 /**
- * WizardPage to configure properties of "Last Customers" dashboard gadget.
+ * WizardPage to configure properties of "My Last Customers" dashboard gadget.
  * @author Frederik Loeser <!-- frederik [AT] nightlabs [DOT] de -->
  */
 public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadgetConfigPage<Object> {
@@ -29,7 +29,8 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 
 	public DashboardGadgetLastCustomersConfigPage() {
 		super(DashboardGadgetLastCustomersConfigPage.class.getName());
-		setTitle(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.title"));
+		setTitle(Messages.getString(
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.title")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -37,14 +38,15 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		
 		Label descriptionLabel = new Label(wrapper, SWT.WRAP);
-		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.descriptionLabel.text"));
+		descriptionLabel.setText(Messages.getString(
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.descriptionLabel.text")); //$NON-NLS-1$
 		
 		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		gridData.verticalIndent = 15;
 		gridData.widthHint = 500;
 		
 		gadgetTitle = new I18nTextEditor(wrapper, Messages.getString(
-			"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption"));
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption")); //$NON-NLS-1$
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
 		gadgetTitle.setLayoutData(gridData);
 		
@@ -53,7 +55,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		
 		Label spinnerLabel = new Label(wrapper, SWT.NONE);
 		spinnerLabel.setText(Messages.getString(
-			"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersConfigPage.spinnerLabel.text"));
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.spinnerLabel.text")); //$NON-NLS-1$
 		spinnerLabel.setLayoutData(gridData);
 		
 		int max = 50;
@@ -61,9 +63,9 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		spinnerAmountOfCustomers.setMinimum(1);
 		spinnerAmountOfCustomers.setIncrement(1);
 		spinnerAmountOfCustomers.setPageIncrement(5);
-		spinnerAmountOfCustomers.setMaximum(max);	// just setting a fix value here
+		spinnerAmountOfCustomers.setMaximum(max);	// just set a fix value here
 		
-		int amount = 5;
+		int amount = 5;	// initial selection if none could be read out
 		Object config = getLayoutEntry().getConfig();
 		if (config instanceof DashboardGadgetLastCustomersConfig)
 			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();

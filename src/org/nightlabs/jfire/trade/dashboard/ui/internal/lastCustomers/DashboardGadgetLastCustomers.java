@@ -39,7 +39,9 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
- * 
+ * "My Last Customers" dashboard gadget. Configuration of this gadget is performed via 
+ * {@link DashboardGadgetLastCustomersConfigPage}. 
+ * @author abieber
  * @author Frederik Loeser <!-- frederik [AT] nightlabs [DOT] de -->
  */
 public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
@@ -51,7 +53,6 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 		public LastCustomerTransaction transactionInfo;
 	}
 	
-	
 	static class TransactionInfoTable extends AbstractTableComposite<CustomerTransaction> {
 
 		public TransactionInfoTable(Composite parent, int style) {
@@ -61,9 +62,11 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 		@Override
 		protected void createTableColumns(final TableViewer tableViewer, final Table table) {
 			TableColumn col1 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-			col1.setText("Business partner");
+			col1.setText(Messages.getString(
+				"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable.column1.text")); //$NON-NLS-1$
 			TableColumn col2 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-			col2.setText("Last transaction");
+			col2.setText(Messages.getString(
+				"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable.column2.text")); //$NON-NLS-1$
 			final TableLayout tableLayout = new TableLayout();
 			tableLayout.addColumnData(new ColumnWeightData(100));
 			tableLayout.addColumnData(new ColumnWeightData(50));
@@ -90,19 +93,17 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 					if (columnIndex == 1) {
 						String type = ((CustomerTransaction) element).transactionInfo.getTransactionType();
 						return Messages.getString(
-							"org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomers.TransactionInfoTable." + type);
+							"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable." + type); //$NON-NLS-1$
 					}
-					return "";
+					return ""; //$NON-NLS-1$
 				}
 			});
 		}
-		
 	}
 	
 	@Override
 	public Composite createControl(Composite parent) {
 		XComposite wrapper = createDefaultWrapper(parent);
-
 		transactionInfoTable = new TransactionInfoTable(wrapper, SWT.NONE);
 		
 		return wrapper;
@@ -110,14 +111,17 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 
 	@Override
 	public void refresh() {
-		Job loadCustomersJob = new Job("Load Customers Job") {
+		Job loadCustomersJob = new Job(Messages.getString(
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.loadCustomers.job.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				monitor.beginTask("Retrieving customers", 100);
+				monitor.beginTask(Messages.getString(
+					"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.loadCustomers.task.name"), 100); //$NON-NLS-1$
 				try {
 					transactionInfoTable.getDisplay().syncExec(new Runnable() {
 						public void run() {
-							transactionInfoTable.setLoadingMessage("Loading...");
+							transactionInfoTable.setLoadingMessage(Messages.getString(
+								"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.loadCustomers.message")); //$NON-NLS-1$
 						}
 					});
 					DashboardManagerRemote dashboardManager = GlobalJFireEjb3Provider.sharedInstance().getRemoteBean(DashboardManagerRemote.class);
@@ -164,7 +168,7 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 
 			private String getLegalEntityName(LegalEntity legalEntity) {
 				String displayName = legalEntity.getPerson().getDisplayName();
-				if (displayName == null || displayName.equals("")) {
+				if (displayName == null || displayName.equals("")) { //$NON-NLS-1$
 					IStruct structure = legalEntity.getPerson().getStructure();
 					displayName = structure.createDisplayName(legalEntity.getPerson());
 				}
