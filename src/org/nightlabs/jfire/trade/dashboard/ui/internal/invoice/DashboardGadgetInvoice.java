@@ -6,27 +6,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadget;
+import org.nightlabs.jfire.base.dashboard.ui.action.DashboardTableActionManager;
 import org.nightlabs.jfire.dashboard.DashboardGadgetLayoutEntry;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructLocal;
@@ -38,6 +32,9 @@ import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetInvoiceConfig;
+import org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action.EditInvoiceAction;
+import org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action.PayInvoiceAction;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.l10n.GlobalNumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -51,6 +48,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 
 	private InvoiceTable invoiceTable;
+	private DashboardTableActionManager<InvoiceTableItem> actionManager;
 
 	public DashboardGadgetInvoice() {}
 
@@ -58,6 +56,8 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 	public Composite createControl(Composite parent) {
 		XComposite invoiceGadget = createDefaultWrapper(parent);
 		invoiceTable = new InvoiceTable(invoiceGadget, SWT.NONE);
+		actionManager = new DashboardTableActionManager<InvoiceTableItem>(invoiceTable);
+		createActions();
 		return invoiceGadget;
 	}
 	
@@ -116,7 +116,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 				}
 				
 				queryCollection.setFromInclude(0);
-				queryCollection.setToExclude(Math.max(1, config.getAmountOfInvoices()));
+				queryCollection.setToExclude(config.getAmountOfInvoices());
 				
 				return queryCollection;
 
@@ -130,6 +130,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 				Price.FETCH_GROUP_CURRENCY,
 				Invoice.FETCH_GROUP_CUSTOMER,
 				Invoice.FETCH_GROUP_VENDOR,
+				Invoice.FETCH_GROUP_INVOICE_LOCAL,
 				LegalEntity.FETCH_GROUP_PERSON,
 				PropertySet.FETCH_GROUP_FULL_DATA };
 
@@ -150,9 +151,11 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 			final List<InvoiceTableItem> tableItems = new LinkedList<InvoiceTableItem>();
 			for (Invoice invoice : invoices) {
 				InvoiceTableItem tableItem = new InvoiceTableItem();
-				tableItem.invoiceId = ArticleContainerUtil.getArticleContainerID(invoice);
-				tableItem.customerName = getBusinessPartnerName(invoice);
-				tableItem.invoiceAmount = formatInvoiceAmount(invoice);
+				tableItem.setInvoiceId(ArticleContainerUtil.getArticleContainerID(invoice));
+				tableItem.setBusinessPartnerName(getBusinessPartnerName(invoice));
+				tableItem.setInvoiceAmount(formatInvoiceAmount(invoice));
+				tableItem.setInvoiceID((ArticleContainerID) JDOHelper.getObjectId(invoice));
+				tableItem.setAmountToPay(invoice.getInvoiceLocal().getAmountToPay());
 				tableItems.add(tableItem);
 			}
 			return tableItems;
@@ -194,62 +197,12 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 			});
 		}
 	}
-
-	static class InvoiceTableItem {
-		String invoiceId;
-		String customerName;
-		String invoiceAmount;
-	}
 	
-	static class InvoiceTable extends AbstractTableComposite<InvoiceTableItem> {
-		
-		public InvoiceTable(Composite parent, int style) {
-			super(parent, style);
-		}
-
-		@Override
-		protected void createTableColumns(TableViewer tableViewer, final Table table) 
-		{
-			TableColumn col0 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-			col0.setText("ID");
-			TableColumn col1 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-			col1.setText("Customer");
-			TableColumn col2 = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
-			col2.setText("Amount");
-			
-			final TableLayout tableLayout = new TableLayout();
-			tableLayout.addColumnData(new ColumnWeightData(30));
-			tableLayout.addColumnData(new ColumnWeightData(60));
-			tableLayout.addColumnData(new ColumnWeightData(30));
-			table.getDisplay().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					if (!table.isDisposed()) {
-						table.setLayout(tableLayout);
-						table.layout(true, true);
-					}
-				}
-			});
-		}
-
-		@Override
-		protected void setTableProvider(TableViewer tableViewer) {
-			tableViewer.setContentProvider(new ArrayContentProvider());
-			tableViewer.setLabelProvider(new TableLabelProvider() {
-				
-				@Override
-				public String getColumnText(Object element, int columnIndex) {
-					if (columnIndex == 0)
-						return ((InvoiceTableItem) element).invoiceId;
-					if (columnIndex == 1)
-						return ((InvoiceTableItem) element).customerName;
-					if (columnIndex == 2)
-						return ((InvoiceTableItem) element).invoiceAmount;
-					return "";
-				}
-			});
-		}
-		
+	private void createActions() {
+		actionManager.addAction(new EditInvoiceAction());
+		actionManager.addAction(new PayInvoiceAction());
 	}
+
+	
 	
 }

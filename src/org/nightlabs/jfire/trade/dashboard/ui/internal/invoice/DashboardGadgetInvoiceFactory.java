@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.trade.dashboard.ui.internal.invoice;
 
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadgetFactory;

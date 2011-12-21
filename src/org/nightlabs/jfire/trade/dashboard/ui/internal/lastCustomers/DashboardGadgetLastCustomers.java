@@ -11,21 +11,14 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.GlobalJFireEjb3Provider;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadget;
+import org.nightlabs.jfire.base.dashboard.ui.action.DashboardTableActionManager;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -33,6 +26,7 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetLastCustomersConfig;
 import org.nightlabs.jfire.trade.dashboard.DashboardManagerRemote;
 import org.nightlabs.jfire.trade.dashboard.LastCustomerTransaction;
+import org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.action.SelectCustomerAction;
 import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
@@ -47,65 +41,14 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 
 	TransactionInfoTable transactionInfoTable;
-	
-	static class CustomerTransaction {
-		public String legalEntityName;
-		public LastCustomerTransaction transactionInfo;
-	}
-	
-	static class TransactionInfoTable extends AbstractTableComposite<CustomerTransaction> {
-
-		public TransactionInfoTable(Composite parent, int style) {
-			super(parent, style);
-		}
-
-		@Override
-		protected void createTableColumns(final TableViewer tableViewer, final Table table) {
-			TableColumn col1 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-			col1.setText(Messages.getString(
-				"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable.column1.text")); //$NON-NLS-1$
-			TableColumn col2 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
-			col2.setText(Messages.getString(
-				"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable.column2.text")); //$NON-NLS-1$
-			final TableLayout tableLayout = new TableLayout();
-			tableLayout.addColumnData(new ColumnWeightData(100));
-			tableLayout.addColumnData(new ColumnWeightData(50));
-			table.getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					if (!table.isDisposed()) {
-						table.setLayout(tableLayout);
-						table.layout(true, true);
-					}
-					
-				}
-			});
-		}
-
-		@Override
-		protected void setTableProvider(TableViewer tableViewer) {
-			tableViewer.setContentProvider(new ArrayContentProvider());
-			tableViewer.setLabelProvider(new TableLabelProvider() {
-				
-				@Override
-				public String getColumnText(Object element, int columnIndex) {
-					if (columnIndex == 0)
-						return ((CustomerTransaction) element).legalEntityName;
-					if (columnIndex == 1) {
-						String type = ((CustomerTransaction) element).transactionInfo.getTransactionType();
-						return Messages.getString(
-							"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable." + type); //$NON-NLS-1$
-					}
-					return ""; //$NON-NLS-1$
-				}
-			});
-		}
-	}
+	private DashboardTableActionManager<TransactionInfoTableItem> actionManager;
 	
 	@Override
 	public Composite createControl(Composite parent) {
 		XComposite wrapper = createDefaultWrapper(parent);
 		transactionInfoTable = new TransactionInfoTable(wrapper, SWT.NONE);
-		
+		actionManager = new DashboardTableActionManager<TransactionInfoTableItem>(transactionInfoTable);
+		createActions();
 		return wrapper;
 	}
 
@@ -144,12 +87,12 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 						anchorIDToLegalEntity.put((AnchorID) JDOHelper.getObjectId(legalEntity), legalEntity);
 					}
 					
-					final List<CustomerTransaction> customerTransactions = new LinkedList<CustomerTransaction>();
+					final List<TransactionInfoTableItem> customerTransactions = new LinkedList<TransactionInfoTableItem>();
 					
 					for (LastCustomerTransaction lastCustomerTransaction : lastCustomers) {
-						CustomerTransaction customerTransaction = new CustomerTransaction();
-						customerTransaction.transactionInfo = lastCustomerTransaction;
-						customerTransaction.legalEntityName = getLegalEntityName(anchorIDToLegalEntity.get(lastCustomerTransaction.getCustomerID()));
+						TransactionInfoTableItem customerTransaction = new TransactionInfoTableItem();
+						customerTransaction.setTransactionInfo(lastCustomerTransaction);
+						customerTransaction.setLegalEntityName(getLegalEntityName(anchorIDToLegalEntity.get(lastCustomerTransaction.getCustomerID())));
 						customerTransactions.add(customerTransaction);
 					}
 					
@@ -178,4 +121,9 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 			
 		loadCustomersJob.schedule();	
 	}
+	
+	private void createActions() {
+		SelectCustomerAction selectCustomerAction = new SelectCustomerAction();
+		actionManager.addAction(selectCustomerAction);
+	}	
 }

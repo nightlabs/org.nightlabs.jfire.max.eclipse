@@ -9,5 +9,6 @@ Require-Bundle: org.nightlabs.i18n,
  org.nightlabs.jfire.base.ui,
  org.nightlabs.jfire.base.dashboard.ui,
  org.nightlabs.jfire.base,
- org.nightlabs.eclipse.compatibility
+ org.nightlabs.eclipse.compatibility,
+ org.nightlabs.jfire.trade.ui
 Bundle-Vendor: NightLabs.org
