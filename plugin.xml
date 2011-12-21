@@ -4,7 +4,7 @@
    <extension
          point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
       <dashboardGadgetFactory
-            class="org.nightlabs.jfire.trade.dashboard.ui.internal.DashboardGadgetLastCustomersFactory"
+            class="org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersFactory"
             dashboardGadgetType="DashboardGadgetLastCustomersFactory"
             description="This gadget displays the last customers the user has worked with."
             name="LastCustomers-Gadget">

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.dashboard.ui.internal;
+package org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.dashboard.ui.internal;
+package org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers;
 
 import java.util.Collection;
 import java.util.HashMap;

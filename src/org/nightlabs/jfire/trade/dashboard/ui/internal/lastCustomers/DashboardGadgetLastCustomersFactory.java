@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.dashboard.ui.internal;
+package org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers;
 
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadgetFactory;
 import org.nightlabs.jfire.base.dashboard.ui.IDashboardGadget;
