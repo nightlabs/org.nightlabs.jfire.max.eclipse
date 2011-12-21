@@ -71,8 +71,9 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	public void configure(DashboardGadgetLayoutEntry layoutEntry) {
 		layoutEntry.getEntryName().copyFrom(gadgetTitle.getI18nText());
 		DashboardGadgetInvoiceConfig newConfig = new DashboardGadgetInvoiceConfig();
-		newConfig.setAmountLastCustomers(amountOfInvoices.getSelection());
-		newConfig.setInvoiceQueryItemId(getSelectedInvoiceQueryItem().invoiceQueryItemId);
+		newConfig.setAmountOfInvoices(amountOfInvoices.getSelection());
+		InvoiceQueryItem selectedItem = getSelectedInvoiceQueryItem();
+		newConfig.setInvoiceQueryItemId(selectedItem != null ? selectedItem.invoiceQueryItemId : null);
 		layoutEntry.setConfig(newConfig);
 	}
 
@@ -82,7 +83,8 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	{
 		XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		
-		final DashboardGadgetInvoiceConfig config = (DashboardGadgetInvoiceConfig) getLayoutEntry().getConfig();
+		DashboardGadgetInvoiceConfig entryConfig = (DashboardGadgetInvoiceConfig) getLayoutEntry().getConfig();
+		final DashboardGadgetInvoiceConfig config = entryConfig != null ? entryConfig : new DashboardGadgetInvoiceConfig(); 
 		
 		Label l = new Label(wrapper, SWT.WRAP);
 		l.setText("bla-label");
@@ -96,7 +98,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 
 		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
 		amountOfInvoices.setMinimum(1);
-		amountOfInvoices.setSelection(config.getAmountLastCustomers());
+		amountOfInvoices.setSelection(config.getAmountOfInvoices());
 		
 		choosenQuery = new ComboViewer(wrapper);
 		choosenQuery.setContentProvider(new ArrayContentProvider());

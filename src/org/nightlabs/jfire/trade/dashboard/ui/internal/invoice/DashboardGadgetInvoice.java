@@ -3,7 +3,6 @@
  */
 package org.nightlabs.jfire.trade.dashboard.ui.internal.invoice;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadget;
@@ -18,7 +17,7 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 
 	@Override
 	public Composite createControl(Composite parent) {
-		XComposite invoiceGadget = new XComposite(parent, SWT.NONE);
+		XComposite invoiceGadget = createDefaultWrapper(parent);
 		
 //		appendNewRow(invoiceGadget, "icons/JFire-Logo.81x81.png", Messages.getString("org.nightlabs.jfire.base.dashboard.ui.internal.welcome.DashboardGadgetWelcome.row1.title"),  //$NON-NLS-1$ //$NON-NLS-2$
 //				Messages.getString("org.nightlabs.jfire.base.dashboard.ui.internal.welcome.DashboardGadgetWelcome.row1.message")); //$NON-NLS-1$

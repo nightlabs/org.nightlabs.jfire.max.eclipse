@@ -14,7 +14,7 @@ import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashbardGadgetConfigPage;
 import org.nightlabs.jfire.dashboard.DashboardGadgetLayoutEntry;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetLastCustomersConfig;
-import org.nightlabs.jfire.trade.dashboard.DashboardLayoutConfigModuleInitialiser;
+import org.nightlabs.jfire.trade.dashboard.TradeDashboardGadgetsConfigModuleInitialiser;
 import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 
 /**
@@ -71,7 +71,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 
 	private I18nText createInitialName() {
 		final I18nTextBuffer textBuffer = new I18nTextBuffer();
-		DashboardLayoutConfigModuleInitialiser.initializeLastCustomersGadgetName(textBuffer);
+		TradeDashboardGadgetsConfigModuleInitialiser.initializeLastCustomersGadgetName(textBuffer);
 		return textBuffer;
 	}
 

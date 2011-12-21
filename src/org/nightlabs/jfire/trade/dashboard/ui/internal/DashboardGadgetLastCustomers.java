@@ -27,6 +27,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.GlobalJFireEjb3Provider;
 import org.nightlabs.jfire.base.dashboard.ui.AbstractDashboardGadget;
 import org.nightlabs.jfire.prop.IStruct;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetLastCustomersConfig;
@@ -100,16 +101,11 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 	
 	@Override
 	public Composite createControl(Composite parent) {
-		XComposite wrapper = new XComposite(parent, SWT.NONE);
+		XComposite wrapper = createDefaultWrapper(parent);
 
 		transactionInfoTable = new TransactionInfoTable(wrapper, SWT.NONE);
 		
-		configureTableViewer();
-
 		return wrapper;
-	}
-
-	private void configureTableViewer() {
 	}
 
 	@Override
@@ -135,7 +131,7 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 					
 					Collection<LegalEntity> legalEntities = LegalEntityDAO.sharedInstance().getLegalEntities(
 						anchorIDToLegalEntity.keySet(), 
-						new String[] {FetchPlan.ALL, "TODO"}, 
+						new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA}, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						new SubProgressMonitor(monitor, 50)
 					);
@@ -167,33 +163,15 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 			}
 
 			private String getLegalEntityName(LegalEntity legalEntity) {
-				// TODO
-				// Look for displayName, or Name and FirstName or Company....
-				
 				String displayName = legalEntity.getPerson().getDisplayName();
-
 				if (displayName == null || displayName.equals("")) {
 					IStruct structure = legalEntity.getPerson().getStructure();
-					
-					
-					
+					displayName = structure.createDisplayName(legalEntity.getPerson());
 				}
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				return displayName;
 			}
 		};
 			
-		loadCustomersJob.setUser(true);
 		loadCustomersJob.schedule();	
 	}
 }
