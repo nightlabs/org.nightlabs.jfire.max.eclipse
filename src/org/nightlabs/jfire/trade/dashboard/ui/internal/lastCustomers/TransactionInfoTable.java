@@ -22,10 +22,10 @@ public class TransactionInfoTable extends AbstractTableComposite<TransactionInfo
 	protected void createTableColumns(final TableViewer tableViewer, final Table table) {
 		TableColumn col1 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
 		col1.setText(Messages.getString(
-			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable.column1.text")); //$NON-NLS-1$
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.TransactionInfoTable.column1.text")); //$NON-NLS-1$
 		TableColumn col2 = new TableColumn(tableViewer.getTable(), SWT.LEFT);
 		col2.setText(Messages.getString(
-			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable.column2.text")); //$NON-NLS-1$
+			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.TransactionInfoTable.column2.text")); //$NON-NLS-1$
 		final TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnWeightData(100));
 		tableLayout.addColumnData(new ColumnWeightData(50));
@@ -35,7 +35,6 @@ public class TransactionInfoTable extends AbstractTableComposite<TransactionInfo
 					table.setLayout(tableLayout);
 					table.layout(true, true);
 				}
-				
 			}
 		});
 	}
@@ -52,7 +51,7 @@ public class TransactionInfoTable extends AbstractTableComposite<TransactionInfo
 				if (columnIndex == 1) {
 					String type = ((TransactionInfoTableItem) element).getTransactionInfo().getTransactionType();
 					return Messages.getString(
-						"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.TransactionInfoTable." + type); //$NON-NLS-1$
+						"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.TransactionInfoTable." + type); //$NON-NLS-1$
 				}
 				return ""; //$NON-NLS-1$
 			}

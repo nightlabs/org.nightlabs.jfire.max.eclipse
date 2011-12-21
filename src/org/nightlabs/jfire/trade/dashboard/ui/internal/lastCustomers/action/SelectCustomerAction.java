@@ -6,6 +6,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.dashboard.ui.action.AbstractDashboardTableAction;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.TransactionInfoTableItem;
+import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.TradePerspective;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction;
@@ -19,7 +20,7 @@ public class SelectCustomerAction extends AbstractDashboardTableAction<Transacti
 
 	public SelectCustomerAction() {
 		setId(SelectCustomerAction.class.getName());
-		setText("Select in trade-perspective");
+		setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.action.SelectCustomerAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				TradePlugin.getDefault(), AssignCustomerAction.class));
 	}
@@ -29,7 +30,8 @@ public class SelectCustomerAction extends AbstractDashboardTableAction<Transacti
 		TransactionInfoTableItem tableItem = getFirstSelectedTableItem();
 		if (tableItem != null) {
 			RCPUtil.showPerspective(TradePerspective.ID_PERSPECTIVE);
-			NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, tableItem.getTransactionInfo().getCustomerID(), LegalEntity.class);
+			NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, tableItem.getTransactionInfo().getCustomerID(), 
+				LegalEntity.class);
 			SelectionManager.sharedInstance().notify(event);
 		}
 	}
@@ -38,5 +40,4 @@ public class SelectCustomerAction extends AbstractDashboardTableAction<Transacti
 	public boolean calculateEnabled() {
 		return getFirstSelectedTableItem() != null;
 	}
-
 }
