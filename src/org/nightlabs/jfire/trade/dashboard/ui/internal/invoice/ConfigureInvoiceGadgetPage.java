@@ -122,6 +122,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		choosenQueryLabel.setText("Select a query of the invoices:");
 		choosenQueryLabel.setLayoutData(gridData);
 		choosenQuery = new ComboViewer(wrapper);
+//		choosenQuery.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		choosenQuery.setContentProvider(new ArrayContentProvider());
 		choosenQuery.setLabelProvider(new LabelProvider() {
 			@Override
@@ -145,6 +146,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 				);
 				
 				final List<InvoiceQueryItem> input = new LinkedList<InvoiceQueryItem>();
+				final InvoiceQueryItem createDefaultItem = createDefaultItem();
 				input.add(createDefaultItem());
 				for (BaseQueryStore baseQueryStore : queries) {
 					input.add(new InvoiceQueryItem((QueryStoreID) JDOHelper.getObjectId(baseQueryStore), baseQueryStore.getName().getText()));
@@ -154,11 +156,15 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 					@Override
 					public void run() {
 						choosenQuery.setInput(input);
-						if (config != null && config.getInvoiceQueryItemId() != null)
+						if (config != null && config.getInvoiceQueryItemId() != null) {
 							for (InvoiceQueryItem invoiceQueryItem : input) {
 								if (invoiceQueryItem.invoiceQueryItemId.equals(config.getInvoiceQueryItemId()))
 									choosenQuery.setSelection(new StructuredSelection(invoiceQueryItem));
 							}
+						} else
+							choosenQuery.setSelection(new StructuredSelection(createDefaultItem));
+						
+						choosenQuery.getControl().pack();
 					}
 				});
 				
