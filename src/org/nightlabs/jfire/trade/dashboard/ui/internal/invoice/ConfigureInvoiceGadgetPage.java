@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.dashboard.ui.internal.invoice;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.JDOHelper;
 
@@ -69,11 +70,13 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 
 	@Override
 	public void configure(DashboardGadgetLayoutEntry layoutEntry) {
-		layoutEntry.getEntryName().copyFrom(gadgetTitle.getI18nText());
+		if (gadgetTitle != null && gadgetTitle.getI18nText() != null)
+			layoutEntry.getEntryName().copyFrom(gadgetTitle.getI18nText());
 		DashboardGadgetInvoiceConfig newConfig = new DashboardGadgetInvoiceConfig();
-		newConfig.setAmountOfInvoices(amountOfInvoices.getSelection());
-		InvoiceQueryItem selectedItem = getSelectedInvoiceQueryItem();
-		newConfig.setInvoiceQueryItemId(selectedItem != null ? selectedItem.invoiceQueryItemId : null);
+		if (amountOfInvoices != null && amountOfInvoices.getSelection() > 0)
+			newConfig.setAmountOfInvoices(amountOfInvoices.getSelection());
+		if (getSelectedInvoiceQueryItem() != null)
+			newConfig.setInvoiceQueryItemId(getSelectedInvoiceQueryItem().invoiceQueryItemId);
 		layoutEntry.setConfig(newConfig);
 	}
 
@@ -87,19 +90,23 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		final DashboardGadgetInvoiceConfig config = entryConfig != null ? entryConfig : new DashboardGadgetInvoiceConfig(); 
 		
 		Label l = new Label(wrapper, SWT.WRAP);
-		l.setText("bla-label");
+		l.setText("This gadget will help you to see the invoices of your most interest.");
 		
-		gadgetTitle = new I18nTextEditor(wrapper, "Title of this gadget:");
+		gadgetTitle = new I18nTextEditor(wrapper, "Set the title of this gadget:");
 		if (!getLayoutEntry().getEntryName().isEmpty()) {
 			gadgetTitle.setI18nText(getLayoutEntry().getEntryName());
 		} else {
 			gadgetTitle.setI18nText(createInitialName());
 		}
 
+		//TODO set label left of spinner
+		Label amountOfInvoicesLabel = new Label(wrapper, SWT.LEFT);
+		amountOfInvoicesLabel.setText("Amount of invoices to show:");
 		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
 		amountOfInvoices.setMinimum(1);
-		amountOfInvoices.setSelection(config.getAmountOfInvoices());
+		amountOfInvoices.setSelection(5);
 		
+		//TODO add a label left of the ComboViewer
 		choosenQuery = new ComboViewer(wrapper);
 		choosenQuery.setContentProvider(new ArrayContentProvider());
 		choosenQuery.setLabelProvider(new LabelProvider() {
@@ -151,7 +158,10 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 
 
 	private I18nText createInitialName() {
-		return new I18nTextBuffer();
+		I18nTextBuffer text = new I18nTextBuffer();
+		//TODO get localised initial message
+		text.setText(Locale.ENGLISH, "My last invoices:");
+		return text;
 	}
 	
 	
