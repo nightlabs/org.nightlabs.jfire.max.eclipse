@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -89,8 +90,12 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		DashboardGadgetInvoiceConfig entryConfig = (DashboardGadgetInvoiceConfig) getLayoutEntry().getConfig();
 		final DashboardGadgetInvoiceConfig config = entryConfig != null ? entryConfig : new DashboardGadgetInvoiceConfig(); 
 		
-		Label l = new Label(wrapper, SWT.WRAP);
-		l.setText("This gadget will help you to see the invoices of your most interest.");
+		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+		gridData.verticalIndent = 15;
+		gridData.widthHint = 500;
+		
+		Label gadgetDescription = new Label(wrapper, SWT.WRAP);
+		gadgetDescription.setText("This gadget will help you to see the invoices of your most interest.");
 		
 		gadgetTitle = new I18nTextEditor(wrapper, "Set the title of this gadget:");
 		if (!getLayoutEntry().getEntryName().isEmpty()) {
@@ -98,15 +103,24 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		} else {
 			gadgetTitle.setI18nText(createInitialName());
 		}
+		gadgetTitle.setLayoutData(gridData);
 
-		//TODO set label left of spinner
+		gridData = new GridData();
+		gridData.verticalIndent = 15;
+		
 		Label amountOfInvoicesLabel = new Label(wrapper, SWT.LEFT);
 		amountOfInvoicesLabel.setText("Amount of invoices to show:");
+		amountOfInvoicesLabel.setLayoutData(gridData);
 		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
 		amountOfInvoices.setMinimum(1);
 		amountOfInvoices.setSelection(5);
 		
-		//TODO add a label left of the ComboViewer
+		gridData = new GridData();
+		gridData.verticalIndent = 15;
+		
+		Label choosenQueryLabel = new Label(wrapper, SWT.LEFT);
+		choosenQueryLabel.setText("Select a query of the invoices:");
+		choosenQueryLabel.setLayoutData(gridData);
 		choosenQuery = new ComboViewer(wrapper);
 		choosenQuery.setContentProvider(new ArrayContentProvider());
 		choosenQuery.setLabelProvider(new LabelProvider() {
