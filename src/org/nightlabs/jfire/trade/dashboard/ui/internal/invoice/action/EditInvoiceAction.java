@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.dashboard.ui.action.AbstractDashboardTableAction;
 import org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.InvoiceTableItem;
+import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorUtil;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
@@ -15,7 +16,7 @@ public class EditInvoiceAction extends AbstractDashboardTableAction<InvoiceTable
 
 	public EditInvoiceAction() {
 		setId(EditInvoiceAction.class.getName());
-		setText("Edit invoice");
+		setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action.EditInvoiceAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				TradePlugin.getDefault(), AbstractEditArticleContainerAction.class));
 	}
@@ -32,5 +33,4 @@ public class EditInvoiceAction extends AbstractDashboardTableAction<InvoiceTable
 	public boolean calculateEnabled() {
 		return getFirstSelectedTableItem() != null;
 	}
-
 }

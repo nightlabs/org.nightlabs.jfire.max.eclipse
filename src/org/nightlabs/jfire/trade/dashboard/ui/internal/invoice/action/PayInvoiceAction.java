@@ -1,12 +1,10 @@
-/**
- * 
- */
 package org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action;
 
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.base.dashboard.ui.action.AbstractDashboardTableAction;
 import org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.InvoiceTableItem;
+import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
@@ -21,7 +19,7 @@ public class PayInvoiceAction extends
 
 	public PayInvoiceAction() {
 		setId(PayInvoiceAction.class.getName());
-		setText("Pay invoice");
+		setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.action.PayInvoiceAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				TradePlugin.getDefault(), PayAction.class));
 	}
@@ -49,5 +47,4 @@ public class PayInvoiceAction extends
 			dialog.open();
 		}
 	}
-
 }
