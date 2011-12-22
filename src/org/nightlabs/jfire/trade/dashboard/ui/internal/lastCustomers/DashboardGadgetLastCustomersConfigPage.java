@@ -35,35 +35,33 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 
 	@Override
 	public Control createPageContents(final Composite parent) {
-		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		final XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, 2);
 		
 		Label descriptionLabel = new Label(wrapper, SWT.WRAP);
 		descriptionLabel.setText(Messages.getString(
 			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.descriptionLabel.text")); //$NON-NLS-1$
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		descriptionLabel.setLayoutData(gd);
 		
-		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-		gridData.verticalIndent = 15;
-		gridData.widthHint = 500;
-		
-		gadgetTitle = new I18nTextEditor(wrapper, Messages.getString(
-			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption")); //$NON-NLS-1$
+		Label titleLabel = new Label(wrapper, SWT.NONE);
+		titleLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption")); //$NON-NLS-1$
+		gadgetTitle = new I18nTextEditor(wrapper);
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
-		gadgetTitle.setLayoutData(gridData);
+		gadgetTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		gridData = new GridData();
-		gridData.verticalIndent = 15;
 		
 		Label spinnerLabel = new Label(wrapper, SWT.NONE);
 		spinnerLabel.setText(Messages.getString(
 			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.spinnerLabel.text")); //$NON-NLS-1$
-		spinnerLabel.setLayoutData(gridData);
+		spinnerLabel.setLayoutData(new GridData());
 		
 		int max = 50;
 		spinnerAmountOfCustomers = new Spinner(wrapper, SWT.BORDER);
 		spinnerAmountOfCustomers.setMinimum(1);
-		spinnerAmountOfCustomers.setIncrement(1);
+		spinnerAmountOfCustomers.setIncrement(5);
 		spinnerAmountOfCustomers.setPageIncrement(5);
-		spinnerAmountOfCustomers.setMaximum(max);	// just set a fix value here
+		spinnerAmountOfCustomers.setMaximum(100);	// just set a fix value here
 		
 		int amount = 5;	// initial selection if none could be read out
 		Object config = getLayoutEntry().getConfig();

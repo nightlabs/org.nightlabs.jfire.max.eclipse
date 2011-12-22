@@ -51,7 +51,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	protected static final String DashboardGadgetInvoice = null;
 
 	private I18nTextEditor gadgetTitle;
-	private boolean gadgetTitleManuallyChanged;
+	private boolean autoAdjustGadgetTitle = true;
 	
 	private Spinner amountOfInvoices;
 
@@ -98,7 +98,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 
 	@Override
 	public void configure(DashboardGadgetLayoutEntry layoutEntry) {
-		if (gadgetTitle != null && gadgetTitle.getI18nText() != null)
+		if (gadgetTitle != null && gadgetTitle.getI18nText() != null)	
 			layoutEntry.getEntryName().copyFrom(gadgetTitle.getI18nText());
 		DashboardGadgetInvoiceConfig newConfig = new DashboardGadgetInvoiceConfig();
 		if (amountOfInvoices != null && amountOfInvoices.getSelection() > 0)
@@ -112,50 +112,36 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	@Override
 	public Control createPageContents(Composite parent) 
 	{
-		XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, 2);
+		
 		
 		DashboardGadgetInvoiceConfig entryConfig = (DashboardGadgetInvoiceConfig) getLayoutEntry().getConfig();
 		final DashboardGadgetInvoiceConfig config = entryConfig != null ? entryConfig : new DashboardGadgetInvoiceConfig(); 
 		
-		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-		gridData.verticalIndent = 15;
-		gridData.widthHint = 500;
-		
 		Label gadgetDescription = new Label(wrapper, SWT.WRAP);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		gadgetDescription.setLayoutData(gd);
 		gadgetDescription.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.0")); //$NON-NLS-1$
-		
-		gadgetTitle = new I18nTextEditor(wrapper, Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.1")); //$NON-NLS-1$
+
+		Label titleLabel = new Label(wrapper, SWT.NONE);
+		titleLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.1")); //$NON-NLS-1$
+		gadgetTitle = new I18nTextEditor(wrapper); 
 		if (!getLayoutEntry().getEntryName().isEmpty()) {
 			gadgetTitle.setI18nText(getLayoutEntry().getEntryName());
 		} else {
 			gadgetTitle.setI18nText(createInitialName());
 		}
-		gadgetTitle.setLayoutData(gridData);
+		gadgetTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		gadgetTitle.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
-				gadgetTitleManuallyChanged = true;
+				autoAdjustGadgetTitle = false;
 			}
 		});
-
-		gridData = new GridData();
-		gridData.verticalIndent = 15;
-		
-		Label amountOfInvoicesLabel = new Label(wrapper, SWT.LEFT);
-		amountOfInvoicesLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.2")); //$NON-NLS-1$
-		amountOfInvoicesLabel.setLayoutData(gridData);
-		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
-		amountOfInvoices.setMinimum(1);
-		amountOfInvoices.setMaximum(100);
-		amountOfInvoices.setIncrement(5);
-		amountOfInvoices.setSelection(5);
-		
-		gridData = new GridData();
-		gridData.verticalIndent = 15;
-		
-		Label choosenQueryLabel = new Label(wrapper, SWT.LEFT);
+		Label choosenQueryLabel = new Label(wrapper, SWT.NONE);
 		choosenQueryLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.3")); //$NON-NLS-1$
-		choosenQueryLabel.setLayoutData(gridData);
+		choosenQueryLabel.setLayoutData(new GridData());
 		choosenQuery = new ComboViewer(wrapper);
 //		choosenQuery.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		choosenQuery.setContentProvider(new ArrayContentProvider());
@@ -168,13 +154,24 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		choosenQuery.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				if (!gadgetTitleManuallyChanged) {
+				if (autoAdjustGadgetTitle) {
 					InvoiceQueryItem selectedInvoiceQueryItem = getSelectedInvoiceQueryItem();
 					if (selectedInvoiceQueryItem != null)
 						gadgetTitle.setI18nText(selectedInvoiceQueryItem.getNameI18nText(), EditMode.BUFFERED);
 				}
 			}
 		});
+		choosenQuery.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+
+		Label amountOfInvoicesLabel = new Label(wrapper, SWT.NONE);
+		amountOfInvoicesLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.2")); //$NON-NLS-1$
+		amountOfInvoicesLabel.setLayoutData(new GridData());
+		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
+		amountOfInvoices.setMinimum(1);
+		amountOfInvoices.setMaximum(100);
+		amountOfInvoices.setIncrement(5);
+		amountOfInvoices.setSelection(config.getAmountOfInvoices());
 		
 		Job loadQueriesJob = new Job(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.4"))  //$NON-NLS-1$
 		{
@@ -201,15 +198,20 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 					@Override
 					public void run() {
 						choosenQuery.setInput(input);
-						if (config != null && config.getInvoiceQueryItemId() != null) {
+						if (config != null) {
 							for (InvoiceQueryItem invoiceQueryItem : input) {
-								if (Util.equals(invoiceQueryItem.getQueryStoreID(), config.getInvoiceQueryItemId()))
-									choosenQuery.setSelection(new StructuredSelection(invoiceQueryItem));
+								if (Util.equals(invoiceQueryItem.getQueryStoreID(), config.getInvoiceQueryItemId())) {
+									boolean oldVal = autoAdjustGadgetTitle;
+									try {
+										autoAdjustGadgetTitle = false;
+										choosenQuery.setSelection(new StructuredSelection(invoiceQueryItem));
+									} finally {
+										autoAdjustGadgetTitle = oldVal;
+									}
+								}
 							}
 						} else
 							choosenQuery.setSelection(new StructuredSelection(createDefaultItem));
-						
-						choosenQuery.getControl().pack();
 					}
 				});
 				
