@@ -11,7 +11,9 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.IWizardHop;
 import org.nightlabs.eclipse.extension.AbstractEPProcessor;
+import org.nightlabs.jfire.auth.ui.editor.IUserSecurityGroupSyncConfigDelegate;
 import org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor;
+import org.nightlabs.jfire.auth.ui.editor.UserSecurityGroupEditorSyncConfigPage;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 
 /**
@@ -51,7 +53,12 @@ public class UserManagementSystemUIMappingRegistry extends AbstractEPProcessor{
 	 * {@link Map} for holding a {@link IWizardHop}s for every {@link UserManagementSystemType} specific class.
 	 */
 	private Map<Class<? extends UserManagementSystemType<?>>, Map<Class<? extends DynamicPathWizard>, Class<? extends IWizardHop>>> wizardHopsByClass = new HashMap<Class<? extends UserManagementSystemType<?>>, Map<Class<? extends DynamicPathWizard>,Class<? extends IWizardHop>>>();
-	
+
+	/**
+	 * {@link Map} for holding class implementing {@link IUserSecurityGroupSyncConfigDelegate}s  for every {@link UserManagementSystemType} specific class.
+	 */
+	private Map<Class<? extends UserManagementSystemType<?>>, Class<? extends IUserSecurityGroupSyncConfigDelegate>> userGroupSyncConfigDelgatesByClass = new HashMap<Class<? extends UserManagementSystemType<?>>, Class<? extends IUserSecurityGroupSyncConfigDelegate>>();
+
 	/**
 	 * Get class names of {@link EntityEditor} page factories by specific {@link UserManagementSystemType} class.
 	 * These class names are then used for filtering {@link UserManagementSystemEditor} pages.
@@ -81,6 +88,23 @@ public class UserManagementSystemUIMappingRegistry extends AbstractEPProcessor{
 			}
 			return null;
 		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Get {@link IUserSecurityGroupSyncConfigDelegate} by specific {@link UserManagementSystemType} class.
+	 * These delegate is then used for creating UI in {@link UserSecurityGroupEditorSyncConfigPage}.
+	 * 
+	 * @param userManagementSystemTypeClass Class of specific {@link UserManagementSystemType}
+	 * @return new {@link IUserSecurityGroupSyncConfigDelegate} instance
+	 */
+	public IUserSecurityGroupSyncConfigDelegate getUserGroupSyncConfigDelegate(Class<? extends UserManagementSystemType<?>> userManagementSystemTypeClass){
+		checkProcessing();
+		Class<? extends IUserSecurityGroupSyncConfigDelegate> delegateClass = userGroupSyncConfigDelgatesByClass==null ? null : userGroupSyncConfigDelgatesByClass.get(userManagementSystemTypeClass);
+		try{
+			return delegateClass != null ? delegateClass.newInstance() : null;
+		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -125,6 +149,12 @@ public class UserManagementSystemUIMappingRegistry extends AbstractEPProcessor{
 						wizardHops.put(wizardClass, hopClass);
 						wizardHopsByClass.put(userManagementSystemTypeClass, wizardHops);
 					}
+					
+				}else if ("userSecurityGroupSyncConfigMapping".equalsIgnoreCase(child.getName())){ //$NON-NLS-3$
+					
+					userGroupSyncConfigDelgatesByClass.put(
+							userManagementSystemTypeClass, 
+							(Class<? extends IUserSecurityGroupSyncConfigDelegate>) Class.forName(child.getAttribute("class"))); //$NON-NLS-4$
 					
 				}
 			}

@@ -47,6 +47,7 @@
          <sequence>
             <element ref="pageFactoryMapping" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="wizardHopMapping" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="userSecurityGroupSyncConfigMapping" minOccurs="0" maxOccurs="1"/>
          </sequence>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -95,6 +96,21 @@
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="org.nightlabs.base.ui.wizard.DynamicPathWizard"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="userSecurityGroupSyncConfigMapping">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.auth.ui.editor.IUserSecurityGroupSyncConfigDelegate"/>
                </appInfo>
             </annotation>
          </attribute>

@@ -23,6 +23,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.IWizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
+import org.nightlabs.jfire.auth.ui.UserManagementSystemTable;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
 import org.nightlabs.jfire.auth.ui.actions.CreateUserManagementSystemAction;
 import org.nightlabs.jfire.auth.ui.resource.Messages;
@@ -121,7 +122,7 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 			if (userManagementSystemTable == null){
 				loadingLabel.dispose();
 				
-				userManagementSystemTable = new UserManagementSystemTable(mainWrapper, SWT.NONE, true, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+				userManagementSystemTable = new UserManagementSystemTable(mainWrapper, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 				userManagementSystemTable.setLinesVisible(true);
 				userManagementSystemTable.setHeaderVisible(true);
 				userManagementSystemTable.addSelectionChangedListener(syncPerfomerfSelectListener);

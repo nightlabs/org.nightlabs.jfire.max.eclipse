@@ -22,8 +22,13 @@
                  viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView" indexHint="11">
            </viewBinding>
         </category>
+        <pageFactory
+              class="org.nightlabs.jfire.auth.ui.editor.UserSecurityGroupEditorSyncConfigPage$Factory"
+              editorID="org.nightlabs.jfire.base.admin.ui.editor.usersecuritygroup.UserSecurityGroupEditor"
+              indexHint="30">
+        </pageFactory>
 	</extension>
-	
+
     <extension point="org.nightlabs.base.ui.editor2perspective">
        <registry
              editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
