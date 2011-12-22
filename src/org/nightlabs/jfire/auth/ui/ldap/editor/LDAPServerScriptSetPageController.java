@@ -18,13 +18,10 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public class LDAPServerScriptSetPageController extends ActiveEntityEditorPageController<LDAPScriptSet>{
 
-	private EntityEditor editor;
-	
 	private UserManagementSystemID ldapServerID;
 	
 	public LDAPServerScriptSetPageController(EntityEditor editor){
 		super(editor, false);
-		this.editor = editor;
 		this.ldapServerID = (UserManagementSystemID) ((JDOObjectEditorInput<?>)editor.getEditorInput()).getJDOObjectID();
 	}
 
@@ -65,11 +62,4 @@ public class LDAPServerScriptSetPageController extends ActiveEntityEditorPageCon
 		return FETCH_GROUPS_LDAP_SCRIPT_SET;
 	}
 	
-	/**
-	 * Get the editor.
-	 * @return the editor
-	 */
-	public EntityEditor getEditor(){
-		return editor;
-	}
 }

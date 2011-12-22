@@ -32,21 +32,14 @@ import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite;
-import org.nightlabs.jfire.auth.ui.ldap.LDAPEntrySelectorComposite.BindCredentials;
 import org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin;
 import org.nightlabs.jfire.auth.ui.ldap.editor.LDAPScriptSetHelper.NamedScript;
 import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
-import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSetDAO;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.AttributeStructFieldSyncHelper.LDAPAttributeSyncPolicy;
-import org.nightlabs.jfire.security.GlobalSecurityReflector;
-import org.nightlabs.jfire.security.NoUserException;
-import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.security.UserDescriptor;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
 /**
@@ -102,7 +95,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 
 	
 	public LDAPServerAdvancedConfigSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Advanced"); //$NON-NLS-1$);
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Advanced configuration");
 		this.advancedConfigPage = page;
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
@@ -241,9 +234,8 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		gd.verticalIndent = 10;
 		separatorLabel.setLayoutData(gd);
 		
-		Button openExportButton = new Button(parent, SWT.PUSH);
-		openExportButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openExportButtonLabel")); //$NON-NLS-1$
-		openExportButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openExportButtonTooltip")); //$NON-NLS-1$
+		Button openExportButton = toolkit.createButton(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openExportButtonLabel"), SWT.PUSH);	 //$NON-NLS-1$
+		openExportButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openExportButtonTooltip"));	 //$NON-NLS-1$
 		openExportButton.setAlignment(SWT.LEFT);
 		openExportButton.setImage(
 				SharedImages.getSharedImage(LdapUIPlugin.sharedInstance(), LDAPServerAdvancedConfigSection.class, "exportButton", ImageDimension._16x16.toString(), ImageFormat.png)); //$NON-NLS-1$
@@ -258,8 +250,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 			}
 		});
 
-		Button openImportButton = new Button(parent, SWT.PUSH);
-		openImportButton.setText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openImportButtonLabel")); //$NON-NLS-1$
+		Button openImportButton = toolkit.createButton(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openImportButtonLabel"), SWT.PUSH);	 //$NON-NLS-1$
 		openImportButton.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerAdvancedConfigSection.openImportBurttonTooltip")); //$NON-NLS-1$
 		openImportButton.setAlignment(SWT.LEFT);
 		openImportButton.setImage(
@@ -282,53 +273,7 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		if (credentialsSet){
 			return;
 		}
-		boolean fallToGlobalSyncCredentials = false;
-		BindCredentials bindCredentials = null;
-		try{
-			UserDescriptor userDescriptor = GlobalSecurityReflector.sharedInstance().getUserDescriptor();
-			if (User.USER_ID_SYSTEM.equals(userDescriptor.getUserID())){
-				fallToGlobalSyncCredentials = true;
-			}else{
-				String bindPwd = LDAPServer.getLDAPPasswordForCurrentUser();
-				if (bindPwd == null){
-					fallToGlobalSyncCredentials = true;
-				}
-				
-				final String bindUser = LDAPScriptSetDAO.sharedInstance().getLDAPEntryName(
-						model.getLdapServer().getUserManagementSystemObjectID(), userDescriptor.getUserObjectID(), new NullProgressMonitor());
-				final String bindPassword = bindPwd;
-				bindCredentials = new BindCredentials() {
-					@Override
-					public String getPassword() {
-						return bindPassword;
-					}
-					@Override
-					public String getLogin() {
-						return bindUser;
-					}
-				};
-			}
-		}catch(NoUserException e){
-			// There's no logged in User, so we'll try to bind with syncDN and syncPasswrod
-			fallToGlobalSyncCredentials = true;
-		}
-		
-		if (fallToGlobalSyncCredentials){
-			final String globalUser = syncDNSelector.getEntryName();
-			final String globalPwd = syncPasswordText.getText();
-			bindCredentials = new BindCredentials() {
-				@Override
-				public String getPassword() {
-					return globalPwd;
-				}
-				@Override
-				public String getLogin() {
-					return globalUser;
-				}
-			};
-		}
-		
-		selectorComposite.setBindCredentials(bindCredentials);
+		LDAPEntrySelectorComposite.setBindCredentialsToSelector(selectorComposite, model.getLdapServer());
 		credentialsSet = true;
 	}
 	

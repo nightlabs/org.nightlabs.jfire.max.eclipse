@@ -23,6 +23,8 @@
      			wizardClass="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"/>
      		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop" 
      			wizardClass="org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard"/>
+ 			<userSecurityGroupSyncConfigMapping
+          		class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerUserSecurityGroupSyncConfigDelegate" />
 		</userManagementSystemType>
 		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.SambaLDAPServerType">
      		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
@@ -31,6 +33,8 @@
      			wizardClass="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"/>
      		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop" 
      			wizardClass="org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard"/>
+ 			<userSecurityGroupSyncConfigMapping
+          		class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerUserSecurityGroupSyncConfigDelegate" />
 		</userManagementSystemType>
 	</extension>
 	

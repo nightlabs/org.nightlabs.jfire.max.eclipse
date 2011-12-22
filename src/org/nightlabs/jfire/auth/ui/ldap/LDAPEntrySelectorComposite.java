@@ -19,9 +19,16 @@ import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPBindCredentialsDialog;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTree;
 import org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry;
 import org.nightlabs.jfire.auth.ui.ldap.tree.SelectLDAPEntryDialog;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSetDAO;
+import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.attributes.LDAPAttributeSet;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.LDAPConnection;
+import org.nightlabs.jfire.security.GlobalSecurityReflector;
+import org.nightlabs.jfire.security.NoUserException;
+import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.UserDescriptor;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * This composite is used for editing the name of LDAP entry. The name could be either typed in manually 
@@ -120,6 +127,61 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	}
 	
 	/**
+	 * Convinient static method which tries to set {@link BindCredentials} to given {@link LDAPEntrySelectorComposite}.
+	 * First it tries to obtain credentials from currently logged in {@link User}, otherwise it takes global sync credentials
+	 * from given {@link LDAPServer}.
+	 * 
+	 * @param selectorComposite {@link LDAPEntrySelectorComposite} to set {@link BindCredentials} to
+	 */
+	public static void setBindCredentialsToSelector(LDAPEntrySelectorComposite selectorComposite, final LDAPServer ldapServer){
+		boolean fallToGlobalSyncCredentials = false;
+		BindCredentials bindCredentials = null;
+		try{
+			UserDescriptor userDescriptor = GlobalSecurityReflector.sharedInstance().getUserDescriptor();
+			if (User.USER_ID_SYSTEM.equals(userDescriptor.getUserID())){
+				fallToGlobalSyncCredentials = true;
+			}else{
+				String bindPwd = LDAPServer.getLDAPPasswordForCurrentUser();
+				if (bindPwd == null){
+					fallToGlobalSyncCredentials = true;
+				}
+				
+				final String bindUser = LDAPScriptSetDAO.sharedInstance().getLDAPEntryName(
+						ldapServer.getUserManagementSystemObjectID(), userDescriptor.getUserObjectID(), new NullProgressMonitor());
+				final String bindPassword = bindPwd;
+				bindCredentials = new BindCredentials() {
+					@Override
+					public String getPassword() {
+						return bindPassword;
+					}
+					@Override
+					public String getLogin() {
+						return bindUser;
+					}
+				};
+			}
+		}catch(NoUserException e){
+			// There's no logged in User, so we'll try to bind with syncDN and syncPasswrod
+			fallToGlobalSyncCredentials = true;
+		}
+		
+		if (fallToGlobalSyncCredentials){
+			bindCredentials = new BindCredentials() {
+				@Override
+				public String getPassword() {
+					return ldapServer.getSyncPassword();
+				}
+				@Override
+				public String getLogin() {
+					return ldapServer.getSyncDN();
+				}
+			};
+		}
+		
+		selectorComposite.setBindCredentials(bindCredentials);
+	}
+	
+	/**
 	 * Get selected LDAP entry name.
 	 * 
 	 * @return selected LDAP entry name
@@ -135,7 +197,7 @@ public class LDAPEntrySelectorComposite extends XComposite{
 	 */
 	public void setEntryName(String entryName) {
 		if (!entryNameText.isDisposed()){
-			entryNameText.setText(entryName);
+			entryNameText.setText(entryName!=null ? entryName : "");
 		}
 	}
 	

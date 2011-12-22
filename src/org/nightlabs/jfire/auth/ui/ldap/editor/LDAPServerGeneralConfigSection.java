@@ -81,7 +81,7 @@ public class LDAPServerGeneralConfigSection extends ToolBarSectionPart {
 
 
 	public LDAPServerGeneralConfigSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "General"); //$NON-NLS-1$);
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "General config");
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
 
