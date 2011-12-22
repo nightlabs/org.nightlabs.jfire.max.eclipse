@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -13,10 +14,14 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,6 +31,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -38,12 +44,14 @@ import org.nightlabs.jfire.query.store.id.QueryStoreID;
 import org.nightlabs.jfire.trade.dashboard.DashboardGadgetInvoiceConfig;
 import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.Util;
 
 public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage<Object> {
 	
 	protected static final String DashboardGadgetInvoice = null;
 
 	private I18nTextEditor gadgetTitle;
+	private boolean gadgetTitleManuallyChanged;
 	
 	private Spinner amountOfInvoices;
 
@@ -53,12 +61,31 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	static class InvoiceQueryItem 
 	{
 		/** The <code>null</code> value marks the default invoice-query for vanilla "latest invoices". */
-		QueryStoreID invoiceQueryItemId;
-		String name;
-		public InvoiceQueryItem(QueryStoreID invoiceQueryItemId, String name) {
+		BaseQueryStore queryStore;
+		I18nText name;
+		public InvoiceQueryItem(BaseQueryStore queryStore) {
 			super();
-			this.invoiceQueryItemId = invoiceQueryItemId;
+			this.queryStore = queryStore;
+			this.name = queryStore.getName();
+		}
+		
+		public InvoiceQueryItem(I18nText name) {
+			super();
 			this.name = name;
+		}
+		
+		private String getName() {
+			return name.getText();
+		}
+		
+		private I18nText getNameI18nText() {
+			return name;
+		}
+		
+		private QueryStoreID getQueryStoreID() {
+			if (queryStore == null)
+				return null;
+			return (QueryStoreID) JDOHelper.getObjectId(queryStore);
 		}
 	}
 
@@ -77,7 +104,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		if (amountOfInvoices != null && amountOfInvoices.getSelection() > 0)
 			newConfig.setAmountOfInvoices(amountOfInvoices.getSelection());
 		if (getSelectedInvoiceQueryItem() != null)
-			newConfig.setInvoiceQueryItemId(getSelectedInvoiceQueryItem().invoiceQueryItemId);
+			newConfig.setInvoiceQueryItemId(getSelectedInvoiceQueryItem().getQueryStoreID());
 		layoutEntry.setConfig(newConfig);
 	}
 
@@ -104,6 +131,12 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 			gadgetTitle.setI18nText(createInitialName());
 		}
 		gadgetTitle.setLayoutData(gridData);
+		gadgetTitle.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent event) {
+				gadgetTitleManuallyChanged = true;
+			}
+		});
 
 		gridData = new GridData();
 		gridData.verticalIndent = 15;
@@ -129,7 +162,17 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		choosenQuery.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((InvoiceQueryItem)element).name;
+				return ((InvoiceQueryItem)element).getName();
+			}
+		});
+		choosenQuery.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (!gadgetTitleManuallyChanged) {
+					InvoiceQueryItem selectedInvoiceQueryItem = getSelectedInvoiceQueryItem();
+					if (selectedInvoiceQueryItem != null)
+						gadgetTitle.setI18nText(selectedInvoiceQueryItem.getNameI18nText(), EditMode.BUFFERED);
+				}
 			}
 		});
 		
@@ -151,7 +194,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 				final InvoiceQueryItem createDefaultItem = createDefaultItem();
 				input.add(createDefaultItem());
 				for (BaseQueryStore baseQueryStore : queries) {
-					input.add(new InvoiceQueryItem((QueryStoreID) JDOHelper.getObjectId(baseQueryStore), baseQueryStore.getName().getText()));
+					input.add(new InvoiceQueryItem(baseQueryStore));
 				}
 				
 				choosenQuery.getCombo().getDisplay().syncExec(new Runnable() {
@@ -160,7 +203,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 						choosenQuery.setInput(input);
 						if (config != null && config.getInvoiceQueryItemId() != null) {
 							for (InvoiceQueryItem invoiceQueryItem : input) {
-								if (invoiceQueryItem.invoiceQueryItemId.equals(config.getInvoiceQueryItemId()))
+								if (Util.equals(invoiceQueryItem.getQueryStoreID(), config.getInvoiceQueryItemId()))
 									choosenQuery.setSelection(new StructuredSelection(invoiceQueryItem));
 							}
 						} else
@@ -179,19 +222,25 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 
 	private InvoiceQueryItem createDefaultItem() {
 		//non-persistent query: 
-		QueryStoreID invoiceQueryItemId = null;
-		InvoiceQueryItem defaultQueryItem = new InvoiceQueryItem(invoiceQueryItemId, Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.5")); //$NON-NLS-1$
+		I18nTextBuffer defaultItemName = new I18nTextBuffer();
+		readI18nTextFromProps(defaultItemName, "org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.5"); //$NON-NLS-1$
+		InvoiceQueryItem defaultQueryItem = new InvoiceQueryItem(defaultItemName);
 		return defaultQueryItem;
 	}
 
-
 	private I18nText createInitialName() {
 		I18nTextBuffer text = new I18nTextBuffer();
-		//TODO get localised initial message
-		text.setText(Locale.ENGLISH, Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.6")); //$NON-NLS-1$
+		readI18nTextFromProps(text,"org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.6"); //$NON-NLS-1$
 		return text;
 	}
 	
+
+	private void readI18nTextFromProps(I18nTextBuffer defaultItemName, String key) {
+		defaultItemName.readFromProperties(Messages.BUNDLE_NAME, getClass().getClassLoader(), key);
+		// readFromProperties does not include the default-props, add them explicitely
+		defaultItemName.setText(Locale.ENGLISH, ResourceBundle.getBundle(Messages.BUNDLE_NAME, Locale.ENGLISH).getString(key));
+	}
+
 	
 	private InvoiceQueryItem getSelectedInvoiceQueryItem() {
 		if (choosenQuery != null) {
@@ -202,5 +251,4 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		}
 		return null;
 	}
-
 }
