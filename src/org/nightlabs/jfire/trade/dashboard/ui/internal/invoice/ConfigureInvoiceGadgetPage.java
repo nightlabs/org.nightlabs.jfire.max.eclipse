@@ -92,7 +92,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 	
 	public ConfigureInvoiceGadgetPage() {
 		super(ConfigureInvoiceGadgetPage.class.getName());
-		setTitle(Messages.getString("org.nightlabs.jfire.base.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.title")); //$NON-NLS-1$
+		setTitle(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.title")); //$NON-NLS-1$
 	}
 
 
