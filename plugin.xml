@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
+      <dashboardGadgetFactory
+            class="org.nightlabs.jfire.issue.dashboard.ui.internal.IssueDashboardGadgetFactory"
+            dashboardGadgetType="IssueDashboardGadgetFactory"
+            description="Issue Dashboard Gadget"
+            name="Issue Dashboard Gadget">
+      </dashboardGadgetFactory>
+   </extension>
+
+</plugin>
