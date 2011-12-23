@@ -66,8 +66,15 @@ public class IssueDashboardGadget extends AbstractDashboardGadget
 				DashboardGadgetLayoutEntry<?> layoutEntry = getGadgetContainer().getLayoutEntry();
 				IssueDashboardGadgetConfig config = getConfig(layoutEntry);
 				QueryCollection<? extends IssueQuery> queryCollection = getConfiguredQueryCollection(config, new SubProgressMonitor(monitor, 50));
-				Collection<Issue> issues = getIssuesForQueryCollection(queryCollection, new SubProgressMonitor(monitor, 50));
-				issueTable.setInput(issues);
+				final Collection<Issue> issues = getIssuesForQueryCollection(queryCollection, new SubProgressMonitor(monitor, 50));
+				if (!issueTable.getDisplay().isDisposed()) {
+					issueTable.getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							issueTable.setInput(issues);			
+						}
+					});					
+				}
 			} finally {
 				monitor.done();
 			}
