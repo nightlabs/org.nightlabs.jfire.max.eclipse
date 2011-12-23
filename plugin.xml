@@ -7,7 +7,7 @@
             class="org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersFactory"
             dashboardGadgetType="DashboardGadgetLastCustomersFactory"
             description="This gadget displays the last customers the user has worked with."
-            name="LastCustomers-Gadget">
+            name="My last customers gadget">
       </dashboardGadgetFactory>
    </extension>
    <extension
