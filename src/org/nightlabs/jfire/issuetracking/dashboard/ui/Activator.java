@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.issue.dashboard.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.dashboard.ui";
 
 	// The shared instance
 	private static Activator plugin;

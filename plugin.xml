@@ -4,8 +4,8 @@
    <extension
          point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
       <dashboardGadgetFactory
-            class="org.nightlabs.jfire.issue.dashboard.ui.internal.IssueDashboardGadgetFactory"
-            dashboardGadgetType="IssueDashboardGadgetFactory"
+            class="org.nightlabs.jfire.issuetracking.dashboard.ui.internal.IssueDashboardGadgetFactory"
+            dashboardGadgetType="DashboardGadgetIssuesFactory"
             description="Issue Dashboard Gadget"
             name="Issue Dashboard Gadget">
       </dashboardGadgetFactory>
