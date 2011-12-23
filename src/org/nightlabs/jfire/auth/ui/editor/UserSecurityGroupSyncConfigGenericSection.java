@@ -278,6 +278,11 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 				if (model == null){
 					return;
 				}
+				final Collection<UserManagementSystem> systemsToSync = userManagementSystemTable.getSelectedElements();
+				if (systemsToSync.isEmpty()){
+					systemsToSync.addAll(userManagementSystemTable.getElements());
+				}
+				
 				ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(getSection().getShell());
 				progressMonitorDialog.setOpenOnRun(true);
 				progressMonitorDialog.setCancelable(true);
@@ -288,12 +293,6 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 						@Override
 						public void run(IProgressMonitor monitor) throws InvocationTargetException,
 								InterruptedException {
-							
-							Collection<UserManagementSystem> systemsToSync = userManagementSystemTable.getSelectedElements();
-							if (systemsToSync.isEmpty()){
-								systemsToSync = userManagementSystemTable.getElements();
-							}
-							
 							monitor.beginTask(
 									"Synchronizing this User security group with user management system(s)...", systemsToSync.size());
 							try{
