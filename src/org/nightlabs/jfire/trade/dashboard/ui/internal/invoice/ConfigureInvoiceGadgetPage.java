@@ -168,7 +168,6 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 			}
 		});
 		choosenQuery.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
 
 		Label amountOfInvoicesLabel = new Label(wrapper, SWT.NONE);
 		amountOfInvoicesLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.2")); //$NON-NLS-1$
@@ -180,7 +179,7 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		amountOfInvoices.setIncrement(5);
 		amountOfInvoices.setPageIncrement(5);
 		
-		int amount = DashboardGadgetInvoiceConfig.initialAmountOfInvoicesInDashboard;	// initial selection if none could be read out
+		int amount = DashboardGadgetInvoiceConfig.initialAmountOfInvoicesInDashboard;	// initial selection if no valid one can be read out from config
 		if (config.getAmountOfInvoices() > 0)
 			amount = config.getAmountOfInvoices();
 		

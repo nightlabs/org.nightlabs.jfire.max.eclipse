@@ -62,7 +62,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		spinnerAmountOfCustomers.setIncrement(5);
 		spinnerAmountOfCustomers.setPageIncrement(5);
 		
-		int amount = DashboardGadgetLastCustomersConfig.initialAmountOfCustomersInDashboard;	// initial selection if none could be read out
+		int amount = DashboardGadgetLastCustomersConfig.initialAmountOfCustomersInDashboard;	// initial selection if no valid one can be read out from config
 		Object config = getLayoutEntry().getConfig();
 		if (config instanceof DashboardGadgetLastCustomersConfig) {
 			DashboardGadgetLastCustomersConfig lcConfig = (DashboardGadgetLastCustomersConfig) config;
