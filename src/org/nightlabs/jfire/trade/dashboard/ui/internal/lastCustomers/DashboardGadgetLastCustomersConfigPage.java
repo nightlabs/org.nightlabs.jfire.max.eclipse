@@ -18,7 +18,7 @@ import org.nightlabs.jfire.trade.dashboard.TradeDashboardGadgetsConfigModuleInit
 import org.nightlabs.jfire.trade.dashboard.ui.resource.Messages;
 
 /**
- * WizardPage to configure properties of "My Last Customers" dashboard gadget.
+ * WizardPage to configure properties of "My last customers" dashboard gadget.
  * @author Frederik Loeser <!-- frederik [AT] nightlabs [DOT] de -->
  */
 public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadgetConfigPage<Object> {
@@ -50,23 +50,25 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
 		gadgetTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		
 		Label spinnerLabel = new Label(wrapper, SWT.NONE);
 		spinnerLabel.setText(Messages.getString(
 			"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.spinnerLabel.text")); //$NON-NLS-1$
 		spinnerLabel.setLayoutData(new GridData());
 		
-		int max = 50;
+		int max = DashboardGadgetLastCustomersConfig.maxAmountOfCustomersInDashboard;
 		spinnerAmountOfCustomers = new Spinner(wrapper, SWT.BORDER);
 		spinnerAmountOfCustomers.setMinimum(1);
+		spinnerAmountOfCustomers.setMaximum(max);	// just set a fix value here
 		spinnerAmountOfCustomers.setIncrement(5);
 		spinnerAmountOfCustomers.setPageIncrement(5);
-		spinnerAmountOfCustomers.setMaximum(100);	// just set a fix value here
 		
-		int amount = 5;	// initial selection if none could be read out
+		int amount = DashboardGadgetLastCustomersConfig.initialAmountOfCustomersInDashboard;	// initial selection if none could be read out
 		Object config = getLayoutEntry().getConfig();
-		if (config instanceof DashboardGadgetLastCustomersConfig)
-			amount = ((DashboardGadgetLastCustomersConfig) config).getAmountLastCustomers();
+		if (config instanceof DashboardGadgetLastCustomersConfig) {
+			DashboardGadgetLastCustomersConfig lcConfig = (DashboardGadgetLastCustomersConfig) config;
+			if (lcConfig.getAmountLastCustomers() > 0)
+				amount = lcConfig.getAmountLastCustomers();
+		}
 		
 		spinnerAmountOfCustomers.setSelection(amount < max + 1 ? amount : max);
 		
@@ -80,15 +82,20 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 	}
 
 	@Override
+	public void initialize(DashboardGadgetLayoutEntry<?> layoutEntry) {
+		super.initialize(layoutEntry);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public void configure(final DashboardGadgetLayoutEntry layoutEntry) {
 		layoutEntry.getEntryName().copyFrom(gadgetTitle != null ? gadgetTitle.getI18nText() : createInitialName());
 		
-		// Create Config object for "Last customers" dashboard gadget and set it for the given layoutEntry.
-		DashboardGadgetLastCustomersConfig config = new DashboardGadgetLastCustomersConfig(spinnerAmountOfCustomers.getSelection());
+		// Create config object for "My last customers" dashboard gadget and set it for the given layoutEntry.
+		DashboardGadgetLastCustomersConfig config = new DashboardGadgetLastCustomersConfig();
+		if (spinnerAmountOfCustomers != null && spinnerAmountOfCustomers.getSelection() > 0)
+			config.setAmountLastCustomers(spinnerAmountOfCustomers.getSelection());
+		
 		layoutEntry.setConfig(config);
-	}
-
-	@Override
-	public void setMessage(String message, int type) {
 	}
 }

@@ -95,6 +95,10 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		setTitle(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.title")); //$NON-NLS-1$
 	}
 
+	@Override
+	public void initialize(DashboardGadgetLayoutEntry<?> layoutEntry) {
+		super.initialize(layoutEntry);
+	}
 
 	@Override
 	public void configure(DashboardGadgetLayoutEntry layoutEntry) {
@@ -167,11 +171,18 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		Label amountOfInvoicesLabel = new Label(wrapper, SWT.NONE);
 		amountOfInvoicesLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.2")); //$NON-NLS-1$
 		amountOfInvoicesLabel.setLayoutData(new GridData());
+		int max = DashboardGadgetInvoiceConfig.maxAmountOfInvoicesInDashboard;
 		amountOfInvoices = new Spinner(wrapper, SWT.BORDER);
 		amountOfInvoices.setMinimum(1);
-		amountOfInvoices.setMaximum(100);
+		amountOfInvoices.setMaximum(max);
 		amountOfInvoices.setIncrement(5);
-		amountOfInvoices.setSelection(config.getAmountOfInvoices());
+		amountOfInvoices.setPageIncrement(5);
+		
+		int amount = DashboardGadgetInvoiceConfig.initialAmountOfInvoicesInDashboard;	// initial selection if none could be read out
+		if (config.getAmountOfInvoices() > 0)
+			amount = config.getAmountOfInvoices();
+		
+		amountOfInvoices.setSelection(amount < max + 1 ? amount : max);
 		
 		Job loadQueriesJob = new Job(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.ConfigureInvoiceGadgetPage.4"))  //$NON-NLS-1$
 		{

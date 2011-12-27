@@ -10,8 +10,6 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -95,8 +93,9 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 			return Status.OK_STATUS;
 		}
 
-		private DashboardGadgetInvoiceConfig getConfig(
-				DashboardGadgetLayoutEntry<?> layoutEntry) {
+		private DashboardGadgetInvoiceConfig getConfig(DashboardGadgetLayoutEntry<?> layoutEntry) {
+			// TODO is only not null in the case one opened the config dialog or added the gadget once again (after removing it) 
+			System.out.println(layoutEntry.getConfig() != null ? "is not null" : "is null");
 			return (DashboardGadgetInvoiceConfig) (layoutEntry.getConfig() != null ? layoutEntry.getConfig() : new DashboardGadgetInvoiceConfig());
 		}
 
@@ -119,7 +118,8 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 				}
 				
 				queryCollection.setFromInclude(0);
-				queryCollection.setToExclude(config.getAmountOfInvoices());
+				long amountOfInvoices = config.getAmountOfInvoices() > 0 ? config.getAmountOfInvoices() : DashboardGadgetInvoiceConfig.initialAmountOfInvoicesInDashboard;
+				queryCollection.setToExclude(amountOfInvoices);
 				
 				return queryCollection;
 
