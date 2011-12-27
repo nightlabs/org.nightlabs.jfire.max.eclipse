@@ -46,6 +46,7 @@ public class DashboardGadgetLastCustomersConfigPage extends AbstractDashbardGadg
 		
 		Label titleLabel = new Label(wrapper, SWT.NONE);
 		titleLabel.setText(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersConfigPage.gadgetTitle.caption")); //$NON-NLS-1$
+
 		gadgetTitle = new I18nTextEditor(wrapper);
 		gadgetTitle.setI18nText(!getLayoutEntry().getEntryName().isEmpty() ? getLayoutEntry().getEntryName() : createInitialName());
 		gadgetTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
