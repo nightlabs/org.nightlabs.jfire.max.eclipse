@@ -94,7 +94,8 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 		}
 
 		private DashboardGadgetInvoiceConfig getConfig(DashboardGadgetLayoutEntry<?> layoutEntry) {
-			// TODO is only not null in the case one opened the config dialog or added the gadget once again (after removing it) 
+			// TODO config is only not null in the case one opened the config dialog or added the gadget once again (after removing it)
+			// If created it should be most likely set for the given layout entry, or not? 
 			System.out.println(layoutEntry.getConfig() != null ? "is not null" : "is null");
 			return (DashboardGadgetInvoiceConfig) (layoutEntry.getConfig() != null ? layoutEntry.getConfig() : new DashboardGadgetInvoiceConfig());
 		}
