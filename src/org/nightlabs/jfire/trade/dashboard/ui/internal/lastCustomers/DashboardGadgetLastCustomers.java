@@ -61,12 +61,14 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 				monitor.beginTask(Messages.getString(
 					"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.loadCustomers.task.name"), 100); //$NON-NLS-1$
 				try {
-					transactionInfoTable.getDisplay().syncExec(new Runnable() {
-						public void run() {
-							transactionInfoTable.setLoadingMessage(Messages.getString(
-								"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.loadCustomers.message")); //$NON-NLS-1$
-						}
-					});
+					if (!transactionInfoTable.isDisposed()) {
+						transactionInfoTable.getDisplay().syncExec(new Runnable() {
+							public void run() {
+								transactionInfoTable.setLoadingMessage(Messages.getString(
+									"org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomers.loadCustomers.message")); //$NON-NLS-1$
+							}
+						});
+					}
 					DashboardManagerRemote dashboardManager = GlobalJFireEjb3Provider.sharedInstance().getRemoteBean(DashboardManagerRemote.class);
 					List<LastCustomerTransaction> lastCustomers = dashboardManager.searchLastCustomerTransactions(
 						(DashboardGadgetLastCustomersConfig) getGadgetContainer().getLayoutEntry().getConfig());
@@ -96,11 +98,15 @@ public class DashboardGadgetLastCustomers extends AbstractDashboardGadget {
 						customerTransactions.add(customerTransaction);
 					}
 					
-					transactionInfoTable.getDisplay().syncExec(new Runnable() {
-						public void run() {
-							transactionInfoTable.setInput(customerTransactions);
-						}
-					});
+					if (!transactionInfoTable.isDisposed()) {
+						transactionInfoTable.getDisplay().syncExec(new Runnable() {
+							public void run() {
+								if (!transactionInfoTable.isDisposed()) {
+									transactionInfoTable.setInput(customerTransactions);
+								}
+							}
+						});
+					}
 					
 				} finally {
 					monitor.done();

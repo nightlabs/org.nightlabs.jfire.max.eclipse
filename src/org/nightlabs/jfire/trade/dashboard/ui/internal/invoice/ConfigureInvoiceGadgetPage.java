@@ -120,8 +120,6 @@ public class ConfigureInvoiceGadgetPage extends AbstractDashbardGadgetConfigPage
 		
 		
 		DashboardGadgetInvoiceConfig entryConfig = (DashboardGadgetInvoiceConfig) getLayoutEntry().getConfig();
-		// TODO config is only not null in the case one opened the config dialog or added the gadget once again (after removing it)
-		// If created it should be most likely set for the given layout entry, or not? 
 		final DashboardGadgetInvoiceConfig config = entryConfig != null ? entryConfig : new DashboardGadgetInvoiceConfig(); 
 		
 		Label gadgetDescription = new Label(wrapper, SWT.WRAP);

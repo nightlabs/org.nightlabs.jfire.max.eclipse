@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

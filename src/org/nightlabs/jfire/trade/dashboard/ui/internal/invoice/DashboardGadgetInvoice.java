@@ -94,9 +94,6 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 		}
 
 		private DashboardGadgetInvoiceConfig getConfig(DashboardGadgetLayoutEntry<?> layoutEntry) {
-			// TODO config is only not null in the case one opened the config dialog or added the gadget once again (after removing it)
-			// If created it should be most likely set for the given layout entry, or not? 
-			System.out.println(layoutEntry.getConfig() != null ? "is not null" : "is null");
 			return (DashboardGadgetInvoiceConfig) (layoutEntry.getConfig() != null ? layoutEntry.getConfig() : new DashboardGadgetInvoiceConfig());
 		}
 
@@ -185,21 +182,27 @@ public class DashboardGadgetInvoice extends AbstractDashboardGadget {
 		}
 
 		private void displayLoadingMessage() {
-			invoiceTable.getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					invoiceTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoice.3")); //$NON-NLS-1$
-				}
-			});
+			if (!invoiceTable.isDisposed()) {
+				invoiceTable.getDisplay().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						invoiceTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoice.3")); //$NON-NLS-1$
+					}
+				});
+			}
 		}
 		
 		private void updateTableInput(final List<InvoiceTableItem> invoiceList) {
-			invoiceTable.getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					invoiceTable.setInput(invoiceList);
-				}
-			});
+			if (!invoiceTable.isDisposed()) {
+				invoiceTable.getDisplay().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (!invoiceTable.isDisposed()) {
+							invoiceTable.setInput(invoiceList);
+						}
+					}
+				});
+			}
 		}
 	}
 	
