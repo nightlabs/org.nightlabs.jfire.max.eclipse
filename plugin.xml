@@ -19,13 +19,4 @@
             name="Invoice gadget">
       </dashboardGadgetFactory>
    </extension>
-   <extension
-         point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
-      <dashboardGadgetFactory
-            class="org.nightlabs.jfire.trade.dashboard.ui.internal.clientScripts.DashboardGadgetClientScriptsFactory"
-            dashboardGadgetType="DashboardGadgetClientScriptsFactory"
-            name="Client Scripts Gadget">
-      </dashboardGadgetFactory>
-   </extension>
-
 </plugin>
