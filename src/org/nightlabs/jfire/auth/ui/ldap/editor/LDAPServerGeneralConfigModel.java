@@ -142,10 +142,8 @@ public class LDAPServerGeneralConfigModel{
 	 * @param encryptionMethodName
 	 */
 	public void setEncryptionMethod(String encryptionMethodName){
-		EncryptionMethod value = EncryptionMethod.findEncryptionMethodByStringValue(encryptionMethodName);
-		if (value != null){
-			ldapServer.setEncryptionMethod(value);
-		}
+		ldapServer.setEncryptionMethod(
+				EncryptionMethod.findEncryptionMethodByStringValue(encryptionMethodName));
 	}
 
 	/**
@@ -163,10 +161,8 @@ public class LDAPServerGeneralConfigModel{
 	 * @param authMethodName
 	 */
 	public void setAuthenticationMethod(String authMethodName){
-		AuthenticationMethod value = AuthenticationMethod.findAuthenticationMethodByStringValue(authMethodName);
-		if (value != null){
-			ldapServer.setAuthenticationMethod(value);
-		}
+		ldapServer.setAuthenticationMethod(
+				AuthenticationMethod.findAuthenticationMethodByStringValue(authMethodName));
 	}
 
 }
