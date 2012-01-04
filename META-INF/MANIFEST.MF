@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dashboard UI Clientscripts Plugin 
+Bundle-SymbolicName: org.nightlabs.jfire.base.dashboard.clientscripts.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: NightLabs.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.nightlabs.clientui.ui,
+ org.nightlabs.jfire.base.ui,
+ org.nightlabs.jfire.base.dashboard.ui,
+ org.nightlabs.eclipse.compatibility
+Bundle-Localization: plugin
