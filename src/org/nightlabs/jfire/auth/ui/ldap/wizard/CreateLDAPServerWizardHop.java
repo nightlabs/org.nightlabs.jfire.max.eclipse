@@ -99,6 +99,12 @@ public class CreateLDAPServerWizardHop extends WizardHop implements IUserManagem
 			public int getPort() {
 				return port;
 			}
+
+			@Override
+			public String getSASLRealm(String bindPrincipal) {
+				// TODO 
+				return null;
+			}
 			
 		};
 	}
