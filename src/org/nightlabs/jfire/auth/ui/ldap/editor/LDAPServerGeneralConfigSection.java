@@ -11,6 +11,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -27,6 +29,7 @@ import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider.AuthenticationMethod;
 import org.nightlabs.jfire.base.security.integration.ldap.connection.ILDAPConnectionParamsProvider.EncryptionMethod;
+import org.nightlabs.jfire.base.security.integration.ldap.scripts.ILDAPScriptProvider;
 
 /**
  * Section of {@link LDAPServerEditorMainPage} for editing general {@link LDAPServer} properties:
@@ -49,6 +52,11 @@ public class LDAPServerGeneralConfigSection extends ToolBarSectionPart {
 	private CCombo authMethodCombo;
 	
 	private LDAPServerGeneralConfigModel model;
+	
+	/**
+	 * See {@link LDAPServerEditorMainPage#openScriptPageSelectionListener}.
+	 */
+	private SelectionListener openScriptSelectionListener;
 
 	/**
 	 * Set to <code>true</code> while automatic refreshing of UI elements
@@ -80,8 +88,9 @@ public class LDAPServerGeneralConfigSection extends ToolBarSectionPart {
 	};
 
 
-	public LDAPServerGeneralConfigSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "General config");
+	public LDAPServerGeneralConfigSection(IFormPage page, Composite parent, SelectionListener openScriptListener) {
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerGeneralConfigSection.sectionTitle")); //$NON-NLS-1$
+		this.openScriptSelectionListener = openScriptListener;
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
 
@@ -203,13 +212,40 @@ public class LDAPServerGeneralConfigSection extends ToolBarSectionPart {
 		authMethodCombo.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerGeneralConfigSection.authMethodComboTooltip")); //$NON-NLS-1$
 		authMethodCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		authMethodCombo.addSelectionListener(dirtySelectionListener);
-
+		
+		final Label emptyLabel = toolkit.createLabel(rightWrapper, ""); //$NON-NLS-1$
+		emptyLabel.setVisible(false);
+		final Link getAttrsScriptLink = new Link(rightWrapper, SWT.NONE);
+		getAttrsScriptLink.setText("<A>"+Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerGeneralConfigSection.editSASLRealmLinkText")+"</A>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		getAttrsScriptLink.addSelectionListener(openScriptSelectionListener);
+		getAttrsScriptLink.setData(ILDAPScriptProvider.GET_ATTRIBUTE_SET_SCRIPT_ID);
+		getAttrsScriptLink.setVisible(false);
+		authMethodCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean digestMd5Selected = AuthenticationMethod.SASL_DIGEST_MD5.equals(AuthenticationMethod.findAuthenticationMethodByStringValue(authMethodCombo.getText()));
+				emptyLabel.setVisible(digestMd5Selected);
+				getAttrsScriptLink.setVisible(digestMd5Selected);
+				super.widgetSelected(e);
+			}
+		});
+		authMethodCombo.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (authMethodCombo.getText() == null || authMethodCombo.getText().isEmpty()){
+					return;
+				}
+				boolean digestMd5Selected = AuthenticationMethod.SASL_DIGEST_MD5.equals(AuthenticationMethod.findAuthenticationMethodByStringValue(authMethodCombo.getText()));
+				emptyLabel.setVisible(digestMd5Selected);
+				getAttrsScriptLink.setVisible(digestMd5Selected);
+			}
+		});
+		
 		
 		nameText = new I18nTextEditor(parent, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerGeneralConfigSection.nameTextLabel")); //$NON-NLS-1$
 		nameText.setToolTipText(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerGeneralConfigSection.nameTextTooltip")); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		gd.verticalIndent = 10;
 		nameText.setLayoutData(gd);
 		nameText.addModifyListener(dirtyModifyListener);
 		nameText.addModificationFinishedListener(dirtyModificationFinishedListener);

@@ -1,7 +1,12 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -60,9 +65,9 @@ public class LDAPServerEditorMainPage extends EntityEditorPageWithProgress{
 	 */
 	@Override
 	protected void addSections(Composite parent) {
-		generalConfigSection = new LDAPServerGeneralConfigSection(this, parent);
+		generalConfigSection = new LDAPServerGeneralConfigSection(this, parent, openScriptPageSelectionListener);
 		getManagedForm().addPart(generalConfigSection);
-		advancedConfigSection = new LDAPServerAdvancedConfigSection(this, parent);
+		advancedConfigSection = new LDAPServerAdvancedConfigSection(this, parent, openScriptPageSelectionListener);
 		getManagedForm().addPart(advancedConfigSection);
 	}
 
@@ -87,4 +92,36 @@ public class LDAPServerEditorMainPage extends EntityEditorPageWithProgress{
 		layout.horizontalSpacing = 10;
 		pageWrapper.setLayout(layout);
 	}
+	
+	/**
+	 * {@link SelectionListener} which is capable of opening {@link LDAPServerEditorScriptSetPage}
+	 * on a needed tab with a script to edit. Event source (Widget) should have scriptID as a {@link String}
+	 * returned by {@link Widget#getData()} method. This listener finds {@link LDAPServerEditorScriptSetPage}, 
+	 * makes it active and selects a tab item with needed script.
+	 * 
+	 */
+	private SelectionListener openScriptPageSelectionListener = new SelectionAdapter() {
+		public void widgetSelected(SelectionEvent selectionevent) {
+			if (selectionevent.getSource() instanceof Link){
+				
+				IFormPage scriptSetPage = getEditor().setActivePage(LDAPServerEditorScriptSetPage.ID_PAGE);
+				String scriptID = (String) ((Widget) selectionevent.getSource()).getData();
+				
+				if (scriptID != null
+						&& !scriptID.isEmpty()
+						&& scriptSetPage instanceof LDAPServerEditorScriptSetPage){
+					
+					LDAPServerScriptSetSection scriptsSection = ((LDAPServerEditorScriptSetPage) scriptSetPage).getScriptsSection();
+					if (scriptsSection != null
+							&& scriptsSection.getContainer() != null
+							&& !scriptsSection.getContainer().isDisposed()){
+						
+						scriptsSection.setActiveScriptTab(scriptID);
+					}
+				}
+				
+			}
+		};
+	};
+
 }

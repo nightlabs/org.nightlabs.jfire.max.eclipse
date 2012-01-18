@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
@@ -62,10 +61,9 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	private LDAPServerAdvancedConfigModel model;
 	
 	/**
-	 * Page reference is held here for making calls to {@link LDAPServerEditorScriptSetPage}.
-	 * See {@link #openScriptPageSelectionListener}.
+	 * See {@link LDAPServerEditorMainPage#openScriptPageSelectionListener}.
 	 */
-	private IFormPage advancedConfigPage;
+	private SelectionListener openScriptSelectionListener;
 
 	/**
 	 * Set to <code>true</code> while automatic refreshing of UI elements
@@ -94,9 +92,9 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	};
 
 	
-	public LDAPServerAdvancedConfigSection(IFormPage page, Composite parent) {
+	public LDAPServerAdvancedConfigSection(IFormPage page, Composite parent, SelectionListener openScriptListener) {
 		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Advanced configuration");
-		this.advancedConfigPage = page;
+		this.openScriptSelectionListener = openScriptListener;
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
 	
@@ -291,14 +289,14 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 	}
 	
 	private void createEditScriptLink(Composite parent, String scriptID, String scriptName){
-		Link syncToJFireScriptLink = new Link(parent, SWT.NONE);
-		syncToJFireScriptLink.setText("<A>"+scriptName+"</A>"); //$NON-NLS-1$ //$NON-NLS-2$
-		syncToJFireScriptLink.addSelectionListener(openScriptPageSelectionListener);
-		syncToJFireScriptLink.setData(scriptID);
+		Link scriptLink = new Link(parent, SWT.NONE);
+		scriptLink.setText("<A>"+scriptName+"</A>"); //$NON-NLS-1$ //$NON-NLS-2$
+		scriptLink.addSelectionListener(openScriptSelectionListener);
+		scriptLink.setData(scriptID);
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 140;
 		gd.verticalIndent = 3;
-		syncToJFireScriptLink.setLayoutData(gd);
+		scriptLink.setLayoutData(gd);
 	}
 	
 	private ExpandableComposite createDescriptionExpandable(Composite parent, FormToolkit toolkit, String descriptionText){
@@ -318,32 +316,5 @@ public class LDAPServerAdvancedConfigSection extends ToolBarSectionPart {
 		
 		return descriptionExpandable;
 	}
-	
-	/**
-	 * This lister finds {@link LDAPServerEditorScriptSetPage}, makes it active and selects a tab item with needed script.
-	 */
-	private SelectionListener openScriptPageSelectionListener = new SelectionAdapter() {
-		public void widgetSelected(SelectionEvent selectionevent) {
-			if (selectionevent.getSource() instanceof Link){
-				
-				IFormPage scriptSetPage = advancedConfigPage.getEditor().setActivePage(LDAPServerEditorScriptSetPage.ID_PAGE);
-				String scriptID = (String) ((Widget) selectionevent.getSource()).getData();
-				
-				if (scriptID != null
-						&& !scriptID.isEmpty()
-						&& scriptSetPage instanceof LDAPServerEditorScriptSetPage){
-					
-					LDAPServerScriptSetSection scriptsSection = ((LDAPServerEditorScriptSetPage) scriptSetPage).getScriptsSection();
-					if (scriptsSection != null
-							&& scriptsSection.getContainer() != null
-							&& !scriptsSection.getContainer().isDisposed()){
-						
-						scriptsSection.setActiveScriptTab(scriptID);
-					}
-				}
-				
-			}
-		};
-	};
 	
 }

@@ -3,6 +3,8 @@ package org.nightlabs.jfire.auth.ui.ldap.wizard;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.jdo.FetchPlan;
+import javax.jdo.JDODetachedFieldAccessException;
 import javax.security.auth.login.LoginException;
 
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -12,17 +14,22 @@ import org.nightlabs.jfire.auth.ui.ldap.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.GenericExportWizardPage;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop;
 import org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard;
+import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.FetchEventTypeDataUnit;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
 import org.nightlabs.jfire.security.GlobalSecurityReflector;
+import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
 import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
+import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
 import org.nightlabs.jfire.security.integration.UserManagementSystemManagerRemote;
 import org.nightlabs.jfire.security.integration.UserManagementSystemSyncEvent.SyncEventGenericType;
 import org.nightlabs.jfire.security.integration.UserManagementSystemSyncException;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * Implementation if {@link ISynchronizationPerformerHop} for running synchronization for {@link LDAPServer} instances.
@@ -64,7 +71,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void performSynchronization(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException {
+	public void performSynchronization(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection, ProgressMonitor monitor) throws LoginException, UserManagementSystemCommunicationException {
 		if ( !(userManagementSystem instanceof LDAPServer) ){
 			throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.inputNotLDAPServerExceptionText")); //$NON-NLS-1$
 		}
@@ -73,12 +80,24 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 		LDAPSyncEvent syncEvent = null;
 
 		try {
-
+			String monitorMessage = SyncDirection.IMPORT.equals(syncDirection) ? Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.monitorMessageImport") : Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.monitorMessageExport"); //$NON-NLS-1$ //$NON-NLS-2$
+			monitor.beginTask(monitorMessage, 2);
+			
 			if (SyncDirection.IMPORT.equals(syncDirection)){
 				
 				syncEvent = new LDAPSyncEvent(SyncEventGenericType.FETCH_USER);
 				Collection<String> entriesToSync = null;
 				if (getImportPage().shouldImportAll()){
+					try{
+						ldapServer.getLdapScriptSet();
+					}catch(JDODetachedFieldAccessException e){
+						ldapServer = (LDAPServer) UserManagementSystemDAO.sharedInstance().getUserManagementSystem(
+								ldapServer.getUserManagementSystemObjectID(), 
+								new String[]{
+									FetchPlan.DEFAULT, LDAPServer.FETCH_GROUP_LDAP_SCRIPT_SET, 
+									UserManagementSystem.FETCH_GROUP_TYPE, UserManagementSystem.FETCH_GROUP_NAME}, 
+								2, new SubProgressMonitor(monitor, 1));
+					}
 					entriesToSync = ldapServer.getAllUserEntriesForSync();
 				}else{
 					entriesToSync = getImportPage().getSelectedEntries();
@@ -88,6 +107,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 					dataUnits.add(new FetchEventTypeDataUnit(ldapName));
 				}
 				syncEvent.setFetchEventTypeDataUnits(dataUnits);
+				monitor.worked(1);
 				
 			}else if (SyncDirection.EXPORT.equals(syncDirection)){
 				
@@ -106,6 +126,7 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 					dataUnits.add(new SendEventTypeDataUnit(objectId));
 				}
 				syncEvent.setSendEventTypeDataUnits(dataUnits);
+				monitor.worked(1);
 				
 			}else{
 				throw new IllegalArgumentException(Messages.getString("org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop.unknownSyncDirectionExceptionText")); //$NON-NLS-1$
@@ -120,9 +141,12 @@ public class LDAPServerImportExportWizardHop extends WizardHop implements ISynch
 						ldapServer.getUserManagementSystemObjectID(), syncEvent);
 				
 			}
+			monitor.worked(1);
 			
 		} catch (UserManagementSystemSyncException e) {
 			throw new UserManagementSystemCommunicationException(e);
+		} finally {
+			monitor.done();
 		}
 	}
 	
