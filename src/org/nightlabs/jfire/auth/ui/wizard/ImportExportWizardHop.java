@@ -106,11 +106,12 @@ public class ImportExportWizardHop extends WizardHop{
 	/**
 	 * Delegates running synchronization to specific {@link ISynchronizationPerformerHop} implementation.
 	 * 
+	 * @param monitor {@link ProgressMonitor} to be used
 	 * @throws LoginException
 	 * @throws UserManagementSystemCommunicationException
 	 */
-	public void performSynchronization() throws LoginException, UserManagementSystemCommunicationException{
-		configPage.getSynchronizationHop().performSynchronization(configPage.getSelectedUserManagementSystem(), configPage.getSyncDirection());
+	public void performSynchronization(ProgressMonitor monitor) throws LoginException, UserManagementSystemCommunicationException{
+		configPage.getSynchronizationHop().performSynchronization(configPage.getSelectedUserManagementSystem(), configPage.getSyncDirection(), monitor);
 	}
 	
 	/**

@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.auth.ui.wizard;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -31,6 +33,7 @@ import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirec
 import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
+import org.nightlabs.jfire.security.integration.id.UserManagementSystemID;
 
 /**
  * Page for selecting {@link UserManagementSystem} for import or export. Contributed to {@link ImportExportWizard} by {@link ImportExportWizardHop}.
@@ -174,7 +177,14 @@ public class ImportExportConfigurationPage extends WizardHopPage{
 				
 			}
 			
-			userManagementSystemTable.setInput(allUserManagementSystems);
+			Set<UserManagementSystemID> userManagementSystemIDs = new HashSet<UserManagementSystemID>();
+			for (SynchronizableUserManagementSystem<?> syncUserManagementSystem : allUserManagementSystems){
+				if (syncUserManagementSystem instanceof UserManagementSystem){
+					userManagementSystemIDs.add(((UserManagementSystem) syncUserManagementSystem).getUserManagementSystemObjectID());
+				}
+			}
+			userManagementSystemTable.setUserManagementSystemsIDs(userManagementSystemIDs);
+			userManagementSystemTable.reload();
 
 		}else{
 			

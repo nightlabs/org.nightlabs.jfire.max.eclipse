@@ -6,6 +6,7 @@ import org.nightlabs.base.ui.wizard.IWizardHop;
 import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemCommunicationException;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * WizardHops for {@link ImportExportWizard} contributed by specific UserManagementSystem plugins should implement this interface. 
@@ -39,9 +40,10 @@ public interface ISynchronizationPerformerHop extends IWizardHop{
 	 * 
 	 * @param userManagementSystem
 	 * @param syncDirection
+	 * @param monitor
 	 * @throws LoginException
 	 * @throws UserManagementSystemCommunicationException
 	 */
-	void performSynchronization(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection) throws LoginException, UserManagementSystemCommunicationException;
+	void performSynchronization(SynchronizableUserManagementSystem<?> userManagementSystem, SyncDirection syncDirection, ProgressMonitor monitor) throws LoginException, UserManagementSystemCommunicationException;
 
 }

@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.auth.ui.actions.OpenImportExportWizardAction;
@@ -20,6 +21,8 @@ import org.nightlabs.jfire.auth.ui.resource.Messages;
 import org.nightlabs.jfire.auth.ui.wizard.ISynchronizationPerformerHop.SyncDirection;
 import org.nightlabs.jfire.security.integration.SynchronizableUserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * Wizard for running user data import/export between JFire and selected {@link SynchronizableUserManagementSystem}. Inititally it has a {@link ImportExportWizardHop}
@@ -81,16 +84,16 @@ public class ImportExportWizard extends DynamicPathWizard{
 			getContainer().run(false, false, new IRunnableWithProgress(){
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException{
+					ProgressMonitor jfireMonitor = new ProgressMonitorWrapper(monitor);
 					try{
-						
 						final SyncDirection syncDirection = importExportWizardHop.getSyncDirection();
 						
 						String monitorMessage = SyncDirection.IMPORT.equals(syncDirection) ? Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.monitorMessageImport") : Messages.getString("org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard.monitorMessageExport"); //$NON-NLS-1$ //$NON-NLS-2$
-						monitor.beginTask(monitorMessage, 2);
+						jfireMonitor.beginTask(monitorMessage, 2);
 						
-						importExportWizardHop.performSynchronization();
+						importExportWizardHop.performSynchronization(new SubProgressMonitor(jfireMonitor, 2));
 						
-						monitor.worked(1);
+						jfireMonitor.worked(1);
 						result[0] = true;
 
 						if (!getContainer().getShell().isDisposed()){
@@ -109,7 +112,7 @@ public class ImportExportWizard extends DynamicPathWizard{
 					}catch(Exception e){
 						throw new RuntimeException(e);
 					}finally{
-						monitor.done();
+						jfireMonitor.done();
 					}
 				}
 			});
