@@ -30,6 +30,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
+import org.nightlabs.jfire.auth.ui.UserManagementSystemActiveJDOTable;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemTable;
 import org.nightlabs.jfire.auth.ui.UserManagementSystemUIMappingRegistry;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
@@ -41,6 +42,7 @@ import org.nightlabs.jfire.security.integration.UserManagementSystemSyncEvent;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 import org.nightlabs.jfire.security.integration.UserSecurityGroupSyncConfig;
 import org.nightlabs.jfire.security.integration.UserSecurityGroupSyncConfigContainer;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * Section of {@link UserSecurityGroupEditorSyncConfigPage} for editing generic options:
@@ -65,7 +67,7 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 	private UserManagementSystemTable userManagementSystemTable;
 	
 	public UserSecurityGroupSyncConfigGenericSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "General");
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Synchronize to");
 		createContents(getSection(), page.getEditor().getToolkit());
 	}
 	
@@ -86,11 +88,7 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 		refreshing = true;
 		try{
 			if (model != null){
-				Collection<UserManagementSystem> selectedElements = userManagementSystemTable.getSelectedElements();
-				selectedElements.retainAll(model.getAllRelatedUserManagementSystems());
-				userManagementSystemTable.setUserManagementSystemsIDs(model.getAllRelatedUserManagementSystemIDs());
-				userManagementSystemTable.reload();
-				userManagementSystemTable.setSelectedElements(selectedElements);
+				userManagementSystemTable.setInput(model.getAllRelatedUserManagementSystems());
 			}
 		}finally{
 			refreshing = false;
@@ -99,7 +97,7 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 	}
 	
 	/**
-	 * Adds given {@link ISelectionChangedListener} to underlying {@link UserManagementSystemTable}
+	 * Adds given {@link ISelectionChangedListener} to underlying {@link UserManagementSystemActiveJDOTable}
 	 * 
 	 * @param listener Can't be <code>null</code>, {@link IllegalArgumentException} will be thrown in this case 
 	 */
@@ -111,7 +109,7 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 	}
 	
 	/**
-	 * Removes given {@link ISelectionChangedListener} from underlying {@link UserManagementSystemTable}
+	 * Removes given {@link ISelectionChangedListener} from underlying {@link UserManagementSystemActiveJDOTable}
 	 * 
 	 * @param listener Can't be <code>null</code>, {@link IllegalArgumentException} will be thrown in this case 
 	 */
@@ -145,6 +143,9 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 		parentLayout.verticalSpacing = 10;
 		parentLayout.marginTop = 10;
 		parentLayout.marginRight = 20;
+		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL);
+		gd.heightHint = 200;
+		parent.setLayoutData(gd);
 		
 		Composite wrapper = toolkit.createComposite(parent, SWT.NONE);
 		GridLayout gLayout = new GridLayout(5, false);
@@ -153,7 +154,7 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 		gLayout.marginWidth = 0;
 		gLayout.marginHeight = 0;
 		wrapper.setLayout(gLayout);
-		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.minimumWidth = 600;
 		gd.widthHint = 600;
 		wrapper.setLayoutData(gd);
@@ -171,20 +172,25 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 				if (Window.OK == dialog.open()){
 					if (model != null){
 						Collection<UserManagementSystem> selectedElements = dialog.getSelectedElements();
+						UserManagementSystem firstAdded = null;
 						for (UserManagementSystem userManagementSystem : selectedElements) {
 							if (!model.syncConfigExistsForUserManagementSystem(userManagementSystem)){
 								@SuppressWarnings("unchecked")
 								IUserSecurityGroupSyncConfigDelegate delegate = UserManagementSystemUIMappingRegistry.sharedInstance().getUserGroupSyncConfigDelegate(
 										(Class<? extends UserManagementSystemType<?>>) userManagementSystem.getType().getClass());
-								if (delegate != null){
-									model.addSyncConfig(
-											delegate.createSyncConfig(model.getSyncConfigsContainer(), userManagementSystem));
+								if (delegate != null 
+										&& model.addSyncConfig(delegate.createSyncConfig(model.getSyncConfigsContainer(), userManagementSystem))
+										&& firstAdded == null){
+											firstAdded = userManagementSystem;
 								}
 							}
 						}
 						if (!refreshing) {
 							markDirty();
 							refresh();
+							if (firstAdded != null){
+								userManagementSystemTable.setSelectedElements(CollectionUtil.createArrayList(firstAdded));
+							}
 						}
 					}
 				}
@@ -367,8 +373,8 @@ public class UserSecurityGroupSyncConfigGenericSection extends ToolBarSectionPar
 		userManagementSystemTable.getTableViewer().setSorter(new ViewerSorter());
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 5;			
-		gd.heightHint = 200;
-		gd.minimumHeight = 100;
+		gd.heightHint = 300;
+		gd.minimumHeight = 200;
 		userManagementSystemTable.setLayoutData(gd);
 		userManagementSystemTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override

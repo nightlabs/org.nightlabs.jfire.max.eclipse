@@ -10,6 +10,7 @@ import org.nightlabs.jfire.security.dao.UserSecurityGroupDAO;
 import org.nightlabs.jfire.security.dao.UserSecurityGroupSyncConfigContainerDAO;
 import org.nightlabs.jfire.security.id.UserSecurityGroupID;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
+import org.nightlabs.jfire.security.integration.UserManagementSystemType;
 import org.nightlabs.jfire.security.integration.UserSecurityGroupSyncConfig;
 import org.nightlabs.jfire.security.integration.UserSecurityGroupSyncConfigContainer;
 import org.nightlabs.progress.ProgressMonitor;
@@ -39,7 +40,8 @@ public class UserSecurityGroupEditorSyncConfigPageController extends ActiveEntit
 		UserSecurityGroupSyncConfigContainer.FETCH_GROUP_USER_SECURITY_GROUP_SYNC_CONFIGS,
 		UserSecurityGroupSyncConfig.FETCH_GROUP_USER_MANAGEMENT_SYSTEM,
 		UserManagementSystem.FETCH_GROUP_NAME,
-		UserManagementSystem.FETCH_GROUP_TYPE
+		UserManagementSystem.FETCH_GROUP_TYPE,
+		UserManagementSystemType.FETCH_GROUP_NAME
 	};
 
 	/**
@@ -73,12 +75,8 @@ public class UserSecurityGroupEditorSyncConfigPageController extends ActiveEntit
 	@Override
 	protected UserSecurityGroupSyncConfigContainer storeEntity(UserSecurityGroupSyncConfigContainer syncConfigs, ProgressMonitor monitor) {
 		UserSecurityGroupSyncConfigContainer container = getControllerObject();
-		if (!container.getSyncConfigs().isEmpty()){
-			return UserSecurityGroupSyncConfigContainerDAO.sharedInstance().storeSyncConfigContainer(
-					container, true, FETCH_GROUPS_SYNC_CONFIG_CONTAINER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-		}else{
-			return container;
-		}
+		return UserSecurityGroupSyncConfigContainerDAO.sharedInstance().storeSyncConfigContainer(
+				container, true, FETCH_GROUPS_SYNC_CONFIG_CONTAINER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
 	/**

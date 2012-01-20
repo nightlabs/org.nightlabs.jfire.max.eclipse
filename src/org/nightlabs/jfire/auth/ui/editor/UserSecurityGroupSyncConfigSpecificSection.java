@@ -65,7 +65,7 @@ public class UserSecurityGroupSyncConfigSpecificSection extends ToolBarSectionPa
 	private FormToolkit toolkit;
 
 	public UserSecurityGroupSyncConfigSpecificSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "General");
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Synchronization options");
 		compositeCache = new HashMap<Class<? extends UserManagementSystemType<?>>, UserSecurityGroupSyncConfigSpecificComposite>();
 		toolkit = page.getEditor().getToolkit();
 		createContents(getSection(), toolkit);
@@ -164,7 +164,7 @@ public class UserSecurityGroupSyncConfigSpecificSection extends ToolBarSectionPa
 		gd.widthHint = 600;
 		wrapper.setLayoutData(gd);
 
-		defaultLabel = toolkit.createLabel(wrapper, "Please select one of User management system in order to configure sync properties");
+		defaultLabel = toolkit.createLabel(wrapper, "Please select one of user management systems to configure sync options");
 		
 		stackLayout.topControl = defaultLabel;
 	}

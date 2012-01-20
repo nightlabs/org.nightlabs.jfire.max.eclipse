@@ -112,7 +112,7 @@ public class UserSecurityGroupEditorSyncConfigPage extends EntityEditorPageWithP
 	 */
 	@Override
 	protected void configurePageWrapper(Composite pageWrapper) {
-		GridLayout layout = new GridLayout(1, false);
+		GridLayout layout = new GridLayout(2, false);
 		layout.marginBottom = 10;
 		layout.marginTop = 5;
 		layout.marginLeft = 5;

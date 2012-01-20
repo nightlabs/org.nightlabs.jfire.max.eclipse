@@ -1,47 +1,80 @@
 package org.nightlabs.jfire.auth.ui;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import javax.jdo.FetchPlan;
+
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.auth.ui.resource.Messages;
+import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
+import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
+import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemType;
+import org.nightlabs.jfire.security.integration.id.UserManagementSystemID;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * Simple table for representing {@link UserManagementSystem}s.
+ * Active JDO Table for representing {@link UserManagementSystem}s showing their names, types and leading status.
  * 
  * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
  *
  */
-public class UserManagementSystemTable extends AbstractTableComposite<UserManagementSystem>{
+public class UserManagementSystemActiveJDOTable extends ActiveJDOObjectTableComposite<UserManagementSystemID, UserManagementSystem>{
+
+	/**
+	 * The fetch groups of {@link UserManagementSystem} data.
+	 */
+	public static final String[] USER_MANAGEMENT_SYSTEM_FETCH_GROUPS = new String[]{
+		FetchPlan.DEFAULT,
+		UserManagementSystem.FETCH_GROUP_NAME,
+		UserManagementSystem.FETCH_GROUP_TYPE,
+		UserManagementSystemType.FETCH_GROUP_NAME
+		};
+
+	private class UserManagementSystemController extends ActiveJDOObjectController<UserManagementSystemID, UserManagementSystem> {
+		@Override
+		protected Class<? extends UserManagementSystem> getJDOObjectClass() {
+			return UserManagementSystem.class;
+		}
+
+		@Override
+		protected Collection<UserManagementSystem> retrieveJDOObjects(Set<UserManagementSystemID> objectIDs, ProgressMonitor monitor) {
+			return UserManagementSystemDAO.sharedInstance().getUserManagementSystems(
+					objectIDs, USER_MANAGEMENT_SYSTEM_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		}
+
+		@Override
+		protected Collection<UserManagementSystem> retrieveJDOObjects(ProgressMonitor monitor) {
+			return UserManagementSystemDAO.sharedInstance().getAllUserManagementSystems(
+					USER_MANAGEMENT_SYSTEM_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		}
+
+		@Override
+		protected void sortJDOObjects(List<UserManagementSystem> objects) {
+			Collections.sort(objects);
+		}
+	}
+
 
 	/**
 	 * {@inheritDoc} 
 	 */
-	public UserManagementSystemTable(Composite parent, int style) {
+	public UserManagementSystemActiveJDOTable(Composite parent, int style) {
 		super(parent, style);
 	}
 	
-	/**
-	 * {@inheritDoc} 
-	 */
-	public UserManagementSystemTable(Composite parent, int style, boolean initTable) {
-		super(parent, style, initTable);
-	}
-
-	/**
-	 * {@inheritDoc} 
-	 */
-	public UserManagementSystemTable(Composite parent, int style, boolean initTable, int viewerStyle) {
-		super(parent, style, initTable, viewerStyle);
-	}
-
 	/**
 	 * {@inheritDoc} 
 	 */
@@ -54,13 +87,14 @@ public class UserManagementSystemTable extends AbstractTableComposite<UserManage
 		table.setLayout(new WeightedTableLayout(new int[] {40, 40, 20}));
 	}
 
-	/**
-	 * {@inheritDoc} 
-	 */
 	@Override
-	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new UserManagementSystemTableLabelProvider());
+	protected ActiveJDOObjectController<UserManagementSystemID, UserManagementSystem> createActiveJDOObjectController() {
+		return new UserManagementSystemController();
+	}
+
+	@Override
+	protected ITableLabelProvider createLabelProvider() {
+		return new UserManagementSystemTableLabelProvider();
 	}
 
 	class UserManagementSystemTableLabelProvider extends TableLabelProvider	{

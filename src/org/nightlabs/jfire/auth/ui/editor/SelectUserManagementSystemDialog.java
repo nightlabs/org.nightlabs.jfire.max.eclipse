@@ -4,8 +4,12 @@ import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,18 +22,19 @@ import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin;
-import org.nightlabs.jfire.auth.ui.UserManagementSystemTable;
+import org.nightlabs.jfire.auth.ui.UserManagementSystemActiveJDOTable;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
+import org.nightlabs.util.CollectionUtil;
 
 /**
- * Dialog with a {@link UserManagementSystemTable} showing all available {@link UserManagementSystem} objects for selection.
+ * Dialog with a {@link UserManagementSystemActiveJDOTable} showing all available {@link UserManagementSystem} objects for selection.
  * 
  * @author Denis Dudnik <deniska.dudnik[at]gmail{dot}com>
  *
  */
 public class SelectUserManagementSystemDialog extends ResizableTitleAreaDialog{
 
-	private UserManagementSystemTable userManagementSystemTable;
+	private UserManagementSystemActiveJDOTable userManagementSystemTable;
 	private Collection<UserManagementSystem> selectedElements;
 	
 	/**
@@ -60,13 +65,12 @@ public class SelectUserManagementSystemDialog extends ResizableTitleAreaDialog{
 		wrapper.setLayout(new GridLayout(1, false));
 		wrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		setTitle("Select User management system(s)"); //$NON-NLS-1$
-		setMessage("Select at least one User management system"); //$NON-NLS-1$
-		// TODO: image
+		setTitle("Select User management system(s)");
+		setMessage("Select at least one User management system");
 		setTitleImage(
 				SharedImages.getSharedImage(JFireAuthUIPlugin.sharedInstance(), SelectUserManagementSystemDialog.class, "titleImage", "66x75", ImageFormat.png)); //$NON-NLS-1$ //$NON-NLS-2$
 
-		userManagementSystemTable = new UserManagementSystemTable(wrapper, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
+		userManagementSystemTable = new UserManagementSystemActiveJDOTable(wrapper, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
 		userManagementSystemTable.setLinesVisible(false);
 		userManagementSystemTable.setHeaderVisible(true);
 		userManagementSystemTable.getTableViewer().setSorter(new ViewerSorter());
@@ -77,6 +81,18 @@ public class SelectUserManagementSystemDialog extends ResizableTitleAreaDialog{
 				Button okButton = getButton(OK);
 				if (okButton != null && !okButton.isDisposed()){
 					okButton.setEnabled(event.getSelection() != null && !event.getSelection().isEmpty());
+				}
+			}
+		});
+		userManagementSystemTable.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent doubleclickevent) {
+				ISelection selection = doubleclickevent.getSelection();
+				if (selection instanceof StructuredSelection
+						&& ((StructuredSelection) selection).getFirstElement() instanceof UserManagementSystem){
+					UserManagementSystem userManagementSystem = (UserManagementSystem) ((StructuredSelection) selection).getFirstElement();
+					selectedElements = CollectionUtil.createArrayList(userManagementSystem);
+					close();
 				}
 			}
 		});
