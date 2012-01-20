@@ -164,7 +164,7 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 	public void setBindCredentials(BindCredentials bindCredentials) {
 		this.bindCredentials = bindCredentials;
 	}
-
+	
 	
 	private static final String OBJECT_CLASS_ATTRIBUTE = "objectClass"; //$NON-NLS-1$
 
@@ -219,6 +219,8 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 		private static final String PERSON = "person"; //$NON-NLS-1$
 		private static final String ORGANIZATIONALUNIT = "organizationalUnit"; //$NON-NLS-1$
 		private static final String ORGANIZATION = "organization"; //$NON-NLS-1$
+		private static final String GROUP_OF_NAMES = "groupOfNames"; //$NON-NLS-1$
+		private static final String GROUP_OF_UNIQUE_NAMES = "groupOfUniqueNames"; //$NON-NLS-1$
 
 		@Override
 		public String getColumnText(Object obj, int i) {
@@ -260,6 +262,12 @@ public class LDAPTree extends AbstractTreeComposite<LDAPTreeEntry> implements LD
 						
 						return SharedImages.getSharedImage(
 								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeUser", ImageDimension._16x16.toString(), ImageFormat.png //$NON-NLS-1$
+								);
+						
+					}else if (attributes.containsAnyAttributeValue(OBJECT_CLASS_ATTRIBUTE, CollectionUtil.createHashSet(GROUP_OF_NAMES, GROUP_OF_UNIQUE_NAMES))){
+						
+						return SharedImages.getSharedImage(
+								LdapUIPlugin.sharedInstance(), LDAPTree.class, "treeNodeUserGroup", ImageDimension._16x16.toString(), ImageFormat.png //$NON-NLS-1$
 								);
 						
 					}

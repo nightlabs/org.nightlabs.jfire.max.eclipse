@@ -97,7 +97,7 @@ public class LDAPServerAdvancedConfigWizardPage extends WizardHopPage{
 			public void modifyText(ModifyEvent modifyevent) {
 				String selectedEntryName = ldapGroupEntrySelector.getEntryName();
 				if (selectedEntryName == null || selectedEntryName.isEmpty()){
-					updateStatus("No base goup entry!");
+					updateStatus("No base group entry!");
 				}else{
 					updateStatus(null);
 				}

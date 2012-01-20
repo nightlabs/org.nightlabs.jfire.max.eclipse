@@ -88,7 +88,7 @@ public class LDAPServerUserSecurityGroupSyncConfigComposite extends UserSecurity
 	private void createContents(FormToolkit toolkit){
 		
 		Composite wrapper = toolkit.createComposite(this, SWT.NONE);
-		GridLayout gLayout = new GridLayout(2, false);
+		GridLayout gLayout = new GridLayout(1, false);
 		gLayout.verticalSpacing = 10;
 		gLayout.horizontalSpacing = 50;
 		gLayout.marginWidth = 0;
