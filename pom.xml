@@ -6,7 +6,7 @@
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.personrelation.ui</artifactId>
 	<version>1.2.0-SNAPSHOT</version>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 
 	<parent>
