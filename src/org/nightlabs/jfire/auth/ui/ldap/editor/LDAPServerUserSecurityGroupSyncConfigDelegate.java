@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.auth.ui.ldap.editor;
 
+import java.util.Set;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDODetachedFieldAccessException;
 
@@ -13,8 +15,10 @@ import org.nightlabs.jfire.base.security.integration.ldap.LDAPUserSecurityGroupS
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.FetchEventTypeDataUnit;
 import org.nightlabs.jfire.base.security.integration.ldap.sync.LDAPSyncEvent.SendEventTypeDataUnit;
+import org.nightlabs.jfire.security.AuthorizedObject;
 import org.nightlabs.jfire.security.UserSecurityGroup;
 import org.nightlabs.jfire.security.dao.UserManagementSystemDAO;
+import org.nightlabs.jfire.security.dao.UserSecurityGroupDAO;
 import org.nightlabs.jfire.security.id.UserSecurityGroupID;
 import org.nightlabs.jfire.security.integration.UserManagementSystem;
 import org.nightlabs.jfire.security.integration.UserManagementSystemSyncEvent;
@@ -82,6 +86,21 @@ public class LDAPServerUserSecurityGroupSyncConfigDelegate implements IUserSecur
 					new FetchEventTypeDataUnit((String) syncConfig.getUserManagementSystemSecurityObject())));
 		}else{
 			UserSecurityGroup userSecurityGroup = syncConfig.getUserSecurityGroup();
+			
+			Set<AuthorizedObject> groupMembers = null;
+			try{
+				groupMembers = userSecurityGroup.getMembers();
+			}catch(JDODetachedFieldAccessException e){
+				UserSecurityGroupID userSecurityGroupID = UserSecurityGroupID.create(userSecurityGroup.getOrganisationID(), userSecurityGroup.getUserSecurityGroupID());
+				userSecurityGroup = UserSecurityGroupDAO.sharedInstance().getUserSecurityGroup(
+						userSecurityGroupID, new String[]{FetchPlan.DEFAULT, UserSecurityGroup.FETCH_GROUP_MEMBERS, UserSecurityGroup.FETCH_GROUP_NAME}, 2, new NullProgressMonitor());
+				groupMembers = userSecurityGroup.getMembers();
+			}
+			if (groupMembers.isEmpty()){
+				throw new IllegalStateException(
+						String.format("UserSecurityGroup %s does not have members, so it is not possible to synchronize it to LDAP since LDAP groups does not allow empty members and therefore any attempt to sync will end up with schema violation exception.", userSecurityGroup.getName()));
+			}
+			
 			syncEvent.setSendEventTypeDataUnits(CollectionUtil.createArrayList(
 					new SendEventTypeDataUnit(
 							UserSecurityGroupID.create(userSecurityGroup.getOrganisationID(), userSecurityGroup.getUserSecurityGroupID()))));
