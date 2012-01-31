@@ -126,9 +126,6 @@ public class LDAPTreeEntry {
 				return entryAttributes;
 
 			} finally {
-				if (connection != null && bindCredentials != null){
-					connection.unbind();
-				}
 				LDAPConnectionManager.sharedInstance().releaseConnection(connection);
 			}
 
@@ -188,9 +185,6 @@ public class LDAPTreeEntry {
 					} catch (Exception e){
 						return new Status(Status.ERROR, LdapUIPlugin.PLUGIN_ID, Messages.getString("org.nightlabs.jfire.auth.ui.ldap.tree.LDAPTreeEntry.errorStatusTitle"), e); //$NON-NLS-1$
 					} finally {
-						if (connection != null && bindCredentials != null){
-							connection.unbind();
-						}
 						LDAPConnectionManager.sharedInstance().releaseConnection(connection);
 					}
 				}
