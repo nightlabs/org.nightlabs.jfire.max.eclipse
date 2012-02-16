@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.eclipse.max.aggregator</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 
@@ -24,7 +24,7 @@
 		<!-- ##### parents ##### -->
 		<module>../org.nightlabs.jfire.eclipse.parent</module>
 		<module>../org.nightlabs.jfire.eclipse.parent.legacy</module>
-
+		
 		<!-- 
 		<module>../org.nightlabs.eclipse.preference.ui</module>
 		<module>../org.nightlabs.eclipse.ui.dialog</module>
