@@ -124,6 +124,7 @@ public class DefaultReportViewerUtilImpl extends DefaultReportViewerUtil {
 							pdfViewerComposite.getPdfViewer().setPDFDocument(pdfDocument);
 							stack.topControl = pdfViewerComposite;
 							pdfViewerComposite.layout(true, true);
+							pdfViewerComposite.getParent().layout(true, true);
 						}
 					});
 				}
