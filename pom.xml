@@ -97,7 +97,7 @@ Marco :-)
 
 	<properties>
 		<!-- This redeclaration is necessary, because the original declaration is not inherited anymore due to the change of the parent/dependency-management-import-strategy -->
-		<jfire.version>${nightlabs.version}</jfire.version>
+		<jfire.version>1.2.0-SNAPSHOT</jfire.version>
 		<birt-runtime.group>org.eclipse.birt.runtime.v2-6-0-mvnzd</birt-runtime.group><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
 		<birt.version>2.6.0</birt.version><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
 		<birt-rcp-report-designer.group>org.eclipse.birt.rcp-report-designer.v2-6-0-mvnzd</birt-rcp-report-designer.group>
@@ -122,37 +122,37 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.clientui.ui</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.eclipse.ui.pdfviewer.extension</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.eclipse.ui.pdfrenderer</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.eclipse.ui.pdfviewer</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.jseditor.ui</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.tableprovider.ui</artifactId>
-				<version>${jfire.version}</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 
 			<dependency>
@@ -285,7 +285,7 @@ Marco :-)
 			<dependency>
 				<groupId>com.essiembre.eclipse</groupId>
 				<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
-				<version>0.7.8</version>
+				<version>${nightlabs.version}</version>
 			</dependency>
 			
 			<!-- ################### birt-report-designer #################################### -->
