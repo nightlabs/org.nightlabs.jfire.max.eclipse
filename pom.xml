@@ -5,8 +5,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.reporting.ui</artifactId>
-	<packaging>jar</packaging>
-	<name>${project.artifactId}</name>
 
 	<parent>
 		<groupId>org.nightlabs.jfire.eclipse</groupId>
@@ -173,17 +171,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<outputDirectory>bin</outputDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
 </project>
