@@ -42,6 +42,7 @@
 		<module>../org.nightlabs.jfire.reporting.admin.ui</module>
 		<module>../org.nightlabs.jfire.reporting.oda.client</module>
 		<module>../org.nightlabs.jfire.reporting.ui</module>
+		<module>../org.nightlabs.jfire.reporting.ui.rcp</module>
 
 		<module>../org.nightlabs.jfire.scripting.ui</module>
 		<module>../org.nightlabs.jfire.simpletrade.ui</module>
