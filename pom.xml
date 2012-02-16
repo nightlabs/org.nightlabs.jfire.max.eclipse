@@ -32,6 +32,7 @@
 					<include>schema/**/*</include>
 					<include>icons/**/*</include>
 					<include>lib/**/*</include>
+					<include>splash.bmp</include>
 				</includes>
 			</resource>
 		</resources>
