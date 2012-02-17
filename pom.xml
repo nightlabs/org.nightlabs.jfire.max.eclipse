@@ -113,7 +113,7 @@ Marco :-)
 				-->
 				<groupId>org.nightlabs.jfire</groupId>
 				<artifactId>org.nightlabs.jfire.parent</artifactId>
-				<version>1.2.0-SNAPSHOT</version>
+				<version>${jfire.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
