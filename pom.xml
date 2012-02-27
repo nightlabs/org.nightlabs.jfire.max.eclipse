@@ -125,27 +125,12 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
-				<artifactId>org.nightlabs.eclipse.ui.pdfviewer.extension</artifactId>
-				<version>${nightlabs.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.nightlabs.eclipse</groupId>
-				<artifactId>org.nightlabs.eclipse.ui.pdfrenderer</artifactId>
-				<version>${nightlabs.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.nightlabs.eclipse</groupId>
-				<artifactId>org.nightlabs.eclipse.ui.pdfviewer</artifactId>
-				<version>${nightlabs.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.nightlabs.eclipse</groupId>
 				<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
 				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.eclipse</groupId>
-				<artifactId>org.nightlabs.jseditor.ui</artifactId>
+				<artifactId>org.nightlabs.keyreader.ui</artifactId>
 				<version>${nightlabs.version}</version>
 			</dependency>
 			<dependency>
@@ -217,6 +202,26 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.department.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.dynamictrade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.department.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.dynamictrade.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.entityuserset.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
@@ -232,6 +237,31 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetimetracking.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetimetracking.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
@@ -242,7 +272,22 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.prop.file.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.prop.html.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.reporting.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.ui.rcp</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -257,7 +302,32 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.admin.parameter.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.scripting.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.editor2d.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.print.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -272,12 +342,37 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.editor2d.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.trade.admin.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.editor2d.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.print.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 
