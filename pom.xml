@@ -16,6 +16,7 @@
 		<assembly.directory>${project.build.directory}/assembly</assembly.directory>
 		<assembly.eclipse.directory>${assembly.directory}/jfire-client</assembly.eclipse.directory>
 		<assembly.plugins.directory>${assembly.eclipse.directory}/plugins</assembly.plugins.directory>
+		<birt.designer.subdir>birt-rcp-report-designer-2_6_0</birt.designer.subdir>
 	</properties>
 	
 	<dependencies>
@@ -225,77 +226,12 @@
 		</dependency>
 
 		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.chart.examples</artifactId>
+			<groupId>org.eclipse.birt.rcp-report-designer</groupId>
+			<artifactId>org.eclipse.birt.reportdesigner</artifactId>
+			<version>2.6.0</version>
+			<type>zip</type>
 		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.chart.reportitem</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.chart.reportitem.ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.chart.ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.chart.ui.extension</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.designer.core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.designer.ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.designer.ui.rcp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.designer.ui.editors</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.designer.ui.editors.schematic</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.engine</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.engine.emitter.html</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.birt.report.engine.emitter.pdf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.datatools.connectivity.oda</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.datatools.connectivity.oda.design.ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.datatools.connectivity.ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.emf.ecore</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${birt-rcp-report-designer.group}</groupId>
-			<artifactId>org.eclipse.gef</artifactId>
-		</dependency>
+
 
 		<dependency>
 			<groupId>org.eclipse</groupId>
@@ -332,6 +268,56 @@
 								<outputDirectory>${assembly.plugins.directory}</outputDirectory>
 								<includeTypes>jar</includeTypes>
 								<excludeTransitive>true</excludeTransitive>
+							</configuration>
+						</execution>
+						<execution>
+							<id>unpack-birt</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>unpack-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${assembly.directory}</outputDirectory>
+								<includeGroupIds>org.eclipse.birt.rcp-report-designer</includeGroupIds>
+								<includeArtifactIds>org.eclipse.birt.reportdesigner</includeArtifactIds>
+								<excludes>
+									${birt.designer.subdir}/.eclipseproduct,
+									${birt.designer.subdir}/BIRT.exe,
+									${birt.designer.subdir}/BIRT.ini,
+									${birt.designer.subdir}/*.html
+								</excludes>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<executions>
+						<execution>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<tasks>
+									<move file="${assembly.directory}/${birt.designer.subdir}"
+										tofile="${assembly.eclipse.directory}" />
+								</tasks>
+							</configuration>
+						</execution>
+						<execution>
+							<id>chmod-jfire-executable</id>
+							<phase>package</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<tasks>
+									<!-- Dependency plugin discards file permissions so we need to set 
+										them back manually. See: http://jira.codehaus.org/browse/MDEP-109 Marco :-) -->
+									<chmod file="${assembly.eclipse.directory}/jfire" perm="ugo+rx" />
+								</tasks>
 							</configuration>
 						</execution>
 					</executions>
