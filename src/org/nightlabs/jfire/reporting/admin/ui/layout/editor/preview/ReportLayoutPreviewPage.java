@@ -47,6 +47,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -594,7 +595,11 @@ implements IReportEditorPage
 				throw new IllegalStateException("ReportViewerFactory associated with ReportPreviewUseCase is not adaptable to Composite!"); //$NON-NLS-1$
 			reportViewer = factory.createReportViewer();
 
-			reportViewer.getAdapter(wrapper);
+			Object adapter = reportViewer.getAdapter(wrapper);
+			if (adapter instanceof Composite) {
+				((Composite) adapter).setLayoutData(new GridData(GridData.FILL_BOTH));
+			}
+			
 		}
 		return reportViewer;
 	}
