@@ -16,4 +16,7 @@ Export-Package: org.nightlabs.jfire.dynamictrade.ui,
  org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail,
  org.nightlabs.jfire.dynamictrade.ui.quicklist,
  org.nightlabs.jfire.dynamictrade.ui.store.search
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.i18n
