@@ -33,5 +33,7 @@ Eclipse-RegisterBuddy: org.nightlabs.config, org.nightlabs.jfire.base.j2ee
 Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
- org.eclipse.ui.forms.widgets
- 
+ org.eclipse.ui.forms.widgets,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.i18n
