@@ -15,3 +15,7 @@ Export-Package: org.nightlabs.jfire.jbpm.ui,
  org.nightlabs.jfire.jbpm.ui.query,
  org.nightlabs.jfire.jbpm.ui.state,
  org.nightlabs.jfire.jbpm.ui.transition.next
+Import-Package: org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.i18n
