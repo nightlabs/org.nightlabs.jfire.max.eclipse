@@ -223,7 +223,85 @@
 			<groupId>org.nightlabs.jfire.eclipse</groupId>
 			<artifactId>org.nightlabs.jfire.voucher.print.ui</artifactId>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.chart.examples</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.chart.reportitem</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.chart.reportitem.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.chart.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.chart.ui.extension</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.designer.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.designer.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.designer.ui.rcp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.designer.ui.editors</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.designer.ui.editors.schematic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.engine.emitter.html</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.engine.emitter.pdf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.datatools.connectivity.oda</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.datatools.connectivity.oda.design.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.datatools.connectivity.ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.emf.ecore</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.gef</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>draw2d</artifactId>
+		</dependency>
+					
 	</dependencies>
 	
 	<build>
