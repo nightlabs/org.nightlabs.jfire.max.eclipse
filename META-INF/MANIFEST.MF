@@ -20,4 +20,7 @@ Export-Package: org.nightlabs.jfire.dynamictrade.admin.ui,
  org.nightlabs.jfire.dynamictrade.admin.ui.resource,
  org.nightlabs.jfire.dynamictrade.admin.ui.store.search,
  org.nightlabs.jfire.dynamictrade.admin.ui.tree
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.i18n
