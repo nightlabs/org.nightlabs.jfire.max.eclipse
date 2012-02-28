@@ -18,4 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.tableprovider.ui;bundle-version="1.0.0",
  org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.i18n
