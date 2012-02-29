@@ -2,6 +2,8 @@ package org.nightlabs.jfire.jbpm.ui.transition.next;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,11 +39,13 @@ import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
 import org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class NextTransitionComposite
 extends XComposite
 implements ISelectionProvider
 {
+	
 	private XComboComposite<Transition> nextTransitionCombo;
 	private static final Transition EMPTY_TRANSITION;
 	static {
@@ -136,9 +140,9 @@ implements ISelectionProvider
 		final State state = statable.getStatableLocal().getState();
 		stateID = (StateID) JDOHelper.getObjectId(state);
 
-		// fetch the possible further transitions for the current state
-		final List<Transition> transitions = TransitionDAO.sharedInstance().getTransitions(
-				stateID, Boolean.TRUE, FETCH_GROUPS_TRANSITION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		// fetch the possible further transitions for the current state and filter them with the ITransitionFilters
+		final List<Transition> transitions = filterTransitions(state, new SubProgressMonitor(monitor, 1));
+		
 		Collections.sort(transitions, new Comparator<Transition>() {
 			@Override
 			public int compare(Transition t1, Transition t2)
@@ -214,7 +218,42 @@ implements ISelectionProvider
 		}
 	}
 
+	private ListenerList transitionFilters = new ListenerList();
+	
+	public void addTransitionFilter(ITransitionFilter transitionFilter) {
+		transitionFilters.add(transitionFilter);
+	}
 
+	public void removeTransitionFilter(ITransitionFilter transitionFilter) {
+		transitionFilters.remove(transitionFilter);
+	}
+	
+	protected List<Transition> filterTransitions(State state, ProgressMonitor monitor) {
+		// fetch the possible further transitions for the current state
+		final List<Transition> transitions = new LinkedList<Transition>(
+				TransitionDAO.sharedInstance().getTransitions(
+				stateID, Boolean.TRUE, FETCH_GROUPS_TRANSITION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+
+		Object[] listeners = transitionFilters.getListeners();
+		
+		
+		Iterator<Transition> transIt = transitions.iterator();
+		while(transIt.hasNext()) {
+			Transition transition = transIt.next();
+			boolean doShow = true;
+			for (Object transitionFilter : listeners) {
+				if (!((ITransitionFilter) transitionFilter).acceptTransition(state, transition)) {
+					doShow = false;
+					break;
+				}
+			}
+			if (!doShow) {
+				transIt.remove();
+			}
+		}
+		return transitions;
+	}
+	
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private void fireSelectionChangedEvent()
 	{
