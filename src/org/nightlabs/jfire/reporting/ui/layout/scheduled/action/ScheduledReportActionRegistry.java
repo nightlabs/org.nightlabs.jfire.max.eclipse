@@ -5,6 +5,7 @@ package org.nightlabs.jfire.reporting.ui.layout.scheduled.action;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.jface.action.IAction;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.ui.action.registry.ActionVisibilityDecider;
 import org.nightlabs.eclipse.extension.EPProcessorException;
@@ -41,6 +42,12 @@ public class ScheduledReportActionRegistry extends AbstractActionRegistry {
 			throw new EPProcessorException(e);
 		}
 	}
+	
+	protected void initAction(IAction action, IExtension extension, IConfigurationElement element) throws EPProcessorException {
+		super.initAction(action, extension, element);
+		action.setEnabled(true);
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#getExtensionPointID()

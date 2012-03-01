@@ -221,6 +221,13 @@
             name="Delete"
             tooltip="Delete scheduled report">
       </scheduledReportAction>
+      <scheduledReportAction
+            class="org.nightlabs.jfire.reporting.ui.layout.scheduled.action.AddScheduledReportAction"
+            contextmenuPath="scheduledReports"
+            id="org.nightlabs.jfire.reporting.ui.layout.scheduled.action.AddScheduledReportAction"
+            name="Schedule report"
+            tooltip="Add scheduled report">
+      </scheduledReportAction>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.ui.scheduledReportDeliveryDelegateEdit">
