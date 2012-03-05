@@ -9,3 +9,5 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.ui;bundle-version="0.9.7"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.department.ui
+Import-Package: org.nightlabs.progress,
+ org.nightlabs.util
