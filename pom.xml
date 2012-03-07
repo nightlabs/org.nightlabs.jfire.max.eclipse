@@ -18,6 +18,7 @@
 		<assembly.plugins.directory>${assembly.eclipse.directory}/plugins</assembly.plugins.directory>
 		<birt.designer.subdir>birt-rcp-report-designer-2_6_0</birt.designer.subdir>
 		<birt.designer.plugins.subdir>birt-rcp-report-designer-2_6_0/plugins</birt.designer.plugins.subdir>
+		<holongate.version>2.3.0</holongate.version>
 	</properties>
 	
 	<dependencies>
@@ -28,6 +29,16 @@
 		<dependency>
 			<groupId>com.essiembre.eclipse</groupId>
 			<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.specs</groupId>
+			<artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xpp3</artifactId>
+			<version>1.1.4c_3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.servicemix.bundles</groupId>
@@ -233,12 +244,30 @@
 			<type>zip</type>
 		</dependency>
 
-
 		<!-- draw2d comes from birt.reportdesigner -->
 		<!-- dependency>
 			<groupId>org.eclipse</groupId>
 			<artifactId>draw2d</artifactId>
 		</dependency-->
+		
+		<dependency>
+		    <groupId>org.holongate.eclipse</groupId>
+		    <artifactId>org.holongate.j2d</artifactId>
+		    <version>${holongate.version}</version>
+		    <type>zip</type>
+		</dependency>
+		<dependency>
+		    <groupId>org.holongate.eclipse</groupId>
+		    <artifactId>org.holongate.gef</artifactId>
+		    <version>${holongate.version}</version>
+		    <type>zip</type>
+		</dependency>
+		<dependency>
+		    <groupId>org.holongate.eclipse</groupId>
+		    <artifactId>org.holongate.draw2d</artifactId>
+		    <version>${holongate.version}</version>
+		    <type>zip</type>
+		</dependency>
 		
 	</dependencies>
 	
@@ -366,6 +395,18 @@
 									${birt.designer.plugins.subdir}/org.w3c.dom.events*.jar,
 									${birt.designer.plugins.subdir}/org.mozilla.rhino*/**,
 								</includes-->
+							</configuration>
+						</execution>
+						<execution>
+							<id>unpack-holongate</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>unpack-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${assembly.plugins.directory}</outputDirectory>
+								<includeGroupIds>org.holongate.eclipse</includeGroupIds>
+								<useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
 							</configuration>
 						</execution>
 					</executions>
