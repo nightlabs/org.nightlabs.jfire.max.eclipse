@@ -27,13 +27,13 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.eclipse.compatibility.CompatibleDialogConstants;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentResult;
+import org.nightlabs.jfire.accounting.pay.id.PayableObjectID;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
@@ -363,7 +363,7 @@ extends ResizableTitleAreaDialog
 
 		if (getPaymentDatas() != null && (transferWizard.getTransferMode() & TransferWizard.TRANSFER_MODE_PAYMENT) > 0) {
 			// add all ArticleIDs from all invoices of all payments
-			Set<ObjectID> payableObjectIDs = new HashSet<ObjectID>();
+			Set<PayableObjectID> payableObjectIDs = new HashSet<PayableObjectID>();
 			for (PaymentData pd : getPaymentDatas()) {
 				payableObjectIDs.addAll(pd.getPayment().getPayableObjectIDs());
 			}

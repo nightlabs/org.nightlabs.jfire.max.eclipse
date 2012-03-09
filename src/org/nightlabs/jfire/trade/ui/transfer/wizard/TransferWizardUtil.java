@@ -51,11 +51,11 @@ import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
+import org.nightlabs.jfire.accounting.pay.id.PayableObjectID;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.login.ui.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -237,9 +237,9 @@ public class TransferWizardUtil
 
 			for (PaymentEntryPage paymentEntryPage : paymentWizard.getPaymentEntryPages()) {
 				Payment payment = paymentEntryPage.getPaymentWizardHop().getPayment();
-				Collection<ObjectID> payableObjectIDs = CollectionUtil.castCollection(paymentWizard.getInvoiceIDs());
+				Collection<PayableObjectID> payableObjectIDs = CollectionUtil.castCollection(paymentWizard.getInvoiceIDs());
 //				payment.setInvoiceIDs(new HashSet<InvoiceID>(paymentWizard.getInvoiceIDs()));
-				payment.setPayableObjectIDs(new HashSet<ObjectID>(payableObjectIDs));
+				payment.setPayableObjectIDs(new HashSet<PayableObjectID>(payableObjectIDs));
 			}
 		} // if (paymentWizard != null) {
 
@@ -308,7 +308,7 @@ public class TransferWizardUtil
 		try {
 			// if a payment was done
 			if (invoicesToPrintCount > 0 && paymentTuples != null) {
-				Set<ObjectID> invoiceIDsToBePrinted = new HashSet<ObjectID>();
+				Set<PayableObjectID> invoiceIDsToBePrinted = new HashSet<PayableObjectID>();
 
 				for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
 					PaymentData paymentData = paymentPair.getFirst();
@@ -318,7 +318,7 @@ public class TransferWizardUtil
 					}
 				}
 
-				for (ObjectID invoiceID : invoiceIDsToBePrinted) {
+				for (PayableObjectID invoiceID : invoiceIDsToBePrinted) {
 					for (int i = 1; i <= invoicesToPrintCount; i++) {
 						printArticleContainer((InvoiceID)invoiceID);
 					}

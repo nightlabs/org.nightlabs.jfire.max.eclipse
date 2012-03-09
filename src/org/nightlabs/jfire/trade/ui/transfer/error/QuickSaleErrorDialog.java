@@ -9,9 +9,9 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
+import org.nightlabs.jfire.accounting.pay.id.PayableObjectID;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
@@ -62,7 +62,7 @@ extends ErrorDialog
 		okPressed();
 		if (getPaymentDatas() != null) {
 			for (PaymentData pd : getPaymentDatas()) {
-				for (ObjectID objectID : pd.getPayment().getPayableObjectIDs()) {
+				for (PayableObjectID objectID : pd.getPayment().getPayableObjectIDs()) {
 					try {
 						Editor2PerspectiveRegistry.sharedInstance().openEditor(
 								new ArticleContainerEditorInput((InvoiceID)objectID), ArticleContainerEditor.ID_EDITOR);
