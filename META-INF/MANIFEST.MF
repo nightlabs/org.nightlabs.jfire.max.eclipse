@@ -13,4 +13,6 @@ Import-Package: org.eclipse.ui.forms,
  org.eclipse.ui.forms.editor,
  org.eclipse.ui.forms.events,
  org.eclipse.ui.forms.widgets,
- org.apache.log4j
+ org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.i18n
