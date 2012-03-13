@@ -12,7 +12,11 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.scripting.editor2d.ui;visibility:=reexport,
  org.nightlabs.jfire.voucher.admin.ui;visibility:=reexport,
  org.nightlabs.editor2d
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.nightlabs.i18n,
+ org.nightlabs.i18n.unit,
+ org.nightlabs.i18n.unit.resolution,
+ org.nightlabs.util
 Export-Package: org.nightlabs.jfire.voucher.editor2d.ui,
  org.nightlabs.jfire.voucher.editor2d.ui.action,
  org.nightlabs.jfire.voucher.editor2d.ui.dialog,
