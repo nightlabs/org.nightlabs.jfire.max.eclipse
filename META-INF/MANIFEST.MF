@@ -33,4 +33,8 @@ Eclipse-RegisterBuddy: org.nightlabs.base.ui,
  org.nightlabs.jfire.base.j2ee
 Import-Package: org.eclipse.jface.text,
  org.eclipse.ui.views.properties,
- org.apache.log4j
+ org.apache.log4j,
+ org.nightlabs.i18n,
+ org.nightlabs.i18n.unit,
+ org.nightlabs.i18n.unit.resolution,
+ org.nightlabs.util
