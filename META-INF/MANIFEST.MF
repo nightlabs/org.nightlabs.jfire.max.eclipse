@@ -14,4 +14,6 @@ Export-Package: org.nightlabs.jfire.scripting.ui,
 Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.eclipse.compatibility
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.nightlabs.i18n,
+ org.nightlabs.util
