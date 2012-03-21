@@ -70,6 +70,7 @@
 		<module>../org.nightlabs.jfire.voucher.print.ui</module>
 
 		<!-- ##### Assemblies ##### -->
+		<module>../org.nightlabs.jfire.eclipse.platform.max.product</module>
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.parent</module>
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.linux-gtk-x86_64</module>
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.win32</module>
