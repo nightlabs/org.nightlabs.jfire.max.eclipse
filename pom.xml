@@ -11,18 +11,18 @@
 	
 	<artifactId>org.nightlabs.jfire.eclipse.max.assembly.linux-gtk-x86_64</artifactId>
 	<packaging>pom</packaging>
-	<name>${project.artifactId}</name>
 
 	<properties>
 		<jfire.eclipse.assembly.artifactId>org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</jfire.eclipse.assembly.artifactId>
+		<eclipse.max.platform.classifier>linux.gtk.x86_64</eclipse.max.platform.classifier>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.nightlabs.jfire.eclipse</groupId>
-			<artifactId>org.nightlabs.jfire.eclipse.min.assembly.linux-gtk-x86_64</artifactId>
+			<artifactId>${jfire.eclipse.assembly.artifactId}</artifactId>
 			<version>${project.version}</version>
-			<type>tar.gz</type>
+			<type>zip</type>
 			<classifier>bin</classifier>
 		</dependency>
 	</dependencies>
@@ -33,12 +33,7 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
