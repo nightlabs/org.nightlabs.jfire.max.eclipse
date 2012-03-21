@@ -16,39 +16,10 @@
 		<assembly.directory>${project.build.directory}/assembly</assembly.directory>
 		<assembly.eclipse.directory>${assembly.directory}/jfire-client</assembly.eclipse.directory>
 		<assembly.plugins.directory>${assembly.eclipse.directory}/plugins</assembly.plugins.directory>
-		<birt.designer.subdir>birt-rcp-report-designer-2_6_0</birt.designer.subdir>
-		<birt.designer.plugins.subdir>birt-rcp-report-designer-2_6_0/plugins</birt.designer.plugins.subdir>
 		<holongate.version>2.3.0</holongate.version>
 	</properties>
 	
 	<dependencies>
-		<dependency>
-			<groupId>net.sf.opencsv</groupId>
-			<artifactId>au.com.bytecode.opencsv</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.essiembre.eclipse</groupId>
-			<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.specs</groupId>
-			<artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
-			<version>1.9.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.xpp3</artifactId>
-			<version>1.1.4c_3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.xstream</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.xmlpull</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.editor2d</artifactId>
@@ -237,19 +208,48 @@
 			<artifactId>org.nightlabs.jfire.voucher.print.ui</artifactId>
 		</dependency>
 
+		<!-- Platform (including Birt and Babel plugins) -->
 		<dependency>
-			<groupId>org.eclipse.birt.rcp-report-designer</groupId>
-			<artifactId>org.eclipse.birt.reportdesigner</artifactId>
-			<version>2.6.0</version>
+			<groupId>org.nightlabs.jfire.eclipse.platform</groupId>
+			<artifactId>org.nightlabs.jfire.eclipse.platform.max.product</artifactId>
+			<version>${jfire.version}</version>
 			<type>zip</type>
 		</dependency>
-
-		<!-- draw2d comes from birt.reportdesigner -->
-		<!-- dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>draw2d</artifactId>
-		</dependency-->
 		
+		<!-- This bundle is not provided by eclipse p2 repos, so we need to include it separately -->
+		<dependency>
+			<groupId>${birt-rcp-report-designer.group}</groupId>
+			<artifactId>org.eclipse.birt.report.designer.ui.rcp</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- ###### 3rd party dependencies ######-->
+		<dependency>
+			<groupId>com.essiembre.eclipse</groupId>
+			<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>au.com.bytecode.opencsv</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.specs</groupId>
+			<artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xpp3</artifactId>
+			<version>1.1.4c_3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xstream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xmlpull</artifactId>
+		</dependency>
 		<dependency>
 		    <groupId>org.holongate.eclipse</groupId>
 		    <artifactId>org.holongate.j2d</artifactId>
@@ -302,99 +302,91 @@
 							</configuration>
 						</execution>
 						<execution>
-							<id>unpack-birt</id>
+							<id>unpack-platform-max</id>
 							<phase>prepare-package</phase>
 							<goals>
 								<goal>unpack-dependencies</goal>
 							</goals>
 							<configuration>
-								<outputDirectory>${assembly.directory}</outputDirectory>
-								<includeGroupIds>org.eclipse.birt.rcp-report-designer</includeGroupIds>
-								<includeArtifactIds>org.eclipse.birt.reportdesigner</includeArtifactIds>
-								<excludes>
-									${birt.designer.subdir}/.eclipseproduct,
-									${birt.designer.subdir}/BIRT.exe,
-									${birt.designer.subdir}/BIRT.ini,
-									${birt.designer.subdir}/*.html
-								</excludes>
-								<!-- includes>
-								
-									This is the try to add only needed dependencies for reporting.admin.ui,
-									however it still lacks javax.xml, xerces, xalan bunles as they are used
-									as require-bundles but not as import-package.
-								
-									${birt.designer.plugins.subdir}/com.lowagie*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.transcoder*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.css*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.util*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.util.gui*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.bridge*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.dom*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.dom.svg*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.ext.awt*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.svggen*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.xml*.jar,
-									${birt.designer.plugins.subdir}/org.apache.batik.parser*.jar
-									${birt.designer.plugins.subdir}/org.apache.batik.pdf*.jar
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.device.extension*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.device.pdf*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.device.svg*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.device.swt*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.engine*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.engine.extension*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.examples*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.examples.core*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.reportitem*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.reportitem.ui*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.ui*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.chart.ui.extension*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.core_*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.core.ui*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.data*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.data.aggregation*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.data.adapter*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.core*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui_*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.cubebuilder*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.editors*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.editors.schematic*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.lib*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.lib.explorer*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.rcp*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.designer.ui.views*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.engine_*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.engine.emitter.html*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.engine.emitter.pdf*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.engine.fonts*/**,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.item.crosstab.core*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.item.crosstab.ui*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.report.model*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.birt.resources*/**,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity_*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.oda_*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.oda.consumer*.jar,			
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.oda.design*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.oda.design.ui*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.oda.profile*.jar,			
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.sqm.core*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.connectivity.ui*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.help*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.modelbase.dbdefinition*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.datatools.modelbase.sql*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.draw2d*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.emf.common*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.emf.ecore*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.emf.ecore.change*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.emf.ecore.xmi*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.gef*.jar,
-									${birt.designer.plugins.subdir}/org.eclipse.ltk.core.refactoring*.jar,
-									${birt.designer.plugins.subdir}/org.w3c.css.sac*.jar,
-									${birt.designer.plugins.subdir}/org.w3c.sac*/**,
-									${birt.designer.plugins.subdir}/org.w3c.dom.svg*.jar,
-									${birt.designer.plugins.subdir}/org.w3c.dom.smil*.jar,
-									${birt.designer.plugins.subdir}/org.w3c.dom.events*.jar,
-									${birt.designer.plugins.subdir}/org.mozilla.rhino*/**,
-								</includes-->
+								<outputDirectory>${assembly.eclipse.directory}</outputDirectory>
+								<includeGroupIds>org.nightlabs.jfire.eclipse.platform</includeGroupIds>
+								<includeArtifactIds>org.nightlabs.jfire.eclipse.platform.max.product</includeArtifactIds>
+								<classifier>${eclipse.max.platform.classifier}</classifier>
+								<type>zip</type>
+								<includes>
+									**/com.lowagie*.jar,
+									**/org.apache.batik.transcoder*.jar,
+									**/org.apache.batik.css*.jar,
+									**/org.apache.batik.util*.jar,
+									**/org.apache.batik.util.gui*.jar,
+									**/org.apache.batik.bridge*.jar,
+									**/org.apache.batik.dom*.jar,
+									**/org.apache.batik.dom.svg*.jar,
+									**/org.apache.batik.ext.awt*.jar,
+									**/org.apache.batik.svggen*.jar,
+									**/org.apache.batik.xml*.jar,
+									**/org.apache.batik.parser*.jar
+									**/org.apache.batik.pdf*.jar
+									**/org.eclipse.birt.chart.device.extension*.jar,
+									**/org.eclipse.birt.chart.device.pdf*.jar,
+									**/org.eclipse.birt.chart.device.svg*.jar,
+									**/org.eclipse.birt.chart.device.swt*.jar,
+									**/org.eclipse.birt.chart.engine*.jar,
+									**/org.eclipse.birt.chart.engine.extension*.jar,
+									**/org.eclipse.birt.chart.examples*.jar,
+									**/org.eclipse.birt.chart.examples.core*.jar,
+									**/org.eclipse.birt.chart.reportitem*.jar,
+									**/org.eclipse.birt.chart.reportitem.ui*.jar,
+									**/org.eclipse.birt.chart.ui*.jar,
+									**/org.eclipse.birt.chart.ui.extension*.jar,
+									**/org.eclipse.birt.core_*.jar,
+									**/org.eclipse.birt.core.ui*.jar,
+									**/org.eclipse.birt.data*.jar,
+									**/org.eclipse.birt.data.aggregation*.jar,
+									**/org.eclipse.birt.report.data.adapter*.jar,
+									**/org.eclipse.birt.report.designer.core*.jar,
+									**/org.eclipse.birt.report.designer.ui_*.jar,
+									**/org.eclipse.birt.report.designer.ui.cubebuilder*.jar,
+									**/org.eclipse.birt.report.designer.ui.data*.jar,
+									**/org.eclipse.birt.report.designer.ui.editors*.jar,
+									**/org.eclipse.birt.report.designer.ui.editors.schematic*.jar,
+									**/org.eclipse.birt.report.designer.ui.lib*.jar,
+									**/org.eclipse.birt.report.designer.ui.lib.explorer*.jar,
+									**/org.eclipse.birt.report.designer.ui.rcp*.jar,
+									**/org.eclipse.birt.report.designer.ui.views*.jar,
+									**/org.eclipse.birt.report.engine_*.jar,
+									**/org.eclipse.birt.report.engine.emitter.html*.jar,
+									**/org.eclipse.birt.report.engine.emitter.pdf*.jar,
+									**/org.eclipse.birt.report.engine.fonts*/**,
+									**/org.eclipse.birt.report.item.crosstab.core*.jar,
+									**/org.eclipse.birt.report.item.crosstab.ui*.jar,
+									**/org.eclipse.birt.report.model*.jar,
+									**/org.eclipse.birt.resources*/**,
+									**/org.eclipse.datatools.connectivity_*.jar,
+									**/org.eclipse.datatools.connectivity.oda_*.jar,
+									**/org.eclipse.datatools.connectivity.oda.consumer*.jar,			
+									**/org.eclipse.datatools.connectivity.oda.design*.jar,
+									**/org.eclipse.datatools.connectivity.oda.design.ui*.jar,
+									**/org.eclipse.datatools.connectivity.oda.profile*.jar,			
+									**/org.eclipse.datatools.connectivity.sqm.core*.jar,
+									**/org.eclipse.datatools.connectivity.ui*.jar,
+									**/org.eclipse.datatools.help*.jar,
+									**/org.eclipse.datatools.modelbase.dbdefinition*.jar,
+									**/org.eclipse.datatools.modelbase.sql*.jar,
+									**/org.eclipse.draw2d*.jar,
+									**/org.eclipse.emf.common*.jar,
+									**/org.eclipse.emf.ecore*.jar,
+									**/org.eclipse.emf.ecore.change*.jar,
+									**/org.eclipse.emf.ecore.xmi*.jar,
+									**/org.eclipse.gef*.jar,
+									**/org.eclipse.ltk.core.refactoring*.jar,
+									**/org.w3c.css.sac*.jar,
+									**/org.w3c.sac*/**,
+									**/org.w3c.dom.svg*.jar,
+									**/org.w3c.dom.smil*.jar,
+									**/org.w3c.dom.events*.jar,
+									**/org.mozilla.javascript*.jar
+								</includes>
 							</configuration>
 						</execution>
 						<execution>
@@ -416,18 +408,6 @@
 					<artifactId>maven-antrun-plugin</artifactId>
 					<executions>
 						<execution>
-							<phase>prepare-package</phase>
-							<goals>
-								<goal>run</goal>
-							</goals>
-							<configuration>
-								<tasks>
-									<move file="${assembly.directory}/${birt.designer.subdir}"
-										tofile="${assembly.eclipse.directory}" />
-								</tasks>
-							</configuration>
-						</execution>
-						<execution>
 							<id>chmod-jfire-executable</id>
 							<phase>package</phase>
 							<goals>
@@ -443,30 +423,6 @@
 						</execution>
 					</executions>
 				</plugin>
-
-				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-					<executions>
-						<execution>
-							<id>copy-resources</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-resources</goal>
-							</goals>
-							<configuration>
-								<resources>
-									<resource>
-										<directory>src/main/resources</directory>
-									</resource>
-								</resources>
-								<outputDirectory>${assembly.directory}</outputDirectory>
-								<overwrite>true</overwrite>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
 					<version>2.2.1</version>
