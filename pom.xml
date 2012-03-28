@@ -282,6 +282,11 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.rap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.reporting.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
@@ -525,6 +530,22 @@ Marco :-)
 				<groupId>${eclipse-ide.group}</groupId>
 				<artifactId>org.eclipse.ui.ide</artifactId>
 				<version>${eclipse-ide.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.eclipse.osgi</groupId>
+				<artifactId>org.eclipse.osgi.services</artifactId>
+				<version>3.2.100</version>
+			</dependency>
+			<dependency>
+		    	<groupId>org.eclipse.equinox</groupId>
+		    	<artifactId>org.eclipse.equinox.http.helper</artifactId>
+		    	<version>1.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>org.eclipse.equinox.jsp.jasper</artifactId>
+				<version>1.0.200.v20100421</version>
 			</dependency>
 			
 		</dependencies>
