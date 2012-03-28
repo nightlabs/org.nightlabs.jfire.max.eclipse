@@ -12,6 +12,7 @@
       <feature id="org.eclipse.birt.osgi.runtime"/>
       <feature id="org.eclipse.birt.example"/>
       <feature id="org.eclipse.babel.nls_birt_de" />
+      <feature id="org.eclipse.babel.nls_tools.gef_de" />
    </features>
 
 
