@@ -31,6 +31,7 @@
 					<include>schema/**/*</include>
 					<include>icons/**/*</include>
 					<include>lib/**/*</include>
+					<include>web/**/*</include>
 					<include>splash.bmp</include>
 				</includes>
 			</resource>
