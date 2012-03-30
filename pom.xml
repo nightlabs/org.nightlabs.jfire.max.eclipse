@@ -167,6 +167,11 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.rap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.login.rap.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
