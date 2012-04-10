@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.auth.ui,
- org.nightlabs.jseditor.ui.rcp;bundle-version="1.1.2"
+ org.nightlabs.jseditor.ui;bundle-version="1.0.1"
 Eclipse-LazyStart: true
 Eclipse-RegisterBuddy: org.nightlabs.jfire.auth.ui
 Bundle-ActivationPolicy: lazy

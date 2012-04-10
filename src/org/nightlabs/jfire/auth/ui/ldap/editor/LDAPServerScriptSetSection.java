@@ -32,6 +32,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
@@ -44,7 +45,8 @@ import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSet;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPScriptSetDAO;
 import org.nightlabs.jfire.base.security.integration.ldap.LDAPServer;
 import org.nightlabs.jfire.base.security.integration.ldap.scripts.ILDAPScriptProvider;
-import org.nightlabs.jseditor.ui.rcp.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.IJSEditor;
+import org.nightlabs.jseditor.ui.JSEditorFactory;
 
 /**
  * Section of {@link LDAPServerEditorScriptSetPage} for editing scripts in {@link LDAPServer}'s {@link LDAPScriptSet}.
@@ -60,7 +62,9 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 	private CTabItem prevSelectedItem;
 	private CTabFolder scriptsTabFolder;
 	
-	private JSEditorComposite jsEditorComposite;
+	private XComposite jsEditorComposite;
+	private IJSEditor jsEditor;
+//	private JSEditorComposite jsEditorComposite;
 	
 	Map<String, NamedScript> namedScriptsLocal;
 	
@@ -237,7 +241,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 									@Override
 									public void run() {
 										if (inititalContent != null){
-											jsEditorComposite.setDocumentText(inititalContent);
+											jsEditor.setDocumentText(inititalContent);
 											markDirty();
 										}else{
 											StatusManager.getManager().handle(
@@ -268,11 +272,14 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 		scriptsTabFolder.setLayoutData(gd);
 		scriptsTabFolder.addSelectionListener(scriptSelectionListener);
 
-		jsEditorComposite = new JSEditorComposite(scriptsTabFolder);
+		jsEditorComposite = new XComposite(scriptsTabFolder, SWT.NONE);
+		jsEditorComposite.setLayout(new GridLayout(1, false));
 		jsEditorComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		jsEditorComposite.setToolkit(new NightlabsFormsToolkit(toolkit.getColors()));
 		jsEditorComposite.adaptToToolkit();
-		jsEditorComposite.addKeyListener(scriptDirtyKeyListener);
+		
+		jsEditor = JSEditorFactory.createJSEditor(jsEditorComposite);
+		jsEditor.addKeyListener(scriptDirtyKeyListener);
 		
 	}
 	
@@ -301,7 +308,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 
 	private void commitScriptTab(CTabItem tabItem){
 		NamedScript namedScript = (NamedScript) tabItem.getData();
-		namedScript.setScriptContent(jsEditorComposite.getDocumentText());
+		namedScript.setScriptContent(jsEditor.getDocumentText());
 	}
 	
 	private SelectionListener scriptSelectionListener = new SelectionAdapter() {
@@ -314,7 +321,7 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 			
 			CTabItem selectedItem = scriptsTabFolder.getSelection();
 			NamedScript namedScript = (NamedScript) selectedItem.getData();
-			jsEditorComposite.setDocumentText(namedScript.getScriptContent());
+			jsEditor.setDocumentText(namedScript.getScriptContent());
 			scriptDirtyKeyListener.setInitialValue(namedScript.getScriptContent());
 			
 			scriptDescriptionLabel.setText(namedScript.getScriptDescription());
@@ -333,9 +340,9 @@ public class LDAPServerScriptSetSection extends ToolBarSectionPart {
 		@Override
 		public void keyPressed(KeyEvent keyevent) {
 			if (!refreshing
-					&& !jsEditorComposite.getDocumentText().equals(previousValue)){
+					&& !jsEditor.getDocumentText().equals(previousValue)){
 				markDirty();
-				previousValue = jsEditorComposite.getDocumentText();
+				previousValue = jsEditor.getDocumentText();
 			}
 		}
 	}
