@@ -7,15 +7,17 @@ Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.auth.ui.ldap.LdapUIPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.ui.forms,
+Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.auth.ui,
- org.nightlabs.jseditor.ui;bundle-version="1.0.1"
+ org.nightlabs.jseditor.ui,
+ org.nightlabs.eclipse.compatibility
 Eclipse-LazyStart: true
 Eclipse-RegisterBuddy: org.nightlabs.jfire.auth.ui
 Bundle-ActivationPolicy: lazy
+Import-Package: org.nightlabs.i18n,
+ org.nightlabs.util,
+ org.nightlabs.progress
 Export-Package: org.nightlabs.jfire.auth.ui.ldap,
  org.nightlabs.jfire.auth.ui.ldap.editor,
  org.nightlabs.jfire.auth.ui.ldap.tree,
