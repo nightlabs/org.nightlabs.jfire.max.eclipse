@@ -10,3 +10,6 @@ Require-Bundle: org.nightlabs.jfire.base.ui,
  org.nightlabs.jfire.issuetracking.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.nightlabs.jfire.issuetracking.dashboard.ui.internal
+Import-Package: org.nightlabs.progress,
+ org.nightlabs.i18n,
+ org.nightlabs.util
