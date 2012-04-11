@@ -7,14 +7,13 @@ Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.ui.editors,
- org.eclipse.ui.forms,
- org.nightlabs.jfire.base.ui;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.eclipse.compatibility
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Bundle-ActivationPolicy: lazy
+Import-Package: org.nightlabs.i18n
 Export-Package: org.nightlabs.jfire.auth.ui,
  org.nightlabs.jfire.auth.ui.actions,
  org.nightlabs.jfire.auth.ui.editor,
