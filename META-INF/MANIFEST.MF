@@ -10,3 +10,4 @@ Require-Bundle: org.nightlabs.clientui.ui,
  org.nightlabs.jfire.base.dashboard.ui,
  org.nightlabs.eclipse.compatibility
 Bundle-Localization: plugin
+Import-Package: org.nightlabs.i18n
