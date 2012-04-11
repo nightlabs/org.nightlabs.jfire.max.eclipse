@@ -157,6 +157,21 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.asterisk.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.auth.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.auth.ui.ldap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.j2ee</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
@@ -168,6 +183,31 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.j2ee.rap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.issuetracking</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.pbx</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.personrelation</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.rap.reporting</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.rap.trade</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -213,6 +253,21 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.base.ui.app.rcp</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.contact.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.contact.email.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.contact.pbx.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -277,12 +332,27 @@ Marco :-)
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.dashboard.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.pbx.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.personrelation.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.personrelation.issuetracking.trade.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -308,6 +378,11 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.reporting.ui.rcp</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.ui.rap</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -368,6 +443,16 @@ Marco :-)
 			<dependency>
 				<groupId>org.nightlabs.jfire.eclipse</groupId>
 				<artifactId>org.nightlabs.jfire.trade.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.dashboard.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.quicksale.ui</artifactId>
 				<version>${jfire.version}</version>
 			</dependency>
 			<dependency>
@@ -561,6 +646,17 @@ Marco :-)
 				<groupId>org.eclipse.equinox</groupId>
 				<artifactId>org.eclipse.equinox.jsp.jasper</artifactId>
 				<version>1.0.200.v20100421</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.servicemix.specs</groupId>
+				<artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
+				<version>1.9.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.servicemix.bundles</groupId>
+				<artifactId>org.apache.servicemix.bundles.xpp3</artifactId>
+				<version>1.1.4c_3</version>
 			</dependency>
 			
 		</dependencies>
