@@ -28,7 +28,16 @@
 		<!-- ##### UI-projects for jfire-MAX ##### -->
 		<module>../org.nightlabs.jfire.entityuserset.ui</module>
 		<module>../org.nightlabs.jfire.jbpm.ui</module>
-
+		
+		<module>../org.nightlabs.jfire.pbx.ui</module>
+		<module>../org.nightlabs.jfire.contact.ui</module>
+		<module>../org.nightlabs.jfire.contact.email.ui</module>
+		<module>../org.nightlabs.jfire.contact.pbx.ui</module>
+		<module>../org.nightlabs.jfire.asterisk.ui</module>
+		
+		<module>../org.nightlabs.jfire.auth.ui</module>
+		<module>../org.nightlabs.jfire.auth.ui.ldap</module>
+		
 		<module>../org.nightlabs.jfire.department.ui</module>
 		<module>../org.nightlabs.jfire.department.admin.ui</module>
 		<module>../org.nightlabs.jfire.dynamictrade.ui</module>
@@ -39,8 +48,10 @@
 		<module>../org.nightlabs.jfire.issuetracking.trade.ui</module>
 		<module>../org.nightlabs.jfire.issuetimetracking.ui</module>
 		<module>../org.nightlabs.jfire.issuetimetracking.admin.ui</module>
-
+		<module>../org.nightlabs.jfire.issuetracking.dashboard.ui</module>
+		
 		<module>../org.nightlabs.jfire.personrelation.ui</module>
+		<module>../org.nightlabs.jfire.personrelation.issuetracking.trade.ui</module>
 
 		<module>../org.nightlabs.jfire.prop.file.ui</module>
 		<module>../org.nightlabs.jfire.prop.html.ui</module>
@@ -50,6 +61,7 @@
 		<module>../org.nightlabs.jfire.reporting.oda.client</module>
 		<module>../org.nightlabs.jfire.reporting.ui</module>
 		<module>../org.nightlabs.jfire.reporting.ui.rcp</module>
+		<module>../org.nightlabs.jfire.reporting.ui.rap</module>
 		<module>../org.nightlabs.jfire.reporting.trade.ui</module>
 		
 		<module>../org.nightlabs.jfire.scripting.ui</module>
@@ -62,12 +74,22 @@
 		
 		<module>../org.nightlabs.jfire.trade.admin.ui</module>
 	 	<module>../org.nightlabs.jfire.trade.editor2d.ui</module>
+	 	<module>../org.nightlabs.jfire.trade.dashboard.ui</module>
+	 	<module>../org.nightlabs.jfire.trade.quicksale.ui</module>
 		<module>../org.nightlabs.jfire.trade.ui</module>
 
 		<module>../org.nightlabs.jfire.voucher.ui</module>
 		<module>../org.nightlabs.jfire.voucher.admin.ui</module>
 		<module>../org.nightlabs.jfire.voucher.editor2d.ui</module>
 		<module>../org.nightlabs.jfire.voucher.print.ui</module>
+		
+		<module>../org.nightlabs.jfire.base.dashboard.clientscripts.ui</module>
+		
+		<module>../org.nightlabs.jfire.base.j2ee.issuetracking</module>
+		<module>../org.nightlabs.jfire.base.j2ee.pbx</module>
+		<module>../org.nightlabs.jfire.base.j2ee.personrelation</module>
+		<module>../org.nightlabs.jfire.base.j2ee.rap.reporting</module>
+		<module>../org.nightlabs.jfire.base.j2ee.rap.trade</module>
 
 		<!-- ##### Assemblies ##### -->
 		<module>../org.nightlabs.jfire.eclipse.platform.max.product</module>
