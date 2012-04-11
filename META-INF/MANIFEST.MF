@@ -4,10 +4,12 @@ Bundle-Name: Trade Dashboard UI Plugin
 Bundle-SymbolicName: org.nightlabs.jfire.trade.dashboard.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.nightlabs.i18n,
- org.nightlabs.base.ui,
+Require-Bundle: org.nightlabs.base.ui,
  org.nightlabs.jfire.base.ui,
  org.nightlabs.jfire.base.dashboard.ui,
  org.nightlabs.eclipse.compatibility,
  org.nightlabs.jfire.trade.ui
 Bundle-Vendor: NightLabs.org
+Import-Package: org.nightlabs.progress,
+ org.nightlabs.i18n,
+ org.nightlabs.util
