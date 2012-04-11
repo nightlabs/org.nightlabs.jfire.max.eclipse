@@ -10,8 +10,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.jfire.personrelation.ui;visibility:=reexport,
  org.nightlabs.jfire.issuetracking.trade.ui;visibility:=reexport,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
- org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
-Import-Package: org.apache.log4j
+ org.nightlabs.eclipse.compatibility
+Import-Package: org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Export-Package: org.nightlabs.jfire.personrelation.issuetracking.trade.ui,
