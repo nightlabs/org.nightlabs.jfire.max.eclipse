@@ -4,7 +4,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nightlabs.jfire.eclipse</groupId>
-	<artifactId>org.nightlabs.jfire.base.j2ee.issue</artifactId>
+	<artifactId>org.nightlabs.jfire.base.j2ee.issuetracking</artifactId>
 	<packaging>bundle</packaging>
 
 	<parent>
@@ -23,6 +23,11 @@
 		<dependency>
 			<groupId>org.nightlabs.jfire</groupId>
 			<artifactId>org.nightlabs.jfire.issue.bug</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs.jfire</groupId>
+			<artifactId>org.nightlabs.jfire.issue.dashboard</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
