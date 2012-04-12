@@ -96,6 +96,7 @@
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.parent</module>
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.linux-gtk-x86_64</module>
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.win32</module>
+		<module>../org.nightlabs.jfire.eclipse.max.assembly.rap</module>
 	</modules>
 
 </project>
