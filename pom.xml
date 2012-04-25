@@ -98,7 +98,7 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Import-Package>*;resolution:=optional</Import-Package>
+						<Import-Package>!org.nightlabs.jdo,*;resolution:=optional</Import-Package>
 						<Fragment-Host>org.nightlabs.jfire.base.j2ee</Fragment-Host>
 						<Embed-Dependency>*;scope=provided;type=!pom;inline=false;artifactId=!slf4j-api</Embed-Dependency>
 						<Embed-StripVersion>true</Embed-StripVersion>
