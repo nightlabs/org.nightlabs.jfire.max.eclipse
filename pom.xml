@@ -2,7 +2,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.nightlabs.jfire.eclipse</groupId>
 	<artifactId>org.nightlabs.jfire.eclipse.max.assembly.rap</artifactId>
 	<packaging>pom</packaging>
 
@@ -183,6 +182,12 @@
 			<groupId>org.apache.servicemix.bundles</groupId>
 			<artifactId>org.apache.servicemix.bundles.xmlpull</artifactId>
 		</dependency>
+		<!-- This is fake org.eclipse.ui plugin which contains just simple manifest file, we need this to resolve org.eclipse.ui.browser plugin -->
+		<dependency>
+		    <groupId>org.nightlabs.jfire.eclipse</groupId>
+		    <artifactId>org.eclipse.ui</artifactId>
+		    <version>3.7.0.fake</version>
+		</dependency>
 
 		<!-- Platform (including Birt and Babel plugins) -->
 		<dependency>
@@ -263,7 +268,6 @@
 								**/org.apache.batik.parser*.jar
 								**/org.apache.batik.pdf*.jar
 								**/org.eclipse.birt.core_*.jar,
-								**/org.eclipse.birt.core.ui*.jar,
 								**/org.eclipse.birt.data*.jar,
 								**/org.eclipse.birt.data.aggregation*.jar,
 								**/org.eclipse.birt.report.data.adapter*.jar,
@@ -272,12 +276,13 @@
 								**/org.eclipse.birt.report.engine.emitter.pdf*.jar,
 								**/org.eclipse.birt.report.engine.fonts*/**,
 								**/org.eclipse.birt.report.model*.jar,
+								**/org.eclipse.core.resources*.jar,			
+								**/org.eclipse.core.filesystem*.jar,			
 								**/org.eclipse.datatools.connectivity_*.jar,
 								**/org.eclipse.datatools.connectivity.oda_*.jar,
 								**/org.eclipse.datatools.connectivity.oda.consumer*.jar,			
-								**/org.eclipse.datatools.connectivity.oda.design*.jar,
-								**/org.eclipse.datatools.connectivity.oda.design.ui*.jar,
 								**/org.eclipse.datatools.connectivity.oda.profile*.jar,			
+								**/org.eclipse.ui.browser*.jar,			
 								**/org.w3c.css.sac*.jar,
 								**/org.w3c.sac*/**,
 								**/org.w3c.dom.svg*.jar,
@@ -318,7 +323,6 @@
 			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
 				<configuration>
 					<descriptors>
 						<descriptor>src/main/assembly/bin.xml</descriptor>
