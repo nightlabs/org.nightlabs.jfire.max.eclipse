@@ -166,22 +166,6 @@
 		</dependency>
 
 		<!-- #### LIBS -->
-		<dependency>
-			<groupId>org.apache.servicemix.specs</groupId>
-			<artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.xpp3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.xstream</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.xmlpull</artifactId>
-		</dependency>
 		<!-- This is fake org.eclipse.ui plugin which contains just simple manifest file, we need this to resolve org.eclipse.ui.browser plugin -->
 		<dependency>
 		    <groupId>org.nightlabs.jfire.eclipse</groupId>
