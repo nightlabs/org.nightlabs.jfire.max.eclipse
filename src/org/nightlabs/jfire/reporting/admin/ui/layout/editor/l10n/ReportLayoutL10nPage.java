@@ -115,6 +115,11 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		}
 	}
 
+	@Override
+	public IEditorInput getEditorInput() {
+		return editor.getEditorInput();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.birt.report.designer.ui.editors.IReportEditorPage#getStaleType()
