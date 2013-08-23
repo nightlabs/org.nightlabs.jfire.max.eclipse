@@ -20,6 +20,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.nightlabs</groupId>
+			<artifactId>org.nightlabs.jdo</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.nightlabs</groupId>
 			<artifactId>org.nightlabs.editor2d</artifactId>
 			<scope>provided</scope>
 		</dependency>
