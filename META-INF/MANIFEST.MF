@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Issue Time Tracking Ui Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetimetracking.ui;singleton:=true
-Bundle-Version: 1.3.2
+Bundle-Version: 1.3.3.SNAPSHOT
 Bundle-Activator: org.nightlabs.jfire.issuetimetracking.ui.IssueTimeTrackingPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
