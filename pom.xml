@@ -9,7 +9,7 @@
 		<groupId>org.nightlabs.jfire.eclipse</groupId>
 		<artifactId>org.nightlabs.jfire.eclipse.parent.legacy</artifactId>
 		<relativePath>../org.nightlabs.jfire.eclipse.parent.legacy</relativePath>
-		<version>1.3.2-SNAPSHOT</version>
+		<version>1.3.2</version>
 	</parent>
 
 	<dependencies>
