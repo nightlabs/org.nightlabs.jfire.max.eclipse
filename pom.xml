@@ -45,7 +45,7 @@
 	<parent>
 		<groupId>org.nightlabs.eclipse</groupId>
 		<artifactId>org.nightlabs.eclipse.parent</artifactId>
-		<version>1.3.2-SNAPSHOT</version>
+		<version>1.3.2</version>
 	</parent>
 
 	<repositories>
@@ -96,7 +96,7 @@ Marco :-)
 
 	<properties>
 		<!-- This redeclaration is necessary, because the original declaration is not inherited anymore due to the change of the parent/dependency-management-import-strategy -->
-		<jfire.version>${nightlabs.version}</jfire.version>
+		<jfire.version>1.3.2</jfire.version>
 		<birt-runtime.group>org.eclipse.birt.runtime.v2-6-0-mvnzd</birt-runtime.group><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
 		<birt.version>2.6.0</birt.version><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
 		<birt-rcp-report-designer.group>org.eclipse.birt.rcp-report-designer.v2-6-0-mvnzd</birt-rcp-report-designer.group>
