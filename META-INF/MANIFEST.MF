@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Department Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.department.ui;singleton:=true
-Bundle-Version: 1.3.2.SNAPSHOT
+Bundle-Version: 1.3.2
 Bundle-Activator: org.nightlabs.jfire.department.ui.DepartmentPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
