@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension-point id="issueLinkHandlerFactory"
+        name="Issue Link Handler Factory Extension-Point" schema="schema/issueLinkHandlerFactory.exsd"/>
+    <extension point="org.eclipse.ui.perspectives">
+        <perspective
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective"
+              icon="icons/IssuePerspective.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.views">
+        <category id="org.nightlabs.jfire.issuetracking" name="%org.nightlabs.jfire.issuetracking.name"/>
+        <view category="org.nightlabs.jfire.issuetracking"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView"
+            icon="icons/IssuePerspective.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView.name"/>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView"
+              icon="icons/composite/Issue-Search.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueDescriptionView.name">
+        </view>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView"
+              icon="icons/issue/IssueLinkHandlerIssue-LinkedObject.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkView.name">
+        </view>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView"
+              icon="icons/issue/IssueLinkHandlerIssue-LinkedObject.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueHistoryView.name">
+        </view>
+        <view
+              allowMultiple="false"
+              category="org.nightlabs.jfire.issuetracking"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueCommentView"
+              icon="icons/IssuePerspective.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issue.IssueCommentView"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueCommentView.name">
+        </view>
+        <category id="org.nightlabs.jfire.issuetracking.project" name="%org.nightlabs.jfire.issuetracking.project.name"/>
+        <view category="org.nightlabs.jfire.issuetracking.project"
+            class="org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView"
+            icon="icons/project/ProjectAdminView.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView" name="%org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="false"
+            icon="icons/overview/IssueEntryListEditor.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor.name"/>
+        <editor
+            class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="false"
+            icon="icons/issue/editor/IssueEditor.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" name="%org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor.name"/>
+        <editor
+            class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="false"
+            icon="icons/project/ProjectAdminTreeComposite-project.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor" name="%org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor.name"/>
+        <editor
+            class="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="false"
+            icon="icons/project/ProjectAdminTreeComposite-project.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor" name="%org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
+            class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorGeneralPage$Factory"
+            editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" indexHint="10"/>
+        <pageFactory
+            class="org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueEditorHistoryPage$Factory"
+            editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" indexHint="20"/>
+        <pageFactory
+            class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage$Factory"
+            editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" indexHint="30"/>
+        <pageFactory
+            class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPage$Factory"
+            editorID="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor" indexHint="10"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.editorActionBarContribution">
+        <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor">
+            <editorActionBarContribution
+                  class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+                  id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+                  name="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip"/>
+            <editorActionBarContribution
+                  actionDefinitionId="org.eclipse.ui.file.save"
+                  class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
+                  icon="icons/overview/action/IssueQuerySaveAction.16x16.png"
+                  id="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
+                  name="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.tooltip"/>
+            <editorActionBarContribution
+                  actionDefinitionId="org.eclipse.ui.edit.delete"
+                  class="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
+                  icon="icons/overview/action/DeleteIssueAction.16x16.png"
+                  id="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
+                  name="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.tooltip"/>
+            <editorActionBarContribution
+                  class="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
+                  icon="icons/overview/action/AddIssueAction.16x16.png"
+                  id="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
+                  name="%org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction.name"
+                  toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+                  tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction.tooltip"/>
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction"
+                icon="icons/overview/action/EditIssueAction.16x16.png"
+                id="org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction"
+                name="%org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction.name"
+                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction.tooltip"/>
+<!--  Commented because Reminder functionality is not finished. Daniel
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction"
+                icon="icons/overview/action/RemindIssueAction.16x16.png"
+                id="org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction"
+                name="%org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction.name"
+                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.RemindIssueAction.tooltip"/>
+-->                
+            <groupMarker name="org.nightlabs.jfire.issuetracking.ui.overview"/>
+        </editorActionBarContributionRegistry>
+    </extension>
+    <extension point="org.nightlabs.jfire.base.ui.quickSearchEntry">
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.issuetracking.ui.overview.search.IssueSubjectQuickSearchEntryFactory"
+            default="true"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer.name"/>
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.issuetracking.ui.overview.search.IssueCommentQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer.name"/>
+        <quickSearchEntryFactory
+            class="org.nightlabs.jfire.issuetracking.ui.overview.search.IssueSubjectCommentQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer.name"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
+        <issueLinkHandlerCategory
+              icon="icons/IssuePerspective.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
+              name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue"
+              icon="icons/issue/IssueLinkHandlerIssue-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue.name"/>
+        <issueLinkHandlerCategory
+              icon="icons/issuelink/person/IssueLinkHandlerPerson-LinkedObject.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
+              name="%org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
+              class="org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson"
+              icon="icons/issuelink/person/IssueLinkHandlerPerson-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.editor2perspective">
+        <registry
+            editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.base.ui.queryFilterComposite">
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="10"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryPeopleRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterPeopleSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterPeopleSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="20"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryTimeRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterTimeSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterTimeSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="30"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssuePropertyRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="40"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssueLinkRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="50"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryWorkTimeRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterWorkTimeSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterWorkTimeSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="60"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryProjectRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterProjectSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterProjectSectionTitle"/>
+        <QueryFilter baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="70"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryStateRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterStateSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue" title="%queryfilterComposite.AdvancedIssueFilterStateSectionTitle"/>
+        <QueryFilter
+              orderHint="80"
+              queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryLinkedObjectRelated"
+              scope="global"
+              targetClass="org.nightlabs.jfire.issue.Issue"
+              title="%queryfilterComposite.AdvancedIssueFilterLinkedObjectSectionTitle">
+        </QueryFilter>
+    </extension>
+    <extension point="org.nightlabs.jfire.base.ui.overview">
+        <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory"
+            index="0" name="%org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory.name" scope="IssueShelf"/>
+        <entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
+            icon="icons/overview/IssueEntryListFactory.16x16.png"
+            index="0" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory.name"/>
+        <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.project"
+            class="org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory"
+            index="20" name="%org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory.name" scope="IssueShelf"/>
+    </extension>
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <category
+             id="org.nightlabs.jfire.issuetracking.ui"
+             name="%org.nightlabs.jfire.issuetracking.ui.newWizard.category.name">
+       </category>
+       <wizard
+             category="org.nightlabs.jfire.issuetracking.ui"
+             class="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard"
+             icon="icons/issue/ProjectTreeComposite-Create.16x16.png"
+             id="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard"
+             name="%org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard.name">
+       </wizard>
+       <wizard
+             category="org.nightlabs.jfire.issuetracking.ui"
+             class="org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard"
+             icon="icons/issue/ProjectTreeComposite-Create.16x16.png"
+             id="org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard"
+             name="%org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard.name">
+       </wizard>
+    </extension>
+      <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         <actionSet id="org.nightlabs.jfire.issuetracking.ui"/>
+      </perspectiveExtension>
+   </extension>
+      <extension
+            point="org.nightlabs.base.ui.editor2perspective">
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+      </extension>
+      <extension
+            point="org.nightlabs.base.ui.simpleExceptionHandler">
+         <simpleExceptionHandler
+               message="There exists already an issue link with the same issue and issue link type"
+               targetType="org.nightlabs.jfire.issue.DuplicateIssueLinkException"
+               title="Same issue link already existing">
+         </simpleExceptionHandler>
+      </extension>
+      <extension
+            point="org.nightlabs.base.ui.wizardDelegateFactory">
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard">
+         </wizardDelegateFactory>
+         <wizardDelegateFactory
+               class="org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizardDelegateFactory"
+               wizardClass="org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard">
+         </wizardDelegateFactory>
+      </extension>
+</plugin>
