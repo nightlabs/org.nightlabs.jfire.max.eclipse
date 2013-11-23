@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Personrelation RAP Fragment
+Bundle-SymbolicName: org.nightlabs.jfire.base.j2ee.personrelation
+Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-Vendor: NightLabs.org
+Fragment-Host: org.nightlabs.jfire.base.j2ee;bundle-version="1.0.5"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/JFirePersonRelation.jar,
+ lib/JFirePersonRelationIssueTracking.jar,
+ .
+Export-Package: org.nightlabs.jfire.personrelation,
+ org.nightlabs.jfire.personrelation.dao,
+ org.nightlabs.jfire.personrelation.id,
+ org.nightlabs.jfire.personrelation.issuetracking,
+ org.nightlabs.jfire.personrelation.resource
