@@ -1,0 +1,57 @@
+package org.nightlabs.jfire.trade.quicksale.ui;
+
+import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.login.LoginState;
+import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.login.ui.LoginStateChangeEvent;
+import org.nightlabs.jfire.base.login.ui.LoginStateListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class LoginStateListenerForQuickSalePerspective
+implements LoginStateListener
+{	
+	@Override
+	public void loginStateChanged(LoginStateChangeEvent event)
+	{		
+		if (event.getNewLoginState() == LoginState.LOGGED_IN)
+			checkOrderOpenAsynchronously();
+	}
+
+	private void checkOrderOpenAsynchronously()
+	{
+		Display.getDefault().asyncExec(new Runnable()
+		{
+			public void run()
+			{
+				final Logger logger = LoggerFactory.getLogger(LoginStateListenerForQuickSalePerspective.class);
+
+				String activePerspectiveID = RCPUtil.getActivePerspectiveID();
+				if (activePerspectiveID == null) {
+					// This Thread is necessary in order to prevent blocking the application from shutdown.
+					// It might happen, that the application never has an active perspective, because it is shut down before
+					// completely starting (e.g. when the classloader-config changed and the login occurs very early
+					// and decides to restart the application.
+					Thread thread = new Thread() {
+						@Override
+						public void run() {
+							logger.info("activePerspectiveID is null. Will re-enqueue this method into the event dispatcher and exit."); //$NON-NLS-1$
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								// ignore
+							}
+							checkOrderOpenAsynchronously();
+						}
+					};
+					thread.setDaemon(true);
+					thread.start();
+					return;
+				}
+
+				logger.info("Calling QuickSalePerspective.checkOrderOpen(...) with activePerspectiveID=" + activePerspectiveID); //$NON-NLS-1$
+				QuickSalePerspective.checkOrderOpen(activePerspectiveID);
+			}
+		});
+	}
+}

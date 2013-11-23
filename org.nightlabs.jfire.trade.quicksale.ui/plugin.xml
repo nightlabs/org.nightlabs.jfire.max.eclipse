@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            class="org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditor"
+            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor"
+            default="false" 
+            icon="icons/QuickSalePerspective.16x16.png"
+            id="org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditor" 
+            name="%org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditor.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.perspectives">
+        <perspective
+            class="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective"
+            fixed="false" 
+            icon="icons/QuickSalePerspective.16x16.png"
+            id="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective" 
+            name="%QuickSalePerspective.perspective.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.perspectiveExtension">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective">
+            <contributionItemSetID id="org.nightlabs.base.ui.search.SearchContributionItem"/>
+        </perspectiveExtension>
+    </extension>
+    <extension point="org.nightlabs.base.ui.editor2perspective">
+        <registry
+            editorID="org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditor" 
+            perspectiveID="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
+		<loginStateListener class="org.nightlabs.jfire.trade.quicksale.ui.LoginStateListenerForQuickSalePerspective"/>    
+	</extension>
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.quicksale.ui.QuickSalePerspective">
+            <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
+            <actionSet
+                  id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate">
+            </actionSet>
+        </perspectiveExtension>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
+       <articleContainerEditorPageFactory
+             class="org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditorPage$Factory"
+             id="org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditorPage"
+             articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
+             editorID="org.nightlabs.jfire.trade.quicksale.ui.ArticleContainerQuickSaleEditor"
+             indexHint="0">
+       </articleContainerEditorPageFactory>
+    </extension>
+
+</plugin>
