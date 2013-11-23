@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension-point id="callHandler" name="Call handler" schema="schema/callHandler.exsd"/>
+    <extension point="org.eclipse.ui.preferencePages">
+        <page
+            class="org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage"
+            id="org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage" name="%org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage.name"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.pbx.ui.callHandler">
+        <callHandler
+            class="org.nightlabs.jfire.pbx.ui.call.DefaultCallHandler"
+            id="org.nightlabs.jfire.pbx.ui.call.DefaultCallHandler" phoneSystemClass="org.nightlabs.jfire.pbx.PhoneSystem"/>
+    </extension>
+</plugin>
