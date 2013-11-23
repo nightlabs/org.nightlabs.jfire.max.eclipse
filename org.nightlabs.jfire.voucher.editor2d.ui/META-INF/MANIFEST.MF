@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Voucher Editor2d Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.voucher.editor2d.ui;singleton:=true
+Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-Activator: org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPlugin
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: NightLabs.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.jfire.scripting.editor2d.ui;visibility:=reexport,
+ org.nightlabs.jfire.voucher.admin.ui;visibility:=reexport,
+ org.nightlabs.editor2d
+Import-Package: org.apache.log4j,
+ org.nightlabs.i18n,
+ org.nightlabs.i18n.unit,
+ org.nightlabs.i18n.unit.resolution,
+ org.nightlabs.util
+Export-Package: org.nightlabs.jfire.voucher.editor2d.ui,
+ org.nightlabs.jfire.voucher.editor2d.ui.action,
+ org.nightlabs.jfire.voucher.editor2d.ui.dialog,
+ org.nightlabs.jfire.voucher.editor2d.ui.resource,
+ org.nightlabs.jfire.voucher.editor2d.ui.scripting,
+ org.nightlabs.jfire.voucher.editor2d.ui.tool
+Bundle-ClassPath: .
