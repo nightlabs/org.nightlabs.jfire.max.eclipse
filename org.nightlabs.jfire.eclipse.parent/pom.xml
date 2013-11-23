@@ -1,0 +1,689 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.nightlabs.jfire.eclipse</groupId>
+	<artifactId>org.nightlabs.jfire.eclipse.parent</artifactId>
+	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
+
+<!--
+	<parent>
+		<groupId>org.nightlabs.jfire</groupId>
+		<artifactId>org.nightlabs.jfire.parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+	</parent>
+
+	Is now inherited from 'org.nightlabs.eclipse.parent' and imports dependencyManagenent only from
+	'org.nightlabs.jfire.parent'. This is because there are far more settings that are not inherited via
+	an import in dependency-management for the eclipse-based-client than there are on the jfire level.
+	
+	See this parent/import-dependency-management graph:
+	
+	org.nightlabs.parent ––––––––––––is–parent–of––––––––––––––––––––––> org.nightlabs.eclipse.parent
+	       |                                                                        |
+	       is                                                                       is
+	       |                                                                        |
+	       parent                                                                   parent
+	       |                                                                        |
+	       of                                                                       of
+	       |                                                                        |
+	       V                                                                        V
+	org.nightlabs.jfire.parent –––imported–in–dependency–management–––> org.nightlabs.jfire.eclipse.parent
+	       |                                                                        |
+	       is                                                                       is
+	       |                                                                        |
+	       parent                                                                   parent
+	       |                                                                        |
+	       of                                                                       of
+	       |                                                                        |
+	       V                                                                        V
+    jfire.based.project.parent –––imported–in–dependency–management–––> jfire.base.project.eclipse.parent
+
+	Marco :-)
+-->
+
+	<parent>
+		<groupId>org.nightlabs.eclipse</groupId>
+		<artifactId>org.nightlabs.eclipse.parent</artifactId>
+		<version>1.3.3-SNAPSHOT</version>
+	</parent>
+
+	<repositories>
+		<!--
+		Here are only those repositories declared that are needed to download
+		the parent-pom.xml (which contains all used repositories).
+		
+		Important:
+		It is recommended that you use a mirror! See the parent-pom for details.
+		-->
+		<repository>
+			<id>dev.nightlabs.org-libs-releases-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/libs-releases-local/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>dev.nightlabs.org-libs-snapshots-local</id>
+			<url>http://dev.nightlabs.org/maven-repository/libs-snapshots-local/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	
+<!-- Not needed anymore - see <parent> above. Marco :-)
+	<properties>
+<!-
+We now build against static dependencies and leave the platform-dependent stuff to the assembly only.
+The reason is that all our libraries (except for org.nightlabs.eclipse.compatibility.rap/rcp) are platform-agnostic
+and it makes therefore no sense to compile them 5 or more times. The only reason to do so is that there might be a mistake
+and platform-dependent stuff might be used by error. But this isn't worth the far more complex build configuration and
+the much longer build time (factor 5 at least).
+We now build solely against RAP, because the feature-set of RAP is smaller than the one of RCP. Hence, we don't need (most of)
+the properties anymore.
+Marco :-)
+-> 
+		<org.nightlabs.eclipse.compatibility.artifactId>org.nightlabs.eclipse.compatibility.rap</org.nightlabs.eclipse.compatibility.artifactId>
+	</properties>
+-->
+
+	<properties>
+		<!-- This redeclaration is necessary, because the original declaration is not inherited anymore due to the change of the parent/dependency-management-import-strategy -->
+		<jfire.version>1.3.3-SNAPSHOT</jfire.version>
+		<birt-runtime.group>org.eclipse.birt.runtime.v2-6-0-mvnzd</birt-runtime.group><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
+		<birt.version>2.6.0</birt.version><!-- must correspond to prop in org.nightlabs.jfire.parent/pom.xml -->
+		<birt-rcp-report-designer.group>org.eclipse.birt.rcp-report-designer.v2-6-0-mvnzd</birt-rcp-report-designer.group>
+		<eclipse-ide.version>3.6.2</eclipse-ide.version>
+		<eclipse-ide.group>org.eclipse.rcp-helios-SR2-linux-gtk-mvnzd</eclipse-ide.group>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- See <parent> above. Marco :-)
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.eclipse.parent</artifactId>
+				-->
+				<groupId>org.nightlabs.jfire</groupId>
+				<artifactId>org.nightlabs.jfire.parent</artifactId>
+				<version>${jfire.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.clientui.ui</artifactId>
+				<version>${nightlabs.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.eclipse.ui.dialog</artifactId>
+				<version>${nightlabs.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.keyreader.ui</artifactId>
+				<version>${nightlabs.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.eclipse</groupId>
+				<artifactId>org.nightlabs.tableprovider.ui</artifactId>
+				<version>${nightlabs.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.nightlabs.jfire</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.oda.wrapper</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.clientui.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jdo.query.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.asterisk.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.auth.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.auth.ui.ldap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.osgi</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.rap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.issuetracking</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.pbx</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.personrelation</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.rap.reporting</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.j2ee.rap.trade</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.login.rap.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.login.rcp.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.login.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.dashboard.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.dashboard.clientscripts.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.intro.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.base.ui.app.rcp</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.contact.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.contact.email.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.contact.pbx.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.department.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.dynamictrade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.department.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.dynamictrade.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.entityuserset.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.errorreport.mantis</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.jbpm.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetimetracking.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetimetracking.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.issuetracking.dashboard.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.querystore.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.pbx.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.personrelation.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.personrelation.issuetracking.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.prop.file.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.prop.html.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.rap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.rap.themes</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.ui.rcp</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.ui.rap</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.oda.client</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.admin.parameter.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.reporting.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.editor2d.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.scripting.print.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.simpletrade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.simpletrade.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.editor2d.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.dashboard.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.quicksale.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.trade.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.admin.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.editor2d.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.nightlabs.jfire.eclipse</groupId>
+				<artifactId>org.nightlabs.jfire.voucher.print.ui</artifactId>
+				<version>${jfire.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.essiembre.eclipse</groupId>
+				<artifactId>com.essiembre.eclipse.i18n.resourcebundle</artifactId>
+				<version>${nightlabs.version}</version>
+			</dependency>
+			
+			<!-- ################### birt-report-designer #################################### -->
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.examples</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.reportitem</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.reportitem.ui</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.ui</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.chart.ui.extension</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.core</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui.rcp</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui.editors</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.designer.ui.editors.schematic</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.engine</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.engine.emitter.html</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.birt.report.engine.emitter.pdf</artifactId>
+				<version>${birt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.core.resources</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.core.runtime</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.datatools.connectivity.oda</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.datatools.connectivity.oda.design.ui</artifactId>
+				<version>3.2.3</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.datatools.connectivity.ui</artifactId>
+				<version>1.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.emf.ecore</artifactId>
+				<version>2.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.gef</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.help</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.browser</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.forms</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.views</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.ui.workbench.texteditor</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+ 			<dependency>
+	 			<!-- as there is no org.eclipse.swt-package with content available in the bundle "birt-rcp-designer-2_6", 
+	 			and we are using this just on scope 'provide', we use the *.win32.* library. (Sebl, 2011-10-06) -->
+				<groupId>${birt-rcp-report-designer.group}</groupId>
+				<artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+				<version>3.6.0</version>
+			</dependency>
+			 
+			 <dependency>
+				<groupId>${eclipse-ide.group}</groupId>
+				<artifactId>org.eclipse.ui.ide</artifactId>
+				<version>${eclipse-ide.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.eclipse.osgi</groupId>
+				<artifactId>org.eclipse.osgi.services</artifactId>
+				<version>3.2.100</version>
+			</dependency>
+			<dependency>
+		    	<groupId>org.eclipse.equinox</groupId>
+		    	<artifactId>org.eclipse.equinox.http.helper</artifactId>
+		    	<version>1.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>org.eclipse.equinox.jsp.jasper</artifactId>
+				<version>1.0.200.v20100421</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.servicemix.specs</groupId>
+				<artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
+				<version>1.9.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.servicemix.bundles</groupId>
+				<artifactId>org.apache.servicemix.bundles.xpp3</artifactId>
+				<version>1.1.4c_3</version>
+			</dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+
+<!--
+	Is now inherited from 'org.nightlabs.eclipse.parent' and imports dependencyManagenent only from
+	'org.nightlabs.jfire.parent'. See <parent> above. Marco :-)
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
+						<Bundle-Localization>plugin</Bundle-Localization>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+-->
+</project>
