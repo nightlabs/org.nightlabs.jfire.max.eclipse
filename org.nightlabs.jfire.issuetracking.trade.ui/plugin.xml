@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension point="org.nightlabs.jfire.trade.ui.articleContainerAction">
+        <articleContainerAction
+            class="org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            icon="icons/articlecontainer/action/issue/AttachIssueAction.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            name="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.name" tooltip="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.tooltip"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
+        <issueLinkHandlerCategory
+              icon="icons/TradeCategory.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer"
+              icon="icons/issuelink/IssueLinkHandlerOffer-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOffer.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder"
+              icon="icons/issuelink/IssueLinkHandlerOrder-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactoryOrder.name"/>
+        <issueLinkHandlerCategory
+              icon="icons/AccountingCategory.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice"
+              icon="icons/accounting/issuelink/IssueLinkHandlerInvoice-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactoryInvoice.name"/>
+        <issueLinkHandlerCategory
+              icon="icons/StoreCategory.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote"
+              icon="icons/store/issuelink/IssueLinkHandlerDeliveryNote-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryDeliveryNote.name"/>
+        <issueLinkHandlerFactory
+              categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote"
+              icon="icons/store/issuelink/IssueLinkHandlerDeliveryNote-LinkedObject.16x16.png"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerAdderFactoryReceptionNote.name"/>
+    </extension>
+    <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+      <editorActionBarContributionRegistry
+            targetEditorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor">
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.issuetracking.ui.issue.action.IssueAction"
+               contextmenuPath="org.nightlabs.jfire.issuetracking.ui.overview"
+			   icon="icons/overview/account/action/ManualMoneyTransferAction.16x16.png"               
+               id="org.nightlabs.jfire.jfire.issuetracking.ui.issue.action.IssueAction"
+               name="Issue"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+               tooltip="Manually transfer money from or to the selected account.">
+         </editorActionBarContribution>
+         <groupMarker
+               name="org.nightlabs.jfire.issuetracking.ui.overview">
+         </groupMarker>         
+      </editorActionBarContributionRegistry>
+   </extension-->
+    <extension point="org.eclipse.ui.views">
+<!--    
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
+            icon="icons/issuelink/person/LegalEntityPersonIssueLinkTreeView.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView" name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView.name"/>
+-->
+        <view
+              category="org.nightlabs.jfire.trade.ui.TradeCategory"
+              class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTableView"
+              icon="icons/issuelink/person/LegalEntityIssueLinkView.16x16.png"
+              id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTableView"
+              name="%org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTableView.name">
+        </view>
+    </extension>
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+            <view
+                id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
+                relationship="stack" relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"/>
+        </perspectiveExtension>
+    </extension>
+    <extension point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
+        <articleContainerEditorPageFactory
+            articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage$Factory"
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage" indexHint="600"/>
+    </extension>
+    <extension point="org.eclipse.ui.popupMenus">
+        <objectContribution id="com.qualityeclipse.favorites.popupMenu" objectClass="java.lang.Object"/>
+    </extension>
+</plugin>
