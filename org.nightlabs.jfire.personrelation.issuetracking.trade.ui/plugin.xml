@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension point="org.eclipse.ui.views">
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationIssueTreeView"
+            icon="icons/view/PersonRelationIssueTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationIssueTreeView" 
+            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationIssueTreeView.name"/>
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView"
+            icon="icons/view/PersonRelationDetailsView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView" 
+            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationDetailsView.name"/>
+            
+        <!--                
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.HierarchicalPersonRelationIssueTreeView"
+            icon="icons/view/HierarchicalPersonRelationIssueTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.HierarchicalPersonRelationIssueTreeView" 
+            name="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.HierarchicalPersonRelationIssueTreeView.name"/>
+            
+            -->
+    </extension>
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+            <view
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationIssueTreeView"
+                relationship="stack" relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"/>
+        </perspectiveExtension>
+	</extension>            
+    <extension point="org.eclipse.ui.viewActions">
+            <!-- id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeViewContribution" targetID="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.PersonRelationIssueTreeView"> -->
+        <viewContribution
+            id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationIssueTreeView" targetID="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.view.PersonRelationIssueTreeView">
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.DeletePersonRelationAction"
+                icon="icons/action/DeletePersonRelationAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.DeletePersonRelationAction"
+                label="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.DeletePersonRelationAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.DeletePersonRelationAction.tooltip"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreatePersonRelationAction"
+                icon="icons/action/CreatePersonRelationAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreatePersonRelationAction"
+                label="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreatePersonRelationAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreatePersonRelationAction.tooltip"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueCommentAction"
+                icon="icons/action/CreateIssueCommentAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueCommentAction"
+                label="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueCommentAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueCommentAction.tooltip"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueAction"
+                icon="icons/action/CreateIssueAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueAction"
+                label="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateIssueAction.tooltip"/>
+            <action
+                class="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction"
+                icon="icons/action/CreateOrLinkIssueAction.16x16.png"
+                id="org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction"
+                label="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.personrelation.issuetracking.trade.ui.action.CreateOrLinkIssueAction.tooltip"/>
+        </viewContribution>
+    </extension>
+    <extension point="org.nightlabs.base.ui.removeExtension">
+        <removeExtension attributeName="id"
+            attributePattern="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
+            elementPath="perspectiveExtension/view" extensionPointID="org.eclipse.ui.perspectiveExtensions"/>
+    </extension>
+</plugin>
