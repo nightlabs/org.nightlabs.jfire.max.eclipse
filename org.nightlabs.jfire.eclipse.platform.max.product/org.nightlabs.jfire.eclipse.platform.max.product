@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.5"?>
+
+<product application="org.nightlabs.jfire.base.ui.app.rcp.app" id="org.nightlabs.jfire.base.ui.app.rcp.product" includeLaunchers="false" name="JFire Max Product" uid="org.nightlabs.jfire.eclipse.platform.max.product" useFeatures="true" version="1.3.0.qualifier">
+
+   <configIni use="default">
+   </configIni>
+
+    <features>
+      <feature id="org.eclipse.birt"/>
+      <feature id="org.eclipse.birt.chart"/>
+      <feature id="org.eclipse.birt.osgi.runtime"/>
+      <feature id="org.eclipse.birt.example"/>
+      <feature id="org.eclipse.babel.nls_birt_de"/>
+      <feature id="org.eclipse.babel.nls_tools.gef_de"/>
+   </features>
+
+
+</product>
