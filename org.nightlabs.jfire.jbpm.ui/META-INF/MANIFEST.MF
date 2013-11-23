@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jbpm UI Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.jbpm.ui
+Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-ClassPath: .
+Bundle-Activator: org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin
+Bundle-Vendor: NightLabs.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.eclipse.compatibility;bundle-version="1.0.0"
+Eclipse-LazyStart: true
+Export-Package: org.nightlabs.jfire.jbpm.ui,
+ org.nightlabs.jfire.jbpm.ui.query,
+ org.nightlabs.jfire.jbpm.ui.state,
+ org.nightlabs.jfire.jbpm.ui.transition.next
+Import-Package: org.apache.log4j,
+ org.nightlabs.progress,
+ org.nightlabs.util,
+ org.nightlabs.i18n
