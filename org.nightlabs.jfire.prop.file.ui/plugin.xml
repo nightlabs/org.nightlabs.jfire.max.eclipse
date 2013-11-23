@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension point="org.nightlabs.jfire.base.ui.propStructField">
+        <propStructField
+              class="org.nightlabs.jfire.prop.file.FileStructField"
+              description="%org.nightlabs.jfire.prop.file.FileStructField.description"
+              editorFactoryClass="org.nightlabs.jfire.prop.file.ui.FileStructFieldEditor$FileStructFieldEditorFactory"
+              factoryClass="org.nightlabs.jfire.prop.file.ui.FileStructFieldFactory"
+              name="%org.nightlabs.jfire.prop.file.FileStructField.name">
+        </propStructField>
+    </extension>
+	<extension point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
+        <propDataFieldEditorFactory class="org.nightlabs.jfire.prop.file.ui.FileDataFieldEditor$Factory"/>
+    </extension>
+</plugin>
