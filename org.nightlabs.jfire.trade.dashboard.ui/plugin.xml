@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
+      <dashboardGadgetFactory
+            class="org.nightlabs.jfire.trade.dashboard.ui.internal.lastCustomers.DashboardGadgetLastCustomersFactory"
+            dashboardGadgetType="DashboardGadgetLastCustomersFactory"
+            description="This gadget displays the last customers the user has worked with."
+            name="My last customers gadget">
+      </dashboardGadgetFactory>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.base.dashboard.ui.dashboardGadgetFactory">
+      <dashboardGadgetFactory
+            class="org.nightlabs.jfire.trade.dashboard.ui.internal.invoice.DashboardGadgetInvoiceFactory"
+            dashboardGadgetType="DashboardGadgetInvoiceFactory"
+            description="This gadget displays a user defined list of invoices."
+            name="Invoice gadget">
+      </dashboardGadgetFactory>
+   </extension>
+</plugin>
