@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UserManagementSystep UI Plugin
+Bundle-SymbolicName: org.nightlabs.jfire.auth.ui;singleton:=true
+Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-ClassPath: .
+Bundle-Activator: org.nightlabs.jfire.auth.ui.JFireAuthUIPlugin
+Bundle-Vendor: NightLabs.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui;visibility:=reexport,
+ org.nightlabs.eclipse.compatibility
+Eclipse-LazyStart: true
+Eclipse-BuddyPolicy: registered
+Bundle-ActivationPolicy: lazy
+Import-Package: org.nightlabs.i18n
+Export-Package: org.nightlabs.jfire.auth.ui,
+ org.nightlabs.jfire.auth.ui.actions,
+ org.nightlabs.jfire.auth.ui.editor,
+ org.nightlabs.jfire.auth.ui.preference,
+ org.nightlabs.jfire.auth.ui.wizard
