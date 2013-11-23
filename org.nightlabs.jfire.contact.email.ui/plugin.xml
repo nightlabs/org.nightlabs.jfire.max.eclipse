@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+    <extension point="org.eclipse.ui.viewActions">
+        <viewContribution
+            id="org.nightlabs.jfire.contact.email.ui.ContactDetailViewContribution" 
+            targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
+            <action
+                class="org.nightlabs.jfire.contact.email.ui.ContactDetailEMailAction"
+                icon="icons/ContactDetailViewEMailAction.16x16.png"
+                id="org.nightlabs.jfire.contact.email.ui.ContactDetailEMailAction"
+                label="%org.nightlabs.jfire.contact.email.ui.ContactDetailEMailAction.label"
+                style="push" 
+                toolbarPath="additions" 
+                tooltip="%org.nightlabs.jfire.contact.email.ui.ContactDetailEMailAction.tooltip"/>
+        </viewContribution>
+    </extension>
+
+</plugin>
