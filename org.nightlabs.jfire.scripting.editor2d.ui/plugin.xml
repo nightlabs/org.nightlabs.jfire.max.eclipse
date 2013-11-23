@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="scriptConditionerContext" name="scriptConditionerContext" schema="schema/scriptConditionerContext.exsd"/>
+   <extension-point id="scriptParameterProvider" name="scriptParameterProvider" schema="schema/scriptParameterProvider.exsd"/>
+   <extension
+         id="org.nightlabs.editor2d.ui.decorator"
+         name="Visiblet Decorator"
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="org.nightlabs.jfire.scripting.editor2d.ui.decorators.VisibleScriptDecorator"
+            icon="icons/decorators/VisibleScriptDecorator.8x8.gif"
+            id="org.nightlabs.jfire.scripting.editor2d.ui.VisibelScriptDecorator"
+            label="%org.nightlabs.jfire.scripting.editor2d.ui.VisibelScriptDecorator.label"
+            lightweight="true"
+            location="TOP_LEFT"
+            objectClass="org.nightlabs.editor2d.ui.edit.tree.DrawComponentTreeEditPart"
+            state="true">
+         <enablement>
+            <objectClass name="org.nightlabs.editor2d.ui.edit.tree.DrawComponentTreeEditPart"/>
+         </enablement>
+      </decorator>
+    </extension>
+   <extension
+         point="org.nightlabs.editor2d.viewer.ui.renderModeRegistry">
+      <registry
+            description="Barcode Renderer"
+            drawComponentClass="org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent"
+            mode="default"
+            name="%org.nightlabs.jfire.scripting.editor2d.ui.render.BarcodeRenderer.name">
+         <renderContext
+               renderContext="org.nightlabs.jfire.scripting.editor2d.render.j2d.J2DBarcodeDefaultRenderer"
+               renderContextType="Java2D"/>
+      </registry>
+   </extension>   
+
+</plugin>
