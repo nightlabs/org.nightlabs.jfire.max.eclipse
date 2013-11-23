@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Scripting Print Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.scripting.print.ui
+Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-Activator: org.nightlabs.jfire.scripting.print.ui.ScriptingPrintPlugin
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: NightLabs.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.jfire.scripting.ui;visibility:=reexport,
+ org.nightlabs.jfire.trade.ui;visibility:=reexport,
+ org.nightlabs.editor2d.viewer.ui;visibility:=reexport,
+ org.nightlabs.editor2d
+Import-Package: org.apache.log4j
+Export-Package: org.nightlabs.jfire.scripting.print.ui,
+ org.nightlabs.jfire.scripting.print.ui.transfer.delivery
+Bundle-ClassPath: .
