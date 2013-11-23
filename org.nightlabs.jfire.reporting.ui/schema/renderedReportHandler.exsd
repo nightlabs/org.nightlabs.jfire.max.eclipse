@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.nightlabs.jfire.reporting.ui">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="renderedReportHandler" name="RenderedReportHandler Extension Point"/>
+      </appInfo>
+      <documentation>
+         Extension point for hanlding rendered reports coming from the server. &lt;br&gt;
+Each format has its own renderer that will put content into the rendered
+layout that is specific to the Birt format so a corresponding handler has
+to exist on the client that can manage the specialized content.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="renderedReportHandler" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="renderedReportHandler">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="format"/>
+         </appInfo>
+         <documentation>
+            RenderedReportHandler are used to handle rendered reports coming from the server.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="format" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The BIRT output format that this renderedReportHandler can handle.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The fully qualified class name of an implementation of 
+&lt;code&gt;org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler&lt;/code&gt;
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>
