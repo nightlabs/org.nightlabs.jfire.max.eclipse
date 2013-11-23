@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension point="org.nightlabs.base.ui.entityEditor">
+        <category
+            class="org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer"
+            icon="icons/asteriskserver/EntityTreeCategoryAsteriskServer.16x16.png"
+            id="org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer" name="%org.nightlabs.jfire.asterisk.ui.asteriskserver.EntityTreeCategoryAsteriskServer.name">
+            <viewBinding
+                editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor"
+                indexHint="20" viewID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView"/>
+        </category>
+        <pageFactory
+            class="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerGeneralPage$Factory"
+            editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor" indexHint="10"/>
+        <pageFactory
+            class="org.nightlabs.jfire.pbx.ui.PhoneSystemConfigPage$Factory"
+            editorID="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor" indexHint="20"/>
+    </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            class="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor"
+            icon="icons/asteriskserver/EntityTreeCategoryAsteriskServer.16x16.png"
+            id="org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor" name="%org.nightlabs.jfire.asterisk.ui.asteriskserver.AsteriskServerEditor.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.preferencePages">
+        <page
+     		category="org.nightlabs.jfire.pbx.ui.config.PhoneSystemWorkstationCfModPreferencePage"
+            class="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage"
+            id="org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage" name="%org.nightlabs.jfire.asterisk.ui.config.AsteriskServerWorkstationCfModPreferencePage.name"/>
+    </extension>
+    
+    <extension point="org.eclipse.ui.viewActions">
+        <viewContribution
+            id="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView" targetID="org.nightlabs.jfire.base.admin.ui.editor.SysAdminEntityTreeView">
+            <action
+                class="org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerAction"
+                icon="icons/asteriskserver/CreateAsteriskServer.16x16.png"
+                id="org.nightlabs.jfire.asterisk.ui.asteriskserver.CreateAsteriskServerAction"
+                label="Create Asterisk Server"
+                style="push" toolbarPath="additions" tooltip="Create new Asterisk server"/>
+        </viewContribution>
+    </extension>
+</plugin>
