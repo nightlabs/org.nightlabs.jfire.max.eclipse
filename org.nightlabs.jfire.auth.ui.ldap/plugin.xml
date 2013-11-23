@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+	<extension point="org.nightlabs.base.ui.entityEditor">
+       <pageFactory
+             class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory"
+             editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
+             indexHint="10">
+       </pageFactory>
+       <pageFactory
+             class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory"
+             editorID="org.nightlabs.jfire.auth.ui.editor.UserManagementSystemEditor"
+             indexHint="20">
+       </pageFactory>
+	</extension>
+	
+	<extension point="org.nightlabs.jfire.auth.ui.userManagementSystemUIMapping">
+		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.InetOrgPersonLDAPServerType">
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory" />
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"/>
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard"/>
+ 			<userSecurityGroupSyncConfigMapping
+          		class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerUserSecurityGroupSyncConfigDelegate" />
+		</userManagementSystemType>
+		<userManagementSystemType class="org.nightlabs.jfire.base.security.integration.ldap.SambaLDAPServerType">
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorMainPage$Factory" />
+     		<pageFactoryMapping class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerEditorScriptSetPage$Factory" />
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.CreateLDAPServerWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.CreateUserManagementSystemWizard"/>
+     		<wizardHopMapping class="org.nightlabs.jfire.auth.ui.ldap.wizard.LDAPServerImportExportWizardHop" 
+     			wizardClass="org.nightlabs.jfire.auth.ui.wizard.ImportExportWizard"/>
+ 			<userSecurityGroupSyncConfigMapping
+          		class="org.nightlabs.jfire.auth.ui.ldap.editor.LDAPServerUserSecurityGroupSyncConfigDelegate" />
+		</userManagementSystemType>
+	</extension>
+	
+</plugin>
