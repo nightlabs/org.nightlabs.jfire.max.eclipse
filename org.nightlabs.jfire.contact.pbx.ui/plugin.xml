@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension point="org.eclipse.ui.viewActions">
+        <viewContribution
+            id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewContribution" targetID="org.nightlabs.jfire.contact.ui.ContactDetailView">
+            <action
+                class="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
+                icon="icons/ContactDetailViewCallAction.16x16.png"
+                id="org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction"
+                label="%org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction.label"
+                style="push" toolbarPath="additions" tooltip="%org.nightlabs.jfire.contact.pbx.ui.ContactDetailViewCallAction.tooltip"/>
+        </viewContribution>
+    </extension>
+    
+	<extension point = "org.eclipse.ui.actionSets">
+	   <actionSet id="org.nightlabs.jfire.contact.pbx.ui.actionSet"
+		   label="Contact PBX Actions"
+		   visible="false">
+		   <action id="org.nightlabs.jfire.contact.pbx.ui.CallPhoneNumberAction"
+			   toolbarPath="additions"
+			   label="%org.nightlabs.jfire.contact.pbx.ui.CallPhoneNumberAction.label"
+			   tooltip="%org.nightlabs.jfire.contact.pbx.ui.CallPhoneNumberAction.tooltip"
+			   icon="icons/ContactDetailViewCallAction.16x16.png"
+			   class="org.nightlabs.jfire.contact.pbx.ui.CallPhoneNumberAction">
+		   </action>
+	   </actionSet>
+   	</extension>
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+  		<perspectiveExtension 
+			targetID="org.nightlabs.jfire.contact.ui.ContactPerspective">
+			<actionSet id="org.nightlabs.jfire.contact.pbx.ui.actionSet"/>
+  		</perspectiveExtension> 
+	</extension>   	    
+</plugin>
