@@ -1,0 +1,178 @@
+/* *****************************************************************************
+ * JFire - it's hot - Free ERP System - http://jfire.org                       *
+ * Copyright (C) 2004-2005 NightLabs - http://NightLabs.org                    *
+ *                                                                             *
+ * This library is free software; you can redistribute it and/or               *
+ * modify it under the terms of the GNU Lesser General Public                  *
+ * License as published by the Free Software Foundation; either                *
+ * version 2.1 of the License, or (at your option) any later version.          *
+ *                                                                             *
+ * This library is distributed in the hope that it will be useful,             *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU           *
+ * Lesser General Public License for more details.                             *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public            *
+ * License along with this library; if not, write to the                       *
+ *     Free Software Foundation, Inc.,                                         *
+ *     51 Franklin St, Fifth Floor,                                            *
+ *     Boston, MA  02110-1301  USA                                             *
+ *                                                                             *
+ * Or get it online :                                                          *
+ *     http://opensource.org/licenses/lgpl-license.php                         *
+ *                                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
+package org.nightlabs.jfire.trade.ui.accounting;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.jdo.FetchPlan;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.PriceFragmentType;
+import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
+
+/**
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
+ *
+ */
+public class PriceFragmentTypeTable 
+extends AbstractTableComposite<PriceFragmentType> 
+{
+	public static final String[] DEFAULT_FETCH_GROUPS = new String[]{
+		FetchPlan.DEFAULT,
+		PriceFragmentType.FETCH_GROUP_NAME
+	};
+	
+//	private static class ContentProvider extends TableContentProvider {
+//		/**
+//		 * @see org.nightlabs.base.ui.table.TableContentProvider#getElements(java.lang.Object)
+//		 */
+//		@Override
+//		public Object[] getElements(Object inputElement) {
+//			// TODO load asynchronously in a Job!!! And not in the ContentProvider!			
+//			return PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
+//					DEFAULT_FETCH_GROUPS, 
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//					new NullProgressMonitor()).toArray();
+//		}
+//	}
+
+	private static class LabelProvider extends TableLabelProvider {
+		public String getColumnText(Object element, int columnIndex) {
+			if (element instanceof PriceFragmentType) {
+				return ((PriceFragmentType)element).getName().getText(NLLocale.getDefault().getLanguage());
+			}
+			return ""; //$NON-NLS-1$
+		}
+	}
+	
+	/**
+	 * Assumes to be added to a GridLayout.
+	 * 
+	 * @param parent
+	 * @param style
+	 */
+	public PriceFragmentTypeTable(Composite parent, int style) {
+		super(parent, style);
+	}
+	
+	/**
+	 * Returns the (first) selected PriceFragmentType or null.
+	 * @return The (first) selected PriceFragmentType or null.
+	 */
+	public PriceFragmentType getSelectedPriceFragmentType() {
+		if (getTable().getSelectionCount() == 1) {
+			return (PriceFragmentType)getTable().getSelection()[0].getData();
+		}
+		return null;
+	}
+
+	/**
+	 * Returns all selected PriceFragmentType in a Set.
+	 * @return All selected PriceFragmentType in a Set.
+	 */
+	public Set<PriceFragmentType> getSelectedPriceFragmentTypes() {
+		Set<PriceFragmentType> result = new HashSet<PriceFragmentType>();
+		TableItem[] items = getTable().getSelection();
+		for (int i = 0; i < items.length; i++) {
+			result.add((PriceFragmentType)items[i].getData());
+		}
+		return result;
+	}
+	
+	@Override
+	protected void createTableColumns(TableViewer tableViewer, Table table) {
+//		table.setHeaderVisible(true); // This UI element is only used in contexts (wizard-page + tab-item) where there is already written "Price fragment type" above => no need for this header!
+		table.setHeaderVisible(false); // true is default => forcing false
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeTable.priceFragmentTableColumn.text")); //$NON-NLS-1$
+		table.setLayout(new WeightedTableLayout(new int[]{1}));
+	}
+
+	@Override
+	protected void setTableProvider(TableViewer tableViewer) {
+		tableViewer.setContentProvider(new ArrayContentProvider());
+		tableViewer.setLabelProvider(new LabelProvider());
+//		tableViewer.setInput(tableViewer.getContentProvider());
+//		
+//		tableViewer.setSorter(new ViewerSorter());
+	}
+
+	private Collection<PriceFragmentType> priceFragmentTypes;
+	public void loadPriceFragmentTypes() {
+		Job job = new Job("Loading Price Fragment Types.....") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) {
+				monitor.beginTask("Loading Price Fragment Types", 100);
+				priceFragmentTypes = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
+						PriceFragmentTypeTable.DEFAULT_FETCH_GROUPS, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						setInput(priceFragmentTypes);
+					}
+				});
+				
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
+//		job.addJobChangeListener(new JobChangeAdapter() {
+//			@Override
+//			public void done(IJobChangeEvent event) {
+//				
+//			}
+//		});
+	}
+	
+	public Collection<PriceFragmentType> getPriceFragmentTypes() {
+		return priceFragmentTypes;
+	}
+}

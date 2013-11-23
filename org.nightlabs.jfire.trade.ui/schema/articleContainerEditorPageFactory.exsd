@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="articleContainerEditorPageFactory" name="ArticleContainerEditorPageFactory extension-point"/>
+      </appInfo>
+      <documentation>
+         [Enter description of this extension point.]
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <documentation>
+            This extension-point is used to register pages for the ArticleContainerEditor based on the type (class) of the ArticleContainer currently edited.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="articleContainerEditorPageFactory" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="articleContainerEditorPageFactory">
+      <annotation>
+         <documentation>
+            By this element editor pages can be registered that will be displayed in the ArticleContainerEditor. You need to register a factory that will create the pages when necessary, not the pages themselves.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of this page. Note, that multiple registrations for the same id are possible and those contraining the articleContainerEditorClass more will be found earlier.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The fully qualified class-name of an implementation of IEntityEditorPageFactory the factory that will create an IFormPage when necessary.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="editorID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of the editor this page should appear in.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="articleContainerClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The class-name of the implementation of ArticleContainer this page should be added for. Note, that inheritance-resolving is applied for the ArtilceContainer class searched for, so registrations on super-classes or interfaces are also possible.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.trade.ArticleContainer"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="indexHint" type="string">
+            <annotation>
+               <documentation>
+                  A hint for positioning this page in the editor&apos;s tab-order.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

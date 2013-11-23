@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.nightlabs.jfire.trade.ui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="articleContainerInfoDelegateFactory" name="articleContainerInfoDelegateFactory"/>
+      </appInfo>
+      <documentation>
+         Extension-Point for registration of ArticleContainerInfoDelegateFactories. 
+ArticleContainerInfoDelegateFactories create ArticleContainerInfoDelegates which can provide a Text and an ImageDesciptor for an ArticleContainerID.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="articleContainerInfoDelegateFactory"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="articleContainerInfoDelegateFactory">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Implementation of org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.ArticleContainerInfoDelegateFactory
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.trade.ui.articlecontainer.detail.info.ArticleContainerInfoDelegateFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="indexHint" type="string">
+            <annotation>
+               <documentation>
+                  The (optional) indexHint for the factoy, which determiens which implementation to use if there exist several for the same type.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiinfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>
