@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <extension point="org.eclipse.ui.views">
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.trade.ui.TuckedPersonRelationTreeView"
+            icon="icons/TuckedPersonRelationTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.trade.ui.TuckedPersonRelationTreeView" 
+            name="%org.nightlabs.jfire.personrelation.trade.ui.TuckedPersonRelationTreeView.name"/>
+        <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.personrelation.trade.ui.CompactedPersonRelationTreeView"
+            icon="icons/CompactedPersonRelationTreeView.16x16.png"
+            id="org.nightlabs.jfire.personrelation.trade.ui.CompactedPersonRelationTreeView" 
+            name="%org.nightlabs.jfire.personrelation.trade.ui.CompactedPersonRelationTreeView.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+            <view
+                id="org.nightlabs.jfire.personrelation.trade.ui.TuckedPersonRelationTreeView"
+                relationship="stack" relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"/>
+        </perspectiveExtension>
+	</extension>            
+    <extension point="org.nightlabs.base.ui.removeExtension">
+        <removeExtension attributeName="id"
+            attributePattern="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
+            elementPath="perspectiveExtension/view" extensionPointID="org.eclipse.ui.perspectiveExtensions"/>
+    </extension>
+</plugin>
