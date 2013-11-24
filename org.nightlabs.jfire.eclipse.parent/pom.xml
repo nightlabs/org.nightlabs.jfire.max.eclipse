@@ -57,8 +57,8 @@
 		It is recommended that you use a mirror! See the parent-pom for details.
 		-->
 		<repository>
-			<id>dev.nightlabs.org-libs-releases-local</id>
-			<url>http://dev.nightlabs.org/maven-repository/libs-releases-local/</url>
+			<id>cloudbees.nightlabs.release</id>
+			<url>dav:https://repository-nightlabs.forge.cloudbees.com/release/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -67,8 +67,8 @@
 			</releases>
 		</repository>
 		<repository>
-			<id>dev.nightlabs.org-libs-snapshots-local</id>
-			<url>http://dev.nightlabs.org/maven-repository/libs-snapshots-local/</url>
+			<id>cloudbees.nightlabs.snapshot</id>
+			<url>dav:https://repository-nightlabs.forge.cloudbees.com/snapshot/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
