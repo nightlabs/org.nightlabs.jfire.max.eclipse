@@ -98,5 +98,13 @@
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.win32</module>
 		<module>../org.nightlabs.jfire.eclipse.max.assembly.rap</module>
 	</modules>
-
+	<build>
+		<extensions>
+			 <extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>2.2</version>
+			</extension>
+		</extensions>
+	</build>
 </project>
