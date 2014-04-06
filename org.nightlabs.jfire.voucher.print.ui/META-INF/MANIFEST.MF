@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Voucher Print Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.voucher.print.ui;singleton:=true
-Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-Version: 1.3.3
 Bundle-Activator: org.nightlabs.jfire.voucher.print.ui.VoucherPrintPlugin
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: NightLabs.org

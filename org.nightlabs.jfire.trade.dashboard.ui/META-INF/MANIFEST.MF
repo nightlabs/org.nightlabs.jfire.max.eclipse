@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Trade Dashboard UI Plugin
 Bundle-SymbolicName: org.nightlabs.jfire.trade.dashboard.ui;singleton:=true
-Bundle-Version: 1.3.3.SNAPSHOT
+Bundle-Version: 1.3.3
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.nightlabs.base.ui,
  org.nightlabs.jfire.base.ui,
