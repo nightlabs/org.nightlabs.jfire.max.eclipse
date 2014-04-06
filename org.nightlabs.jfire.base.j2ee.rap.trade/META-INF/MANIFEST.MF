@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Trade RAP J2EE Fragment
 Bundle-SymbolicName: org.nightlabs.jfire.base.j2ee.rap.trade
-Bundle-Version: 1.3.3
+Bundle-Version: 1.3.4.SNAPSHOT
 Bundle-Vendor: NightLabs.org
 Fragment-Host: org.nightlabs.jfire.base.j2ee;bundle-version="1.0.5"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

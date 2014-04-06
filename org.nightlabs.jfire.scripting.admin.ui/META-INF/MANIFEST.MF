@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Scripting Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.scripting.admin.ui;singleton:=true
-Bundle-Version: 1.3.3
+Bundle-Version: 1.3.4.SNAPSHOT
 Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin
 Bundle-ActivationPolicy: lazy

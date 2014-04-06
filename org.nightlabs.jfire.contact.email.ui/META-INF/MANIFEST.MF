@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JFire Contact E-Mail UI
 Bundle-SymbolicName: org.nightlabs.jfire.contact.email.ui;singleton:=true
-Bundle-Version: 1.3.3
+Bundle-Version: 1.3.4.SNAPSHOT
 Bundle-Activator: org.nightlabs.jfire.contact.email.ui.Activator
 Bundle-Vendor: NightLabs.org
 Require-Bundle: org.eclipse.core.runtime,
