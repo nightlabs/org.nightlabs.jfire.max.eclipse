@@ -125,7 +125,8 @@ public class DeliveryDelegateEditComposite extends XComposite {
 			}
 		}
 		if (editComposite != null) {
-			stackLayout.topControl = editComposite;		
+			stackLayout.topControl = editComposite;	
+			stackComposite.layout();
 			layoutEnvironment();
 		}
 		return editComposite;

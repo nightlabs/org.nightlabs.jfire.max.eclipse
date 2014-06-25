@@ -44,7 +44,7 @@ extends Command
 	public boolean canExecute()
 	{
 		if (sourceParameterType != null && targetParameterType != null) {
-			if (sourceParameterType.equals(targetParameterType))
+			//if (sourceParameterType.equals(targetParameterType))
 				return true;
 		}
 		return false;
