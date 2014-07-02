@@ -59,7 +59,8 @@ Require-Bundle: org.eclipse.ui,
  com.essiembre.eclipse.i18n.resourcebundle,
  org.eclipse.birt.resources,
  org.nightlabs.jfire.reporting.oda.wrapper;bundle-version="1.1.0",
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.nightlabs.xml
 Import-Package: org.apache.log4j, org.nightlabs.progress, org.nightlabs.util, org.nightlabs.i18n
 Eclipse-RegisterBuddy: org.nightlabs.jfire.reporting.ui,
  org.nightlabs.jfire.base.j2ee

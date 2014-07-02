@@ -152,6 +152,9 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	/** The parameters to use for the next run, set to <code>null</code> after each run. */
 	private Map<String, Object> nextRunParams = null;
 	
+	
+	/** user information don't override nextRunParams **/
+	private boolean askUser = false;
 	/**
 	 * 
 	 * @param reportRegistryItems
@@ -167,17 +170,24 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 				boolean paramsSet = false;
 				if (nextRunParams != null) {
 					params = nextRunParams;
-					paramsSet = true;
+					paramsSet = !askUser;
 					nextRunParams = null;
 				};
 				String errorMessages = ""; //$NON-NLS-1$
 				for (ReportRegistryItemID itemID : reportRegistryItems) {
-					if (params == null && !paramsSet) {
+					if (!paramsSet) {
 						// if no parameters set by now, get them from the user
 						WizardResult dialogResult = ReportParameterWizard.openResult(activeShell, itemID, false);
 						if (!dialogResult.isAcquisitionFinished())
 							return Status.OK_STATUS;
-						params = dialogResult.getParameters();
+						Map<String, Object> parameters = dialogResult.getParameters();
+						if (params == null) {
+							params = parameters;	
+						} else {
+							params.putAll(parameters);
+						}
+							
+						
 						paramsSet = true;
 					}
 					String useCaseID = getReportUseCaseID(itemID, params, new SubProgressMonitor(monitor, 3));
@@ -279,6 +289,14 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	 */
 	public void setNextRunParams(Map<String, Object> nextRunParams) {
 		this.nextRunParams = nextRunParams;
+	}
+	
+	/**
+	 * If true, than will be shown the {@link ReportParameterWizard}
+	 * @param askUser
+	 */
+	public void setAskUser(boolean askUser) {
+		this.askUser = askUser;
 	}
 	
 	protected Birt.OutputFormat getOutputFormat(UseCaseConfig useCaseConfig) {		
