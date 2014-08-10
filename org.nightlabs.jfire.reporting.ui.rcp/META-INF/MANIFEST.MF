@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Rcp
 Bundle-SymbolicName: org.nightlabs.jfire.reporting.ui.rcp
-Bundle-Version: 1.3.4.SNAPSHOT
+Bundle-Version: 1.3.4
 Fragment-Host: org.nightlabs.jfire.reporting.ui;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.nightlabs.eclipse.ui.pdfrenderer, 
